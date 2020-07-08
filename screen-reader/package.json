@@ -1,0 +1,50 @@
+{
+  "name": "@capacitor/screen-reader",
+  "version": "0.0.1",
+  "description": "Screen Reader APIs",
+  "main": "dist/esm/index.js",
+  "types": "dist/esm/index.d.ts",
+  "scripts": {
+    "build": "npm run clean && tsc",
+    "clean": "rimraf ./dist",
+    "watch": "tsc --watch",
+    "prepublishOnly": "npm run build"
+  },
+  "author": "Ionic <hi@ionicframework.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@capacitor/core": "^2.2.1"
+  },
+  "devDependencies": {
+    "rimraf": "^3.0.0",
+    "typescript": "^3.2.4",
+    "@capacitor/ios": "^2.2.1",
+    "@capacitor/android": "^2.2.1"
+  },
+  "files": [
+    "dist/",
+    "ios/",
+    "android/",
+    "CapacitorScreenReader.podspec"
+  ],
+  "keywords": [
+    "capacitor",
+    "plugin",
+    "native"
+  ],
+  "capacitor": {
+    "ios": {
+      "src": "ios"
+    },
+    "android": {
+      "src": "android"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ionic-team/capacitor-plugins"
+  },
+  "bugs": {
+    "url": "https://github.com/ionic-team/capacitor-plugins/issues"
+  }
+}
