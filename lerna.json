@@ -1,4 +1,6 @@
 {
-  "packages": [],
+  "packages": [
+    "screen-reader"
+  ],
   "version": "independent"
 }
