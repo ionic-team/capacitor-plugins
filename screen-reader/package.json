@@ -2,24 +2,28 @@
   "name": "@capacitor/screen-reader",
   "version": "0.0.1",
   "description": "Screen Reader APIs",
-  "main": "dist/esm/index.js",
+  "main": "dist/plugin.js",
+  "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
   "scripts": {
-    "build": "npm run clean && tsc",
+    "build": "npm run clean && tsc && rollup -c rollup.config.js",
     "clean": "rimraf ./dist",
     "watch": "tsc --watch",
     "prepublishOnly": "npm run build"
   },
   "author": "Ionic <hi@ionicframework.com>",
   "license": "MIT",
-  "dependencies": {
-    "@capacitor/core": "^2.2.1"
-  },
   "devDependencies": {
-    "rimraf": "^3.0.0",
-    "typescript": "^3.2.4",
+    "@capacitor/android": "^2.2.1",
+    "@capacitor/core": "^2.2.1",
     "@capacitor/ios": "^2.2.1",
-    "@capacitor/android": "^2.2.1"
+    "@rollup/plugin-node-resolve": "^8.1.0",
+    "rimraf": "^3.0.0",
+    "rollup": "^2.21.0",
+    "typescript": "~3.8.3"
+  },
+  "peerDependencies": {
+    "@capacitor/core": "^2.2.1"
   },
   "files": [
     "dist/",
