@@ -1,4 +1,4 @@
-package com.capacitorjs.plugins.screen-reader;
+package com.capacitorjs.plugins.screenreader;
 
 import com.getcapacitor.JSObject;
 import com.getcapacitor.NativePlugin;
