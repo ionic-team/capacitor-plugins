@@ -6,7 +6,9 @@
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
   "scripts": {
+    "lint": "npm run prettier -- --check && npm run swiftlint -- lint",
     "prettier": "prettier \"**/*.{css,html,ts,js,java}\"",
+    "swiftlint": "swiftlint",
     "build": "npm run clean && tsc && rollup -c rollup.config.js",
     "clean": "rimraf ./dist",
     "watch": "tsc --watch",
@@ -19,11 +21,13 @@
     "@capacitor/core": "^2.2.1",
     "@capacitor/ios": "^2.2.1",
     "@ionic/prettier-config": "^1.0.0",
+    "@ionic/swiftlint-config": "^1.0.0",
     "@rollup/plugin-node-resolve": "^8.1.0",
     "prettier": "^2.0.5",
     "prettier-plugin-java": "^0.8.0",
     "rimraf": "^3.0.0",
     "rollup": "^2.21.0",
+    "swiftlint": "^0.39.4",
     "typescript": "~3.8.3"
   },
   "peerDependencies": {
@@ -49,6 +53,7 @@
     }
   },
   "prettier": "@ionic/prettier-config",
+  "swiftlint": "@ionic/swiftlint-config",
   "repository": {
     "type": "git",
     "url": "https://github.com/ionic-team/capacitor-plugins"
