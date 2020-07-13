@@ -5,11 +5,11 @@ export class ScreenReaderWeb extends WebPlugin implements ScreenReaderPlugin {
   constructor() {
     super({
       name: 'ScreenReader',
-      platforms: ['web']
+      platforms: ['web'],
     });
   }
 
-  async echo(options: { value: string }): Promise<{value: string}> {
+  async echo(options: { value: string }): Promise<{ value: string }> {
     console.log('ECHO', options);
     return options;
   }

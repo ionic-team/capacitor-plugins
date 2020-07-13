@@ -1,9 +1,9 @@
-declare module "@capacitor/core" {
+declare module '@capacitor/core' {
   interface PluginRegistry {
     ScreenReader: ScreenReaderPlugin;
   }
 }
 
 export interface ScreenReaderPlugin {
-  echo(options: { value: string }): Promise<{value: string}>;
+  echo(options: { value: string }): Promise<{ value: string }>;
 }
