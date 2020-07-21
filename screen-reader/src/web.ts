@@ -3,10 +3,7 @@ import { ScreenReaderPlugin } from './definitions';
 
 export class ScreenReaderWeb extends WebPlugin implements ScreenReaderPlugin {
   constructor() {
-    super({
-      name: 'ScreenReader',
-      platforms: ['web'],
-    });
+    super({ name: 'ScreenReader' });
   }
 
   async echo(options: { value: string }): Promise<{ value: string }> {
@@ -14,10 +11,3 @@ export class ScreenReaderWeb extends WebPlugin implements ScreenReaderPlugin {
     return options;
   }
 }
-
-const ScreenReader = new ScreenReaderWeb();
-
-export { ScreenReader };
-
-import { registerWebPlugin } from '@capacitor/core';
-registerWebPlugin(ScreenReader);
