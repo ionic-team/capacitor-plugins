@@ -28,7 +28,7 @@
     "rimraf": "^3.0.0",
     "rollup": "^2.21.0",
     "swiftlint": "^1.0.1",
-    "typescript": "~3.8.3"
+    "typescript": "~3.9.7"
   },
   "peerDependencies": {
     "@capacitor/core": "^2.3.0"
