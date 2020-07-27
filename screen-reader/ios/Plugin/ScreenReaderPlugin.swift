@@ -7,7 +7,6 @@ import Capacitor
  */
 @objc(ScreenReaderPlugin)
 public class ScreenReaderPlugin: CAPPlugin {
-// swiftlint:disable:previous type_name
     private let implementation = ScreenReader()
 
     @objc func echo(_ call: CAPPluginCall) {
