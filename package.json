@@ -1,6 +1,12 @@
 {
   "name": "capacitor-plugins",
   "private": true,
+  "scripts": {
+    "build": "lerna run build",
+    "watch": "lerna run --parallel --stream watch",
+    "lint": "lerna run lint",
+    "postinstall": "lerna bootstrap"
+  },
   "devDependencies": {
     "lerna": "^3.22.1"
   }
