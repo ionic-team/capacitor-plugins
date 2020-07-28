@@ -2,5 +2,17 @@
   "packages": [
     "screen-reader"
   ],
+  "command": {
+    "bootstrap": {
+      "hoist": true
+    },
+    "version": {
+      "allowBranch": "main",
+      "conventionalCommits": true,
+      "createRelease": "github",
+      "message": "chore(release): publish [skip ci]",
+      "tagVersionPrefix": ""
+    }
+  },
   "version": "independent"
 }
