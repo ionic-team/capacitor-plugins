@@ -13,6 +13,9 @@
     }
   },
   "devDependencies": {
+    "@capacitor/android": "file:../capacitor/android",
+    "@capacitor/core": "file:../capacitor/core",
+    "@capacitor/ios": "file:../capacitor/ios",
     "husky": "^4.2.5",
     "lerna": "^3.22.1"
   }
