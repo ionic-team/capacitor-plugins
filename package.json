@@ -7,7 +7,13 @@
     "lint": "lerna run lint",
     "postinstall": "lerna bootstrap"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint"
+    }
+  },
   "devDependencies": {
+    "husky": "^4.2.5",
     "lerna": "^3.22.1"
   }
 }
