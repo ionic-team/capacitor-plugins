@@ -6,8 +6,11 @@ export class ScreenReaderWeb extends WebPlugin implements ScreenReaderPlugin {
     super({ name: 'ScreenReader' });
   }
 
-  async echo(options: { value: string }): Promise<{ value: string }> {
-    console.log('ECHO', options);
-    return options;
+  async isEnabled(): Promise<{ value: boolean }> {
+    return { value: false };
+  }
+
+  async speak(): Promise<void> {
+    console.warn('unimplemented');
   }
 }

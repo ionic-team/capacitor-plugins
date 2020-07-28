@@ -8,14 +8,33 @@ import com.getcapacitor.PluginMethod;
 
 @NativePlugin(name = "ScreenReader")
 public class ScreenReaderPlugin extends Plugin {
-    private ScreenReader implementation = new ScreenReader();
+    public static final String EVENT_SCREEN_READER_STATE_CHANGE = "accessibilityScreenReaderStateChange";
+    private ScreenReader implementation;
 
+    @Override
+    public void load() {
+        implementation = new ScreenReader(getContext());
+        implementation.addStateChangeListener(enabled -> {
+            JSObject ret = new JSObject();
+            ret.put("value", enabled);
+            notifyListeners(EVENT_SCREEN_READER_STATE_CHANGE, ret);
+        });
+    }
+
+    @SuppressWarnings("unused")
     @PluginMethod
-    public void echo(PluginCall call) {
-        String value = call.getString("value");
-
+    public void isEnabled(PluginCall call) {
         JSObject ret = new JSObject();
-        ret.put("value", implementation.echo(value));
+        ret.put("value", implementation.isEnabled());
         call.success(ret);
+    }
+
+    @SuppressWarnings("unused")
+    @PluginMethod
+    public void speak(PluginCall call) {
+        String value = call.getString("value");
+        String language = call.getString("language", "en");
+        implementation.speak(value, language);
+        call.success();
     }
 }
