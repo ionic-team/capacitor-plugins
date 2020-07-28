@@ -3,9 +3,7 @@ package com.capacitorjs.plugins.screenreader;
 import android.content.Context;
 import android.speech.tts.TextToSpeech;
 import android.view.accessibility.AccessibilityManager;
-
 import com.getcapacitor.JSObject;
-
 import java.util.Locale;
 
 public class ScreenReader {
@@ -23,9 +21,7 @@ public class ScreenReader {
     }
 
     public void addStateChangeListener(ScreenReaderStateChangeListener listener) {
-        am.addTouchExplorationStateChangeListener(
-            listener::onScreenReaderStateChanged
-        );
+        am.addTouchExplorationStateChangeListener(listener::onScreenReaderStateChanged);
     }
 
     public boolean isEnabled() {
@@ -39,9 +35,13 @@ public class ScreenReader {
     public void speak(final String text, final String languageTag) {
         final Locale locale = Locale.forLanguageTag(languageTag);
 
-        tts = new TextToSpeech(context, status -> {
-            tts.setLanguage(locale);
-            tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, "capacitor-screen-reader" + System.currentTimeMillis());
-        });
+        tts =
+            new TextToSpeech(
+                context,
+                status -> {
+                    tts.setLanguage(locale);
+                    tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, "capacitor-screen-reader" + System.currentTimeMillis());
+                }
+            );
     }
 }
