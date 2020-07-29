@@ -9,10 +9,14 @@ import Capacitor
 public class ScreenReaderPlugin: CAPPlugin {
     private let implementation = ScreenReader()
 
-    @objc func echo(_ call: CAPPluginCall) {
-        let value = call.getString("value") ?? ""
-        call.success([
-            "value": implementation.echo(value)
-        ])
+    @objc func speak(_ call: CAPPluginCall) {
+        guard let value = call.getString("value") else {
+            call.error("No value provided")
+            return
+        }
+
+        implementation.speak(value)
+
+        call.success()
     }
 }
