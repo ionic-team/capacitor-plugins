@@ -7,7 +7,7 @@ import Capacitor
  */
 @objc(ScreenReaderPlugin)
 public class ScreenReaderPlugin: CAPPlugin {
-    static let screenReaderStateChangeEvent = "accessibilityScreenReaderStateChange"
+    static let screenReaderStateChangeEvent = "screenReaderStateChange"
 
     override public func load() {
         NotificationCenter.default.addObserver(self,

@@ -68,7 +68,7 @@ export interface ScreenReaderPlugin {
    * @since 0.0.1
    */
   addListener(
-    eventName: 'accessibilityScreenReaderStateChange',
+    eventName: 'screenReaderStateChange',
     listener: ScreenReaderStateChangeListener,
   ): PluginListenerHandle;
 
