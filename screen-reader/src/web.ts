@@ -1,16 +1,26 @@
 import { WebPlugin } from '@capacitor/core';
-import { ScreenReaderPlugin } from './definitions';
+import { ScreenReaderPlugin, ScreenReaderSpeakOptions } from './definitions';
 
 export class ScreenReaderWeb extends WebPlugin implements ScreenReaderPlugin {
   constructor() {
     super({ name: 'ScreenReader' });
   }
 
-  async isEnabled(): Promise<{ value: boolean }> {
-    return { value: false };
+  async isEnabled(): Promise<never> {
+    throw new Error('This feature is not available in the browser.');
   }
 
-  async speak(): Promise<void> {
-    console.warn('unimplemented');
+  async speak(options: ScreenReaderSpeakOptions): Promise<void> {
+    if (!('speechSynthesis' in window)) {
+      throw new Error('Browser does not support the SpeechSynthesis API');
+    }
+
+    const utterance = new SpeechSynthesisUtterance(options.value);
+
+    if (options.language) {
+      utterance.lang = options.language;
+    }
+
+    speechSynthesis.speak(utterance);
   }
 }
