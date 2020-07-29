@@ -5,6 +5,7 @@
     "build": "lerna run build",
     "watch": "lerna run --parallel --stream watch",
     "lint": "lerna run lint",
+    "toggle-local": "node ./scripts/toggle-local.mjs && lerna bootstrap",
     "postinstall": "lerna bootstrap"
   },
   "husky": {
@@ -13,9 +14,9 @@
     }
   },
   "devDependencies": {
-    "@capacitor/android": "file:../capacitor/android",
-    "@capacitor/core": "file:../capacitor/core",
-    "@capacitor/ios": "file:../capacitor/ios",
+    "@capacitor/android": "next",
+    "@capacitor/core": "next",
+    "@capacitor/ios": "next",
     "husky": "^4.2.5",
     "lerna": "^3.22.1"
   }
