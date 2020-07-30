@@ -13,9 +13,6 @@ const implementations: PluginImplementations<HapticsPlugin> = {
   web: new HapticsWeb(),
 };
 
-const Haptics = registerPlugin(
-  'Haptics',
-  implementations,
-).getImplementation();
+const Haptics = registerPlugin('Haptics', implementations).getImplementation();
 
 export { Haptics };

@@ -8,14 +8,41 @@ import com.getcapacitor.PluginMethod;
 
 @NativePlugin(name = "Haptics")
 public class HapticsPlugin extends Plugin {
-    private Haptics implementation = new Haptics();
+    private Haptics implementation;
+
+    @Override
+    public void load() {
+        implementation = new Haptics(getContext(), bridge.getWebView());
+    }
 
     @PluginMethod
-    public void echo(PluginCall call) {
-        String value = call.getString("value");
+    public void vibrate(PluginCall call) {
+        int duration = call.getInt("duration", 300);
+        implementation.vibrate(duration);
+    }
 
-        JSObject ret = new JSObject();
-        ret.put("value", implementation.echo(value));
-        call.success(ret);
+    @PluginMethod
+    public void impact(PluginCall call) {
+        implementation.impact();
+    }
+
+    @PluginMethod
+    public void notification(PluginCall call) {
+        call.unimplemented();
+    }
+
+    @PluginMethod
+    public void selectionStart(PluginCall call) {
+        implementation.selectionStart();
+    }
+
+    @PluginMethod
+    public void selectionChanged(PluginCall call) {
+        implementation.selectionChanged();
+    }
+
+    @PluginMethod
+    public void selectionEnd(PluginCall call) {
+        implementation.selectionEnd();
     }
 }

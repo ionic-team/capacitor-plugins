@@ -1,18 +1,31 @@
 import Foundation
 import Capacitor
 
-/**
- * Please read the Capacitor iOS Plugin Development Guide
- * here: https://capacitorjs.com/docs/plugins/ios
- */
 @objc(HapticsPlugin)
 public class HapticsPlugin: CAPPlugin {
     private let implementation = Haptics()
 
-    @objc func echo(_ call: CAPPluginCall) {
-        let value = call.getString("value") ?? ""
-        call.success([
-            "value": implementation.echo(value)
-        ])
+    @objc public func impact(_ call: CAPPluginCall) {
+        implementation.impact(call.options["style"] as? String)
+    }
+
+    @objc public func notification(_ call: CAPPluginCall) {
+        implementation.notification(call.options["type"] as? String)
+    }
+
+    @objc public func selectionStart(_ call: CAPPluginCall) {
+        implementation.selectionStart()
+    }
+
+    @objc public func selectionChanged(_ call: CAPPluginCall) {
+        implementation.selectionChanged()
+    }
+
+    @objc public func selectionEnd(_ call: CAPPluginCall) {
+        implementation.selectionEnd()
+    }
+
+    @objc public func vibrate(_ call: CAPPluginCall) {
+        implementation.vibrate()
     }
 }
