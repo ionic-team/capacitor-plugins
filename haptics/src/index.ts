@@ -4,7 +4,11 @@ import {
   registerPlugin,
 } from '@capacitor/core';
 
-import { HapticsPlugin, HapticsImpactStyle, HapticsNotificationType } from './definitions';
+import {
+  HapticsPlugin,
+  HapticsImpactStyle,
+  HapticsNotificationType,
+} from './definitions';
 import { HapticsWeb } from './web';
 
 const implementations: PluginImplementations<HapticsPlugin> = {
