@@ -1,5 +1,5 @@
-import Foundation
 import AudioToolbox
+import UIKit
 
 @objc public class Haptics: NSObject {
 
