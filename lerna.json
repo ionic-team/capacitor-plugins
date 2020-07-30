@@ -1,5 +1,7 @@
 {
-  "packages": [],
+  "packages": [
+    "haptics"
+  ],
   "command": {
     "bootstrap": {
       "hoist": true
