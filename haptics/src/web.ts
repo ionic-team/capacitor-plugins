@@ -20,8 +20,10 @@ export class HapticsWeb extends WebPlugin implements HapticsPlugin {
   }
 
   vibrate(options?: VibrateOptions): void {
-    const duration = options?.duration || 300;
-    navigator.vibrate(duration);
+    if (navigator.vibrate) {
+      const duration = options?.duration || 300;
+      navigator.vibrate(duration);
+    }
   }
 
   selectionStart(): void {
