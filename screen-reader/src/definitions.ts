@@ -48,11 +48,14 @@ export interface ScreenReaderPlugin {
   /**
    * Text-to-Speech functionality.
    *
+   * This function will only work if a Screen Reader is currently active.
+   *
    * On web, browsers must support the [SpeechSynthesis
    * API](https://developer.mozilla.org/en-US/docs/Web/API/SpeechSynthesis), or
    * this method will throw an error.
    *
-   * For more capabilities, please see the [Capacitor Community Text-to-Speech
+   * For more text-to-speech capabilities, please see the [Capacitor Community
+   * Text-to-Speech
    * plugin](https://github.com/capacitor-community/text-to-speech).
    *
    * @since 0.0.1
