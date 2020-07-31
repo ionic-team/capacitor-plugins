@@ -33,15 +33,17 @@ public class ScreenReader {
     }
 
     public void speak(final String text, final String languageTag) {
-        final Locale locale = Locale.forLanguageTag(languageTag);
+        if (isEnabled()) {
+            final Locale locale = Locale.forLanguageTag(languageTag);
 
-        tts =
-            new TextToSpeech(
-                context,
-                status -> {
-                    tts.setLanguage(locale);
-                    tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, "capacitor-screen-reader" + System.currentTimeMillis());
-                }
-            );
+            tts =
+                new TextToSpeech(
+                    context,
+                    status -> {
+                        tts.setLanguage(locale);
+                        tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, "capacitor-screen-reader" + System.currentTimeMillis());
+                    }
+                );
+        }
     }
 }
