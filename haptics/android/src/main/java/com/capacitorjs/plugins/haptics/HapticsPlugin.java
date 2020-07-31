@@ -19,11 +19,13 @@ public class HapticsPlugin extends Plugin {
     public void vibrate(PluginCall call) {
         int duration = call.getInt("duration", 300);
         implementation.vibrate(duration);
+        call.resolve();
     }
 
     @PluginMethod
     public void impact(PluginCall call) {
         implementation.impact();
+        call.resolve();
     }
 
     @PluginMethod
@@ -34,15 +36,18 @@ public class HapticsPlugin extends Plugin {
     @PluginMethod
     public void selectionStart(PluginCall call) {
         implementation.selectionStart();
+        call.resolve();
     }
 
     @PluginMethod
     public void selectionChanged(PluginCall call) {
         implementation.selectionChanged();
+        call.resolve();
     }
 
     @PluginMethod
     public void selectionEnd(PluginCall call) {
         implementation.selectionEnd();
+        call.resolve();
     }
 }
