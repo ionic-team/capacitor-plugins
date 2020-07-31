@@ -2,19 +2,26 @@ import { resolve } from 'path';
 
 import { PROJECTS } from './lib/capacitor.mjs';
 import { readJson, writeJson } from './lib/fs.mjs';
-import { root } from './lib/repo.mjs';
+import { getLernaPackagePaths } from './lib/repo.mjs';
 
-const run = async () => {
-  const p = resolve(root, 'package.json');
-  const pkg = await readJson(p);
+const updatePackageJson = async (path) => {
+  const pkg = await readJson(path);
 
   for (const project of PROJECTS) {
     pkg.devDependencies[`@capacitor/${project}`] = pkg.devDependencies[`@capacitor/${project}`].startsWith('file:')
       ? 'next'
-      : `file:../capacitor/${project}`;
+      : `file:../../capacitor/${project}`;
   }
 
-  await writeJson(p, pkg);
+  await writeJson(path, pkg);
+};
+
+const run = async () => {
+  const paths = await getLernaPackagePaths();
+
+  for (const path of paths) {
+    await updatePackageJson(resolve(path, 'package.json'));
+  }
 };
 
 run();

@@ -15,9 +15,6 @@
     }
   },
   "devDependencies": {
-    "@capacitor/android": "next",
-    "@capacitor/core": "next",
-    "@capacitor/ios": "next",
     "husky": "^4.2.5",
     "lerna": "^3.22.1"
   }
