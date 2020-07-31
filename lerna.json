@@ -1,9 +1,6 @@
 {
   "packages": [],
   "command": {
-    "bootstrap": {
-      "hoist": true
-    },
     "version": {
       "allowBranch": "main",
       "conventionalCommits": true,
