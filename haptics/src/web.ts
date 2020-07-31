@@ -27,7 +27,7 @@ export class HapticsWeb extends WebPlugin implements HapticsPlugin {
       navigator.vibrate(duration);
       return Promise.resolve();
     } else {
-      return Promise.reject('Vibrate API not available in this browser')
+      return Promise.reject('Vibrate API not available in this browser');
     }
   }
 
