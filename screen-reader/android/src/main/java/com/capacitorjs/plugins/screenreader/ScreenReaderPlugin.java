@@ -9,12 +9,12 @@ import com.getcapacitor.PluginMethod;
 @NativePlugin(name = "ScreenReader")
 public class ScreenReaderPlugin extends Plugin {
     public static final String EVENT_SCREEN_READER_STATE_CHANGE = "screenReaderStateChange";
-    private ScreenReader implementation;
+    private ScreenReader sr;
 
     @Override
     public void load() {
-        implementation = new ScreenReader(getContext());
-        implementation.addStateChangeListener(
+        sr = new ScreenReader(getContext());
+        sr.addStateChangeListener(
             enabled -> {
                 JSObject ret = new JSObject();
                 ret.put("value", enabled);
@@ -25,14 +25,14 @@ public class ScreenReaderPlugin extends Plugin {
 
     @Override
     protected void handleOnDestroy() {
-        implementation.removeStateChangeListeners();
+        sr.removeAllListeners();
     }
 
     @SuppressWarnings("unused")
     @PluginMethod
     public void isEnabled(PluginCall call) {
         JSObject ret = new JSObject();
-        ret.put("value", implementation.isEnabled());
+        ret.put("value", sr.isEnabled());
         call.success(ret);
     }
 
@@ -41,7 +41,7 @@ public class ScreenReaderPlugin extends Plugin {
     public void speak(PluginCall call) {
         String value = call.getString("value");
         String language = call.getString("language", "en");
-        implementation.speak(value, language);
+        sr.speak(value, language);
         call.success();
     }
 }
