@@ -23,6 +23,11 @@ public class ScreenReaderPlugin extends Plugin {
         );
     }
 
+    @Override
+    protected void handleOnDestroy() {
+        implementation.removeStateChangeListeners();
+    }
+
     @SuppressWarnings("unused")
     @PluginMethod
     public void isEnabled(PluginCall call) {

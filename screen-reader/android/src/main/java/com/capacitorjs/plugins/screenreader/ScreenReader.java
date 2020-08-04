@@ -4,11 +4,14 @@ import android.content.Context;
 import android.speech.tts.TextToSpeech;
 import android.view.accessibility.AccessibilityManager;
 import com.getcapacitor.JSObject;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 public class ScreenReader {
     private Context context;
     private AccessibilityManager am;
+    private List<ScreenReaderStateChangeListener> listeners = new ArrayList<>();
     private TextToSpeech tts;
 
     public interface ScreenReaderStateChangeListener {
@@ -21,7 +24,14 @@ public class ScreenReader {
     }
 
     public void addStateChangeListener(ScreenReaderStateChangeListener listener) {
+        listeners.add(listener);
         am.addTouchExplorationStateChangeListener(listener::onScreenReaderStateChanged);
+    }
+
+    public void removeStateChangeListeners() {
+        for (ScreenReaderStateChangeListener listener : listeners) {
+            am.removeTouchExplorationStateChangeListener(listener::onScreenReaderStateChanged);
+        }
     }
 
     public boolean isEnabled() {
