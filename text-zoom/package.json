@@ -18,9 +18,9 @@
   "author": "Ionic <hi@ionicframework.com>",
   "license": "MIT",
   "devDependencies": {
-    "@capacitor/android": "file:../../capacitor/android",
-    "@capacitor/core": "file:../../capacitor/core",
-    "@capacitor/ios": "file:../../capacitor/ios",
+    "@capacitor/android": "next",
+    "@capacitor/core": "next",
+    "@capacitor/ios": "next",
     "@ionic/prettier-config": "^1.0.0",
     "@ionic/swiftlint-config": "^1.0.0",
     "@rollup/plugin-node-resolve": "^8.1.0",
