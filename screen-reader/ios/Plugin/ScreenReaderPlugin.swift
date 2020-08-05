@@ -19,7 +19,7 @@ public class ScreenReaderPlugin: CAPPlugin {
     @objc func isEnabled(_ call: CAPPluginCall) {
         let enabled = UIAccessibility.isVoiceOverRunning
 
-        call.success([
+        call.resolve([
             "value": enabled
         ])
     }
@@ -36,7 +36,7 @@ public class ScreenReaderPlugin: CAPPlugin {
             }
         }
 
-        call.success()
+        call.resolve()
     }
 
     @objc private func onVoiceOverStateChanged(notification: NSNotification) {

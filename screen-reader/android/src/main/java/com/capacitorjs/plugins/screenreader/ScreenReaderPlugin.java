@@ -33,7 +33,7 @@ public class ScreenReaderPlugin extends Plugin {
     public void isEnabled(PluginCall call) {
         JSObject ret = new JSObject();
         ret.put("value", sr.isEnabled());
-        call.success(ret);
+        call.resolve(ret);
     }
 
     @SuppressWarnings("unused")
@@ -42,6 +42,6 @@ public class ScreenReaderPlugin extends Plugin {
         String value = call.getString("value");
         String language = call.getString("language", "en");
         sr.speak(value, language);
-        call.success();
+        call.resolve();
     }
 }
