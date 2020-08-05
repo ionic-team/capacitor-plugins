@@ -1,5 +1,7 @@
 {
-  "packages": [],
+  "packages": [
+    "text-zoom"
+  ],
   "command": {
     "version": {
       "allowBranch": "main",
