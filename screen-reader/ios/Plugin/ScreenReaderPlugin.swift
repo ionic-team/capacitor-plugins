@@ -16,6 +16,10 @@ public class ScreenReaderPlugin: CAPPlugin {
                                                object: nil)
     }
 
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+
     @objc func isEnabled(_ call: CAPPluginCall) {
         let enabled = UIAccessibility.isVoiceOverRunning
 
