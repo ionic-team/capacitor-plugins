@@ -6,8 +6,16 @@ export class TextZoomWeb extends WebPlugin implements TextZoomPlugin {
     super({ name: 'TextZoom' });
   }
 
-  async echo(options: { value: string }): Promise<{ value: string }> {
-    console.log('ECHO', options);
-    return options;
+  async get(): Promise<{ value: number }> {
+    throw new Error('TODO');
+  }
+
+  async getPreferred(): Promise<{ value: number }> {
+    throw new Error('TODO');
+  }
+
+  async set(options: { value: number }): Promise<void> {
+    options;
+    throw new Error('TODO');
   }
 }

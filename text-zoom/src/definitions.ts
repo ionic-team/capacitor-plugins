@@ -5,5 +5,7 @@ declare module '@capacitor/core' {
 }
 
 export interface TextZoomPlugin {
-  echo(options: { value: string }): Promise<{ value: string }>;
+  get(): Promise<{ value: number }>;
+  getPreferred(): Promise<{ value: number }>;
+  set(options: { value: number }): Promise<void>;
 }
