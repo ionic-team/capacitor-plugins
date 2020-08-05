@@ -1,0 +1,72 @@
+import Foundation
+import Capacitor
+
+@objc public class Clipboard: NSObject {
+    
+    @objc enum ContentType: Int {
+        case string
+        case url
+        case image
+    }
+    
+    @objc func write(_ label: ContentType, _ content: String) {
+        switch label {
+        case ContentType.string:
+                UIPasteboard.general.string = content
+        case ContentType.url:
+            if let url = URL(string: content) {
+                UIPasteboard.general.url = url
+            }
+        case ContentType.image:
+            if let data = Data(base64Encoded: getCleanData(content)) {
+                let image = UIImage(data: data)
+                CAPLog.print("Loaded image", image!.size.width, image!.size.height)
+                UIPasteboard.general.image = image
+            } else {
+                CAPLog.print("Unable to encode image")
+            }
+        default:
+            CAPLog.print("Unknown clipboard content type")
+        }
+    }
+
+    @objc func read() -> [String: Any] {
+        if UIPasteboard.general.hasStrings {
+            return [
+                "value": UIPasteboard.general.string!,
+                "type": "text/plain"
+            ]
+            
+        }
+        
+        if UIPasteboard.general.hasURLs {
+            let url = UIPasteboard.general.url!
+            return [
+                "value": url.absoluteString,
+                "type": "text/plain"
+            ]
+        }
+        
+        if UIPasteboard.general.hasImages {
+            let image = UIPasteboard.general.image!
+            let data = image.pngData()
+            if let base64 = data?.base64EncodedString() {
+                return [
+                    "value": "data:image/png;base64," + base64,
+                    "type": "image/png"
+                ]
+            }
+        }
+        
+        return [:]
+    }
+    
+    func getCleanData(_ data: String) -> String {
+        let dataParts = data.split(separator: ",")
+        var cleanData = data
+        if dataParts.count > 0 {
+            cleanData = String(dataParts.last!)
+        }
+        return cleanData
+    }
+}
