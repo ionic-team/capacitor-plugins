@@ -38,7 +38,7 @@ public class TextZoomPlugin extends Plugin {
     public void set(final PluginCall call) {
         mainHandler.post(
             () -> {
-                Integer value = call.getInt("value");
+                Double value = call.getDouble("value");
 
                 if (value == null) {
                     call.reject("Invalid integer value.");
@@ -52,12 +52,8 @@ public class TextZoomPlugin extends Plugin {
 
     @PluginMethod
     public void getPreferred(final PluginCall call) {
-        mainHandler.post(
-            () -> {
-                JSObject ret = new JSObject();
-                ret.put("value", tz.getPreferred());
-                call.resolve(ret);
-            }
-        );
+        JSObject ret = new JSObject();
+        ret.put("value", tz.getPreferred());
+        call.resolve(ret);
     }
 }

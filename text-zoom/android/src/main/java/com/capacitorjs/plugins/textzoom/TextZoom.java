@@ -13,20 +13,18 @@ public class TextZoom {
         this.webView = webView;
     }
 
-    public int get() {
+    public double get() {
         WebSettings settings = webView.getSettings();
-        return settings.getTextZoom();
+        return (double) settings.getTextZoom() / 100;
     }
 
-    public void set(int level) {
+    public void set(double level) {
         WebSettings settings = webView.getSettings();
-        settings.setTextZoom(level);
+        int rounded = (int) Math.round(level * 100);
+        settings.setTextZoom(rounded);
     }
 
-    public int getPreferred() {
-        float fontScale = activity.getResources().getConfiguration().fontScale;
-        int preferred = Math.round(fontScale * 100);
-
-        return preferred;
+    public double getPreferred() {
+        return Double.parseDouble(Float.valueOf(activity.getResources().getConfiguration().fontScale).toString());
     }
 }
