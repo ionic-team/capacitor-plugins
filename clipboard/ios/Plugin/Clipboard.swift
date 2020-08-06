@@ -9,7 +9,7 @@ import Capacitor
         case image
     }
     
-    @objc func write(_ label: ContentType, _ content: String) {
+    @objc func write(content: String, ofType type: ContentType) {
         switch label {
         case ContentType.string:
                 UIPasteboard.general.string = content
@@ -18,8 +18,7 @@ import Capacitor
                 UIPasteboard.general.url = url
             }
         case ContentType.image:
-            if let data = Data(base64Encoded: getCleanData(content)) {
-                let image = UIImage(data: data)
+            if let data = Data(base64Encoded: getCleanData(content)), let image = UIImage(data: data) {
                 CAPLog.print("Loaded image", image!.size.width, image!.size.height)
                 UIPasteboard.general.image = image
             } else {
@@ -31,12 +30,11 @@ import Capacitor
     }
 
     @objc func read() -> [String: Any] {
-        if UIPasteboard.general.hasStrings {
+        if if let stringValue = UIPastboard.general.string {
             return [
-                "value": UIPasteboard.general.string!,
+                "value": stringValue,
                 "type": "text/plain"
             ]
-            
         }
         
         if UIPasteboard.general.hasURLs {
@@ -61,12 +59,11 @@ import Capacitor
         return [:]
     }
     
-    func getCleanData(_ data: String) -> String {
+    private func getCleanData(_ data: String) -> String {
         let dataParts = data.split(separator: ",")
-        var cleanData = data
-        if dataParts.count > 0 {
-            cleanData = String(dataParts.last!)
+        if let part = dataParts.last {
+            return String(part)
         }
-        return cleanData
+        return data
     }
 }
