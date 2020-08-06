@@ -6,8 +6,6 @@ export class TextZoomIOS implements TextZoomPlugin {
   async get(): Promise<{ value: number }> {
     const percentage = this.getRaw();
     const value = this.textSizePercentageToNumber(percentage);
-    console.log('percentage', percentage);
-    console.log('value', value);
 
     return { value };
   }
@@ -18,7 +16,6 @@ export class TextZoomIOS implements TextZoomPlugin {
 
   async set(options: { value: number }): Promise<void> {
     const num = this.textSizeNumberToPercentage(options.value);
-    console.log('num', num);
     this.setRaw(num);
   }
 
@@ -32,8 +29,6 @@ export class TextZoomIOS implements TextZoomPlugin {
 
   textSizePercentageToNumber(percentage: string): number {
     const m = TextZoomIOS.TEXT_SIZE_REGEX.exec(percentage);
-
-    console.log('re', m);
 
     if (!m) {
       return 1;
