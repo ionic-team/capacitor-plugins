@@ -1,10 +1,6 @@
 import Foundation
 import Capacitor
 
-/**
- * Please read the Capacitor iOS Plugin Development Guide
- * here: https://capacitorjs.com/docs/plugins/ios
- */
 @objc(ScreenReaderPlugin)
 public class ScreenReaderPlugin: CAPPlugin {
     static let screenReaderStateChangeEvent = "screenReaderStateChange"
