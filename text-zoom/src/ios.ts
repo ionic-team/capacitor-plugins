@@ -1,3 +1,5 @@
+import { Plugins } from '@capacitor/core';
+
 import { TextZoomPlugin } from './definitions';
 
 export class TextZoomIOS implements TextZoomPlugin {
@@ -11,7 +13,7 @@ export class TextZoomIOS implements TextZoomPlugin {
   }
 
   async getPreferred(): Promise<{ value: number }> {
-    return { value: 1 };
+    return Plugins.TextZoom.getPreferred();
   }
 
   async set(options: { value: number }): Promise<void> {
