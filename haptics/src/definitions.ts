@@ -8,11 +8,11 @@ export interface HapticsPlugin {
   /**
    * Trigger a haptics "impact" feedback
    */
-  impact(options: HapticsImpactOptions): Promise<void>;
+  impact(options?: HapticsImpactOptions): Promise<void>;
   /**
    * Trigger a haptics "notification" feedback
    */
-  notification(options: HapticsNotificationOptions): Promise<void>;
+  notification(options?: HapticsNotificationOptions): Promise<void>;
   /**
    * Vibrate the device
    */
@@ -56,5 +56,5 @@ export enum HapticsNotificationType {
 
 export interface VibrateOptions {
   // Android and Web only
-  duration?: number;
+  duration: number;
 }

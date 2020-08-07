@@ -13,13 +13,13 @@ export class HapticsWeb extends WebPlugin implements HapticsPlugin {
 
   selectionStarted = false;
 
-  async impact(options: HapticsImpactOptions): Promise<void> {
-    const pattern = this.patternForImpact(options.style);
+  async impact(options?: HapticsImpactOptions): Promise<void> {
+    const pattern = this.patternForImpact(options?.style);
     this.vibrateWithPattern(pattern);
   }
 
-  async notification(options: HapticsNotificationOptions): Promise<void> {
-    const pattern = this.patternForNotification(options.type);
+  async notification(options?: HapticsNotificationOptions): Promise<void> {
+    const pattern = this.patternForNotification(options?.type);
     this.vibrateWithPattern(pattern);
   }
 
@@ -42,7 +42,7 @@ export class HapticsWeb extends WebPlugin implements HapticsPlugin {
     this.selectionStarted = false;
   }
 
-  private patternForImpact(style: string): number[] {
+  private patternForImpact(style?: string): number[] {
     if (style === 'MEDIUM') {
       return [43];
     } else if (style === 'LIGHT') {
@@ -51,7 +51,7 @@ export class HapticsWeb extends WebPlugin implements HapticsPlugin {
     return [61];
   }
 
-  private patternForNotification(type: string): number[] {
+  private patternForNotification(type?: string): number[] {
     if (type === 'WARNING') {
       return [30, 40, 30, 50, 60];
     } else if (type === 'ERROR') {
