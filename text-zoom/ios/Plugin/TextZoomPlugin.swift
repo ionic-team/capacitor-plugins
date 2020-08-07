@@ -7,11 +7,11 @@ import Capacitor
  */
 @objc(TextZoomPlugin)
 public class TextZoomPlugin: CAPPlugin {
-    private let tz = TextZoom()
+    private let textZoom = TextZoom()
 
     @objc func getPreferred(_ call: CAPPluginCall) {
         call.resolve([
-            "value": tz.getPreferred()
+            "value": textZoom.getPreferred()
         ])
     }
 }
