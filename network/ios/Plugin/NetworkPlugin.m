@@ -3,6 +3,7 @@
 
 // Define the plugin using the CAP_PLUGIN Macro, and
 // each method the plugin supports using the CAP_PLUGIN_METHOD macro.
-CAP_PLUGIN(NetworkPlugin, "Network",
-           CAP_PLUGIN_METHOD(echo, CAPPluginReturnPromise);
+CAP_PLUGIN(CAPNetworkPlugin, "Network",
+  CAP_PLUGIN_METHOD(getStatus, CAPPluginReturnPromise);
+  CAP_PLUGIN_METHOD(removeAllListeners, CAPPluginReturnNone);
 )

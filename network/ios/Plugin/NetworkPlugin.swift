@@ -1,18 +1,60 @@
 import Foundation
 import Capacitor
 
-/**
- * Please read the Capacitor iOS Plugin Development Guide
- * here: https://capacitorjs.com/docs/plugins/ios
- */
-@objc(NetworkPlugin)
+@objc(CAPNetworkPlugin)
 public class NetworkPlugin: CAPPlugin {
-    private let implementation = Network()
+    private var implementation: Network?
+    
+    override public func load() {
+        CAPLog.print("Loading network plugin")
+        do {
+            implementation = try Network()
+            implementation?.statusObserver = { [weak self] status in
+                CAPLog.print(status.logMessage)
+                self?.notifyListeners("networkStatusChange", data: [
+                    "connected": status.isConnected,
+                    "connectionType": status.jsStringValue
+                ])
+            }
+        }
+        catch let error {
+            CAPLog.print("Unable to start network monitor: \(error)")
+        }
+    }
+    
+    @objc func getStatus(_ call: CAPPluginCall) {
+        let status = implementation?.currentStatus() ?? Reachability.Connection.none
+        call.resolve(["connected": status.isConnected, "connectionType": status.jsStringValue])
+    }
+}
 
-    @objc func echo(_ call: CAPPluginCall) {
-        let value = call.getString("value") ?? ""
-        call.success([
-            "value": implementation.echo(value)
-        ])
+extension Reachability.Connection {
+    internal var jsStringValue: String {
+        switch self {
+        case .cellular:
+            return "cellular"
+        case .wifi:
+            return "wifi"
+        case .none:
+            return ""
+        }
+    }
+    internal var isConnected: Bool {
+        switch self {
+        case .cellular, .wifi:
+            return true
+        case .none:
+            return false
+        }
+    }
+    internal var logMessage: String {
+        switch self {
+        case .cellular:
+            return "Reachable via Cellular"
+        case .wifi:
+            return "Reachable via WiFi"
+        case .none:
+            return "Not reachable"
+        }
     }
 }
