@@ -4,24 +4,24 @@ import android.content.Context;
 import android.os.Build;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
-import android.view.HapticFeedbackConstants;
-import android.webkit.WebView;
+import com.capacitorjs.plugins.haptics.arguments.HapticsImpactType;
+import com.capacitorjs.plugins.haptics.arguments.HapticsNotificationType;
+import com.capacitorjs.plugins.haptics.arguments.HapticsSelectionType;
+import com.capacitorjs.plugins.haptics.arguments.HapticsVibrationType;
 
 public class Haptics {
     private Context context;
-    private WebView webView;
     private boolean selectionStarted = false;
+    private final Vibrator mVibrator;
 
-    Haptics(Context context, WebView webView) {
+    Haptics(Context context) {
         this.context = context;
-        this.webView = webView;
+        mVibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
     }
 
     public void vibrate(int duration) {
         if (Build.VERSION.SDK_INT >= 26) {
-            ((Vibrator) this.context.getSystemService(Context.VIBRATOR_SERVICE)).vibrate(
-                    VibrationEffect.createOneShot(duration, VibrationEffect.DEFAULT_AMPLITUDE)
-                );
+            mVibrator.vibrate(VibrationEffect.createOneShot(duration, VibrationEffect.DEFAULT_AMPLITUDE));
         } else {
             vibratePre26(duration);
         }
@@ -29,11 +29,20 @@ public class Haptics {
 
     @SuppressWarnings({ "deprecation" })
     private void vibratePre26(int duration) {
-        ((Vibrator) this.context.getSystemService(Context.VIBRATOR_SERVICE)).vibrate(duration);
+        mVibrator.vibrate(duration);
     }
 
-    public void impact() {
-        this.webView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+    @SuppressWarnings({ "deprecation" })
+    private void vibratePre26(long[] pattern, int repeat) {
+        mVibrator.vibrate(pattern, repeat);
+    }
+
+    public void impact(String style) {
+        this.performHaptics(HapticsImpactType.fromString(style));
+    }
+
+    public void notification(String type) {
+        this.performHaptics(HapticsNotificationType.fromString(type));
     }
 
     public void selectionStart() {
@@ -42,11 +51,19 @@ public class Haptics {
 
     public void selectionChanged() {
         if (this.selectionStarted) {
-            this.webView.performHapticFeedback(HapticFeedbackConstants.CLOCK_TICK);
+            performHaptics(new HapticsSelectionType());
         }
     }
 
     public void selectionEnd() {
         this.selectionStarted = false;
+    }
+
+    private void performHaptics(HapticsVibrationType type) {
+        if (Build.VERSION.SDK_INT >= 26) {
+            mVibrator.vibrate(VibrationEffect.createWaveform(type.getTimings(), type.getAmplitudes(), -1));
+        } else {
+            vibratePre26(type.getOldSDKPattern(), -1);
+        }
     }
 }

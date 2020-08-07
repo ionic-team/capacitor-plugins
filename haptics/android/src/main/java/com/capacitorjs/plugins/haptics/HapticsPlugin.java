@@ -12,7 +12,7 @@ public class HapticsPlugin extends Plugin {
 
     @Override
     public void load() {
-        implementation = new Haptics(getContext(), bridge.getWebView());
+        implementation = new Haptics(getContext());
     }
 
     @PluginMethod
@@ -24,13 +24,14 @@ public class HapticsPlugin extends Plugin {
 
     @PluginMethod
     public void impact(PluginCall call) {
-        implementation.impact();
+        implementation.impact(call.getString("style"));
         call.resolve();
     }
 
     @PluginMethod
     public void notification(PluginCall call) {
-        call.unimplemented();
+        implementation.notification(call.getString("type"));
+        call.resolve();
     }
 
     @PluginMethod
