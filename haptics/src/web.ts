@@ -2,7 +2,9 @@ import { UnsupportedBrowserException, WebPlugin } from '@capacitor/core';
 import {
   HapticsPlugin,
   HapticsImpactOptions,
+  HapticsImpactStyle,
   HapticsNotificationOptions,
+  HapticsNotificationType,
   VibrateOptions,
 } from './definitions';
 
@@ -42,19 +44,23 @@ export class HapticsWeb extends WebPlugin implements HapticsPlugin {
     this.selectionStarted = false;
   }
 
-  private patternForImpact(style?: string): number[] {
-    if (style === 'MEDIUM') {
+  private patternForImpact(
+    style: HapticsImpactStyle = HapticsImpactStyle.Heavy,
+  ): number[] {
+    if (style === HapticsImpactStyle.Medium) {
       return [43];
-    } else if (style === 'LIGHT') {
+    } else if (style === HapticsImpactStyle.Light) {
       return [20];
     }
     return [61];
   }
 
-  private patternForNotification(type?: string): number[] {
-    if (type === 'WARNING') {
+  private patternForNotification(
+    type: HapticsNotificationType = HapticsNotificationType.SUCCESS,
+  ): number[] {
+    if (type === HapticsNotificationType.WARNING) {
       return [30, 40, 30, 50, 60];
-    } else if (type === 'ERROR') {
+    } else if (type === HapticsNotificationType.ERROR) {
       return [27, 45, 50];
     }
     return [35, 65, 21];
