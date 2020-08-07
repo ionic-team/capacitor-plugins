@@ -4,6 +4,33 @@ declare module '@capacitor/core' {
   }
 }
 
+export interface GetResponse {
+  /**
+   * The current zoom level (represented as a decimal).
+   *
+   * @since 0.0.1
+   */
+  value: number;
+}
+
+export interface GetPreferredResponse {
+  /**
+   * The preferred zoom level (represented as a decimal).
+   *
+   * @since 0.0.1
+   */
+  value: number;
+}
+
+export interface SetOptions {
+  /**
+   * The new zoom level (represented as a decimal).
+   *
+   * @since 0.0.1
+   */
+  value: number;
+}
+
 export interface TextZoomPlugin {
   /**
    * Get the current zoom level.
@@ -12,7 +39,7 @@ export interface TextZoomPlugin {
    *
    * @since 0.0.1
    */
-  get(): Promise<{ value: number }>;
+  get(): Promise<GetResponse>;
 
   /**
    * Get the preferred zoom level.
@@ -21,7 +48,7 @@ export interface TextZoomPlugin {
    *
    * @since 0.0.1
    */
-  getPreferred(): Promise<{ value: number }>;
+  getPreferred(): Promise<GetPreferredResponse>;
 
   /**
    * Set the current zoom level.
@@ -30,5 +57,5 @@ export interface TextZoomPlugin {
    *
    * @since 0.0.1
    */
-  set(options: { value: number }): Promise<void>;
+  set(options: SetOptions): Promise<void>;
 }
