@@ -11,34 +11,62 @@ export class HapticsWeb extends WebPlugin implements HapticsPlugin {
     super({ name: 'Haptics' });
   }
 
+  selectionStarted = false;
+
   async impact(options: HapticsImpactOptions): Promise<void> {
-    console.log('impact options', options);
+    const pattern = this.patternForImpact(options.style);
+    this.vibrateWithPattern(pattern);
   }
 
   async notification(options: HapticsNotificationOptions): Promise<void> {
-    console.log('notification options', options);
+    const pattern = this.patternForNotification(options.type);
+    this.vibrateWithPattern(pattern);
   }
 
   async vibrate(options?: VibrateOptions): Promise<void> {
+    const duration = options?.duration || 300;
+    this.vibrateWithPattern([duration]);
+  }
+
+  async selectionStart(): Promise<void> {
+    this.selectionStarted = true;
+  }
+
+  async selectionChanged(): Promise<void> {
+    if (this.selectionStarted) {
+      this.vibrateWithPattern([70]);
+    }
+  }
+
+  async selectionEnd(): Promise<void> {
+    this.selectionStarted = false;
+  }
+
+  private patternForImpact(style: string): number[] {
+    if (style === 'MEDIUM') {
+      return [43];
+    } else if (style === 'LIGHT') {
+      return [20];
+    }
+    return [61];
+  }
+
+  private patternForNotification(type: string): number[] {
+    if (type === 'WARNING') {
+      return [30, 40, 30, 50, 60];
+    } else if (type === 'ERROR') {
+      return [27, 45, 50];
+    }
+    return [35, 65, 21];
+  }
+
+  private vibrateWithPattern(pattern: number[]) {
     if (navigator.vibrate) {
-      const duration = options?.duration || 300;
-      navigator.vibrate(duration);
+      navigator.vibrate(pattern);
     } else {
       throw new UnsupportedBrowserException(
         'Browser does not support the vibrate API',
       );
     }
-  }
-
-  async selectionStart(): Promise<void> {
-    console.log('selectionStart');
-  }
-
-  async selectionChanged(): Promise<void> {
-    console.log('selectionChanged');
-  }
-
-  async selectionEnd(): Promise<void> {
-    console.log('selectionEnd');
   }
 }
