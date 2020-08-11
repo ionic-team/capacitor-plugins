@@ -13,9 +13,6 @@ const implementations: PluginImplementations<NetworkPlugin> = {
   web: new NetworkWeb(),
 };
 
-const Network = registerPlugin(
-  'Network',
-  implementations,
-).getImplementation();
+const Network = registerPlugin('Network', implementations).getImplementation();
 
 export { Network };

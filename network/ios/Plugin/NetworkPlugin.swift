@@ -4,7 +4,7 @@ import Capacitor
 @objc(CAPNetworkPlugin)
 public class NetworkPlugin: CAPPlugin {
     private var implementation: Network?
-    
+
     override public func load() {
         CAPLog.print("Loading network plugin")
         do {
@@ -16,12 +16,11 @@ public class NetworkPlugin: CAPPlugin {
                     "connectionType": status.jsStringValue
                 ])
             }
-        }
-        catch let error {
+        } catch let error {
             CAPLog.print("Unable to start network monitor: \(error)")
         }
     }
-    
+
     @objc func getStatus(_ call: CAPPluginCall) {
         let status = implementation?.currentStatus() ?? Reachability.Connection.none
         call.resolve(["connected": status.isConnected, "connectionType": status.jsStringValue])

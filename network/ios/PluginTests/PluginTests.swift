@@ -12,38 +12,35 @@ class NetworkTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
     }
-    
+
     func testStatus() {
         do {
             let implementation = try Network()
             XCTAssertEqual(Reachability.Connection.wifi, implementation.currentStatus())
-        }
-        catch let error {
+        } catch let error {
             XCTFail("Network initialization failed! \(error)")
         }
     }
-    
+
     func testCallback() {
         do {
             let implementation = try Network()
             XCTAssertNotNil(implementation.reachability)
-            
+
             let expectation = self.expectation(description: "Network will call the status observer")
             implementation.statusObserver = { status in
                 XCTAssertEqual(Reachability.Connection.wifi, status)
                 expectation.fulfill()
             }
             implementation.reachability?.whenReachable?(implementation.reachability!)
-            
+
             waitForExpectations(timeout: 1) { error in
-              if let error = error {
-                XCTFail("waitForExpectations errored: \(error)")
-              }
+                if let error = error {
+                    XCTFail("waitForExpectations errored: \(error)")
+                }
             }
-        }
-        catch let error {
+        } catch let error {
             XCTFail("Network initialization failed! \(error)")
         }
     }
 }
-

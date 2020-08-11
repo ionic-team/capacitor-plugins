@@ -6,10 +6,10 @@ public class Network {
     public enum NetworkError: Error {
         case initializationFailed
     }
-    
+
     internal private(set) var reachability: Reachability?
     var statusObserver: NetworkConnectionChangedObserver?
-    
+
     init() throws {
         reachability = Reachability()
         if reachability == nil {
@@ -24,7 +24,7 @@ public class Network {
         }
         try reachability?.startNotifier()
     }
-    
+
     func currentStatus() -> Reachability.Connection {
         return reachability?.connection ?? Reachability.Connection.none
     }

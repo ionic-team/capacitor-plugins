@@ -1,12 +1,12 @@
 package com.capacitorjs.plugins.network;
 
+import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.Manifest;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Logger;
 import com.getcapacitor.NativePlugin;
@@ -31,17 +31,17 @@ public class NetworkPlugin extends Plugin {
         cm = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
 
         receiver =
-                new BroadcastReceiver() {
+            new BroadcastReceiver() {
 
-                    @Override
-                    public void onReceive(Context context, Intent intent) {
-                        if (hasRequiredPermissions()) {
-                            notifyListeners(NETWORK_CHANGE_EVENT, getStatusJSObject(cm.getActiveNetworkInfo()));
-                        } else {
-                            Logger.error(getLogTag(), PERMISSION_NOT_SET, null);
-                        }
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    if (hasRequiredPermissions()) {
+                        notifyListeners(NETWORK_CHANGE_EVENT, getStatusJSObject(cm.getActiveNetworkInfo()));
+                    } else {
+                        Logger.error(getLogTag(), PERMISSION_NOT_SET, null);
                     }
-                };
+                }
+            };
     }
 
     /**

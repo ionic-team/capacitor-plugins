@@ -1,5 +1,9 @@
 import { WebPlugin } from '@capacitor/core';
-import { NetworkPlugin, NetworkStatus, PluginListenerHandle } from './definitions';
+import {
+  NetworkPlugin,
+  NetworkStatus,
+  PluginListenerHandle,
+} from './definitions';
 
 declare var window: any;
 
@@ -66,8 +70,7 @@ export class NetworkWeb extends WebPlugin implements NetworkPlugin {
       };
     } else {
       return {
-        remove: () => {
-        },
+        remove: () => {},
       };
     }
   }
