@@ -64,6 +64,11 @@ export class NetworkWeb extends WebPlugin implements NetworkPlugin {
           window.removeEventListener('offline', offlineBindFunc);
         },
       };
+    } else {
+      return {
+        remove: () => {
+        },
+      };
     }
   }
 }
