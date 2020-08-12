@@ -10,7 +10,7 @@ import Capacitor
     }
     
     @objc func write(content: String, ofType type: ContentType) {
-        switch label {
+        switch type {
         case ContentType.string:
                 UIPasteboard.general.string = content
         case ContentType.url:
@@ -19,7 +19,7 @@ import Capacitor
             }
         case ContentType.image:
             if let data = Data(base64Encoded: getCleanData(content)), let image = UIImage(data: data) {
-                CAPLog.print("Loaded image", image!.size.width, image!.size.height)
+                CAPLog.print("Loaded image", image.size.width, image.size.height)
                 UIPasteboard.general.image = image
             } else {
                 CAPLog.print("Unable to encode image")
@@ -30,7 +30,7 @@ import Capacitor
     }
 
     @objc func read() -> [String: Any] {
-        if if let stringValue = UIPastboard.general.string {
+        if let stringValue = UIPasteboard.general.string {
             return [
                 "value": stringValue,
                 "type": "text/plain"

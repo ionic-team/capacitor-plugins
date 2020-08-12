@@ -17,13 +17,13 @@ public class ClipboardPlugin: CAPPlugin {
         var success : Bool = false
         
         if let string = call.options["string"] as? String {
-            implementation.write(Clipboard.ContentType.string, string)
+            implementation.write(content: string, ofType: Clipboard.ContentType.string)
             success = true
         } else if let urlString = call.options["url"] as? String {
-            implementation.write(Clipboard.ContentType.url, urlString)
+            implementation.write(content: urlString, ofType: Clipboard.ContentType.url)
             success = true
         } else if let imageBase64 = call.options["image"] as? String {
-            implementation.write(Clipboard.ContentType.image, imageBase64)
+            implementation.write(content: imageBase64, ofType: Clipboard.ContentType.image)
             success = true
         }
         
