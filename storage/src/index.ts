@@ -13,9 +13,6 @@ const implementations: PluginImplementations<StoragePlugin> = {
   web: new StorageWeb(),
 };
 
-const Storage = registerPlugin(
-  'Storage',
-  implementations,
-).getImplementation();
+const Storage = registerPlugin('Storage', implementations).getImplementation();
 
 export { Storage };
