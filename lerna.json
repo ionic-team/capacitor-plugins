@@ -1,5 +1,7 @@
 {
-  "packages": [],
+  "packages": [
+    "storage"
+  ],
   "command": {
     "version": {
       "allowBranch": "main",
