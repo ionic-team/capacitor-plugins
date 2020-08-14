@@ -12,7 +12,7 @@ import Foundation
     }
 
     @objc func remove(byKey key: String) {
-        defaults.removeObject(forKey: key)
+        defaults.removeObject(forKey: applyPrefix(onKey: key))
     }
 
     @objc func removeAll() {
