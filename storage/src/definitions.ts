@@ -6,16 +6,14 @@ declare module '@capacitor/core' {
 
 export interface ConfigureOptions {
   /**
-   * Set the prefix used for each key.
+   * Set the storage group.
    *
-   * WARNING: The prefix is used to categorize keys in native storage
-   * (localStorage for web). Using an insufficiently unique prefix could result
-   * in incorrect behavior and unintended data loss.
+   * Storage groups can be used to organize key/value pairs.
    *
-   * @default _cap_
+   * @default CapacitorStorage
    * @since 0.0.1
    */
-  prefix?: string;
+  group?: string;
 }
 
 export interface GetOptions {

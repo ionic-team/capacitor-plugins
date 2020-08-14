@@ -10,21 +10,15 @@ import {
 } from './definitions';
 
 export class StorageWeb extends WebPlugin implements StoragePlugin {
-  private prefix = '_cap_';
+  private group = 'CapacitorStorage';
 
   constructor() {
     super({ name: 'Storage' });
   }
 
-  public async configure({ prefix }: ConfigureOptions): Promise<void> {
-    if (typeof prefix === 'string') {
-      if (prefix.length <= 1) {
-        console.warn(
-          `Storage: Extremely short prefixes (such as '${prefix}') may result in data loss.`,
-        );
-      }
-
-      this.prefix = prefix;
+  public async configure({ group }: ConfigureOptions): Promise<void> {
+    if (typeof group === 'string') {
+      this.group = group;
     }
   }
 
@@ -43,7 +37,7 @@ export class StorageWeb extends WebPlugin implements StoragePlugin {
   }
 
   public async keys(): Promise<KeysResult> {
-    const keys = this.rawKeys().map(k => k.substr(this.prefix.length));
+    const keys = this.rawKeys().map(k => k.substring(this.prefix.length));
 
     return { keys };
   }
@@ -56,6 +50,10 @@ export class StorageWeb extends WebPlugin implements StoragePlugin {
 
   private get impl(): Storage {
     return window.localStorage;
+  }
+
+  private get prefix(): string {
+    return this.group ? `${this.group}.` : '';
   }
 
   private rawKeys(): string[] {
