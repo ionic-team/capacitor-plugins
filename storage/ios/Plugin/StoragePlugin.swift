@@ -3,7 +3,18 @@ import Capacitor
 
 @objc(StoragePlugin)
 public class StoragePlugin: CAPPlugin {
-    private let storage = Storage()
+    private var storage = Storage(withConfiguration: StorageConfiguration())
+
+    @objc func configure(_ call: CAPPluginCall) {
+        let group = call.getString("group")
+        var configuration = StorageConfiguration()
+
+        if group != nil {
+            configuration.group = group!
+        }
+
+        storage = Storage(withConfiguration: configuration)
+    }
 
     @objc func get(_ call: CAPPluginCall) {
         guard let key = call.getString("key") else {

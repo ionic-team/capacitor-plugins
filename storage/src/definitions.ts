@@ -8,7 +8,12 @@ export interface ConfigureOptions {
   /**
    * Set the storage group.
    *
-   * Storage groups can be used to organize key/value pairs.
+   * Storage groups are used to organize key/value pairs.
+   *
+   * Using the value 'NativeStorage' provides backwards-compatibility with
+   * [`cordova-plugin-nativestorage`](https://www.npmjs.com/package/cordova-plugin-nativestorage).
+   * WARNING: The `clear()` method can delete unintended values when using the
+   * 'NativeStorage' group.
    *
    * @default CapacitorStorage
    * @since 0.0.1

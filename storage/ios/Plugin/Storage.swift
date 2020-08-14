@@ -1,18 +1,26 @@
 import Foundation
 
+public struct StorageConfiguration {
+    var group = "CapacitorStorage"
+}
+
 @objc public class Storage: NSObject {
-    var prefix = "_cap_"
+    private var configuration: StorageConfiguration
+
+    public init(withConfiguration configuration: StorageConfiguration) {
+        self.configuration = configuration
+    }
 
     @objc func get(byKey key: String) -> String? {
-        return defaults.string(forKey: applyPrefix(onKey: key))
+        return defaults.string(forKey: applyPrefix(toKey: key))
     }
 
     @objc func set(_ value: String, forKey key: String) {
-        defaults.set(value, forKey: applyPrefix(onKey: key))
+        defaults.set(value, forKey: applyPrefix(toKey: key))
     }
 
     @objc func remove(byKey key: String) {
-        defaults.removeObject(forKey: applyPrefix(onKey: key))
+        defaults.removeObject(forKey: applyPrefix(toKey: key))
     }
 
     @objc func removeAll() {
@@ -22,7 +30,11 @@ import Foundation
     }
 
     @objc func getKeys() -> [String] {
-        keys.map { String($0.dropFirst(prefix.count)) }
+        return keys.map { String($0.dropFirst(prefix.count)) }
+    }
+
+    private var prefix: String {
+        return configuration.group == "NativeStorage" ? "" : configuration.group + "."
     }
 
     private var defaults: UserDefaults {
@@ -33,7 +45,7 @@ import Foundation
         return defaults.dictionaryRepresentation().keys.filter { $0.hasPrefix(prefix) }
     }
 
-    private func applyPrefix(onKey key: String) -> String {
+    private func applyPrefix(toKey key: String) -> String {
         return prefix + key
     }
 }

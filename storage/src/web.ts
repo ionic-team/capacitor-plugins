@@ -53,7 +53,7 @@ export class StorageWeb extends WebPlugin implements StoragePlugin {
   }
 
   private get prefix(): string {
-    return this.group ? `${this.group}.` : '';
+    return this.group === 'NativeStorage' ? '' : `${this.group}.`;
   }
 
   private rawKeys(): string[] {
