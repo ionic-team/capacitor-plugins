@@ -1,12 +1,4 @@
-declare module '@capacitor/core' {
-  interface PluginRegistry {
-    Network: NetworkPlugin;
-  }
-}
-
-export interface PluginListenerHandle {
-  remove: () => void;
-}
+import { PluginListenerHandle } from '@capacitor/core';
 
 export interface NetworkPlugin {
   /**

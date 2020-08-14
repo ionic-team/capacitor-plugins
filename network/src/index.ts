@@ -4,7 +4,7 @@ import {
   registerPlugin,
 } from '@capacitor/core';
 
-import { NetworkPlugin } from './definitions';
+import { NetworkPlugin, NetworkStatus } from './definitions';
 import { NetworkWeb } from './web';
 
 const implementations: PluginImplementations<NetworkPlugin> = {
@@ -15,4 +15,4 @@ const implementations: PluginImplementations<NetworkPlugin> = {
 
 const Network = registerPlugin('Network', implementations).getImplementation();
 
-export { Network };
+export { Network, NetworkStatus };

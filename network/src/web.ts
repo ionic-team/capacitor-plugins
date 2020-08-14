@@ -1,8 +1,7 @@
-import { WebPlugin } from '@capacitor/core';
+import { WebPlugin, PluginListenerHandle } from '@capacitor/core';
 import {
   NetworkPlugin,
-  NetworkStatus,
-  PluginListenerHandle,
+  NetworkStatus
 } from './definitions';
 
 declare var window: any;
