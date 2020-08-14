@@ -6,15 +6,14 @@ import android.content.SharedPreferences;
 import java.util.Set;
 
 public class Storage {
-    private static final String PREFERENCES_NAME = "CapacitorStorage";
     private SharedPreferences preferences;
 
-    interface StorageOperation {
+    private interface StorageOperation {
         void execute(SharedPreferences.Editor editor);
     }
 
-    Storage(Context context) {
-        preferences = context.getSharedPreferences(PREFERENCES_NAME, Activity.MODE_PRIVATE);
+    Storage(Context context, StorageConfiguration configuration) {
+        this.preferences = context.getSharedPreferences(configuration.group, Activity.MODE_PRIVATE);
     }
 
     public String get(String key) {

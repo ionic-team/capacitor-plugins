@@ -15,7 +15,19 @@ public class StoragePlugin extends Plugin {
 
     @Override
     public void load() {
-        storage = new Storage(getContext());
+        storage = new Storage(getContext(), StorageConfiguration.DEFAULTS);
+    }
+
+    @PluginMethod
+    public void configure(PluginCall call) {
+        try {
+            StorageConfiguration configuration = StorageConfiguration.DEFAULTS.clone();
+            configuration.group = call.getString("group", StorageConfiguration.DEFAULTS.group);
+
+            storage = new Storage(getContext(), configuration);
+        } catch (CloneNotSupportedException e) {
+            call.reject("Error while configuring", e);
+        }
     }
 
     @PluginMethod
