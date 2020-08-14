@@ -1,5 +1,12 @@
 import { WebPlugin } from '@capacitor/core';
-import { StoragePlugin } from './definitions';
+import {
+  StoragePlugin,
+  GetOptions,
+  GetResult,
+  SetOptions,
+  RemoveOptions,
+  KeysResult,
+} from './definitions';
 
 export class StorageWeb extends WebPlugin implements StoragePlugin {
   KEY_PREFIX = '_cap_';
@@ -8,56 +15,41 @@ export class StorageWeb extends WebPlugin implements StoragePlugin {
     super({ name: 'Storage' });
   }
 
-  get(options: { key: string }): Promise<{ value: string | null }> {
-    return new Promise((resolve, _reject) => {
-      resolve({
-        value: window.localStorage.getItem(this.makeKey(options.key)),
-      });
-    });
+  public async get(options: GetOptions): Promise<GetResult> {
+    const value = this.impl.getItem(this.applyPrefix(options.key));
+
+    return { value };
   }
 
-  set(options: { key: string; value: string }): Promise<void> {
-    return new Promise((resolve, _reject) => {
-      window.localStorage.setItem(this.makeKey(options.key), options.value);
-      resolve();
-    });
+  public async set(options: SetOptions): Promise<void> {
+    this.impl.setItem(this.applyPrefix(options.key), options.value);
   }
 
-  remove(options: { key: string }): Promise<void> {
-    return new Promise((resolve, _reject) => {
-      window.localStorage.removeItem(this.makeKey(options.key));
-      resolve();
-    });
+  public async remove(options: RemoveOptions): Promise<void> {
+    this.impl.removeItem(this.applyPrefix(options.key));
   }
 
-  keys(): Promise<{ keys: string[] }> {
-    return new Promise((resolve, _reject) => {
-      resolve({
-        keys: Object.keys(localStorage)
-          .filter(k => this.isKey(k))
-          .map(k => this.getKey(k)),
-      });
-    });
+  public async keys(): Promise<KeysResult> {
+    const keys = this.rawKeys().map(k => k.substr(this.KEY_PREFIX.length));
+
+    return { keys };
   }
 
-  clear(): Promise<void> {
-    return new Promise((resolve, _reject) => {
-      Object.keys(localStorage)
-        .filter(k => this.isKey(k))
-        .forEach(k => window.localStorage.removeItem(k));
-      resolve();
-    });
+  public async clear(): Promise<void> {
+    for (const key of this.rawKeys()) {
+      this.impl.removeItem(key);
+    }
   }
 
-  makeKey(key: string) {
+  private get impl(): Storage {
+    return window.localStorage;
+  }
+
+  private rawKeys(): string[] {
+    return Object.keys(this.impl).filter(k => k.indexOf(this.KEY_PREFIX) === 0);
+  }
+
+  private applyPrefix(key: string) {
     return this.KEY_PREFIX + key;
-  }
-
-  isKey(key: string) {
-    return key.indexOf(this.KEY_PREFIX) === 0;
-  }
-
-  getKey(key: string) {
-    return key.substr(this.KEY_PREFIX.length);
   }
 }
