@@ -52,7 +52,7 @@ public class Reachability {
     public typealias NetworkReachable = (Reachability) -> Void
     public typealias NetworkUnreachable = (Reachability) -> Void
 
-    @available(*, unavailable, renamed: "Conection")
+    @available(*, unavailable, renamed: "Connection")
     public enum NetworkStatus: String {
         case notReachable = "No Connection"
         case reachableViaWiFi = "WiFi"

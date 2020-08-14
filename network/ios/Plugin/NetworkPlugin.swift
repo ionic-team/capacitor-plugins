@@ -35,7 +35,7 @@ extension Reachability.Connection {
         case .wifi:
             return "wifi"
         case .none:
-            return ""
+            return "none"
         }
     }
     internal var isConnected: Bool {
