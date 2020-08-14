@@ -4,6 +4,20 @@ declare module '@capacitor/core' {
   }
 }
 
+export interface ConfigureOptions {
+  /**
+   * Set the prefix used for each key.
+   *
+   * WARNING: The prefix is used to categorize keys in native storage
+   * (localStorage for web). Using an insufficiently unique prefix could result
+   * in incorrect behavior and unintended data loss.
+   *
+   * @default _cap_
+   * @since 0.0.1
+   */
+  prefix?: string;
+}
+
 export interface GetOptions {
   /**
    * The key whose value to retrieve from storage.
@@ -59,6 +73,15 @@ export interface KeysResult {
 }
 
 export interface StoragePlugin {
+  /**
+   * Configure the storage plugin at runtime.
+   *
+   * Options that are `undefined` will not be used.
+   *
+   * @since 0.0.1
+   */
+  configure(options: ConfigureOptions): Promise<void>;
+
   /**
    * Get the value from storage of a given key.
    *

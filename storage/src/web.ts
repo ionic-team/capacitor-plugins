@@ -1,6 +1,7 @@
 import { WebPlugin } from '@capacitor/core';
 import {
   StoragePlugin,
+  ConfigureOptions,
   GetOptions,
   GetResult,
   SetOptions,
@@ -9,10 +10,22 @@ import {
 } from './definitions';
 
 export class StorageWeb extends WebPlugin implements StoragePlugin {
-  KEY_PREFIX = '_cap_';
+  private prefix = '_cap_';
 
   constructor() {
     super({ name: 'Storage' });
+  }
+
+  public async configure({ prefix }: ConfigureOptions): Promise<void> {
+    if (typeof prefix === 'string') {
+      if (prefix.length <= 1) {
+        console.warn(
+          `Storage: Extremely short prefixes (such as '${prefix}') may result in data loss.`,
+        );
+      }
+
+      this.prefix = prefix;
+    }
   }
 
   public async get(options: GetOptions): Promise<GetResult> {
@@ -30,7 +43,7 @@ export class StorageWeb extends WebPlugin implements StoragePlugin {
   }
 
   public async keys(): Promise<KeysResult> {
-    const keys = this.rawKeys().map(k => k.substr(this.KEY_PREFIX.length));
+    const keys = this.rawKeys().map(k => k.substr(this.prefix.length));
 
     return { keys };
   }
@@ -46,10 +59,10 @@ export class StorageWeb extends WebPlugin implements StoragePlugin {
   }
 
   private rawKeys(): string[] {
-    return Object.keys(this.impl).filter(k => k.indexOf(this.KEY_PREFIX) === 0);
+    return Object.keys(this.impl).filter(k => k.indexOf(this.prefix) === 0);
   }
 
   private applyPrefix(key: string) {
-    return this.KEY_PREFIX + key;
+    return this.prefix + key;
   }
 }
