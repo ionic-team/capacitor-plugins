@@ -1,11 +1,6 @@
 package com.capacitorjs.plugins.network;
 
 import android.Manifest;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Logger;
@@ -16,11 +11,9 @@ import com.getcapacitor.PluginMethod;
 
 @NativePlugin(name = "Network", permissions = { Manifest.permission.ACCESS_NETWORK_STATE })
 public class NetworkPlugin extends Plugin {
+    private Network implementation;
     public static final String NETWORK_CHANGE_EVENT = "networkStatusChange";
     private static final String PERMISSION_NOT_SET = Manifest.permission.ACCESS_NETWORK_STATE + " not set in AndroidManifest.xml";
-
-    private ConnectivityManager cm;
-    private BroadcastReceiver receiver;
 
     /**
      * Monitor for network status changes and fire our event.
@@ -28,37 +21,29 @@ public class NetworkPlugin extends Plugin {
     @Override
     @SuppressWarnings("MissingPermission")
     public void load() {
-        cm = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        receiver =
-            new BroadcastReceiver() {
-
-                @Override
-                public void onReceive(Context context, Intent intent) {
-                    if (hasRequiredPermissions()) {
-                        notifyListeners(NETWORK_CHANGE_EVENT, getStatusJSObject(cm.getActiveNetworkInfo()));
-                    } else {
-                        Logger.error(getLogTag(), PERMISSION_NOT_SET, null);
-                    }
-                }
-            };
+        implementation = new Network(getContext());
+        implementation.setStatusChangeListener(this::updateNetworkStatus);
     }
 
     /**
-     * Get current network status information
+     * Clean up callback to prevent leaks.
+     */
+    @Override
+    protected void handleOnDestroy() {
+        implementation.setStatusChangeListener(null);
+    }
+
+    /**
+     * Get current network status information.
      * @param call
      */
     @SuppressWarnings("MissingPermission")
     @PluginMethod
     public void getStatus(PluginCall call) {
         if (hasRequiredPermissions()) {
-            ConnectivityManager cm = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-
-            NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-
-            call.success(getStatusJSObject(activeNetwork));
+            call.resolve(getStatusJSObject(implementation.getNetworkStatus()));
         } else {
-            call.error(PERMISSION_NOT_SET);
+            call.reject(PERMISSION_NOT_SET);
         }
     }
 
@@ -67,8 +52,7 @@ public class NetworkPlugin extends Plugin {
      */
     @Override
     protected void handleOnResume() {
-        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
-        getActivity().registerReceiver(receiver, filter);
+        implementation.startMonitoring(getActivity());
     }
 
     /**
@@ -76,7 +60,16 @@ public class NetworkPlugin extends Plugin {
      */
     @Override
     protected void handleOnPause() {
-        getActivity().unregisterReceiver(receiver);
+        implementation.stopMonitoring(getActivity());
+    }
+
+    @SuppressWarnings("MissingPermission")
+    private void updateNetworkStatus() {
+        if (hasRequiredPermissions()) {
+            notifyListeners(NETWORK_CHANGE_EVENT, getStatusJSObject(implementation.getNetworkStatus()));
+        } else {
+            Logger.error(getLogTag(), PERMISSION_NOT_SET, null);
+        }
     }
 
     /**
