@@ -57,7 +57,7 @@ public class StoragePlugin: CAPPlugin {
     }
 
     @objc func keys(_ call: CAPPluginCall) {
-        let keys = storage.getKeys()
+        let keys = storage.keys()
 
         call.resolve([
             "keys": keys
