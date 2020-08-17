@@ -10,7 +10,7 @@ export interface ScreenReaderSpeakOptions {
   /**
    * The text to speak.
    *
-   * @since 0.0.1
+   * @since 1.0.0
    */
   value: string;
 
@@ -20,7 +20,7 @@ export interface ScreenReaderSpeakOptions {
    *
    * This option is only supported on Android.
    *
-   * @since 0.0.1
+   * @since 1.0.0
    */
   language?: string;
 }
@@ -29,7 +29,7 @@ export type ScreenReaderStateChangeListener = (state: {
   /**
    * Whether a Screen Reader is currently active.
    *
-   * @since 0.0.1
+   * @since 1.0.0
    */
   value: boolean;
 }) => any;
@@ -41,7 +41,7 @@ export interface ScreenReaderPlugin {
    * This method is not supported on web (it is not possible to detect Screen
    * Readers).
    *
-   * @since 0.0.1
+   * @since 1.0.0
    */
   isEnabled(): Promise<{ value: boolean }>;
 
@@ -58,7 +58,7 @@ export interface ScreenReaderPlugin {
    * Text-to-Speech
    * plugin](https://github.com/capacitor-community/text-to-speech).
    *
-   * @since 0.0.1
+   * @since 1.0.0
    */
   speak(options: ScreenReaderSpeakOptions): Promise<void>;
 
@@ -68,7 +68,7 @@ export interface ScreenReaderPlugin {
    * This method is not supported on web (it is not possible to detect Screen
    * Readers).
    *
-   * @since 0.0.1
+   * @since 1.0.0
    */
   addListener(
     eventName: 'screenReaderStateChange',
@@ -78,7 +78,7 @@ export interface ScreenReaderPlugin {
   /**
    * Remove all the listeners that are attached to this plugin.
    *
-   * @since 0.0.1
+   * @since 1.0.0
    */
   removeAllListeners(): void;
 }
