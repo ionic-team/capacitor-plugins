@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class Network {
+
     /**
      * Interface for callbacks when network status changes.
      */
@@ -18,7 +19,9 @@ public class Network {
         void onNetworkStatusChanged();
     }
 
-    @Nullable private NetworkStatusChangeListener statusChangeListener;
+    @Nullable
+    private NetworkStatusChangeListener statusChangeListener;
+
     private ConnectivityManager cm;
     private BroadcastReceiver receiver;
 
@@ -29,13 +32,13 @@ public class Network {
     public Network(@NonNull Context context) {
         cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         receiver =
-                new BroadcastReceiver() {
+            new BroadcastReceiver() {
 
-                    @Override
-                    public void onReceive(Context context, Intent intent) {
-                        statusChangeListener.onNetworkStatusChanged();
-                    }
-                };
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    statusChangeListener.onNetworkStatusChanged();
+                }
+            };
     }
 
     /**
@@ -50,7 +53,8 @@ public class Network {
      * Return the object that is receiving the callbacks.
      * @return
      */
-    @Nullable public NetworkStatusChangeListener getStatusChangeListener() {
+    @Nullable
+    public NetworkStatusChangeListener getStatusChangeListener() {
         return statusChangeListener;
     }
 
@@ -79,8 +83,3 @@ public class Network {
         activity.unregisterReceiver(receiver);
     }
 }
-
-
-
-
-
