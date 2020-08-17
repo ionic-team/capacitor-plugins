@@ -9,8 +9,8 @@ public class StoragePlugin: CAPPlugin {
         let group = call.getString("group")
         var configuration = StorageConfiguration()
 
-        if group != nil {
-            configuration.group = group!
+        if let group = group {
+            configuration.group = group
         }
 
         storage = Storage(withConfiguration: configuration)
