@@ -1,26 +1,51 @@
 import Foundation
 
 public struct StorageConfiguration {
-    var group = "CapacitorStorage"
+    enum Group {
+        case named(String), cordovaNativeStorage
+    }
+
+    let group: Group
+
+    init(for group: Group = .named("CapacitorStorage")) {
+        self.group = group
+    }
 }
 
 @objc public class Storage: NSObject {
-    private var configuration: StorageConfiguration
+    private let configuration: StorageConfiguration
 
-    public init(withConfiguration configuration: StorageConfiguration) {
+    private var defaults: UserDefaults {
+        return UserDefaults.standard
+    }
+
+    private var prefix: String {
+        switch configuration.group {
+        case .cordovaNativeStorage:
+            return ""
+        case let .named(group):
+            return group + "."
+        }
+    }
+
+    private var keys: [String] {
+        return defaults.dictionaryRepresentation().keys.filter { $0.hasPrefix(prefix) }
+    }
+
+    public init(with configuration: StorageConfiguration) {
         self.configuration = configuration
     }
 
-    @objc func get(byKey key: String) -> String? {
-        return defaults.string(forKey: applyPrefix(toKey: key))
+    @objc func get(by key: String) -> String? {
+        return defaults.string(forKey: applyPrefix(to: key))
     }
 
-    @objc func set(_ value: String, forKey key: String) {
-        defaults.set(value, forKey: applyPrefix(toKey: key))
+    @objc func set(_ value: String, for key: String) {
+        defaults.set(value, forKey: applyPrefix(to: key))
     }
 
-    @objc func remove(byKey key: String) {
-        defaults.removeObject(forKey: applyPrefix(toKey: key))
+    @objc func remove(by key: String) {
+        defaults.removeObject(forKey: applyPrefix(to: key))
     }
 
     @objc func removeAll() {
@@ -33,19 +58,7 @@ public struct StorageConfiguration {
         return keys.map { String($0.dropFirst(prefix.count)) }
     }
 
-    private var prefix: String {
-        return configuration.group == "NativeStorage" ? "" : configuration.group + "."
-    }
-
-    private var defaults: UserDefaults {
-        return UserDefaults.standard
-    }
-
-    private var keys: [String] {
-        return defaults.dictionaryRepresentation().keys.filter { $0.hasPrefix(prefix) }
-    }
-
-    private func applyPrefix(toKey key: String) -> String {
+    private func applyPrefix(to key: String) -> String {
         return prefix + key
     }
 }

@@ -3,17 +3,23 @@ import Capacitor
 
 @objc(StoragePlugin)
 public class StoragePlugin: CAPPlugin {
-    private var storage = Storage(withConfiguration: StorageConfiguration())
+    private var storage = Storage(with: StorageConfiguration())
 
     @objc func configure(_ call: CAPPluginCall) {
         let group = call.getString("group")
-        var configuration = StorageConfiguration()
+        let configuration: StorageConfiguration
 
         if let group = group {
-            configuration.group = group
+            if group == "NativeStorage" {
+                configuration = StorageConfiguration(for: .cordovaNativeStorage)
+            } else {
+                configuration = StorageConfiguration(for: .named(group))
+            }
+        } else {
+            configuration = StorageConfiguration()
         }
 
-        storage = Storage(withConfiguration: configuration)
+        storage = Storage(with: configuration)
     }
 
     @objc func get(_ call: CAPPluginCall) {
@@ -22,7 +28,7 @@ public class StoragePlugin: CAPPlugin {
             return
         }
 
-        let value = storage.get(byKey: key)
+        let value = storage.get(by: key)
 
         call.resolve([
             "value": value as Any
@@ -36,7 +42,7 @@ public class StoragePlugin: CAPPlugin {
         }
         let value = call.getString("value", "") ?? ""
 
-        storage.set(value, forKey: key)
+        storage.set(value, for: key)
         call.resolve()
     }
 
@@ -46,7 +52,7 @@ public class StoragePlugin: CAPPlugin {
             return
         }
 
-        storage.remove(byKey: key)
+        storage.remove(by: key)
         call.resolve()
     }
 
@@ -72,10 +78,10 @@ public class StoragePlugin: CAPPlugin {
         for oldKey in oldKeys {
             let key = String(oldKey.dropFirst(oldPrefix.count))
             let value = UserDefaults.standard.string(forKey: oldKey) ?? ""
-            let currentValue = storage.get(byKey: key)
+            let currentValue = storage.get(by: key)
 
             if currentValue == nil {
-                storage.set(value, forKey: key)
+                storage.set(value, for: key)
                 migrated.append(key)
             } else {
                 existing.append(key)
