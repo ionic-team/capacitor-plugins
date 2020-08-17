@@ -12,14 +12,14 @@ import com.getcapacitor.PluginMethod;
 
 @NativePlugin(name = "TextZoom")
 public class TextZoomPlugin extends Plugin {
-    private TextZoom tz;
+    private TextZoom textZoom;
     private Handler mainHandler;
 
     @Override
     public void load() {
         Activity activity = getBridge().getActivity();
         WebView webView = getBridge().getWebView();
-        tz = new TextZoom(activity, webView);
+        textZoom = new TextZoom(activity, webView);
         mainHandler = new Handler(Looper.getMainLooper());
     }
 
@@ -28,7 +28,7 @@ public class TextZoomPlugin extends Plugin {
         mainHandler.post(
             () -> {
                 JSObject ret = new JSObject();
-                ret.put("value", tz.get());
+                ret.put("value", textZoom.get());
                 call.resolve(ret);
             }
         );
@@ -43,7 +43,7 @@ public class TextZoomPlugin extends Plugin {
                 if (value == null) {
                     call.reject("Invalid integer value.");
                 } else {
-                    tz.set(value);
+                    textZoom.set(value);
                     call.resolve();
                 }
             }
@@ -53,7 +53,7 @@ public class TextZoomPlugin extends Plugin {
     @PluginMethod
     public void getPreferred(final PluginCall call) {
         JSObject ret = new JSObject();
-        ret.put("value", tz.getPreferred());
+        ret.put("value", textZoom.getPreferred());
         call.resolve(ret);
     }
 }
