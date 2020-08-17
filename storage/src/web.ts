@@ -7,6 +7,7 @@ import {
   SetOptions,
   RemoveOptions,
   KeysResult,
+  MigrateResult,
 } from './definitions';
 
 export class StorageWeb extends WebPlugin implements StoragePlugin {
@@ -46,6 +47,28 @@ export class StorageWeb extends WebPlugin implements StoragePlugin {
     for (const key of this.rawKeys()) {
       this.impl.removeItem(key);
     }
+  }
+
+  public async migrate(): Promise<MigrateResult> {
+    const migrated: string[] = [];
+    const existing: string[] = [];
+    const oldprefix = '_cap_';
+    const keys = Object.keys(this.impl).filter(k => k.indexOf(oldprefix) === 0);
+
+    for (const oldkey of keys) {
+      const key = oldkey.substring(oldprefix.length);
+      const value = this.impl.getItem(oldkey) ?? '';
+      const { value: currentValue } = await this.get({ key });
+
+      if (typeof currentValue === 'string') {
+        existing.push(key);
+      } else {
+        await this.set({ key, value });
+        migrated.push(key);
+      }
+    }
+
+    return { migrated, existing };
   }
 
   private get impl(): Storage {

@@ -6,6 +6,8 @@ import com.getcapacitor.NativePlugin;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import org.json.JSONException;
 
@@ -81,7 +83,7 @@ public class StoragePlugin extends Plugin {
         try {
             ret.put("keys", new JSArray(keys));
         } catch (JSONException ex) {
-            call.reject("Unable to create key array.");
+            call.reject("Unable to serialize response.", ex);
             return;
         }
         call.resolve(ret);
@@ -91,5 +93,29 @@ public class StoragePlugin extends Plugin {
     public void clear(PluginCall call) {
         storage.clear();
         call.resolve();
+    }
+
+    @PluginMethod
+    public void migrate(PluginCall call) {
+        List<String> migrated = new ArrayList<>();
+        List<String> existing = new ArrayList<>();
+        Storage oldStorage = new Storage(getContext(), StorageConfiguration.DEFAULTS);
+
+        for (String key : oldStorage.keys()) {
+            String value = oldStorage.get(key);
+            String currentValue = storage.get(key);
+
+            if (currentValue == null) {
+                storage.set(key, value);
+                migrated.add(key);
+            } else {
+                existing.add(key);
+            }
+        }
+
+        JSObject ret = new JSObject();
+        ret.put("migrated", new JSArray(migrated));
+        ret.put("existing", new JSArray(existing));
+        call.resolve(ret);
     }
 }
