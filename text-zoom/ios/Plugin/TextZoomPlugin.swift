@@ -7,7 +7,7 @@ public class TextZoomPlugin: CAPPlugin {
 
     @objc func getPreferred(_ call: CAPPluginCall) {
         call.resolve([
-            "value": textZoom.getPreferred()
+            "value": textZoom.preferredFontSize()
         ])
     }
 }
