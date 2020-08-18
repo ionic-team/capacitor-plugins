@@ -7,15 +7,15 @@ public class ClipboardPlugin: CAPPlugin {
 
     @objc func read(_ call: CAPPluginCall) {
         let result = implementation.read()
-        
+
         if !result.isEmpty {
             call.resolve(result)
         }
     }
-    
+
     @objc func write(_ call: CAPPluginCall) {
-        var success : Bool = false
-        
+        var success: Bool = false
+
         if let string = call.options["string"] as? String {
             implementation.write(content: string, ofType: Clipboard.ContentType.string)
             success = true
@@ -26,7 +26,7 @@ public class ClipboardPlugin: CAPPlugin {
             implementation.write(content: imageBase64, ofType: Clipboard.ContentType.image)
             success = true
         }
-        
+
         if success {
             call.resolve()
         } else {
