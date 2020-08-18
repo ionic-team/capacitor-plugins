@@ -3,7 +3,6 @@ import {
   PluginImplementations,
   registerPlugin,
 } from '@capacitor/core';
-
 import { BrowserPlugin } from './definitions';
 import { BrowserWeb } from './web';
 
@@ -13,9 +12,6 @@ const implementations: PluginImplementations<BrowserPlugin> = {
   web: new BrowserWeb(),
 };
 
-const Browser = registerPlugin(
-  'Browser',
-  implementations,
-).getImplementation();
+const Browser = registerPlugin('Browser', implementations).getImplementation();
 
 export { Browser };

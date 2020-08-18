@@ -1,5 +1,7 @@
 {
-  "packages": [],
+  "packages": [
+  "browser"
+  ],
   "command": {
     "version": {
       "allowBranch": "main",
