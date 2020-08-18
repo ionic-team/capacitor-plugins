@@ -9,7 +9,7 @@ public class ClipboardPlugin: CAPPlugin {
         let result = implementation.read()
         
         if !result.isEmpty {
-            call.success(result)
+            call.resolve(result)
         }
     }
     
@@ -28,7 +28,7 @@ public class ClipboardPlugin: CAPPlugin {
         }
         
         if success {
-            call.success()
+            call.resolve()
         } else {
             call.error("No data provided")
         }
