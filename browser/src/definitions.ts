@@ -9,17 +9,19 @@ export interface BrowserPlugin {
   open(options: BrowserOpenOptions): Promise<void>;
 
   /**
-   * Tells the browser that the specified URLs will be accessed and can
+   * Android only: Hints to the browser that the specified URLs will be accessed and can
    * improve initial loading times.
    *
-   * Only functional on Android, is a no-op on iOS.
+   * No-op on other platforms.
    *
    * @since 1.0.0
    */
   prefetch(options: BrowserPrefetchOptions): Promise<void>;
 
   /**
-   * Close an open browser. Only works on iOS and Web environment, otherwise is a no-op.
+   * Web & iOS only: Close an open browser window.
+   *
+   * No-op on other platforms.
    *
    * @since 1.0.0
    */
@@ -61,13 +63,13 @@ export interface BrowserPlugin {
 export interface BrowserInfo {}
 
 /**
- * Represents the options passed to `open`
+ * Represents the options passed to `open`.
  *
  * @since 1.0.0
  */
 export interface BrowserOpenOptions {
   /**
-   * The URL to open the browser to
+   * The URL to which the browser is opened.
    *
    * @since 1.0.0
    */
@@ -76,14 +78,16 @@ export interface BrowserOpenOptions {
   /**
    * Web only: Optional target for browser open. Follows
    * the `target` property for window.open. Defaults
-   * to _blank
+   * to _blank.
+   *
+   * Ignored on other platforms.
    *
    * @since 1.0.0
    */
   windowName?: string;
 
   /**
-   * A hex color to set the toolbar color to.
+   * A hex color to which the toolbar color is set.
    *
    * @since 1.0.0
    */
@@ -92,13 +96,15 @@ export interface BrowserOpenOptions {
   /**
    * iOS only: The presentation style of the browser. Defaults to fullscreen.
    *
+   * Ignored on other platforms.
+   *
    * @since 1.0.0
    */
   presentationStyle?: 'fullscreen' | 'popover';
 }
 
 /**
- * Represents the options passed to `prefetch`
+ * Represents the options passed to `prefetch`.
  *
  * @since 1.0.0
  */
