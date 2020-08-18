@@ -1,6 +1,7 @@
 {
   "packages": [
-    "storage"
+    "storage",
+    "text-zoom"
   ],
   "command": {
     "version": {
