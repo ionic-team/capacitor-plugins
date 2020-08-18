@@ -30,7 +30,7 @@ public class ClipboardPlugin: CAPPlugin {
         if success {
             call.resolve()
         } else {
-            call.error("No data provided")
+            call.reject("No data provided")
         }
     }
 }

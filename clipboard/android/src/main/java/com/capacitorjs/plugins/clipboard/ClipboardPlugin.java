@@ -38,7 +38,7 @@ public class ClipboardPlugin extends Plugin {
         JSObject result = implementation.read();
 
         if (result == null) {
-            call.error("Unable to read clipboard from the given Context");
+            call.reject("Unable to read clipboard from the given Context");
         } else {
             call.resolve(result);
         }
