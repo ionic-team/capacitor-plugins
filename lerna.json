@@ -1,6 +1,7 @@
 {
   "packages": [
-    "screen-reader"
+    "screen-reader",
+    "text-zoom"
   ],
   "command": {
     "version": {
