@@ -12,7 +12,7 @@ public struct StorageConfiguration {
     }
 }
 
-public class Storage: NSObject {
+public class Storage {
     private let configuration: StorageConfiguration
 
     private var defaults: UserDefaults {
