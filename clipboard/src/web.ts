@@ -1,79 +1,86 @@
-import { WebPlugin } from '@capacitor/core';
+import { WebPlugin, UnsupportedBrowserException } from '@capacitor/core';
 import {
   ClipboardPlugin,
-  ClipboardWrite,
+  ClipboardWriteOptions,
   ClipboardReadResult,
 } from './definitions';
 
-declare var navigator: any;
 declare var ClipboardItem: any;
 
 export class ClipboardWeb extends WebPlugin implements ClipboardPlugin {
   constructor() {
     super({
       name: 'Clipboard',
-      platforms: ['web'],
     });
   }
 
-  async write(options: ClipboardWrite): Promise<void> {
-    if (!navigator.clipboard) {
-      return Promise.reject('Clipboard API not available in this browser');
+  async write(options: ClipboardWriteOptions): Promise<void> {
+    if (!('clipboard' in navigator)) {
+      throw new UnsupportedBrowserException(
+        'Clipboard API not available in this browser',
+      );
     }
 
-    if (options.string !== undefined || options.url) {
-      if (!navigator.clipboard.writeText) {
-        return Promise.reject(
-          'Writting to clipboard not supported in this browser',
+    if (options.string !== undefined) {
+      await this.writeText(options.string);
+    } else if (options.url) {
+      await this.writeText(options.url);
+    } else if (options.image) {
+      if ('ClipboardItem' in window && 'write' in navigator.clipboard) {
+        try {
+          const blob = await (await fetch(options.image)).blob();
+          const clipboardItemInput = new ClipboardItem({ [blob.type]: blob });
+          await (navigator.clipboard as any).write([clipboardItemInput]);
+        } catch (err) {
+          throw new Error('Failed to write image');
+        }
+      } else {
+        throw new UnsupportedBrowserException(
+          'Writing images to the clipboard is not supported in this browser',
         );
       }
-      await navigator.clipboard.writeText(
-        options.string !== undefined ? options.string : options.url,
-      );
-    } else if (options.image) {
-      if (!navigator.clipboard.write) {
-        return Promise.reject('Setting images not supported in this browser');
-      }
-      try {
-        const blob = await (await fetch(options.image)).blob();
-        const clipboardItemInput = new ClipboardItem({ [blob.type]: blob });
-        await navigator.clipboard.write([clipboardItemInput]);
-      } catch (err) {
-        return Promise.reject('Failed to write image');
-      }
     } else {
-      return Promise.reject('Nothing to write');
+      throw new Error('Nothing to write');
     }
-    return Promise.resolve();
   }
 
   async read(): Promise<ClipboardReadResult> {
-    if (!navigator.clipboard) {
-      return Promise.reject('Clipboard API not available in this browser');
+    if (!('clipboard' in navigator)) {
+      throw new UnsupportedBrowserException(
+        'Clipboard API not available in this browser',
+      );
     }
-    if (!navigator.clipboard.read) {
-      if (!navigator.clipboard.readText) {
-        return Promise.reject(
-          'Reading from clipboard not supported in this browser',
-        );
-      }
-      return this.readText();
-    } else {
+
+    if ('ClipboardItem' in window && 'read' in navigator.clipboard) {
       try {
-        const clipboardItems = await navigator.clipboard.read();
+        const clipboardItems = await (navigator.clipboard as any).read();
         const type = clipboardItems[0].types[0];
         const clipboardBlob = await clipboardItems[0].getType(type);
         const data = await this._getBlobData(clipboardBlob, type);
-        return Promise.resolve({ value: data, type });
+        return { value: data, type };
       } catch (err) {
         return this.readText();
       }
+    } else {
+      return this.readText();
     }
   }
 
   private async readText() {
+    if (!('readText' in navigator.clipboard)) {
+      throw new Error('Reading from clipboard not supported in this browser');
+    }
+
     const text = await navigator.clipboard.readText();
-    return Promise.resolve({ value: text, type: 'text/plain' });
+    return { value: text, type: 'text/plain' };
+  }
+
+  private async writeText(text: string) {
+    if (!('writeText' in navigator.clipboard)) {
+      throw new Error('Writting to clipboard not supported in this browser');
+    }
+
+    await navigator.clipboard.writeText(text);
   }
 
   private _getBlobData(clipboardBlob: Blob, type: string) {

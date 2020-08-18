@@ -39,7 +39,7 @@ public class Clipboard {
         }
     }
 
-    public JSObject read() {
+    public ClipboardData read() {
         if (clipboard != null) {
             CharSequence value = null;
 
@@ -55,17 +55,19 @@ public class Clipboard {
                 }
             }
 
-            JSObject ret = new JSObject();
+            ClipboardData clipboardData = new ClipboardData();
             String type = "text/plain";
-            ret.put("value", value != null ? value : "");
+
+            if (value != null) {
+                clipboardData.setValue(value.toString());
+            }
 
             if (value != null && value.toString().startsWith("data:")) {
                 type = value.toString().split(";")[0].split(":")[1];
             }
 
-            ret.put("type", type);
-
-            return ret;
+            clipboardData.setType(type);
+            return clipboardData;
         }
 
         return null;

@@ -10,7 +10,7 @@ export interface ClipboardPlugin {
    *
    * @since 1.0.0
    */
-  write(options: ClipboardWrite): Promise<void>;
+  write(options: ClipboardWriteOptions): Promise<void>;
 
   /**
    * Read a value from the clipboard (the "paste" action)
@@ -25,11 +25,26 @@ export interface ClipboardPlugin {
  *
  * @since 1.0.0
  */
-export interface ClipboardWrite {
+export interface ClipboardWriteOptions {
+  /**
+   * Text value to copy.
+   */
   string?: string;
+
+  /**
+   * Image in [Data URL](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URIs) format to copy.
+   */
   image?: string;
+
+  /**
+   * URL string to copy.
+   */
   url?: string;
-  label?: string; // Android only
+
+  /**
+   * User visible label to accompany the copied data (Android Only).
+   */
+  label?: string;
 }
 
 /**
@@ -38,6 +53,13 @@ export interface ClipboardWrite {
  * @since 1.0.0
  */
 export interface ClipboardReadResult {
+  /**
+   * Data read from the clipboard.
+   */
   value: string;
+
+  /**
+   * Type of data in the clipboard.
+   */
   type: string;
 }

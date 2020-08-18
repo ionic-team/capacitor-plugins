@@ -35,12 +35,16 @@ public class ClipboardPlugin extends Plugin {
 
     @PluginMethod
     public void read(PluginCall call) {
-        JSObject result = implementation.read();
+        ClipboardData result = implementation.read();
 
         if (result == null) {
             call.reject("Unable to read clipboard from the given Context");
         } else {
-            call.resolve(result);
+            JSObject resultJS = new JSObject();
+            resultJS.put("value", result.getValue());
+            resultJS.put("type", result.getType());
+
+            call.resolve(resultJS);
         }
     }
 }
