@@ -37,16 +37,14 @@ import Capacitor
             ]
         }
         
-        if UIPasteboard.general.hasURLs {
-            let url = UIPasteboard.general.url!
+        if let url = UIPasteboard.general.url {
             return [
                 "value": url.absoluteString,
                 "type": "text/plain"
             ]
         }
         
-        if UIPasteboard.general.hasImages {
-            let image = UIPasteboard.general.image!
+        if let image = UIPasteboard.general.image {
             let data = image.pngData()
             if let base64 = data?.base64EncodedString() {
                 return [
