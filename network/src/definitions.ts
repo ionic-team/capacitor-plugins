@@ -32,7 +32,20 @@ export interface NetworkPlugin {
  * @since 1.0.0
  */
 export interface NetworkStatus {
+  /**
+   * Whether there is an active connection or not.
+   *
+   * @since 1.0.0
+   */
   connected: boolean;
+
+  /**
+   * The type of network connection currently in use.
+   *
+   * If there is no active network connection, `connectionType` will be `'none'`.
+   *
+   * @since 1.0.0
+   */
   connectionType: 'wifi' | 'cellular' | 'none' | 'unknown';
 }
 
