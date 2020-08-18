@@ -30,7 +30,7 @@ public class ClipboardPlugin extends Plugin {
             implementation.write(label, Clipboard.ContentType.URL, urlVal);
         }
 
-        call.success();
+        call.resolve();
     }
 
     @PluginMethod
@@ -40,7 +40,7 @@ public class ClipboardPlugin extends Plugin {
         if (result == null) {
             call.error("Unable to read clipboard from the given Context");
         } else {
-            call.success(result);
+            call.resolve(result);
         }
     }
 }
