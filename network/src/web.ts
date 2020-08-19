@@ -26,10 +26,12 @@ export class NetworkWeb extends WebPlugin implements NetworkPlugin {
         ? connection.type || connection.effectiveType
         : 'wifi';
 
-      resolve({
+      const status: NetworkStatus = {
         connected: connected,
         connectionType: connected ? connectionType : 'none',
-      } as NetworkStatus);
+      }
+
+      resolve(status);
     });
   }
 
