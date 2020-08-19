@@ -17,7 +17,7 @@ export class NetworkWeb extends WebPlugin implements NetworkPlugin {
         return;
       }
 
-      let connected = window.navigator.onLine;
+      const connected = window.navigator.onLine;
       let connection =
         window.navigator.connection ||
         window.navigator.mozConnection ||
