@@ -54,8 +54,8 @@ export interface HapticsPlugin {
 export interface HapticsImpactOptions {
   /**
    * Impact Feedback Style
-   * The mass of the objects in the collision simulated by a UIImpactFeedbackGenerator object.
-   * https://developer.apple.com/documentation/uikit/uiimpactfeedbackstyle
+   *
+   * The mass of the objects in the collision simulated by a [UIImpactFeedbackGenerator](https://developer.apple.com/documentation/uikit/uiimpactfeedbackstyle) object.
    * Default value is HapticsImpactStyle.Heavy
    *
    * @since 1.0.0
