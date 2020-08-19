@@ -1,6 +1,7 @@
 {
   "packages": [
-    "haptics"
+    "haptics",
+    "text-zoom"
   ],
   "command": {
     "version": {
