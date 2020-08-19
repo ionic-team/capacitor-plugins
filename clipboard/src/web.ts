@@ -68,7 +68,9 @@ export class ClipboardWeb extends WebPlugin implements ClipboardPlugin {
 
   private async readText() {
     if (!('readText' in navigator.clipboard)) {
-      throw new Error('Reading from clipboard not supported in this browser');
+      throw new UnsupportedBrowserException(
+        'Reading from clipboard not supported in this browser',
+      );
     }
 
     const text = await navigator.clipboard.readText();
@@ -77,13 +79,15 @@ export class ClipboardWeb extends WebPlugin implements ClipboardPlugin {
 
   private async writeText(text: string) {
     if (!('writeText' in navigator.clipboard)) {
-      throw new Error('Writting to clipboard not supported in this browser');
+      throw new UnsupportedBrowserException(
+        'Writting to clipboard not supported in this browser',
+      );
     }
 
     await navigator.clipboard.writeText(text);
   }
 
-  private _getBlobData(clipboardBlob: Blob, type: string) {
+  private _getBlobData(clipboardBlob: Blob, type: string): Promise<string> {
     return new Promise<string>((resolve, reject) => {
       var reader = new FileReader();
       if (type.includes('image')) {
