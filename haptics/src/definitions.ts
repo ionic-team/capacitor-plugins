@@ -126,8 +126,8 @@ export interface VibrateOptions {
    * Duration of the vibration in milliseconds.
    *
    * Not supported in iOS.
-   * default value is 300
    *
+   * @default 300
    * @since 1.0.0
    */
   duration: number;
