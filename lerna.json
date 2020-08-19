@@ -1,7 +1,9 @@
 {
   "packages": [
-     "network"
-   ],
+    "screen-reader",
+    "text-zoom",
+    "network"
+  ],
   "command": {
     "version": {
       "allowBranch": "main",
