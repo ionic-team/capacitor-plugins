@@ -1,5 +1,11 @@
 import { PluginListenerHandle } from '@capacitor/core';
 
+declare module '@capacitor/core' {
+  interface PluginRegistry {
+    Network: NetworkPlugin;
+  }
+}
+
 export interface NetworkPlugin {
   /**
    * Query the current status of the network connection.
