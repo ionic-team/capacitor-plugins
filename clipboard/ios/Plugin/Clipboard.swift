@@ -18,7 +18,7 @@ import Capacitor
                 UIPasteboard.general.url = url
             }
         case ContentType.image:
-            if let data = Data(base64Encoded: getCleanData(content)), let image = UIImage(data: data) {
+            if let data = Data(base64Encoded: content.lastCommaSeparatedValue()), let image = UIImage(data: data) {
                 CAPLog.print("Loaded image", image.size.width, image.size.height)
                 UIPasteboard.general.image = image
             } else {
@@ -56,12 +56,13 @@ import Capacitor
 
         return [:]
     }
+}
 
-    private func getCleanData(_ data: String) -> String {
-        let dataParts = data.split(separator: ",")
-        if let part = dataParts.last {
+private extension String {
+    func lastCommaSeparatedValue() -> String {
+        if let part = self.split(separator: ",").last {
             return String(part)
         }
-        return data
+        return self
     }
 }
