@@ -1,7 +1,4 @@
-import {
-  PluginImplementations,
-  registerPlugin,
-} from '@capacitor/core';
+import { PluginImplementations, registerPlugin } from '@capacitor/core';
 
 import { MotionPlugin } from './definitions';
 import { MotionWeb } from './web';
@@ -12,9 +9,6 @@ const implementations: PluginImplementations<MotionPlugin> = {
   web: new MotionWeb(),
 };
 
-const Motion = registerPlugin(
-  'Motion',
-  implementations,
-).getImplementation();
+const Motion = registerPlugin('Motion', implementations).getImplementation();
 
 export { Motion };
