@@ -9,9 +9,9 @@ import java.util.Locale;
 
 public class ScreenReader {
     private Context context;
-    private AccessibilityManager am;
+    private AccessibilityManager accessibilityManager;
     private List<ScreenReaderStateChangeListener> stateChangeListeners = new ArrayList<>();
-    private TextToSpeech tts;
+    private TextToSpeech textToSpeech;
 
     public interface ScreenReaderStateChangeListener {
         void onScreenReaderStateChanged(boolean enabled);
@@ -19,22 +19,22 @@ public class ScreenReader {
 
     ScreenReader(Context context) {
         this.context = context;
-        this.am = (AccessibilityManager) this.context.getSystemService(Context.ACCESSIBILITY_SERVICE);
+        this.accessibilityManager = (AccessibilityManager) this.context.getSystemService(Context.ACCESSIBILITY_SERVICE);
     }
 
     public void addStateChangeListener(ScreenReaderStateChangeListener listener) {
         stateChangeListeners.add(listener);
-        am.addTouchExplorationStateChangeListener(listener::onScreenReaderStateChanged);
+        accessibilityManager.addTouchExplorationStateChangeListener(listener::onScreenReaderStateChanged);
     }
 
     public void removeAllListeners() {
         for (ScreenReaderStateChangeListener listener : stateChangeListeners) {
-            am.removeTouchExplorationStateChangeListener(listener::onScreenReaderStateChanged);
+            accessibilityManager.removeTouchExplorationStateChangeListener(listener::onScreenReaderStateChanged);
         }
     }
 
     public boolean isEnabled() {
-        return am.isTouchExplorationEnabled();
+        return accessibilityManager.isTouchExplorationEnabled();
     }
 
     public void speak(String text) {
@@ -45,12 +45,12 @@ public class ScreenReader {
         if (isEnabled()) {
             final Locale locale = Locale.forLanguageTag(languageTag);
 
-            tts =
+            textToSpeech =
                 new TextToSpeech(
                     context,
                     status -> {
-                        tts.setLanguage(locale);
-                        tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, "capacitor-screen-reader" + System.currentTimeMillis());
+                        textToSpeech.setLanguage(locale);
+                        textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, "capacitor-screen-reader" + System.currentTimeMillis());
                     }
                 );
         }
