@@ -22,7 +22,7 @@ export class NetworkWeb extends WebPlugin implements NetworkPlugin {
         window.navigator.connection ||
         window.navigator.mozConnection ||
         window.navigator.webkitConnection;
-      let connectionType = connection
+      const connectionType = connection
         ? connection.type || connection.effectiveType
         : 'wifi';
 
