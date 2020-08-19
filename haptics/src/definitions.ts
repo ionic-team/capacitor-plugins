@@ -123,8 +123,9 @@ export enum HapticsNotificationType {
 
 export interface VibrateOptions {
   /**
-   * Android and Web only
-   * duration of the vibration in milliseconds
+   * Duration of the vibration in milliseconds.
+   *
+   * Not supported in iOS.
    * default value is 300
    *
    * @since 1.0.0
