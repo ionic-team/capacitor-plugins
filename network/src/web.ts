@@ -17,19 +17,21 @@ export class NetworkWeb extends WebPlugin implements NetworkPlugin {
         return;
       }
 
-      let connected = window.navigator.onLine;
-      let connection =
+      const connected = window.navigator.onLine;
+      const connection =
         window.navigator.connection ||
         window.navigator.mozConnection ||
         window.navigator.webkitConnection;
-      let connectionType = connection
+      const connectionType = connection
         ? connection.type || connection.effectiveType
         : 'wifi';
 
-      resolve({
+      const status: NetworkStatus = {
         connected: connected,
         connectionType: connected ? connectionType : 'none',
-      } as NetworkStatus);
+      }
+
+      resolve(status);
     });
   }
 
