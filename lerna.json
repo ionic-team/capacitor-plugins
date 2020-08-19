@@ -1,6 +1,8 @@
 {
   "packages": [
-  "browser"
+    "screen-reader",
+    "text-zoom",
+    "browser"
   ],
   "command": {
     "version": {
