@@ -1,58 +1,59 @@
-import { WebPlugin, PluginListenerHandle } from '@capacitor/core';
+import {
+  UnsupportedBrowserException,
+  WebPlugin,
+  PluginListenerHandle,
+} from '@capacitor/core';
 import { NetworkPlugin, NetworkStatus } from './definitions';
 
 declare var window: any;
 
 export class NetworkWeb extends WebPlugin implements NetworkPlugin {
-  listenerFunction: any = null;
-
   constructor() {
     super({ name: 'Network' });
   }
 
-  getStatus(): Promise<NetworkStatus> {
-    return new Promise((resolve, reject) => {
-      if (!window.navigator) {
-        reject('Network info not available');
-        return;
-      }
+  async getStatus(): Promise<NetworkStatus> {
+    if (!window.navigator) {
+      throw new UnsupportedBrowserException(
+        'Browser does not support the Network Information API',
+      );
+    }
 
-      const connected = window.navigator.onLine;
-      const connection =
-        window.navigator.connection ||
-        window.navigator.mozConnection ||
-        window.navigator.webkitConnection;
-      const connectionType = connection
-        ? connection.type || connection.effectiveType
-        : 'wifi';
+    const connected = window.navigator.onLine;
+    const connection =
+      window.navigator.connection ||
+      window.navigator.mozConnection ||
+      window.navigator.webkitConnection;
+    const connectionType = connection
+      ? connection.type || connection.effectiveType
+      : 'wifi';
 
-      const status: NetworkStatus = {
-        connected: connected,
-        connectionType: connected ? connectionType : 'none',
-      }
+    const status: NetworkStatus = {
+      connected: connected,
+      connectionType: connected ? connectionType : 'none',
+    };
 
-      resolve(status);
-    });
+    return status;
   }
 
   addListener(
     eventName: 'networkStatusChange',
     listenerFunc: (status: NetworkStatus) => void,
   ): PluginListenerHandle {
-    let thisRef = this;
-    let connection =
+    const thisRef = this;
+    const connection =
       window.navigator.connection ||
       window.navigator.mozConnection ||
       window.navigator.webkitConnection;
-    let connectionType = connection
+    const connectionType = connection
       ? connection.type || connection.effectiveType
       : 'wifi';
 
-    let onlineBindFunc = listenerFunc.bind(thisRef, {
+    const onlineBindFunc = listenerFunc.bind(thisRef, {
       connected: true,
       connectionType: connectionType,
     });
-    let offlineBindFunc = listenerFunc.bind(thisRef, {
+    const offlineBindFunc = listenerFunc.bind(thisRef, {
       connected: false,
       connectionType: 'none',
     });
