@@ -22,7 +22,7 @@ public class Network {
     @Nullable
     private NetworkStatusChangeListener statusChangeListener;
 
-    private ConnectivityManager cm;
+    private ConnectivityManager connectivityManager;
     private BroadcastReceiver receiver;
 
     /**
@@ -30,7 +30,7 @@ public class Network {
      * @param context
      */
     public Network(@NonNull Context context) {
-        cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         receiver =
             new BroadcastReceiver() {
 
@@ -63,7 +63,7 @@ public class Network {
      * @return NetworkInfo
      */
     public NetworkInfo getNetworkStatus() {
-        return cm.getActiveNetworkInfo();
+        return connectivityManager.getActiveNetworkInfo();
     }
 
     /**
