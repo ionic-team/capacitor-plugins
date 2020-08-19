@@ -7,7 +7,7 @@
   "types": "dist/esm/index.d.ts",
   "scripts": {
     "lint": "npm run prettier -- --check && npm run swiftlint -- lint",
-    "fmt": "npm run prettier -- --write && npm run swiftlint -- autocorrect",
+    "fmt": "npm run prettier -- --write && npm run swiftlint -- autocorrect --format",
     "prettier": "prettier \"**/*.{css,html,ts,js,java}\"",
     "swiftlint": "node-swiftlint",
     "build": "npm run clean && tsc && rollup -c rollup.config.js",
@@ -32,7 +32,7 @@
     "typescript": "~3.9.7"
   },
   "peerDependencies": {
-    "@capacitor/core": "^2.4.0"
+    "@capacitor/core": "^3.0.0-alpha.0"
   },
   "files": [
     "dist/",

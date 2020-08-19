@@ -5,7 +5,6 @@
     "build": "lerna run build",
     "watch": "lerna run --parallel --stream watch",
     "lint": "lerna run lint",
-    "fmt": "lerna run fmt",
     "toggle-local": "node ./scripts/toggle-local.mjs && lerna bootstrap",
     "postinstall": "lerna bootstrap"
   },
