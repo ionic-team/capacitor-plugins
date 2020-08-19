@@ -25,12 +25,34 @@ jobs:
           key: ${{ runner.OS }}-dependency-cache-${{ hashFiles('**/package.json') }}
       - run: npm install
       - run: npm run lint
+  verify:
+    runs-on: macos-latest
+    timeout-minutes: 30
+    strategy:
+      matrix:
+        plugin:
+          - screen-reader
+          - text-zoom
+    steps:
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+      - uses: actions/checkout@v2
+      - name: Restore Dependency Cache
+        uses: actions/cache@v1
+        with:
+          path: ~/.npm
+          key: ${{ runner.OS }}-dependency-cache-${{ hashFiles('**/package.json') }}
+      - run: npm install
+      - run: npm run verify
+        working-directory: ${{ matrix.plugin }}
   deploy:
     runs-on: macos-latest
     if: ${{ github.ref == 'refs/heads/main' }}
     timeout-minutes: 30
     needs:
       - lint
+      - verify
     steps:
       - run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >> ~/.npmrc
       - uses: actions/setup-node@v1
