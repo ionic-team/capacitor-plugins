@@ -9,15 +9,22 @@ on:
       - '**'
 
 jobs:
-  set-matrix:
+  setup:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     outputs:
       plugins: ${{ steps['set-plugins'].outputs.plugins }}
+      changed-directories: ${{ steps['set-changed-directories'].outputs['changed-directories'] }}
     steps:
       - uses: actions/checkout@v2
+      - id: files
+        uses: jitterbit/get-changed-files@b17fbb00bdc0c0f63fcf166580804b4d2cdc2a42
+        with:
+          format: 'json'
       - id: set-plugins
         run: echo "::set-output name=plugins::$(jq -cM .packages lerna.json)"
+      - id: set-changed-directories
+        run: echo "::set-output name=changed-directories::$(echo ${{ toJson(steps.files.outputs.all) }} | jq -cM 'map(split("/")) | map(.[0])')"
   lint:
     runs-on: macos-latest
     timeout-minutes: 30
@@ -38,11 +45,11 @@ jobs:
     runs-on: macos-latest
     timeout-minutes: 30
     needs:
-      - set-matrix
+      - setup
       - lint
     strategy:
       matrix:
-        plugin: ${{ fromJson(needs['set-matrix'].outputs.plugins) }}
+        plugin: ${{ fromJson(needs.setup.outputs.plugins) }}
     steps:
       - uses: actions/setup-node@v1
         with:
@@ -56,6 +63,7 @@ jobs:
       - run: npm install
       - run: npm run verify
         working-directory: ${{ matrix.plugin }}
+        if: ${{ contains(needs.setup.outputs['changed-directories'], matrix.plugin) }}
   deploy:
     runs-on: macos-latest
     if: ${{ github.ref == 'refs/heads/main' }}
