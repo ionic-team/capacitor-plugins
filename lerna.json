@@ -1,6 +1,8 @@
 {
   "packages": [
-    "geolocation"
+    "geolocation",
+    "screen-reader",
+    "text-zoom"
   ],
   "command": {
     "version": {
