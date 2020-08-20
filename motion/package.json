@@ -39,14 +39,7 @@
     "plugin",
     "native"
   ],
-  "capacitor": {
-    "ios": {
-      "src": "ios"
-    },
-    "android": {
-      "src": "android"
-    }
-  },
+  "capacitor": {},
   "prettier": "@ionic/prettier-config",
   "repository": {
     "type": "git",
