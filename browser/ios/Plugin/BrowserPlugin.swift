@@ -1,5 +1,6 @@
 import Foundation
 import Capacitor
+import SafariServices
 
 //@objc(BrowserPlugin)
 //public class BrowserPlugin: CAPPlugin {
@@ -19,12 +20,12 @@ public class CAPBrowserPlugin: CAPPlugin, SFSafariViewControllerDelegate {
 
     @objc func open(_ call: CAPPluginCall) {
         guard let urlString = call.getString("url") else {
-            call.error("Must provide a URL to open")
+            call.reject("Must provide a URL to open")
             return
         }
 
         if urlString.isEmpty {
-            call.error("URL must not be empty")
+            call.reject("URL must not be empty")
             return
         }
 
@@ -42,27 +43,27 @@ public class CAPBrowserPlugin: CAPPlugin, SFSafariViewControllerDelegate {
                     safariVC.modalPresentationStyle = .fullScreen
                 }
 
-                if toolbarColor != nil {
-                    safariVC.preferredBarTintColor = UIColor(fromHex: toolbarColor!)
+                if let toolbarColor = toolbarColor {
+                    safariVC.preferredBarTintColor = UIColor.capacitor.color(fromHex: toolbarColor)
                 }
-
+                
                 self?.bridge?.presentVC(safariVC, animated: true, completion: {
-                    call.success()
+                    call.resolve()
                 })
                 self?.vc = safariVC
             }
         } else {
-            call.error("Invalid URL")
+            call.reject("Invalid URL")
         }
     }
 
     @objc func close(_ call: CAPPluginCall) {
         if vc == nil {
-            call.success()
+            call.resolve()
         }
         DispatchQueue.main.async {
             self.bridge?.dismissVC(animated: true) {
-                call.success()
+                call.resolve()
             }
         }
     }
