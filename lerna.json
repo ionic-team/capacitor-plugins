@@ -1,6 +1,7 @@
 {
   "packages": [
     "geolocation",
+    "motion",
     "screen-reader",
     "text-zoom"
   ],
