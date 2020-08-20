@@ -11,7 +11,7 @@ public class Network {
     var statusObserver: NetworkConnectionChangedObserver?
 
     init() throws {
-        reachability = Reachability()
+        reachability = try Reachability()
         if reachability == nil {
             throw NetworkError.initializationFailed
         }
@@ -20,12 +20,12 @@ public class Network {
             self?.statusObserver?(reachable.connection)
         }
         reachability?.whenUnreachable = { [weak self] _ in
-            self?.statusObserver?(Reachability.Connection.none)
+            self?.statusObserver?(Reachability.Connection.unavailable)
         }
         try reachability?.startNotifier()
     }
 
     func currentStatus() -> Reachability.Connection {
-        return reachability?.connection ?? Reachability.Connection.none
+        return reachability?.connection ?? Reachability.Connection.unavailable
     }
 }

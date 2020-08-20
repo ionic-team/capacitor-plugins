@@ -22,7 +22,7 @@ public class NetworkPlugin: CAPPlugin {
     }
 
     @objc func getStatus(_ call: CAPPluginCall) {
-        let status = implementation?.currentStatus() ?? Reachability.Connection.none
+        let status = implementation?.currentStatus() ?? Reachability.Connection.unavailable
         call.resolve(["connected": status.isConnected, "connectionType": status.jsStringValue])
     }
 }
@@ -34,7 +34,7 @@ extension Reachability.Connection {
             return "cellular"
         case .wifi:
             return "wifi"
-        case .none:
+        case .unavailable, .none:
             return "none"
         }
     }
@@ -42,7 +42,7 @@ extension Reachability.Connection {
         switch self {
         case .cellular, .wifi:
             return true
-        case .none:
+        case .unavailable, .none:
             return false
         }
     }
@@ -52,7 +52,7 @@ extension Reachability.Connection {
             return "Reachable via Cellular"
         case .wifi:
             return "Reachable via WiFi"
-        case .none:
+        case .unavailable, .none:
             return "Not reachable"
         }
     }
