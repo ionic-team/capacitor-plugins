@@ -1,6 +1,6 @@
 {
   "packages": [
-    "clipboard"
+    "clipboard",
     "motion",
     "screen-reader",
     "text-zoom"
