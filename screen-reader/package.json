@@ -1,7 +1,7 @@
 {
-  "name": "@capacitor/text-zoom",
+  "name": "@capacitor/screen-reader",
   "version": "0.0.1",
-  "description": "Text Zoom APIs",
+  "description": "Screen Reader APIs",
   "main": "dist/plugin.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -10,7 +10,7 @@
     "verify:ios": "cd ios && pod install && xcodebuild -workspace Plugin.xcworkspace -scheme Plugin && cd ..",
     "verify:android": "cd android && ./gradlew clean build test && cd ..",
     "lint": "npm run prettier -- --check && npm run swiftlint -- lint",
-    "fmt": "npm run prettier -- --write && npm run swiftlint -- autocorrect --format",
+    "fmt": "npm run prettier -- --write && npm run swiftlint -- autocorrect  --format",
     "prettier": "prettier \"**/*.{css,html,ts,js,java}\"",
     "swiftlint": "node-swiftlint",
     "build": "npm run clean && tsc && rollup -c rollup.config.js",
@@ -41,7 +41,7 @@
     "dist/",
     "ios/",
     "android/",
-    "CapacitorTextZoom.podspec"
+    "CapacitorScreenReader.podspec"
   ],
   "keywords": [
     "capacitor",
