@@ -3,21 +3,19 @@ package com.capacitorjs.plugins.geolocation;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.location.Location;
-
 import com.getcapacitor.JSObject;
 import com.getcapacitor.NativePlugin;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.PluginRequestCodes;
-
 import java.util.HashMap;
 import java.util.Map;
 
 @NativePlugin(
-        name = "Geolocation",
-        permissions = { Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION },
-        permissionRequestCode = PluginRequestCodes.GEOLOCATION_REQUEST_PERMISSIONS
+    name = "Geolocation",
+    permissions = { Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION },
+    permissionRequestCode = PluginRequestCodes.GEOLOCATION_REQUEST_PERMISSIONS
 )
 public class GeolocationPlugin extends Plugin {
     private Geolocation implementation;
@@ -49,7 +47,37 @@ public class GeolocationPlugin extends Plugin {
             boolean enableHighAccuracy = call.getBoolean("enableHighAccuracy", false);
             int timeout = call.getInt("timeout", 10000);
 
-            implementation.sendLocation(enableHighAccuracy, timeout, false, new LocationResultCallback() {
+            implementation.sendLocation(
+                enableHighAccuracy,
+                timeout,
+                false,
+                new LocationResultCallback() {
+
+                    @Override
+                    public void success(JSObject location) {
+                        call.success(location);
+                    }
+
+                    @Override
+                    public void error(String message) {
+                        call.error(message);
+                    }
+                }
+            );
+        }
+    }
+
+    @SuppressWarnings("MissingPermission")
+    private void startWatch(final PluginCall call) {
+        boolean enableHighAccuracy = call.getBoolean("enableHighAccuracy", false);
+        int timeout = call.getInt("timeout", 10000);
+
+        implementation.requestLocationUpdates(
+            enableHighAccuracy,
+            timeout,
+            false,
+            new LocationResultCallback() {
+
                 @Override
                 public void success(JSObject location) {
                     call.success(location);
@@ -59,26 +87,8 @@ public class GeolocationPlugin extends Plugin {
                 public void error(String message) {
                     call.error(message);
                 }
-            });
-        }
-    }
-
-    @SuppressWarnings("MissingPermission")
-    private void startWatch(final PluginCall call) {
-        boolean enableHighAccuracy = call.getBoolean("enableHighAccuracy", false);
-        int timeout = call.getInt("timeout", 10000);
-
-        implementation.requestLocationUpdates(enableHighAccuracy, timeout, false, new LocationResultCallback() {
-            @Override
-            public void success(JSObject location) {
-                call.success(location);
             }
-
-            @Override
-            public void error(String message) {
-                call.error(message);
-            }
-        });
+        );
 
         watchingCalls.put(call.getCallbackId(), call);
     }
@@ -119,17 +129,23 @@ public class GeolocationPlugin extends Plugin {
             boolean enableHighAccuracy = savedCall.getBoolean("enableHighAccuracy", false);
             int timeout = savedCall.getInt("timeout", 10000);
 
-            implementation.sendLocation(enableHighAccuracy, timeout, true, new LocationResultCallback() {
-                @Override
-                public void success(JSObject location) {
-                    savedCall.success(location);
-                }
+            implementation.sendLocation(
+                enableHighAccuracy,
+                timeout,
+                true,
+                new LocationResultCallback() {
 
-                @Override
-                public void error(String message) {
-                    savedCall.error(message);
+                    @Override
+                    public void success(JSObject location) {
+                        savedCall.success(location);
+                    }
+
+                    @Override
+                    public void error(String message) {
+                        savedCall.error(message);
+                    }
                 }
-            });
+            );
         } else if (savedCall.getMethodName().equals("watchPosition")) {
             startWatch(savedCall);
         } else {

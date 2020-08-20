@@ -1,7 +1,8 @@
 import { WebPlugin } from '@capacitor/core';
 import { GeolocationPluginPlugin } from './definitions';
 
-export class GeolocationPluginWeb extends WebPlugin implements GeolocationPluginPlugin {
+export class GeolocationPluginWeb extends WebPlugin
+  implements GeolocationPluginPlugin {
   constructor() {
     super({
       name: 'GeolocationPlugin',

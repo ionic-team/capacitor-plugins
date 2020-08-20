@@ -23,9 +23,9 @@ class PluginTests: XCTestCase {
 
         let call = CAPPluginCall(callbackId: "test", options: [
             "value": value
-        ], success: { (result, _) in
-            let resultValue = result!.data["value"] as? String
-            XCTAssertEqual(value, resultValue)
+            ], success: { (result, _) in
+                let resultValue = result!.data["value"] as? String
+                XCTAssertEqual(value, resultValue)
         }, error: { (_) in
             XCTFail("Error shouldn't have been called")
         })

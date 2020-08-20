@@ -5,7 +5,6 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
-
 import com.getcapacitor.JSObject;
 import com.getcapacitor.PluginMethod;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -14,7 +13,6 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,13 +26,14 @@ public class Geolocation {
         this.context = context;
     }
 
-    public void sendLocation(boolean enableHighAccuracy, int timeout, final boolean getCurrentPosition, final LocationResultCallback resultCallback) {
+    public void sendLocation(
+        boolean enableHighAccuracy,
+        int timeout,
+        final boolean getCurrentPosition,
+        final LocationResultCallback resultCallback
+    ) {
         requestLocationUpdates(enableHighAccuracy, timeout, getCurrentPosition, resultCallback);
     }
-
-
-
-
 
     public JSObject getJSObjectForLocation(Location location) {
         JSObject ret = new JSObject();
@@ -54,7 +53,12 @@ public class Geolocation {
     }
 
     @SuppressWarnings("MissingPermission")
-    public void requestLocationUpdates(boolean enableHighAccuracy, int timeout, final boolean getCurrentPosition, final LocationResultCallback resultCallback) {
+    public void requestLocationUpdates(
+        boolean enableHighAccuracy,
+        int timeout,
+        final boolean getCurrentPosition,
+        final LocationResultCallback resultCallback
+    ) {
         clearLocationUpdates();
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
 
@@ -74,29 +78,29 @@ public class Geolocation {
         locationRequest.setPriority(priority);
 
         locationCallback =
-                new LocationCallback() {
+            new LocationCallback() {
 
-                    @Override
-                    public void onLocationResult(LocationResult locationResult) {
-                        if (getCurrentPosition) {
-                            clearLocationUpdates();
-                        }
-                        Location lastLocation = locationResult.getLastLocation();
-                        if (lastLocation == null) {
-                            resultCallback.error("location unavailable");
-                        } else {
-                            resultCallback.success(getJSObjectForLocation(lastLocation));
-                        }
+                @Override
+                public void onLocationResult(LocationResult locationResult) {
+                    if (getCurrentPosition) {
+                        clearLocationUpdates();
                     }
+                    Location lastLocation = locationResult.getLastLocation();
+                    if (lastLocation == null) {
+                        resultCallback.error("location unavailable");
+                    } else {
+                        resultCallback.success(getJSObjectForLocation(lastLocation));
+                    }
+                }
 
-                    @Override
-                    public void onLocationAvailability(LocationAvailability availability) {
-                        if (!availability.isLocationAvailable()) {
-                            resultCallback.error("location unavailable");
-                            clearLocationUpdates();
-                        }
+                @Override
+                public void onLocationAvailability(LocationAvailability availability) {
+                    if (!availability.isLocationAvailable()) {
+                        resultCallback.error("location unavailable");
+                        clearLocationUpdates();
                     }
-                };
+                }
+            };
 
         fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null);
     }

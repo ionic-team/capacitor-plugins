@@ -1,5 +1,7 @@
 {
-  "packages": [],
+  "packages": [
+    "geolocation"
+  ],
   "command": {
     "version": {
       "allowBranch": "main",
