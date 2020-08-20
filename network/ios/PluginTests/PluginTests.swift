@@ -32,6 +32,7 @@ class NetworkTests: XCTestCase {
                 XCTAssertEqual(Reachability.Connection.wifi, status)
                 expectation.fulfill()
             }
+            // swiftlint:disable:next force_unwrapping
             implementation.reachability?.whenReachable?(implementation.reachability!)
 
             waitForExpectations(timeout: 1) { error in
