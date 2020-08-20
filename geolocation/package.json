@@ -7,6 +7,7 @@
   "types": "dist/esm/index.d.ts",
   "scripts": {
     "lint": "npm run prettier -- --check && npm run swiftlint -- lint",
+    "fmt": "npm run prettier -- --write && npm run swiftlint -- autocorrect --format",
     "prettier": "prettier \"**/*.{css,html,ts,js,java}\"",
     "swiftlint": "node-swiftlint",
     "build": "npm run clean && tsc && rollup -c rollup.config.js",
@@ -17,9 +18,9 @@
   "author": "Ionic <hi@ionicframework.com>",
   "license": "MIT",
   "devDependencies": {
-    "@capacitor/android": "^2.4.0",
-    "@capacitor/core": "^2.4.0",
-    "@capacitor/ios": "^2.4.0",
+    "@capacitor/android": "next",
+    "@capacitor/core": "next",
+    "@capacitor/ios": "next",
     "@ionic/prettier-config": "^1.0.0",
     "@ionic/swiftlint-config": "^1.0.0",
     "@rollup/plugin-node-resolve": "^8.1.0",
@@ -31,7 +32,7 @@
     "typescript": "~3.8.3"
   },
   "peerDependencies": {
-    "@capacitor/core": "^2.4.0"
+    "@capacitor/core": "^3.0.0-alpha.0"
   },
   "files": [
     "dist/",
