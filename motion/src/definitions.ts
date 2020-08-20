@@ -8,14 +8,19 @@ declare module '@capacitor/core' {
 
 export interface MotionPlugin {
   /**
-   * Listen for accelerometer data
+   * Add a listener for accelerometer data
+   *
+   * @since 1.0.0
    */
   addListener(
     eventName: 'accel',
     listenerFunc: (event: MotionEventResult) => void,
   ): PluginListenerHandle;
+
   /**
-   * Listen for device orientation change (compass heading, etc.)
+   * Add a listener for device orientation change (compass heading, etc.)
+   *
+   * @since 1.0.0
    */
   addListener(
     eventName: 'orientation',
@@ -23,37 +28,88 @@ export interface MotionPlugin {
   ): PluginListenerHandle;
 
   /**
-   * Remove all native listeners for this plugin
+   * Remove all the listeners that are attached to this plugin.
+   *
+   * @since 1.0.0
    */
   removeAllListeners(): void;
 }
 
-export type MotionWatchOrientationCallback = (
-  accel: MotionOrientationEventResult,
-) => void;
-export type MotionWatchAccelCallback = (accel: MotionEventResult) => void;
-
-export interface MotionOrientationEventResult {
+export interface DeviceMotionEventRotationRate {
+  /**
+   * The amount of rotation around the Z axis, in degrees per second.
+   *
+   * @since 1.0.0
+   */
   alpha: number;
+
+  /**
+   * The amount of rotation around the X axis, in degrees per second.
+   *
+   * @since 1.0.0
+   */
   beta: number;
+
+  /**
+   * The amount of rotation around the Y axis, in degrees per second.
+   *
+   * @since 1.0.0
+   */
   gamma: number;
 }
 
+export interface MotionOrientationEventResult
+  extends DeviceMotionEventRotationRate {}
+
+export interface DeviceMotionEventAcceleration {
+  /**
+   * The amount of acceleration along the X axis.
+   *
+   * @since 1.0.0
+   */
+  x: number;
+
+  /**
+   * The amount of acceleration along the Y axis.
+   *
+   * @since 1.0.0
+   */
+  y: number;
+
+  /**
+   * The amount of acceleration along the Z axis.
+   *
+   * @since 1.0.0
+   */
+  z: number;
+}
+
 export interface MotionEventResult {
-  acceleration: {
-    x: number;
-    y: number;
-    z: number;
-  };
-  accelerationIncludingGravity: {
-    x: number;
-    y: number;
-    z: number;
-  };
-  rotationRate: {
-    alpha: number;
-    beta: number;
-    gamma: number;
-  };
+  /**
+   * An object giving the acceleration of the device on the three axis X, Y and Z. Acceleration is expressed in m/s
+   *
+   * @since 1.0.0
+   */
+  acceleration: DeviceMotionEventAcceleration;
+
+  /**
+   * An object giving the acceleration of the device on the three axis X, Y and Z with the effect of gravity. Acceleration is expressed in m/s
+   *
+   * @since 1.0.0
+   */
+  accelerationIncludingGravity: DeviceMotionEventAcceleration;
+
+  /**
+   * An object giving the rate of change of the device's orientation on the three orientation axis alpha, beta and gamma. Rotation rate is expressed in degrees per seconds.
+   *
+   * @since 1.0.0
+   */
+  rotationRate: DeviceMotionEventRotationRate;
+
+  /**
+   * A number representing the interval of time, in milliseconds, at which data is obtained from the device.
+   *
+   * @since 1.0.0
+   */
   interval: number;
 }
