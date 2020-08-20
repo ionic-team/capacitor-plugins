@@ -1,4 +1,5 @@
 import Foundation
+import UIKit
 
 @objc public class TextZoom: NSObject {
     static var baseFontSize: Double = 17
