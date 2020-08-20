@@ -1,9 +1,10 @@
 {
   "packages": [
-      "screen-reader",
-      "text-zoom",
-      "clipboard"
-    ],
+    "clipboard"
+    "motion",
+    "screen-reader",
+    "text-zoom"
+  ],
   "command": {
     "version": {
       "allowBranch": "main",
