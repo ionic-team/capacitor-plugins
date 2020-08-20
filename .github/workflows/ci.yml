@@ -9,6 +9,15 @@ on:
       - '**'
 
 jobs:
+  set-matrix:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    outputs:
+      plugins: ${{ steps['set-plugins'].outputs.plugins }}
+    steps:
+      - uses: actions/checkout@v2
+      - id: set-plugins
+        run: echo "::set-output name=plugins::$(jq -cM .packages lerna.json)"
   lint:
     runs-on: macos-latest
     timeout-minutes: 30
@@ -28,11 +37,12 @@ jobs:
   verify:
     runs-on: macos-latest
     timeout-minutes: 30
+    needs:
+      - set-matrix
+      - lint
     strategy:
       matrix:
-        plugin:
-          - screen-reader
-          - text-zoom
+        plugin: ${{ fromJson(needs['set-matrix'].outputs.plugins) }}
     steps:
       - uses: actions/setup-node@v1
         with:
