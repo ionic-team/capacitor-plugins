@@ -1,6 +1,7 @@
 {
   "packages": [
     "haptics",
+    "motion",
     "screen-reader",
     "text-zoom"
   ],
