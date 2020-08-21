@@ -1,10 +1,12 @@
 package com.capacitorjs.plugins.haptics;
 
-import com.getcapacitor.JSObject;
 import com.getcapacitor.NativePlugin;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
+import com.capacitorjs.plugins.haptics.arguments.HapticsImpactType;
+import com.capacitorjs.plugins.haptics.arguments.HapticsNotificationType;
+import com.capacitorjs.plugins.haptics.arguments.HapticsVibrationType;
 
 @NativePlugin(name = "Haptics")
 public class HapticsPlugin extends Plugin {
@@ -24,13 +26,13 @@ public class HapticsPlugin extends Plugin {
 
     @PluginMethod
     public void impact(PluginCall call) {
-        implementation.impact(call.getString("style"));
+        implementation.performHaptics(HapticsImpactType.fromString(call.getString("style")));
         call.resolve();
     }
 
     @PluginMethod
     public void notification(PluginCall call) {
-        implementation.notification(call.getString("type"));
+        implementation.performHaptics(HapticsNotificationType.fromString(call.getString("type")));
         call.resolve();
     }
 

@@ -4,8 +4,6 @@ import android.content.Context;
 import android.os.Build;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
-import com.capacitorjs.plugins.haptics.arguments.HapticsImpactType;
-import com.capacitorjs.plugins.haptics.arguments.HapticsNotificationType;
 import com.capacitorjs.plugins.haptics.arguments.HapticsSelectionType;
 import com.capacitorjs.plugins.haptics.arguments.HapticsVibrationType;
 
@@ -37,14 +35,6 @@ public class Haptics {
         mVibrator.vibrate(pattern, repeat);
     }
 
-    public void impact(String style) {
-        this.performHaptics(HapticsImpactType.fromString(style));
-    }
-
-    public void notification(String type) {
-        this.performHaptics(HapticsNotificationType.fromString(type));
-    }
-
     public void selectionStart() {
         this.selectionStarted = true;
     }
@@ -59,7 +49,7 @@ public class Haptics {
         this.selectionStarted = false;
     }
 
-    private void performHaptics(HapticsVibrationType type) {
+    public void performHaptics(HapticsVibrationType type) {
         if (Build.VERSION.SDK_INT >= 26) {
             mVibrator.vibrate(VibrationEffect.createWaveform(type.getTimings(), type.getAmplitudes(), -1));
         } else {
