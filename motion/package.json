@@ -11,7 +11,7 @@
     "prettier": "prettier \"**/*.{css,html,ts,js,java}\"",
     "build": "npm run clean && tsc && rollup -c rollup.config.js",
     "clean": "rimraf ./dist",
-    "verify": "true",
+    "verify": "npm run build",
     "watch": "tsc --watch",
     "prepublishOnly": "npm run build"
   },
