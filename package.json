@@ -8,7 +8,7 @@
     "fmt": "lerna run fmt",
     "toggle-local": "node ./scripts/toggle-local.mjs",
     "set-capacitor-version": "node ./scripts/set-capacitor-version.mjs",
-    "postinstall": "npm run bootstrap"
+    "postinstall": "lerna bootstrap"
   },
   "husky": {
     "hooks": {
