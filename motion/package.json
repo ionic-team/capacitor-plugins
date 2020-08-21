@@ -18,9 +18,9 @@
   "author": "Ionic <hi@ionicframework.com>",
   "license": "MIT",
   "devDependencies": {
-    "@capacitor/android": "next",
-    "@capacitor/core": "next",
-    "@capacitor/ios": "next",
+    "@capacitor/android": "^3.0.0-alpha.1",
+    "@capacitor/core": "^3.0.0-alpha.1",
+    "@capacitor/ios": "^3.0.0-alpha.1",
     "@ionic/prettier-config": "^1.0.0",
     "@rollup/plugin-node-resolve": "^8.1.0",
     "prettier": "^2.0.5",
