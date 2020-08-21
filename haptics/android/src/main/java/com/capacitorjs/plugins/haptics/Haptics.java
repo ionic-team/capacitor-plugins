@@ -10,16 +10,16 @@ import com.capacitorjs.plugins.haptics.arguments.HapticsVibrationType;
 public class Haptics {
     private Context context;
     private boolean selectionStarted = false;
-    private final Vibrator mVibrator;
+    private final Vibrator vibrator;
 
     Haptics(Context context) {
         this.context = context;
-        mVibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+        this.vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
     }
 
     public void vibrate(int duration) {
         if (Build.VERSION.SDK_INT >= 26) {
-            mVibrator.vibrate(VibrationEffect.createOneShot(duration, VibrationEffect.DEFAULT_AMPLITUDE));
+            vibrator.vibrate(VibrationEffect.createOneShot(duration, VibrationEffect.DEFAULT_AMPLITUDE));
         } else {
             vibratePre26(duration);
         }
@@ -27,12 +27,12 @@ public class Haptics {
 
     @SuppressWarnings({ "deprecation" })
     private void vibratePre26(int duration) {
-        mVibrator.vibrate(duration);
+        vibrator.vibrate(duration);
     }
 
     @SuppressWarnings({ "deprecation" })
     private void vibratePre26(long[] pattern, int repeat) {
-        mVibrator.vibrate(pattern, repeat);
+        vibrator.vibrate(pattern, repeat);
     }
 
     public void selectionStart() {
@@ -51,7 +51,7 @@ public class Haptics {
 
     public void performHaptics(HapticsVibrationType type) {
         if (Build.VERSION.SDK_INT >= 26) {
-            mVibrator.vibrate(VibrationEffect.createWaveform(type.getTimings(), type.getAmplitudes(), -1));
+            vibrator.vibrate(VibrationEffect.createWaveform(type.getTimings(), type.getAmplitudes(), -1));
         } else {
             vibratePre26(type.getOldSDKPattern(), -1);
         }
