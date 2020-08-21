@@ -10,21 +10,21 @@ public enum HapticsNotificationType implements HapticsVibrationType {
     ),
     ERROR("ERROR", new long[] { 0, 27, 45, 50 }, new int[] { 0, 120, 0, 250 }, new long[] { 0, 27, 45, 50 });
 
-    private final String mType;
-    private final long[] mTimings;
-    private final int[] mAmplitudes;
-    private final long[] mOldSDKPattern;
+    private final String type;
+    private final long[] timings;
+    private final int[] amplitudes;
+    private final long[] oldSDKPattern;
 
     HapticsNotificationType(String type, long[] timings, int[] amplitudes, long[] oldSDKPattern) {
-        mType = type;
-        mTimings = timings;
-        mAmplitudes = amplitudes;
-        mOldSDKPattern = oldSDKPattern;
+        this.type = type;
+        this.timings = timings;
+        this.amplitudes = amplitudes;
+        this.oldSDKPattern = oldSDKPattern;
     }
 
     public static HapticsNotificationType fromString(String type) {
         for (HapticsNotificationType nt : values()) {
-            if (nt.mType.equals(type)) {
+            if (nt.type.equals(type)) {
                 return nt;
             }
         }
@@ -33,16 +33,16 @@ public enum HapticsNotificationType implements HapticsVibrationType {
 
     @Override
     public long[] getTimings() {
-        return mTimings;
+        return timings;
     }
 
     @Override
     public int[] getAmplitudes() {
-        return mAmplitudes;
+        return amplitudes;
     }
 
     @Override
     public long[] getOldSDKPattern() {
-        return mOldSDKPattern;
+        return oldSDKPattern;
     }
 }

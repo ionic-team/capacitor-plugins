@@ -5,21 +5,21 @@ public enum HapticsImpactType implements HapticsVibrationType {
     MEDIUM("MEDIUM", new long[] { 0, 43 }, new int[] { 0, 180 }, new long[] { 0, 43 }),
     HEAVY("HEAVY", new long[] { 0, 60 }, new int[] { 0, 255 }, new long[] { 0, 61 });
 
-    private final String mType;
-    private final long[] mTimings;
-    private final int[] mAmplitudes;
-    private final long[] mOldSDKPattern;
+    private final String type;
+    private final long[] timings;
+    private final int[] amplitudes;
+    private final long[] oldSDKPattern;
 
     HapticsImpactType(String type, long[] timings, int[] amplitudes, long[] oldSDKPattern) {
-        mType = type;
-        mTimings = timings;
-        mAmplitudes = amplitudes;
-        mOldSDKPattern = oldSDKPattern;
+        this.type = type;
+        this.timings = timings;
+        this.amplitudes = amplitudes;
+        this.oldSDKPattern = oldSDKPattern;
     }
 
     public static HapticsImpactType fromString(String style) {
         for (HapticsImpactType nt : values()) {
-            if (nt.mType.equals(style)) {
+            if (nt.type.equals(style)) {
                 return nt;
             }
         }
@@ -28,16 +28,16 @@ public enum HapticsImpactType implements HapticsVibrationType {
 
     @Override
     public long[] getTimings() {
-        return mTimings;
+        return timings;
     }
 
     @Override
     public int[] getAmplitudes() {
-        return mAmplitudes;
+        return amplitudes;
     }
 
     @Override
     public long[] getOldSDKPattern() {
-        return mOldSDKPattern;
+        return oldSDKPattern;
     }
 }
