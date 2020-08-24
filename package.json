@@ -6,7 +6,8 @@
     "watch": "lerna run --parallel --stream watch",
     "lint": "lerna run lint",
     "fmt": "lerna run fmt",
-    "toggle-local": "node ./scripts/toggle-local.mjs && lerna bootstrap",
+    "toggle-local": "node ./scripts/toggle-local.mjs",
+    "set-capacitor-version": "node ./scripts/set-capacitor-version.mjs",
     "postinstall": "lerna bootstrap"
   },
   "husky": {

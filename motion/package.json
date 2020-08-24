@@ -1,0 +1,49 @@
+{
+  "name": "@capacitor/motion",
+  "version": "0.0.1",
+  "description": "The Motion API tracks accelerometer and device orientation (compass heading, etc.)",
+  "main": "dist/plugin.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/esm/index.d.ts",
+  "scripts": {
+    "lint": "npm run prettier -- --check",
+    "fmt": "npm run prettier -- --write",
+    "prettier": "prettier \"**/*.{css,html,ts,js,java}\"",
+    "build": "npm run clean && tsc && rollup -c rollup.config.js",
+    "clean": "rimraf ./dist",
+    "verify": "npm run build",
+    "watch": "tsc --watch",
+    "prepublishOnly": "npm run build"
+  },
+  "author": "Ionic <hi@ionicframework.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@capacitor/android": "^3.0.0-alpha.1",
+    "@capacitor/core": "^3.0.0-alpha.1",
+    "@capacitor/ios": "^3.0.0-alpha.1",
+    "@ionic/prettier-config": "^1.0.0",
+    "@rollup/plugin-node-resolve": "^8.1.0",
+    "prettier": "^2.0.5",
+    "prettier-plugin-java": "^0.8.0",
+    "rimraf": "^3.0.0",
+    "rollup": "^2.21.0",
+    "typescript": "~3.9.7"
+  },
+  "peerDependencies": {
+    "@capacitor/core": "^3.0.0-alpha.0"
+  },
+  "files": [
+    "dist/"
+  ],
+  "keywords": [
+    "capacitor",
+    "plugin",
+    "native"
+  ],
+  "capacitor": {},
+  "prettier": "@ionic/prettier-config",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ionic-team/capacitor-plugins"
+  }
+}

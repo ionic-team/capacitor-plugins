@@ -1,8 +1,11 @@
 {
   "packages": [
+    "haptics",
+    "motion",
+    "network",
     "screen-reader",
-    "text-zoom",
-    "network"
+    "storage",
+    "text-zoom"
   ],
   "command": {
     "version": {
