@@ -1,6 +1,7 @@
 {
   "packages": [
     "clipboard",
+    "haptics",
     "motion",
     "screen-reader",
     "storage",
