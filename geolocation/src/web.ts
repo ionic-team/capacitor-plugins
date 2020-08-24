@@ -1,24 +1,78 @@
 import { WebPlugin } from '@capacitor/core';
-import { GeolocationPluginPlugin } from './definitions';
 
-export class GeolocationPluginWeb extends WebPlugin
-  implements GeolocationPluginPlugin {
+import {
+  GeolocationPlugin,
+  GeolocationOptions,
+  GeolocationPosition,
+  GeolocationWatchCallback,
+} from './definitions';
+
+import { PermissionsRequestResult } from './definitions';
+
+import { extend } from './util';
+
+export class GeolocationWeb extends WebPlugin implements GeolocationPlugin {
   constructor() {
-    super({
-      name: 'GeolocationPlugin',
-      platforms: ['web'],
+    super({ name: 'Geolocation' });
+  }
+
+  getCurrentPosition(
+    options?: GeolocationOptions,
+  ): Promise<GeolocationPosition> {
+    return new Promise((resolve, reject) => {
+      return this.requestPermissions().then(
+        (_result: PermissionsRequestResult) => {
+          window.navigator.geolocation.getCurrentPosition(
+            pos => {
+              resolve(pos);
+            },
+            err => {
+              reject(err);
+            },
+            extend(
+              {
+                enableHighAccuracy: true,
+                timeout: 10000,
+                maximumAge: 0,
+              },
+              options,
+            ),
+          );
+        },
+      );
     });
   }
 
-  async echo(options: { value: string }): Promise<{ value: string }> {
-    console.log('ECHO', options);
-    return options;
+  watchPosition(
+    options: GeolocationOptions,
+    callback: GeolocationWatchCallback,
+  ): string {
+    let id = window.navigator.geolocation.watchPosition(
+      pos => {
+        callback(pos);
+      },
+      err => {
+        callback(null, err);
+      },
+      extend(
+        {
+          enableHighAccuracy: true,
+          timeout: 10000,
+          maximumAge: 0,
+        },
+        options,
+      ),
+    );
+
+    return `${id}`;
+  }
+
+  clearWatch(options: { id: string }) {
+    window.navigator.geolocation.clearWatch(parseInt(options.id, 10));
+    return Promise.resolve();
   }
 }
 
-const GeolocationPlugin = new GeolocationPluginWeb();
+const Geolocation = new GeolocationWeb();
 
-export { GeolocationPlugin };
-
-import { registerWebPlugin } from '@capacitor/core';
-registerWebPlugin(GeolocationPlugin);
+export { Geolocation };
