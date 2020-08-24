@@ -3,6 +3,7 @@
     "geolocation",
     "motion",
     "screen-reader",
+    "storage",
     "text-zoom"
   ],
   "command": {
