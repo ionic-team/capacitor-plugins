@@ -1,4 +1,5 @@
 import Foundation
+import Reachability
 
 public typealias NetworkConnectionChangedObserver = (Reachability.Connection) -> Void
 

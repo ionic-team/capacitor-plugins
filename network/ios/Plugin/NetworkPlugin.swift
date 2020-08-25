@@ -1,5 +1,6 @@
 import Foundation
 import Capacitor
+import Reachability
 
 @objc(CAPNetworkPlugin)
 public class NetworkPlugin: CAPPlugin {

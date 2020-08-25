@@ -1,4 +1,5 @@
 import XCTest
+import Reachability
 @testable import Plugin
 
 class NetworkTests: XCTestCase {
