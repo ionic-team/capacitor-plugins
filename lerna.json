@@ -1,7 +1,9 @@
 {
   "packages": [
+    "haptics",
     "motion",
     "screen-reader",
+    "storage",
     "text-zoom",
     "browser"
   ],
