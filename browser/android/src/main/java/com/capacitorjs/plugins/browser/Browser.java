@@ -6,7 +6,4 @@ package com.capacitorjs.plugins.browser;
 //         return value;
 //     }
 // }
-
 //package com.getcapacitor.plugin;
-
-

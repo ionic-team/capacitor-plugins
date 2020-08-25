@@ -5,9 +5,9 @@ import SafariServices
 @objc(CAPBrowserPlugin)
 public class CAPBrowserPlugin: CAPPlugin, SFSafariViewControllerDelegate {
     private let implementation = Browser()
-    
+
     var vc: SFSafariViewController?
-    
+
     @objc func open(_ call: CAPPluginCall) {
         // validate the URL
         guard let urlString = call.getString("url"), let url = URL(string: urlString) else {
@@ -15,7 +15,7 @@ public class CAPBrowserPlugin: CAPPlugin, SFSafariViewControllerDelegate {
             return
         }
         // extract the optional parameters
-        var color: UIColor? = nil
+        var color: UIColor?
         if let toolbarColor = call.getString("toolbarColor") {
             color = UIColor.capacitor.color(fromHex: toolbarColor)
         }
@@ -46,8 +46,7 @@ public class CAPBrowserPlugin: CAPPlugin, SFSafariViewControllerDelegate {
                     call.resolve()
                     self?.implementation.cleanup()
                 }
-            }
-            else {
+            } else {
                 call.resolve()
             }
         }
@@ -56,7 +55,7 @@ public class CAPBrowserPlugin: CAPPlugin, SFSafariViewControllerDelegate {
     @objc func prefetch(_ call: CAPPluginCall) {
         call.unimplemented()
     }
-    
+
     private func presentationStyle(for style: String?) -> UIModalPresentationStyle {
         if let style = style, style == "popover", supportsPopover() {
             return .popover

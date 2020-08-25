@@ -31,26 +31,25 @@ package com.capacitorjs.plugins.browser;
 //    }
 //}
 
-
 import android.content.ComponentName;
-        import android.content.Intent;
-        import android.graphics.Color;
-        import android.net.Uri;
-        import android.os.Bundle;
-        import androidx.browser.customtabs.CustomTabsCallback;
-        import androidx.browser.customtabs.CustomTabsClient;
-        import androidx.browser.customtabs.CustomTabsIntent;
-        import androidx.browser.customtabs.CustomTabsServiceConnection;
-        import androidx.browser.customtabs.CustomTabsSession;
-        import com.getcapacitor.JSArray;
-        import com.getcapacitor.JSObject;
-        import com.getcapacitor.Logger;
-        import com.getcapacitor.NativePlugin;
-        import com.getcapacitor.Plugin;
-        import com.getcapacitor.PluginCall;
-        import com.getcapacitor.PluginMethod;
-        import com.getcapacitor.PluginRequestCodes;
-        import org.json.JSONException;
+import android.content.Intent;
+import android.graphics.Color;
+import android.net.Uri;
+import android.os.Bundle;
+import androidx.browser.customtabs.CustomTabsCallback;
+import androidx.browser.customtabs.CustomTabsClient;
+import androidx.browser.customtabs.CustomTabsIntent;
+import androidx.browser.customtabs.CustomTabsServiceConnection;
+import androidx.browser.customtabs.CustomTabsSession;
+import com.getcapacitor.JSArray;
+import com.getcapacitor.JSObject;
+import com.getcapacitor.Logger;
+import com.getcapacitor.NativePlugin;
+import com.getcapacitor.Plugin;
+import com.getcapacitor.PluginCall;
+import com.getcapacitor.PluginMethod;
+import com.getcapacitor.PluginRequestCodes;
+import org.json.JSONException;
 
 /**
  * The Browser plugin implements Custom Chrome Tabs. See
@@ -167,25 +166,25 @@ public class BrowserPlugin extends Plugin {
 
         if (currentSession == null) {
             currentSession =
-                    customTabsClient.newSession(
-                            new CustomTabsCallback() {
+                customTabsClient.newSession(
+                    new CustomTabsCallback() {
 
-                                @Override
-                                public void onNavigationEvent(int navigationEvent, Bundle extras) {
-                                    switch (navigationEvent) {
-                                        case NAVIGATION_FINISHED:
-                                            notifyListeners("browserPageLoaded", new JSObject());
-                                            break;
-                                        case TAB_HIDDEN:
-                                            fireFinished = true;
-                                            break;
-                                        case TAB_SHOWN:
-                                            fireFinished = false;
-                                            break;
-                                    }
-                                }
+                        @Override
+                        public void onNavigationEvent(int navigationEvent, Bundle extras) {
+                            switch (navigationEvent) {
+                                case NAVIGATION_FINISHED:
+                                    notifyListeners("browserPageLoaded", new JSObject());
+                                    break;
+                                case TAB_HIDDEN:
+                                    fireFinished = true;
+                                    break;
+                                case TAB_SHOWN:
+                                    fireFinished = false;
+                                    break;
                             }
-                    );
+                        }
+                    }
+                );
         }
 
         return currentSession;
