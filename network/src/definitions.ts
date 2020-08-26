@@ -52,7 +52,7 @@ export interface NetworkStatus {
    *
    * @since 1.0.0
    */
-  connectionType: 'wifi' | 'cellular' | 'none' | 'unknown';
+  connectionType: NetworkStatusConnectionType;
 }
 
 /**
@@ -61,3 +61,14 @@ export interface NetworkStatus {
  * @since 1.0.0
  */
 export type NetworkStatusChangeCallback = (status: NetworkStatus) => void;
+
+/**
+ * The type of network connection that a device might have.
+ *
+ * @since 1.0.0
+ */
+export type NetworkStatusConnectionType =
+  | 'wifi'
+  | 'cellular'
+  | 'none'
+  | 'unknown';
