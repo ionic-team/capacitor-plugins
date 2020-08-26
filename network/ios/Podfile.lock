@@ -7,7 +7,7 @@ PODS:
 DEPENDENCIES:
   - "Capacitor (from `../node_modules/@capacitor/ios`)"
   - "CapacitorCordova (from `../node_modules/@capacitor/ios`)"
-  - ReachabilitySwift
+  - ReachabilitySwift (~> 5.0)
 
 SPEC REPOS:
   trunk:
@@ -24,6 +24,6 @@ SPEC CHECKSUMS:
   CapacitorCordova: 232755ae6305222225111926f91f9048354199e3
   ReachabilitySwift: 985039c6f7b23a1da463388634119492ff86c825
 
-PODFILE CHECKSUM: c2e8fb025f4de0303d8320784adaf20e0d0c2560
+PODFILE CHECKSUM: 1352a1bb0792a204090a68a1e7e948a162f9841f
 
 COCOAPODS: 1.9.3
