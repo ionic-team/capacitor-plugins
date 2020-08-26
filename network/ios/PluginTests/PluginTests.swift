@@ -1,5 +1,4 @@
 import XCTest
-import Reachability
 @testable import Plugin
 
 class NetworkTests: XCTestCase {
@@ -17,7 +16,7 @@ class NetworkTests: XCTestCase {
     func testStatus() {
         do {
             let implementation = try Network()
-            XCTAssertEqual(Reachability.Connection.wifi, implementation.currentStatus())
+            XCTAssertEqual(Network.Connection.wifi, implementation.currentStatus())
         } catch let error {
             XCTFail("Network initialization failed! \(error)")
         }
@@ -30,7 +29,7 @@ class NetworkTests: XCTestCase {
 
             let expectation = self.expectation(description: "Network will call the status observer")
             implementation.statusObserver = { status in
-                XCTAssertEqual(Reachability.Connection.wifi, status)
+                XCTAssertEqual(Network.Connection.wifi, status)
                 expectation.fulfill()
             }
             // swiftlint:disable:next force_unwrapping

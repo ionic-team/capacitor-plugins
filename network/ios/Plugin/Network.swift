@@ -1,11 +1,14 @@
 import Foundation
 import Reachability
 
-public typealias NetworkConnectionChangedObserver = (Reachability.Connection) -> Void
+public typealias NetworkConnectionChangedObserver = (Network.Connection) -> Void
 
 public class Network {
     public enum NetworkError: Error {
         case initializationFailed
+    }
+    public enum Connection {
+        case unavailable, wifi, cellular
     }
 
     internal private(set) var reachability: Reachability?
@@ -18,15 +21,29 @@ public class Network {
         }
         // setup our callback(s) and start notifications
         reachability?.whenReachable = { [weak self] reachable in
-            self?.statusObserver?(reachable.connection)
+            self?.statusObserver?(reachable.connection.equivalentEnum)
         }
         reachability?.whenUnreachable = { [weak self] _ in
-            self?.statusObserver?(Reachability.Connection.unavailable)
+            self?.statusObserver?(Connection.unavailable)
         }
         try reachability?.startNotifier()
     }
-
-    func currentStatus() -> Reachability.Connection {
-        return reachability?.connection ?? Reachability.Connection.unavailable
+    
+    func currentStatus() -> Network.Connection {
+        return reachability?.connection.equivalentEnum ?? Connection.unavailable
     }
 }
+
+fileprivate extension Reachability.Connection {
+    var equivalentEnum: Network.Connection {
+        switch self {
+        case .unavailable, .none:
+            return .unavailable
+        case .wifi:
+            return .wifi
+        case .cellular:
+            return .cellular
+        }
+    }
+}
+

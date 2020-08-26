@@ -1,6 +1,5 @@
 import Foundation
 import Capacitor
-import Reachability
 
 @objc(CAPNetworkPlugin)
 public class NetworkPlugin: CAPPlugin {
@@ -23,19 +22,19 @@ public class NetworkPlugin: CAPPlugin {
     }
 
     @objc func getStatus(_ call: CAPPluginCall) {
-        let status = implementation?.currentStatus() ?? Reachability.Connection.unavailable
+        let status = implementation?.currentStatus() ?? Network.Connection.unavailable
         call.resolve(["connected": status.isConnected, "connectionType": status.jsStringValue])
     }
 }
 
-extension Reachability.Connection {
+extension Network.Connection {
     internal var jsStringValue: String {
         switch self {
         case .cellular:
             return "cellular"
         case .wifi:
             return "wifi"
-        case .unavailable, .none:
+        case .unavailable:
             return "none"
         }
     }
@@ -43,7 +42,7 @@ extension Reachability.Connection {
         switch self {
         case .cellular, .wifi:
             return true
-        case .unavailable, .none:
+        case .unavailable:
             return false
         }
     }
@@ -53,7 +52,7 @@ extension Reachability.Connection {
             return "Reachable via Cellular"
         case .wifi:
             return "Reachable via WiFi"
-        case .unavailable, .none:
+        case .unavailable:
             return "Not reachable"
         }
     }
