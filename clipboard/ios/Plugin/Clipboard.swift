@@ -18,7 +18,7 @@ import Capacitor
                 UIPasteboard.general.url = url
             }
         case ContentType.image:
-            if let data = Data(base64Encoded: content.lastCommaSeparatedValue()), let image = UIImage(data: data) {
+            if let data = Data.capacitor.data(base64EncodedOrDataUrl: content), let image = UIImage(data: data) {
                 CAPLog.print("Loaded image", image.size.width, image.size.height)
                 UIPasteboard.general.image = image
             } else {
