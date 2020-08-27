@@ -12,7 +12,7 @@ import Capacitor
     @objc func write(content: String, ofType type: ContentType) {
         switch type {
         case ContentType.string:
-                UIPasteboard.general.string = content
+            UIPasteboard.general.string = content
         case ContentType.url:
             if let url = URL(string: content) {
                 UIPasteboard.general.url = url

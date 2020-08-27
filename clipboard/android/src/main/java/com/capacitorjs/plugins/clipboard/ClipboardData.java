@@ -4,10 +4,7 @@ public class ClipboardData {
     private String value;
     private String type;
 
-    public ClipboardData() {
-        this.value = "";
-        this.type = "";
-    }
+    public ClipboardData() {}
 
     public ClipboardData(String value, String type) {
         this.value = value;

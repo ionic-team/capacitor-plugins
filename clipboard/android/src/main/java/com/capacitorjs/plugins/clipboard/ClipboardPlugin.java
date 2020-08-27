@@ -39,6 +39,8 @@ public class ClipboardPlugin extends Plugin {
 
         if (result == null) {
             call.reject("Unable to read clipboard from the given Context");
+        } else if (result.getValue() == null) {
+            call.reject("There is no data on the clipboard");
         } else {
             JSObject resultJS = new JSObject();
             resultJS.put("value", result.getValue());

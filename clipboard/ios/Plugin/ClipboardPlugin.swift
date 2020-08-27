@@ -10,6 +10,8 @@ public class ClipboardPlugin: CAPPlugin {
 
         if !result.isEmpty {
             call.resolve(result)
+        } else {
+            call.reject("There is no data on the clipboard")
         }
     }
 
