@@ -57,12 +57,3 @@ import Capacitor
         return [:]
     }
 }
-
-private extension String {
-    func lastCommaSeparatedValue() -> String {
-        if let part = self.split(separator: ",").last {
-            return String(part)
-        }
-        return self
-    }
-}
