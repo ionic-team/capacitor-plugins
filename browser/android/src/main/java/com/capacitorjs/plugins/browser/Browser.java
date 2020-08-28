@@ -5,14 +5,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import java.util.List;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.browser.customtabs.CustomTabsCallback;
 import androidx.browser.customtabs.CustomTabsClient;
 import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.browser.customtabs.CustomTabsServiceConnection;
 import androidx.browser.customtabs.CustomTabsSession;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import java.util.List;
 
 /**
  * The Browser class implements Custom Chrome Tabs. See
@@ -20,12 +20,14 @@ import androidx.annotation.Nullable;
  * on how this code works.
  */
 public class Browser {
+
     /**
      * Interface for callbacks for browser events.
      */
     interface BrowserEventListener {
         void onBrowserEvent(int event);
     }
+
     /**
      * Sent when the browser has loaded the initial page.
      */
@@ -38,6 +40,7 @@ public class Browser {
     // private properties
     @Nullable
     private BrowserEventListener browserEventListener;
+
     private Context context;
     private static final String CUSTOM_TAB_PACKAGE_NAME = "com.android.chrome"; // Change when in stable
     private CustomTabsClient customTabsClient;
@@ -186,17 +189,17 @@ public class Browser {
 
         if (browserSession == null) {
             browserSession =
-                    customTabsClient.newSession(
-                            new CustomTabsCallback() {
+                customTabsClient.newSession(
+                    new CustomTabsCallback() {
 
-                                @Override
-                                public void onNavigationEvent(int navigationEvent, Bundle extras) {
-                                    handledNavigationEvent(navigationEvent);
-                                }
-                            }
-                    );
+                        @Override
+                        public void onNavigationEvent(int navigationEvent, Bundle extras) {
+                            handledNavigationEvent(navigationEvent);
+                        }
+                    }
+                );
         }
 
         return browserSession;
     }
- }
+}

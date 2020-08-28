@@ -4,9 +4,11 @@ package com.capacitorjs.plugins.browser;
  * Simple class to handle indeterminate sequence of events. Not thread safe.
  */
 class EventGroup {
+
     interface EventGroupCompletion {
         void onGroupCompletion();
     }
+
     private int count;
     private boolean isComplete;
     private EventGroupCompletion completion;
@@ -18,11 +20,11 @@ class EventGroup {
         completion = onCompletion;
     }
 
-    public void enter(){
+    public void enter() {
         count++;
     }
 
-    public void leave(){
+    public void leave() {
         count--;
         checkForCompletion();
     }
@@ -32,7 +34,7 @@ class EventGroup {
         isComplete = false;
     }
 
-    private void checkForCompletion(){
+    private void checkForCompletion() {
         if (count <= 0) {
             if (isComplete == false && completion != null) {
                 completion.onGroupCompletion();
