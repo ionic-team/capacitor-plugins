@@ -81,11 +81,7 @@ export class NetworkWeb extends WebPlugin implements NetworkPlugin {
     listenerFunc: (status: NetworkStatus) => void,
   ): PluginListenerHandle {
     const thisRef = this;
-    const connectionType = translateConnection(
-      window.navigator.connection ||
-        window.navigator.mozConnection ||
-        window.navigator.webkitConnection,
-    );
+    const connectionType = translatedConnection();
 
     const onlineBindFunc = listenerFunc.bind(thisRef, {
       connected: true,
