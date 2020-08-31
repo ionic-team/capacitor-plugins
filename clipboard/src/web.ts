@@ -5,6 +5,13 @@ import {
   ClipboardReadResult,
 } from './definitions';
 
+declare global {
+  interface Clipboard {
+    read(): Promise<any>;
+    write(data: any[]): Promise<any>;
+  }
+}
+
 declare var ClipboardItem: any;
 
 export class ClipboardWeb extends WebPlugin implements ClipboardPlugin {
@@ -117,10 +124,3 @@ export class ClipboardWeb extends WebPlugin implements ClipboardPlugin {
 const Clipboard = new ClipboardWeb();
 
 export { Clipboard };
-
-declare global {
-  interface Clipboard {
-    read(): Promise<any>;
-    write(data: any[]): Promise<any>;
-  }
-}
