@@ -10,12 +10,6 @@ import com.getcapacitor.Logger;
 public class Clipboard {
     private static final String TAG = "Clipboard";
 
-    public enum ContentType {
-        STRING,
-        IMAGE,
-        URL
-    }
-
     private Context context;
     private ClipboardManager clipboard;
 
@@ -24,15 +18,8 @@ public class Clipboard {
         this.clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
     }
 
-    public void write(String label, ContentType contentType, String content) {
-        ClipData data = null;
-        switch (contentType) {
-            case STRING:
-            case IMAGE:
-            case URL:
-                data = ClipData.newPlainText(label, content);
-                break;
-        }
+    public void write(String label, String content) {
+        ClipData data = ClipData.newPlainText(label, content);
 
         if (data != null && clipboard != null) {
             clipboard.setPrimaryClip(data);

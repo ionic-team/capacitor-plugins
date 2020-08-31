@@ -23,11 +23,11 @@ public class ClipboardPlugin extends Plugin {
         String label = call.getString("label");
 
         if (strVal != null) {
-            implementation.write(label, Clipboard.ContentType.STRING, strVal);
+            implementation.write(label, strVal);
         } else if (imageVal != null) {
-            implementation.write(label, Clipboard.ContentType.IMAGE, imageVal);
+            implementation.write(label, imageVal);
         } else if (urlVal != null) {
-            implementation.write(label, Clipboard.ContentType.URL, urlVal);
+            implementation.write(label, urlVal);
         }
 
         call.resolve();
