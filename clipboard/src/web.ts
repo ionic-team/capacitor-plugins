@@ -15,7 +15,7 @@ export class ClipboardWeb extends WebPlugin implements ClipboardPlugin {
   }
 
   async write(options: ClipboardWriteOptions): Promise<void> {
-    if (!('clipboard' in navigator)) {
+    if (typeof navigator === 'undefined' || !navigator.clipboard) {
       throw new UnsupportedBrowserException(
         'Clipboard API not available in this browser',
       );
@@ -26,11 +26,11 @@ export class ClipboardWeb extends WebPlugin implements ClipboardPlugin {
     } else if (options.url) {
       await this.writeText(options.url);
     } else if (options.image) {
-      if ('ClipboardItem' in window && 'write' in navigator.clipboard) {
+      if (typeof ClipboardItem !== 'undefined') {
         try {
           const blob = await (await fetch(options.image)).blob();
           const clipboardItemInput = new ClipboardItem({ [blob.type]: blob });
-          await (navigator.clipboard as any).write([clipboardItemInput]);
+          await navigator.clipboard.write([clipboardItemInput]);
         } catch (err) {
           throw new Error('Failed to write image');
         }
@@ -45,15 +45,15 @@ export class ClipboardWeb extends WebPlugin implements ClipboardPlugin {
   }
 
   async read(): Promise<ClipboardReadResult> {
-    if (!('clipboard' in navigator)) {
+    if (typeof navigator === 'undefined' || !navigator.clipboard) {
       throw new UnsupportedBrowserException(
         'Clipboard API not available in this browser',
       );
     }
 
-    if ('ClipboardItem' in window && 'read' in navigator.clipboard) {
+    if (typeof ClipboardItem !== 'undefined') {
       try {
-        const clipboardItems = await (navigator.clipboard as any).read();
+        const clipboardItems = await navigator.clipboard.read();
         const type = clipboardItems[0].types[0];
         const clipboardBlob = await clipboardItems[0].getType(type);
         const data = await this._getBlobData(clipboardBlob, type);
@@ -67,7 +67,11 @@ export class ClipboardWeb extends WebPlugin implements ClipboardPlugin {
   }
 
   private async readText() {
-    if (!('readText' in navigator.clipboard)) {
+    if (
+      typeof navigator === 'undefined' ||
+      !navigator.clipboard ||
+      !navigator.clipboard.readText
+    ) {
       throw new UnsupportedBrowserException(
         'Reading from clipboard not supported in this browser',
       );
@@ -78,7 +82,11 @@ export class ClipboardWeb extends WebPlugin implements ClipboardPlugin {
   }
 
   private async writeText(text: string) {
-    if (!('writeText' in navigator.clipboard)) {
+    if (
+      typeof navigator === 'undefined' ||
+      !navigator.clipboard ||
+      !navigator.clipboard.writeText
+    ) {
       throw new UnsupportedBrowserException(
         'Writting to clipboard not supported in this browser',
       );
@@ -109,3 +117,10 @@ export class ClipboardWeb extends WebPlugin implements ClipboardPlugin {
 const Clipboard = new ClipboardWeb();
 
 export { Clipboard };
+
+declare global {
+  interface Clipboard {
+    read(): Promise<any>;
+    write(data: any[]): Promise<any>;
+  }
+}
