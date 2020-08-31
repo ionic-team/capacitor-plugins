@@ -1,11 +1,11 @@
 {
   "packages": [
+    "browser",
     "haptics",
     "motion",
     "screen-reader",
     "storage",
-    "text-zoom",
-    "browser"
+    "text-zoom"
   ],
   "command": {
     "version": {
