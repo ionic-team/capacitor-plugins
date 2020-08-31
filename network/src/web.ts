@@ -9,7 +9,13 @@ import {
   NetworkStatusConnectionType,
 } from './definitions';
 
-declare var window: any;
+declare global {
+  interface Navigator {
+    connection: any;
+    mozConnection: any;
+    webkitConnection: any;
+  }
+}
 
 function translatedConnection(): NetworkStatusConnectionType {
   const connection =
