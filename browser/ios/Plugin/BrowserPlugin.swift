@@ -1,12 +1,9 @@
 import Foundation
 import Capacitor
-import SafariServices
 
 @objc(CAPBrowserPlugin)
-public class CAPBrowserPlugin: CAPPlugin, SFSafariViewControllerDelegate {
+public class CAPBrowserPlugin: CAPPlugin {
     private let implementation = Browser()
-
-    var vc: SFSafariViewController?
 
     @objc func open(_ call: CAPPluginCall) {
         // validate the URL
