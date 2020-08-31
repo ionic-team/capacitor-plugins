@@ -11,7 +11,11 @@ import {
 
 declare var window: any;
 
-function translateConnection(connection: any): NetworkStatusConnectionType {
+function translatedConnection(): NetworkStatusConnectionType {
+  const connection =
+    window.navigator.connection ||
+    window.navigator.mozConnection ||
+    window.navigator.webkitConnection;
   let result: NetworkStatusConnectionType = 'unknown';
   const type = connection ? connection.type || connection.effectiveType : null;
   if (type && typeof type === 'string') {
