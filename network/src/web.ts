@@ -59,7 +59,7 @@ export class NetworkWeb extends WebPlugin implements NetworkPlugin {
   }
 
   async getStatus(): Promise<NetworkStatus> {
-    if ('onLine' in navigator) {
+    if (!window.navigator) {
       throw new UnsupportedBrowserException(
         'Browser does not support the Network Information API',
       );
