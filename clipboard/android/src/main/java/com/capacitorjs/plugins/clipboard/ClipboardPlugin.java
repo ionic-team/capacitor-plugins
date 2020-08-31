@@ -22,15 +22,24 @@ public class ClipboardPlugin extends Plugin {
         String urlVal = call.getString("url");
         String label = call.getString("label");
 
+        ClipboardWriteResponse response;
+
         if (strVal != null) {
-            implementation.write(label, strVal);
+            response = implementation.write(label, strVal);
         } else if (imageVal != null) {
-            implementation.write(label, imageVal);
+            response = implementation.write(label, imageVal);
         } else if (urlVal != null) {
-            implementation.write(label, urlVal);
+            response = implementation.write(label, urlVal);
+        } else {
+            call.reject("No data provided");
+            return;
         }
 
-        call.resolve();
+        if (response.isSuccess()) {
+            call.resolve();
+        } else {
+            call.reject(response.getErrorMessage());
+        }
     }
 
     @PluginMethod
