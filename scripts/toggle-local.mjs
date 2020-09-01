@@ -3,16 +3,16 @@ import { resolve } from 'path';
 import { PROJECTS } from './lib/capacitor.mjs';
 import { execute } from './lib/cli.mjs';
 import { readJson } from './lib/fs.mjs';
-import { bootstrap, getLernaPackagePaths } from './lib/repo.mjs';
+import { bootstrap, ls } from './lib/lerna.mjs';
 import { setLernaPackageDependencies } from './lib/version.mjs';
 
 execute(async () => {
-  const [path] = await getLernaPackagePaths();
+  const [path] = (await ls()).map(p => p.location);
   const pkg = await readJson(resolve(path, 'package.json'));
 
   const packages = Object.fromEntries(PROJECTS.map(project => [
     `@capacitor/${project}`,
-    pkg.devDependencies[`@capacitor/${project}`].startsWith('file:') ? '^3.0.0-alpha.1' : `file:../../capacitor/${project}`,
+    pkg.devDependencies[`@capacitor/${project}`].startsWith('file:') ? '^3.0.0-alpha.2' : `file:../../capacitor/${project}`,
   ]));
 
   await setLernaPackageDependencies(packages, 'devDependencies');
