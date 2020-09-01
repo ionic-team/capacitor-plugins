@@ -2,6 +2,7 @@
   "packages": [
     "haptics",
     "motion",
+    "network",
     "screen-reader",
     "storage",
     "text-zoom"

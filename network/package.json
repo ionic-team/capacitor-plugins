@@ -1,7 +1,7 @@
 {
-  "name": "@capacitor/text-zoom",
+  "name": "@capacitor/network",
   "version": "0.0.1",
-  "description": "The Text Zoom API provides the ability to change Web View text size for visual accessibility.",
+  "description": "The Network API provides network and connectivity information.",
   "main": "dist/plugin.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -36,8 +36,14 @@
     "typescript": "~3.9.7"
   },
   "peerDependencies": {
-    "@capacitor/core": "^3.0.0-alpha.2"
+    "@capacitor/core": "^3.0.0-alpha.0"
   },
+  "files": [
+    "dist/",
+    "ios/",
+    "android/",
+    "CapacitorNetwork.podspec"
+  ],
   "keywords": [
     "capacitor",
     "plugin",
