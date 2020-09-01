@@ -8,6 +8,9 @@
     "text-zoom"
   ],
   "command": {
+    "bootstrap": {
+      "ci": false
+    },
     "version": {
       "allowBranch": "main",
       "conventionalCommits": true,
