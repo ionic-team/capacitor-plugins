@@ -1,7 +1,7 @@
 {
   "name": "@capacitor/network",
   "version": "0.0.1",
-  "description": "Network monitoring APIs",
+  "description": "The Network API provides network and connectivity information.",
   "main": "dist/plugin.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
