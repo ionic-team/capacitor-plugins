@@ -1,7 +1,7 @@
 import { PROJECTS } from './lib/capacitor.mjs';
 import { execute } from './lib/cli.mjs';
 import { setLernaPackageDependencies } from './lib/version.mjs';
-import { bootstrap } from './lib/repo.mjs';
+import { bootstrap } from './lib/lerna.mjs';
 
 execute(async () => {
   const packages = Object.fromEntries(PROJECTS.map(project => [`@capacitor/${project}`, process.argv[2]]));
