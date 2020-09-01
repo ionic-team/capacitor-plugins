@@ -3,9 +3,8 @@ import * as util from 'util';
 
 export const exec = util.promisify(cp.exec);
 export const spawn = cp.spawn;
-export const run = (cmd, args, options) => {
-  const p = spawn(cmd, args, options);
-
+export const run = (cmd, args, options) => wait(spawn(cmd, args, options));
+export const wait = async p => {
   return new Promise((resolve, reject) => {
     p.on('error', reject);
 

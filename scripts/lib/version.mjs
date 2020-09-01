@@ -1,7 +1,7 @@
 import { resolve } from 'path';
 
 import { readJson, writeJson } from './fs.mjs';
-import { getLernaPackagePaths } from './repo.mjs';
+import { ls } from './lerna.mjs';
 
 export const setPackageJsonDependencies = async (path, packages, key = 'dependencies') => {
   const pkg = await readJson(path);
@@ -14,7 +14,7 @@ export const setPackageJsonDependencies = async (path, packages, key = 'dependen
 };
 
 export const setLernaPackageDependencies = async (packages, key = 'dependencies') => {
-  const paths = await getLernaPackagePaths();
+  const paths = (await ls()).map(p => p.location);
 
   for (const path of paths) {
     await setPackageJsonDependencies(resolve(path, 'package.json'), packages, key);
