@@ -1,6 +1,3 @@
-android/.gradle
-ios/Pods
-ios/Podfile.lock
 /src
 .prettierignore
 rollup.config.js
