@@ -1,35 +1,52 @@
 import Foundation
 import Capacitor
 
-@objc public class Clipboard: NSObject {
+public class Clipboard: NSObject {
 
-    @objc enum ContentType: Int {
+    enum ContentType: Int {
         case string
         case url
         case image
     }
 
-    @objc func write(content: String, ofType type: ContentType) {
+    struct ClipboardError: Error {
+        private let message: String
+
+        var localizedDescription: String {
+            return message
+        }
+
+        init(message: String) {
+            self.message = message
+        }
+    }
+
+    func write(content: String, ofType type: ContentType) -> Result<Void, Error> {
         switch type {
         case ContentType.string:
             UIPasteboard.general.string = content
+            return .success(())
         case ContentType.url:
             if let url = URL(string: content) {
                 UIPasteboard.general.url = url
+                return .success(())
+            } else {
+                CAPLog.print("Unable to form URL")
+                return .failure(ClipboardError(message: "Unable to form URL"))
             }
         case ContentType.image:
             if let data = Data.capacitor.data(base64EncodedOrDataUrl: content), let image = UIImage(data: data) {
                 CAPLog.print("Loaded image", image.size.width, image.size.height)
                 UIPasteboard.general.image = image
+                return .success(())
             } else {
                 CAPLog.print("Unable to encode image")
+                return .failure(ClipboardError(message: "Unable to encode image"))
             }
-        default:
-            CAPLog.print("Unknown clipboard content type")
         }
     }
 
-    @objc func read() -> [String: Any] {
+    func read() -> [String: Any] {
         if let stringValue = UIPasteboard.general.string {
             return [
                 "value": stringValue,

@@ -16,23 +16,24 @@ public class ClipboardPlugin: CAPPlugin {
     }
 
     @objc func write(_ call: CAPPluginCall) {
-        var success: Bool = false
+        var result: Result<Void, Error>
 
         if let string = call.options["string"] as? String {
-            implementation.write(content: string, ofType: Clipboard.ContentType.string)
-            success = true
+            result = implementation.write(content: string, ofType: Clipboard.ContentType.string)
         } else if let urlString = call.options["url"] as? String {
-            implementation.write(content: urlString, ofType: Clipboard.ContentType.url)
-            success = true
+            result = implementation.write(content: urlString, ofType: Clipboard.ContentType.url)
         } else if let imageBase64 = call.options["image"] as? String {
-            implementation.write(content: imageBase64, ofType: Clipboard.ContentType.image)
-            success = true
+            result = implementation.write(content: imageBase64, ofType: Clipboard.ContentType.image)
+        } else {
+            call.reject("No content provided")
+            return
         }
 
-        if success {
+        switch result {
+        case .success:
             call.resolve()
-        } else {
-            call.reject("No data provided")
+        case .failure(let err):
+            call.reject(err.localizedDescription)
         }
     }
 }
