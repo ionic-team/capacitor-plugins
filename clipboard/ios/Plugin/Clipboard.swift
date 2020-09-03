@@ -16,7 +16,7 @@ public class Clipboard: NSObject {
             return message
         }
 
-        init(message: String) {
+        init(_ message: String) {
             self.message = message
         }
     }
@@ -31,8 +31,9 @@ public class Clipboard: NSObject {
                 UIPasteboard.general.url = url
                 return .success(())
             } else {
-                CAPLog.print("Unable to form URL")
-                return .failure(ClipboardError(message: "Unable to form URL"))
+                let errMsg = "Unable to form URL"
+                CAPLog.print(errMsg)
+                return .failure(ClipboardError(errMsg))
             }
         case ContentType.image:
             if let data = Data.capacitor.data(base64EncodedOrDataUrl: content), let image = UIImage(data: data) {
@@ -40,8 +41,9 @@ public class Clipboard: NSObject {
                 UIPasteboard.general.image = image
                 return .success(())
             } else {
-                CAPLog.print("Unable to encode image")
-                return .failure(ClipboardError(message: "Unable to encode image"))
+                let errMsg = "Unable to encode image"
+                CAPLog.print(errMsg)
+                return .failure(ClipboardError(errMsg))
             }
         }
     }
