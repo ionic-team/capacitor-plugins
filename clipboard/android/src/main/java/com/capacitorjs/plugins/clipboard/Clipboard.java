@@ -4,7 +4,6 @@ import android.content.ClipData;
 import android.content.ClipDescription;
 import android.content.ClipboardManager;
 import android.content.Context;
-import com.getcapacitor.JSObject;
 import com.getcapacitor.Logger;
 
 public class Clipboard {
