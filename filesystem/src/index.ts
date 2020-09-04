@@ -4,7 +4,11 @@ import {
   registerPlugin,
 } from '@capacitor/core';
 
-import { FilesystemPlugin } from './definitions';
+import {
+  FilesystemPlugin,
+  FilesystemDirectory,
+  FilesystemEncoding,
+} from './definitions';
 import { FilesystemWeb } from './web';
 
 const implementations: PluginImplementations<FilesystemPlugin> = {
@@ -18,4 +22,4 @@ const Filesystem = registerPlugin(
   implementations,
 ).getImplementation();
 
-export { Filesystem };
+export { Filesystem, FilesystemDirectory, FilesystemEncoding };
