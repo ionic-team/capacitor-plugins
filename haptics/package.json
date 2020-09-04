@@ -38,12 +38,6 @@
   "peerDependencies": {
     "@capacitor/core": "^3.0.0-alpha.2"
   },
-  "files": [
-    "dist/",
-    "ios/",
-    "android/",
-    "CapacitorHaptics.podspec"
-  ],
   "keywords": [
     "capacitor",
     "plugin",
