@@ -37,12 +37,6 @@
   "peerDependencies": {
     "@capacitor/core": "^3.0.0-alpha.2"
   },
-  "files": [
-    "dist/",
-    "ios/",
-    "android/",
-    "CapacitorClipboard.podspec"
-  ],
   "keywords": [
     "capacitor",
     "plugin",
