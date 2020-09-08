@@ -40,6 +40,30 @@ Sometimes, it may be necessary to work on Capacitor in parellel with the plugin(
     npm install ../path/to/capacitor/ios
     ```
 
+### Monorepo Scripts
+
+To aid in managing these plugins, this repo has a variety of scripts (located in `scripts/`) that can be run with `npm`.
+
+#### `npm run set-capacitor-version "<version>"`
+
+This script is for setting the version (or version range) of Capacitor packages in each plugin's `package.json`. It will also run `lerna bootstrap` for you.
+
+#### `npm run toggle-local`
+
+> :memo: Requires [Capacitor](https://github.com/ionic-team/capacitor/) to be cloned in a sibling directory.
+
+This script is for switching between Capacitor packages from npm and Capacitor packages installed locally. It will also run `lerna bootstrap` for you.
+
+#### `npm run apply-patches "<package>"`
+
+This script is for copying git changes from one plugin to all plugins.
+
+To use:
+
+1. Make sure your staging area is clean, e.g. `git reset`
+1. Stage the changes from (and only from) your package, e.g. `git add -p -- text-zoom/`
+1. Run the script with `<package>` being the npm name of your package, e.g. `npm run apply-patches @capacitor/text-zoom`
+
 ## Publishing Capacitor Plugins
 
 Capacitor packages are published using [Lerna](https://github.com/lerna/lerna) with independent versioning.

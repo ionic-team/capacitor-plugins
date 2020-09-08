@@ -1,7 +1,7 @@
 {
   "name": "@capacitor/text-zoom",
   "version": "0.0.1",
-  "description": "Text Zoom APIs",
+  "description": "The Text Zoom API provides the ability to change Web View text size for visual accessibility.",
   "main": "dist/plugin.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -22,9 +22,9 @@
   "author": "Ionic <hi@ionicframework.com>",
   "license": "MIT",
   "devDependencies": {
-    "@capacitor/android": "^3.0.0-alpha.1",
-    "@capacitor/core": "^3.0.0-alpha.1",
-    "@capacitor/ios": "^3.0.0-alpha.1",
+    "@capacitor/android": "^3.0.0-alpha.2",
+    "@capacitor/core": "^3.0.0-alpha.2",
+    "@capacitor/ios": "^3.0.0-alpha.2",
     "@ionic/prettier-config": "^1.0.0",
     "@ionic/swiftlint-config": "^1.0.0",
     "@rollup/plugin-node-resolve": "^8.1.0",
@@ -36,14 +36,8 @@
     "typescript": "~3.9.7"
   },
   "peerDependencies": {
-    "@capacitor/core": "^3.0.0-alpha.0"
+    "@capacitor/core": "^3.0.0-alpha.2"
   },
-  "files": [
-    "dist/",
-    "ios/",
-    "android/",
-    "CapacitorTextZoom.podspec"
-  ],
   "keywords": [
     "capacitor",
     "plugin",
@@ -62,5 +56,8 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/ionic-team/capacitor-plugins"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

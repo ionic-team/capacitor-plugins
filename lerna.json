@@ -1,12 +1,17 @@
 {
   "packages": [
     "geolocation",
+    "haptics",
     "motion",
+    "network",
     "screen-reader",
     "storage",
     "text-zoom"
   ],
   "command": {
+    "bootstrap": {
+      "ci": false
+    },
     "version": {
       "allowBranch": "main",
       "conventionalCommits": true,
