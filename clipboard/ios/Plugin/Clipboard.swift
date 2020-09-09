@@ -1,7 +1,7 @@
 import Foundation
 import Capacitor
 
-public class Clipboard: NSObject {
+public class Clipboard {
 
     enum ContentType: Int {
         case string
@@ -9,15 +9,16 @@ public class Clipboard: NSObject {
         case image
     }
 
-    struct ClipboardError: Error {
-        private let message: String
+    enum ClipboardError: LocalizedError {
+        case invalidURL, invalidImage
 
-        var localizedDescription: String {
-            return message
-        }
-
-        init(_ message: String) {
-            self.message = message
+        public var errorDescription: String? {
+            switch self {
+            case .invalidURL:
+                return "Unable to form URL"
+            case .invalidImage:
+                return "Unable to encode image"
+            }
         }
     }
 
@@ -31,9 +32,7 @@ public class Clipboard: NSObject {
                 UIPasteboard.general.url = url
                 return .success(())
             } else {
-                let errMsg = "Unable to form URL"
-                CAPLog.print(errMsg)
-                return .failure(ClipboardError(errMsg))
+                return .failure(ClipboardError.invalidURL)
             }
         case ContentType.image:
             if let data = Data.capacitor.data(base64EncodedOrDataUrl: content), let image = UIImage(data: data) {
@@ -41,9 +40,7 @@ public class Clipboard: NSObject {
                 UIPasteboard.general.image = image
                 return .success(())
             } else {
-                let errMsg = "Unable to encode image"
-                CAPLog.print(errMsg)
-                return .failure(ClipboardError(errMsg))
+                return .failure(ClipboardError.invalidImage)
             }
         }
     }

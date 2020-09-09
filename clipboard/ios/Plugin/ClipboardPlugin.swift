@@ -33,6 +33,7 @@ public class ClipboardPlugin: CAPPlugin {
         case .success:
             call.resolve()
         case .failure(let err):
+            CAPLog.print(err.localizedDescription)
             call.reject(err.localizedDescription)
         }
     }
