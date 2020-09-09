@@ -38,12 +38,6 @@
   "peerDependencies": {
     "@capacitor/core": "^3.0.0-alpha.0"
   },
-  "files": [
-    "dist/",
-    "ios/",
-    "android/",
-    "CapacitorNetwork.podspec"
-  ],
   "keywords": [
     "capacitor",
     "plugin",

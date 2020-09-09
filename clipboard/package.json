@@ -1,14 +1,15 @@
 {
   "name": "@capacitor/clipboard",
   "version": "0.0.1",
-  "description": "The Clipboard API enables copy and pasting to/from the clipboard.",
+  "description": "The Clipboard API enables copy and pasting to/from the system clipboard.",
   "main": "dist/plugin.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
   "scripts": {
-    "verify": "npm run verify:ios && npm run verify:android",
+    "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",
     "verify:ios": "cd ios && pod install && xcodebuild -workspace Plugin.xcworkspace -scheme Plugin && cd ..",
     "verify:android": "cd android && ./gradlew clean build test && cd ..",
+    "verify:web": "npm run build",
     "lint": "npm run prettier -- --check && npm run swiftlint -- lint",
     "fmt": "npm run prettier -- --write && npm run swiftlint -- autocorrect --format",
     "prettier": "prettier \"**/*.{css,html,ts,js,java}\"",
@@ -37,12 +38,6 @@
   "peerDependencies": {
     "@capacitor/core": "^3.0.0-alpha.2"
   },
-  "files": [
-    "dist/",
-    "ios/",
-    "android/",
-    "CapacitorClipboard.podspec"
-  ],
   "keywords": [
     "capacitor",
     "plugin",
@@ -61,5 +56,8 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/ionic-team/capacitor-plugins"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
