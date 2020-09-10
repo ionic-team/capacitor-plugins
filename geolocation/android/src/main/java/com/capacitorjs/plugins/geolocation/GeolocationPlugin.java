@@ -9,6 +9,7 @@ import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.PluginRequestCodes;
+import com.getcapacitor.util.GeolocationPromptListener;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,6 +26,21 @@ public class GeolocationPlugin extends Plugin {
     @Override
     public void load() {
         implementation = new Geolocation(getContext());
+        getBridge()
+            .registerGeolocationPlugin(
+                new GeolocationPromptListener() {
+
+                    @Override
+                    public boolean hasRequiredPermissions() {
+                        return GeolocationPlugin.this.hasRequiredPermissions();
+                    }
+
+                    @Override
+                    public void requestPermissions() {
+                        pluginRequestAllPermissions();
+                    }
+                }
+            );
     }
 
     @PluginMethod(returnType = PluginMethod.RETURN_CALLBACK)
