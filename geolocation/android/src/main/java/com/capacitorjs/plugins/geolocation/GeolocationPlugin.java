@@ -18,7 +18,7 @@ import java.util.Map;
     permissions = { Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION },
     permissionRequestCode = PluginRequestCodes.GEOLOCATION_REQUEST_PERMISSIONS
 )
-public class GeolocationPlugin extends Plugin {
+public class GeolocationPlugin extends Plugin implements GeolocationPromptListener {
     private Geolocation implementation;
 
     private Map<String, PluginCall> watchingCalls = new HashMap<>();
@@ -26,21 +26,7 @@ public class GeolocationPlugin extends Plugin {
     @Override
     public void load() {
         implementation = new Geolocation(getContext());
-        getBridge()
-            .registerGeolocationPlugin(
-                new GeolocationPromptListener() {
-
-                    @Override
-                    public boolean hasRequiredPermissions() {
-                        return GeolocationPlugin.this.hasRequiredPermissions();
-                    }
-
-                    @Override
-                    public void requestPermissions() {
-                        pluginRequestAllPermissions();
-                    }
-                }
-            );
+        registerGeolocationPromptListener(this);
     }
 
     @PluginMethod(returnType = PluginMethod.RETURN_CALLBACK)
@@ -187,5 +173,10 @@ public class GeolocationPlugin extends Plugin {
         JSObject ret = new JSObject();
         ret.put("value", value);
         call.success(ret);
+    }
+
+    @Override
+    public void requestPermissions() {
+        pluginRequestAllPermissions();
     }
 }
