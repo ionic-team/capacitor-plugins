@@ -174,9 +174,4 @@ public class GeolocationPlugin extends Plugin implements GeolocationPromptListen
         ret.put("value", value);
         call.success(ret);
     }
-
-    @Override
-    public void requestPermissions() {
-        pluginRequestAllPermissions();
-    }
 }
