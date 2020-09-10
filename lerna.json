@@ -1,5 +1,6 @@
 {
   "packages": [
+    "clipboard",
     "geolocation",
     "haptics",
     "motion",
