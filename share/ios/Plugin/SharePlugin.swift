@@ -1,18 +1,54 @@
 import Foundation
 import Capacitor
 
-/**
- * Please read the Capacitor iOS Plugin Development Guide
- * here: https://capacitorjs.com/docs/plugins/ios
- */
 @objc(SharePlugin)
 public class SharePlugin: CAPPlugin {
-    private let implementation = Share()
 
-    @objc func echo(_ call: CAPPluginCall) {
-        let value = call.getString("value") ?? ""
-        call.resolve([
-            "value": implementation.echo(value)
-        ])
+    @objc func share(_ call: CAPPluginCall) {
+        var items = [Any]()
+
+        if let text = call.options["text"] as? String {
+            items.append(text)
+        }
+
+        if let url = call.options["url"] as? String {
+            let urlObj = URL(string: url)
+            items.append(urlObj!)
+        }
+
+        let title = call.getString("title")
+
+        if items.count == 0 {
+            call.reject("Must provide at least url or text")
+            return
+        }
+
+        DispatchQueue.main.async { [weak self] in
+            let actionController = UIActivityViewController(activityItems: items, applicationActivities: nil)
+
+            if title != nil {
+                actionController.setValue(title, forKey: "subject")
+            }
+
+            actionController.completionWithItemsHandler = { (activityType, completed, _ returnedItems, activityError) in
+                if activityError != nil {
+                    call.reject("Error sharing item", nil, activityError)
+                    return
+                }
+
+                if completed {
+                    call.resolve([
+                        "activityType": activityType?.rawValue ?? ""
+                    ])
+                } else {
+                    call.reject("Share canceled")
+                }
+
+            }
+
+            self?.setCenteredPopover(actionController)
+            self?.bridge?.viewController?.present(actionController, animated: true, completion: nil)
+        }
+
     }
 }

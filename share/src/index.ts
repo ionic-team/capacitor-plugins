@@ -13,9 +13,6 @@ const implementations: PluginImplementations<SharePlugin> = {
   web: new ShareWeb(),
 };
 
-const Share = registerPlugin(
-  'Share',
-  implementations,
-).getImplementation();
+const Share = registerPlugin('Share', implementations).getImplementation();
 
 export { Share };
