@@ -1,10 +1,7 @@
-import {
-  Plugins,
-  PluginImplementations,
-  registerPlugin,
-} from '@capacitor/core';
+import type { PluginImplementations } from '@capacitor/core';
+import { Plugins, registerPlugin } from '@capacitor/core';
 
-import { StoragePlugin } from './definitions';
+import type { StoragePlugin } from './definitions';
 import { StorageWeb } from './web';
 
 const implementations: PluginImplementations<StoragePlugin> = {

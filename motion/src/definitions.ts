@@ -1,4 +1,4 @@
-import { PluginListenerHandle } from '@capacitor/core';
+import type { PluginListenerHandle } from '@capacitor/core';
 
 declare module '@capacitor/core' {
   interface PluginRegistry {
@@ -58,8 +58,7 @@ export interface DeviceMotionEventRotationRate {
   gamma: number;
 }
 
-export interface MotionOrientationEventResult
-  extends DeviceMotionEventRotationRate {}
+export type MotionOrientationEventResult = DeviceMotionEventRotationRate;
 
 export interface DeviceMotionEventAcceleration {
   /**

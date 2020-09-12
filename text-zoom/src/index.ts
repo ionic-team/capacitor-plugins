@@ -1,10 +1,7 @@
-import {
-  Plugins,
-  PluginImplementations,
-  registerPlugin,
-} from '@capacitor/core';
+import type { PluginImplementations } from '@capacitor/core';
+import { Plugins, registerPlugin } from '@capacitor/core';
 
-import { TextZoomPlugin } from './definitions';
+import type { TextZoomPlugin } from './definitions';
 import { TextZoomIOS } from './ios';
 
 const implementations: PluginImplementations<TextZoomPlugin> = {
