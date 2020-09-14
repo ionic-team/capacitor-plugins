@@ -12,7 +12,7 @@ import java.io.File;
 
 @NativePlugin(name = "Share", requestCodes = { SharePlugin.REQUEST_SHARE })
 public class SharePlugin extends Plugin {
-    static final int REQUEST_SHARE = PluginRequestCodes.SHARE_REQUEST;
+    static final int REQUEST_SHARE = 9023;
 
     private BroadcastReceiver broadcastReceiver;
     private boolean stopped = false;
