@@ -1,5 +1,6 @@
 {
   "packages": [
+    "clipboard",
     "filesystem",
     "haptics",
     "motion",

@@ -9,7 +9,7 @@ import { exec, spawn, wait } from './lib/subprocess.mjs';
 
 execute(async () => {
   if (!process.argv[2]) {
-    console.error('ERR: Supply lerna package for source of patch as first argument.');
+    process.stderr.write('ERR: Supply lerna package for source of patch as first argument.\n');
     process.exit(1);
   }
 
@@ -18,7 +18,7 @@ execute(async () => {
   const targets = packages.filter(p => p !== source);
 
   if (!source) {
-    console.error(`ERR: ${source} is not a valid lerna package name.`);
+    process.stderr.write(`ERR: ${source} is not a valid lerna package name.\n`);
     process.exit(1);
   }
 
@@ -29,19 +29,33 @@ execute(async () => {
 
   const sourceDirectory = basename(source.location);
 
-  console.log(customizePatch(coloredDiff, sourceDirectory, '<plugin>'));
+  process.stdout.write(customizePatch(coloredDiff, sourceDirectory, '<plugin>')) + '\n';
 
   await confirmOrExit('Make the changes above to all plugins?');
 
+  const succeeded = [];
+  const failed = [];
+
   for (const target of targets) {
-    const targetDirectory = basename(target.location);
-    const s = Readable.from(customizePatch(diff, sourceDirectory, targetDirectory));
-    const p = spawn('git', ['apply'], { cwd: root, stdio: ['pipe', 'inherit', 'inherit'] });
-    s.pipe(p.stdin);
-    await wait(p);
+    try {
+      const targetDirectory = basename(target.location);
+      const s = Readable.from(customizePatch(diff, sourceDirectory, targetDirectory));
+      const p = spawn('git', ['apply'], { cwd: root, stdio: ['pipe', 'inherit', 'inherit'] });
+      s.pipe(p.stdin);
+      await wait(p);
+      succeeded.push(target);
+    } catch (e) {
+      await confirmOrExit(`Could not apply patch to ${target.name}. Skip and continue?`);
+      failed.push(target);
+    }
   }
 
-  console.log('Done!');
+  process.stdout.write(
+    `Successfully applied the patch to:\n` +
+    succeeded.map(target => ` - ${target.name}`).join('\n') +
+    `\nCould not apply the patch to:\n` +
+    failed.map(target => ` - ${target.name}`).join('\n')
+  );
 });
 
 const customizePatch = (diff, source, target) => {
