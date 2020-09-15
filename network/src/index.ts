@@ -1,10 +1,8 @@
-import {
-  Plugins,
-  PluginImplementations,
-  registerPlugin,
-} from '@capacitor/core';
+import type { PluginImplementations } from '@capacitor/core';
+import { Plugins, registerPlugin } from '@capacitor/core';
 
-import { NetworkPlugin, NetworkStatus } from './definitions';
+import type { NetworkPlugin } from './definitions';
+import { NetworkStatus } from './definitions';
 import { NetworkWeb } from './web';
 
 const implementations: PluginImplementations<NetworkPlugin> = {

@@ -1,10 +1,7 @@
-import {
-  Plugins,
-  PluginImplementations,
-  registerPlugin,
-} from '@capacitor/core';
+import type { PluginImplementations } from '@capacitor/core';
+import { Plugins, registerPlugin } from '@capacitor/core';
 
-import { ClipboardPlugin } from './definitions';
+import type { ClipboardPlugin } from './definitions';
 import { ClipboardWeb } from './web';
 
 const implementations: PluginImplementations<ClipboardPlugin> = {

@@ -1,5 +1,6 @@
 import { WebPlugin } from '@capacitor/core';
-import { MotionPlugin } from './definitions';
+
+import type { MotionPlugin } from './definitions';
 
 export class MotionWeb extends WebPlugin implements MotionPlugin {
   constructor() {
