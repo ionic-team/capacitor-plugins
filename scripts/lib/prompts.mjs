@@ -11,8 +11,9 @@ export const confirm = async message => {
         {
           type: 'confirm',
           name: 'confirm',
-          message
-        }
+          message,
+          initial: true,
+        },
       ],
       { onCancel: () => resolve(false) }
     ).then(result => resolve(result.confirm));

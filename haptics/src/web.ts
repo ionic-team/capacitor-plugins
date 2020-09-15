@@ -1,12 +1,12 @@
 import { UnsupportedBrowserException, WebPlugin } from '@capacitor/core';
-import {
+
+import type {
   HapticsPlugin,
   HapticsImpactOptions,
-  HapticsImpactStyle,
   HapticsNotificationOptions,
-  HapticsNotificationType,
   VibrateOptions,
 } from './definitions';
+import { HapticsImpactStyle, HapticsNotificationType } from './definitions';
 
 export class HapticsWeb extends WebPlugin implements HapticsPlugin {
   constructor() {

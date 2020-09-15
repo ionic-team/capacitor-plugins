@@ -1,6 +1,6 @@
 export const execute = (fn) => {
-  fn().catch(err => {
-    console.error(err);
+  fn().catch(e => {
+    process.stderr.write(e.stack ?? e);
     process.exit(1);
   });
 };

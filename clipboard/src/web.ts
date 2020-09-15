@@ -1,5 +1,6 @@
 import { WebPlugin, UnsupportedBrowserException } from '@capacitor/core';
-import {
+
+import type {
   ClipboardPlugin,
   ClipboardWriteOptions,
   ClipboardReadResult,
@@ -12,7 +13,7 @@ declare global {
   }
 }
 
-declare var ClipboardItem: any;
+declare let ClipboardItem: any;
 
 export class ClipboardWeb extends WebPlugin implements ClipboardPlugin {
   constructor() {
@@ -104,7 +105,7 @@ export class ClipboardWeb extends WebPlugin implements ClipboardPlugin {
 
   private _getBlobData(clipboardBlob: Blob, type: string): Promise<string> {
     return new Promise<string>((resolve, reject) => {
-      var reader = new FileReader();
+      const reader = new FileReader();
       if (type.includes('image')) {
         reader.readAsDataURL(clipboardBlob);
       } else {
