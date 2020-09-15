@@ -1,6 +1,6 @@
 import { Plugins } from '@capacitor/core';
 
-import { TextZoomPlugin } from './definitions';
+import type { TextZoomPlugin } from './definitions';
 
 export class TextZoomIOS implements TextZoomPlugin {
   static readonly TEXT_SIZE_REGEX = /(\d+)%/;
