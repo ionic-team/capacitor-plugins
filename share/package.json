@@ -34,9 +34,9 @@
     "prepublishOnly": "npm run build"
   },
   "devDependencies": {
-    "@capacitor/android": "next",
-    "@capacitor/core": "next",
-    "@capacitor/ios": "next",
+    "@capacitor/android": "^3.0.0-alpha.3",
+    "@capacitor/core": "^3.0.0-alpha.3",
+    "@capacitor/ios": "^3.0.0-alpha.3",
     "@ionic/prettier-config": "^1.0.0",
     "@ionic/swiftlint-config": "^1.0.0",
     "@rollup/plugin-node-resolve": "^8.1.0",
