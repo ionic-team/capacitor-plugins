@@ -28,7 +28,7 @@ public class Network {
         }
         try reachability?.startNotifier()
     }
-    
+
     func currentStatus() -> Network.Connection {
         return reachability?.connection.equivalentEnum ?? Connection.unavailable
     }
@@ -46,4 +46,3 @@ fileprivate extension Reachability.Connection {
         }
     }
 }
-
