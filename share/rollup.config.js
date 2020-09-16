@@ -5,7 +5,7 @@ export default {
   output: {
     file: 'dist/plugin.js',
     format: 'iife',
-    name: 'sharePlugin',
+    name: 'capacitorShare',
     globals: {
       '@capacitor/core': 'capacitorExports',
     },
