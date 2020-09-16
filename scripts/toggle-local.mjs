@@ -12,7 +12,7 @@ execute(async () => {
 
   const packages = Object.fromEntries(PROJECTS.map(project => [
     `@capacitor/${project}`,
-    pkg.devDependencies[`@capacitor/${project}`].startsWith('file:') ? '^3.0.0-alpha.2' : `file:../../capacitor/${project}`,
+    pkg.devDependencies[`@capacitor/${project}`].startsWith('file:') ? '^3.0.0-alpha.3' : `file:../../capacitor/${project}`,
   ]));
 
   await setLernaPackageDependencies(packages, 'devDependencies');
