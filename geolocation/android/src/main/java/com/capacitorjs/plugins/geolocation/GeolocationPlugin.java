@@ -3,22 +3,25 @@ package com.capacitorjs.plugins.geolocation;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import com.getcapacitor.CapacitorPlugin;
 import com.getcapacitor.JSObject;
-import com.getcapacitor.NativePlugin;
+import com.getcapacitor.Permission;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.PluginRequestCodes;
-import com.getcapacitor.util.GeolocationPromptListener;
 import java.util.HashMap;
 import java.util.Map;
 
-@NativePlugin(
+@CapacitorPlugin(
     name = "Geolocation",
-    permissions = { Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION },
+    permissions = {
+        @Permission(permission = Manifest.permission.ACCESS_COARSE_LOCATION, alias = "networkLocation"),
+        @Permission(permission = Manifest.permission.ACCESS_FINE_LOCATION, alias = "gps")
+    },
     permissionRequestCode = PluginRequestCodes.GEOLOCATION_REQUEST_PERMISSIONS
 )
-public class GeolocationPlugin extends Plugin implements GeolocationPromptListener {
+public class GeolocationPlugin extends Plugin {
     private Geolocation implementation;
 
     private Map<String, PluginCall> watchingCalls = new HashMap<>();
@@ -26,7 +29,6 @@ public class GeolocationPlugin extends Plugin implements GeolocationPromptListen
     @Override
     public void load() {
         implementation = new Geolocation(getContext());
-        registerGeolocationPromptListener(this);
     }
 
     @PluginMethod(returnType = PluginMethod.RETURN_CALLBACK)
@@ -57,12 +59,12 @@ public class GeolocationPlugin extends Plugin implements GeolocationPromptListen
 
                     @Override
                     public void success(JSObject location) {
-                        call.success(location);
+                        call.resolve(location);
                     }
 
                     @Override
                     public void error(String message) {
-                        call.error(message);
+                        call.reject(message);
                     }
                 }
             );
@@ -82,12 +84,12 @@ public class GeolocationPlugin extends Plugin implements GeolocationPromptListen
 
                 @Override
                 public void success(JSObject location) {
-                    call.success(location);
+                    call.resolve(location);
                 }
 
                 @Override
                 public void error(String message) {
-                    call.error(message);
+                    call.reject(message);
                 }
             }
         );
@@ -108,7 +110,7 @@ public class GeolocationPlugin extends Plugin implements GeolocationPromptListen
         if (watchingCalls.size() == 0) {
             implementation.clearLocationUpdates();
         }
-        call.success();
+        call.resolve();
     }
 
     @Override
@@ -122,7 +124,7 @@ public class GeolocationPlugin extends Plugin implements GeolocationPromptListen
 
         for (int result : grantResults) {
             if (result == PackageManager.PERMISSION_DENIED) {
-                savedCall.error("User denied location permission");
+                savedCall.reject("User denied location permission");
                 return;
             }
         }
@@ -139,39 +141,20 @@ public class GeolocationPlugin extends Plugin implements GeolocationPromptListen
 
                     @Override
                     public void success(JSObject location) {
-                        savedCall.success(location);
+                        savedCall.resolve(location);
                     }
 
                     @Override
                     public void error(String message) {
-                        savedCall.error(message);
+                        savedCall.reject(message);
                     }
                 }
             );
         } else if (savedCall.getMethodName().equals("watchPosition")) {
             startWatch(savedCall);
         } else {
-            savedCall.resolve();
+            savedCall.resolve(getPermissionStates());
             savedCall.release(bridge);
         }
-    }
-
-    /**
-     * Process a new location item and send it to any listening calls
-     * @param location
-     */
-    private void processLocation(Location location) {
-        for (Map.Entry<String, PluginCall> watch : watchingCalls.entrySet()) {
-            watch.getValue().success(implementation.getJSObjectForLocation(location));
-        }
-    }
-
-    @PluginMethod
-    public void echo(PluginCall call) {
-        String value = call.getString("value");
-
-        JSObject ret = new JSObject();
-        ret.put("value", value);
-        call.success(ret);
     }
 }
