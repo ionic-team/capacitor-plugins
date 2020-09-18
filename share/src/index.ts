@@ -1,10 +1,7 @@
-import {
-  Plugins,
-  PluginImplementations,
-  registerPlugin,
-} from '@capacitor/core';
+import type { PluginImplementations } from '@capacitor/core';
+import { Plugins, registerPlugin } from '@capacitor/core';
 
-import { SharePlugin } from './definitions';
+import type { SharePlugin } from './definitions';
 import { ShareWeb } from './web';
 
 const implementations: PluginImplementations<SharePlugin> = {

@@ -1,5 +1,6 @@
 import { UnsupportedBrowserException, WebPlugin } from '@capacitor/core';
-import { ShareOptions, SharePlugin, ShareResult } from './definitions';
+
+import type { ShareOptions, SharePlugin, ShareResult } from './definitions';
 
 export class ShareWeb extends WebPlugin implements SharePlugin {
   constructor() {
