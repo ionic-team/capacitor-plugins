@@ -333,7 +333,7 @@ export interface CopyOptions {
   toDirectory?: FilesystemDirectory;
 }
 
-export interface RenameOptions extends CopyOptions {}
+export type RenameOptions = CopyOptions;
 
 export interface FileReadResult {
   /**
