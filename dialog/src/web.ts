@@ -1,5 +1,6 @@
 import { WebPlugin } from '@capacitor/core';
-import {
+
+import type {
   DialogPlugin,
   AlertOptions,
   PromptOptions,
