@@ -7,7 +7,7 @@ public class SharePlugin: CAPPlugin {
     @objc func share(_ call: CAPPluginCall) {
         var items = [Any]()
 
-        if let text = call.options["text"] as? String {
+        if let text = call.getString("text") {
             items.append(text)
         }
 
