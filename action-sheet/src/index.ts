@@ -1,10 +1,8 @@
-import {
-  Plugins,
-  PluginImplementations,
-  registerPlugin,
-} from '@capacitor/core';
+import type { PluginImplementations } from '@capacitor/core';
+import { Plugins, registerPlugin } from '@capacitor/core';
 
-import { ActionSheetOptionStyle, ActionSheetPlugin } from './definitions';
+import type { ActionSheetPlugin } from './definitions';
+import { ActionSheetOptionStyle } from './definitions';
 import { ActionSheetWeb } from './web';
 
 const implementations: PluginImplementations<ActionSheetPlugin> = {
