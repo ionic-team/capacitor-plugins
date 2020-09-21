@@ -11,9 +11,8 @@ public class SharePlugin: CAPPlugin {
             items.append(text)
         }
 
-        if let url = call.options["url"] as? String {
-            let urlObj = URL(string: url)
-            items.append(urlObj!)
+        if let url = call.getString("url"), let urlObj = URL(string: url) {
+            items.append(urlObj)
         }
 
         let title = call.getString("title")
