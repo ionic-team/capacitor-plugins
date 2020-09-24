@@ -76,7 +76,7 @@ public class BrowserPlugin extends Plugin {
             return;
         }
 
-        List<Uri> urls = new ArrayList();
+        List<Uri> urls = new ArrayList<>();
         try {
             for (String urlString : urlStrings.<String>toList()) {
                 urls.add(Uri.parse(urlString));
