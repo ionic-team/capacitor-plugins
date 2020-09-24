@@ -92,8 +92,7 @@ public class BrowserPlugin extends Plugin {
 
     @Override
     protected void handleOnResume() {
-        boolean ok = implementation.bindService();
-        if (!ok) {
+        if (!implementation.bindService()) {
             Logger.error(getLogTag(), "Error binding to custom tabs service", null);
         }
     }
