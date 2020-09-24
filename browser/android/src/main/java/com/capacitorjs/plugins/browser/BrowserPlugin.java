@@ -105,10 +105,10 @@ public class BrowserPlugin extends Plugin {
     void onBrowserEvent(int event) {
         switch (event) {
             case Browser.BROWSER_LOADED:
-                notifyListeners("browserPageLoaded", new JSObject());
+                notifyListeners("browserPageLoaded", null);
                 break;
             case Browser.BROWSER_FINISHED:
-                notifyListeners("browserFinished", new JSObject());
+                notifyListeners("browserFinished", null);
                 break;
         }
     }

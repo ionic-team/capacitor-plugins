@@ -40,7 +40,7 @@ export interface BrowserPlugin {
    */
   addListener(
     eventName: 'browserFinished',
-    listenerFunc: (info: BrowserInfo) => void,
+    listenerFunc: () => void,
   ): PluginListenerHandle;
 
   /**
@@ -50,7 +50,7 @@ export interface BrowserPlugin {
    */
   addListener(
     eventName: 'browserPageLoaded',
-    listenerFunc: (info: BrowserInfo) => void,
+    listenerFunc: () => void,
   ): PluginListenerHandle;
 
   /**
@@ -60,13 +60,6 @@ export interface BrowserPlugin {
    */
   removeAllListeners(): void;
 }
-
-/**
- * Represents the browser information passed to event listeners.
- *
- * @since 1.0.0
- */
-export interface BrowserInfo {}
 
 /**
  * Represents the options passed to `open`.

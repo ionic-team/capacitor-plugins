@@ -23,7 +23,7 @@ public class CAPBrowserPlugin: CAPPlugin {
             return
         }
         implementation.browserEventDidOccur = { [weak self] (event) in
-            self?.notifyListeners(event.listenerEvent, data: [:])
+            self?.notifyListeners(event.listenerEvent, data: nil)
         }
         // display
         DispatchQueue.main.async { [weak self] in
