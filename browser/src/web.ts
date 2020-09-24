@@ -22,10 +22,15 @@ export class BrowserWeb extends WebPlugin implements BrowserPlugin {
   }
 
   async close(): Promise<void> {
-    if (this._lastWindow != null) {
-      this._lastWindow.close();
-      this._lastWindow = null;
-    }
+    return new Promise((resolve, reject) => {
+      if (this._lastWindow != null) {
+        this._lastWindow.close();
+        this._lastWindow = null;
+        resolve();
+      } else {
+        reject('No active window to close!');
+      }
+    });
   }
 }
 

@@ -44,7 +44,7 @@ public class CAPBrowserPlugin: CAPPlugin {
                     self?.implementation.cleanup()
                 }
             } else {
-                call.resolve()
+                call.reject("No active window to close!")
             }
         }
     }
