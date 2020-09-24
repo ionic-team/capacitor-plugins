@@ -34,7 +34,7 @@ export interface BrowserPlugin {
   close(): Promise<void>;
 
   /**
-   * Listen for the finished event.
+   * Android & iOS only: Listen for the loading finished event.
    *
    * @since 1.0.0
    */
@@ -44,7 +44,7 @@ export interface BrowserPlugin {
   ): PluginListenerHandle;
 
   /**
-   * Listen for the page loaded event.
+   * Android & iOS only: Listen for the page loaded event.
    *
    * @since 1.0.0
    */
