@@ -1,13 +1,20 @@
 {
   "packages": [
     "browser",
+    "clipboard",
+    "device",
     "haptics",
     "motion",
+    "network",
     "screen-reader",
+    "share",
     "storage",
     "text-zoom"
   ],
   "command": {
+    "bootstrap": {
+      "ci": false
+    },
     "version": {
       "allowBranch": "main",
       "conventionalCommits": true,

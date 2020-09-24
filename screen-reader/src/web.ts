@@ -1,5 +1,9 @@
 import { UnsupportedBrowserException, WebPlugin } from '@capacitor/core';
-import { ScreenReaderPlugin, ScreenReaderSpeakOptions } from './definitions';
+
+import type {
+  ScreenReaderPlugin,
+  ScreenReaderSpeakOptions,
+} from './definitions';
 
 export class ScreenReaderWeb extends WebPlugin implements ScreenReaderPlugin {
   constructor() {

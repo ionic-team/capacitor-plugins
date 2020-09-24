@@ -1,14 +1,8 @@
-import {
-  Plugins,
-  PluginImplementations,
-  registerPlugin,
-} from '@capacitor/core';
+import type { PluginImplementations } from '@capacitor/core';
+import { Plugins, registerPlugin } from '@capacitor/core';
 
-import {
-  HapticsPlugin,
-  HapticsImpactStyle,
-  HapticsNotificationType,
-} from './definitions';
+import type { HapticsPlugin } from './definitions';
+import { HapticsImpactStyle, HapticsNotificationType } from './definitions';
 import { HapticsWeb } from './web';
 
 const implementations: PluginImplementations<HapticsPlugin> = {
