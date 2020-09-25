@@ -8,7 +8,8 @@
     "screen-reader",
     "share",
     "storage",
-    "text-zoom"
+    "text-zoom",
+    "toast"
   ],
   "command": {
     "bootstrap": {
