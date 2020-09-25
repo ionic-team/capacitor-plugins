@@ -63,33 +63,6 @@ public class BrowserPlugin extends Plugin {
         call.unimplemented();
     }
 
-    @PluginMethod
-    public void prefetch(PluginCall call) {
-        JSArray urlStrings = call.getArray("urls");
-        if (urlStrings == null || urlStrings.length() == 0) {
-            call.reject("Must provide an array of URLs to prefetch");
-            return;
-        }
-
-        if (implementation.isPrepared()) {
-            call.reject("Browser session isn't ready yet");
-            return;
-        }
-
-        List<Uri> urls = new ArrayList<>();
-        try {
-            for (String urlString : urlStrings.<String>toList()) {
-                urls.add(Uri.parse(urlString));
-            }
-        } catch (JSONException ex) {
-            call.reject("Unable to process provided list of urls. Ensure each item is a string and valid URL", ex);
-            return;
-        }
-
-        implementation.prefetch(urls);
-        call.resolve();
-    }
-
     @Override
     protected void handleOnResume() {
         if (!implementation.bindService()) {

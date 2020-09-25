@@ -17,10 +17,6 @@ export class BrowserWeb extends WebPlugin implements BrowserPlugin {
     this._lastWindow = window.open(options.url, options.windowName || '_blank');
   }
 
-  async prefetch(_options: BrowserPrefetchOptions): Promise<void> {
-    // Does nothing
-  }
-
   async close(): Promise<void> {
     return new Promise((resolve, reject) => {
       if (this._lastWindow != null) {

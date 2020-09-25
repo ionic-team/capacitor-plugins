@@ -124,19 +124,6 @@ public class Browser {
     }
 
     /**
-     * Hint to the browser that the specified URLs might be opened.
-     * @param urls
-     */
-    public void prefetch(List<Uri> urls) {
-        CustomTabsSession session = getCustomTabsSession();
-        if (session != null) {
-            for (Uri url : urls) {
-                session.mayLaunchUrl(url, null, null);
-            }
-        }
-    }
-
-    /**
      * Bind to the custom tabs service, required to be called in the `onResume` lifecycle event.
      */
     public boolean bindService() {

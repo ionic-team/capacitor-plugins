@@ -49,10 +49,6 @@ public class CAPBrowserPlugin: CAPPlugin {
         }
     }
 
-    @objc func prefetch(_ call: CAPPluginCall) {
-        call.unimplemented()
-    }
-
     private func presentationStyle(for style: String?) -> UIModalPresentationStyle {
         if let style = style, style == "popover", supportsPopover() {
             return .popover

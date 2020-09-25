@@ -15,16 +15,6 @@ export interface BrowserPlugin {
   open(options: BrowserOpenOptions): Promise<void>;
 
   /**
-   * Android only: Hints to the browser that the specified URLs will be accessed and can
-   * improve initial loading times.
-   *
-   * No-op on other platforms.
-   *
-   * @since 1.0.0
-   */
-  prefetch(options: BrowserPrefetchOptions): Promise<void>;
-
-  /**
    * Web & iOS only: Close an open browser window.
    *
    * No-op on other platforms.
