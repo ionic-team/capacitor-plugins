@@ -64,7 +64,7 @@ public class DialogPlugin extends Plugin {
 
     @PluginMethod
     public void prompt(final PluginCall call) {
-        final AppCompatActivity c = this.getActivity();
+        final AppCompatActivity activity = this.getActivity();
         final String title = call.getString("title");
         final String message = call.getString("message");
         final String okButtonTitle = call.getString("okButtonTitle", "OK");
@@ -77,13 +77,13 @@ public class DialogPlugin extends Plugin {
             return;
         }
 
-        if (c.isFinishing()) {
+        if (activity.isFinishing()) {
             call.reject("App is finishing");
             return;
         }
 
         Dialog.prompt(
-            c,
+            activity,
             message,
             title,
             okButtonTitle,
