@@ -76,7 +76,7 @@ export interface PromptOptions {
 
 export interface ConfirmOptions {
   /**
-   * Title of de dialog.
+   * Title of the dialog.
    *
    * @since 1.0.0
    */
