@@ -1,10 +1,24 @@
 {
-  "name": "@capacitor/network",
+  "name": "@capacitor/device",
   "version": "0.0.1",
-  "description": "The Network API provides network and connectivity information.",
+  "description": "The Device API exposes internal information about the device, such as the model and operating system version, along with user information such as unique ids.",
   "main": "dist/plugin.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
+  "author": "Ionic <hi@ionicframework.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ionic-team/capacitor-plugins.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ionic-team/capacitor-plugins/issues"
+  },
+  "keywords": [
+    "capacitor",
+    "plugin",
+    "native"
+  ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",
     "verify:ios": "cd ios && pod install && xcodebuild -workspace Plugin.xcworkspace -scheme Plugin && cd ..",
@@ -20,32 +34,30 @@
     "watch": "tsc --watch",
     "prepublishOnly": "npm run build"
   },
-  "author": "Ionic <hi@ionicframework.com>",
-  "license": "MIT",
   "devDependencies": {
     "@capacitor/android": "^3.0.0-alpha.4",
     "@capacitor/core": "^3.0.0-alpha.4",
     "@capacitor/ios": "^3.0.0-alpha.4",
     "@ionic/eslint-config": "^0.2.1",
     "@ionic/prettier-config": "^1.0.0",
-    "@ionic/swiftlint-config": "^1.0.0",
+    "@ionic/swiftlint-config": "^1.1.2",
     "@rollup/plugin-node-resolve": "^8.1.0",
     "eslint": "^7.8.1",
     "prettier": "^2.0.5",
     "prettier-plugin-java": "^0.8.0",
     "rimraf": "^3.0.0",
     "rollup": "^2.21.0",
-    "swiftlint": "^1.0.1",
+    "swiftlint": "^1.0.0",
     "typescript": "~3.9.7"
   },
   "peerDependencies": {
     "@capacitor/core": "^3.0.0-alpha.4"
   },
-  "keywords": [
-    "capacitor",
-    "plugin",
-    "native"
-  ],
+  "prettier": "@ionic/prettier-config",
+  "swiftlint": "@ionic/swiftlint-config",
+  "eslintConfig": {
+    "extends": "@ionic/eslint-config/recommended"
+  },
   "capacitor": {
     "ios": {
       "src": "ios"
@@ -53,15 +65,6 @@
     "android": {
       "src": "android"
     }
-  },
-  "prettier": "@ionic/prettier-config",
-  "swiftlint": "@ionic/swiftlint-config",
-  "eslintConfig": {
-    "extends": "@ionic/eslint-config/recommended"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/ionic-team/capacitor-plugins"
   },
   "publishConfig": {
     "access": "public"

@@ -1,6 +1,7 @@
 {
   "packages": [
     "clipboard",
+    "device",
     "dialog",
     "haptics",
     "motion",
