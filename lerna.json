@@ -2,6 +2,7 @@
   "packages": [
     "action-sheet",
     "clipboard",
+    "device",
     "haptics",
     "motion",
     "network",
