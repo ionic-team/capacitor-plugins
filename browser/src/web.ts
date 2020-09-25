@@ -1,5 +1,6 @@
 import { WebPlugin } from '@capacitor/core';
-import { BrowserPlugin, BrowserOpenOptions } from './definitions';
+
+import type { BrowserPlugin, BrowserOpenOptions } from './definitions';
 
 export class BrowserWeb extends WebPlugin implements BrowserPlugin {
   _lastWindow: Window | null;
