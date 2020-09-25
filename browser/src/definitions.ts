@@ -91,17 +91,3 @@ export interface BrowserOpenOptions {
    */
   presentationStyle?: 'fullscreen' | 'popover';
 }
-
-/**
- * Represents the options passed to `prefetch`.
- *
- * @since 1.0.0
- */
-export interface BrowserPrefetchOptions {
-  /**
-   * The URLs that should be pre-fetched if possible.
-   *
-   * @since 1.0.0
-   */
-  urls: string[];
-}
