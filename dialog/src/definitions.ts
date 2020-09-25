@@ -6,7 +6,7 @@ declare module '@capacitor/core' {
 
 export interface AlertOptions {
   /**
-   * Title of de dialog.
+   * Title of the dialog.
    *
    * @since 1.0.0
    */
