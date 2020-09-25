@@ -12,7 +12,7 @@ public class DialogPlugin extends Plugin {
 
     @PluginMethod
     public void alert(final PluginCall call) {
-        final AppCompatActivity c = this.getActivity();
+        final AppCompatActivity activity = this.getActivity();
         final String title = call.getString("title");
         final String message = call.getString("message");
         final String buttonTitle = call.getString("buttonTitle", "OK");
@@ -22,12 +22,12 @@ public class DialogPlugin extends Plugin {
             return;
         }
 
-        if (c.isFinishing()) {
+        if (activity.isFinishing()) {
             call.reject("App is finishing");
             return;
         }
 
-        Dialog.alert(c, message, title, buttonTitle, (value, didCancel, inputValue) -> call.resolve());
+        Dialog.alert(activity, message, title, buttonTitle, (value, didCancel, inputValue) -> call.resolve());
     }
 
     @PluginMethod
