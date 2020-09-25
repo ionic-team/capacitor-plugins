@@ -30,7 +30,7 @@ export interface AlertOptions {
 
 export interface PromptOptions {
   /**
-   * Title of de dialog.
+   * Title of the dialog.
    *
    * @since 1.0.0
    */
