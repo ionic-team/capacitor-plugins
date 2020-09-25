@@ -1,5 +1,6 @@
 {
   "packages": [
+    "action-sheet",
     "clipboard",
     "device",
     "haptics",
