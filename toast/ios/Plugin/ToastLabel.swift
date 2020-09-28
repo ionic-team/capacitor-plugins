@@ -1,6 +1,6 @@
 import UIKit
 
-@objc public class ToastLabel: UILabel {
+@objc internal class ToastLabel: UILabel {
     var padding: UIEdgeInsets?
 
     override open func draw(_ rect: CGRect) {
