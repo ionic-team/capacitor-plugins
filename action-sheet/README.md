@@ -1,3 +1,3 @@
 # @capacitor/action-sheet
 
-Show a sheet of options the user can choose from
+The Action Sheet API provides access to native Action Sheets, which come up from the bottom of the screen and display actions a user can take.
