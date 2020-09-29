@@ -12,7 +12,6 @@ import androidx.browser.customtabs.CustomTabsClient;
 import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.browser.customtabs.CustomTabsServiceConnection;
 import androidx.browser.customtabs.CustomTabsSession;
-import java.util.List;
 
 /**
  * The Browser class implements Custom Chrome Tabs. See
