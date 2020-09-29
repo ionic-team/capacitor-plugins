@@ -105,7 +105,7 @@ public class FilesystemPlugin: CAPPlugin {
      * Delete a file.
      */
     @objc func deleteFile(_ call: CAPPluginCall) {
-        guard let file = call.get("path", String.self) else {
+        guard let file = call.getString("path") else {
             handleError(call, "path must be provided and must be a string.")
             return
         }
