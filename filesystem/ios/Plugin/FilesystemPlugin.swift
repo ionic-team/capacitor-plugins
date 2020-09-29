@@ -283,7 +283,7 @@ public class FilesystemPlugin: CAPPlugin {
      * Copy a file or directory.
      */
     @objc func copy(_ call: CAPPluginCall) {
-        guard let from = call.get("from", String.self), let to = call.get("to", String.self) else {
+        guard let from = call.getString("from"), let to = call.getString("to") else {
             handleError(call, "Both to and from must be provided")
             return
         }
