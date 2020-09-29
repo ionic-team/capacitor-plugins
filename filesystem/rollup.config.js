@@ -5,7 +5,7 @@ export default {
   output: {
     file: 'dist/plugin.js',
     format: 'iife',
-    name: 'filesystemPlugin',
+    name: 'capacitorFilesystem',
     globals: {
       '@capacitor/core': 'capacitorExports',
     },
