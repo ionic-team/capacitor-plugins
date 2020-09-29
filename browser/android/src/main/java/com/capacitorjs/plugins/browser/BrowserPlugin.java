@@ -2,8 +2,6 @@ package com.capacitorjs.plugins.browser;
 
 import android.graphics.Color;
 import android.net.Uri;
-import com.getcapacitor.JSArray;
-import com.getcapacitor.JSObject;
 import com.getcapacitor.Logger;
 import com.getcapacitor.NativePlugin;
 import com.getcapacitor.Plugin;
