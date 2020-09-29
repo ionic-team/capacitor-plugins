@@ -10,9 +10,6 @@ import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.PluginRequestCodes;
-import java.util.ArrayList;
-import java.util.List;
-import org.json.JSONException;
 
 @NativePlugin(name = "Browser", requestCodes = { PluginRequestCodes.BROWSER_OPEN_CHROME_TAB })
 public class BrowserPlugin extends Plugin {
