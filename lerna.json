@@ -3,6 +3,7 @@
     "action-sheet",
     "clipboard",
     "device",
+    "dialog",
     "haptics",
     "motion",
     "network",
