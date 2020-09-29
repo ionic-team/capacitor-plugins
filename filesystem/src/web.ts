@@ -201,14 +201,15 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
 
     const parentEntry = (await this.dbRequest('get', [parentPath])) as EntryObj;
     if (parentEntry === undefined) {
-      const parentArgPathIndex = parentPath.indexOf('/', 1);
-      const parentArgPath =
-        parentArgPathIndex !== -1 ? parentPath.substr(parentArgPathIndex) : '/';
-      await this.mkdir({
-        path: parentArgPath,
-        directory: options.directory,
-        recursive: true,
-      });
+      const subDirIndex = parentPath.indexOf('/', 1);
+      if (subDirIndex !== -1) {
+        const parentArgPath = parentPath.substr(subDirIndex);
+        await this.mkdir({
+          path: parentArgPath,
+          directory: options.directory,
+          recursive: true,
+        });
+      }
     }
 
     if (occupiedEntry !== undefined) {
