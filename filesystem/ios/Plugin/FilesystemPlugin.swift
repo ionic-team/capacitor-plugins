@@ -163,7 +163,7 @@ public class FilesystemPlugin: CAPPlugin {
             return
         }
 
-        let recursive = call.get("recursive", Bool.self, false)!
+        let recursive = call.getBool("recursive") ?? false
 
         do {
             try implementation.rmdir(at: fileUrl, recursive: recursive)
