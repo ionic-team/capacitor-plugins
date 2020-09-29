@@ -1,7 +1,7 @@
 {
   "name": "@capacitor/action-sheet",
   "version": "0.0.1",
-  "description": "Show a sheet of options the user can choose from",
+  "description": "The Action Sheet API provides access to native Action Sheets, which come up from the bottom of the screen and display actions a user can take.",
   "main": "dist/plugin.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
