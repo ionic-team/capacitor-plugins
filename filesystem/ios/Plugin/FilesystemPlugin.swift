@@ -133,8 +133,8 @@ public class FilesystemPlugin: CAPPlugin {
             return
         }
 
-        let recursive = call.get("recursive", Bool.self, false)!
-        let directory = call.get("directory", String.self, defaultDirectory)!
+        let recursive = call.getBool("recursive") ?? false
+        let directory = call.getString("directory") ?? defaultDirectory
         guard let fileUrl = implementation.getFileUrl(at: path, in: directory) else {
             handleError(call, "Invalid path")
             return
