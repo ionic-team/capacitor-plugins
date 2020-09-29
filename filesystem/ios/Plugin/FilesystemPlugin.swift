@@ -255,12 +255,8 @@ public class FilesystemPlugin: CAPPlugin {
             return
         }
 
-        let directory = call.get("directory", String.self, defaultDirectory)!
-        var toDirectory = call.get("toDirectory", String.self, "")!
-
-        if toDirectory == "" {
-            toDirectory = directory
-        }
+        let directory = call.getString("directory") ?? defaultDirectory
+        let toDirectory = call.getString("toDirectory") ?? directory
 
         guard let fromUrl = implementation.getFileUrl(at: from, in: directory) else {
             handleError(call, "Invalid from path")
