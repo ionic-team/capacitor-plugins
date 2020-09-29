@@ -85,14 +85,6 @@ public class Browser {
     }
 
     /**
-     * Returns whether or not the chrome custom tabs are configured and ready to use.
-     * @return flag
-     */
-    public boolean isPrepared() {
-        return (getCustomTabsSession() != null);
-    }
-
-    /**
      * Open the browser to the specified URL.
      * @param url
      */
