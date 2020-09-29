@@ -41,7 +41,7 @@ public class FilesystemPlugin: CAPPlugin {
      */
     @objc func writeFile(_ call: CAPPluginCall) {
         let encoding = call.getString("encoding")
-        let recursive = call.get("recursive", Bool.self, false)!
+        let recursive = call.getBool("recursive") ?? false
 
         guard let file = call.get("path", String.self) else {
             handleError(call, "path must be provided and must be a string.")
