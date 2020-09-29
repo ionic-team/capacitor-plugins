@@ -203,7 +203,7 @@ public class FilesystemPlugin: CAPPlugin {
     }
 
     @objc func stat(_ call: CAPPluginCall) {
-        guard let path = call.get("path", String.self) else {
+        guard let path = call.getString("path") else {
             handleError(call, "path must be provided and must be a string.")
             return
         }
