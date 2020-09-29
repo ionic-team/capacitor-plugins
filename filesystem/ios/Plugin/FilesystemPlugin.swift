@@ -78,7 +78,7 @@ public class FilesystemPlugin: CAPPlugin {
     @objc func appendFile(_ call: CAPPluginCall) {
         let encoding = call.getString("encoding")
 
-        guard let file = call.get("path", String.self) else {
+        guard let file = call.getString("path") else {
             handleError(call, "path must be provided and must be a string.")
             return
         }
