@@ -83,7 +83,7 @@ public class FilesystemPlugin: CAPPlugin {
             return
         }
 
-        guard let data = call.get("data", String.self) else {
+        guard let data = call.getString("data") else {
             handleError(call, "Data must be provided and must be a string.")
             return
         }
