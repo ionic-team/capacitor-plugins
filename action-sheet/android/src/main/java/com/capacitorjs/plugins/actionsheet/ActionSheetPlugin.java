@@ -1,4 +1,4 @@
-package com.capacitorjs.plugins.action.sheet;
+package com.capacitorjs.plugins.actionsheet;
 
 import com.getcapacitor.*;
 import java.util.List;

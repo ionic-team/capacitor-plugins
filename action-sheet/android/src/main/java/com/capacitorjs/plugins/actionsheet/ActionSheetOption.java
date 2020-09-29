@@ -1,4 +1,4 @@
-package com.capacitorjs.plugins.action.sheet;
+package com.capacitorjs.plugins.actionsheet;
 
 public class ActionSheetOption {
     private String title;
