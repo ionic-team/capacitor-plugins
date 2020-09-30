@@ -3,6 +3,7 @@
     "action-sheet",
     "clipboard",
     "device",
+    "dialog",
     "filesystem",
     "haptics",
     "motion",
@@ -10,7 +11,8 @@
     "screen-reader",
     "share",
     "storage",
-    "text-zoom"
+    "text-zoom",
+    "toast"
   ],
   "command": {
     "bootstrap": {
