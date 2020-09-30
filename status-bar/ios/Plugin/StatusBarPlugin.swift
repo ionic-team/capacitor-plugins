@@ -2,8 +2,8 @@ import Foundation
 import Capacitor
 
 /**
- * Please read the Capacitor iOS Plugin Development Guide
- * here: https://capacitorjs.com/docs/plugins/ios
+ * StatusBar plugin. Requires "View controller-based status bar appearance" to
+ * be "YES" in Info.plist
  */
 @objc(StatusBarPlugin)
 public class StatusBarPlugin: CAPPlugin {
