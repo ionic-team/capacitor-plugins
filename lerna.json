@@ -5,6 +5,7 @@
     "device",
     "dialog",
     "haptics",
+    "keyboard",
     "motion",
     "network",
     "screen-reader",
