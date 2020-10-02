@@ -2,6 +2,7 @@ import type { PluginImplementations } from '@capacitor/core';
 import { Plugins, registerPlugin } from '@capacitor/core';
 
 import type { KeyboardPlugin } from './definitions';
+import { KeyboardResize, KeyboardStyle } from './definitions';
 
 const implementations: PluginImplementations<KeyboardPlugin> = {
   android: Plugins.Keyboard,
@@ -13,4 +14,4 @@ const Keyboard = registerPlugin(
   implementations,
 ).getImplementation();
 
-export { Keyboard };
+export { Keyboard, KeyboardResize, KeyboardStyle };
