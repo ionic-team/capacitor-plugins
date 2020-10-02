@@ -26,7 +26,7 @@ public class ScreenReaderPlugin: CAPPlugin {
 
     @objc func speak(_ call: CAPPluginCall) {
         guard let value = call.getString("value") else {
-            call.error("No value provided")
+            call.reject("No value provided")
             return
         }
 
