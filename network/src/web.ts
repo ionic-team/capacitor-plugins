@@ -1,9 +1,7 @@
-import {
-  UnsupportedBrowserException,
-  WebPlugin,
-  PluginListenerHandle,
-} from '@capacitor/core';
-import {
+import type { PluginListenerHandle } from '@capacitor/core';
+import { UnsupportedBrowserException, WebPlugin } from '@capacitor/core';
+
+import type {
   NetworkPlugin,
   NetworkStatus,
   NetworkStatusConnectionType,
@@ -109,7 +107,9 @@ export class NetworkWeb extends WebPlugin implements NetworkPlugin {
       };
     } else {
       return {
-        remove: () => {},
+        remove: () => {
+          /* do nothing */
+        },
       };
     }
   }

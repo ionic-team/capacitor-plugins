@@ -1,13 +1,18 @@
 {
   "packages": [
+    "action-sheet",
     "clipboard",
+    "device",
+    "dialog",
     "geolocation",
     "haptics",
     "motion",
     "network",
     "screen-reader",
+    "share",
     "storage",
-    "text-zoom"
+    "text-zoom",
+    "toast"
   ],
   "command": {
     "bootstrap": {
