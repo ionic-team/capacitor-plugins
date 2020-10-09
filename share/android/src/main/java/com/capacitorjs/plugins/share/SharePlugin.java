@@ -71,6 +71,10 @@ public class SharePlugin extends Plugin {
                 new File(Uri.parse(url).getPath())
             );
             intent.putExtra(Intent.EXTRA_STREAM, fileUrl);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                intent.setData(fileUrl);
+            }
+            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         }
 
         if (title != null) {
