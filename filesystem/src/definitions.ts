@@ -4,7 +4,7 @@ declare module '@capacitor/core' {
   }
 }
 
-export const enum FilesystemDirectory {
+export enum FilesystemDirectory {
   /**
    * The Documents directory
    * On iOS it's the app's documents directory.
@@ -63,7 +63,7 @@ export const enum FilesystemDirectory {
   ExternalStorage = 'EXTERNAL_STORAGE',
 }
 
-export const enum FilesystemEncoding {
+export enum FilesystemEncoding {
   /**
    * Eight-bit UCS Transformation Format
    *
