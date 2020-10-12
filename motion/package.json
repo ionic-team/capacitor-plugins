@@ -5,20 +5,32 @@
   "main": "dist/plugin.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
+  "author": "Ionic <hi@ionicframework.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ionic-team/capacitor-plugins"
+  },
+  "bugs": {
+    "url": "https://github.com/ionic-team/capacitor-plugins/issues"
+  },
+  "keywords": [
+    "capacitor",
+    "plugin",
+    "native"
+  ],
   "scripts": {
     "lint": "npm run eslint && npm run prettier -- --check",
     "fmt": "npm run eslint -- --fix && npm run prettier -- --write",
     "eslint": "eslint . --ext ts",
     "prettier": "prettier \"**/*.{css,html,ts,js,java}\"",
     "docgen": "docgen --api MotionPlugin --output-readme README.md --output-json dist/docs.json",
-    "build": "npm run clean && tsc && rollup -c rollup.config.js",
+    "build": "npm run clean && npm run docgen && tsc && rollup -c rollup.config.js",
     "clean": "rimraf ./dist",
     "verify": "npm run build",
     "watch": "tsc --watch",
     "prepublishOnly": "npm run build"
   },
-  "author": "Ionic <hi@ionicframework.com>",
-  "license": "MIT",
   "devDependencies": {
     "@capacitor/android": "^3.0.0-alpha.5",
     "@capacitor/core": "^3.0.0-alpha.5",
@@ -37,20 +49,11 @@
   "peerDependencies": {
     "@capacitor/core": "^3.0.0-alpha.5"
   },
-  "keywords": [
-    "capacitor",
-    "plugin",
-    "native"
-  ],
-  "capacitor": {},
   "prettier": "@ionic/prettier-config",
   "eslintConfig": {
     "extends": "@ionic/eslint-config/recommended"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/ionic-team/capacitor-plugins"
-  },
+  "capacitor": {},
   "publishConfig": {
     "access": "public"
   }
