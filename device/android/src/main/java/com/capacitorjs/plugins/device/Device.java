@@ -9,6 +9,7 @@ import android.os.StatFs;
 import android.provider.Settings;
 
 public class Device {
+
     private Context context;
 
     Device(Context context) {

@@ -1,6 +1,7 @@
 package com.capacitorjs.plugins.storage;
 
 public class StorageConfiguration implements Cloneable {
+
     static final StorageConfiguration DEFAULTS;
 
     static {

@@ -10,6 +10,7 @@ import com.getcapacitor.PluginMethod;
 
 @NativePlugin(name = "Haptics")
 public class HapticsPlugin extends Plugin {
+
     private Haptics implementation;
 
     @Override

@@ -6,6 +6,7 @@ import android.os.Looper;
 import android.view.Gravity;
 
 public class Toast {
+
     private static final int GRAVITY_TOP = Gravity.TOP | Gravity.CENTER_HORIZONTAL;
     private static final int GRAVITY_CENTER = Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL;
 

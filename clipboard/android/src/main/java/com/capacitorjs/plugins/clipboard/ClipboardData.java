@@ -1,6 +1,7 @@
 package com.capacitorjs.plugins.clipboard;
 
 public class ClipboardData {
+
     private String value;
     private String type;
 
