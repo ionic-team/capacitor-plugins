@@ -10,6 +10,7 @@
     "fmt": "npm run eslint -- --fix && npm run prettier -- --write",
     "eslint": "eslint . --ext ts",
     "prettier": "prettier \"**/*.{css,html,ts,js,java}\"",
+    "docgen": "docgen --api MotionPlugin --output-readme README.md --output-json dist/docs.json",
     "build": "npm run clean && tsc && rollup -c rollup.config.js",
     "clean": "rimraf ./dist",
     "verify": "npm run build",
@@ -21,6 +22,7 @@
   "devDependencies": {
     "@capacitor/android": "^3.0.0-alpha.5",
     "@capacitor/core": "^3.0.0-alpha.5",
+    "@capacitor/docgen": "^0.0.5",
     "@capacitor/ios": "^3.0.0-alpha.5",
     "@ionic/eslint-config": "^0.3.0",
     "@ionic/prettier-config": "^1.0.0",
