@@ -7,6 +7,7 @@ import org.json.JSONObject;
 
 @NativePlugin(name = "ActionSheet")
 public class ActionSheetPlugin extends Plugin {
+
     private ActionSheet implementation = new ActionSheet();
 
     @PluginMethod

@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import java.util.Set;
 
 public class Storage {
+
     private SharedPreferences preferences;
 
     private interface StorageOperation {

@@ -12,6 +12,7 @@ import java.io.File;
 
 @NativePlugin(name = "Share", requestCodes = { SharePlugin.REQUEST_SHARE })
 public class SharePlugin extends Plugin {
+
     static final int REQUEST_SHARE = 9023;
 
     private BroadcastReceiver broadcastReceiver;
@@ -23,7 +24,6 @@ public class SharePlugin extends Plugin {
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
             broadcastReceiver =
                 new BroadcastReceiver() {
-
                     @Override
                     public void onReceive(Context context, Intent intent) {
                         chosenComponent = intent.getParcelableExtra(Intent.EXTRA_CHOSEN_COMPONENT);
