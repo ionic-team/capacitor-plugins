@@ -3,8 +3,8 @@
 The Clipboard API enables copy and pasting to/from the system clipboard.
 
 <!--DOCGEN_INDEX_START-->
-* [write()](#write)
-* [read()](#read)
+* [`write(...)`](#write)
+* [`read()`](#read)
 * [Interfaces](#interfaces)
 <!--DOCGEN_INDEX_END-->
 
@@ -12,7 +12,7 @@ The Clipboard API enables copy and pasting to/from the system clipboard.
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
 ## API
 
-### write
+### write(...)
 
 ```typescript
 write(options: ClipboardWriteOptions) => Promise<void>
@@ -20,18 +20,18 @@ write(options: ClipboardWriteOptions) => Promise<void>
 
 Write a value to the clipboard (the "copy" action)
 
-| Param       | Type                                            |
-| ----------- | ----------------------------------------------- |
-| **options** | [ClipboardWriteOptions](#clipboardwriteoptions) |
+| Param       | Type                                                                    |
+| ----------- | ----------------------------------------------------------------------- |
+| **options** | <code><a href="#clipboardwriteoptions">ClipboardWriteOptions</a></code> |
 
-**Returns:** Promise&lt;void&gt;
+**Returns:** <code>Promise&lt;void&gt;</code>
 
 **Since:** 1.0.0
 
 --------------------
 
 
-### read
+### read()
 
 ```typescript
 read() => Promise<ClipboardReadResult>
@@ -39,7 +39,7 @@ read() => Promise<ClipboardReadResult>
 
 Read a value from the clipboard (the "paste" action)
 
-**Returns:** Promise&lt;[ClipboardReadResult](#clipboardreadresult)&gt;
+**Returns:** <code>Promise&lt;<a href="#clipboardreadresult">ClipboardReadResult</a>&gt;</code>
 
 **Since:** 1.0.0
 
@@ -53,22 +53,22 @@ Read a value from the clipboard (the "paste" action)
 
 Represents the data to be written to the clipboard.
 
-| Prop       | Type   | Description                                                                                                     | Since |
-| ---------- | ------ | --------------------------------------------------------------------------------------------------------------- | ----- |
-| **string** | string | Text value to copy.                                                                                             | 1.0.0 |
-| **image**  | string | Image in [Data URL](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URIs) format to copy. | 1.0.0 |
-| **url**    | string | URL string to copy.                                                                                             | 1.0.0 |
-| **label**  | string | User visible label to accompany the copied data (Android Only).                                                 | 1.0.0 |
+| Prop         | Type                | Description                                                                                                     | Since |
+| ------------ | ------------------- | --------------------------------------------------------------------------------------------------------------- | ----- |
+| **`string`** | <code>string</code> | Text value to copy.                                                                                             | 1.0.0 |
+| **`image`**  | <code>string</code> | Image in [Data URL](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URIs) format to copy. | 1.0.0 |
+| **`url`**    | <code>string</code> | URL string to copy.                                                                                             | 1.0.0 |
+| **`label`**  | <code>string</code> | User visible label to accompany the copied data (Android Only).                                                 | 1.0.0 |
 
 
 #### ClipboardReadResult
 
 Represents the data read from the clipboard.
 
-| Prop      | Type   | Description                    | Since |
-| --------- | ------ | ------------------------------ | ----- |
-| **value** | string | Data read from the clipboard.  | 1.0.0 |
-| **type**  | string | Type of data in the clipboard. | 1.0.0 |
+| Prop        | Type                | Description                    | Since |
+| ----------- | ------------------- | ------------------------------ | ----- |
+| **`value`** | <code>string</code> | Data read from the clipboard.  | 1.0.0 |
+| **`type`**  | <code>string</code> | Type of data in the clipboard. | 1.0.0 |
 
 
 <!--DOCGEN_API_END-->

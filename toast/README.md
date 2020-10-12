@@ -3,7 +3,7 @@
 The Toast API provides a notification pop up for displaying important information to a user. Just like real toast!
 
 <!--DOCGEN_INDEX_START-->
-* [show()](#show)
+* [`show(...)`](#show)
 * [Interfaces](#interfaces)
 <!--DOCGEN_INDEX_END-->
 
@@ -11,7 +11,7 @@ The Toast API provides a notification pop up for displaying important informatio
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
 ## API
 
-### show
+### show(...)
 
 ```typescript
 show(options: ToastShowOptions) => Promise<void>
@@ -19,11 +19,11 @@ show(options: ToastShowOptions) => Promise<void>
 
 Shows a Toast on the screen
 
-| Param       | Type                                  |
-| ----------- | ------------------------------------- |
-| **options** | [ToastShowOptions](#toastshowoptions) |
+| Param       | Type                                                          |
+| ----------- | ------------------------------------------------------------- |
+| **options** | <code><a href="#toastshowoptions">ToastShowOptions</a></code> |
 
-**Returns:** Promise&lt;void&gt;
+**Returns:** <code>Promise&lt;void&gt;</code>
 
 **Since:** 1.0.0
 
@@ -35,11 +35,11 @@ Shows a Toast on the screen
 
 #### ToastShowOptions
 
-| Prop         | Type                          | Description                                                       | Default  | Since |
-| ------------ | ----------------------------- | ----------------------------------------------------------------- | -------- | ----- |
-| **text**     | string                        | Text to display on the Toast                                      |          | 1.0.0 |
-| **duration** | "short" \| "long"             | Duration of the Toast, either 'short' (2000ms) or 'long' (3500ms) | 'short'  | 1.0.0 |
-| **position** | "top" \| "center" \| "bottom" | Postion of the Toast                                              | 'bottom' | 1.0.0 |
+| Prop           | Type                                       | Description                                                       | Default               | Since |
+| -------------- | ------------------------------------------ | ----------------------------------------------------------------- | --------------------- | ----- |
+| **`text`**     | <code>string</code>                        | Text to display on the Toast                                      |                       | 1.0.0 |
+| **`duration`** | <code>"short" \| "long"</code>             | Duration of the Toast, either 'short' (2000ms) or 'long' (3500ms) | <code>'short'</code>  | 1.0.0 |
+| **`position`** | <code>"top" \| "center" \| "bottom"</code> | Postion of the Toast                                              | <code>'bottom'</code> | 1.0.0 |
 
 
 <!--DOCGEN_API_END-->

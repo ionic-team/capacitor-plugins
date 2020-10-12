@@ -3,9 +3,9 @@
 The Motion API tracks accelerometer and device orientation (compass heading, etc.)
 
 <!--DOCGEN_INDEX_START-->
-* [addListener()](#addlistener)
-* [addListener()](#addlistener)
-* [removeAllListeners()](#removealllisteners)
+* [`addListener(...)`](#addlistener)
+* [`addListener(...)`](#addlistener)
+* [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
 <!--DOCGEN_INDEX_END-->
 
@@ -13,7 +13,7 @@ The Motion API tracks accelerometer and device orientation (compass heading, etc
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
 ## API
 
-### addListener
+### addListener(...)
 
 ```typescript
 addListener(eventName: 'accel', listenerFunc: (event: MotionEventResult) => void) => PluginListenerHandle
@@ -21,19 +21,19 @@ addListener(eventName: 'accel', listenerFunc: (event: MotionEventResult) => void
 
 Add a listener for accelerometer data
 
-| Param            | Type                               |
-| ---------------- | ---------------------------------- |
-| **eventName**    | "accel"                            |
-| **listenerFunc** | (event: MotionEventResult) => void |
+| Param            | Type                                            |
+| ---------------- | ----------------------------------------------- |
+| **eventName**    | <code>"accel"</code>                            |
+| **listenerFunc** | <code>(event: MotionEventResult) => void</code> |
 
-**Returns:** [PluginListenerHandle](#pluginlistenerhandle)
+**Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
 **Since:** 1.0.0
 
 --------------------
 
 
-### addListener
+### addListener(...)
 
 ```typescript
 addListener(eventName: 'orientation', listenerFunc: (event: MotionOrientationEventResult) => void) => PluginListenerHandle
@@ -41,19 +41,19 @@ addListener(eventName: 'orientation', listenerFunc: (event: MotionOrientationEve
 
 Add a listener for device orientation change (compass heading, etc.)
 
-| Param            | Type                                           |
-| ---------------- | ---------------------------------------------- |
-| **eventName**    | "orientation"                                  |
-| **listenerFunc** | (event: DeviceMotionEventRotationRate) => void |
+| Param            | Type                                                        |
+| ---------------- | ----------------------------------------------------------- |
+| **eventName**    | <code>"orientation"</code>                                  |
+| **listenerFunc** | <code>(event: DeviceMotionEventRotationRate) => void</code> |
 
-**Returns:** [PluginListenerHandle](#pluginlistenerhandle)
+**Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
 **Since:** 1.0.0
 
 --------------------
 
 
-### removeAllListeners
+### removeAllListeners()
 
 ```typescript
 removeAllListeners() => void
@@ -61,7 +61,7 @@ removeAllListeners() => void
 
 Remove all the listeners that are attached to this plugin.
 
-**Returns:** void
+**Returns:** <code>void</code>
 
 **Since:** 1.0.0
 
@@ -73,37 +73,37 @@ Remove all the listeners that are attached to this plugin.
 
 #### PluginListenerHandle
 
-| Prop       | Type       |
-| ---------- | ---------- |
-| **remove** | () => void |
+| Prop         | Type                    |
+| ------------ | ----------------------- |
+| **`remove`** | <code>() => void</code> |
 
 
 #### MotionEventResult
 
-| Prop                             | Type                                                            | Description                                                                                                                                                             | Since |
-| -------------------------------- | --------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **acceleration**                 | [DeviceMotionEventAcceleration](#devicemotioneventacceleration) | An object giving the acceleration of the device on the three axis X, Y and Z. Acceleration is expressed in m/s                                                          | 1.0.0 |
-| **accelerationIncludingGravity** | [DeviceMotionEventAcceleration](#devicemotioneventacceleration) | An object giving the acceleration of the device on the three axis X, Y and Z with the effect of gravity. Acceleration is expressed in m/s                               | 1.0.0 |
-| **rotationRate**                 | [DeviceMotionEventRotationRate](#devicemotioneventrotationrate) | An object giving the rate of change of the device's orientation on the three orientation axis alpha, beta and gamma. Rotation rate is expressed in degrees per seconds. | 1.0.0 |
-| **interval**                     | number                                                          | A number representing the interval of time, in milliseconds, at which data is obtained from the device.                                                                 | 1.0.0 |
+| Prop                               | Type                                                                                    | Description                                                                                                                                                             | Since |
+| ---------------------------------- | --------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`acceleration`**                 | <code><a href="#devicemotioneventacceleration">DeviceMotionEventAcceleration</a></code> | An object giving the acceleration of the device on the three axis X, Y and Z. Acceleration is expressed in m/s                                                          | 1.0.0 |
+| **`accelerationIncludingGravity`** | <code><a href="#devicemotioneventacceleration">DeviceMotionEventAcceleration</a></code> | An object giving the acceleration of the device on the three axis X, Y and Z with the effect of gravity. Acceleration is expressed in m/s                               | 1.0.0 |
+| **`rotationRate`**                 | <code><a href="#devicemotioneventrotationrate">DeviceMotionEventRotationRate</a></code> | An object giving the rate of change of the device's orientation on the three orientation axis alpha, beta and gamma. Rotation rate is expressed in degrees per seconds. | 1.0.0 |
+| **`interval`**                     | <code>number</code>                                                                     | A number representing the interval of time, in milliseconds, at which data is obtained from the device.                                                                 | 1.0.0 |
 
 
 #### DeviceMotionEventAcceleration
 
-| Prop  | Type   | Description                                  | Since |
-| ----- | ------ | -------------------------------------------- | ----- |
-| **x** | number | The amount of acceleration along the X axis. | 1.0.0 |
-| **y** | number | The amount of acceleration along the Y axis. | 1.0.0 |
-| **z** | number | The amount of acceleration along the Z axis. | 1.0.0 |
+| Prop    | Type                | Description                                  | Since |
+| ------- | ------------------- | -------------------------------------------- | ----- |
+| **`x`** | <code>number</code> | The amount of acceleration along the X axis. | 1.0.0 |
+| **`y`** | <code>number</code> | The amount of acceleration along the Y axis. | 1.0.0 |
+| **`z`** | <code>number</code> | The amount of acceleration along the Z axis. | 1.0.0 |
 
 
 #### DeviceMotionEventRotationRate
 
-| Prop      | Type   | Description                                                      | Since |
-| --------- | ------ | ---------------------------------------------------------------- | ----- |
-| **alpha** | number | The amount of rotation around the Z axis, in degrees per second. | 1.0.0 |
-| **beta**  | number | The amount of rotation around the X axis, in degrees per second. | 1.0.0 |
-| **gamma** | number | The amount of rotation around the Y axis, in degrees per second. | 1.0.0 |
+| Prop        | Type                | Description                                                      | Since |
+| ----------- | ------------------- | ---------------------------------------------------------------- | ----- |
+| **`alpha`** | <code>number</code> | The amount of rotation around the Z axis, in degrees per second. | 1.0.0 |
+| **`beta`**  | <code>number</code> | The amount of rotation around the X axis, in degrees per second. | 1.0.0 |
+| **`gamma`** | <code>number</code> | The amount of rotation around the Y axis, in degrees per second. | 1.0.0 |
 
 
 <!--DOCGEN_API_END-->
