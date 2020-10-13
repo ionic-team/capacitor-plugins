@@ -20,6 +20,7 @@
 #import <Foundation/Foundation.h>
 #import <objc/runtime.h>
 #import <Capacitor/Capacitor-Swift.h>
+#import <Capacitor/Capacitor.h>
 
 typedef enum : NSUInteger {
   ResizeNone,
