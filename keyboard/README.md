@@ -65,9 +65,9 @@ the accessory bar for short forms (login, signup, etc.) to provide a cleaner UI.
 
 This method is only supported on iPhone devices.
 
-| Param       | Type                                 |
-| ----------- | ------------------------------------ |
-| **options** | <code>{ isVisible: boolean; }</code> |
+| Param         | Type                                 |
+| ------------- | ------------------------------------ |
+| **`options`** | <code>{ isVisible: boolean; }</code> |
 
 **Returns:** <code>Promise&lt;void&gt;</code>
 
@@ -86,9 +86,9 @@ Programmatically enable or disable the WebView scroll.
 
 This method is only supported on iOS.
 
-| Param       | Type                                  |
-| ----------- | ------------------------------------- |
-| **options** | <code>{ isDisabled: boolean; }</code> |
+| Param         | Type                                  |
+| ------------- | ------------------------------------- |
+| **`options`** | <code>{ isDisabled: boolean; }</code> |
 
 **Returns:** <code>Promise&lt;void&gt;</code>
 
@@ -107,9 +107,9 @@ Programmatically set the keyboard style.
 
 This method is only supported on iOS.
 
-| Param       | Type                                                                  |
-| ----------- | --------------------------------------------------------------------- |
-| **options** | <code><a href="#keyboardstyleoptions">KeyboardStyleOptions</a></code> |
+| Param         | Type                                                                  |
+| ------------- | --------------------------------------------------------------------- |
+| **`options`** | <code><a href="#keyboardstyleoptions">KeyboardStyleOptions</a></code> |
 
 **Returns:** <code>Promise&lt;void&gt;</code>
 
@@ -128,9 +128,9 @@ Programmatically set the resize mode.
 
 This method is only supported on iOS.
 
-| Param       | Type                                                                    |
-| ----------- | ----------------------------------------------------------------------- |
-| **options** | <code><a href="#keyboardresizeoptions">KeyboardResizeOptions</a></code> |
+| Param         | Type                                                                    |
+| ------------- | ----------------------------------------------------------------------- |
+| **`options`** | <code><a href="#keyboardresizeoptions">KeyboardResizeOptions</a></code> |
 
 **Returns:** <code>Promise&lt;void&gt;</code>
 
@@ -147,10 +147,10 @@ addListener(eventName: 'keyboardWillShow', listenerFunc: (info: KeyboardInfo) =>
 
 Listen for when the keyboard is about to be shown.
 
-| Param            | Type                                      |
-| ---------------- | ----------------------------------------- |
-| **eventName**    | <code>"keyboardWillShow"</code>           |
-| **listenerFunc** | <code>(info: KeyboardInfo) => void</code> |
+| Param              | Type                                      |
+| ------------------ | ----------------------------------------- |
+| **`eventName`**    | <code>"keyboardWillShow"</code>           |
+| **`listenerFunc`** | <code>(info: KeyboardInfo) => void</code> |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
@@ -167,10 +167,10 @@ addListener(eventName: 'keyboardDidShow', listenerFunc: (info: KeyboardInfo) => 
 
 Listen for when the keyboard is shown.
 
-| Param            | Type                                      |
-| ---------------- | ----------------------------------------- |
-| **eventName**    | <code>"keyboardDidShow"</code>            |
-| **listenerFunc** | <code>(info: KeyboardInfo) => void</code> |
+| Param              | Type                                      |
+| ------------------ | ----------------------------------------- |
+| **`eventName`**    | <code>"keyboardDidShow"</code>            |
+| **`listenerFunc`** | <code>(info: KeyboardInfo) => void</code> |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
@@ -187,10 +187,10 @@ addListener(eventName: 'keyboardWillHide', listenerFunc: () => void) => PluginLi
 
 Listen for when the keyboard is about to be hidden.
 
-| Param            | Type                            |
-| ---------------- | ------------------------------- |
-| **eventName**    | <code>"keyboardWillHide"</code> |
-| **listenerFunc** | <code>() => void</code>         |
+| Param              | Type                            |
+| ------------------ | ------------------------------- |
+| **`eventName`**    | <code>"keyboardWillHide"</code> |
+| **`listenerFunc`** | <code>() => void</code>         |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
@@ -207,10 +207,10 @@ addListener(eventName: 'keyboardDidHide', listenerFunc: () => void) => PluginLis
 
 Listen for when the keyboard is hidden.
 
-| Param            | Type                           |
-| ---------------- | ------------------------------ |
-| **eventName**    | <code>"keyboardDidHide"</code> |
-| **listenerFunc** | <code>() => void</code>        |
+| Param              | Type                           |
+| ------------------ | ------------------------------ |
+| **`eventName`**    | <code>"keyboardDidHide"</code> |
+| **`listenerFunc`** | <code>() => void</code>        |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
