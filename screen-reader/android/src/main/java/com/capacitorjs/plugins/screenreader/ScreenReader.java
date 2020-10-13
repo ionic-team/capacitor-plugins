@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class ScreenReader {
+
     private Context context;
     private AccessibilityManager accessibilityManager;
     private List<ScreenReaderStateChangeListener> stateChangeListeners = new ArrayList<>();

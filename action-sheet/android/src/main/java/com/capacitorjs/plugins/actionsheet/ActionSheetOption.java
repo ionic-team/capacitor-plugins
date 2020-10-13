@@ -1,6 +1,7 @@
 package com.capacitorjs.plugins.actionsheet;
 
 public class ActionSheetOption {
+
     private String title;
 
     public ActionSheetOption(String title) {

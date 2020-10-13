@@ -9,6 +9,7 @@ import java.util.Locale;
 
 @NativePlugin(name = "Device")
 public class DevicePlugin extends Plugin {
+
     private Device implementation;
 
     @Override

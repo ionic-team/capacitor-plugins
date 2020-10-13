@@ -7,6 +7,7 @@ import android.content.Context;
 import com.getcapacitor.Logger;
 
 public class Clipboard {
+
     private static final String TAG = "Clipboard";
 
     private Context context;

@@ -11,6 +11,7 @@ import com.getcapacitor.PluginMethod;
 
 @NativePlugin(name = "Network", permissions = { Manifest.permission.ACCESS_NETWORK_STATE })
 public class NetworkPlugin extends Plugin {
+
     private Network implementation;
     public static final String NETWORK_CHANGE_EVENT = "networkStatusChange";
     private static final String PERMISSION_NOT_SET = Manifest.permission.ACCESS_NETWORK_STATE + " not set in AndroidManifest.xml";
