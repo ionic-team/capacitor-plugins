@@ -6,7 +6,7 @@ import { KeyboardResize, KeyboardStyle } from './definitions';
 
 const implementations: PluginImplementations<KeyboardPlugin> = {
   android: Plugins.Keyboard,
-  ios: Plugins.Keyboard
+  ios: Plugins.Keyboard,
 };
 
 const Keyboard = registerPlugin(

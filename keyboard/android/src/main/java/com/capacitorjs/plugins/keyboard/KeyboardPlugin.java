@@ -9,45 +9,44 @@ import com.getcapacitor.PluginMethod;
 
 @NativePlugin(name = "Keyboard")
 public class KeyboardPlugin extends Plugin {
+
     private Keyboard implementation;
-
-
 
     @Override
     public void load() {
         execute(
-                () -> {
-                    implementation =  new Keyboard(getActivity());
-                    implementation.setKeyboardEventListener(this::onKeyboardEvent);
-                }
+            () -> {
+                implementation = new Keyboard(getActivity());
+                implementation.setKeyboardEventListener(this::onKeyboardEvent);
+            }
         );
     }
 
     @PluginMethod
     public void show(final PluginCall call) {
         execute(
-                () ->
-                        new Handler()
-                                .postDelayed(
-                                        () -> {
-                                            implementation.show();
-                                            call.resolve();
-                                        },
-                                        350
-                                )
+            () ->
+                new Handler()
+                .postDelayed(
+                        () -> {
+                            implementation.show();
+                            call.resolve();
+                        },
+                        350
+                    )
         );
     }
 
     @PluginMethod
     public void hide(final PluginCall call) {
         execute(
-                () -> {
-                    if (!implementation.hide()) {
-                        call.reject("Can't close keyboard, not currently focused");
-                    } else {
-                        call.resolve();
-                    }
+            () -> {
+                if (!implementation.hide()) {
+                    call.reject("Can't close keyboard, not currently focused");
+                } else {
+                    call.resolve();
                 }
+            }
         );
     }
 
