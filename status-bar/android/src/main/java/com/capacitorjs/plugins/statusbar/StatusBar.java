@@ -7,6 +7,7 @@ import android.view.WindowManager;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class StatusBar {
+
     private int currentStatusbarColor;
     private AppCompatActivity activity;
     private String defaultStyle;

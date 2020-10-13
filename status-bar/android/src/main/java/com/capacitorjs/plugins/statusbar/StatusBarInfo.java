@@ -1,6 +1,7 @@
 package com.capacitorjs.plugins.statusbar;
 
 public class StatusBarInfo {
+
     private boolean overlays;
     private boolean visible;
     private String style;

@@ -9,6 +9,7 @@ import com.getcapacitor.PluginMethod;
 
 @NativePlugin(name = "StatusBar")
 public class StatusBarPlugin extends Plugin {
+
     private StatusBar implementation;
 
     @Override
