@@ -8,6 +8,7 @@ import com.getcapacitor.PluginMethod;
 
 @NativePlugin(name = "Clipboard")
 public class ClipboardPlugin extends Plugin {
+
     private Clipboard implementation;
 
     @Override

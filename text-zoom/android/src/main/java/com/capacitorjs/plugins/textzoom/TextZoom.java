@@ -5,6 +5,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 
 public class TextZoom {
+
     Activity activity;
     WebView webView;
 

@@ -8,6 +8,7 @@ import com.getcapacitor.PluginMethod;
 
 @NativePlugin(name = "ScreenReader")
 public class ScreenReaderPlugin extends Plugin {
+
     public static final String EVENT_SCREEN_READER_STATE_CHANGE = "screenReaderStateChange";
     private ScreenReader screenReader;
 

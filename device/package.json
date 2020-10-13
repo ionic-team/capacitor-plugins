@@ -1,6 +1,6 @@
 {
   "name": "@capacitor/device",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "The Device API exposes internal information about the device, such as the model and operating system version, along with user information such as unique ids.",
   "main": "dist/plugin.js",
   "module": "dist/esm/index.js",
@@ -29,7 +29,8 @@
     "eslint": "eslint . --ext ts",
     "prettier": "prettier \"**/*.{css,html,ts,js,java}\"",
     "swiftlint": "node-swiftlint",
-    "build": "npm run clean && tsc && rollup -c rollup.config.js",
+    "docgen": "docgen --api DevicePlugin --output-readme README.md --output-json dist/docs.json",
+    "build": "npm run clean && npm run docgen && tsc && rollup -c rollup.config.js",
     "clean": "rimraf ./dist",
     "watch": "tsc --watch",
     "prepublishOnly": "npm run build"
@@ -37,17 +38,18 @@
   "devDependencies": {
     "@capacitor/android": "^3.0.0-alpha.5",
     "@capacitor/core": "^3.0.0-alpha.5",
+    "@capacitor/docgen": "^0.0.6",
     "@capacitor/ios": "^3.0.0-alpha.5",
-    "@ionic/eslint-config": "^0.2.1",
+    "@ionic/eslint-config": "^0.3.0",
     "@ionic/prettier-config": "^1.0.0",
     "@ionic/swiftlint-config": "^1.1.2",
     "@rollup/plugin-node-resolve": "^8.1.0",
-    "eslint": "^7.8.1",
+    "eslint": "^7.11.0",
     "prettier": "^2.0.5",
-    "prettier-plugin-java": "^0.8.0",
+    "prettier-plugin-java": "^0.8.3",
     "rimraf": "^3.0.0",
-    "rollup": "^2.21.0",
-    "swiftlint": "^1.0.0",
+    "rollup": "^2.29.0",
+    "swiftlint": "^1.0.1",
     "typescript": "~3.9.7"
   },
   "peerDependencies": {
