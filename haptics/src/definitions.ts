@@ -104,21 +104,21 @@ export enum HapticsNotificationType {
    *
    * @since 1.0.0
    */
-  SUCCESS = 'SUCCESS',
+  Success = 'SUCCESS',
 
   /**
    * A notification feedback type indicating that a task has produced a warning
    *
    * @since 1.0.0
    */
-  WARNING = 'WARNING',
+  Warning = 'WARNING',
 
   /**
    * A notification feedback type indicating that a task has failed
    *
    * @since 1.0.0
    */
-  ERROR = 'ERROR',
+  Error = 'ERROR',
 }
 
 export interface VibrateOptions {
