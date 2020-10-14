@@ -3,15 +3,21 @@
 The Screen Reader API provides access to TalkBack/VoiceOver/etc. and provides simple text-to-speech capabilities for visual accessibility.
 
 <!--DOCGEN_INDEX_START-->
+<div class="docgen docgen-index">
+
 * [`isEnabled()`](#isenabled)
 * [`speak(...)`](#speak)
 * [`addListener(...)`](#addlistener)
 * [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
+
+</div>
 <!--DOCGEN_INDEX_END-->
 
 <!--DOCGEN_API_START-->
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
+<div class="docgen docgen-api">
+
 ## API
 
 ### isEnabled()
@@ -50,9 +56,9 @@ For more text-to-speech capabilities, please see the [Capacitor Community
 Text-to-Speech
 plugin](https://github.com/capacitor-community/text-to-speech).
 
-| Param       | Type                                                                          |
-| ----------- | ----------------------------------------------------------------------------- |
-| **options** | <code><a href="#screenreaderspeakoptions">ScreenReaderSpeakOptions</a></code> |
+| Param         | Type                                                                          |
+| ------------- | ----------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#screenreaderspeakoptions">ScreenReaderSpeakOptions</a></code> |
 
 **Returns:** <code>Promise&lt;void&gt;</code>
 
@@ -72,10 +78,10 @@ Add a listener
 This method is not supported on web (it is not possible to detect Screen
 Readers).
 
-| Param         | Type                                             |
-| ------------- | ------------------------------------------------ |
-| **eventName** | <code>"screenReaderStateChange"</code>           |
-| **listener**  | <code>(state: { value: boolean; }) => any</code> |
+| Param           | Type                                             |
+| --------------- | ------------------------------------------------ |
+| **`eventName`** | <code>"screenReaderStateChange"</code>           |
+| **`listener`**  | <code>(state: { value: boolean; }) => any</code> |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
@@ -116,5 +122,5 @@ Remove all the listeners that are attached to this plugin.
 | ------------ | ----------------------- |
 | **`remove`** | <code>() => void</code> |
 
-
+</div>
 <!--DOCGEN_API_END-->

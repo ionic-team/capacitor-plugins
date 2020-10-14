@@ -3,6 +3,8 @@
 The Haptics API provides physical feedback to the user through touch or vibration.
 
 <!--DOCGEN_INDEX_START-->
+<div class="docgen docgen-index">
+
 * [`impact(...)`](#impact)
 * [`notification(...)`](#notification)
 * [`vibrate(...)`](#vibrate)
@@ -11,10 +13,14 @@ The Haptics API provides physical feedback to the user through touch or vibratio
 * [`selectionEnd()`](#selectionend)
 * [Interfaces](#interfaces)
 * [Enums](#enums)
+
+</div>
 <!--DOCGEN_INDEX_END-->
 
 <!--DOCGEN_API_START-->
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
+<div class="docgen docgen-api">
+
 ## API
 
 ### impact(...)
@@ -25,9 +31,9 @@ impact(options?: HapticsImpactOptions | undefined) => Promise<void>
 
 Trigger a haptics "impact" feedback
 
-| Param       | Type                                                                  |
-| ----------- | --------------------------------------------------------------------- |
-| **options** | <code><a href="#hapticsimpactoptions">HapticsImpactOptions</a></code> |
+| Param         | Type                                                                  |
+| ------------- | --------------------------------------------------------------------- |
+| **`options`** | <code><a href="#hapticsimpactoptions">HapticsImpactOptions</a></code> |
 
 **Returns:** <code>Promise&lt;void&gt;</code>
 
@@ -44,9 +50,9 @@ notification(options?: HapticsNotificationOptions | undefined) => Promise<void>
 
 Trigger a haptics "notification" feedback
 
-| Param       | Type                                                                              |
-| ----------- | --------------------------------------------------------------------------------- |
-| **options** | <code><a href="#hapticsnotificationoptions">HapticsNotificationOptions</a></code> |
+| Param         | Type                                                                              |
+| ------------- | --------------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#hapticsnotificationoptions">HapticsNotificationOptions</a></code> |
 
 **Returns:** <code>Promise&lt;void&gt;</code>
 
@@ -63,9 +69,9 @@ vibrate(options?: VibrateOptions | undefined) => Promise<void>
 
 Vibrate the device
 
-| Param       | Type                                                      |
-| ----------- | --------------------------------------------------------- |
-| **options** | <code><a href="#vibrateoptions">VibrateOptions</a></code> |
+| Param         | Type                                                      |
+| ------------- | --------------------------------------------------------- |
+| **`options`** | <code><a href="#vibrateoptions">VibrateOptions</a></code> |
 
 **Returns:** <code>Promise&lt;void&gt;</code>
 
@@ -166,5 +172,5 @@ For example, call this when a user has lifted their finger from a control
 | **`WARNING`** | <code>'WARNING'</code> | A notification feedback type indicating that a task has produced a warning     | 1.0.0 |
 | **`ERROR`**   | <code>'ERROR'</code>   | A notification feedback type indicating that a task has failed                 | 1.0.0 |
 
-
+</div>
 <!--DOCGEN_API_END-->
