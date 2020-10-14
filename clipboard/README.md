@@ -3,13 +3,19 @@
 The Clipboard API enables copy and pasting to/from the system clipboard.
 
 <!--DOCGEN_INDEX_START-->
+<div class="docgen docgen-index">
+
 * [`write(...)`](#write)
 * [`read()`](#read)
 * [Interfaces](#interfaces)
+
+</div>
 <!--DOCGEN_INDEX_END-->
 
 <!--DOCGEN_API_START-->
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
+<div class="docgen docgen-api">
+
 ## API
 
 ### write(...)
@@ -20,9 +26,9 @@ write(options: ClipboardWriteOptions) => Promise<void>
 
 Write a value to the clipboard (the "copy" action)
 
-| Param       | Type                                                                    |
-| ----------- | ----------------------------------------------------------------------- |
-| **options** | <code><a href="#clipboardwriteoptions">ClipboardWriteOptions</a></code> |
+| Param         | Type                                                                    |
+| ------------- | ----------------------------------------------------------------------- |
+| **`options`** | <code><a href="#clipboardwriteoptions">ClipboardWriteOptions</a></code> |
 
 **Returns:** <code>Promise&lt;void&gt;</code>
 
@@ -70,5 +76,5 @@ Represents the data read from the clipboard.
 | **`value`** | <code>string</code> | Data read from the clipboard.  | 1.0.0 |
 | **`type`**  | <code>string</code> | Type of data in the clipboard. | 1.0.0 |
 
-
+</div>
 <!--DOCGEN_API_END-->
