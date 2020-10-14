@@ -3,14 +3,20 @@
 The Motion API tracks accelerometer and device orientation (compass heading, etc.)
 
 <!--DOCGEN_INDEX_START-->
+<div class="docgen docgen-index">
+
 * [`addListener(...)`](#addlistener)
 * [`addListener(...)`](#addlistener)
 * [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
+
+</div>
 <!--DOCGEN_INDEX_END-->
 
 <!--DOCGEN_API_START-->
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
+<div class="docgen docgen-api">
+
 ## API
 
 ### addListener(...)
@@ -21,10 +27,10 @@ addListener(eventName: 'accel', listenerFunc: (event: MotionEventResult) => void
 
 Add a listener for accelerometer data
 
-| Param            | Type                                            |
-| ---------------- | ----------------------------------------------- |
-| **eventName**    | <code>"accel"</code>                            |
-| **listenerFunc** | <code>(event: MotionEventResult) => void</code> |
+| Param              | Type                                            |
+| ------------------ | ----------------------------------------------- |
+| **`eventName`**    | <code>"accel"</code>                            |
+| **`listenerFunc`** | <code>(event: MotionEventResult) => void</code> |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
@@ -41,10 +47,10 @@ addListener(eventName: 'orientation', listenerFunc: (event: MotionOrientationEve
 
 Add a listener for device orientation change (compass heading, etc.)
 
-| Param            | Type                                                        |
-| ---------------- | ----------------------------------------------------------- |
-| **eventName**    | <code>"orientation"</code>                                  |
-| **listenerFunc** | <code>(event: DeviceMotionEventRotationRate) => void</code> |
+| Param              | Type                                                        |
+| ------------------ | ----------------------------------------------------------- |
+| **`eventName`**    | <code>"orientation"</code>                                  |
+| **`listenerFunc`** | <code>(event: DeviceMotionEventRotationRate) => void</code> |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
@@ -105,5 +111,5 @@ Remove all the listeners that are attached to this plugin.
 | **`beta`**  | <code>number</code> | The amount of rotation around the X axis, in degrees per second. | 1.0.0 |
 | **`gamma`** | <code>number</code> | The amount of rotation around the Y axis, in degrees per second. | 1.0.0 |
 
-
+</div>
 <!--DOCGEN_API_END-->

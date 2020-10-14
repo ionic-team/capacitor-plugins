@@ -3,14 +3,20 @@
 The Dialog API provides methods for triggering native dialog windows for alerts, confirmations, and input prompts
 
 <!--DOCGEN_INDEX_START-->
+<div class="docgen docgen-index">
+
 * [`alert(...)`](#alert)
 * [`prompt(...)`](#prompt)
 * [`confirm(...)`](#confirm)
 * [Interfaces](#interfaces)
+
+</div>
 <!--DOCGEN_INDEX_END-->
 
 <!--DOCGEN_API_START-->
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
+<div class="docgen docgen-api">
+
 ## API
 
 ### alert(...)
@@ -21,9 +27,9 @@ alert(options: AlertOptions) => Promise<void>
 
 Show an alert dialog
 
-| Param       | Type                                                  |
-| ----------- | ----------------------------------------------------- |
-| **options** | <code><a href="#alertoptions">AlertOptions</a></code> |
+| Param         | Type                                                  |
+| ------------- | ----------------------------------------------------- |
+| **`options`** | <code><a href="#alertoptions">AlertOptions</a></code> |
 
 **Returns:** <code>Promise&lt;void&gt;</code>
 
@@ -40,9 +46,9 @@ prompt(options: PromptOptions) => Promise<PromptResult>
 
 Show a prompt dialog
 
-| Param       | Type                                                    |
-| ----------- | ------------------------------------------------------- |
-| **options** | <code><a href="#promptoptions">PromptOptions</a></code> |
+| Param         | Type                                                    |
+| ------------- | ------------------------------------------------------- |
+| **`options`** | <code><a href="#promptoptions">PromptOptions</a></code> |
 
 **Returns:** <code>Promise&lt;<a href="#promptresult">PromptResult</a>&gt;</code>
 
@@ -59,9 +65,9 @@ confirm(options: ConfirmOptions) => Promise<ConfirmResult>
 
 Show a confirmation dialog
 
-| Param       | Type                                                      |
-| ----------- | --------------------------------------------------------- |
-| **options** | <code><a href="#confirmoptions">ConfirmOptions</a></code> |
+| Param         | Type                                                      |
+| ------------- | --------------------------------------------------------- |
+| **`options`** | <code><a href="#confirmoptions">ConfirmOptions</a></code> |
 
 **Returns:** <code>Promise&lt;<a href="#confirmresult">ConfirmResult</a>&gt;</code>
 
@@ -118,5 +124,5 @@ Show a confirmation dialog
 | **`okButtonTitle`**     | <code>string</code> | Text to use on the positive action button. | <code>"OK"</code>     | 1.0.0 |
 | **`cancelButtonTitle`** | <code>string</code> | Text to use on the negative action button. | <code>"Cancel"</code> | 1.0.0 |
 
-
+</div>
 <!--DOCGEN_API_END-->

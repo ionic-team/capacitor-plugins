@@ -3,12 +3,18 @@
 The Share API provides methods for sharing content in any sharing-enabled apps the user may have installed.
 
 <!--DOCGEN_INDEX_START-->
+<div class="docgen docgen-index">
+
 * [`share(...)`](#share)
 * [Interfaces](#interfaces)
+
+</div>
 <!--DOCGEN_INDEX_END-->
 
 <!--DOCGEN_API_START-->
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
+<div class="docgen docgen-api">
+
 ## API
 
 ### share(...)
@@ -19,9 +25,9 @@ share(options: ShareOptions) => Promise<ShareResult>
 
 Show a Share modal for sharing content with other apps
 
-| Param       | Type                                                  |
-| ----------- | ----------------------------------------------------- |
-| **options** | <code><a href="#shareoptions">ShareOptions</a></code> |
+| Param         | Type                                                  |
+| ------------- | ----------------------------------------------------- |
+| **`options`** | <code><a href="#shareoptions">ShareOptions</a></code> |
 
 **Returns:** <code>Promise&lt;<a href="#shareresult">ShareResult</a>&gt;</code>
 
@@ -49,5 +55,5 @@ Show a Share modal for sharing content with other apps
 | **`url`**         | <code>string</code> | Set a URL to share, can be http, https or file:// URL                      | 1.0.0 |
 | **`dialogTitle`** | <code>string</code> | Set a title for the share modal. This option is only supported on Android. | 1.0.0 |
 
-
+</div>
 <!--DOCGEN_API_END-->
