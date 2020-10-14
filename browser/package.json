@@ -1,7 +1,7 @@
 {
   "name": "@capacitor/browser",
   "version": "0.0.1",
-  "description": "In-app browser",
+  "description": "The Browser API provides the ability to open an in-app browser and subscribe to browser events.",
   "main": "dist/plugin.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
