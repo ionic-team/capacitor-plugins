@@ -1,54 +1,59 @@
 {
   "name": "@capacitor/motion",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "The Motion API tracks accelerometer and device orientation (compass heading, etc.)",
   "main": "dist/plugin.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
-  "scripts": {
-    "lint": "npm run eslint && npm run prettier -- --check",
-    "fmt": "npm run eslint -- --fix && npm run prettier -- --write",
-    "eslint": "eslint . --ext ts",
-    "prettier": "prettier \"**/*.{css,html,ts,js,java}\"",
-    "build": "npm run clean && tsc && rollup -c rollup.config.js",
-    "clean": "rimraf ./dist",
-    "verify": "npm run build",
-    "watch": "tsc --watch",
-    "prepublishOnly": "npm run build"
-  },
   "author": "Ionic <hi@ionicframework.com>",
   "license": "MIT",
-  "devDependencies": {
-    "@capacitor/android": "^3.0.0-alpha.5",
-    "@capacitor/core": "^3.0.0-alpha.5",
-    "@capacitor/ios": "^3.0.0-alpha.5",
-    "@ionic/eslint-config": "^0.2.1",
-    "@ionic/prettier-config": "^1.0.0",
-    "@rollup/plugin-node-resolve": "^8.1.0",
-    "eslint": "^7.8.1",
-    "prettier": "^2.0.5",
-    "prettier-plugin-java": "^0.8.0",
-    "rimraf": "^3.0.0",
-    "rollup": "^2.21.0",
-    "typescript": "~3.9.7"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ionic-team/capacitor-plugins"
   },
-  "peerDependencies": {
-    "@capacitor/core": "^3.0.0-alpha.5"
+  "bugs": {
+    "url": "https://github.com/ionic-team/capacitor-plugins/issues"
   },
   "keywords": [
     "capacitor",
     "plugin",
     "native"
   ],
-  "capacitor": {},
+  "scripts": {
+    "lint": "npm run eslint && npm run prettier -- --check",
+    "fmt": "npm run eslint -- --fix && npm run prettier -- --write",
+    "eslint": "eslint . --ext ts",
+    "prettier": "prettier \"**/*.{css,html,ts,js,java}\"",
+    "docgen": "docgen --api MotionPlugin --output-readme README.md --output-json dist/docs.json",
+    "build": "npm run clean && npm run docgen && tsc && rollup -c rollup.config.js",
+    "clean": "rimraf ./dist",
+    "verify": "npm run build",
+    "watch": "tsc --watch",
+    "prepublishOnly": "npm run build"
+  },
+  "devDependencies": {
+    "@capacitor/android": "^3.0.0-alpha.5",
+    "@capacitor/core": "^3.0.0-alpha.5",
+    "@capacitor/docgen": "^0.0.8",
+    "@capacitor/ios": "^3.0.0-alpha.5",
+    "@ionic/eslint-config": "^0.3.0",
+    "@ionic/prettier-config": "^1.0.0",
+    "@rollup/plugin-node-resolve": "^8.1.0",
+    "eslint": "^7.11.0",
+    "prettier": "^2.0.5",
+    "prettier-plugin-java": "^0.8.3",
+    "rimraf": "^3.0.0",
+    "rollup": "^2.29.0",
+    "typescript": "~3.9.7"
+  },
+  "peerDependencies": {
+    "@capacitor/core": "^3.0.0-alpha.5"
+  },
   "prettier": "@ionic/prettier-config",
   "eslintConfig": {
     "extends": "@ionic/eslint-config/recommended"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/ionic-team/capacitor-plugins"
-  },
+  "capacitor": {},
   "publishConfig": {
     "access": "public"
   }
