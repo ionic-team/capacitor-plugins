@@ -33,7 +33,6 @@ public class Network {
         connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         receiver =
             new BroadcastReceiver() {
-
                 @Override
                 public void onReceive(Context context, Intent intent) {
                     statusChangeListener.onNetworkStatusChanged();

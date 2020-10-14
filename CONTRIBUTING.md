@@ -70,6 +70,15 @@ Capacitor packages are published using [Lerna](https://github.com/lerna/lerna) w
 
 During Capacitor 3 development, the following workflow is used to create dev releases:
 
+1. Make sure the `README.md` files are updated with the current API.
+    * Run the doc generator.
+
+      ```shell
+      npx lerna run docgen
+      ```
+
+    * Commit any changes.
+
 1. Create the next development version. The following command will:
     * Create a release commit with a generated changelog
     * Create a git tag

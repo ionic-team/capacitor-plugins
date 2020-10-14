@@ -8,6 +8,7 @@ import com.capacitorjs.plugins.haptics.arguments.HapticsSelectionType;
 import com.capacitorjs.plugins.haptics.arguments.HapticsVibrationType;
 
 public class Haptics {
+
     private Context context;
     private boolean selectionStarted = false;
     private final Vibrator vibrator;
