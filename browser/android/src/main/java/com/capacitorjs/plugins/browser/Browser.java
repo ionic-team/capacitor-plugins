@@ -47,7 +47,6 @@ public class Browser {
     private boolean isInitialLoad = false;
     private EventGroup group;
     private CustomTabsServiceConnection connection = new CustomTabsServiceConnection() {
-
         @Override
         public void onCustomTabsServiceConnected(ComponentName name, CustomTabsClient client) {
             customTabsClient = client;
@@ -169,7 +168,6 @@ public class Browser {
             browserSession =
                 customTabsClient.newSession(
                     new CustomTabsCallback() {
-
                         @Override
                         public void onNavigationEvent(int navigationEvent, Bundle extras) {
                             handledNavigationEvent(navigationEvent);
