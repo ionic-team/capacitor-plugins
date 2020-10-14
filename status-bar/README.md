@@ -3,6 +3,8 @@
 The StatusBar API Provides methods for configuring the style of the Status Bar, along with showing or hiding it.
 
 <!--DOCGEN_INDEX_START-->
+<div class="docgen docgen-index">
+
 * [`setStyle(...)`](#setstyle)
 * [`setBackgroundColor(...)`](#setbackgroundcolor)
 * [`show(...)`](#show)
@@ -11,10 +13,14 @@ The StatusBar API Provides methods for configuring the style of the Status Bar, 
 * [`setOverlaysWebView(...)`](#setoverlayswebview)
 * [Interfaces](#interfaces)
 * [Enums](#enums)
+
+</div>
 <!--DOCGEN_INDEX_END-->
 
 <!--DOCGEN_API_START-->
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
+<div class="docgen docgen-api">
+
 ## API
 
 ### setStyle(...)
@@ -25,9 +31,9 @@ setStyle(options: StatusBarStyleOptions) => Promise<void>
 
 Set the current style of the status bar.
 
-| Param       | Type                                                                    |
-| ----------- | ----------------------------------------------------------------------- |
-| **options** | <code><a href="#statusbarstyleoptions">StatusBarStyleOptions</a></code> |
+| Param         | Type                                                                    |
+| ------------- | ----------------------------------------------------------------------- |
+| **`options`** | <code><a href="#statusbarstyleoptions">StatusBarStyleOptions</a></code> |
 
 **Returns:** <code>Promise&lt;void&gt;</code>
 
@@ -46,9 +52,9 @@ Set the background color of the status bar.
 
 This method is only supported on Android.
 
-| Param       | Type                                                                                        |
-| ----------- | ------------------------------------------------------------------------------------------- |
-| **options** | <code><a href="#statusbarbackgroundcoloroptions">StatusBarBackgroundColorOptions</a></code> |
+| Param         | Type                                                                                        |
+| ------------- | ------------------------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#statusbarbackgroundcoloroptions">StatusBarBackgroundColorOptions</a></code> |
 
 **Returns:** <code>Promise&lt;void&gt;</code>
 
@@ -65,9 +71,9 @@ show(options?: StatusBarAnimationOptions | undefined) => Promise<void>
 
 Show the status bar.
 
-| Param       | Type                                                                            |
-| ----------- | ------------------------------------------------------------------------------- |
-| **options** | <code><a href="#statusbaranimationoptions">StatusBarAnimationOptions</a></code> |
+| Param         | Type                                                                            |
+| ------------- | ------------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#statusbaranimationoptions">StatusBarAnimationOptions</a></code> |
 
 **Returns:** <code>Promise&lt;void&gt;</code>
 
@@ -84,9 +90,9 @@ hide(options?: StatusBarAnimationOptions | undefined) => Promise<void>
 
 Hide the status bar.
 
-| Param       | Type                                                                            |
-| ----------- | ------------------------------------------------------------------------------- |
-| **options** | <code><a href="#statusbaranimationoptions">StatusBarAnimationOptions</a></code> |
+| Param         | Type                                                                            |
+| ------------- | ------------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#statusbaranimationoptions">StatusBarAnimationOptions</a></code> |
 
 **Returns:** <code>Promise&lt;void&gt;</code>
 
@@ -121,9 +127,9 @@ of the space underneath it.
 
 This method is only supported on Android.
 
-| Param       | Type                                                                                        |
-| ----------- | ------------------------------------------------------------------------------------------- |
-| **options** | <code><a href="#statusbaroverlayswebviewoptions">StatusBarOverlaysWebviewOptions</a></code> |
+| Param         | Type                                                                                        |
+| ------------- | ------------------------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#statusbaroverlayswebviewoptions">StatusBarOverlaysWebviewOptions</a></code> |
 
 **Returns:** <code>Promise&lt;void&gt;</code>
 
@@ -193,5 +199,5 @@ This method is only supported on Android.
 | **`Slide`** | <code>'SLIDE'</code> | Slide animation during show/hide. | 1.0.0 |
 | **`Fade`**  | <code>'FADE'</code>  | Fade animation during show/hide.  | 1.0.0 |
 
-
+</div>
 <!--DOCGEN_API_END-->
