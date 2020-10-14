@@ -3,13 +3,19 @@
 The Action Sheet API provides access to native Action Sheets, which come up from the bottom of the screen and display actions a user can take.
 
 <!--DOCGEN_INDEX_START-->
+<div class="docgen docgen-index">
+
 * [`showActions(...)`](#showactions)
 * [Interfaces](#interfaces)
 * [Enums](#enums)
+
+</div>
 <!--DOCGEN_INDEX_END-->
 
 <!--DOCGEN_API_START-->
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
+<div class="docgen docgen-api">
+
 ## API
 
 ### showActions(...)
@@ -21,9 +27,9 @@ showActions(options: ActionSheetOptions) => Promise<ActionSheetResult>
 Show an Action Sheet style modal with various options for the user
 to select.
 
-| Param       | Type                                                              |
-| ----------- | ----------------------------------------------------------------- |
-| **options** | <code><a href="#actionsheetoptions">ActionSheetOptions</a></code> |
+| Param         | Type                                                              |
+| ------------- | ----------------------------------------------------------------- |
+| **`options`** | <code><a href="#actionsheetoptions">ActionSheetOptions</a></code> |
 
 **Returns:** <code>Promise&lt;<a href="#actionsheetresult">ActionSheetResult</a>&gt;</code>
 
@@ -71,5 +77,5 @@ to select.
 | **`Destructive`** | <code>'DESTRUCTIVE'</code> | Style to use on destructive options.                                                                        | 1.0.0 |
 | **`Cancel`**      | <code>'CANCEL'</code>      | Style to use on the option that cancels the Action Sheet. If used, should be on the latest availabe option. | 1.0.0 |
 
-
+</div>
 <!--DOCGEN_API_END-->

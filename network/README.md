@@ -3,14 +3,20 @@
 The Network API provides network and connectivity information.
 
 <!--DOCGEN_INDEX_START-->
+<div class="docgen docgen-index">
+
 * [`getStatus()`](#getstatus)
 * [`addListener(...)`](#addlistener)
 * [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
+
+</div>
 <!--DOCGEN_INDEX_END-->
 
 <!--DOCGEN_API_START-->
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
+<div class="docgen docgen-api">
+
 ## API
 
 ### getStatus()
@@ -36,10 +42,10 @@ addListener(eventName: 'networkStatusChange', listenerFunc: (status: NetworkStat
 
 Listen for changes in the network connection.
 
-| Param            | Type                                         |
-| ---------------- | -------------------------------------------- |
-| **eventName**    | <code>"networkStatusChange"</code>           |
-| **listenerFunc** | <code>(status: NetworkStatus) => void</code> |
+| Param              | Type                                         |
+| ------------------ | -------------------------------------------- |
+| **`eventName`**    | <code>"networkStatusChange"</code>           |
+| **`listenerFunc`** | <code>(status: NetworkStatus) => void</code> |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
@@ -82,5 +88,5 @@ Represents the state and type of the network connection.
 | ------------ | ----------------------- |
 | **`remove`** | <code>() => void</code> |
 
-
+</div>
 <!--DOCGEN_API_END-->
