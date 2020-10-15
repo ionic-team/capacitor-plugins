@@ -5,7 +5,7 @@ import {
   GeolocationOptions,
   GeolocationPosition,
   GeolocationWatchCallback,
-  GeolocationPluginPermissionStatus,
+  GeolocationPermissionStatus,
 } from './definitions';
 
 import { extend } from './util';
@@ -67,7 +67,7 @@ export class GeolocationWeb extends WebPlugin implements GeolocationPlugin {
     return Promise.resolve();
   }
 
-  async checkPermissions(): Promise<GeolocationPluginPermissionStatus> {
+  async checkPermissions(): Promise<GeolocationPermissionStatus> {
     if (typeof navigator === 'undefined' || !navigator.permissions) {
       throw new UnsupportedBrowserException(
         'Permissions API not available in this browser',
@@ -80,7 +80,7 @@ export class GeolocationWeb extends WebPlugin implements GeolocationPlugin {
     return Promise.resolve({ location: permission.state });
   }
 
-  requestPermissions(): Promise<GeolocationPluginPermissionStatus> {
+  requestPermissions(): Promise<GeolocationPermissionStatus> {
     return Promise.resolve({ location: 'granted' });
   }
 }
