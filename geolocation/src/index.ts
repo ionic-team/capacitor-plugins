@@ -4,7 +4,7 @@ import {
   registerPlugin,
 } from '@capacitor/core';
 
-import { GeolocationPlugin } from './definitions';
+import { GeolocationPlugin, GeolocationPermissionStatus } from './definitions';
 import { GeolocationWeb } from './web';
 
 const implementations: PluginImplementations<GeolocationPlugin> = {
@@ -18,4 +18,4 @@ const Geolocation = registerPlugin(
   implementations,
 ).getImplementation();
 
-export { Geolocation };
+export { Geolocation, GeolocationPermissionStatus };
