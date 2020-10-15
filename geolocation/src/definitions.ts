@@ -6,6 +6,13 @@ declare module '@capacitor/core' {
 
 export type CallbackID = string;
 
+export type GeolocationPermissionType = 'location';
+export type GeolocationState = PermissionState;
+
+export interface GeolocationPluginPermissionStatus {
+  location: GeolocationState;
+}
+
 export interface GeolocationPlugin {
   /**
    * Get the current GPS location of the device
@@ -26,6 +33,18 @@ export interface GeolocationPlugin {
    * Clear a given watch
    */
   clearWatch(options: { id: string }): Promise<void>;
+
+  /**
+   * Check location permissions
+   */
+  checkPermissions(): Promise<GeolocationPluginPermissionStatus>;
+
+  /**
+   * Request location permissions
+   */
+  requestPermissions(
+    permissions: GeolocationPermissionType,
+  ): Promise<GeolocationPluginPermissionStatus>;
 }
 
 export interface GeolocationPosition {
