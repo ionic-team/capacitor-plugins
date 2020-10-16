@@ -13,50 +13,65 @@ public struct GeolocationCoords {
 
 class Geolocation: NSObject, CLLocationManagerDelegate {
     var locationManager = CLLocationManager()
-    var call: CAPPluginCall
+    var call: CAPPluginCall?
 
-    init(call: CAPPluginCall, options: [String: Any]) {
+    func getLocation(call: CAPPluginCall) {
         self.call = call
 
-        super.init()
-
-        // TODO: Allow user to configure accuracy, request/authorization mode
         self.locationManager.delegate = self
         self.locationManager.requestWhenInUseAuthorization()
-        let shouldWatch = options["watch"] as? Bool ?? false
+
         if call.getBool("enableHighAccuracy", false) == true {
-            if shouldWatch {
-                self.locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
-            } else {
-                self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
-            }
+            self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
         } else {
             self.locationManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers
         }
 
-        if shouldWatch {
-            self.locationManager.startUpdatingLocation()
+        self.locationManager.requestLocation()
+    }
+
+    func watchLocation(call: CAPPluginCall) {
+        self.call = call
+
+        self.locationManager.delegate = self
+        self.locationManager.requestWhenInUseAuthorization()
+
+        if call.getBool("enableHighAccuracy", false) == true {
+            self.locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
         } else {
-            self.locationManager.requestLocation()
+            self.locationManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers
         }
+
+        self.locationManager.startUpdatingLocation()
     }
 
     public func stopUpdating() {
         self.locationManager.stopUpdatingLocation()
     }
 
+    public func checkPermissions() -> [String: Any] {
+        return [
+            "location": "granted"
+        ]
+    }
+
+    public func requestPermissions() {
+        self.locationManager.delegate = self
+        self.locationManager.requestWhenInUseAuthorization()
+    }
+
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        call.reject(error.localizedDescription)
+        call?.reject(error.localizedDescription)
     }
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let location = locations.first {
             let result = makePosition(location)
 
-            call.resolve(result)
+            call?.resolve(result)
         } else {
             // TODO: Handle case where location is nil
-            call.resolve()
+            call?.resolve()
         }
     }
 

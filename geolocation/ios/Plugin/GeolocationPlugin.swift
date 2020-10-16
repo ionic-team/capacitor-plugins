@@ -4,14 +4,12 @@ import Capacitor
 
 @objc(GeolocationPlugin)
 public class GeolocationPlugin: CAPPlugin {
-    var locationHandler: Geolocation?
-    var watchLocationHandler: Geolocation?
+
+    private let implementation = Geolocation()
 
     @objc func getCurrentPosition(_ call: CAPPluginCall) {
         DispatchQueue.main.async {
-            self.locationHandler = Geolocation(call: call, options: [
-                "watch": false
-            ])
+            self.implementation.getLocation(call: call)
         }
     }
 
@@ -19,9 +17,7 @@ public class GeolocationPlugin: CAPPlugin {
         call.save()
 
         DispatchQueue.main.async {
-            self.watchLocationHandler = Geolocation(call: call, options: [
-                "watch": true
-            ])
+            self.implementation.watchLocation(call: call)
         }
     }
 
@@ -34,11 +30,18 @@ public class GeolocationPlugin: CAPPlugin {
         if savedCall != nil {
             bridge?.releaseCall(savedCall!)
 
-            if self.watchLocationHandler != nil {
-                self.watchLocationHandler?.stopUpdating()
-            }
+            self.implementation.stopUpdating()
         }
         call.resolve()
+    }
+
+    @objc func checkPermissions(_ call: CAPPluginCall) {
+        let result = self.implementation.checkPermissions()
+        call.resolve(result)
+    }
+
+    @objc func requestPermissions(_ call: CAPPluginCall) {
+
     }
 
 }
