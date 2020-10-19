@@ -10,6 +10,7 @@ import com.getcapacitor.*;
 
 @NativePlugin(name = "App")
 public class AppPlugin extends Plugin {
+
     private static final String EVENT_BACK_BUTTON = "backButton";
     private static final String EVENT_URL_OPEN = "appUrlOpen";
     private static final String EVENT_STATE_CHANGE = "appStateChange";
