@@ -44,7 +44,7 @@ export interface AppInfo {
 
 export interface AppState {
   /**
-   * Wheter if the app is active or not.
+   * Whether the app is active or not.
    *
    * @since 1.0.0
    */
