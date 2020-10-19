@@ -17,7 +17,7 @@ export interface AppInfo {
   /**
    * The identifier of the app.
    * On iOS it's the Bundle Identifier.
-   * On Android it's the package name
+   * On Android it's the Application ID
    *
    * @since 1.0.0
    */
