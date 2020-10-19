@@ -20,6 +20,10 @@ public class AppPlugin: CAPPlugin {
 
     }
 
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+
     @objc func handleUrlOpened(notification: NSNotification) {
         guard let object = notification.object as? [String: Any?] else {
             return
