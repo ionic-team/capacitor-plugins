@@ -43,7 +43,7 @@
     "@ionic/eslint-config": "^0.3.0",
     "@ionic/prettier-config": "^1.0.0",
     "@ionic/swiftlint-config": "^1.1.2",
-    "@rollup/plugin-node-resolve": "^8.1.0",
+    "@rollup/plugin-node-resolve": "^9.0.0",
     "eslint": "^7.11.0",
     "prettier": "^2.0.5",
     "prettier-plugin-java": "^0.8.3",
