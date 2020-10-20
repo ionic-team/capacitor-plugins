@@ -2,6 +2,7 @@ import { resolve } from 'path';
 
 import { readJson, writeJson } from './fs.mjs';
 import { ls } from './lerna.mjs';
+import * as cp from './subprocess.mjs';
 
 export const setPackageJsonDependencies = async (path, packages, key = 'dependencies') => {
   const pkg = await readJson(path);
@@ -19,4 +20,10 @@ export const setLernaPackageDependencies = async (packages, key = 'dependencies'
   for (const path of paths) {
     await setPackageJsonDependencies(resolve(path, 'package.json'), packages, key);
   }
+};
+
+export const getLatestVersion = async (pkg, distTag = 'latest') => {
+  const { stdout } = await cp.exec(`npm info ${pkg}@${distTag} version`);
+
+  return stdout.trim();
 };
