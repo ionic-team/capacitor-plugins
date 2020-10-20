@@ -2,20 +2,17 @@
 
 The Dialog API provides methods for triggering native dialog windows for alerts, confirmations, and input prompts
 
-<!--DOCGEN_INDEX_START-->
-<div class="docgen docgen-index">
+<docgen-index>
 
 * [`alert(...)`](#alert)
 * [`prompt(...)`](#prompt)
 * [`confirm(...)`](#confirm)
 * [Interfaces](#interfaces)
 
-</div>
-<!--DOCGEN_INDEX_END-->
+</docgen-index>
 
-<!--DOCGEN_API_START-->
+<docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
-<div class="docgen docgen-api">
 
 ## API
 
@@ -30,8 +27,6 @@ Show an alert dialog
 | Param         | Type                                                  |
 | ------------- | ----------------------------------------------------- |
 | **`options`** | <code><a href="#alertoptions">AlertOptions</a></code> |
-
-**Returns:** <code>Promise&lt;void&gt;</code>
 
 **Since:** 1.0.0
 
@@ -124,5 +119,4 @@ Show a confirmation dialog
 | **`okButtonTitle`**     | <code>string</code> | Text to use on the positive action button. | <code>"OK"</code>     | 1.0.0 |
 | **`cancelButtonTitle`** | <code>string</code> | Text to use on the negative action button. | <code>"Cancel"</code> | 1.0.0 |
 
-</div>
-<!--DOCGEN_API_END-->
+</docgen-api>

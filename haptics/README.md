@@ -2,8 +2,7 @@
 
 The Haptics API provides physical feedback to the user through touch or vibration.
 
-<!--DOCGEN_INDEX_START-->
-<div class="docgen docgen-index">
+<docgen-index>
 
 * [`impact(...)`](#impact)
 * [`notification(...)`](#notification)
@@ -14,12 +13,10 @@ The Haptics API provides physical feedback to the user through touch or vibratio
 * [Interfaces](#interfaces)
 * [Enums](#enums)
 
-</div>
-<!--DOCGEN_INDEX_END-->
+</docgen-index>
 
-<!--DOCGEN_API_START-->
+<docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
-<div class="docgen docgen-api">
 
 ## API
 
@@ -34,8 +31,6 @@ Trigger a haptics "impact" feedback
 | Param         | Type                                                                  |
 | ------------- | --------------------------------------------------------------------- |
 | **`options`** | <code><a href="#hapticsimpactoptions">HapticsImpactOptions</a></code> |
-
-**Returns:** <code>Promise&lt;void&gt;</code>
 
 **Since:** 1.0.0
 
@@ -54,8 +49,6 @@ Trigger a haptics "notification" feedback
 | ------------- | --------------------------------------------------------------------------------- |
 | **`options`** | <code><a href="#hapticsnotificationoptions">HapticsNotificationOptions</a></code> |
 
-**Returns:** <code>Promise&lt;void&gt;</code>
-
 **Since:** 1.0.0
 
 --------------------
@@ -73,8 +66,6 @@ Vibrate the device
 | ------------- | --------------------------------------------------------- |
 | **`options`** | <code><a href="#vibrateoptions">VibrateOptions</a></code> |
 
-**Returns:** <code>Promise&lt;void&gt;</code>
-
 **Since:** 1.0.0
 
 --------------------
@@ -87,8 +78,6 @@ selectionStart() => Promise<void>
 ```
 
 Trigger a selection started haptic hint
-
-**Returns:** <code>Promise&lt;void&gt;</code>
 
 **Since:** 1.0.0
 
@@ -105,8 +94,6 @@ Trigger a selection changed haptic hint. If a selection was
 started already, this will cause the device to provide haptic
 feedback
 
-**Returns:** <code>Promise&lt;void&gt;</code>
-
 **Since:** 1.0.0
 
 --------------------
@@ -120,8 +107,6 @@ selectionEnd() => Promise<void>
 
 If selectionStart() was called, selectionEnd() ends the selection.
 For example, call this when a user has lifted their finger from a control
-
-**Returns:** <code>Promise&lt;void&gt;</code>
 
 **Since:** 1.0.0
 
@@ -172,5 +157,4 @@ For example, call this when a user has lifted their finger from a control
 | **`Warning`** | <code>'WARNING'</code> | A notification feedback type indicating that a task has produced a warning     | 1.0.0 |
 | **`Error`**   | <code>'ERROR'</code>   | A notification feedback type indicating that a task has failed                 | 1.0.0 |
 
-</div>
-<!--DOCGEN_API_END-->
+</docgen-api>
