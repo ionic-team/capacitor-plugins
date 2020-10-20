@@ -60,21 +60,6 @@ class Geolocation: NSObject, CLLocationManagerDelegate {
         self.locationManager.requestWhenInUseAuthorization()
     }
 
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        call?.reject(error.localizedDescription)
-    }
-
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if let location = locations.first {
-            let result = makePosition(location)
-
-            call?.resolve(result)
-        } else {
-            // TODO: Handle case where location is nil
-            call?.resolve()
-        }
-    }
-
     func makePosition(_ location: CLLocation) -> JSObject {
         var ret = JSObject()
         var coords = JSObject()
