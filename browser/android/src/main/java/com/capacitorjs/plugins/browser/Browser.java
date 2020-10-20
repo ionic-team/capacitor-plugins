@@ -115,7 +115,7 @@ public class Browser {
      * Bind to the custom tabs service, required to be called in the `onResume` lifecycle event.
      */
     public boolean bindService() {
-        String customTabPackageName = CustomTabsClient.getPackageName(getContext(), null);
+        String customTabPackageName = CustomTabsClient.getPackageName(context, null);
         boolean result = CustomTabsClient.bindCustomTabsService(context, customTabPackageName, connection);
         group.leave();
         return result;
