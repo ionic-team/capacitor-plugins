@@ -2,8 +2,7 @@
 
 The Keyboard API provides keyboard display and visibility control, along with event tracking when the keyboard shows and hides.
 
-<!--DOCGEN_INDEX_START-->
-<div class="docgen docgen-index">
+<docgen-index>
 
 * [`show()`](#show)
 * [`hide()`](#hide)
@@ -19,12 +18,10 @@ The Keyboard API provides keyboard display and visibility control, along with ev
 * [Interfaces](#interfaces)
 * [Enums](#enums)
 
-</div>
-<!--DOCGEN_INDEX_END-->
+</docgen-index>
 
-<!--DOCGEN_API_START-->
+<docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
-<div class="docgen docgen-api">
 
 ## API
 
@@ -38,8 +35,6 @@ Show the keyboard. This method is alpha and may have issues.
 
 This method is only supported on Android.
 
-**Returns:** <code>Promise&lt;void&gt;</code>
-
 **Since:** 1.0.0
 
 --------------------
@@ -52,8 +47,6 @@ hide() => Promise<void>
 ```
 
 Hide the keyboard.
-
-**Returns:** <code>Promise&lt;void&gt;</code>
 
 **Since:** 1.0.0
 
@@ -75,8 +68,6 @@ This method is only supported on iPhone devices.
 | ------------- | ------------------------------------ |
 | **`options`** | <code>{ isVisible: boolean; }</code> |
 
-**Returns:** <code>Promise&lt;void&gt;</code>
-
 **Since:** 1.0.0
 
 --------------------
@@ -95,8 +86,6 @@ This method is only supported on iOS.
 | Param         | Type                                  |
 | ------------- | ------------------------------------- |
 | **`options`** | <code>{ isDisabled: boolean; }</code> |
-
-**Returns:** <code>Promise&lt;void&gt;</code>
 
 **Since:** 1.0.0
 
@@ -117,8 +106,6 @@ This method is only supported on iOS.
 | ------------- | --------------------------------------------------------------------- |
 | **`options`** | <code><a href="#keyboardstyleoptions">KeyboardStyleOptions</a></code> |
 
-**Returns:** <code>Promise&lt;void&gt;</code>
-
 **Since:** 1.0.0
 
 --------------------
@@ -137,8 +124,6 @@ This method is only supported on iOS.
 | Param         | Type                                                                    |
 | ------------- | ----------------------------------------------------------------------- |
 | **`options`** | <code><a href="#keyboardresizeoptions">KeyboardResizeOptions</a></code> |
-
-**Returns:** <code>Promise&lt;void&gt;</code>
 
 **Since:** 1.0.0
 
@@ -233,8 +218,6 @@ removeAllListeners() => void
 
 Remove all native listeners for this plugin.
 
-**Returns:** <code>void</code>
-
 **Since:** 1.0.0
 
 --------------------
@@ -291,5 +274,4 @@ Remove all native listeners for this plugin.
 | **`Native`** | <code>'native'</code> | Resizes the WebView.   | 1.0.0 |
 | **`None`**   | <code>'none'</code>   | Don't resize anything. | 1.0.0 |
 
-</div>
-<!--DOCGEN_API_END-->
+</docgen-api>
