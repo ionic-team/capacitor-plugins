@@ -20,6 +20,7 @@ import java.util.Map;
     permissionRequestCode = GeolocationPlugin.GEOLOCATION_REQUEST_PERMISSIONS
 )
 public class GeolocationPlugin extends Plugin {
+
     public static final int GEOLOCATION_REQUEST_PERMISSIONS = 9004;
 
     private Geolocation implementation;
@@ -56,7 +57,6 @@ public class GeolocationPlugin extends Plugin {
             timeout,
             false,
             new LocationResultCallback() {
-
                 @Override
                 public void success(JSObject location) {
                     call.resolve(location);
@@ -97,7 +97,6 @@ public class GeolocationPlugin extends Plugin {
             timeout,
             false,
             new LocationResultCallback() {
-
                 @Override
                 public void success(JSObject location) {
                     call.resolve(location);
@@ -161,7 +160,6 @@ public class GeolocationPlugin extends Plugin {
                     timeout,
                     true,
                     new LocationResultCallback() {
-
                         @Override
                         public void success(JSObject location) {
                             savedCall.resolve(location);

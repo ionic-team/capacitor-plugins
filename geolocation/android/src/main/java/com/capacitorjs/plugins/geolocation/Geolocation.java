@@ -13,6 +13,7 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 
 public class Geolocation {
+
     private FusedLocationProviderClient fusedLocationClient;
     private LocationCallback locationCallback;
 
@@ -75,7 +76,6 @@ public class Geolocation {
 
         locationCallback =
             new LocationCallback() {
-
                 @Override
                 public void onLocationResult(LocationResult locationResult) {
                     if (getCurrentPosition) {
