@@ -1,10 +1,10 @@
 import { WebPlugin } from '@capacitor/core';
 
-import type { AppOpenerPlugin } from './definitions';
+import type { AppLauncherPlugin } from './definitions';
 
-export class AppOpenerWeb extends WebPlugin implements AppOpenerPlugin {
+export class AppLauncherWeb extends WebPlugin implements AppLauncherPlugin {
   constructor() {
-    super({ name: 'AppOpener' });
+    super({ name: 'AppLauncher' });
   }
 
   async canOpenUrl(_options: { url: string }): Promise<{ value: boolean }> {

@@ -1,4 +1,4 @@
-package com.capacitorjs.plugins.appopener;
+package com.capacitorjs.plugins.applauncher;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,8 +11,8 @@ import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 
-@NativePlugin(name = "AppOpener")
-public class AppOpenerPlugin extends Plugin {
+@NativePlugin(name = "AppLauncher")
+public class AppLauncherPlugin extends Plugin {
 
     @PluginMethod
     public void canOpenUrl(PluginCall call) {

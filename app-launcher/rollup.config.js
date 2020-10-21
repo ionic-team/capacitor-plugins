@@ -5,7 +5,7 @@ export default {
   output: {
     file: 'dist/plugin.js',
     format: 'iife',
-    name: 'capacitorAppOpener',
+    name: 'capacitorAppLauncher',
     globals: {
       '@capacitor/core': 'capacitorExports',
     },

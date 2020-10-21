@@ -1,6 +1,6 @@
-# @capacitor/app-opener
+# @capacitor/app-launcher
 
-The AppOpener API allows to open other apps
+The AppLauncher API allows to open other apps
 
 <!--DOCGEN_INDEX_START-->
 <div class="docgen docgen-index">

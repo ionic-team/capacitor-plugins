@@ -1,7 +1,7 @@
 {
   "packages": [
     "action-sheet",
-    "app-opener",
+    "app-launcher",
     "browser",
     "clipboard",
     "device",

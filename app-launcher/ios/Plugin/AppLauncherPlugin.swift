@@ -1,8 +1,8 @@
 import Foundation
 import Capacitor
 
-@objc(AppOpenerPlugin)
-public class AppOpenerPlugin: CAPPlugin {
+@objc(AppLauncherPlugin)
+public class AppLauncherPlugin: CAPPlugin {
 
     @objc func canOpenUrl(_ call: CAPPluginCall) {
         guard let urlString = call.getString("url") else {
