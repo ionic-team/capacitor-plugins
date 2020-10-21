@@ -2,8 +2,7 @@
 
 The Screen Reader API provides access to TalkBack/VoiceOver/etc. and provides simple text-to-speech capabilities for visual accessibility.
 
-<!--DOCGEN_INDEX_START-->
-<div class="docgen docgen-index">
+<docgen-index>
 
 * [`isEnabled()`](#isenabled)
 * [`speak(...)`](#speak)
@@ -11,12 +10,10 @@ The Screen Reader API provides access to TalkBack/VoiceOver/etc. and provides si
 * [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
 
-</div>
-<!--DOCGEN_INDEX_END-->
+</docgen-index>
 
-<!--DOCGEN_API_START-->
+<docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
-<div class="docgen docgen-api">
 
 ## API
 
@@ -60,8 +57,6 @@ plugin](https://github.com/capacitor-community/text-to-speech).
 | ------------- | ----------------------------------------------------------------------------- |
 | **`options`** | <code><a href="#screenreaderspeakoptions">ScreenReaderSpeakOptions</a></code> |
 
-**Returns:** <code>Promise&lt;void&gt;</code>
-
 **Since:** 1.0.0
 
 --------------------
@@ -98,8 +93,6 @@ removeAllListeners() => void
 
 Remove all the listeners that are attached to this plugin.
 
-**Returns:** <code>void</code>
-
 **Since:** 1.0.0
 
 --------------------
@@ -122,5 +115,4 @@ Remove all the listeners that are attached to this plugin.
 | ------------ | ----------------------- |
 | **`remove`** | <code>() => void</code> |
 
-</div>
-<!--DOCGEN_API_END-->
+</docgen-api>
