@@ -1,15 +1,18 @@
 {
   "packages": [
     "action-sheet",
+    "browser",
     "clipboard",
     "device",
     "dialog",
     "geolocation",
     "haptics",
+    "keyboard",
     "motion",
     "network",
     "screen-reader",
     "share",
+    "status-bar",
     "storage",
     "text-zoom",
     "toast"

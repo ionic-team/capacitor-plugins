@@ -4,7 +4,9 @@ import { setLernaPackageDependencies } from './lib/version.mjs';
 import { bootstrap } from './lib/lerna.mjs';
 
 execute(async () => {
-  const packages = Object.fromEntries(PROJECTS.map(project => [`@capacitor/${project}`, process.argv[2]]));
+  const packages = Object.fromEntries(
+    PROJECTS.map(project => [`@capacitor/${project}`, process.argv[2]]),
+  );
 
   await setLernaPackageDependencies(packages, 'devDependencies');
   await bootstrap();

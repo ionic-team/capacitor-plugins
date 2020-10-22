@@ -2,20 +2,17 @@
 
 The Network API provides network and connectivity information.
 
-<!--DOCGEN_INDEX_START-->
-<div class="docgen docgen-index">
+<docgen-index>
 
 * [`getStatus()`](#getstatus)
 * [`addListener(...)`](#addlistener)
 * [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
 
-</div>
-<!--DOCGEN_INDEX_END-->
+</docgen-index>
 
-<!--DOCGEN_API_START-->
+<docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
-<div class="docgen docgen-api">
 
 ## API
 
@@ -62,8 +59,6 @@ removeAllListeners() => void
 
 Remove all listeners (including the network status changes) for this plugin.
 
-**Returns:** <code>void</code>
-
 **Since:** 1.0.0
 
 --------------------
@@ -88,5 +83,4 @@ Represents the state and type of the network connection.
 | ------------ | ----------------------- |
 | **`remove`** | <code>() => void</code> |
 
-</div>
-<!--DOCGEN_API_END-->
+</docgen-api>

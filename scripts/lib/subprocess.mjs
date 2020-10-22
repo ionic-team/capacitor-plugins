@@ -12,7 +12,9 @@ export const wait = async p => {
       if (code === 0) {
         resolve();
       } else {
-        reject(new Error(`bad subprocess exit (code=${code}, signal=${signal})`));
+        reject(
+          new Error(`bad subprocess exit (code=${code}, signal=${signal})`),
+        );
       }
     });
   });

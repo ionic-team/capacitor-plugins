@@ -2,8 +2,7 @@
 
 The Storage API provides a simple key/value persistent store for lightweight data.
 
-<!--DOCGEN_INDEX_START-->
-<div class="docgen docgen-index">
+<docgen-index>
 
 * [`configure(...)`](#configure)
 * [`get(...)`](#get)
@@ -14,12 +13,10 @@ The Storage API provides a simple key/value persistent store for lightweight dat
 * [`migrate()`](#migrate)
 * [Interfaces](#interfaces)
 
-</div>
-<!--DOCGEN_INDEX_END-->
+</docgen-index>
 
-<!--DOCGEN_API_START-->
+<docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
-<div class="docgen docgen-api">
 
 ## API
 
@@ -36,8 +33,6 @@ Options that are `undefined` will not be used.
 | Param         | Type                                                          |
 | ------------- | ------------------------------------------------------------- |
 | **`options`** | <code><a href="#configureoptions">ConfigureOptions</a></code> |
-
-**Returns:** <code>Promise&lt;void&gt;</code>
 
 **Since:** 1.0.0
 
@@ -75,8 +70,6 @@ Set the value in storage for a given key.
 | ------------- | ------------------------------------------------- |
 | **`options`** | <code><a href="#setoptions">SetOptions</a></code> |
 
-**Returns:** <code>Promise&lt;void&gt;</code>
-
 **Since:** 1.0.0
 
 --------------------
@@ -94,8 +87,6 @@ Remove the value from storage for a given key, if any.
 | ------------- | ------------------------------------------------------- |
 | **`options`** | <code><a href="#removeoptions">RemoveOptions</a></code> |
 
-**Returns:** <code>Promise&lt;void&gt;</code>
-
 **Since:** 1.0.0
 
 --------------------
@@ -108,8 +99,6 @@ clear() => Promise<void>
 ```
 
 Clear keys and values from storage.
-
-**Returns:** <code>Promise&lt;void&gt;</code>
 
 **Since:** 1.0.0
 
@@ -202,5 +191,4 @@ write new data if they key was not already set.
 | **`migrated`** | <code>string[]</code> | An array of keys that were migrated.                                                                                          | 1.0.0 |
 | **`existing`** | <code>string[]</code> | An array of keys that were already migrated or otherwise exist in storage that had a value in the Capacitor 2 Storage plugin. | 1.0.0 |
 
-</div>
-<!--DOCGEN_API_END-->
+</docgen-api>
