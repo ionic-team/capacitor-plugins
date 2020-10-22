@@ -1,4 +1,4 @@
-import { UnsupportedBrowserException, WebPlugin } from '@capacitor/core';
+import { WebPlugin } from '@capacitor/core';
 
 import {
   GeolocationPlugin,
@@ -69,9 +69,7 @@ export class GeolocationWeb extends WebPlugin implements GeolocationPlugin {
 
   async checkPermissions(): Promise<GeolocationPermissionStatus> {
     if (typeof navigator === 'undefined' || !navigator.permissions) {
-      throw new UnsupportedBrowserException(
-        'Permissions API not available in this browser',
-      );
+      throw this.unavailable('Permissions API not available in this browser');
     }
 
     const permission = await window.navigator.permissions.query({
