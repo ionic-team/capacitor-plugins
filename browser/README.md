@@ -2,8 +2,7 @@
 
 The Browser API provides the ability to open an in-app browser and subscribe to browser events.
 
-<!--DOCGEN_INDEX_START-->
-<div class="docgen docgen-index">
+<docgen-index>
 
 * [`open(...)`](#open)
 * [`close()`](#close)
@@ -12,12 +11,10 @@ The Browser API provides the ability to open an in-app browser and subscribe to 
 * [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
 
-</div>
-<!--DOCGEN_INDEX_END-->
+</docgen-index>
 
-<!--DOCGEN_API_START-->
+<docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
-<div class="docgen docgen-api">
 
 ## API
 
@@ -33,8 +30,6 @@ Open a page with the specified options.
 | ------------- | ----------------------------------------------------------------- |
 | **`options`** | <code><a href="#browseropenoptions">BrowserOpenOptions</a></code> |
 
-**Returns:** <code>Promise&lt;void&gt;</code>
-
 **Since:** 1.0.0
 
 --------------------
@@ -49,8 +44,6 @@ close() => Promise<void>
 Web & iOS only: Close an open browser window.
 
 No-op on other platforms.
-
-**Returns:** <code>Promise&lt;void&gt;</code>
 
 **Since:** 1.0.0
 
@@ -105,8 +98,6 @@ removeAllListeners() => void
 
 Remove all native listeners for this plugin.
 
-**Returns:** <code>void</code>
-
 **Since:** 1.0.0
 
 --------------------
@@ -133,5 +124,4 @@ Represents the options passed to `open`.
 | ------------ | ----------------------- |
 | **`remove`** | <code>() => void</code> |
 
-</div>
-<!--DOCGEN_API_END-->
+</docgen-api>
