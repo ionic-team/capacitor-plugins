@@ -93,16 +93,12 @@ public class GeolocationPlugin: CAPPlugin, CLLocationManagerDelegate {
     }
 
     public func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        let removalQueue = callQueue.filter { $0.value == .permissions || $0.value == .singleUpdate }
+        let removalQueue = callQueue.filter { $0.value == .singleUpdate }
         callQueue = callQueue.filter { $0.value == .watch }
 
-        for (id, callType) in removalQueue {
+        for (id, _) in removalQueue {
             if let call = bridge?.getSavedCall(id) {
-                if callType == .permissions {
-                    checkPermissions(call)
-                } else {
-                    reportLocation(call, locations)
-                }
+                reportLocation(call, locations)
                 bridge?.releaseCall(call)
             }
         }
@@ -110,6 +106,18 @@ public class GeolocationPlugin: CAPPlugin, CLLocationManagerDelegate {
         for (id, _) in callQueue {
             if let call = bridge?.getSavedCall(id) {
                 reportLocation(call, locations)
+            }
+        }
+    }
+
+    public func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        let removalQueue = callQueue.filter { $0.value == .permissions }
+        callQueue = callQueue.filter { $0.value != .permissions }
+
+        for (id, _) in removalQueue {
+            if let call = bridge?.getSavedCall(id) {
+                checkPermissions(call)
+                bridge?.releaseCall(call)
             }
         }
     }
@@ -162,8 +170,10 @@ public class GeolocationPlugin: CAPPlugin, CLLocationManagerDelegate {
                 call.save()
                 callQueue[call.callbackId] = .permissions
 
-                self.locationManager.delegate = self
-                self.locationManager.requestWhenInUseAuthorization()
+                DispatchQueue.main.async {
+                    self.locationManager.delegate = self
+                    self.locationManager.requestWhenInUseAuthorization()
+                }
             } else {
                 checkPermissions(call)
             }
