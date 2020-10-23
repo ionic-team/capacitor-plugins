@@ -2,6 +2,15 @@
 
 The Keyboard API provides keyboard display and visibility control, along with event tracking when the keyboard shows and hides.
 
+## Install
+
+```bash
+npm install @capacitor/keyboard
+npx cap sync
+```
+
+## API
+
 <docgen-index>
 
 * [`show()`](#show)
@@ -22,8 +31,6 @@ The Keyboard API provides keyboard display and visibility control, along with ev
 
 <docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
-
-## API
 
 ### show()
 
@@ -138,10 +145,10 @@ addListener(eventName: 'keyboardWillShow', listenerFunc: (info: KeyboardInfo) =>
 
 Listen for when the keyboard is about to be shown.
 
-| Param              | Type                                      |
-| ------------------ | ----------------------------------------- |
-| **`eventName`**    | <code>"keyboardWillShow"</code>           |
-| **`listenerFunc`** | <code>(info: KeyboardInfo) => void</code> |
+| Param              | Type                                                                     |
+| ------------------ | ------------------------------------------------------------------------ |
+| **`eventName`**    | <code>"keyboardWillShow"</code>                                          |
+| **`listenerFunc`** | <code>(info: <a href="#keyboardinfo">KeyboardInfo</a>) =&gt; void</code> |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
@@ -158,10 +165,10 @@ addListener(eventName: 'keyboardDidShow', listenerFunc: (info: KeyboardInfo) => 
 
 Listen for when the keyboard is shown.
 
-| Param              | Type                                      |
-| ------------------ | ----------------------------------------- |
-| **`eventName`**    | <code>"keyboardDidShow"</code>            |
-| **`listenerFunc`** | <code>(info: KeyboardInfo) => void</code> |
+| Param              | Type                                                                     |
+| ------------------ | ------------------------------------------------------------------------ |
+| **`eventName`**    | <code>"keyboardDidShow"</code>                                           |
+| **`listenerFunc`** | <code>(info: <a href="#keyboardinfo">KeyboardInfo</a>) =&gt; void</code> |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
@@ -181,7 +188,7 @@ Listen for when the keyboard is about to be hidden.
 | Param              | Type                            |
 | ------------------ | ------------------------------- |
 | **`eventName`**    | <code>"keyboardWillHide"</code> |
-| **`listenerFunc`** | <code>() => void</code>         |
+| **`listenerFunc`** | <code>() =&gt; void</code>      |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
@@ -201,7 +208,7 @@ Listen for when the keyboard is hidden.
 | Param              | Type                           |
 | ------------------ | ------------------------------ |
 | **`eventName`**    | <code>"keyboardDidHide"</code> |
-| **`listenerFunc`** | <code>() => void</code>        |
+| **`listenerFunc`** | <code>() =&gt; void</code>     |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
@@ -242,9 +249,9 @@ Remove all native listeners for this plugin.
 
 #### PluginListenerHandle
 
-| Prop         | Type                    |
-| ------------ | ----------------------- |
-| **`remove`** | <code>() => void</code> |
+| Prop         | Type                       |
+| ------------ | -------------------------- |
+| **`remove`** | <code>() =&gt; void</code> |
 
 
 #### KeyboardInfo
