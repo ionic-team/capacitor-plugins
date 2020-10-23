@@ -2,6 +2,8 @@
 
 The Motion API tracks accelerometer and device orientation (compass heading, etc.)
 
+## API
+
 <docgen-index>
 
 * [`addListener(...)`](#addlistener)
@@ -14,8 +16,6 @@ The Motion API tracks accelerometer and device orientation (compass heading, etc
 <docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
 
-## API
-
 ### addListener(...)
 
 ```typescript
@@ -24,10 +24,10 @@ addListener(eventName: 'accel', listenerFunc: (event: MotionEventResult) => void
 
 Add a listener for accelerometer data
 
-| Param              | Type                                            |
-| ------------------ | ----------------------------------------------- |
-| **`eventName`**    | <code>"accel"</code>                            |
-| **`listenerFunc`** | <code>(event: MotionEventResult) => void</code> |
+| Param              | Type                                                                                |
+| ------------------ | ----------------------------------------------------------------------------------- |
+| **`eventName`**    | <code>"accel"</code>                                                                |
+| **`listenerFunc`** | <code>(event: <a href="#motioneventresult">MotionEventResult</a>) =&gt; void</code> |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
@@ -44,10 +44,10 @@ addListener(eventName: 'orientation', listenerFunc: (event: MotionOrientationEve
 
 Add a listener for device orientation change (compass heading, etc.)
 
-| Param              | Type                                                        |
-| ------------------ | ----------------------------------------------------------- |
-| **`eventName`**    | <code>"orientation"</code>                                  |
-| **`listenerFunc`** | <code>(event: DeviceMotionEventRotationRate) => void</code> |
+| Param              | Type                                                                                                        |
+| ------------------ | ----------------------------------------------------------------------------------------------------------- |
+| **`eventName`**    | <code>"orientation"</code>                                                                                  |
+| **`listenerFunc`** | <code>(event: <a href="#devicemotioneventrotationrate">DeviceMotionEventRotationRate</a>) =&gt; void</code> |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
@@ -74,9 +74,9 @@ Remove all the listeners that are attached to this plugin.
 
 #### PluginListenerHandle
 
-| Prop         | Type                    |
-| ------------ | ----------------------- |
-| **`remove`** | <code>() => void</code> |
+| Prop         | Type                       |
+| ------------ | -------------------------- |
+| **`remove`** | <code>() =&gt; void</code> |
 
 
 #### MotionEventResult

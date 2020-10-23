@@ -2,6 +2,8 @@
 
 The Action Sheet API provides access to native Action Sheets, which come up from the bottom of the screen and display actions a user can take.
 
+## API
+
 <docgen-index>
 
 * [`showActions(...)`](#showactions)
@@ -12,8 +14,6 @@ The Action Sheet API provides access to native Action Sheets, which come up from
 
 <docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
-
-## API
 
 ### showActions(...)
 

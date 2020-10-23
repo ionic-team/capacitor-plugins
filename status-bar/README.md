@@ -2,6 +2,8 @@
 
 The StatusBar API Provides methods for configuring the style of the Status Bar, along with showing or hiding it.
 
+## API
+
 <docgen-index>
 
 * [`setStyle(...)`](#setstyle)
@@ -17,8 +19,6 @@ The StatusBar API Provides methods for configuring the style of the Status Bar, 
 
 <docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
-
-## API
 
 ### setStyle(...)
 

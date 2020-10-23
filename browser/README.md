@@ -2,6 +2,8 @@
 
 The Browser API provides the ability to open an in-app browser and subscribe to browser events.
 
+## API
+
 <docgen-index>
 
 * [`open(...)`](#open)
@@ -15,8 +17,6 @@ The Browser API provides the ability to open an in-app browser and subscribe to 
 
 <docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
-
-## API
 
 ### open(...)
 
@@ -61,7 +61,7 @@ Android & iOS only: Listen for the loading finished event.
 | Param              | Type                           |
 | ------------------ | ------------------------------ |
 | **`eventName`**    | <code>"browserFinished"</code> |
-| **`listenerFunc`** | <code>() => void</code>        |
+| **`listenerFunc`** | <code>() =&gt; void</code>     |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
@@ -81,7 +81,7 @@ Android & iOS only: Listen for the page loaded event.
 | Param              | Type                             |
 | ------------------ | -------------------------------- |
 | **`eventName`**    | <code>"browserPageLoaded"</code> |
-| **`listenerFunc`** | <code>() => void</code>          |
+| **`listenerFunc`** | <code>() =&gt; void</code>       |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
@@ -120,8 +120,8 @@ Represents the options passed to `open`.
 
 #### PluginListenerHandle
 
-| Prop         | Type                    |
-| ------------ | ----------------------- |
-| **`remove`** | <code>() => void</code> |
+| Prop         | Type                       |
+| ------------ | -------------------------- |
+| **`remove`** | <code>() =&gt; void</code> |
 
 </docgen-api>
