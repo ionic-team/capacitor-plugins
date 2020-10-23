@@ -177,8 +177,7 @@ public class GeolocationPlugin extends Plugin {
                 startWatch(savedCall);
             }
         } else {
-            savedCall.resolve(getPermissionStates());
-            savedCall.release(bridge);
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
 
