@@ -2,6 +2,13 @@
 
 The Screen Reader API provides access to TalkBack/VoiceOver/etc. and provides simple text-to-speech capabilities for visual accessibility.
 
+## Install
+
+```bash
+npm install @capacitor/screen-reader
+npx cap sync
+```
+
 ## API
 
 <docgen-index>

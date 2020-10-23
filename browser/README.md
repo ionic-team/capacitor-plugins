@@ -2,6 +2,13 @@
 
 The Browser API provides the ability to open an in-app browser and subscribe to browser events.
 
+## Install
+
+```bash
+npm install @capacitor/browser
+npx cap sync
+```
+
 ## API
 
 <docgen-index>

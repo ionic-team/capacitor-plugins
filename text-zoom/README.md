@@ -2,6 +2,13 @@
 
 The Text Zoom API provides the ability to change Web View text size for visual accessibility.
 
+## Install
+
+```bash
+npm install @capacitor/text-zoom
+npx cap sync
+```
+
 ## API
 
 <docgen-index>

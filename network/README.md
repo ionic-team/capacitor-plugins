@@ -2,6 +2,13 @@
 
 The Network API provides network and connectivity information.
 
+## Install
+
+```bash
+npm install @capacitor/network
+npx cap sync
+```
+
 ## API
 
 <docgen-index>

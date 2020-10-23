@@ -2,6 +2,13 @@
 
 The Storage API provides a simple key/value persistent store for lightweight data.
 
+## Install
+
+```bash
+npm install @capacitor/storage
+npx cap sync
+```
+
 ## API
 
 <docgen-index>
