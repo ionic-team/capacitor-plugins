@@ -2,6 +2,8 @@
 
 The Dialog API provides methods for triggering native dialog windows for alerts, confirmations, and input prompts
 
+## API
+
 <docgen-index>
 
 * [`alert(...)`](#alert)
@@ -13,8 +15,6 @@ The Dialog API provides methods for triggering native dialog windows for alerts,
 
 <docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
-
-## API
 
 ### alert(...)
 

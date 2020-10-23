@@ -2,6 +2,8 @@
 
 The Share API provides methods for sharing content in any sharing-enabled apps the user may have installed.
 
+## API
+
 <docgen-index>
 
 * [`share(...)`](#share)
@@ -11,8 +13,6 @@ The Share API provides methods for sharing content in any sharing-enabled apps t
 
 <docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
-
-## API
 
 ### share(...)
 

@@ -2,6 +2,8 @@
 
 The Haptics API provides physical feedback to the user through touch or vibration.
 
+## API
+
 <docgen-index>
 
 * [`impact(...)`](#impact)
@@ -17,8 +19,6 @@ The Haptics API provides physical feedback to the user through touch or vibratio
 
 <docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
-
-## API
 
 ### impact(...)
 

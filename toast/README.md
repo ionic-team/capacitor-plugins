@@ -2,6 +2,8 @@
 
 The Toast API provides a notification pop up for displaying important information to a user. Just like real toast!
 
+## API
+
 <docgen-index>
 
 * [`show(...)`](#show)
@@ -11,8 +13,6 @@ The Toast API provides a notification pop up for displaying important informatio
 
 <docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
-
-## API
 
 ### show(...)
 

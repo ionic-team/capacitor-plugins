@@ -2,6 +2,8 @@
 
 The Clipboard API enables copy and pasting to/from the system clipboard.
 
+## API
+
 <docgen-index>
 
 * [`write(...)`](#write)
@@ -12,8 +14,6 @@ The Clipboard API enables copy and pasting to/from the system clipboard.
 
 <docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
-
-## API
 
 ### write(...)
 
