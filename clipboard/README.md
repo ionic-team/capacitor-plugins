@@ -2,6 +2,13 @@
 
 The Clipboard API enables copy and pasting to/from the system clipboard.
 
+## Install
+
+```bash
+npm install @capacitor/clipboard
+npx cap sync
+```
+
 ## API
 
 <docgen-index>

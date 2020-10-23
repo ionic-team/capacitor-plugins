@@ -2,6 +2,13 @@
 
 The AppLauncher API allows to open other apps
 
+## Install
+
+```bash
+npm install @capacitor/app-launcher
+npx cap sync
+```
+
 ## API
 
 <docgen-index>
