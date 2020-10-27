@@ -1,5 +1,5 @@
 import type { PluginListenerHandle } from '@capacitor/core';
-import { UnsupportedBrowserException, WebPlugin } from '@capacitor/core';
+import { WebPlugin } from '@capacitor/core';
 
 import type {
   NetworkPlugin,
@@ -64,7 +64,7 @@ export class NetworkWeb extends WebPlugin implements NetworkPlugin {
 
   async getStatus(): Promise<NetworkStatus> {
     if (!window.navigator) {
-      throw new UnsupportedBrowserException(
+      throw this.unavailable(
         'Browser does not support the Network Information API',
       );
     }
