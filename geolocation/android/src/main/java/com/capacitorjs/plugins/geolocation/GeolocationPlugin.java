@@ -21,7 +21,7 @@ import java.util.Map;
 )
 public class GeolocationPlugin extends Plugin {
 
-    public static final int GEOLOCATION_REQUEST_PERMISSIONS = 9004;
+    public static final int GEOLOCATION_REQUEST_PERMISSIONS = 7179;
 
     private Geolocation implementation;
     private Map<String, PluginCall> watchingCalls = new HashMap<>();

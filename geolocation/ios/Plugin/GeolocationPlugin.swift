@@ -3,15 +3,6 @@ import CoreLocation
 import UIKit
 import Capacitor
 
-public struct GeolocationCoords {
-    public var latitude: Double
-    public var longitude: Double
-    public init(latitude: Double, longitude: Double) {
-        self.latitude = latitude
-        self.longitude = longitude
-    }
-}
-
 @objc(GeolocationPlugin)
 public class GeolocationPlugin: CAPPlugin, CLLocationManagerDelegate {
 
