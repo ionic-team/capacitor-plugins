@@ -65,9 +65,8 @@ public class GeolocationPlugin: CAPPlugin, CLLocationManagerDelegate {
             CAPLog.print("Must supply id")
             return
         }
-        let savedCall = bridge?.getSavedCall(callbackId)
-        if savedCall != nil {
-            bridge?.releaseCall(savedCall!)
+        if let savedCall = bridge?.getSavedCall(callbackId) {
+            bridge?.releaseCall(savedCall)
 
             self.stopUpdating()
         }
