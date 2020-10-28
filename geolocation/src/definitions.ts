@@ -92,7 +92,9 @@ export interface GeolocationPosition {
     accuracy: number;
 
     /**
-     * Accuracy level of the altitude coordinate in meters (if available)
+     * Accuracy level of the altitude coordinate in meters, if available.
+     *
+     * Available on all iOS versions and on Android 8.0+.
      *
      * @since 1.0.0
      */

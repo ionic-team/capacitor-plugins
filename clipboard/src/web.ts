@@ -1,4 +1,4 @@
-import { WebPlugin, UnsupportedBrowserException } from '@capacitor/core';
+import { WebPlugin } from '@capacitor/core';
 
 import type {
   ClipboardPlugin,
@@ -24,9 +24,7 @@ export class ClipboardWeb extends WebPlugin implements ClipboardPlugin {
 
   async write(options: ClipboardWriteOptions): Promise<void> {
     if (typeof navigator === 'undefined' || !navigator.clipboard) {
-      throw new UnsupportedBrowserException(
-        'Clipboard API not available in this browser',
-      );
+      throw this.unavailable('Clipboard API not available in this browser');
     }
 
     if (options.string !== undefined) {
@@ -43,7 +41,7 @@ export class ClipboardWeb extends WebPlugin implements ClipboardPlugin {
           throw new Error('Failed to write image');
         }
       } else {
-        throw new UnsupportedBrowserException(
+        throw this.unavailable(
           'Writing images to the clipboard is not supported in this browser',
         );
       }
@@ -54,9 +52,7 @@ export class ClipboardWeb extends WebPlugin implements ClipboardPlugin {
 
   async read(): Promise<ClipboardReadResult> {
     if (typeof navigator === 'undefined' || !navigator.clipboard) {
-      throw new UnsupportedBrowserException(
-        'Clipboard API not available in this browser',
-      );
+      throw this.unavailable('Clipboard API not available in this browser');
     }
 
     if (typeof ClipboardItem !== 'undefined') {
@@ -80,7 +76,7 @@ export class ClipboardWeb extends WebPlugin implements ClipboardPlugin {
       !navigator.clipboard ||
       !navigator.clipboard.readText
     ) {
-      throw new UnsupportedBrowserException(
+      throw this.unavailable(
         'Reading from clipboard not supported in this browser',
       );
     }
@@ -95,7 +91,7 @@ export class ClipboardWeb extends WebPlugin implements ClipboardPlugin {
       !navigator.clipboard ||
       !navigator.clipboard.writeText
     ) {
-      throw new UnsupportedBrowserException(
+      throw this.unavailable(
         'Writting to clipboard not supported in this browser',
       );
     }
