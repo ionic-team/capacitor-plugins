@@ -51,9 +51,9 @@ export interface GeolocationPlugin {
    *
    * @since 1.0.0
    */
-  requestPermissions(
-    permissions: GeolocationPermissionType,
-  ): Promise<GeolocationPermissionStatus>;
+  requestPermissions(options: {
+    permissions: GeolocationPermissionType[];
+  }): Promise<GeolocationPermissionStatus>;
 }
 
 export interface GeolocationPosition {
