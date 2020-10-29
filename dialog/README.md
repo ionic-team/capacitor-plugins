@@ -2,6 +2,13 @@
 
 The Dialog API provides methods for triggering native dialog windows for alerts, confirmations, and input prompts
 
+## Install
+
+```bash
+npm install @capacitor/dialog
+npx cap sync
+```
+
 ## API
 
 <docgen-index>

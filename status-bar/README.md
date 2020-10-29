@@ -2,6 +2,13 @@
 
 The StatusBar API Provides methods for configuring the style of the Status Bar, along with showing or hiding it.
 
+## Install
+
+```bash
+npm install @capacitor/status-bar
+npx cap sync
+```
+
 ## API
 
 <docgen-index>
