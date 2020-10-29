@@ -1,6 +1,7 @@
 package com.capacitorjs.plugins.clipboard;
 
 public class ClipboardWriteResponse {
+
     private boolean success;
     private String errorMessage;
 

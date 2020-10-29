@@ -1,15 +1,19 @@
 {
   "packages": [
     "action-sheet",
+    "app-launcher",
+    "browser",
     "clipboard",
     "device",
     "dialog",
     "filesystem",
     "haptics",
+    "keyboard",
     "motion",
     "network",
     "screen-reader",
     "share",
+    "status-bar",
     "storage",
     "text-zoom",
     "toast"

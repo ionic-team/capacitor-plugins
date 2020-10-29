@@ -13,6 +13,7 @@ import org.json.JSONException;
 
 @NativePlugin(name = "Storage")
 public class StoragePlugin extends Plugin {
+
     private Storage storage;
 
     @Override

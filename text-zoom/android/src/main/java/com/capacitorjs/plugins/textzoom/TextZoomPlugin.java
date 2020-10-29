@@ -12,6 +12,7 @@ import com.getcapacitor.PluginMethod;
 
 @NativePlugin(name = "TextZoom")
 public class TextZoomPlugin extends Plugin {
+
     private TextZoom textZoom;
     private Handler mainHandler;
 

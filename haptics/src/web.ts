@@ -56,11 +56,11 @@ export class HapticsWeb extends WebPlugin implements HapticsPlugin {
   }
 
   private patternForNotification(
-    type: HapticsNotificationType = HapticsNotificationType.SUCCESS,
+    type: HapticsNotificationType = HapticsNotificationType.Success,
   ): number[] {
-    if (type === HapticsNotificationType.WARNING) {
+    if (type === HapticsNotificationType.Warning) {
       return [30, 40, 30, 50, 60];
-    } else if (type === HapticsNotificationType.ERROR) {
+    } else if (type === HapticsNotificationType.Error) {
       return [27, 45, 50];
     }
     return [35, 65, 21];

@@ -15,7 +15,7 @@ export const confirm = async message => {
           initial: true,
         },
       ],
-      { onCancel: () => resolve(false) }
+      { onCancel: () => resolve(false) },
     ).then(result => resolve(result.confirm));
   });
 };
