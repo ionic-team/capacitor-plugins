@@ -2,6 +2,15 @@
 
 The Network API provides network and connectivity information.
 
+## Install
+
+```bash
+npm install @capacitor/network
+npx cap sync
+```
+
+## API
+
 <docgen-index>
 
 * [`getStatus()`](#getstatus)
@@ -13,8 +22,6 @@ The Network API provides network and connectivity information.
 
 <docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
-
-## API
 
 ### getStatus()
 
@@ -39,10 +46,10 @@ addListener(eventName: 'networkStatusChange', listenerFunc: (status: NetworkStat
 
 Listen for changes in the network connection.
 
-| Param              | Type                                         |
-| ------------------ | -------------------------------------------- |
-| **`eventName`**    | <code>"networkStatusChange"</code>           |
-| **`listenerFunc`** | <code>(status: NetworkStatus) => void</code> |
+| Param              | Type                                                                         |
+| ------------------ | ---------------------------------------------------------------------------- |
+| **`eventName`**    | <code>"networkStatusChange"</code>                                           |
+| **`listenerFunc`** | <code>(status: <a href="#networkstatus">NetworkStatus</a>) =&gt; void</code> |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
@@ -79,8 +86,8 @@ Represents the state and type of the network connection.
 
 #### PluginListenerHandle
 
-| Prop         | Type                    |
-| ------------ | ----------------------- |
-| **`remove`** | <code>() => void</code> |
+| Prop         | Type                       |
+| ------------ | -------------------------- |
+| **`remove`** | <code>() =&gt; void</code> |
 
 </docgen-api>
