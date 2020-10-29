@@ -37,6 +37,7 @@ import org.json.JSONException;
     permissionRequestCode = PluginRequestCodes.FILESYSTEM_REQUEST_ALL_PERMISSIONS
 )
 public class FilesystemPlugin extends Plugin {
+
     private Filesystem implementation;
 
     @Override
