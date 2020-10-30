@@ -10,16 +10,18 @@ import com.capacitorjs.plugins.filesystem.exceptions.DirectoryNotFoundException;
 import com.getcapacitor.JSArray;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Logger;
-import com.getcapacitor.NativePlugin;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.PluginRequestCodes;
+import com.getcapacitor.annotation.CapacitorPlugin;
+import com.getcapacitor.annotation.Permission;
+
 import java.io.*;
 import java.nio.charset.Charset;
 import org.json.JSONException;
 
-@NativePlugin(
+@CapacitorPlugin(
     name = "Filesystem",
     requestCodes = {
         PluginRequestCodes.FILESYSTEM_REQUEST_WRITE_FILE_PERMISSIONS,
@@ -33,7 +35,10 @@ import org.json.JSONException;
         PluginRequestCodes.FILESYSTEM_REQUEST_RENAME_PERMISSIONS,
         PluginRequestCodes.FILESYSTEM_REQUEST_COPY_PERMISSIONS
     },
-    permissions = { Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE },
+    permissions = {
+            @Permission(permission = Manifest.permission.READ_EXTERNAL_STORAGE),
+            @Permission(permission = Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    },
     permissionRequestCode = PluginRequestCodes.FILESYSTEM_REQUEST_ALL_PERMISSIONS
 )
 public class FilesystemPlugin extends Plugin {
@@ -441,8 +446,8 @@ public class FilesystemPlugin extends Plugin {
     }
 
     @Override
-    protected void handleRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        super.handleRequestPermissionsResult(requestCode, permissions, grantResults);
+    protected void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
         Logger.debug(getLogTag(), "handling request perms result");
 
