@@ -40,7 +40,7 @@ public class StoragePlugin: CAPPlugin {
             call.reject("Must provide a key")
             return
         }
-        let value = call.getString("value", "") ?? ""
+        let value = call.getString("value", "")
 
         storage.set(value, for: key)
         call.resolve()
