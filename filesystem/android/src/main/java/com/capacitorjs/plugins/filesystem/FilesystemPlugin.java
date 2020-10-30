@@ -16,7 +16,6 @@ import com.getcapacitor.PluginMethod;
 import com.getcapacitor.PluginRequestCodes;
 import com.getcapacitor.annotation.CapacitorPlugin;
 import com.getcapacitor.annotation.Permission;
-
 import java.io.*;
 import java.nio.charset.Charset;
 import org.json.JSONException;
@@ -36,8 +35,8 @@ import org.json.JSONException;
         PluginRequestCodes.FILESYSTEM_REQUEST_COPY_PERMISSIONS
     },
     permissions = {
-            @Permission(permission = Manifest.permission.READ_EXTERNAL_STORAGE),
-            @Permission(permission = Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        @Permission(permission = Manifest.permission.READ_EXTERNAL_STORAGE),
+        @Permission(permission = Manifest.permission.WRITE_EXTERNAL_STORAGE)
     },
     permissionRequestCode = PluginRequestCodes.FILESYSTEM_REQUEST_ALL_PERMISSIONS
 )
