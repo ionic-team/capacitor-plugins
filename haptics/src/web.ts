@@ -1,4 +1,4 @@
-import { UnsupportedBrowserException, WebPlugin } from '@capacitor/core';
+import { WebPlugin } from '@capacitor/core';
 
 import type {
   HapticsPlugin,
@@ -70,9 +70,7 @@ export class HapticsWeb extends WebPlugin implements HapticsPlugin {
     if (navigator.vibrate) {
       navigator.vibrate(pattern);
     } else {
-      throw new UnsupportedBrowserException(
-        'Browser does not support the vibrate API',
-      );
+      throw this.unavailable('Browser does not support the vibrate API');
     }
   }
 }

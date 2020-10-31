@@ -2,6 +2,15 @@
 
 The AppLauncher API allows to open other apps
 
+## Install
+
+```bash
+npm install @capacitor/app-launcher
+npx cap sync
+```
+
+## API
+
 <docgen-index>
 
 * [`canOpenUrl(...)`](#canopenurl)
@@ -11,8 +20,6 @@ The AppLauncher API allows to open other apps
 
 <docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
-
-## API
 
 ### canOpenUrl(...)
 

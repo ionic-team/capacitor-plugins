@@ -2,6 +2,15 @@
 
 The Screen Reader API provides access to TalkBack/VoiceOver/etc. and provides simple text-to-speech capabilities for visual accessibility.
 
+## Install
+
+```bash
+npm install @capacitor/screen-reader
+npx cap sync
+```
+
+## API
+
 <docgen-index>
 
 * [`isEnabled()`](#isenabled)
@@ -14,8 +23,6 @@ The Screen Reader API provides access to TalkBack/VoiceOver/etc. and provides si
 
 <docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
-
-## API
 
 ### isEnabled()
 
@@ -73,10 +80,10 @@ Add a listener
 This method is not supported on web (it is not possible to detect Screen
 Readers).
 
-| Param           | Type                                             |
-| --------------- | ------------------------------------------------ |
-| **`eventName`** | <code>"screenReaderStateChange"</code>           |
-| **`listener`**  | <code>(state: { value: boolean; }) => any</code> |
+| Param           | Type                                                |
+| --------------- | --------------------------------------------------- |
+| **`eventName`** | <code>"screenReaderStateChange"</code>              |
+| **`listener`**  | <code>(state: { value: boolean; }) =&gt; any</code> |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
@@ -111,8 +118,8 @@ Remove all the listeners that are attached to this plugin.
 
 #### PluginListenerHandle
 
-| Prop         | Type                    |
-| ------------ | ----------------------- |
-| **`remove`** | <code>() => void</code> |
+| Prop         | Type                       |
+| ------------ | -------------------------- |
+| **`remove`** | <code>() =&gt; void</code> |
 
 </docgen-api>
