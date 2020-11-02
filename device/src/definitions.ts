@@ -10,7 +10,7 @@ export interface DeviceInfo {
   /**
    * The name of the device. For example, "John's iPhone".
    *
-   * This is only supported on iOS and Android.
+   * This is only supported on iOS and Android 7.1 or above.
    *
    * @since 1.0.0
    */
