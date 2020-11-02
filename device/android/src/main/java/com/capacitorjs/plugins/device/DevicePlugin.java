@@ -31,6 +31,7 @@ public class DevicePlugin extends Plugin {
         r.put("manufacturer", android.os.Build.MANUFACTURER);
         r.put("uuid", implementation.getUuid());
         r.put("isVirtual", implementation.isVirtual());
+        r.put("name", implementation.getName());
 
         call.resolve(r);
     }
