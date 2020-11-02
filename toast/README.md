@@ -2,6 +2,13 @@
 
 The Toast API provides a notification pop up for displaying important information to a user. Just like real toast!
 
+## Install
+
+```bash
+npm install @capacitor/toast
+npx cap sync
+```
+
 ## API
 
 <docgen-index>

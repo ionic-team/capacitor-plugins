@@ -2,6 +2,13 @@
 
 The Haptics API provides physical feedback to the user through touch or vibration.
 
+## Install
+
+```bash
+npm install @capacitor/haptics
+npx cap sync
+```
+
 ## API
 
 <docgen-index>

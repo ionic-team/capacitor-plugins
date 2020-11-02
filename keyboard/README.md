@@ -2,6 +2,13 @@
 
 The Keyboard API provides keyboard display and visibility control, along with event tracking when the keyboard shows and hides.
 
+## Install
+
+```bash
+npm install @capacitor/keyboard
+npx cap sync
+```
+
 ## API
 
 <docgen-index>

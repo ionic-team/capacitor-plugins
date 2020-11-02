@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/network@0.1.0...@capacitor/network@0.1.1) (2020-10-30)
+
+**Note:** Version bump only for package @capacitor/network
+
+
+
+
+
 # 0.1.0 (2020-10-12)
 
 

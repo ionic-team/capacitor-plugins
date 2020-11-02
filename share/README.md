@@ -2,6 +2,13 @@
 
 The Share API provides methods for sharing content in any sharing-enabled apps the user may have installed.
 
+## Install
+
+```bash
+npm install @capacitor/share
+npx cap sync
+```
+
 ## API
 
 <docgen-index>
