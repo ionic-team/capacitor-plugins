@@ -15,7 +15,7 @@ export class AppWeb extends WebPlugin implements AppPlugin {
   }
 
   exitApp(): never {
-    throw new Error('Method not implemented.');
+    throw this.unimplemented('Not implemented on web.');
   }
 
   async getInfo(): Promise<AppInfo> {
