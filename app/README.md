@@ -2,8 +2,16 @@
 
 The App API handles high level App state and events.For example, this API emits events when the app enters and leaves the foreground, handles deeplinks, opens other apps, and manages persisted plugin state.
 
-<!--DOCGEN_INDEX_START-->
-<div class="docgen docgen-index">
+## Install
+
+```bash
+npm install @capacitor/app
+npx cap sync
+```
+
+## API
+
+<docgen-index>
 
 * [`exitApp()`](#exitapp)
 * [`getInfo()`](#getinfo)
@@ -16,14 +24,10 @@ The App API handles high level App state and events.For example, this API emits 
 * [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
 
-</div>
-<!--DOCGEN_INDEX_END-->
+</docgen-index>
 
-<!--DOCGEN_API_START-->
+<docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
-<div class="docgen docgen-api">
-
-## API
 
 ### exitApp()
 
@@ -96,10 +100,10 @@ addListener(eventName: 'appStateChange', listenerFunc: (state: AppState) => void
 
 Listen for changes in the App's active state (whether the app is in the foreground or background)
 
-| Param              | Type                                   |
-| ------------------ | -------------------------------------- |
-| **`eventName`**    | <code>"appStateChange"</code>          |
-| **`listenerFunc`** | <code>(state: AppState) => void</code> |
+| Param              | Type                                                              |
+| ------------------ | ----------------------------------------------------------------- |
+| **`eventName`**    | <code>"appStateChange"</code>                                     |
+| **`listenerFunc`** | <code>(state: <a href="#appstate">AppState</a>) =&gt; void</code> |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
@@ -117,10 +121,10 @@ addListener(eventName: 'appUrlOpen', listenerFunc: (data: AppUrlOpen) => void) =
 Listen for url open events for the app. This handles both custom URL scheme links as well
 as URLs your app handles (Universal Links on iOS and App Links on Android)
 
-| Param              | Type                                    |
-| ------------------ | --------------------------------------- |
-| **`eventName`**    | <code>"appUrlOpen"</code>               |
-| **`listenerFunc`** | <code>(data: AppUrlOpen) => void</code> |
+| Param              | Type                                                                 |
+| ------------------ | -------------------------------------------------------------------- |
+| **`eventName`**    | <code>"appUrlOpen"</code>                                            |
+| **`listenerFunc`** | <code>(data: <a href="#appurlopen">AppUrlOpen</a>) =&gt; void</code> |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
@@ -139,10 +143,10 @@ If the app was launched with previously persisted plugin call data, such as on A
 when an activity returns to an app that was closed, this call will return any data
 the app was launched with, converted into the form of a result from a plugin call.
 
-| Param              | Type                                           |
-| ------------------ | ---------------------------------------------- |
-| **`eventName`**    | <code>"appRestoredResult"</code>               |
-| **`listenerFunc`** | <code>(data: AppRestoredResult) => void</code> |
+| Param              | Type                                                                               |
+| ------------------ | ---------------------------------------------------------------------------------- |
+| **`eventName`**    | <code>"appRestoredResult"</code>                                                   |
+| **`listenerFunc`** | <code>(data: <a href="#apprestoredresult">AppRestoredResult</a>) =&gt; void</code> |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
@@ -161,10 +165,10 @@ Listen for the hardware back button event (Android only). Listening for this eve
 default back button behaviour, so you might want to call `window.history.back()` manually.
 If you want to close the app, call `App.exitApp()`.
 
-| Param              | Type                      |
-| ------------------ | ------------------------- |
-| **`eventName`**    | <code>"backButton"</code> |
-| **`listenerFunc`** | <code>() => void</code>   |
+| Param              | Type                       |
+| ------------------ | -------------------------- |
+| **`eventName`**    | <code>"backButton"</code>  |
+| **`listenerFunc`** | <code>() =&gt; void</code> |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
@@ -180,8 +184,6 @@ removeAllListeners() => void
 ```
 
 Remove all native listeners for this plugin
-
-**Returns:** <code>void</code>
 
 **Since:** 1.0.0
 
@@ -217,9 +219,9 @@ Remove all native listeners for this plugin
 
 #### PluginListenerHandle
 
-| Prop         | Type                    |
-| ------------ | ----------------------- |
-| **`remove`** | <code>() => void</code> |
+| Prop         | Type                       |
+| ------------ | -------------------------- |
+| **`remove`** | <code>() =&gt; void</code> |
 
 
 #### AppUrlOpen
@@ -241,5 +243,4 @@ Remove all native listeners for this plugin
 | **`success`**    | <code>boolean</code>              | Boolean indicating if the plugin call succeeded.                                                                                                  | 1.0.0 |
 | **`error`**      | <code>{ message: string; }</code> | If the plugin call didn't succeed, it will contain the error message.                                                                             | 1.0.0 |
 
-</div>
-<!--DOCGEN_API_END-->
+</docgen-api>
