@@ -7,10 +7,14 @@ import android.net.Uri;
 import android.os.Build;
 import android.webkit.MimeTypeMap;
 import androidx.core.content.FileProvider;
-import com.getcapacitor.*;
+import com.getcapacitor.JSObject;
+import com.getcapacitor.Plugin;
+import com.getcapacitor.PluginCall;
+import com.getcapacitor.PluginMethod;
+import com.getcapacitor.annotation.CapacitorPlugin;
 import java.io.File;
 
-@NativePlugin(name = "Share", requestCodes = { SharePlugin.REQUEST_SHARE })
+@CapacitorPlugin(name = "Share", requestCodes = { SharePlugin.REQUEST_SHARE })
 public class SharePlugin extends Plugin {
 
     static final int REQUEST_SHARE = 9023;

@@ -2,16 +2,16 @@ package com.capacitorjs.plugins.storage;
 
 import com.getcapacitor.JSArray;
 import com.getcapacitor.JSObject;
-import com.getcapacitor.NativePlugin;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
+import com.getcapacitor.annotation.CapacitorPlugin;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import org.json.JSONException;
 
-@NativePlugin(name = "Storage")
+@CapacitorPlugin(name = "Storage")
 public class StoragePlugin extends Plugin {
 
     private Storage storage;
