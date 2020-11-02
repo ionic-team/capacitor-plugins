@@ -1,10 +1,8 @@
-import {
-  Plugins,
-  PluginImplementations,
-  registerPlugin,
-} from '@capacitor/core';
+import type { PluginImplementations } from '@capacitor/core';
+import { Plugins, registerPlugin } from '@capacitor/core';
 
-import { GeolocationPlugin, GeolocationPermissionStatus } from './definitions';
+import type { GeolocationPlugin } from './definitions';
+import { GeolocationPermissionStatus } from './definitions';
 import { GeolocationWeb } from './web';
 
 const implementations: PluginImplementations<GeolocationPlugin> = {

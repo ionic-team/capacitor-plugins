@@ -1,13 +1,12 @@
 import { WebPlugin } from '@capacitor/core';
 
-import {
+import type {
   GeolocationPlugin,
   GeolocationOptions,
   GeolocationPosition,
   GeolocationWatchCallback,
   GeolocationPermissionStatus,
 } from './definitions';
-
 import { extend } from './util';
 
 export class GeolocationWeb extends WebPlugin implements GeolocationPlugin {
@@ -42,7 +41,7 @@ export class GeolocationWeb extends WebPlugin implements GeolocationPlugin {
     options: GeolocationOptions,
     callback: GeolocationWatchCallback,
   ): string {
-    let id = navigator.geolocation.watchPosition(
+    const id = navigator.geolocation.watchPosition(
       pos => {
         callback(pos);
       },
@@ -62,9 +61,8 @@ export class GeolocationWeb extends WebPlugin implements GeolocationPlugin {
     return `${id}`;
   }
 
-  clearWatch(options: { id: string }) {
+  async clearWatch(options: { id: string }): Promise<void> {
     window.navigator.geolocation.clearWatch(parseInt(options.id, 10));
-    return Promise.resolve();
   }
 
   async checkPermissions(): Promise<GeolocationPermissionStatus> {
@@ -75,11 +73,11 @@ export class GeolocationWeb extends WebPlugin implements GeolocationPlugin {
     const permission = await window.navigator.permissions.query({
       name: 'geolocation',
     });
-    return Promise.resolve({ location: permission.state });
+    return { location: permission.state };
   }
 
-  requestPermissions(): Promise<GeolocationPermissionStatus> {
-    return Promise.resolve({ location: 'granted' });
+  async requestPermissions(): Promise<GeolocationPermissionStatus> {
+    return { location: 'granted' };
   }
 }
 
