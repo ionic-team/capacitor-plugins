@@ -75,7 +75,7 @@ public class Device {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
             return Settings.Global.getString(this.context.getContentResolver(), Settings.Global.DEVICE_NAME);
         }
-        
+
         return null;
     }
 }
