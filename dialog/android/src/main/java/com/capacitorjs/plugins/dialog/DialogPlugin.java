@@ -2,12 +2,12 @@ package com.capacitorjs.plugins.dialog;
 
 import androidx.appcompat.app.AppCompatActivity;
 import com.getcapacitor.JSObject;
-import com.getcapacitor.NativePlugin;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
+import com.getcapacitor.annotation.CapacitorPlugin;
 
-@NativePlugin(name = "Dialog")
+@CapacitorPlugin(name = "Dialog")
 public class DialogPlugin extends Plugin {
 
     @PluginMethod
