@@ -2,13 +2,12 @@ package com.capacitorjs.plugins.haptics;
 
 import com.capacitorjs.plugins.haptics.arguments.HapticsImpactType;
 import com.capacitorjs.plugins.haptics.arguments.HapticsNotificationType;
-import com.capacitorjs.plugins.haptics.arguments.HapticsVibrationType;
-import com.getcapacitor.NativePlugin;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
+import com.getcapacitor.annotation.CapacitorPlugin;
 
-@NativePlugin(name = "Haptics")
+@CapacitorPlugin(name = "Haptics")
 public class HapticsPlugin extends Plugin {
 
     private Haptics implementation;

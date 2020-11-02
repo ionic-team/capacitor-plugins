@@ -4,12 +4,13 @@ import android.Manifest;
 import android.net.NetworkInfo;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Logger;
-import com.getcapacitor.NativePlugin;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
+import com.getcapacitor.annotation.CapacitorPlugin;
+import com.getcapacitor.annotation.Permission;
 
-@NativePlugin(name = "Network", permissions = { Manifest.permission.ACCESS_NETWORK_STATE })
+@CapacitorPlugin(name = "Network", permissions = { @Permission(permission = Manifest.permission.ACCESS_NETWORK_STATE) })
 public class NetworkPlugin extends Plugin {
 
     private Network implementation;

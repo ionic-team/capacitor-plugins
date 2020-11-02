@@ -5,12 +5,12 @@ import android.os.Handler;
 import android.os.Looper;
 import android.webkit.WebView;
 import com.getcapacitor.JSObject;
-import com.getcapacitor.NativePlugin;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
+import com.getcapacitor.annotation.CapacitorPlugin;
 
-@NativePlugin(name = "TextZoom")
+@CapacitorPlugin(name = "TextZoom")
 public class TextZoomPlugin extends Plugin {
 
     private TextZoom textZoom;
