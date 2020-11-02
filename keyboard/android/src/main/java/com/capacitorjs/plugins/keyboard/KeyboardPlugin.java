@@ -2,12 +2,12 @@ package com.capacitorjs.plugins.keyboard;
 
 import android.os.Handler;
 import com.getcapacitor.JSObject;
-import com.getcapacitor.NativePlugin;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
+import com.getcapacitor.annotation.CapacitorPlugin;
 
-@NativePlugin(name = "Keyboard")
+@CapacitorPlugin(name = "Keyboard")
 public class KeyboardPlugin extends Plugin {
 
     private Keyboard implementation;
