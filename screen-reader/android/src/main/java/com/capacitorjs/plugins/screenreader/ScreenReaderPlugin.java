@@ -1,12 +1,12 @@
 package com.capacitorjs.plugins.screenreader;
 
 import com.getcapacitor.JSObject;
-import com.getcapacitor.NativePlugin;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
+import com.getcapacitor.annotation.CapacitorPlugin;
 
-@NativePlugin(name = "ScreenReader")
+@CapacitorPlugin(name = "ScreenReader")
 public class ScreenReaderPlugin extends Plugin {
 
     public static final String EVENT_SCREEN_READER_STATE_CHANGE = "screenReaderStateChange";
