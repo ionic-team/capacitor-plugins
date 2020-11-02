@@ -4,11 +4,15 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.net.Uri;
-import com.getcapacitor.*;
+import com.getcapacitor.JSObject;
+import com.getcapacitor.Logger;
+import com.getcapacitor.Plugin;
+import com.getcapacitor.PluginCall;
+import com.getcapacitor.PluginMethod;
+import com.getcapacitor.annotation.CapacitorPlugin;
 
-@NativePlugin(name = "App")
+@CapacitorPlugin(name = "App")
 public class AppPlugin extends Plugin {
-
     private static final String EVENT_BACK_BUTTON = "backButton";
     private static final String EVENT_URL_OPEN = "appUrlOpen";
     private static final String EVENT_STATE_CHANGE = "appStateChange";
