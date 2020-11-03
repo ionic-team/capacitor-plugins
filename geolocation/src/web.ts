@@ -77,7 +77,7 @@ export class GeolocationWeb extends WebPlugin implements GeolocationPlugin {
   }
 
   async requestPermissions(): Promise<GeolocationPermissionStatus> {
-    return { location: 'granted' };
+    throw this.unimplemented('Not implemented on web.');
   }
 }
 
