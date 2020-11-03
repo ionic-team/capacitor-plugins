@@ -21,7 +21,10 @@ public class GeolocationPlugin: CAPPlugin, CLLocationManagerDelegate {
 
         DispatchQueue.main.async {
             self.locationManager.delegate = self
-            self.locationManager.requestWhenInUseAuthorization()
+
+            if CLLocationManager.authorizationStatus() == .notDetermined {
+                self.locationManager.requestWhenInUseAuthorization()
+            }
 
             if call.getBool("enableHighAccuracy", false) == true {
                 self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
@@ -39,7 +42,10 @@ public class GeolocationPlugin: CAPPlugin, CLLocationManagerDelegate {
 
         DispatchQueue.main.async {
             self.locationManager.delegate = self
-            self.locationManager.requestWhenInUseAuthorization()
+
+            if CLLocationManager.authorizationStatus() == .notDetermined {
+                self.locationManager.requestWhenInUseAuthorization()
+            }
 
             if call.getBool("enableHighAccuracy", false) == true {
                 self.locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
@@ -53,14 +59,18 @@ public class GeolocationPlugin: CAPPlugin, CLLocationManagerDelegate {
 
     @objc func clearWatch(_ call: CAPPluginCall) {
         guard let callbackId = call.getString("id") else {
-            CAPLog.print("Must supply id")
+            call.reject("Watch call id must be provided")
             return
         }
+
         if let savedCall = bridge?.getSavedCall(callbackId) {
             bridge?.releaseCall(savedCall)
 
             self.stopUpdating()
         }
+
+        callQueue.removeValue(forKey: callbackId)
+
         call.resolve()
     }
 
@@ -84,7 +94,7 @@ public class GeolocationPlugin: CAPPlugin, CLLocationManagerDelegate {
 
     public func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         let removalQueue = callQueue.filter { $0.value == .singleUpdate }
-        callQueue = callQueue.filter { $0.value == .watch }
+        callQueue = callQueue.filter { $0.value != .singleUpdate }
 
         for (id, _) in removalQueue {
             if let call = bridge?.getSavedCall(id) {
@@ -93,9 +103,11 @@ public class GeolocationPlugin: CAPPlugin, CLLocationManagerDelegate {
             }
         }
 
-        for (id, _) in callQueue {
+        for (id, callType) in callQueue {
             if let call = bridge?.getSavedCall(id) {
-                reportLocation(call, locations)
+                if callType == .watch {
+                    reportLocation(call, locations)
+                }
             }
         }
     }
@@ -182,7 +194,7 @@ public class GeolocationPlugin: CAPPlugin, CLLocationManagerDelegate {
         coords["altitudeAccuracy"] = location.verticalAccuracy
         coords["speed"] = location.speed
         coords["heading"] = location.course
-        ret["timestamp"] = NSNumber(value: Int((location.timestamp.timeIntervalSince1970 * 1000)))
+        ret["timestamp"] = Int((location.timestamp.timeIntervalSince1970 * 1000))
         ret["coords"] = coords
         return ret
     }

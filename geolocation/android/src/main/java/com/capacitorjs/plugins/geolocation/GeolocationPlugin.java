@@ -121,16 +121,21 @@ public class GeolocationPlugin extends Plugin {
     @PluginMethod
     public void clearWatch(PluginCall call) {
         String callbackId = call.getString("id");
+
         if (callbackId != null) {
             PluginCall removed = watchingCalls.remove(callbackId);
             if (removed != null) {
                 removed.release(bridge);
             }
+
+            if (watchingCalls.size() == 0) {
+                implementation.clearLocationUpdates();
+            }
+
+            call.resolve();
+        } else {
+            call.reject("Watch call id must be provided");
         }
-        if (watchingCalls.size() == 0) {
-            implementation.clearLocationUpdates();
-        }
-        call.resolve();
     }
 
     /**
