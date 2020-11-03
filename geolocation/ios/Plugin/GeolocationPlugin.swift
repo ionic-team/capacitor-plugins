@@ -104,10 +104,8 @@ public class GeolocationPlugin: CAPPlugin, CLLocationManagerDelegate {
         }
 
         for (id, callType) in callQueue {
-            if let call = bridge?.getSavedCall(id) {
-                if callType == .watch {
-                    reportLocation(call, locations)
-                }
+            if let call = bridge?.getSavedCall(id), callType == .watch {
+                reportLocation(call, locations)
             }
         }
     }
