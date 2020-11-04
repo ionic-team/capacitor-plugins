@@ -2,12 +2,23 @@ import Foundation
 
 @objc public class Filesystem: NSObject {
 
-    public enum FilesystemError: String, Error {
-        case noParentFolder = "Parent folder doesn't exist"
-        case noSave = "Unable to save file"
-        case failEncode = "Unable to encode data to utf-8"
-        case noAppend = "Unable to append file"
-        case notEmpty = "Folder is not empty"
+    public enum FilesystemError: LocalizedError {
+        case noParentFolder, noSave, failEncode, noAppend, notEmpty
+
+        public var errorDescription: String? {
+            switch self {
+            case .noParentFolder:
+                return "Parent folder doesn't exist"
+            case .noSave:
+                return "Unable to save file"
+            case .failEncode:
+                return "Unable to encode data to utf-8"
+            case .noAppend:
+                return "Unable to append file"
+            case .notEmpty:
+                return "Folder is not empty"
+            }
+        }
     }
 
     public func readFile(at fileUrl: URL, with encoding: String?) throws -> String {

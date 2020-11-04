@@ -65,8 +65,6 @@ public class FilesystemPlugin: CAPPlugin {
             call.resolve([
                 "uri": path
             ])
-        } catch let error as Filesystem.FilesystemError {
-            handleError(call, error.rawValue)
         } catch let error as NSError {
             handleError(call, error.localizedDescription, error)
         }
@@ -167,8 +165,6 @@ public class FilesystemPlugin: CAPPlugin {
 
         do {
             try implementation.rmdir(at: fileUrl, recursive: recursive)
-        } catch let error as Filesystem.FilesystemError {
-            handleError(call, error.rawValue)
         } catch let error as NSError {
             handleError(call, error.localizedDescription, error)
         }
