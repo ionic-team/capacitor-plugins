@@ -3,8 +3,6 @@ package com.capacitorjs.plugins.geolocation;
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationManager;
-import android.os.Build;
-import com.getcapacitor.JSObject;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationAvailability;
 import com.google.android.gms.location.LocationCallback;
@@ -30,23 +28,6 @@ public class Geolocation {
         final LocationResultCallback resultCallback
     ) {
         requestLocationUpdates(enableHighAccuracy, timeout, getCurrentPosition, resultCallback);
-    }
-
-    public JSObject getJSObjectForLocation(Location location) {
-        JSObject ret = new JSObject();
-        JSObject coords = new JSObject();
-        ret.put("coords", coords);
-        ret.put("timestamp", location.getTime());
-        coords.put("latitude", location.getLatitude());
-        coords.put("longitude", location.getLongitude());
-        coords.put("accuracy", location.getAccuracy());
-        coords.put("altitude", location.getAltitude());
-        if (Build.VERSION.SDK_INT >= 26) {
-            coords.put("altitudeAccuracy", location.getVerticalAccuracyMeters());
-        }
-        coords.put("speed", location.getSpeed());
-        coords.put("heading", location.getBearing());
-        return ret;
     }
 
     @SuppressWarnings("MissingPermission")
@@ -85,7 +66,7 @@ public class Geolocation {
                     if (lastLocation == null) {
                         resultCallback.error("location unavailable");
                     } else {
-                        resultCallback.success(getJSObjectForLocation(lastLocation));
+                        resultCallback.success(lastLocation);
                     }
                 }
 
