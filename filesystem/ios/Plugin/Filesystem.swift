@@ -10,7 +10,7 @@ import Foundation
         case notEmpty = "Folder is not empty"
     }
 
-    @objc public func readFile(at fileUrl: URL, with encoding: String?) throws -> String {
+    public func readFile(at fileUrl: URL, with encoding: String?) throws -> String {
         if encoding != nil {
             let data = try String(contentsOf: fileUrl, encoding: .utf8)
             return data
@@ -20,7 +20,7 @@ import Foundation
         }
     }
 
-    @objc public func writeFile(at fileUrl: URL, with data: String, recursive: Bool, with encoding: String?) throws -> String {
+    public func writeFile(at fileUrl: URL, with data: String, recursive: Bool, with encoding: String?) throws -> String {
         if !FileManager.default.fileExists(atPath: fileUrl.deletingLastPathComponent().path) {
             if recursive {
                 try FileManager.default.createDirectory(at: fileUrl.deletingLastPathComponent(), withIntermediateDirectories: recursive, attributes: nil)
@@ -84,11 +84,11 @@ import Foundation
         try FileManager.default.removeItem(at: fileUrl)
     }
 
-    @objc public func readdir(at fileUrl: URL) throws -> [URL] {
+    public func readdir(at fileUrl: URL) throws -> [URL] {
         return try FileManager.default.contentsOfDirectory(at: fileUrl, includingPropertiesForKeys: nil, options: [])
     }
 
-    @objc func stat(at fileUrl: URL) throws -> [FileAttributeKey: Any] {
+    func stat(at fileUrl: URL) throws -> [FileAttributeKey: Any] {
         return try FileManager.default.attributesOfItem(atPath: fileUrl.path)
     }
 
