@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.BatteryManager;
+import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
 import android.provider.Settings;
@@ -68,5 +69,13 @@ public class Device {
 
     public boolean isVirtual() {
         return android.os.Build.FINGERPRINT.contains("generic") || android.os.Build.PRODUCT.contains("sdk");
+    }
+
+    public String getName() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+            return Settings.Global.getString(this.context.getContentResolver(), Settings.Global.DEVICE_NAME);
+        }
+
+        return null;
     }
 }

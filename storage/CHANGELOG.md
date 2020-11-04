@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.3](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/storage@0.0.2...@capacitor/storage@0.0.3) (2020-10-30)
+
+
+### Bug Fixes
+
+* **storage:** Remove warning on getString usage ([#85](https://github.com/ionic-team/capacitor-plugins/issues/85)) ([db9c9c0](https://github.com/ionic-team/capacitor-plugins/commit/db9c9c0d6743488e13c86e3b4efd192b4a28a193))
+
+
+
+
+
 ## [0.0.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/storage@0.0.1...@capacitor/storage@0.0.2) (2020-10-12)
 
 

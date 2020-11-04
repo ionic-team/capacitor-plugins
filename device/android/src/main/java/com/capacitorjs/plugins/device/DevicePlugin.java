@@ -1,13 +1,13 @@
 package com.capacitorjs.plugins.device;
 
 import com.getcapacitor.JSObject;
-import com.getcapacitor.NativePlugin;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
+import com.getcapacitor.annotation.CapacitorPlugin;
 import java.util.Locale;
 
-@NativePlugin(name = "Device")
+@CapacitorPlugin(name = "Device")
 public class DevicePlugin extends Plugin {
 
     private Device implementation;
@@ -31,6 +31,7 @@ public class DevicePlugin extends Plugin {
         r.put("manufacturer", android.os.Build.MANUFACTURER);
         r.put("uuid", implementation.getUuid());
         r.put("isVirtual", implementation.isVirtual());
+        r.put("name", implementation.getName());
 
         call.resolve(r);
     }

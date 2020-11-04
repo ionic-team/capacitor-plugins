@@ -1,11 +1,17 @@
 package com.capacitorjs.plugins.actionsheet;
 
-import com.getcapacitor.*;
+import com.getcapacitor.JSArray;
+import com.getcapacitor.JSObject;
+import com.getcapacitor.Logger;
+import com.getcapacitor.Plugin;
+import com.getcapacitor.PluginCall;
+import com.getcapacitor.PluginMethod;
+import com.getcapacitor.annotation.CapacitorPlugin;
 import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-@NativePlugin(name = "ActionSheet")
+@CapacitorPlugin(name = "ActionSheet")
 public class ActionSheetPlugin extends Plugin {
 
     private ActionSheet implementation = new ActionSheet();
