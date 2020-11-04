@@ -37,7 +37,7 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
       return this._db;
     }
     if (!('indexedDB' in window)) {
-      throw new Error("This browser doesn't support IndexedDB");
+      throw this.unavailable("This browser doesn't support IndexedDB");
     }
 
     return new Promise<IDBDatabase>((resolve, reject) => {
