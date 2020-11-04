@@ -1,8 +1,8 @@
 package com.capacitorjs.plugins.geolocation;
 
-import com.getcapacitor.JSObject;
+import android.location.Location;
 
 public interface LocationResultCallback {
-    void success(JSObject location);
+    void success(Location location);
     void error(String message);
 }

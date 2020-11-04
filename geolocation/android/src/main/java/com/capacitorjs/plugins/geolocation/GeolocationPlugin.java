@@ -2,6 +2,8 @@ package com.capacitorjs.plugins.geolocation;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.location.Location;
+import android.os.Build;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
@@ -58,8 +60,8 @@ public class GeolocationPlugin extends Plugin {
             false,
             new LocationResultCallback() {
                 @Override
-                public void success(JSObject location) {
-                    call.resolve(location);
+                public void success(Location location) {
+                    call.resolve(getJSObjectForLocation(location));
                 }
 
                 @Override
@@ -98,8 +100,8 @@ public class GeolocationPlugin extends Plugin {
             false,
             new LocationResultCallback() {
                 @Override
-                public void success(JSObject location) {
-                    call.resolve(location);
+                public void success(Location location) {
+                    call.resolve(getJSObjectForLocation(location));
                 }
 
                 @Override
@@ -166,8 +168,8 @@ public class GeolocationPlugin extends Plugin {
                     true,
                     new LocationResultCallback() {
                         @Override
-                        public void success(JSObject location) {
-                            savedCall.resolve(location);
+                        public void success(Location location) {
+                            savedCall.resolve(getJSObjectForLocation(location));
                         }
 
                         @Override
@@ -202,5 +204,22 @@ public class GeolocationPlugin extends Plugin {
         }
 
         return false;
+    }
+
+    private JSObject getJSObjectForLocation(Location location) {
+        JSObject ret = new JSObject();
+        JSObject coords = new JSObject();
+        ret.put("coords", coords);
+        ret.put("timestamp", location.getTime());
+        coords.put("latitude", location.getLatitude());
+        coords.put("longitude", location.getLongitude());
+        coords.put("accuracy", location.getAccuracy());
+        coords.put("altitude", location.getAltitude());
+        if (Build.VERSION.SDK_INT >= 26) {
+            coords.put("altitudeAccuracy", location.getVerticalAccuracyMeters());
+        }
+        coords.put("speed", location.getSpeed());
+        coords.put("heading", location.getBearing());
+        return ret;
     }
 }
