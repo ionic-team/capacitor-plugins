@@ -11,6 +11,7 @@
     "keyboard",
     "motion",
     "network",
+    "notifications",
     "screen-reader",
     "share",
     "status-bar",
