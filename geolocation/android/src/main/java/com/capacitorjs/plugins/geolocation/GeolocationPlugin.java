@@ -157,6 +157,8 @@ public class GeolocationPlugin extends Plugin {
             return;
         }
 
+        handlePermissions(permissions, grantResults);
+
         if (savedCall.getMethodName().equals("getCurrentPosition")) {
             if (!handleDenied(savedCall, grantResults)) {
                 boolean enableHighAccuracy = savedCall.getBoolean("enableHighAccuracy", false);
@@ -184,7 +186,7 @@ public class GeolocationPlugin extends Plugin {
                 startWatch(savedCall);
             }
         } else {
-            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+            savedCall.resolve(getPermissionStates());
         }
     }
 
