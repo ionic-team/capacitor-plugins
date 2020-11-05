@@ -24,6 +24,8 @@ npx cap sync
 * [`stat(...)`](#stat)
 * [`rename(...)`](#rename)
 * [`copy(...)`](#copy)
+* [`checkPermissions()`](#checkpermissions)
+* [`requestPermissions()`](#requestpermissions)
 * [Interfaces](#interfaces)
 * [Enums](#enums)
 
@@ -229,6 +231,38 @@ Copy a file or directory
 --------------------
 
 
+### checkPermissions()
+
+```typescript
+checkPermissions() => Promise<FilesystemPermissionStatus>
+```
+
+Check read/write permissions.
+Required on Android, only when using <a href="#filesystemdirectory">FilesystemDirectory.Documents</a> or
+FilesystemDirectory.ExternalStorage.
+
+**Returns:** <code>Promise&lt;<a href="#filesystempermissionstatus">FilesystemPermissionStatus</a>&gt;</code>
+
+**Since:** 1.0.0
+
+--------------------
+
+
+### requestPermissions()
+
+```typescript
+requestPermissions() => Promise<void>
+```
+
+Request read/write permissions.
+Required on Android, only when using <a href="#filesystemdirectory">FilesystemDirectory.Documents</a> or
+FilesystemDirectory.ExternalStorage.
+
+**Since:** 1.0.0
+
+--------------------
+
+
 ### Interfaces
 
 
@@ -359,6 +393,13 @@ Copy a file or directory
 | **`to`**          | <code>string</code>                                                 | The destination file or directory                                                                                                                                              | 1.0.0 |
 | **`directory`**   | <code><a href="#filesystemdirectory">FilesystemDirectory</a></code> | The <a href="#filesystemdirectory">FilesystemDirectory</a> containing the existing file or directory                                                                           | 1.0.0 |
 | **`toDirectory`** | <code><a href="#filesystemdirectory">FilesystemDirectory</a></code> | The <a href="#filesystemdirectory">FilesystemDirectory</a> containing the destination file or directory. If not supplied will use the 'directory' parameter as the destination | 1.0.0 |
+
+
+#### FilesystemPermissionStatus
+
+| Prop                | Type             |
+| ------------------- | ---------------- |
+| **`publicStorage`** | <code>any</code> |
 
 
 ### Enums

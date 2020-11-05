@@ -35,8 +35,8 @@ import org.json.JSONException;
         PluginRequestCodes.FILESYSTEM_REQUEST_COPY_PERMISSIONS
     },
     permissions = {
-        @Permission(permission = Manifest.permission.READ_EXTERNAL_STORAGE),
-        @Permission(permission = Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        @Permission(permission = Manifest.permission.READ_EXTERNAL_STORAGE, alias = "publicStorage"),
+        @Permission(permission = Manifest.permission.WRITE_EXTERNAL_STORAGE, alias = "publicStorage")
     },
     permissionRequestCode = PluginRequestCodes.FILESYSTEM_REQUEST_ALL_PERMISSIONS
 )
@@ -446,10 +446,8 @@ public class FilesystemPlugin extends Plugin {
 
     @Override
     protected void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
         Logger.debug(getLogTag(), "handling request perms result");
-
+        this.handlePermissions(permissions, grantResults);
         if (getSavedCall() == null) {
             Logger.debug(getLogTag(), "No stored plugin call for permissions request result");
             return;

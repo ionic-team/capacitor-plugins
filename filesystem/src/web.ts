@@ -6,6 +6,7 @@ import type {
   FileDeleteOptions,
   FileReadOptions,
   FileReadResult,
+  FilesystemPermissionStatus,
   FilesystemPlugin,
   FileWriteOptions,
   FileWriteResult,
@@ -399,6 +400,14 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
    */
   async copy(options: CopyOptions): Promise<void> {
     return this._copy(options, false);
+  }
+
+  async requestPermissions(): Promise<void> {
+    throw this.unimplemented('Not implemented on web.');
+  }
+
+  async checkPermissions(): Promise<FilesystemPermissionStatus> {
+    throw this.unimplemented('Not implemented on web.');
   }
 
   /**

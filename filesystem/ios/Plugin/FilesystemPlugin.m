@@ -15,4 +15,6 @@ CAP_PLUGIN(FilesystemPlugin, "Filesystem",
            CAP_PLUGIN_METHOD(stat, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(rename, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(copy, CAPPluginReturnPromise);
+           CAP_PLUGIN_METHOD(checkPermissions, CAPPluginReturnPromise);
+           CAP_PLUGIN_METHOD(requestPermissions, CAPPluginReturnPromise);
 )

@@ -4,6 +4,10 @@ declare module '@capacitor/core' {
   }
 }
 
+export interface FilesystemPermissionStatus {
+  publicStorage: PermissionState;
+}
+
 export enum FilesystemDirectory {
   /**
    * The Documents directory
@@ -481,4 +485,22 @@ export interface FilesystemPlugin {
    * @since 1.0.0
    */
   copy(options: CopyOptions): Promise<void>;
+
+  /**
+   * Check read/write permissions.
+   * Required on Android, only when using FilesystemDirectory.Documents or
+   * FilesystemDirectory.ExternalStorage.
+   *
+   * @since 1.0.0
+   */
+  checkPermissions(): Promise<FilesystemPermissionStatus>;
+
+  /**
+   * Request read/write permissions.
+   * Required on Android, only when using FilesystemDirectory.Documents or
+   * FilesystemDirectory.ExternalStorage.
+   *
+   * @since 1.0.0
+   */
+  requestPermissions(): Promise<void>;
 }

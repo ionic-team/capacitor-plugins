@@ -300,6 +300,14 @@ public class FilesystemPlugin: CAPPlugin {
         }
     }
 
+    @objc func checkPermissions(_ call: CAPPluginCall) {
+        call.unimplemented()
+    }
+
+    @objc func requestPermissions(_ call: CAPPluginCall) {
+        call.unimplemented()
+    }
+
     /**
      * Helper for handling errors
      */
