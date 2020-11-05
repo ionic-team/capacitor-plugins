@@ -9,6 +9,34 @@ npm install @capacitor/motion
 npx cap sync
 ```
 
+## Permissions
+
+This plugin is currently implemented using Web APIs. Most browsers require
+permission before using this API. To request permission, prompt the user for
+permission on any user-initiated action (such as a button click):
+
+```typescript
+import { Motion } from '@capacitor/motion';
+
+myButton.addEventListener('click', async () => {
+  try {
+    await DeviceMotionEvent.requestPermission();
+  } catch (e) {
+    // Handle error
+    return;
+  }
+
+  // Once the user approves, can start listening:
+  Motion.addListener('accel', event => {
+    console.log('Device motion event:', event);
+  });
+});
+```
+
+See the
+[`DeviceMotionEvent`](https://developer.mozilla.org/en-US/docs/Web/API/DeviceMotionEvent)
+API to understand the data supplied in the 'accel' event.
+
 ## API
 
 <docgen-index>

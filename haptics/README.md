@@ -9,6 +9,45 @@ npm install @capacitor/haptics
 npx cap sync
 ```
 
+## Permissions
+
+On Android, you must add the `VIBRATE` permission to your app's
+`AndroidManifest.xml` file.
+
+```xml
+<uses-permission android:name="android.permission.VIBRATE" />
+```
+
+## Example
+
+```typescript
+import { Haptics, HapticsImpactStyle } from '@capacitor/haptics';
+
+const hapticsImpactMedium = async () => {
+  await Haptics.impact({ style: HapticsImpactStyle.Medium });
+};
+
+const hapticsImpactLight = async () => {
+  await Haptics.impact({ style: HapticsImpactStyle.Light });
+};
+
+const hapticsVibrate = async () => {
+  await Haptics.vibrate();
+};
+
+const hapticsSelectionStart = async () => {
+  await Haptics.selectionStart();
+};
+
+const hapticsSelectionChanged = async () => {
+  await Haptics.selectionChanged();
+};
+
+const hapticsSelectionEnd = async () => {
+  await Haptics.selectionEnd();
+};
+```
+
 ## API
 
 <docgen-index>

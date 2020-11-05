@@ -179,6 +179,24 @@ export interface AppPlugin {
    * when an activity returns to an app that was closed, this call will return any data
    * the app was launched with, converted into the form of a result from a plugin call.
    *
+   * On Android, due to memory constraints on low-end devices, it's possible
+   * that, if your app launches a new activity, your app will be terminated by
+   * the operating system in order to reduce memory consumption.
+   *
+   * For example, that means the Camera API, which launches a new Activity to
+   * take a photo, may not be able to return data back to your app.
+   *
+   * To avoid this, Capacitor stores all restored activity results on launch.
+   * You should add a listener for `appRestoredResult` in order to handle any
+   * plugin call results that were delivered when your app was not running.
+   *
+   * Once you have that result (if any), you can update the UI to restore a
+   * logical experience for the user, such as navigating or selecting the
+   * proper tab.
+   *
+   * We recommend every Android app using plugins that rely on external
+   * Activities (for example, Camera) to have this event and process handled.
+   *
    * @since 1.0.0
    */
   addListener(

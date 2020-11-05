@@ -9,6 +9,50 @@ npm install @capacitor/status-bar
 npx cap sync
 ```
 
+## iOS Note
+
+This plugin requires "View controller-based status bar appearance"
+(`UIViewControllerBasedStatusBarAppearance`) set to `YES` in `Info.plist`. Read
+about [Configuring iOS](https://capacitorjs.com/docs/ios/configuration) for
+help.
+
+The status bar visibility defaults to visible and the style defaults to
+`StatusBarStyle.Light`. You can change these defaults by adding
+`UIStatusBarHidden` and/or `UIStatusBarStyle` in `Info.plist`.
+
+`setBackgroundColor` and `setOverlaysWebView` are currently not supported on
+iOS devices.
+
+## Example
+
+```typescript
+import { StatusBar, StatusBarStyle } from '@capacitor/status-bar';
+
+// iOS only
+window.addEventListener('statusTap', function () {
+  console.log('statusbar tapped');
+});
+
+// Display content under transparent status bar (Android only)
+StatusBar.setOverlaysWebView({ overlay: true });
+
+const setStatusBarStyleDark = async () => {
+  await StatusBar.setStyle({ style: StatusBarStyle.Dark });
+};
+
+const setStatusBarStyleLight = async () => {
+  await StatusBar.setStyle({ style: StatusBarStyle.Light });
+};
+
+const hideStatusBar = async () => {
+  await StatusBar.hide();
+};
+
+const showStatusBar = async () => {
+  await StatusBar.show();
+};
+```
+
 ## API
 
 <docgen-index>

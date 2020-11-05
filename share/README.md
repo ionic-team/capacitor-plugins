@@ -2,12 +2,30 @@
 
 The Share API provides methods for sharing content in any sharing-enabled apps the user may have installed.
 
+The Share API works on iOS, Android, and the Web (using the new [Web Share
+API](https://web.dev/web-share/)), though web support is currently spotty.
+
 ## Install
 
 ```bash
 npm install @capacitor/share
 npx cap sync
 ```
+
+## Example
+
+```typescript
+import { Share } from '@capacitor/share';
+
+await Share.share({
+  title: 'See cool stuff',
+  text: 'Really awesome thing you need to see right meow',
+  url: 'http://ionicframework.com/',
+  dialogTitle: 'Share with buddies',
+});
+```
+
+Each platform uses a different set of fields, but you should supply them all.
 
 ## API
 

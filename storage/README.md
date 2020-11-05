@@ -2,12 +2,57 @@
 
 The Storage API provides a simple key/value persistent store for lightweight data.
 
+Mobile OS's may periodically clear data set in `window.localStorage`, so this
+API should be used instead. This API will fall back to using `localStorage`
+when running as a Progressive Web App.
+
+This plugin will use
+[`UserDefaults`](https://developer.apple.com/documentation/foundation/userdefaults)
+on iOS and
+[`SharedPreferences`](https://developer.android.com/reference/android/content/SharedPreferences)
+on Android. Stored data is cleared if the app is uninstalled.
+
+**Note**: this API is _not_ meant for high-performance data storage
+applications. Take a look at using
+[`@capacitor-community/sqlite`](https://github.com/capacitor-community/sqlite)
+if your application will store a lot of items, have high read/write load, or
+require complex querying.
+
 ## Install
 
 ```bash
 npm install @capacitor/storage
 npx cap sync
 ```
+
+## Example
+
+```typescript
+import { Storage } from '@capacitor/storage';
+
+const setName = () => {
+  await Storage.set({
+    key: 'name',
+    value: 'Max',
+  });
+};
+
+const checkName = async () => {
+  const { value } = await Storage.get({ key: 'name' });
+
+  alert(`Hello ${value}!`);
+};
+
+const removeName = async () => {
+  await Storage.remove({ key: 'name' });
+};
+```
+
+## Working with JSON
+
+The Storage API only supports string values. You can, however, use JSON if you `JSON.stringify` the object before calling `set()`, then `JSON.parse` the value returned from `get()`.
+
+This method can also be used to store non-string values, such as numbers and booleans.
 
 ## API
 

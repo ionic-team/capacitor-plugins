@@ -2,11 +2,23 @@
 
 The Browser API provides the ability to open an in-app browser and subscribe to browser events.
 
+On iOS, this uses `SFSafariViewController` and is compliant with leading OAuth service in-app-browser requirements.
+
 ## Install
 
 ```bash
 npm install @capacitor/browser
 npx cap sync
+```
+
+## Example
+
+```typescript
+import { Browser } from '@capacitor/browser';
+
+const openCapacitorSite = async () => {
+  await Browser.open({ url: 'http://capacitorjs.com/' });
+};
 ```
 
 ## API

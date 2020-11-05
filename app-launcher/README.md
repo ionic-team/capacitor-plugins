@@ -9,6 +9,22 @@ npm install @capacitor/app-launcher
 npx cap sync
 ```
 
+## Example
+
+```typescript
+import { App } from '@capacitor/app';
+
+const checkCanOpenUrl = async () => {
+  const { value } = await App.canOpenUrl({ url: 'com.getcapacitor.myapp' });
+
+  alert('Can open url: ', value);
+};
+
+const openPortfolioPage = async () => {
+  await App.openUrl({ url: 'com.getcapacitor.myapp://page?id=portfolio' });
+};
+```
+
 ## API
 
 <docgen-index>
@@ -29,10 +45,13 @@ canOpenUrl(options: { url: string; }) => Promise<{ value: boolean; }>
 
 Check if an app can be opened with the given URL.
 
-On iOS  you must declare the URL schemes you pass to this method by adding
-the LSApplicationQueriesSchemes key to your app's Info.plist file.
-This method always returns false for undeclared schemes, whether or not an appropriate
-app is installed. To learn more about the key, see
+On iOS you must declare the URL schemes you pass to this method by adding
+the `LSApplicationQueriesSchemes` key to your app's `Info.plist` file.
+Learn more about configuring
+[`Info.plist`](https://capacitorjs.com/docs/ios/configuration#configuring-infoplist).
+
+This method always returns false for undeclared schemes, whether or not an
+appropriate app is installed. To learn more about the key, see
 [LSApplicationQueriesSchemes](https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/LaunchServicesKeys.html#//apple_ref/doc/plist/info/LSApplicationQueriesSchemes).
 
 | Param         | Type                          |

@@ -9,6 +9,24 @@ npm install @capacitor/device
 npx cap sync
 ```
 
+## Example
+
+```typescript
+import { Device } from '@capacitor/device';
+
+const logDeviceInfo = async () => {
+  const info = await Device.getInfo();
+
+  console.log(info);
+};
+
+const logBatteryInfo = async () => {
+  const info = await Device.getBatteryInfo();
+
+  console.log(info);
+};
+```
+
 ## API
 
 <docgen-index>

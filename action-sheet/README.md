@@ -9,6 +9,33 @@ npm install @capacitor/action-sheet
 npx cap sync
 ```
 
+## Example
+
+```typescript
+import { ActionSheet, ActionSheetOptionStyle } from '@capacitor/action-sheet';
+
+const showActions = async () => {
+  const result = await ActionSheet.showActions({
+    title: 'Photo Options',
+    message: 'Select an option to perform',
+    options: [
+      {
+        title: 'Upload',
+      },
+      {
+        title: 'Share',
+      },
+      {
+        title: 'Remove',
+        style: ActionSheetOptionStyle.Destructive,
+      },
+    ],
+  });
+
+  console.log('Action Sheet result:', result);
+};
+```
+
 ## API
 
 <docgen-index>
