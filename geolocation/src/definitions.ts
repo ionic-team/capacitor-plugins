@@ -6,7 +6,6 @@ declare module '@capacitor/core' {
 
 export type CallbackID = string;
 
-export type GeolocationPermissionType = 'location';
 export type GeolocationState = PermissionState;
 
 export interface GeolocationPermissionStatus {
@@ -51,9 +50,7 @@ export interface GeolocationPlugin {
    *
    * @since 1.0.0
    */
-  requestPermissions(options: {
-    permissions: GeolocationPermissionType[];
-  }): Promise<GeolocationPermissionStatus>;
+  requestPermissions(): Promise<GeolocationPermissionStatus>;
 }
 
 export interface GeolocationPosition {
