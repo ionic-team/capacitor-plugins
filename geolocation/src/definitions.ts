@@ -6,7 +6,6 @@ declare module '@capacitor/core' {
 
 export type CallbackID = string;
 
-export type GeolocationPermissionType = 'location';
 export type GeolocationState = PermissionState;
 
 export interface GeolocationPermissionStatus {
