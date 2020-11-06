@@ -17,7 +17,7 @@ npx cap sync
 * [`watchPosition(...)`](#watchposition)
 * [`clearWatch(...)`](#clearwatch)
 * [`checkPermissions()`](#checkpermissions)
-* [`requestPermissions(...)`](#requestpermissions)
+* [`requestPermissions()`](#requestpermissions)
 * [Interfaces](#interfaces)
 
 </docgen-index>
@@ -95,17 +95,13 @@ Check location permissions
 --------------------
 
 
-### requestPermissions(...)
+### requestPermissions()
 
 ```typescript
-requestPermissions(options: { permissions: GeolocationPermissionType[]; }) => Promise<GeolocationPermissionStatus>
+requestPermissions() => Promise<GeolocationPermissionStatus>
 ```
 
 Request location permissions
-
-| Param         | Type                                        |
-| ------------- | ------------------------------------------- |
-| **`options`** | <code>{ permissions: "location"[]; }</code> |
 
 **Returns:** <code>Promise&lt;<a href="#geolocationpermissionstatus">GeolocationPermissionStatus</a>&gt;</code>
 
