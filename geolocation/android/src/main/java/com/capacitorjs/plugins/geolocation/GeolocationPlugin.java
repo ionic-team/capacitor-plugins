@@ -200,7 +200,7 @@ public class GeolocationPlugin extends Plugin {
     private boolean handleDenied(PluginCall savedCall, int[] grantResults) {
         for (int result : grantResults) {
             if (result == PackageManager.PERMISSION_DENIED) {
-                savedCall.reject("User denied location permission");
+                savedCall.reject("Location permission was denied");
                 return true;
             }
         }
