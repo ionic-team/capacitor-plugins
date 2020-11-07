@@ -14,6 +14,7 @@ import type {
   LocalNotificationSchedule,
   LocalNotificationScheduleResult,
   LocalNotificationsPlugin,
+  LocalNotificationsPermissionStatus,
   NotificationChannel,
   NotificationChannelList,
 } from './definitions';
@@ -43,6 +44,7 @@ export {
   LocalNotificationSchedule,
   LocalNotificationScheduleResult,
   LocalNotifications,
+  LocalNotificationsPermissionStatus,
   NotificationChannel,
   NotificationChannelList,
 };

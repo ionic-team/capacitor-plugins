@@ -1,9 +1,13 @@
-import type { PluginListenerHandle } from '@capacitor/core';
+import type { PermissionState, PluginListenerHandle } from '@capacitor/core';
 
 declare module '@capacitor/core' {
   interface PluginRegistry {
     LocalNotifications: LocalNotificationsPlugin;
   }
+}
+
+export interface LocalNotificationsPermissionStatus {
+  display: PermissionState;
 }
 
 export interface LocalNotificationsPlugin {
@@ -19,8 +23,21 @@ export interface LocalNotificationsPlugin {
   createChannel(channel: NotificationChannel): Promise<void>;
   deleteChannel(channel: NotificationChannel): Promise<void>;
   listChannels(): Promise<NotificationChannelList>;
-  // TODO
-  // requestPermission(): Promise<NotificationPermissionResponse>;
+
+  /**
+   * Check notification permissions
+   *
+   * @since 1.0.0
+   */
+  checkPermissions(): Promise<LocalNotificationsPermissionStatus>;
+
+  /**
+   * Request location permissions
+   *
+   * @since 1.0.0
+   */
+  requestPermissions(): Promise<LocalNotificationsPermissionStatus>;
+
   addListener(
     eventName: 'localNotificationReceived',
     listenerFunc: (notification: LocalNotification) => void,

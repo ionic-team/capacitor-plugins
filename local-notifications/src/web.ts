@@ -1,12 +1,14 @@
+import type { PermissionState } from '@capacitor/core';
 import { WebPlugin } from '@capacitor/core';
 
 import type {
-  LocalNotificationsPlugin,
+  LocalNotification,
+  LocalNotificationActionType,
   LocalNotificationEnabledResult,
   LocalNotificationPendingList,
-  LocalNotificationActionType,
-  LocalNotification,
   LocalNotificationScheduleResult,
+  LocalNotificationsPermissionStatus,
+  LocalNotificationsPlugin,
   NotificationChannel,
   NotificationChannelList,
 } from './definitions';
@@ -119,5 +121,34 @@ export class LocalNotificationsWeb
     return Promise.resolve({
       value: Notification.permission === 'granted',
     });
+  }
+
+  async requestPermissions(): Promise<LocalNotificationsPermissionStatus> {
+    const display = this.transformNotificationPermission(
+      await Notification.requestPermission(),
+    );
+
+    return { display };
+  }
+
+  async checkPermissions(): Promise<LocalNotificationsPermissionStatus> {
+    const display = this.transformNotificationPermission(
+      Notification.permission,
+    );
+
+    return { display };
+  }
+
+  protected transformNotificationPermission(
+    permission: NotificationPermission,
+  ): PermissionState {
+    switch (permission) {
+      case 'granted':
+        return 'granted';
+      case 'denied':
+        return 'denied';
+      default:
+        return 'prompt';
+    }
   }
 }
