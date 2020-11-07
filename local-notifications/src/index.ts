@@ -1,7 +1,22 @@
 import type { PluginImplementations } from '@capacitor/core';
 import { Plugins, registerPlugin } from '@capacitor/core';
 
-import type { LocalNotificationsPlugin } from './definitions';
+import type {
+  LocalNotification,
+  LocalNotificationAction,
+  LocalNotificationActionPerformed,
+  LocalNotificationActionType,
+  LocalNotificationAttachment,
+  LocalNotificationAttachmentOptions,
+  LocalNotificationEnabledResult,
+  LocalNotificationPendingList,
+  LocalNotificationRequest,
+  LocalNotificationSchedule,
+  LocalNotificationScheduleResult,
+  LocalNotificationsPlugin,
+  NotificationChannel,
+  NotificationChannelList,
+} from './definitions';
 import { LocalNotificationsWeb } from './web';
 
 const implementations: PluginImplementations<LocalNotificationsPlugin> = {
@@ -15,4 +30,19 @@ const LocalNotifications = registerPlugin(
   implementations,
 ).getImplementation();
 
-export { LocalNotifications };
+export {
+  LocalNotification,
+  LocalNotificationAction,
+  LocalNotificationActionPerformed,
+  LocalNotificationActionType,
+  LocalNotificationAttachment,
+  LocalNotificationAttachmentOptions,
+  LocalNotificationEnabledResult,
+  LocalNotificationPendingList,
+  LocalNotificationRequest,
+  LocalNotificationSchedule,
+  LocalNotificationScheduleResult,
+  LocalNotifications,
+  NotificationChannel,
+  NotificationChannelList,
+};
