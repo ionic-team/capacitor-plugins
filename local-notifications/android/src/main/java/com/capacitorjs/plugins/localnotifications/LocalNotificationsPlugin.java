@@ -67,7 +67,7 @@ public class LocalNotificationsPlugin extends Plugin {
                 } catch (Exception ex) {}
             }
             result.put("notifications", jsArray);
-            call.success(result);
+            call.resolve(result);
         }
     }
 
@@ -75,7 +75,7 @@ public class LocalNotificationsPlugin extends Plugin {
     public void requestPermission(PluginCall call) {
         JSObject result = new JSObject();
         result.put("granted", true);
-        call.success(result);
+        call.resolve(result);
     }
 
     @PluginMethod
@@ -87,7 +87,7 @@ public class LocalNotificationsPlugin extends Plugin {
     public void getPending(PluginCall call) {
         List<String> ids = notificationStorage.getSavedNotificationIds();
         JSObject result = LocalNotification.buildLocalNotificationPendingList(ids);
-        call.success(result);
+        call.resolve(result);
     }
 
     @PluginMethod
@@ -95,14 +95,14 @@ public class LocalNotificationsPlugin extends Plugin {
         JSArray types = call.getArray("types");
         Map<String, NotificationAction[]> typesArray = NotificationAction.buildTypes(types);
         notificationStorage.writeActionGroup(typesArray);
-        call.success();
+        call.resolve();
     }
 
     @PluginMethod
     public void areEnabled(PluginCall call) {
         JSObject data = new JSObject();
         data.put("value", manager.areNotificationsEnabled());
-        call.success(data);
+        call.resolve(data);
     }
 
     @PluginMethod
