@@ -12,16 +12,16 @@ npx cap sync
 ## Example
 
 ```typescript
-import { App } from '@capacitor/app';
+import { AppLauncher } from '@capacitor/app-launcher';
 
 const checkCanOpenUrl = async () => {
-  const { value } = await App.canOpenUrl({ url: 'com.getcapacitor.myapp' });
+  const { value } = await AppLauncher.canOpenUrl({ url: 'com.getcapacitor.myapp' });
 
   alert('Can open url: ', value);
 };
 
 const openPortfolioPage = async () => {
-  await App.openUrl({ url: 'com.getcapacitor.myapp://page?id=portfolio' });
+  await AppLauncher.openUrl({ url: 'com.getcapacitor.myapp://page?id=portfolio' });
 };
 ```
 
