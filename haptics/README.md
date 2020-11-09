@@ -9,15 +9,6 @@ npm install @capacitor/haptics
 npx cap sync
 ```
 
-## Permissions
-
-On Android, you must add the `VIBRATE` permission to your app's
-`AndroidManifest.xml` file.
-
-```xml
-<uses-permission android:name="android.permission.VIBRATE" />
-```
-
 ## Example
 
 ```typescript

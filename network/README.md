@@ -9,18 +9,6 @@ npm install @capacitor/network
 npx cap sync
 ```
 
-## Permissions
-
-On Android, you must add the `ACCESS_NETWORK_STATE` permission to your app's
-`AndroidManifest.xml` file.
-
-```xml
-<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-```
-
-This permission allows the app to access information about the current network,
-such as whether it is connected to Wi-Fi or cellular.
-
 ## Example
 
 ```typescript
