@@ -1,18 +1,9 @@
-import type { PluginImplementations } from '@capacitor/core';
-import { Plugins, registerPlugin } from '@capacitor/core';
+import { registerPlugin } from '@capacitor/core';
 
 import type { ClipboardPlugin } from './definitions';
-import { ClipboardWeb } from './web';
 
-const implementations: PluginImplementations<ClipboardPlugin> = {
-  android: Plugins.Clipboard,
-  ios: Plugins.Clipboard,
-  web: new ClipboardWeb(),
-};
-
-const Clipboard = registerPlugin(
-  'Clipboard',
-  implementations,
-).getImplementation();
+const Clipboard = registerPlugin<ClipboardPlugin>('Clipboard', {
+  web: import('./web').then(m => new m.ClipboardWeb()),
+});
 
 export { Clipboard };

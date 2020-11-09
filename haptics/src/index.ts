@@ -1,16 +1,10 @@
-import type { PluginImplementations } from '@capacitor/core';
-import { Plugins, registerPlugin } from '@capacitor/core';
+import { registerPlugin } from '@capacitor/core';
 
 import type { HapticsPlugin } from './definitions';
 import { HapticsImpactStyle, HapticsNotificationType } from './definitions';
-import { HapticsWeb } from './web';
 
-const implementations: PluginImplementations<HapticsPlugin> = {
-  android: Plugins.Haptics,
-  ios: Plugins.Haptics,
-  web: new HapticsWeb(),
-};
-
-const Haptics = registerPlugin('Haptics', implementations).getImplementation();
+const Haptics = registerPlugin<HapticsPlugin>('Haptics', {
+  web: import('./web').then(m => new m.HapticsWeb()),
+});
 
 export { Haptics, HapticsImpactStyle, HapticsNotificationType };

@@ -2,9 +2,12 @@
   "name": "@capacitor/haptics",
   "version": "0.0.3",
   "description": "The Haptics API provides physical feedback to the user through touch or vibration.",
-  "main": "dist/plugin.js",
-  "module": "dist/esm/index.js",
+  "main": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
+  "unpkg": "dist/plugin.js",
+  "files": [
+    "dist"
+  ],
   "author": "Ionic <hi@ionicframework.com>",
   "license": "MIT",
   "repository": {
@@ -43,7 +46,6 @@
     "@ionic/eslint-config": "^0.3.0",
     "@ionic/prettier-config": "^1.0.1",
     "@ionic/swiftlint-config": "^1.1.2",
-    "@rollup/plugin-node-resolve": "^9.0.0",
     "eslint": "^7.11.0",
     "prettier": "^2.0.5",
     "prettier-plugin-java": "^0.8.3",

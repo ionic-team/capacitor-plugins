@@ -15,10 +15,6 @@ declare global {
 }
 
 export class DeviceWeb extends WebPlugin implements DevicePlugin {
-  constructor() {
-    super({ name: 'Device' });
-  }
-
   async getInfo(): Promise<DeviceInfo> {
     if (typeof navigator === 'undefined' || !navigator.userAgent) {
       throw this.unavailable('Device API not available in this browser');

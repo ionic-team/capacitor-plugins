@@ -6,10 +6,6 @@ import type {
 } from './definitions';
 
 export class ScreenReaderWeb extends WebPlugin implements ScreenReaderPlugin {
-  constructor() {
-    super({ name: 'ScreenReader' });
-  }
-
   async isEnabled(): Promise<never> {
     throw this.unavailable('This feature is not available in the browser.');
   }

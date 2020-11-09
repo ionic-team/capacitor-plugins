@@ -13,7 +13,7 @@ export interface StatusBarStyleOptions {
   style: StatusBarStyle;
 }
 
-export enum StatusBarStyle {
+export const enum StatusBarStyle {
   /**
    * Light text for dark backgrounds.
    *
@@ -51,7 +51,7 @@ export interface StatusBarAnimationOptions {
   animation: StatusBarAnimation;
 }
 
-export enum StatusBarAnimation {
+export const enum StatusBarAnimation {
   /**
    * No animation during show/hide.
    *

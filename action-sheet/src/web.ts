@@ -7,10 +7,6 @@ import type {
 } from './definitions';
 
 export class ActionSheetWeb extends WebPlugin implements ActionSheetPlugin {
-  constructor() {
-    super({ name: 'ActionSheet' });
-  }
-
   async showActions(options: ActionSheetOptions): Promise<ActionSheetResult> {
     return new Promise<ActionSheetResult>((resolve, _reject) => {
       let actionSheet: any = document.querySelector('pwa-action-sheet');

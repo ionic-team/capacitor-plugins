@@ -2,9 +2,12 @@
   "name": "@capacitor/motion",
   "version": "0.0.3",
   "description": "The Motion API tracks accelerometer and device orientation (compass heading, etc.)",
-  "main": "dist/plugin.js",
-  "module": "dist/esm/index.js",
+  "main": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
+  "unpkg": "dist/plugin.js",
+  "files": [
+    "dist"
+  ],
   "author": "Ionic <hi@ionicframework.com>",
   "license": "MIT",
   "repository": {
@@ -38,7 +41,6 @@
     "@capacitor/ios": "^3.0.0-alpha.6",
     "@ionic/eslint-config": "^0.3.0",
     "@ionic/prettier-config": "^1.0.1",
-    "@rollup/plugin-node-resolve": "^9.0.0",
     "eslint": "^7.11.0",
     "prettier": "^2.0.5",
     "prettier-plugin-java": "^0.8.3",
