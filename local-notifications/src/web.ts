@@ -3,124 +3,74 @@ import { WebPlugin } from '@capacitor/core';
 
 import type {
   LocalNotification,
-  LocalNotificationActionType,
   LocalNotificationEnabledResult,
   LocalNotificationPendingList,
   LocalNotificationScheduleResult,
   LocalNotificationsPermissionStatus,
   LocalNotificationsPlugin,
-  NotificationChannel,
   NotificationChannelList,
 } from './definitions';
 
 export class LocalNotificationsWeb
   extends WebPlugin
   implements LocalNotificationsPlugin {
-  private pending: LocalNotification[] = [];
+  protected pending: LocalNotification[] = [];
 
   constructor() {
     super({ name: 'LocalNotifications' });
   }
 
-  createChannel(channel: NotificationChannel): Promise<void> {
-    throw new Error('Feature not available in the browser. ' + channel.id);
+  async createChannel(): Promise<void> {
+    throw this.unavailable('Feature not available for web.');
   }
 
-  deleteChannel(channel: NotificationChannel): Promise<void> {
-    throw new Error('Feature not available in the browser. ' + channel.id);
+  async deleteChannel(): Promise<void> {
+    throw this.unavailable('Feature not available for web.');
   }
 
-  listChannels(): Promise<NotificationChannelList> {
-    throw new Error('Feature not available in the browser');
+  async listChannels(): Promise<NotificationChannelList> {
+    throw this.unavailable('Feature not available for web.');
   }
 
-  sendPending(): void {
-    const toRemove: LocalNotification[] = [];
-    const now = +new Date();
-    this.pending.forEach(localNotification => {
-      if (localNotification.schedule?.at) {
-        if (+localNotification.schedule.at <= now) {
-          this.buildNotification(localNotification);
-          toRemove.push(localNotification);
-        }
-      }
-    });
-    console.log('Sent pending, removing', toRemove);
-
-    this.pending = this.pending.filter(
-      localNotification => !toRemove.find(ln => ln === localNotification),
-    );
-  }
-
-  // TODO
-  sendNotification(
-    localNotification: LocalNotification,
-  ): any /* Notification */ {
-    const l = localNotification;
-
-    if (localNotification.schedule?.at) {
-      const diff = +localNotification.schedule.at - +new Date();
-      this.pending.push(l);
-      setTimeout(() => {
-        this.sendPending();
-      }, diff);
-      return;
-    }
-
-    this.buildNotification(localNotification);
-  }
-
-  buildNotification(localNotification: LocalNotification): Notification {
-    const l = localNotification;
-    return new Notification(l.title, {
-      body: l.body,
-    });
-  }
-
-  schedule(options: {
+  async schedule(options: {
     notifications: LocalNotification[];
   }): Promise<LocalNotificationScheduleResult> {
-    const notifications: Notification[] = [];
-    options.notifications.forEach(notification => {
-      notifications.push(this.sendNotification(notification));
-    });
+    for (const notification of options.notifications) {
+      this.sendNotification(notification);
+    }
 
-    return Promise.resolve({
-      notifications: options.notifications.map(notification => {
-        return { id: '' + notification.id };
-      }),
-    });
+    return {
+      notifications: options.notifications.map(notification => ({
+        id: notification.id.toString(),
+      })),
+    };
   }
 
-  getPending(): Promise<LocalNotificationPendingList> {
-    return Promise.resolve({
-      notifications: this.pending.map(localNotification => {
-        return {
-          id: '' + localNotification.id,
-        };
-      }),
-    });
+  async getPending(): Promise<LocalNotificationPendingList> {
+    return {
+      notifications: this.pending.map(notification => ({
+        id: notification.id.toString(),
+      })),
+    };
   }
 
-  registerActionTypes(_options: {
-    types: LocalNotificationActionType[];
-  }): Promise<void> {
-    throw new Error('Method not implemented.');
+  async registerActionTypes(): Promise<void> {
+    throw this.unavailable('Feature not available for web.');
   }
 
-  cancel(pending: LocalNotificationPendingList): Promise<void> {
-    console.log('Cancel these', pending);
+  async cancel(pending: LocalNotificationPendingList): Promise<void> {
     this.pending = this.pending.filter(
-      localNotification =>
-        !pending.notifications.find(ln => ln.id === '' + localNotification.id),
+      notification =>
+        !pending.notifications.find(n => n.id === notification.id.toString()),
     );
-    return Promise.resolve();
   }
 
-  areEnabled(): Promise<LocalNotificationEnabledResult> {
-    return Promise.resolve({
-      value: Notification.permission === 'granted',
-    });
+  async areEnabled(): Promise<LocalNotificationEnabledResult> {
+    const { display } = await this.checkPermissions();
+
+    return {
+      value: display === 'granted',
+    };
   }
 
   async requestPermissions(): Promise<LocalNotificationsPermissionStatus> {
@@ -150,5 +100,41 @@ export class LocalNotificationsWeb
       default:
         return 'prompt';
     }
+  }
+
+  protected sendPending(): void {
+    const toRemove: LocalNotification[] = [];
+    const now = new Date().getTime();
+
+    for (const notification of this.pending) {
+      if (
+        notification.schedule?.at &&
+        notification.schedule.at.getTime() <= now
+      ) {
+        this.buildNotification(notification);
+        toRemove.push(notification);
+      }
+    }
+
+    this.pending = this.pending.filter(
+      notification => !toRemove.find(n => n === notification),
+    );
+  }
+
+  protected sendNotification(notification: LocalNotification): void {
+    if (notification.schedule?.at) {
+      const diff = notification.schedule.at.getTime() - new Date().getTime();
+
+      this.pending.push(notification);
+      setTimeout(() => {
+        this.sendPending();
+      }, diff);
+    }
+  }
+
+  protected buildNotification(notification: LocalNotification): Notification {
+    return new Notification(notification.title, {
+      body: notification.body,
+    });
   }
 }
