@@ -12,11 +12,10 @@ on iOS and
 [`SharedPreferences`](https://developer.android.com/reference/android/content/SharedPreferences)
 on Android. Stored data is cleared if the app is uninstalled.
 
-**Note**: this API is _not_ meant for high-performance data storage
-applications. Take a look at using
-[`@capacitor-community/sqlite`](https://github.com/capacitor-community/sqlite)
-if your application will store a lot of items, have high read/write load, or
-require complex querying.
+**Note**: This API is _not_ meant to be used as a local database. If your app
+stores a lot of data, has high read/write load, or requires complex querying,
+take a look at
+[`@capacitor-community/sqlite`](https://github.com/capacitor-community/sqlite).
 
 ## Install
 
