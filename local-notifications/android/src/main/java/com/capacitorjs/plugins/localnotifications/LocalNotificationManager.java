@@ -133,7 +133,7 @@ public class LocalNotificationManager {
         boolean notificationsEnabled = notificationManager.areNotificationsEnabled();
         if (!notificationsEnabled) {
             if (call != null) {
-                call.error("Notifications not enabled on this device");
+                call.reject("Notifications not enabled on this device");
             }
             return null;
         }
@@ -141,7 +141,7 @@ public class LocalNotificationManager {
             Integer id = localNotification.getId();
             if (localNotification.getId() == null) {
                 if (call != null) {
-                    call.error("LocalNotification missing identifier");
+                    call.reject("LocalNotification missing identifier");
                 }
                 return null;
             }
@@ -209,7 +209,7 @@ public class LocalNotificationManager {
                 mBuilder.setColor(Color.parseColor(iconColor));
             } catch (IllegalArgumentException ex) {
                 if (call != null) {
-                    call.error("Invalid color provided. Must be a hex string (ex: #ff0000");
+                    call.reject("Invalid color provided. Must be a hex string (ex: #ff0000");
                 }
                 return;
             }
@@ -361,7 +361,7 @@ public class LocalNotificationManager {
                 storage.deleteNotification(Integer.toString(id));
             }
         }
-        call.success();
+        call.resolve();
     }
 
     private void cancelTimerForNotification(Integer notificationId) {

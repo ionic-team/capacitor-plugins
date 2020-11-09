@@ -175,7 +175,7 @@ public class LocalNotification {
     public static List<LocalNotification> buildNotificationList(PluginCall call) {
         JSArray notificationArray = call.getArray("notifications");
         if (notificationArray == null) {
-            call.error("Must provide notifications array as notifications option");
+            call.reject("Must provide notifications array as notifications option");
             return null;
         }
         List<LocalNotification> resultLocalNotifications = new ArrayList<>(notificationArray.length());
@@ -183,7 +183,7 @@ public class LocalNotification {
         try {
             notificationsJson = notificationArray.toList();
         } catch (JSONException e) {
-            call.error("Provided notification format is invalid");
+            call.reject("Provided notification format is invalid");
             return null;
         }
 
@@ -192,7 +192,7 @@ public class LocalNotification {
             try {
                 notification = JSObject.fromJSONObject(jsonNotification);
             } catch (JSONException e) {
-                call.error("Invalid JSON object sent to NotificationPlugin", e);
+                call.reject("Invalid JSON object sent to NotificationPlugin", e);
                 return null;
             }
 
@@ -200,7 +200,7 @@ public class LocalNotification {
                 LocalNotification activeLocalNotification = buildNotificationFromJSObject(notification);
                 resultLocalNotifications.add(activeLocalNotification);
             } catch (ParseException e) {
-                call.error("Invalid date format sent to Notification plugin", e);
+                call.reject("Invalid date format sent to Notification plugin", e);
                 return null;
             }
         }
@@ -235,7 +235,7 @@ public class LocalNotification {
             notifications = call.getArray("notifications").toList();
         } catch (JSONException e) {}
         if (notifications == null || notifications.size() == 0) {
-            call.error("Must provide notifications array as notifications option");
+            call.reject("Must provide notifications array as notifications option");
             return null;
         }
         List<Integer> notificationsList = new ArrayList<>(notifications.size());
