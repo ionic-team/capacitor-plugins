@@ -71,11 +71,11 @@ public class LocalNotificationsPlugin extends Plugin {
         }
     }
 
-    @PluginMethod
-    public void requestPermission(PluginCall call) {
+    @Override
+    public JSObject getPermissionStates() {
         JSObject result = new JSObject();
-        result.put("granted", true);
-        call.resolve(result);
+        result.put("display", "granted");
+        return result;
     }
 
     @PluginMethod
