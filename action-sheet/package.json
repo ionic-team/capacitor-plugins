@@ -6,7 +6,10 @@
   "types": "dist/esm/index.d.ts",
   "unpkg": "dist/plugin.js",
   "files": [
-    "dist"
+    "android/",
+    "dist/",
+    "ios/",
+    "CapacitorActionSheet.podspec"
   ],
   "author": "Ionic <hi@ionicframework.com>",
   "license": "MIT",
