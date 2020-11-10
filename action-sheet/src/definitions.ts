@@ -29,7 +29,7 @@ export interface ActionSheetOptions {
   options: ActionSheetOption[];
 }
 
-export const enum ActionSheetOptionStyle {
+export enum ActionSheetOptionStyle {
   /**
    * Default style of the option.
    *

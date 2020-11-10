@@ -63,7 +63,7 @@ export interface HapticsImpactOptions {
   style: HapticsImpactStyle;
 }
 
-export const enum HapticsImpactStyle {
+export enum HapticsImpactStyle {
   /**
    * A collision between small, light user interface elements
    *
@@ -98,7 +98,7 @@ export interface HapticsNotificationOptions {
   type: HapticsNotificationType;
 }
 
-export const enum HapticsNotificationType {
+export enum HapticsNotificationType {
   /**
    * A notification feedback type indicating that a task has completed successfully
    *

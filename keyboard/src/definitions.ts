@@ -24,7 +24,7 @@ export interface KeyboardStyleOptions {
   style: KeyboardStyle;
 }
 
-export const enum KeyboardStyle {
+export enum KeyboardStyle {
   /**
    * Dark keyboard.
    *
@@ -49,7 +49,7 @@ export interface KeyboardResizeOptions {
   mode: KeyboardResize;
 }
 
-export const enum KeyboardResize {
+export enum KeyboardResize {
   /**
    * Resizes the html body.
    *
