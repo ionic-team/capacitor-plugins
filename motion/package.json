@@ -8,7 +8,7 @@
   "files": [
     "dist/"
   ],
-"author": "Ionic <hi@ionicframework.com>",
+  "author": "Ionic <hi@ionicframework.com>",
   "license": "MIT",
   "repository": {
     "type": "git",
