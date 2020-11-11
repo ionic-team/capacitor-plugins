@@ -56,31 +56,46 @@ public class SharePlugin extends Plugin {
 
         Intent intent = new Intent(Intent.ACTION_SEND);
 
-        if (text != null) {
-            // If they supplied both fields, concat them
-            if (url != null && isHttpUrl(url)) text = text + " " + url;
+        if (url!=null){
+            if (text!=null && isHttpUrl(url)){
+                text = text + " " + url;
+                intent.putExtra(Intent.EXTRA_TEXT, text);
+                intent.setTypeAndNormalize("text/plain");
+            } else if (isHttpUrl(url)){
+                intent.putExtra(Intent.EXTRA_TEXT, url);
+                intent.setTypeAndNormalize("text/plain");
+            } else if (text!=null && isFileUrl(url)){
+                intent.setType("*/*");
+                intent.putExtra(Intent.EXTRA_TEXT, text);
+                Uri fileUrl = FileProvider.getUriForFile(
+                    getActivity(),
+                    getContext().getPackageName() + ".fileprovider",
+                    new File(Uri.parse(url).getPath())
+                );
+                intent.putExtra(Intent.EXTRA_STREAM, fileUrl);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    intent.setData(fileUrl);
+                }
+                intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);                              
+            } else if (isFileUrl(url)) {
+                String type = getMimeType(url);
+                intent.setType(type);
+                Uri fileUrl = FileProvider.getUriForFile(
+                    getActivity(),
+                    getContext().getPackageName() + ".fileprovider",
+                    new File(Uri.parse(url).getPath())
+                );
+                intent.putExtra(Intent.EXTRA_STREAM, fileUrl);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    intent.setData(fileUrl);
+                }
+                intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);                
+            }        
+        } else {
             intent.putExtra(Intent.EXTRA_TEXT, text);
             intent.setTypeAndNormalize("text/plain");
         }
-
-        if (url != null && isHttpUrl(url) && text == null) {
-            intent.putExtra(Intent.EXTRA_TEXT, url);
-            intent.setTypeAndNormalize("text/plain");
-        } else if (url != null && isFileUrl(url)) {
-            String type = getMimeType(url);
-            intent.setType(type);
-            Uri fileUrl = FileProvider.getUriForFile(
-                getActivity(),
-                getContext().getPackageName() + ".fileprovider",
-                new File(Uri.parse(url).getPath())
-            );
-            intent.putExtra(Intent.EXTRA_STREAM, fileUrl);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                intent.setData(fileUrl);
-            }
-            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        }
-
+        
         if (title != null) {
             intent.putExtra(Intent.EXTRA_SUBJECT, title);
         }
