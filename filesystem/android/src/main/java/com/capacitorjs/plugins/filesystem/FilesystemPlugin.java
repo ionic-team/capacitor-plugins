@@ -453,7 +453,6 @@ public class FilesystemPlugin extends Plugin {
                 return;
             }
 
-
             PluginCall savedCall = getSavedCall();
 
             for (int i = 0; i < grantResults.length; i++) {
