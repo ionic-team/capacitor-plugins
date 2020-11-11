@@ -447,47 +447,49 @@ public class FilesystemPlugin extends Plugin {
     @Override
     protected void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         Logger.debug(getLogTag(), "handling request perms result");
-        this.handlePermissions(permissions, grantResults);
-        if (getSavedCall() == null) {
-            Logger.debug(getLogTag(), "No stored plugin call for permissions request result");
-            return;
-        }
-
-        PluginCall savedCall = getSavedCall();
-
-        for (int i = 0; i < grantResults.length; i++) {
-            int result = grantResults[i];
-            String perm = permissions[i];
-            if (result == PackageManager.PERMISSION_DENIED) {
-                Logger.debug(getLogTag(), "User denied storage permission: " + perm);
-                savedCall.reject(PERMISSION_DENIED_ERROR);
-                this.freeSavedCall();
+        if (validatePermissions(permissions, grantResults)) {
+            if (getSavedCall() == null) {
+                Logger.debug(getLogTag(), "No stored plugin call for permissions request result");
                 return;
             }
-        }
 
-        if (requestCode == PluginRequestCodes.FILESYSTEM_REQUEST_WRITE_FILE_PERMISSIONS) {
-            this.writeFile(savedCall);
-        } else if (requestCode == PluginRequestCodes.FILESYSTEM_REQUEST_WRITE_FOLDER_PERMISSIONS) {
-            this.mkdir(savedCall);
-        } else if (requestCode == PluginRequestCodes.FILESYSTEM_REQUEST_READ_FILE_PERMISSIONS) {
-            this.readFile(savedCall);
-        } else if (requestCode == PluginRequestCodes.FILESYSTEM_REQUEST_READ_FOLDER_PERMISSIONS) {
-            this.readdir(savedCall);
-        } else if (requestCode == PluginRequestCodes.FILESYSTEM_REQUEST_DELETE_FILE_PERMISSIONS) {
-            this.deleteFile(savedCall);
-        } else if (requestCode == PluginRequestCodes.FILESYSTEM_REQUEST_DELETE_FOLDER_PERMISSIONS) {
-            this.rmdir(savedCall);
-        } else if (requestCode == PluginRequestCodes.FILESYSTEM_REQUEST_URI_PERMISSIONS) {
-            this.getUri(savedCall);
-        } else if (requestCode == PluginRequestCodes.FILESYSTEM_REQUEST_STAT_PERMISSIONS) {
-            this.stat(savedCall);
-        } else if (requestCode == PluginRequestCodes.FILESYSTEM_REQUEST_RENAME_PERMISSIONS) {
-            this.rename(savedCall);
-        } else if (requestCode == PluginRequestCodes.FILESYSTEM_REQUEST_COPY_PERMISSIONS) {
-            this.copy(savedCall);
-        } else if (requestCode == PluginRequestCodes.FILESYSTEM_REQUEST_ALL_PERMISSIONS) {
-            savedCall.resolve();
+
+            PluginCall savedCall = getSavedCall();
+
+            for (int i = 0; i < grantResults.length; i++) {
+                int result = grantResults[i];
+                String perm = permissions[i];
+                if (result == PackageManager.PERMISSION_DENIED) {
+                    Logger.debug(getLogTag(), "User denied storage permission: " + perm);
+                    savedCall.reject(PERMISSION_DENIED_ERROR);
+                    this.freeSavedCall();
+                    return;
+                }
+            }
+
+            if (requestCode == PluginRequestCodes.FILESYSTEM_REQUEST_WRITE_FILE_PERMISSIONS) {
+                this.writeFile(savedCall);
+            } else if (requestCode == PluginRequestCodes.FILESYSTEM_REQUEST_WRITE_FOLDER_PERMISSIONS) {
+                this.mkdir(savedCall);
+            } else if (requestCode == PluginRequestCodes.FILESYSTEM_REQUEST_READ_FILE_PERMISSIONS) {
+                this.readFile(savedCall);
+            } else if (requestCode == PluginRequestCodes.FILESYSTEM_REQUEST_READ_FOLDER_PERMISSIONS) {
+                this.readdir(savedCall);
+            } else if (requestCode == PluginRequestCodes.FILESYSTEM_REQUEST_DELETE_FILE_PERMISSIONS) {
+                this.deleteFile(savedCall);
+            } else if (requestCode == PluginRequestCodes.FILESYSTEM_REQUEST_DELETE_FOLDER_PERMISSIONS) {
+                this.rmdir(savedCall);
+            } else if (requestCode == PluginRequestCodes.FILESYSTEM_REQUEST_URI_PERMISSIONS) {
+                this.getUri(savedCall);
+            } else if (requestCode == PluginRequestCodes.FILESYSTEM_REQUEST_STAT_PERMISSIONS) {
+                this.stat(savedCall);
+            } else if (requestCode == PluginRequestCodes.FILESYSTEM_REQUEST_RENAME_PERMISSIONS) {
+                this.rename(savedCall);
+            } else if (requestCode == PluginRequestCodes.FILESYSTEM_REQUEST_COPY_PERMISSIONS) {
+                this.copy(savedCall);
+            } else if (requestCode == PluginRequestCodes.FILESYSTEM_REQUEST_ALL_PERMISSIONS) {
+                savedCall.resolve();
+            }
         }
         this.freeSavedCall();
     }
