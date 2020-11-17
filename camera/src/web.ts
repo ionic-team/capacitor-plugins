@@ -1,6 +1,11 @@
 import { WebPlugin } from '@capacitor/core';
 
-import type { CameraPlugin, CameraPhoto, CameraOptions } from './definitions';
+import type {
+  CameraPlugin,
+  CameraPhoto,
+  CameraOptions,
+  CameraPermissionStatus,
+} from './definitions';
 
 export class CameraWeb extends WebPlugin implements CameraPlugin {
   constructor() {
@@ -147,6 +152,34 @@ export class CameraWeb extends WebPlugin implements CameraPlugin {
         };
       }
     });
+  }
+
+  async checkPermissions(): Promise<CameraPermissionStatus> {
+    if (typeof navigator === 'undefined' || !navigator.permissions) {
+      throw this.unavailable('Permissions API not available in this browser');
+    }
+
+    try {
+      // https://developer.mozilla.org/en-US/docs/Web/API/Permissions/query
+      // the specific permissions that are supported varies among browsers that implement the
+      // permissions API, so we need a try/catch in case 'camera' is invalid
+      const permission = await window.navigator.permissions.query({
+        name: 'camera',
+      });
+      return {
+        camera: permission.state,
+        writePhotos: 'denied',
+        readPhotos: 'denied',
+      };
+    } catch {
+      throw this.unavailable(
+        'Camera permissions are not available in this browser',
+      );
+    }
+  }
+
+  async requestPermissions(): Promise<CameraPermissionStatus> {
+    throw this.unimplemented('Not implemented on web.');
   }
 }
 

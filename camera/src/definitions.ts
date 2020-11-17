@@ -6,12 +6,44 @@ declare module '@capacitor/core' {
   }
 }
 
+export type CameraPermissionState = PermissionState;
+
+export type CameraPermissionType = 'camera' | 'writePhotos' | 'readPhotos';
+
+export interface CameraPermissionStatus {
+  camera: CameraPermissionState;
+  writePhotos: CameraPermissionState;
+  readPhotos: CameraPermissionState;
+}
+
+export interface CameraPluginPermissions {
+  types: CameraPermissionType[];
+}
+
 export interface CameraPlugin {
   /**
    * Prompt the user to pick a photo from an album, or take a new photo
    * with the camera.
+   *
+   * @since 1.0.0
    */
   getPhoto(options: CameraOptions): Promise<CameraPhoto>;
+
+  /**
+   * Check camera and photo album permissions
+   *
+   * @since 1.0.0
+   */
+  checkPermissions(): Promise<CameraPermissionStatus>;
+
+  /**
+   * Request camera and photo album permissions
+   *
+   * @since 1.0.0
+   */
+  requestPermissions(
+    types: CameraPluginPermissions | null,
+  ): Promise<CameraPermissionStatus>;
 }
 
 export interface CameraOptions {
