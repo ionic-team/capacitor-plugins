@@ -3,6 +3,7 @@ package com.capacitorjs.plugins.camera;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,6 +11,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
+
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 import com.getcapacitor.FileUtils;
 import com.getcapacitor.JSObject;
@@ -19,6 +22,8 @@ import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.PluginRequestCodes;
+import com.getcapacitor.annotation.CapacitorPlugin;
+import com.getcapacitor.annotation.Permission;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -37,12 +42,19 @@ import java.util.List;
  *
  * Adapted from https://developer.android.com/training/camera/photobasics.html
  */
-@NativePlugin(
-    name = "Camera",
-    requestCodes = { CameraPlugin.REQUEST_IMAGE_CAPTURE, CameraPlugin.REQUEST_IMAGE_PICK, CameraPlugin.REQUEST_IMAGE_EDIT }
+@CapacitorPlugin(
+        name = "Camera",
+        permissions = {
+                @Permission(permission = Manifest.permission.CAMERA, alias = "camera"),
+                @Permission(permission = Manifest.permission.WRITE_EXTERNAL_STORAGE, alias = "writePhotos"),
+                @Permission(permission = Manifest.permission.READ_EXTERNAL_STORAGE, alias = "readPhotos")
+        },
+        requestCodes = { CameraPlugin.REQUEST_IMAGE_CAPTURE, CameraPlugin.REQUEST_IMAGE_PICK, CameraPlugin.REQUEST_IMAGE_EDIT },
+        permissionRequestCode = CameraPlugin.CAMERA_REQUEST_PERMISSIONS
 )
 public class CameraPlugin extends Plugin {
     // Request codes
+    static final int CAMERA_REQUEST_PERMISSIONS = PluginRequestCodes.CAMERA_IMAGE_CAPTURE;
     static final int REQUEST_IMAGE_CAPTURE = PluginRequestCodes.CAMERA_IMAGE_CAPTURE;
     static final int REQUEST_IMAGE_PICK = PluginRequestCodes.CAMERA_IMAGE_PICK;
     static final int REQUEST_IMAGE_EDIT = PluginRequestCodes.CAMERA_IMAGE_EDIT;
@@ -140,13 +152,13 @@ public class CameraPlugin extends Plugin {
                     Manifest.permission.WRITE_EXTERNAL_STORAGE,
                     Manifest.permission.READ_EXTERNAL_STORAGE
                 },
-                REQUEST_IMAGE_CAPTURE
+                    CAMERA_REQUEST_PERMISSIONS
             );
             return false;
         }
         // If we don't need to save to the gallery, we can just ask for camera permissions
         else if (!hasPermission(Manifest.permission.CAMERA)) {
-            pluginRequestPermission(Manifest.permission.CAMERA, REQUEST_IMAGE_CAPTURE);
+            pluginRequestPermission(Manifest.permission.CAMERA, CAMERA_REQUEST_PERMISSIONS);
             return false;
         }
         return true;
@@ -154,7 +166,7 @@ public class CameraPlugin extends Plugin {
 
     private boolean checkPhotosPermissions(PluginCall call) {
         if (!hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE)) {
-            pluginRequestPermission(Manifest.permission.READ_EXTERNAL_STORAGE, REQUEST_IMAGE_CAPTURE);
+            pluginRequestPermission(Manifest.permission.READ_EXTERNAL_STORAGE, CAMERA_REQUEST_PERMISSIONS);
             return false;
         }
         return true;
@@ -439,30 +451,68 @@ public class CameraPlugin extends Plugin {
     }
 
     @Override
-    protected void handleRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        super.handleRequestPermissionsResult(requestCode, permissions, grantResults);
-
+    protected
+    void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         Logger.debug(getLogTag(), "handling request perms result");
 
-        if (getSavedCall() == null) {
+        PluginCall savedCall = getSavedCall();
+        if (savedCall == null) {
             Logger.debug(getLogTag(), "No stored plugin call for permissions request result");
             return;
         }
 
-        PluginCall savedCall = getSavedCall();
+        // TODO: remove this block once handlePermissions is available in core
+        //
+        // handlePermissions(permissions, grantResults);
+        //
+        // start block
+        SharedPreferences prefs = getContext().getSharedPreferences("PluginPermStates", Activity.MODE_PRIVATE);
 
-        for (int i = 0; i < grantResults.length; i++) {
-            int result = grantResults[i];
-            String perm = permissions[i];
-            if (result == PackageManager.PERMISSION_DENIED) {
-                Logger.debug(getLogTag(), "User denied camera permission: " + perm);
-                savedCall.reject(PERMISSION_DENIED_ERROR);
-                return;
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            // Permission granted. If previously denied, remove cached state
+            for (String permission : permissions) {
+                String state = prefs.getString(permission, null);
+
+                if (state != null) {
+                    SharedPreferences.Editor editor = prefs.edit();
+                    editor.remove(permission);
+                    editor.apply();
+                }
+            }
+        } else {
+            for (String permission : permissions) {
+                SharedPreferences.Editor editor = prefs.edit();
+
+                if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), permission)) {
+                    // Permission denied, can prompt again with rationale
+                    editor.putString(permission, "prompt-with-rationale");
+                } else {
+                    // Permission denied permanently, store this state for future reference
+                    editor.putString(permission, "denied");
+                }
+
+                editor.apply();
             }
         }
+        // end block
 
-        if (requestCode == REQUEST_IMAGE_CAPTURE) {
+
+        if (savedCall.getMethodName().equals("getPhoto")) {
+            for (int i = 0; i < grantResults.length; i++) {
+                int result = grantResults[i];
+                String perm = permissions[i];
+                if (result == PackageManager.PERMISSION_DENIED) {
+                    Logger.debug(getLogTag(), "User denied camera permission: " + perm);
+                    savedCall.reject(PERMISSION_DENIED_ERROR);
+                    savedCall.release(bridge);
+                    return;
+                }
+            }
             doShow(savedCall);
+        }
+        else {
+            savedCall.resolve(getPermissionStates());
+            savedCall.release(bridge);
         }
     }
 
