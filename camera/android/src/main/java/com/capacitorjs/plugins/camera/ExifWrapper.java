@@ -6,6 +6,7 @@ import androidx.exifinterface.media.ExifInterface;
 import com.getcapacitor.JSObject;
 
 public class ExifWrapper {
+
     private final ExifInterface exif;
 
     public ExifWrapper(ExifInterface exif) {

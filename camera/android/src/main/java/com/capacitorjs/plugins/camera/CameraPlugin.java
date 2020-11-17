@@ -11,7 +11,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
-
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 import com.getcapacitor.FileUtils;
@@ -43,16 +42,17 @@ import java.util.List;
  * Adapted from https://developer.android.com/training/camera/photobasics.html
  */
 @CapacitorPlugin(
-        name = "Camera",
-        permissions = {
-                @Permission(permission = Manifest.permission.CAMERA, alias = "camera"),
-                @Permission(permission = Manifest.permission.WRITE_EXTERNAL_STORAGE, alias = "writePhotos"),
-                @Permission(permission = Manifest.permission.READ_EXTERNAL_STORAGE, alias = "readPhotos")
-        },
-        requestCodes = { CameraPlugin.REQUEST_IMAGE_CAPTURE, CameraPlugin.REQUEST_IMAGE_PICK, CameraPlugin.REQUEST_IMAGE_EDIT },
-        permissionRequestCode = CameraPlugin.CAMERA_REQUEST_PERMISSIONS
+    name = "Camera",
+    permissions = {
+        @Permission(permission = Manifest.permission.CAMERA, alias = "camera"),
+        @Permission(permission = Manifest.permission.WRITE_EXTERNAL_STORAGE, alias = "writePhotos"),
+        @Permission(permission = Manifest.permission.READ_EXTERNAL_STORAGE, alias = "readPhotos")
+    },
+    requestCodes = { CameraPlugin.REQUEST_IMAGE_CAPTURE, CameraPlugin.REQUEST_IMAGE_PICK, CameraPlugin.REQUEST_IMAGE_EDIT },
+    permissionRequestCode = CameraPlugin.CAMERA_REQUEST_PERMISSIONS
 )
 public class CameraPlugin extends Plugin {
+
     // Request codes
     static final int CAMERA_REQUEST_PERMISSIONS = PluginRequestCodes.CAMERA_IMAGE_CAPTURE;
     static final int REQUEST_IMAGE_CAPTURE = PluginRequestCodes.CAMERA_IMAGE_CAPTURE;
@@ -152,7 +152,7 @@ public class CameraPlugin extends Plugin {
                     Manifest.permission.WRITE_EXTERNAL_STORAGE,
                     Manifest.permission.READ_EXTERNAL_STORAGE
                 },
-                    CAMERA_REQUEST_PERMISSIONS
+                CAMERA_REQUEST_PERMISSIONS
             );
             return false;
         }
@@ -451,8 +451,7 @@ public class CameraPlugin extends Plugin {
     }
 
     @Override
-    protected
-    void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    protected void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         Logger.debug(getLogTag(), "handling request perms result");
 
         PluginCall savedCall = getSavedCall();
@@ -496,7 +495,6 @@ public class CameraPlugin extends Plugin {
         }
         // end block
 
-
         if (savedCall.getMethodName().equals("getPhoto")) {
             for (int i = 0; i < grantResults.length; i++) {
                 int result = grantResults[i];
@@ -509,8 +507,7 @@ public class CameraPlugin extends Plugin {
                 }
             }
             doShow(savedCall);
-        }
-        else {
+        } else {
             savedCall.resolve(getPermissionStates());
             savedCall.release(bridge);
         }

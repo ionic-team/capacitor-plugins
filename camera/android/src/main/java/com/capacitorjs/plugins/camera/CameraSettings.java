@@ -1,6 +1,7 @@
 package com.capacitorjs.plugins.camera;
 
 public class CameraSettings {
+
     public static final int DEFAULT_QUALITY = 90;
     public static final boolean DEFAULT_SAVE_IMAGE_TO_GALLERY = false;
     public static final boolean DEFAULT_CORRECT_ORIENTATION = true;
