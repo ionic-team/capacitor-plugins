@@ -20,7 +20,10 @@ public class CameraPlugin: CAPPlugin {
             switch permission {
             case .camera:
                 state = AVCaptureDevice.authorizationStatus(for: .video).authorizationState
-            case .photos:
+            case .writePhotos:
+                // inserting captured photos into the camera roll is always allowed
+                state = PHAuthorizationStatus.authorized.authorizationState
+            case .readPhotos:
                 state = PHPhotoLibrary.authorizationStatus().authorizationState
             }
             result[permission.rawValue] = state
@@ -48,7 +51,9 @@ public class CameraPlugin: CAPPlugin {
                         AVAuthorizationStatus.denied.authorizationState
                     group.leave()
                 }
-            case .photos:
+            case .writePhotos:
+                result[permission.rawValue] = PHAuthorizationStatus.authorized.authorizationState
+            case .readPhotos:
                 group.enter()
                 PHPhotoLibrary.requestAuthorization({ (status) in
                     result[permission.rawValue] = status.authorizationState

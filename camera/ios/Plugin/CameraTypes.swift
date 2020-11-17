@@ -57,7 +57,8 @@ public struct CameraResult {
 
 internal enum CameraPermissionType: String, CaseIterable {
     case camera
-    case photos
+    case writePhotos
+    case readPhotos
 }
 
 internal enum CameraPropertyListKeys: String, CaseIterable {
