@@ -5,6 +5,9 @@
   "main": "dist/plugin.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
+  "files": [
+    "dist/"
+  ],
   "author": "Ionic <hi@ionicframework.com>",
   "license": "MIT",
   "repository": {
