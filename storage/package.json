@@ -5,6 +5,13 @@
   "main": "dist/plugin.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
+  "files": [
+    "android/src/main/",
+    "android/build.gradle",
+    "dist/",
+    "ios/Plugin/",
+    "CapacitorStorage.podspec"
+  ],
   "author": "Ionic <hi@ionicframework.com>",
   "license": "MIT",
   "repository": {
