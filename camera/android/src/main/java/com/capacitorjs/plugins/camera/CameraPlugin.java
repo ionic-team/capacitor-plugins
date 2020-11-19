@@ -44,9 +44,9 @@ import java.util.List;
 @CapacitorPlugin(
     name = "Camera",
     permissions = {
-        @Permission(permission = Manifest.permission.CAMERA, alias = "camera"),
-        @Permission(permission = Manifest.permission.WRITE_EXTERNAL_STORAGE, alias = "writePhotos"),
-        @Permission(permission = Manifest.permission.READ_EXTERNAL_STORAGE, alias = "readPhotos")
+        @Permission(strings = { Manifest.permission.CAMERA }, alias = "camera"),
+        @Permission(strings = { Manifest.permission.WRITE_EXTERNAL_STORAGE }, alias = "writePhotos"),
+        @Permission(strings = { Manifest.permission.READ_EXTERNAL_STORAGE }, alias = "readPhotos")
     },
     requestCodes = { CameraPlugin.REQUEST_IMAGE_CAPTURE, CameraPlugin.REQUEST_IMAGE_PICK, CameraPlugin.REQUEST_IMAGE_EDIT },
     permissionRequestCode = CameraPlugin.CAMERA_REQUEST_PERMISSIONS
