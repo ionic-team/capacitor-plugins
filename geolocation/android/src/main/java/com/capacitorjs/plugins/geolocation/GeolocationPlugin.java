@@ -16,8 +16,7 @@ import java.util.Map;
 @CapacitorPlugin(
     name = "Geolocation",
     permissions = {
-        @Permission(permission = Manifest.permission.ACCESS_COARSE_LOCATION, alias = "location"),
-        @Permission(permission = Manifest.permission.ACCESS_FINE_LOCATION, alias = "location")
+        @Permission(strings = { Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION }, alias = "location")
     },
     permissionRequestCode = GeolocationPlugin.GEOLOCATION_REQUEST_PERMISSIONS
 )
@@ -157,7 +156,10 @@ public class GeolocationPlugin extends Plugin {
             return;
         }
 
-        handlePermissions(permissions, grantResults);
+        if (!validatePermissions(permissions, grantResults)) {
+            freeSavedCall();
+            return;
+        }
 
         if (savedCall.getMethodName().equals("getCurrentPosition")) {
             if (!handleDenied(savedCall, grantResults)) {
@@ -187,6 +189,7 @@ public class GeolocationPlugin extends Plugin {
             }
         } else {
             savedCall.resolve(getPermissionStates());
+            freeSavedCall();
         }
     }
 
