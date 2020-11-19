@@ -460,40 +460,10 @@ public class CameraPlugin extends Plugin {
             return;
         }
 
-        // TODO: remove this block once handlePermissions is available in core
-        //
-        // handlePermissions(permissions, grantResults);
-        //
-        // start block
-        SharedPreferences prefs = getContext().getSharedPreferences("PluginPermStates", Activity.MODE_PRIVATE);
-
-        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            // Permission granted. If previously denied, remove cached state
-            for (String permission : permissions) {
-                String state = prefs.getString(permission, null);
-
-                if (state != null) {
-                    SharedPreferences.Editor editor = prefs.edit();
-                    editor.remove(permission);
-                    editor.apply();
-                }
-            }
-        } else {
-            for (String permission : permissions) {
-                SharedPreferences.Editor editor = prefs.edit();
-
-                if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), permission)) {
-                    // Permission denied, can prompt again with rationale
-                    editor.putString(permission, "prompt-with-rationale");
-                } else {
-                    // Permission denied permanently, store this state for future reference
-                    editor.putString(permission, "denied");
-                }
-
-                editor.apply();
-            }
+        if (!validatePermissions(permissions, grantResults)) {
+            freeSavedCall();
+            return;
         }
-        // end block
 
         if (savedCall.getMethodName().equals("getPhoto")) {
             for (int i = 0; i < grantResults.length; i++) {
