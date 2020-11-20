@@ -25,12 +25,12 @@ enum LocalNotificationError: LocalizedError {
 
 @objc(LocalNotificationsPlugin)
 public class LocalNotificationsPlugin: CAPPlugin {
+    private let notificationDelegationHandler = LocalNotificationsDelegate()
 
-    let notificationDelegationHandler = LocalNotificationsDelegate()
-
-    //    override public init() {
-    //        self.notificationDelegationHandler = LocalNotificationsDelegate()
-    //    }
+    override public func load() {
+        self.bridge?.userNotificationDelegate.localNotificationHandler = self.notificationDelegationHandler
+        self.notificationDelegationHandler.plugin = self
+    }
 
     /**
      * Schedule a notification.
@@ -137,7 +137,7 @@ public class LocalNotificationsPlugin: CAPPlugin {
             CAPLog.print(notifications)
 
             let ret = notifications.compactMap({ [weak self] (notification) -> JSObject? in
-                return self?.notificationDelegationHandler.makePendingNotificationRequestJSObject(notification)
+                return self?.makePendingNotificationRequestJSObject(notification)
             })
             call.success([
                 "notifications": ret
@@ -513,6 +513,13 @@ public class LocalNotificationsPlugin: CAPPlugin {
         }
         return opts
     }
+    
+    func makePendingNotificationRequestJSObject(_ request: UNNotificationRequest) -> JSObject {
+        return [
+            "id": request.identifier
+        ]
+    }
+
 
     @objc func createChannel(_ call: CAPPluginCall) {
         call.unimplemented()
