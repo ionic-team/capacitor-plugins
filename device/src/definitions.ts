@@ -91,14 +91,14 @@ export interface DeviceInfo {
 
   /**
    * The web view browser version
-   * 
+   *
    * @since 1.0.0
    */
   webViewVersion: string;
 
   /**
    * The web view browser engine
-   * 
+   *
    * @since 1.0.0
    */
   browserEngine?: string;

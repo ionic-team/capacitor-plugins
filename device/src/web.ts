@@ -112,25 +112,30 @@ export class DeviceWeb extends WebPlugin implements DevicePlugin {
       uaFields.operatingSystem = 'unknown';
     }
 
-    let match = _ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
+    let match =
+      _ua.match(
+        /(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i,
+      ) || [];
     let versions: RegExpMatchArray | RegExpExecArray | null;
-    if (/trident/i.test(match[1])){
-      versions =/\brv[ :]+(\d+)/g.exec(_ua) || [];
+    if (/trident/i.test(match[1])) {
+      versions = /\brv[ :]+(\d+)/g.exec(_ua) || [];
       uaFields.browserEngine = 'Internet Explorer';
       uaFields.browserVersion = versions[1] || '';
     } else if (match[1] === 'Chrome') {
-      versions = _ua.match(/\bOPR|Edge\/(\d+)/)
-      if(versions !== null) {
+      versions = _ua.match(/\bOPR|Edge\/(\d+)/);
+      if (versions !== null) {
         uaFields.browserEngine = 'Opera';
         uaFields.browserVersion = versions[1] || '';
       }
     } else {
-      match = match[2] ? [match[1], match[2]]: [navigator.appName, navigator.appVersion, '-?'];
+      match = match[2]
+        ? [match[1], match[2]]
+        : [navigator.appName, navigator.appVersion, '-?'];
       versions = _ua.match(/version\/(\d+)/i);
-      if(versions !== null) {
+      if (versions !== null) {
         match.splice(1, 1, versions[1]);
       }
-      uaFields.browserEngine =  match[0];
+      uaFields.browserEngine = match[0];
       uaFields.browserVersion = match[1];
     }
 
