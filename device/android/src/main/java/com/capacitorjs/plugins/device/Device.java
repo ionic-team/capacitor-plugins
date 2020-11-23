@@ -3,11 +3,14 @@ package com.capacitorjs.plugins.device;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageInfo;
 import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
 import android.provider.Settings;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 
 public class Device {
 
@@ -77,5 +80,23 @@ public class Device {
         }
 
         return null;
+    }
+
+    public String getWebViewVersion() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            PackageInfo info = WebView.getCurrentWebViewPackage();
+            return info.versionName;
+        }
+
+        return android.os.Build.VERSION.RELEASE;
+    }
+
+    public String getWebViewVendor() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            PackageInfo info = WebView.getCurrentWebViewPackage();
+            return info.packageName;
+        }
+
+        return "Android System WebView";
     }
 }

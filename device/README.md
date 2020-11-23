@@ -86,6 +86,8 @@ Get the device's current language locale code.
 | **`memUsed`**         | <code>number</code>                                                | Approximate memory used by the current app, in bytes. Divide by 1048576 to get the number of MBs used.                                       | 1.0.0 |
 | **`diskFree`**        | <code>number</code>                                                | How much free disk space is available on the the normal data storage. path for the os, in bytes                                              | 1.0.0 |
 | **`diskTotal`**       | <code>number</code>                                                | The total size of the normal data storage path for the OS, in bytes.                                                                         | 1.0.0 |
+| **`webViewVersion`**  | <code>string</code>                                                | The web view browser version                                                                                                                 | 1.0.0 |
+| **`browserEngine`**   | <code>string</code>                                                | The web view browser engine                                                                                                                  | 1.0.0 |
 
 
 #### DeviceBatteryInfo

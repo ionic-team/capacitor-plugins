@@ -88,6 +88,20 @@ export interface DeviceInfo {
    * @since 1.0.0
    */
   diskTotal?: number;
+
+  /**
+   * The web view browser version
+   * 
+   * @since 1.0.0
+   */
+  webViewVersion: string;
+
+  /**
+   * The web view browser engine
+   * 
+   * @since 1.0.0
+   */
+  browserEngine?: string;
 }
 
 export interface DeviceBatteryInfo {
