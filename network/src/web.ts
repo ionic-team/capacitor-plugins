@@ -58,10 +58,6 @@ function translatedConnection(): NetworkStatusConnectionType {
 }
 
 export class NetworkWeb extends WebPlugin implements NetworkPlugin {
-  constructor() {
-    super({ name: 'Network' });
-  }
-
   async getStatus(): Promise<NetworkStatus> {
     if (!window.navigator) {
       throw this.unavailable(
