@@ -41,8 +41,7 @@ public class GeolocationPlugin extends Plugin {
     @PluginMethod
     public void getCurrentPosition(final PluginCall call) {
         if (!hasRequiredPermissions()) {
-            saveCall(call);
-            pluginRequestAllPermissions();
+            requestAllPermissions(call);
         } else {
             getPosition(call);
         }
@@ -81,8 +80,7 @@ public class GeolocationPlugin extends Plugin {
     public void watchPosition(PluginCall call) {
         call.save();
         if (!hasRequiredPermissions()) {
-            saveCall(call);
-            pluginRequestAllPermissions();
+            requestAllPermissions(call);
         } else {
             startWatch(call);
         }
@@ -145,22 +143,13 @@ public class GeolocationPlugin extends Plugin {
      *
      * The result of a direct call will return the result states for each permission.
      *
+     * @param savedCall The original call to the plugin waiting for a response
      * @param requestCode The code associated with the permission request {@link #GEOLOCATION_REQUEST_PERMISSIONS}
      * @param permissions The permissions requested
      * @param grantResults The result status
      */
     @Override
-    protected void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        PluginCall savedCall = getSavedCall();
-        if (savedCall == null) {
-            return;
-        }
-
-        if (!validatePermissions(permissions, grantResults)) {
-            freeSavedCall();
-            return;
-        }
-
+    protected void onRequestPermissionsResult(PluginCall savedCall, int requestCode, String[] permissions, int[] grantResults) {
         if (savedCall.getMethodName().equals("getCurrentPosition")) {
             if (!handleDenied(savedCall, grantResults)) {
                 boolean enableHighAccuracy = savedCall.getBoolean("enableHighAccuracy", false);
@@ -187,9 +176,6 @@ public class GeolocationPlugin extends Plugin {
             if (!handleDenied(savedCall, grantResults)) {
                 startWatch(savedCall);
             }
-        } else {
-            savedCall.resolve(getPermissionStates());
-            freeSavedCall();
         }
     }
 
