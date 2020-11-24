@@ -1,21 +1,14 @@
-import nodeResolve from '@rollup/plugin-node-resolve';
-
 export default {
   input: 'dist/esm/index.js',
   output: {
     file: 'dist/plugin.js',
     format: 'iife',
-    name: 'capacitorPlugin', // TODO: change this
+    name: 'capacitorLocalNotifications',
     globals: {
       '@capacitor/core': 'capacitorExports',
     },
     sourcemap: true,
+    inlineDynamicImports: true,
   },
-  plugins: [
-    nodeResolve({
-      // allowlist of dependencies to bundle in
-      // @see https://github.com/rollup/plugins/tree/HEAD/packages/node-resolve#resolveonly
-      resolveOnly: ['lodash'],
-    }),
-  ],
+  external: ['@capacitor/core'],
 };

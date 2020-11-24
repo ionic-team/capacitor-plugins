@@ -1,5 +1,4 @@
-import type { PluginImplementations } from '@capacitor/core';
-import { Plugins, registerPlugin } from '@capacitor/core';
+import { registerPlugin } from '@capacitor/core';
 
 import type {
   LocalNotification,
@@ -18,18 +17,13 @@ import type {
   NotificationChannel,
   NotificationChannelList,
 } from './definitions';
-import { LocalNotificationsWeb } from './web';
 
-const implementations: PluginImplementations<LocalNotificationsPlugin> = {
-  android: Plugins.LocalNotifications,
-  ios: Plugins.LocalNotifications,
-  web: new LocalNotificationsWeb(),
-};
-
-const LocalNotifications = registerPlugin(
+const LocalNotifications = registerPlugin<LocalNotificationsPlugin>(
   'LocalNotifications',
-  implementations,
-).getImplementation();
+  {
+    web: () => import('./web').then(m => new m.LocalNotificationsWeb()),
+  },
+);
 
 export {
   LocalNotification,
