@@ -54,6 +54,21 @@ This script is for setting the version (or version range) of Capacitor packages 
 
 This script is for switching between Capacitor packages from npm and Capacitor packages installed locally. It will also run `lerna bootstrap` for you.
 
+> If you get npm errors, you can try installing from scratch:
+>
+> 1. Reset the changes in `package.json` files.
+> 1. Clear out all `node_modules`.
+>
+>     ```shell
+>     npx lerna exec 'rm -fr package-lock.json && rm -fr node_modules'
+>     rm -fr node_modules
+>     ```
+> 1. Install with local dependencies:
+>
+>     ```
+>     npm run toggle-local
+>     ```
+
 #### `npm run apply-patches "<package>"`
 
 This script is for copying git changes from one plugin to all plugins.
