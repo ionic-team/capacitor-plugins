@@ -9,7 +9,6 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
 import android.provider.Settings;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 
 public class Device {
