@@ -104,11 +104,7 @@ public class SharePlugin extends Plugin {
     }
 
     @Override
-    protected void handleOnActivityResult(int requestCode, int resultCode, Intent data) {
-        PluginCall savedCall = getSavedCall();
-        if (savedCall == null) {
-            return;
-        }
+    protected void handleOnActivityResult(PluginCall savedCall, int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_CANCELED && !stopped) {
             savedCall.reject("Share canceled");
         } else {
