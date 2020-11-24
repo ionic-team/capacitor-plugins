@@ -488,8 +488,11 @@ public class LocalNotificationsPlugin: CAPPlugin {
      * Get the internal URL for the attachment URL
      */
     func makeAttachmentUrl(_ path: String) -> URL? {
-        let file = CAPFileManager.get(path: path)
-        return file?.url
+        guard let webURL = URL(string: path) else {
+            return nil
+        }
+
+        return bridge?.localURL(fromWebURL: webURL)
     }
 
     /**
@@ -513,13 +516,12 @@ public class LocalNotificationsPlugin: CAPPlugin {
         }
         return opts
     }
-    
+
     func makePendingNotificationRequestJSObject(_ request: UNNotificationRequest) -> JSObject {
         return [
             "id": request.identifier
         ]
     }
-
 
     @objc func createChannel(_ call: CAPPluginCall) {
         call.unimplemented()
