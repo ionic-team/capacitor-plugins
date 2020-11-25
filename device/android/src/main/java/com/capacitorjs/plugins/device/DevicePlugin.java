@@ -33,7 +33,6 @@ public class DevicePlugin extends Plugin {
         r.put("isVirtual", implementation.isVirtual());
         r.put("name", implementation.getName());
         r.put("webViewVersion", implementation.getWebViewVersion());
-        r.put("browserEngine", implementation.getWebViewVendor());
 
         call.resolve(r);
     }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Environment;
@@ -94,7 +95,7 @@ public class Device {
             try {
                 info = pm.getPackageInfo(webViewPackage, 0);
             } catch (PackageManager.NameNotFoundException e) {
-
+                e.printStackTrace();
             }
         }
         if (info != null) {
@@ -102,14 +103,5 @@ public class Device {
         }
 
         return android.os.Build.VERSION.RELEASE;
-    }
-
-    public String getWebViewVendor() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            PackageInfo info = WebView.getCurrentWebViewPackage();
-            return info.packageName;
-        }
-
-        return "Android System WebView";
     }
 }

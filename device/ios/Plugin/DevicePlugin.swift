@@ -27,8 +27,7 @@ public class DevicePlugin: CAPPlugin {
             "manufacturer": "Apple",
             "uuid": UIDevice.current.identifierForVendor!.uuidString,
             "isVirtual": isSimulator,
-            "webViewVersion": UIDevice.current.systemVersion,
-            "browserEngine": "Safari"
+            "webViewVersion": UIDevice.current.systemVersion
         ])
     }
 
