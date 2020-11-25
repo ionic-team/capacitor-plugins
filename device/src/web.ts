@@ -126,17 +126,17 @@ export class DeviceWeb extends WebPlugin implements DevicePlugin {
         uaFields.browserEngine = 'Opera';
         uaFields.browserVersion = versions[1] || '';
       }
-    } else {
-      match = match[2]
-        ? [match[1], match[2]]
-        : [navigator.appName, navigator.appVersion, '-?'];
-      versions = _ua.match(/version\/(\d+)/i);
-      if (versions !== null) {
-        match.splice(1, 1, versions[1]);
-      }
-      uaFields.browserEngine = match[0];
-      uaFields.browserVersion = match[1];
     }
+
+    match = match[2]
+      ? [match[1], match[2]]
+      : [navigator.appName, navigator.appVersion, '-?'];
+    versions = _ua.match(/version\/(\d+)/i);
+    if (versions !== null) {
+      match.splice(1, 1, versions[1]);
+    }
+    uaFields.browserEngine = match[0];
+    uaFields.browserVersion = match[1];
 
     return uaFields;
   }
