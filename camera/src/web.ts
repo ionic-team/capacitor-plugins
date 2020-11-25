@@ -8,9 +8,6 @@ import type {
 } from './definitions';
 
 export class CameraWeb extends WebPlugin implements CameraPlugin {
-  constructor() {
-    super({ name: 'Camera' });
-  }
 
   async getPhoto(options: CameraOptions): Promise<CameraPhoto> {
     // eslint-disable-next-line no-async-promise-executor

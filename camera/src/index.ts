@@ -1,5 +1,4 @@
-import type { PluginImplementations } from '@capacitor/core';
-import { Plugins, registerPlugin } from '@capacitor/core';
+import { registerPlugin } from '@capacitor/core';
 
 import type { CameraPlugin } from './definitions';
 import {
@@ -9,15 +8,10 @@ import {
   CameraResultType,
   CameraSource,
 } from './definitions';
-import { CameraWeb } from './web';
 
-const implementations: PluginImplementations<CameraPlugin> = {
-  android: Plugins.Camera,
-  ios: Plugins.Camera,
-  web: new CameraWeb(),
-};
-
-const Camera = registerPlugin('Camera', implementations).getImplementation();
+const Camera = registerPlugin<CameraPlugin>('Camera', {
+  web: () => import('./web').then(m => new m.CameraWeb()),
+});
 
 export {
   Camera,
