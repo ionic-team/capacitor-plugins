@@ -451,19 +451,8 @@ public class CameraPlugin extends Plugin {
     }
 
     @Override
-    protected void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    protected void onRequestPermissionsResult(PluginCall savedCall, int requestCode, String[] permissions, int[] grantResults) {
         Logger.debug(getLogTag(), "handling request perms result");
-
-        PluginCall savedCall = getSavedCall();
-        if (savedCall == null) {
-            Logger.debug(getLogTag(), "No stored plugin call for permissions request result");
-            return;
-        }
-
-        if (!validatePermissions(permissions, grantResults)) {
-            freeSavedCall();
-            return;
-        }
 
         if (savedCall.getMethodName().equals("getPhoto")) {
             for (int i = 0; i < grantResults.length; i++) {
@@ -472,14 +461,10 @@ public class CameraPlugin extends Plugin {
                 if (result == PackageManager.PERMISSION_DENIED) {
                     Logger.debug(getLogTag(), "User denied camera permission: " + perm);
                     savedCall.reject(PERMISSION_DENIED_ERROR);
-                    savedCall.release(bridge);
                     return;
                 }
             }
             doShow(savedCall);
-        } else {
-            savedCall.resolve(getPermissionStates());
-            savedCall.release(bridge);
         }
     }
 
