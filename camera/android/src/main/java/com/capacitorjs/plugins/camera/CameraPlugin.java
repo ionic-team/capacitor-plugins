@@ -469,11 +469,7 @@ public class CameraPlugin extends Plugin {
     }
 
     @Override
-    protected void handleOnActivityResult(int requestCode, int resultCode, Intent data) {
-        super.handleOnActivityResult(requestCode, resultCode, data);
-
-        PluginCall savedCall = getSavedCall();
-
+    protected void handleOnActivityResult(PluginCall savedCall, int requestCode, int resultCode, Intent data) {
         if (savedCall == null) {
             return;
         }
