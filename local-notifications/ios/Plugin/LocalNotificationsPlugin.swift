@@ -28,7 +28,7 @@ public class LocalNotificationsPlugin: CAPPlugin {
     private let notificationDelegationHandler = LocalNotificationsDelegate()
 
     override public func load() {
-        self.bridge?.userNotificationDelegate.localNotificationHandler = self.notificationDelegationHandler
+        self.bridge?.notificationRouter.localNotificationHandler = self.notificationDelegationHandler
         self.notificationDelegationHandler.plugin = self
     }
 
@@ -99,7 +99,7 @@ public class LocalNotificationsPlugin: CAPPlugin {
     /**
      * Request notification permission
      */
-    @objc func requestPermissions(_ call: CAPPluginCall) {
+    @objc override public func requestPermissions(_ call: CAPPluginCall) {
         self.notificationDelegationHandler.requestPermissions { granted, error in
             guard error == nil else {
                 call.error(error!.localizedDescription)
@@ -109,7 +109,7 @@ public class LocalNotificationsPlugin: CAPPlugin {
         }
     }
 
-    @objc func checkPermissions(_ call: CAPPluginCall) {
+    @objc override public func checkPermissions(_ call: CAPPluginCall) {
         call.success(["display": "prompt"]) // TODO
     }
 
