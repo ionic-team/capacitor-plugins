@@ -82,8 +82,22 @@ public class Device {
     }
 
     public String getWebViewVersion() {
+        PackageInfo info = null;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            PackageInfo info = WebView.getCurrentWebViewPackage();
+            info = WebView.getCurrentWebViewPackage();
+        } else {
+            String webViewPackage = "com.google.android.webview";
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                webViewPackage = "com.android.chrome";
+            }
+            PackageManager pm = this.context.getPackageManager();
+            try {
+                info = pm.getPackageInfo(webViewPackage, 0);
+            } catch (PackageManager.NameNotFoundException e) {
+
+            }
+        }
+        if (info != null) {
             return info.versionName;
         }
 
