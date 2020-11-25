@@ -7,11 +7,12 @@ import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
+import com.getcapacitor.annotation.Permission;
 import java.util.List;
 import java.util.Map;
 import org.json.JSONArray;
 
-@CapacitorPlugin(name = "LocalNotifications")
+@CapacitorPlugin(name = "LocalNotifications", permissions = @Permission(strings = {}, alias = "display"))
 public class LocalNotificationsPlugin extends Plugin {
 
     private LocalNotificationManager manager;
@@ -40,8 +41,8 @@ public class LocalNotificationsPlugin extends Plugin {
     }
 
     @Override
-    protected void handleOnActivityResult(int requestCode, int resultCode, Intent data) {
-        super.handleOnActivityResult(requestCode, resultCode, data);
+    protected void handleOnActivityResult(PluginCall savedCall, int requestCode, int resultCode, Intent data) {
+        super.handleOnActivityResult(savedCall, requestCode, resultCode, data);
         this.handleOnNewIntent(data);
     }
 
@@ -69,13 +70,6 @@ public class LocalNotificationsPlugin extends Plugin {
             result.put("notifications", jsArray);
             call.resolve(result);
         }
-    }
-
-    @Override
-    public JSObject getPermissionStates() {
-        JSObject result = new JSObject();
-        result.put("display", "granted");
-        return result;
     }
 
     @PluginMethod
