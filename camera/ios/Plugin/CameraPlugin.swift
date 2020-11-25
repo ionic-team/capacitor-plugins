@@ -13,7 +13,7 @@ public class CameraPlugin: CAPPlugin {
 
     private var imageCounter = 0
 
-    @objc func checkPermissions(_ call: CAPPluginCall) {
+    @objc public override func checkPermissions(_ call: CAPPluginCall) {
         var result: [String: Any] = [:]
         for permission in CameraPermissionType.allCases {
             let state: String
@@ -31,7 +31,7 @@ public class CameraPlugin: CAPPlugin {
         call.resolve(result)
     }
 
-    @objc func requestPermissions(_ call: CAPPluginCall) {
+    @objc public override func requestPermissions(_ call: CAPPluginCall) {
         // get the list of desired types, if passed
         let typeList = call.getArray("types", String.self)?.compactMap({ (type) -> CameraPermissionType? in
             return CameraPermissionType(rawValue: type)
@@ -177,7 +177,7 @@ extension CameraPlugin: UIImagePickerControllerDelegate, UINavigationControllerD
             ])
         } else if settings.resultType == CameraResultType.uri {
             guard let path = try? saveTemporaryImage(jpeg),
-                  let webPath = CAPFileManager.getPortablePath(host: bridge?.getLocalUrl() ?? "", uri: URL(string: path)) else {
+                  let webPath = CAPFileManager.getPortablePath(host: bridge?.config.localURL.path ?? "", uri: URL(string: path)) else {
                 call?.reject("Unable to get portable path to file")
                 return
             }
@@ -214,7 +214,7 @@ private extension CameraPlugin {
 
     func showCamera() {
         // check if we have a camera
-        if (bridge?.isSimulator() ?? false) || !UIImagePickerController.isSourceTypeAvailable(UIImagePickerController.SourceType.camera) {
+        if (bridge?.isSimEnvironment ?? false) || !UIImagePickerController.isSourceTypeAvailable(UIImagePickerController.SourceType.camera) {
             bridge?.modulePrint(self, "Camera not available in simulator")
             bridge?.alert("Camera Error", "Camera not available in Simulator")
             call?.reject("Camera not available while running in Simulator")
