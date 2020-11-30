@@ -118,12 +118,10 @@ export class DeviceWeb extends WebPlugin implements DevicePlugin {
     let versions: RegExpMatchArray | RegExpExecArray | null;
     if (/trident/i.test(match[1])) {
       versions = /\brv[ :]+(\d+)/g.exec(_ua) || [];
-      uaFields.browserEngine = 'Internet Explorer';
       uaFields.browserVersion = versions[1] || '';
     } else if (match[1] === 'Chrome') {
       versions = _ua.match(/\bOPR|Edge\/(\d+)/);
       if (versions !== null) {
-        uaFields.browserEngine = 'Opera';
         uaFields.browserVersion = versions[1] || '';
       }
     }
@@ -135,7 +133,6 @@ export class DeviceWeb extends WebPlugin implements DevicePlugin {
     if (versions !== null) {
       match.splice(1, 1, versions[1]);
     }
-    uaFields.browserEngine = match[0];
     uaFields.browserVersion = match[1];
 
     return uaFields;
@@ -153,12 +150,13 @@ export class DeviceWeb extends WebPlugin implements DevicePlugin {
   }
 
   uuid4(): string {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (
-      c,
-    ) {
-      const r = (Math.random() * 16) | 0,
-        v = c === 'x' ? r : (r & 0x3) | 0x8;
-      return v.toString(16);
-    });
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(
+      /[xy]/g,
+      function (c) {
+        const r = (Math.random() * 16) | 0,
+          v = c === 'x' ? r : (r & 0x3) | 0x8;
+        return v.toString(16);
+      },
+    );
   }
 }
