@@ -1,9 +1,3 @@
-declare module '@capacitor/core' {
-  interface PluginRegistry {
-    Storage: StoragePlugin;
-  }
-}
-
 export interface ConfigureOptions {
   /**
    * Set the storage group.

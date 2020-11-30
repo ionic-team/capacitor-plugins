@@ -1,11 +1,5 @@
 import type { PluginListenerHandle } from '@capacitor/core';
 
-declare module '@capacitor/core' {
-  interface PluginRegistry {
-    App: AppPlugin;
-  }
-}
-
 export interface AppInfo {
   /**
    * The name of the app.
