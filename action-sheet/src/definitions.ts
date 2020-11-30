@@ -1,9 +1,3 @@
-declare module '@capacitor/core' {
-  interface PluginRegistry {
-    ActionSheet: ActionSheetPlugin;
-  }
-}
-
 export interface ActionSheetOptions {
   /**
    * The title of the Action Sheet.
