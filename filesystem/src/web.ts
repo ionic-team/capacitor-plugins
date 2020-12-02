@@ -400,11 +400,11 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
   }
 
   async requestPermissions(): Promise<FilesystemPermissionStatus> {
-    return { publicStorage: "granted" };
+    return { publicStorage: 'granted' };
   }
 
   async checkPermissions(): Promise<FilesystemPermissionStatus> {
-    return { publicStorage: "granted" };
+    return { publicStorage: 'granted' };
   }
 
   /**
