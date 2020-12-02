@@ -1,11 +1,5 @@
 import type { PermissionState, PluginListenerHandle } from '@capacitor/core';
 
-declare module '@capacitor/core' {
-  interface PluginRegistry {
-    LocalNotifications: LocalNotificationsPlugin;
-  }
-}
-
 export interface LocalNotificationsPermissionStatus {
   display: PermissionState;
 }
