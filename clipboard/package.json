@@ -1,6 +1,6 @@
 {
   "name": "@capacitor/clipboard",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "The Clipboard API enables copy and pasting to/from the system clipboard.",
   "main": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
