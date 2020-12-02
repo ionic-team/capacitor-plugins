@@ -35,8 +35,10 @@ import org.json.JSONException;
         PluginRequestCodes.FILESYSTEM_REQUEST_COPY_PERMISSIONS
     },
     permissions = {
-        @Permission(permission = Manifest.permission.READ_EXTERNAL_STORAGE, alias = "publicStorage"),
-        @Permission(permission = Manifest.permission.WRITE_EXTERNAL_STORAGE, alias = "publicStorage")
+        @Permission(
+            strings = { Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE },
+            alias = "publicStorage"
+        )
     },
     permissionRequestCode = PluginRequestCodes.FILESYSTEM_REQUEST_ALL_PERMISSIONS
 )
@@ -53,7 +55,6 @@ public class FilesystemPlugin extends Plugin {
 
     @PluginMethod
     public void readFile(PluginCall call) {
-        saveCall(call);
         String path = call.getString("path");
         String directory = getDirectoryParameter(call);
         String encoding = call.getString("encoding");
@@ -67,6 +68,7 @@ public class FilesystemPlugin extends Plugin {
         if (
             !isPublicDirectory(directory) ||
             isStoragePermissionGranted(
+                call,
                 PluginRequestCodes.FILESYSTEM_REQUEST_READ_FILE_PERMISSIONS,
                 Manifest.permission.READ_EXTERNAL_STORAGE
             )
@@ -88,7 +90,6 @@ public class FilesystemPlugin extends Plugin {
 
     @PluginMethod
     public void writeFile(PluginCall call) {
-        saveCall(call);
         String path = call.getString("path");
         String data = call.getString("data");
         Boolean recursive = call.getBoolean("recursive", false);
@@ -110,6 +111,7 @@ public class FilesystemPlugin extends Plugin {
             if (
                 !isPublicDirectory(directory) ||
                 isStoragePermissionGranted(
+                    call,
                     PluginRequestCodes.FILESYSTEM_REQUEST_WRITE_FILE_PERMISSIONS,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE
                 )
@@ -143,6 +145,7 @@ public class FilesystemPlugin extends Plugin {
                 // TODO to prevent permission checking we need a property from the call
                 if (
                     isStoragePermissionGranted(
+                        call,
                         PluginRequestCodes.FILESYSTEM_REQUEST_WRITE_FILE_PERMISSIONS,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE
                     )
@@ -198,12 +201,12 @@ public class FilesystemPlugin extends Plugin {
 
     @PluginMethod
     public void deleteFile(PluginCall call) {
-        saveCall(call);
         String file = call.getString("path");
         String directory = getDirectoryParameter(call);
         if (
             !isPublicDirectory(directory) ||
             isStoragePermissionGranted(
+                call,
                 PluginRequestCodes.FILESYSTEM_REQUEST_DELETE_FILE_PERMISSIONS,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
             )
@@ -223,13 +226,13 @@ public class FilesystemPlugin extends Plugin {
 
     @PluginMethod
     public void mkdir(PluginCall call) {
-        saveCall(call);
         String path = call.getString("path");
         String directory = getDirectoryParameter(call);
         boolean recursive = call.getBoolean("recursive", false).booleanValue();
         if (
             !isPublicDirectory(directory) ||
             isStoragePermissionGranted(
+                call,
                 PluginRequestCodes.FILESYSTEM_REQUEST_WRITE_FOLDER_PERMISSIONS,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
             )
@@ -249,7 +252,6 @@ public class FilesystemPlugin extends Plugin {
 
     @PluginMethod
     public void rmdir(PluginCall call) {
-        saveCall(call);
         String path = call.getString("path");
         String directory = getDirectoryParameter(call);
         Boolean recursive = call.getBoolean("recursive", false);
@@ -259,6 +261,7 @@ public class FilesystemPlugin extends Plugin {
         if (
             !isPublicDirectory(directory) ||
             isStoragePermissionGranted(
+                call,
                 PluginRequestCodes.FILESYSTEM_REQUEST_DELETE_FOLDER_PERMISSIONS,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
             )
@@ -290,13 +293,13 @@ public class FilesystemPlugin extends Plugin {
 
     @PluginMethod
     public void readdir(PluginCall call) {
-        saveCall(call);
         String path = call.getString("path");
         String directory = getDirectoryParameter(call);
 
         if (
             !isPublicDirectory(directory) ||
             isStoragePermissionGranted(
+                call,
                 PluginRequestCodes.FILESYSTEM_REQUEST_READ_FOLDER_PERMISSIONS,
                 Manifest.permission.READ_EXTERNAL_STORAGE
             )
@@ -318,7 +321,6 @@ public class FilesystemPlugin extends Plugin {
 
     @PluginMethod
     public void getUri(PluginCall call) {
-        saveCall(call);
         String path = call.getString("path");
         String directory = getDirectoryParameter(call);
 
@@ -326,7 +328,11 @@ public class FilesystemPlugin extends Plugin {
 
         if (
             !isPublicDirectory(directory) ||
-            isStoragePermissionGranted(PluginRequestCodes.FILESYSTEM_REQUEST_URI_PERMISSIONS, Manifest.permission.READ_EXTERNAL_STORAGE)
+            isStoragePermissionGranted(
+                call,
+                PluginRequestCodes.FILESYSTEM_REQUEST_URI_PERMISSIONS,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            )
         ) {
             JSObject data = new JSObject();
             data.put("uri", Uri.fromFile(fileObject).toString());
@@ -336,7 +342,6 @@ public class FilesystemPlugin extends Plugin {
 
     @PluginMethod
     public void stat(PluginCall call) {
-        saveCall(call);
         String path = call.getString("path");
         String directory = getDirectoryParameter(call);
 
@@ -344,7 +349,11 @@ public class FilesystemPlugin extends Plugin {
 
         if (
             !isPublicDirectory(directory) ||
-            isStoragePermissionGranted(PluginRequestCodes.FILESYSTEM_REQUEST_STAT_PERMISSIONS, Manifest.permission.READ_EXTERNAL_STORAGE)
+            isStoragePermissionGranted(
+                call,
+                PluginRequestCodes.FILESYSTEM_REQUEST_STAT_PERMISSIONS,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            )
         ) {
             if (!fileObject.exists()) {
                 call.reject("File does not exist");
@@ -385,6 +394,7 @@ public class FilesystemPlugin extends Plugin {
             if (doRename) {
                 if (
                     !isStoragePermissionGranted(
+                        call,
                         PluginRequestCodes.FILESYSTEM_REQUEST_RENAME_PERMISSIONS,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE
                     )
@@ -394,6 +404,7 @@ public class FilesystemPlugin extends Plugin {
             } else {
                 if (
                     !isStoragePermissionGranted(
+                        call,
                         PluginRequestCodes.FILESYSTEM_REQUEST_COPY_PERMISSIONS,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE
                     )
@@ -413,17 +424,18 @@ public class FilesystemPlugin extends Plugin {
 
     /**
      * Checks the the given permission and requests them if they are not already granted.
+     * @param call the plugin call
      * @param permissionRequestCode the request code see {@link PluginRequestCodes}
      * @param permission the permission string
      * @return Returns true if the permission is granted and false if it is denied.
      */
-    private boolean isStoragePermissionGranted(int permissionRequestCode, String permission) {
+    private boolean isStoragePermissionGranted(PluginCall call, int permissionRequestCode, String permission) {
         if (hasPermission(permission)) {
             Logger.verbose(getLogTag(), "Permission '" + permission + "' is granted");
             return true;
         } else {
             Logger.verbose(getLogTag(), "Permission '" + permission + "' denied. Asking user for it.");
-            pluginRequestPermissions(new String[] { permission }, permissionRequestCode);
+            requestPermission(call, permission, permissionRequestCode);
             return false;
         }
     }
@@ -445,51 +457,38 @@ public class FilesystemPlugin extends Plugin {
     }
 
     @Override
-    protected void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    protected void onRequestPermissionsResult(PluginCall savedCall, int requestCode, String[] permissions, int[] grantResults) {
         Logger.debug(getLogTag(), "handling request perms result");
-        if (validatePermissions(permissions, grantResults)) {
-            if (getSavedCall() == null) {
-                Logger.debug(getLogTag(), "No stored plugin call for permissions request result");
+        for (int i = 0; i < grantResults.length; i++) {
+            int result = grantResults[i];
+            String perm = permissions[i];
+            if (result == PackageManager.PERMISSION_DENIED) {
+                Logger.debug(getLogTag(), "User denied storage permission: " + perm);
+                savedCall.reject(PERMISSION_DENIED_ERROR);
                 return;
             }
-
-            PluginCall savedCall = getSavedCall();
-
-            for (int i = 0; i < grantResults.length; i++) {
-                int result = grantResults[i];
-                String perm = permissions[i];
-                if (result == PackageManager.PERMISSION_DENIED) {
-                    Logger.debug(getLogTag(), "User denied storage permission: " + perm);
-                    savedCall.reject(PERMISSION_DENIED_ERROR);
-                    this.freeSavedCall();
-                    return;
-                }
-            }
-
-            if (requestCode == PluginRequestCodes.FILESYSTEM_REQUEST_WRITE_FILE_PERMISSIONS) {
-                this.writeFile(savedCall);
-            } else if (requestCode == PluginRequestCodes.FILESYSTEM_REQUEST_WRITE_FOLDER_PERMISSIONS) {
-                this.mkdir(savedCall);
-            } else if (requestCode == PluginRequestCodes.FILESYSTEM_REQUEST_READ_FILE_PERMISSIONS) {
-                this.readFile(savedCall);
-            } else if (requestCode == PluginRequestCodes.FILESYSTEM_REQUEST_READ_FOLDER_PERMISSIONS) {
-                this.readdir(savedCall);
-            } else if (requestCode == PluginRequestCodes.FILESYSTEM_REQUEST_DELETE_FILE_PERMISSIONS) {
-                this.deleteFile(savedCall);
-            } else if (requestCode == PluginRequestCodes.FILESYSTEM_REQUEST_DELETE_FOLDER_PERMISSIONS) {
-                this.rmdir(savedCall);
-            } else if (requestCode == PluginRequestCodes.FILESYSTEM_REQUEST_URI_PERMISSIONS) {
-                this.getUri(savedCall);
-            } else if (requestCode == PluginRequestCodes.FILESYSTEM_REQUEST_STAT_PERMISSIONS) {
-                this.stat(savedCall);
-            } else if (requestCode == PluginRequestCodes.FILESYSTEM_REQUEST_RENAME_PERMISSIONS) {
-                this.rename(savedCall);
-            } else if (requestCode == PluginRequestCodes.FILESYSTEM_REQUEST_COPY_PERMISSIONS) {
-                this.copy(savedCall);
-            } else if (requestCode == PluginRequestCodes.FILESYSTEM_REQUEST_ALL_PERMISSIONS) {
-                savedCall.resolve();
-            }
         }
-        this.freeSavedCall();
+
+        if (requestCode == PluginRequestCodes.FILESYSTEM_REQUEST_WRITE_FILE_PERMISSIONS) {
+            this.writeFile(savedCall);
+        } else if (requestCode == PluginRequestCodes.FILESYSTEM_REQUEST_WRITE_FOLDER_PERMISSIONS) {
+            this.mkdir(savedCall);
+        } else if (requestCode == PluginRequestCodes.FILESYSTEM_REQUEST_READ_FILE_PERMISSIONS) {
+            this.readFile(savedCall);
+        } else if (requestCode == PluginRequestCodes.FILESYSTEM_REQUEST_READ_FOLDER_PERMISSIONS) {
+            this.readdir(savedCall);
+        } else if (requestCode == PluginRequestCodes.FILESYSTEM_REQUEST_DELETE_FILE_PERMISSIONS) {
+            this.deleteFile(savedCall);
+        } else if (requestCode == PluginRequestCodes.FILESYSTEM_REQUEST_DELETE_FOLDER_PERMISSIONS) {
+            this.rmdir(savedCall);
+        } else if (requestCode == PluginRequestCodes.FILESYSTEM_REQUEST_URI_PERMISSIONS) {
+            this.getUri(savedCall);
+        } else if (requestCode == PluginRequestCodes.FILESYSTEM_REQUEST_STAT_PERMISSIONS) {
+            this.stat(savedCall);
+        } else if (requestCode == PluginRequestCodes.FILESYSTEM_REQUEST_RENAME_PERMISSIONS) {
+            this.rename(savedCall);
+        } else if (requestCode == PluginRequestCodes.FILESYSTEM_REQUEST_COPY_PERMISSIONS) {
+            this.copy(savedCall);
+        }
     }
 }
