@@ -3,10 +3,8 @@
     "allowUnreachableCode": false,
     "declaration": true,
     "esModuleInterop": true,
-    "lib": [
-      "dom"
-    ],
-    "module": "es2015",
+    "lib": ["dom"],
+    "module": "esnext",
     "moduleResolution": "node",
     "noFallthroughCasesInSwitch": true,
     "noUnusedLocals": true,
@@ -17,7 +15,5 @@
     "strict": true,
     "target": "es2017"
   },
-  "files": [
-    "src/index.ts"
-  ]
+  "files": ["src/index.ts"]
 }

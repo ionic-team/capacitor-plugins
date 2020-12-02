@@ -1,11 +1,5 @@
 import type { PluginListenerHandle } from '@capacitor/core';
 
-declare module '@capacitor/core' {
-  interface PluginRegistry {
-    Motion: MotionPlugin;
-  }
-}
-
 export interface MotionPlugin {
   /**
    * Add a listener for accelerometer data

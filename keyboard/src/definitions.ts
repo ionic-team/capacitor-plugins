@@ -2,12 +2,6 @@
 
 import type { PluginListenerHandle } from '@capacitor/core';
 
-declare module '@capacitor/core' {
-  interface PluginRegistry {
-    Keyboard: KeyboardPlugin;
-  }
-}
-
 declare module '@capacitor/cli' {
   export interface PluginsConfig {
     Keyboard?: {
