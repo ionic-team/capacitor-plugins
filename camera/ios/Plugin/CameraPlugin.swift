@@ -176,15 +176,15 @@ extension CameraPlugin: UIImagePickerControllerDelegate, UINavigationControllerD
                 "format": "jpeg"
             ])
         } else if settings.resultType == CameraResultType.uri {
-            guard let path = try? saveTemporaryImage(jpeg),
-                  let webPath = CAPFileManager.getPortablePath(host: bridge?.config.localURL.path ?? "", uri: URL(string: path)) else {
+            guard let fileURL = try? saveTemporaryImage(jpeg),
+                  let webURL = bridge?.portablePath(fromLocalURL: fileURL) else {
                 call?.reject("Unable to get portable path to file")
                 return
             }
             call?.resolve([
-                "path": path,
+                "path": fileURL.path,
                 "exif": processedImage.exifData,
-                "webPath": webPath,
+                "webPath": webURL.path,
                 "format": "jpeg"
             ])
         }
@@ -288,15 +288,15 @@ private extension CameraPlugin {
         self.bridge?.viewController?.present(imagePicker, animated: true, completion: nil)
     }
 
-    func saveTemporaryImage(_ data: Data) throws -> String {
+    func saveTemporaryImage(_ data: Data) throws -> URL {
         var url: URL
         repeat {
             imageCounter += 1
             url = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("photo-\(imageCounter).jpg")
-        } while FileManager.default.fileExists(atPath: url.absoluteString)
+        } while FileManager.default.fileExists(atPath: url.path)
 
         try data.write(to: url, options: .atomic)
-        return url.absoluteString
+        return url
     }
 
     func processImage(from info: [UIImagePickerController.InfoKey: Any]) -> ProcessedImage? {
