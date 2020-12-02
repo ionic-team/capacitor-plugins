@@ -1,15 +1,9 @@
-import type { PluginImplementations } from '@capacitor/core';
-import { Plugins, registerPlugin } from '@capacitor/core';
+import { registerPlugin } from '@capacitor/core';
 
 import type { DialogPlugin } from './definitions';
-import { DialogWeb } from './web';
 
-const implementations: PluginImplementations<DialogPlugin> = {
-  android: Plugins.Dialog,
-  ios: Plugins.Dialog,
-  web: new DialogWeb(),
-};
-
-const Dialog = registerPlugin('Dialog', implementations).getImplementation();
+const Dialog = registerPlugin<DialogPlugin>('Dialog', {
+  web: () => import('./web').then(m => new m.DialogWeb()),
+});
 
 export { Dialog };

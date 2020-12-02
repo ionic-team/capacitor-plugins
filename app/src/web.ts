@@ -4,7 +4,7 @@ import type { AppInfo, AppPlugin, AppLaunchUrl, AppState } from './definitions';
 
 export class AppWeb extends WebPlugin implements AppPlugin {
   constructor() {
-    super({ name: 'App' });
+    super();
     if (typeof document !== 'undefined') {
       document.addEventListener(
         'visibilitychange',

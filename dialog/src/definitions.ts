@@ -1,9 +1,3 @@
-declare module '@capacitor/core' {
-  interface PluginRegistry {
-    Dialog: DialogPlugin;
-  }
-}
-
 export interface AlertOptions {
   /**
    * Title of the dialog.
