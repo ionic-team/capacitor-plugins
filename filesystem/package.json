@@ -2,7 +2,7 @@
   "name": "@capacitor/filesystem",
   "version": "0.0.1",
   "description": "The Filesystem API provides a NodeJS-like API for working with files on the device.",
-  "main": "dist/plugin.js",
+  "main": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
   "unpkg": "dist/plugin.js",
   "files": [
