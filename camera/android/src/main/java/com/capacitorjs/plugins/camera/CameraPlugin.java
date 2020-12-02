@@ -42,7 +42,7 @@ import java.util.List;
     name = "Camera",
     permissions = {
         @Permission(strings = { Manifest.permission.CAMERA }, alias = "camera"),
-        @Permission(strings = { Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE }, alias = "photos"),
+        @Permission(strings = { Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE }, alias = "photos")
     },
     requestCodes = { CameraPlugin.REQUEST_IMAGE_CAPTURE, CameraPlugin.REQUEST_IMAGE_PICK, CameraPlugin.REQUEST_IMAGE_EDIT },
     permissionRequestCode = CameraPlugin.CAMERA_REQUEST_PERMISSIONS
@@ -139,13 +139,14 @@ public class CameraPlugin extends Plugin {
             settings.isSaveToGallery() &&
             !(hasPermission(Manifest.permission.CAMERA) && hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE))
         ) {
-            requestPermissions(call,
-                    new String[] {
+            requestPermissions(
+                call,
+                new String[] {
                     Manifest.permission.CAMERA,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE,
                     Manifest.permission.READ_EXTERNAL_STORAGE
-            },
-                    CAMERA_REQUEST_PERMISSIONS
+                },
+                CAMERA_REQUEST_PERMISSIONS
             );
             return false;
         }

@@ -13,7 +13,7 @@ public class CameraPlugin: CAPPlugin {
 
     private var imageCounter = 0
 
-    @objc public override func checkPermissions(_ call: CAPPluginCall) {
+    @objc override public func checkPermissions(_ call: CAPPluginCall) {
         var result: [String: Any] = [:]
         for permission in CameraPermissionType.allCases {
             let state: String
@@ -28,7 +28,7 @@ public class CameraPlugin: CAPPlugin {
         call.resolve(result)
     }
 
-    @objc public override func requestPermissions(_ call: CAPPluginCall) {
+    @objc override public func requestPermissions(_ call: CAPPluginCall) {
         // get the list of desired types, if passed
         let typeList = call.getArray("types", String.self)?.compactMap({ (type) -> CameraPermissionType? in
             return CameraPermissionType(rawValue: type)
@@ -309,8 +309,7 @@ private extension CameraPlugin {
         // get the image's metadata from the picker or from the photo album
         if let photoMetadata = info[UIImagePickerController.InfoKey.mediaMetadata] as? [String: Any] {
             result.metadata = photoMetadata
-        }
-        else {
+        } else {
             flags = flags.union([.gallery])
         }
         if let asset = info[UIImagePickerController.InfoKey.phAsset] as? PHAsset {
