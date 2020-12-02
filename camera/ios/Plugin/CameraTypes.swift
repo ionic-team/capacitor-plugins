@@ -104,14 +104,7 @@ internal struct ProcessedImage {
     }
 
     mutating func overwriteMetadataOrientation(to orientation: Int) {
-        let original = metadata
         replaceDictionaryOrientation(atNode: &metadata, to: orientation)
-
-        if (original as NSDictionary).isEqual(to: metadata) {
-            print("dictionary is unchanged")
-        } else {
-            print("dictionaries no longer match")
-        }
     }
 
     func replaceDictionaryOrientation(atNode node: inout [String: Any], to orientation: Int) {
