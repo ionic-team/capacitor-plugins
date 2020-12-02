@@ -1,11 +1,5 @@
 import type { PluginListenerHandle } from '@capacitor/core';
 
-declare module '@capacitor/core' {
-  interface PluginRegistry {
-    Keyboard: KeyboardPlugin;
-  }
-}
-
 export interface KeyboardInfo {
   /**
    * Height of the heyboard.

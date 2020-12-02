@@ -1,9 +1,3 @@
-declare module '@capacitor/core' {
-  interface PluginRegistry {
-    AppLauncher: AppLauncherPlugin;
-  }
-}
-
 export interface AppLauncherPlugin {
   /**
    * Check if an app can be opened with the given URL.

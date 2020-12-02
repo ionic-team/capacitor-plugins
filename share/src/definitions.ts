@@ -1,9 +1,3 @@
-declare module '@capacitor/core' {
-  interface PluginRegistry {
-    Share: SharePlugin;
-  }
-}
-
 export interface ShareOptions {
   /**
    * Set a title for any message. This will be the subject

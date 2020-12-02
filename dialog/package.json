@@ -1,6 +1,6 @@
 {
   "name": "@capacitor/dialog",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "The Dialog API provides methods for triggering native dialog windows for alerts, confirmations, and input prompts",
   "main": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -59,7 +59,7 @@
     "typescript": "~4.0.3"
   },
   "peerDependencies": {
-    "@capacitor/core": "^3.0.0-alpha.6"
+    "@capacitor/core": "^3.0.0-alpha.7"
   },
   "prettier": "@ionic/prettier-config",
   "swiftlint": "@ionic/swiftlint-config",

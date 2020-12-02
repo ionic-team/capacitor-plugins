@@ -1,9 +1,3 @@
-declare module '@capacitor/core' {
-  interface PluginRegistry {
-    Clipboard: ClipboardPlugin;
-  }
-}
-
 export interface ClipboardPlugin {
   /**
    * Write a value to the clipboard (the "copy" action)
