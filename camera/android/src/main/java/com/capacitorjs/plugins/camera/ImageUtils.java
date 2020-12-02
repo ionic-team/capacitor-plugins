@@ -126,14 +126,21 @@ public class ImageUtils {
     }
 
     public static ExifWrapper getExifData(final Context c, final Bitmap bitmap, final Uri imageUri) {
+        InputStream stream = null;
         try {
-            String fu = FileUtils.getFileUrlForUri(c, imageUri);
-            final ExifInterface exifInterface = new ExifInterface(fu);
+            stream = c.getContentResolver().openInputStream(imageUri);
+            final ExifInterface exifInterface = new ExifInterface(stream);
 
             return new ExifWrapper(exifInterface);
         } catch (IOException ex) {
             Logger.error("Error loading exif data from image", ex);
-        } finally {}
+        } finally {
+            if (stream != null) {
+                try {
+                    stream.close();
+                } catch (IOException ignored) {}
+            }
+        }
         return new ExifWrapper(null);
     }
 }
