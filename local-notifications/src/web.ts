@@ -16,10 +16,6 @@ export class LocalNotificationsWeb
   implements LocalNotificationsPlugin {
   protected pending: LocalNotification[] = [];
 
-  constructor() {
-    super({ name: 'LocalNotifications' });
-  }
-
   async createChannel(): Promise<void> {
     throw this.unavailable('Feature not available for web.');
   }
