@@ -300,12 +300,16 @@ public class FilesystemPlugin: CAPPlugin {
         }
     }
 
-    @objc func checkPermissions(_ call: CAPPluginCall) {
-        call.unimplemented()
+    @objc override public func checkPermissions(_ call: CAPPluginCall) {
+        call.resolve([
+            "publicStorage": "granted"
+        ])
     }
 
-    @objc func requestPermissions(_ call: CAPPluginCall) {
-        call.unimplemented()
+    @objc override public func requestPermissions(_ call: CAPPluginCall) {
+        call.resolve([
+            "publicStorage": "granted"
+        ])
     }
 
     /**
