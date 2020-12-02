@@ -3,7 +3,6 @@ package com.capacitorjs.plugins.camera;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,12 +10,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 import com.getcapacitor.FileUtils;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Logger;
-import com.getcapacitor.NativePlugin;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
@@ -89,9 +86,6 @@ public class CameraPlugin extends Plugin {
 
     private void doShow(PluginCall call) {
         switch (settings.getSource()) {
-            case prompt:
-                showPrompt(call);
-                break;
             case camera:
                 showCamera(call);
                 break;
@@ -106,7 +100,7 @@ public class CameraPlugin extends Plugin {
 
     private void showPrompt(final PluginCall call) {
         // We have all necessary permissions, open the camera
-        List<String> options = new ArrayList<String>();
+        List<String> options = new ArrayList<>();
         options.add(call.getString("promptLabelPhoto", "From Photos"));
         options.add(call.getString("promptLabelPicture", "Take Picture"));
 
@@ -183,7 +177,6 @@ public class CameraPlugin extends Plugin {
         settings.setShouldResize(settings.getWidth() > 0 || settings.getHeight() > 0);
         settings.setShouldCorrectOrientation(call.getBoolean("correctOrientation", CameraSettings.DEFAULT_CORRECT_ORIENTATION));
         try {
-            String foo = CameraSource.prompt.getSource();
             settings.setSource(CameraSource.valueOf(call.getString("source", CameraSource.prompt.getSource())));
         } catch (IllegalArgumentException ex) {
             settings.setSource(CameraSource.prompt);
@@ -539,7 +532,9 @@ public class CameraPlugin extends Plugin {
     @Override
     protected Bundle saveInstanceState() {
         Bundle bundle = super.saveInstanceState();
-        bundle.putString("cameraImageFileSavePath", imageFileSavePath);
+        if (bundle != null) {
+            bundle.putString("cameraImageFileSavePath", imageFileSavePath);
+        }
         return bundle;
     }
 
