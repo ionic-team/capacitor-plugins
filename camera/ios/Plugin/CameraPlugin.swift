@@ -72,7 +72,7 @@ public class CameraPlugin: CAPPlugin {
 
         // Make sure they have all the necessary info.plist settings
         if let missingUsageDescription = checkUsageDescriptions() {
-            bridge?.modulePrint(self, missingUsageDescription)
+            CAPLog.print("⚡️ ", self.pluginId, "-", missingUsageDescription)
             call.reject(missingUsageDescription)
             bridge?.alert("Camera Error", "Missing required usage description. See console for more information")
             return
@@ -215,7 +215,7 @@ private extension CameraPlugin {
     func showCamera() {
         // check if we have a camera
         if (bridge?.isSimEnvironment ?? false) || !UIImagePickerController.isSourceTypeAvailable(UIImagePickerController.SourceType.camera) {
-            bridge?.modulePrint(self, "Camera not available in simulator")
+            CAPLog.print("⚡️ ", self.pluginId, "-", "Camera not available in simulator")
             bridge?.alert("Camera Error", "Camera not available in Simulator")
             call?.reject("Camera not available while running in Simulator")
             return
