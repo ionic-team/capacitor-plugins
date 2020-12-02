@@ -8,16 +8,15 @@ declare module '@capacitor/core' {
 
 export type CameraPermissionState = PermissionState;
 
-export type CameraPermissionType = 'camera' | 'writePhotos' | 'readPhotos';
+export type CameraPermissionType = 'camera' | 'photos';
 
 export interface CameraPermissionStatus {
   camera: CameraPermissionState;
-  writePhotos: CameraPermissionState;
-  readPhotos: CameraPermissionState;
+  photos: CameraPermissionState;
 }
 
 export interface CameraPluginPermissions {
-  types: CameraPermissionType[];
+  permissions: CameraPermissionType[];
 }
 
 export interface CameraPlugin {
@@ -42,7 +41,7 @@ export interface CameraPlugin {
    * @since 1.0.0
    */
   requestPermissions(
-    types: CameraPluginPermissions | null,
+    permissions: CameraPluginPermissions | null,
   ): Promise<CameraPermissionStatus>;
 }
 

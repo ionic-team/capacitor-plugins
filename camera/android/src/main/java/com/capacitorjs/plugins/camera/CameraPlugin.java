@@ -42,8 +42,7 @@ import java.util.List;
     name = "Camera",
     permissions = {
         @Permission(strings = { Manifest.permission.CAMERA }, alias = "camera"),
-        @Permission(strings = { Manifest.permission.WRITE_EXTERNAL_STORAGE }, alias = "writePhotos"),
-        @Permission(strings = { Manifest.permission.READ_EXTERNAL_STORAGE }, alias = "readPhotos")
+        @Permission(strings = { Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE }, alias = "photos"),
     },
     requestCodes = { CameraPlugin.REQUEST_IMAGE_CAPTURE, CameraPlugin.REQUEST_IMAGE_PICK, CameraPlugin.REQUEST_IMAGE_EDIT },
     permissionRequestCode = CameraPlugin.CAMERA_REQUEST_PERMISSIONS
@@ -140,19 +139,19 @@ public class CameraPlugin extends Plugin {
             settings.isSaveToGallery() &&
             !(hasPermission(Manifest.permission.CAMERA) && hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE))
         ) {
-            pluginRequestPermissions(
-                new String[] {
+            requestPermissions(call,
+                    new String[] {
                     Manifest.permission.CAMERA,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE,
                     Manifest.permission.READ_EXTERNAL_STORAGE
-                },
-                CAMERA_REQUEST_PERMISSIONS
+            },
+                    CAMERA_REQUEST_PERMISSIONS
             );
             return false;
         }
         // If we don't need to save to the gallery, we can just ask for camera permissions
         else if (!hasPermission(Manifest.permission.CAMERA)) {
-            pluginRequestPermission(Manifest.permission.CAMERA, CAMERA_REQUEST_PERMISSIONS);
+            requestPermission(call, Manifest.permission.CAMERA, CAMERA_REQUEST_PERMISSIONS);
             return false;
         }
         return true;
@@ -160,7 +159,7 @@ public class CameraPlugin extends Plugin {
 
     private boolean checkPhotosPermissions(PluginCall call) {
         if (!hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE)) {
-            pluginRequestPermission(Manifest.permission.READ_EXTERNAL_STORAGE, CAMERA_REQUEST_PERMISSIONS);
+            requestPermission(call, Manifest.permission.READ_EXTERNAL_STORAGE, CAMERA_REQUEST_PERMISSIONS);
             return false;
         }
         return true;
@@ -451,7 +450,8 @@ public class CameraPlugin extends Plugin {
             for (int i = 0; i < grantResults.length; i++) {
                 int result = grantResults[i];
                 String perm = permissions[i];
-                if (result == PackageManager.PERMISSION_DENIED) {
+
+                if (result == PackageManager.PERMISSION_DENIED && perm != Manifest.permission.WRITE_EXTERNAL_STORAGE) {
                     Logger.debug(getLogTag(), "User denied camera permission: " + perm);
                     savedCall.reject(PERMISSION_DENIED_ERROR);
                     return;
