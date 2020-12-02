@@ -16,12 +16,6 @@ declare global {
 declare let ClipboardItem: any;
 
 export class ClipboardWeb extends WebPlugin implements ClipboardPlugin {
-  constructor() {
-    super({
-      name: 'Clipboard',
-    });
-  }
-
   async write(options: ClipboardWriteOptions): Promise<void> {
     if (typeof navigator === 'undefined' || !navigator.clipboard) {
       throw this.unavailable('Clipboard API not available in this browser');

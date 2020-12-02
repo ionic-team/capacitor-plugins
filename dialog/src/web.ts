@@ -10,10 +10,6 @@ import type {
 } from './definitions';
 
 export class DialogWeb extends WebPlugin implements DialogPlugin {
-  constructor() {
-    super({ name: 'Dialog' });
-  }
-
   async alert(options: AlertOptions): Promise<void> {
     window.alert(options.message);
   }

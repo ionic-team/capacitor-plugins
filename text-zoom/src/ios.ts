@@ -22,11 +22,16 @@ export class TextZoomIOS implements TextZoomPlugin {
   }
 
   getRaw(): string {
-    return document.body.style.webkitTextSizeAdjust || '100%';
+    if (typeof document !== 'undefined') {
+      return document.body.style.webkitTextSizeAdjust || '100%';
+    }
+    return '100%';
   }
 
   setRaw(value: string): void {
-    document.body.style.webkitTextSizeAdjust = value;
+    if (typeof document !== 'undefined') {
+      document.body.style.webkitTextSizeAdjust = value;
+    }
   }
 
   textSizePercentageToNumber(percentage: string): number {
