@@ -23,6 +23,10 @@
     "native"
   ],
   "scripts": {
+    "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",
+    "verify:ios": "true",
+    "verify:android": "true",
+    "verify:web": "npm run build",
     "lint": "npm run eslint && npm run prettier -- --check",
     "fmt": "npm run eslint -- --fix && npm run prettier -- --write",
     "eslint": "eslint . --ext ts",
@@ -30,7 +34,6 @@
     "docgen": "docgen --api MotionPlugin --output-readme README.md --output-json dist/docs.json",
     "build": "npm run clean && npm run docgen && tsc && rollup -c rollup.config.js",
     "clean": "rimraf ./dist",
-    "verify": "npm run build",
     "watch": "tsc --watch",
     "prepublishOnly": "npm run build"
   },
