@@ -251,12 +251,14 @@ FilesystemDirectory.ExternalStorage.
 ### requestPermissions()
 
 ```typescript
-requestPermissions() => Promise<void>
+requestPermissions() => Promise<FilesystemPermissionStatus>
 ```
 
 Request read/write permissions.
 Required on Android, only when using <a href="#filesystemdirectory">FilesystemDirectory.Documents</a> or
 FilesystemDirectory.ExternalStorage.
+
+**Returns:** <code>Promise&lt;<a href="#filesystempermissionstatus">FilesystemPermissionStatus</a>&gt;</code>
 
 **Since:** 1.0.0
 

@@ -399,12 +399,12 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
     return this._copy(options, false);
   }
 
-  async requestPermissions(): Promise<void> {
-    throw this.unimplemented('Not implemented on web.');
+  async requestPermissions(): Promise<FilesystemPermissionStatus> {
+    return { publicStorage: "granted" };
   }
 
   async checkPermissions(): Promise<FilesystemPermissionStatus> {
-    throw this.unimplemented('Not implemented on web.');
+    return { publicStorage: "granted" };
   }
 
   /**

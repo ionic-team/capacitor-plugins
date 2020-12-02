@@ -496,5 +496,5 @@ export interface FilesystemPlugin {
    *
    * @since 1.0.0
    */
-  requestPermissions(): Promise<void>;
+  requestPermissions(): Promise<FilesystemPermissionStatus>;
 }
