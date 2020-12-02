@@ -30,9 +30,6 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
   private _writeCmds: string[] = ['add', 'put', 'delete'];
   private _db?: IDBDatabase;
   static _debug = true;
-  constructor() {
-    super({ name: 'Filesystem' });
-  }
   async initDb(): Promise<IDBDatabase> {
     if (this._db !== undefined) {
       return this._db;

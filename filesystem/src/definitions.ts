@@ -1,9 +1,3 @@
-declare module '@capacitor/core' {
-  interface PluginRegistry {
-    Filesystem: FilesystemPlugin;
-  }
-}
-
 export interface FilesystemPermissionStatus {
   publicStorage: PermissionState;
 }
