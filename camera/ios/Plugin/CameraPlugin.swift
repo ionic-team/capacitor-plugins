@@ -234,6 +234,7 @@ private extension CameraPlugin {
                         return
                     }
                     // select the input
+                    imagePicker.sourceType = .camera
                     if settings.direction == .rear, UIImagePickerController.isCameraDeviceAvailable(.rear) {
                         imagePicker.cameraDevice = .rear
                     } else if settings.direction == .front, UIImagePickerController.isCameraDeviceAvailable(.front) {
@@ -313,6 +314,8 @@ private extension CameraPlugin {
         // get the image's metadata from the picker or from the photo album
         if let photoMetadata = info[UIImagePickerController.InfoKey.mediaMetadata] as? [String: Any] {
             result.metadata = photoMetadata
+        }
+        else {
             flags = flags.union([.gallery])
         }
         if let asset = info[UIImagePickerController.InfoKey.phAsset] as? PHAsset {
@@ -328,7 +331,7 @@ private extension CameraPlugin {
             result.overwriteMetadataOrientation(to: 1)
         }
         // conditionally save the image
-        if settings.saveToGallery, flags.contains(.edited) == true, flags.contains(.gallery) == false {
+        if settings.saveToGallery && (flags.contains(.edited) == true || flags.contains(.gallery) == false) {
             UIImageWriteToSavedPhotosAlbum(result.image, nil, nil, nil)
         }
 
