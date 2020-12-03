@@ -5,7 +5,7 @@ import Capacitor
 public class AppPlugin: CAPPlugin {
 
     override public func load() {
-        NotificationCenter.default.addObserver(self, selector: #selector(self.handleUrlOpened(notification:)), name:Notification.Name.capacitorOpenURL, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.handleUrlOpened(notification:)), name: Notification.Name.capacitorOpenURL, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.handleUniversalLink(notification:)), name: Notification.Name.capacitorOpenUniversalLink, object: nil)
         NotificationCenter.default.addObserver(forName: UIApplication.didBecomeActiveNotification, object: nil, queue: OperationQueue.main) { [weak self] (_) in
             self?.notifyListeners("appStateChange", data: [
