@@ -6,10 +6,10 @@ import PhotosUI
 /*
  Runtime detection of iOS 14 with @available and #available is straightforward but that code will fail to compile
  under Xcode 11. So we need to use statements in the form of
- 
+
  #if swift(>=5.3)
  #endif
- 
+
  as a poor proxy for Xcode 12 detection. The conditionals should be removed once Xcode 12 is required.
  */
 
@@ -177,8 +177,7 @@ extension CameraPlugin: UIImagePickerControllerDelegate, UINavigationControllerD
         picker.dismiss(animated: true, completion: nil)
         if let processedImage = processImage(from: info) {
             returnProcessedImage(processedImage)
-        }
-        else {
+        } else {
             self.call?.reject("Error processing image")
         }
     }
@@ -198,7 +197,7 @@ extension CameraPlugin: PHPickerViewControllerDelegate {
             return
         }
         // extract the image
-        result.itemProvider.loadObject(ofClass: UIImage.self) { [weak self] (reading, error) in
+        result.itemProvider.loadObject(ofClass: UIImage.self) { [weak self] (reading, _) in
             if let image = reading as? UIImage {
                 var asset: PHAsset?
                 if let assetId = result.assetIdentifier {
@@ -248,7 +247,7 @@ private extension CameraPlugin {
             ])
         }
     }
-    
+
     func showPrompt() {
         // Build the action sheet
         let alert = UIAlertController(title: settings.userPromptText.title, message: nil, preferredStyle: UIAlertController.Style.actionSheet)
@@ -315,7 +314,7 @@ private extension CameraPlugin {
             })
         }
     }
-    
+
     func presentCameraPicker() {
         let picker = UIImagePickerController()
         picker.delegate = self
@@ -335,7 +334,7 @@ private extension CameraPlugin {
         }
         bridge?.viewController?.present(picker, animated: true, completion: nil)
     }
-    
+
     func presentSystemAppropriateImagePicker() {
         #if swift(>=5.3)
         if #available(iOS 14, *) {
@@ -347,7 +346,7 @@ private extension CameraPlugin {
         presentImagePicker()
         #endif
     }
-    
+
     func presentImagePicker() {
         let picker = UIImagePickerController()
         picker.delegate = self
@@ -362,7 +361,7 @@ private extension CameraPlugin {
         }
         bridge?.viewController?.present(picker, animated: true, completion: nil)
     }
-    
+
     #if swift(>=5.3)
     @available(iOS 14, *)
     func presentPhotoPicker() {
@@ -423,7 +422,7 @@ private extension CameraPlugin {
         }
         return result
     }
-    
+
     func processedImage(from image: UIImage, with metadata: [String: Any]?) -> ProcessedImage {
         var result = ProcessedImage(image: image, metadata: metadata ?? [:])
         // resizing the image only makes sense if we have real values to which to constrain it
