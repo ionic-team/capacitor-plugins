@@ -1,161 +1,634 @@
 import type { PermissionState, PluginListenerHandle } from '@capacitor/core';
 
-export interface LocalNotificationsPermissionStatus {
-  display: PermissionState;
-}
-
 export interface LocalNotificationsPlugin {
-  schedule(options: {
-    notifications: LocalNotification[];
-  }): Promise<LocalNotificationScheduleResult>;
-  getPending(): Promise<LocalNotificationPendingList>;
-  registerActionTypes(options: {
-    types: LocalNotificationActionType[];
-  }): Promise<void>;
-  cancel(pending: LocalNotificationPendingList): Promise<void>;
-  areEnabled(): Promise<LocalNotificationEnabledResult>;
-  createChannel(channel: NotificationChannel): Promise<void>;
-  deleteChannel(channel: NotificationChannel): Promise<void>;
-  listChannels(): Promise<NotificationChannelList>;
-
   /**
-   * Check notification permissions
+   * Schedule one or more local notifications.
    *
    * @since 1.0.0
    */
-  checkPermissions(): Promise<LocalNotificationsPermissionStatus>;
+  schedule(options: ScheduleOptions): Promise<ScheduleResult>;
 
   /**
-   * Request location permissions
+   * Get a list of pending notifications.
    *
    * @since 1.0.0
    */
-  requestPermissions(): Promise<LocalNotificationsPermissionStatus>;
+  getPending(): Promise<PendingResult>;
 
+  /**
+   * Register actions to take when notifications are displayed.
+   *
+   * Only available for iOS and Android.
+   *
+   * @since 1.0.0
+   */
+  registerActionTypes(options: RegisterActionTypesOptions): Promise<void>;
+
+  /**
+   * Cancel pending notifications.
+   *
+   * @since 1.0.0
+   */
+  cancel(options: CancelOptions): Promise<void>;
+
+  /**
+   * Check if notifications are enabled or not.
+   *
+   * @deprecated Use `checkPermissions()` to check if the user has allowed
+   * notifications to be displayed.
+   * @since 1.0.0
+   */
+  areEnabled(): Promise<EnabledResult>;
+
+  /**
+   * Create a notification channel.
+   *
+   * Only available for Android.
+   *
+   * @since 1.0.0
+   */
+  createChannel(channel: Channel): Promise<void>;
+
+  /**
+   * Delete a notification channel.
+   *
+   * Only available for Android.
+   *
+   * @since 1.0.0
+   */
+  deleteChannel(channel: Channel): Promise<void>;
+
+  /**
+   * Get a list of notification channels.
+   *
+   * Only available for Android.
+   *
+   * @since 1.0.0
+   */
+  listChannels(): Promise<ListChannelsResult>;
+
+  /**
+   * Check permission to display local notifications.
+   *
+   * @since 1.0.0
+   */
+  checkPermissions(): Promise<PermissionStatus>;
+
+  /**
+   * Request permission to display local notifications.
+   *
+   * @since 1.0.0
+   */
+  requestPermissions(): Promise<PermissionStatus>;
+
+  /**
+   * Listen for when notifications are displayed.
+   *
+   * @since 1.0.0
+   */
   addListener(
     eventName: 'localNotificationReceived',
-    listenerFunc: (notification: LocalNotification) => void,
-  ): PluginListenerHandle;
-  addListener(
-    eventName: 'localNotificationActionPerformed',
-    listenerFunc: (
-      notificationAction: LocalNotificationActionPerformed,
-    ) => void,
+    listenerFunc: (notification: LocalNotificationSchema) => void,
   ): PluginListenerHandle;
 
   /**
-   * Remove all native listeners for this plugin
+   * Listen for when an action is performed on a notification.
+   *
+   * @since 1.0.0
+   */
+  addListener(
+    eventName: 'localNotificationActionPerformed',
+    listenerFunc: (notificationAction: ActionPerformed) => void,
+  ): PluginListenerHandle;
+
+  /**
+   * Remove all listeners for this plugin.
+   *
+   * @since 1.0.0
    */
   removeAllListeners(): void;
 }
 
-export interface LocalNotificationRequest {
+/**
+ * The object that describes a local notification.
+ *
+ * @since 1.0.0
+ */
+export interface LocalNotificationDescriptor {
+  /**
+   * The notification identifier.
+   *
+   * @since 1.0.0
+   */
   id: string;
 }
 
-export interface LocalNotificationPendingList {
-  notifications: LocalNotificationRequest[];
+export interface ScheduleOptions {
+  /**
+   * The list of notifications to schedule.
+   *
+   * @since 1.0.0
+   */
+  notifications: LocalNotificationSchema[];
 }
 
-export type LocalNotificationScheduleResult = LocalNotificationPendingList;
+export interface ScheduleResult {
+  /**
+   * The list of scheduled notifications.
+   *
+   * @since 1.0.0
+   */
+  notifications: LocalNotificationDescriptor[];
+}
 
-export interface LocalNotificationActionType {
+export interface PendingResult {
+  /**
+   * The list of pending notifications.
+   *
+   * @since 1.0.0
+   */
+  notifications: LocalNotificationDescriptor[];
+}
+
+export interface RegisterActionTypesOptions {
+  /**
+   * The list of action types to register.
+   *
+   * @since 1.0.0
+   */
+  types: ActionType[];
+}
+
+export interface CancelOptions {
+  /**
+   * The list of notifications to cancel.
+   *
+   * @since 1.0.0
+   */
+  notifications: LocalNotificationDescriptor[];
+}
+
+/**
+ * A collection of actions.
+ *
+ * @since 1.0.0
+ */
+export interface ActionType {
+  /**
+   * The ID of the action type.
+   *
+   * Referenced in notifications by the `actionTypeId` key.
+   *
+   * @since 1.0.0
+   */
   id: string;
-  actions?: LocalNotificationAction[];
+
+  /**
+   * The list of actions associated with this action type.
+   *
+   * @since 1.0.0
+   */
+  actions?: Action[];
+
+  /**
+   * Sets `hiddenPreviewsBodyPlaceholder` of the
+   * [`UNNotificationCategory`](https://developer.apple.com/documentation/usernotifications/unnotificationcategory).
+   *
+   * Only available for iOS 11+.
+   *
+   * @since 1.0.0
+   */
   iosHiddenPreviewsBodyPlaceholder?: string; // >= iOS 11 only
+
+  /**
+   * Sets `customDismissAction` in the options of the
+   * [`UNNotificationCategory`](https://developer.apple.com/documentation/usernotifications/unnotificationcategory).
+   *
+   * Only available for iOS.
+   *
+   * @since 1.0.0
+   */
   iosCustomDismissAction?: boolean;
+
+  /**
+   * Sets `allowInCarPlay` in the options of the
+   * [`UNNotificationCategory`](https://developer.apple.com/documentation/usernotifications/unnotificationcategory).
+   *
+   * Only available for iOS.
+   *
+   * @since 1.0.0
+   */
   iosAllowInCarPlay?: boolean;
-  iosHiddenPreviewsShowTitle?: boolean; // >= iOS 11 only
-  iosHiddenPreviewsShowSubtitle?: boolean; // >= iOS 11 only
+
+  /**
+   * Sets `hiddenPreviewsShowTitle` in the options of the
+   * [`UNNotificationCategory`](https://developer.apple.com/documentation/usernotifications/unnotificationcategory).
+   *
+   * Only available for iOS 11+.
+   *
+   * @since 1.0.0
+   */
+  iosHiddenPreviewsShowTitle?: boolean;
+
+  /**
+   * Sets `hiddenPreviewsShowSubtitle` in the options of the
+   * [`UNNotificationCategory`](https://developer.apple.com/documentation/usernotifications/unnotificationcategory).
+   *
+   * Only available for iOS 11+.
+   *
+   * @since 1.0.0
+   */
+  iosHiddenPreviewsShowSubtitle?: boolean;
 }
 
-export interface LocalNotificationAction {
+/**
+ * An action that can be taken when a notification is displayed.
+ *
+ * @since 1.0.0
+ */
+export interface Action {
+  /**
+   * The action identifier.
+   *
+   * Referenced in the `'localNotificationActionPerformed'` event as
+   * `actionId`.
+   *
+   * @since 1.0.0
+   */
   id: string;
+
+  /**
+   * The title text to display for this action.
+   *
+   * @since 1.0.0
+   */
   title: string;
+
+  /**
+   * Sets `authenticationRequired` in the options of the
+   * [`UNNotificationAction`](https://developer.apple.com/documentation/usernotifications/unnotificationaction).
+   *
+   * Only available for iOS.
+   *
+   * @since 1.0.0
+   */
   requiresAuthentication?: boolean;
+
+  /**
+   * Sets `foreground` in the options of the
+   * [`UNNotificationAction`](https://developer.apple.com/documentation/usernotifications/unnotificationaction).
+   *
+   * Only available for iOS.
+   *
+   * @since 1.0.0
+   */
   foreground?: boolean;
+
+  /**
+   * Sets `destructive` in the options of the
+   * [`UNNotificationAction`](https://developer.apple.com/documentation/usernotifications/unnotificationaction).
+   *
+   * Only available for iOS.
+   *
+   * @since 1.0.0
+   */
   destructive?: boolean;
+
+  /**
+   * Use a `UNTextInputNotificationAction` instead of a `UNNotificationAction`.
+   *
+   * Only available for iOS.
+   *
+   * @since 1.0.0
+   */
   input?: boolean;
+
+  /**
+   * Sets `textInputButtonTitle` on the
+   * [`UNTextInputNotificationAction`](https://developer.apple.com/documentation/usernotifications/untextinputnotificationaction).
+   *
+   * Only available for iOS when `input` is `true`.
+   *
+   * @since 1.0.0
+   */
   inputButtonTitle?: string;
+
+  /**
+   * Sets `textInputPlaceholder` on the
+   * [`UNTextInputNotificationAction`](https://developer.apple.com/documentation/usernotifications/untextinputnotificationaction).
+   *
+   * Only available for iOS when `input` is `true`.
+   *
+   * @since 1.0.0
+   */
   inputPlaceholder?: string;
 }
 
-export interface LocalNotificationAttachment {
+/**
+ * Represents a notification attachment.
+ *
+ * @since 1.0.0
+ */
+export interface Attachment {
+  /**
+   * The attachment identifier.
+   *
+   * @since 1.0.0
+   */
   id: string;
+
+  /**
+   * The URL to the attachment.
+   *
+   * Use the `res` scheme to reference web assets, e.g.
+   * `res:///assets/img/icon.png`. Also accepts `file` URLs.
+   *
+   * @since 1.0.0
+   */
   url: string;
-  options?: LocalNotificationAttachmentOptions;
+
+  /**
+   * Attachment options.
+   *
+   * @since 1.0.0
+   */
+  options?: AttachmentOptions;
 }
 
-export interface LocalNotificationAttachmentOptions {
+export interface AttachmentOptions {
+  /**
+   * Sets the `UNNotificationAttachmentOptionsTypeHintKey` key in the hashable
+   * options of
+   * [`UNNotificationAttachment`](https://developer.apple.com/documentation/usernotifications/unnotificationattachment).
+   *
+   * Only available for iOS.
+   *
+   * @since 1.0.0
+   */
   iosUNNotificationAttachmentOptionsTypeHintKey?: string;
+
+  /**
+   * Sets the `UNNotificationAttachmentOptionsThumbnailHiddenKey` key in the
+   * hashable options of
+   * [`UNNotificationAttachment`](https://developer.apple.com/documentation/usernotifications/unnotificationattachment).
+   *
+   * Only available for iOS.
+   *
+   * @since 1.0.0
+   */
   iosUNNotificationAttachmentOptionsThumbnailHiddenKey?: string;
+
+  /**
+   * Sets the `UNNotificationAttachmentOptionsThumbnailClippingRectKey` key in
+   * the hashable options of
+   * [`UNNotificationAttachment`](https://developer.apple.com/documentation/usernotifications/unnotificationattachment).
+   *
+   * Only available for iOS.
+   *
+   * @since 1.0.0
+   */
   iosUNNotificationAttachmentOptionsThumbnailClippingRectKey?: string;
+
+  /**
+   * Sets the `UNNotificationAttachmentOptionsThumbnailTimeKey` key in the
+   * hashable options of
+   * [`UNNotificationAttachment`](https://developer.apple.com/documentation/usernotifications/unnotificationattachment).
+   *
+   * Only available for iOS.
+   *
+   * @since 1.0.0
+   */
   iosUNNotificationAttachmentOptionsThumbnailTimeKey?: string;
 }
 
-export interface LocalNotification {
-  title: string;
-  body: string;
-  id: number;
-  schedule?: LocalNotificationSchedule;
+export interface LocalNotificationSchema {
   /**
-   * Name of the audio file with extension.
-   * On iOS the file should be in the app bundle.
-   * On Android the file should be on res/raw folder.
-   * Doesn't work on Android version 26+ (Android O and newer), for
-   * Recommended format is .wav because is supported by both platforms.
+   * The title of the notification.
+   *
+   * @since 1.0.0
+   */
+  title: string;
+
+  /**
+   * The body of the notification, shown below the title.
+   *
+   * @since 1.0.0
+   */
+  body: string;
+
+  /**
+   * The notification identifier.
+   *
+   * @since 1.0.0
+   */
+  id: number;
+
+  /**
+   * Schedule this notification for a later time.
+   *
+   * @since 1.0.0
+   */
+  schedule?: Schedule;
+
+  /**
+   * Name of the audio file to play when this notification is displayed.
+   *
+   * Include the file extension with the filename.
+   *
+   * On iOS, the file should be in the app bundle.
+   * On Android, the file should be in res/raw folder.
+   *
+   * Recommended format is `.wav` because is supported by both iOS and Android.
+   *
+   * Only available for iOS and Android 26+.
+   *
+   * @since 1.0.0
    */
   sound?: string;
+
   /**
-   * Android-only: set a custom statusbar icon.
-   * If set, it overrides default icon from capacitor.config.json
+   * Set a custom status bar icon.
+   *
+   * If set, this overrides the default icon from Capacitor configuration.
+   *
+   * Only available for Android.
+   *
+   * @since 1.0.0
    */
   smallIcon?: string;
+
   /**
-   * Android only: set the color of the notification icon
+   * Set the color of the notification icon.
+   *
+   * Only available for Android.
+   *
+   * @since 1.0.0
    */
   iconColor?: string;
-  attachments?: LocalNotificationAttachment[];
-  actionTypeId?: string;
-  extra?: any;
+
   /**
-   * iOS only: set the thread identifier for notification grouping
+   * Set attachments for this notification.
+   *
+   * @since 1.0.0
+   */
+  attachments?: Attachment[];
+
+  /**
+   * Associate an action type with this notification.
+   *
+   * @since 1.0.0
+   */
+  actionTypeId?: string;
+
+  /**
+   * Set extra data to store within this notification.
+   *
+   * @since 1.0.0
+   */
+  extra?: any;
+
+  /**
+   * Used to group multiple notifications.
+   *
+   * Sets `threadIdentifier` on the
+   * [`UNMutableNotificationContent`](https://developer.apple.com/documentation/usernotifications/unmutablenotificationcontent).
+   *
+   * Only available for iOS.
+   *
+   * @since 1.0.0
    */
   threadIdentifier?: string;
+
   /**
-   * iOS 12+ only: set the summary argument for notification grouping
+   * The string this notification adds to the category's summary format string.
+   *
+   * Sets `summaryArgument` on the
+   * [`UNMutableNotificationContent`](https://developer.apple.com/documentation/usernotifications/unmutablenotificationcontent).
+   *
+   * Only available for iOS 12+.
+   *
+   * @since 1.0.0
    */
   summaryArgument?: string;
+
   /**
-   * Android only: set the group identifier for notification grouping, like
-   * threadIdentifier on iOS.
+   * Used to group multiple notifications.
+   *
+   * Calls `setGroup()` on
+   * [`NotificationCompat.Builder`](https://developer.android.com/reference/androidx/core/app/NotificationCompat.Builder)
+   * with the provided value.
+   *
+   * Only available for Android.
+   *
+   * @since 1.0.0
    */
   group?: string;
+
   /**
-   * Android only: designate this notification as the summary for a group
-   * (should be used with the `group` property).
+   * If true, this notification becomes the summary for a group of
+   * notifications.
+   *
+   * Calls `setGroupSummary()` on
+   * [`NotificationCompat.Builder`](https://developer.android.com/reference/androidx/core/app/NotificationCompat.Builder)
+   * with the provided value.
+   *
+   * Only available for Android when using `group`.
+   *
+   * @since 1.0.0
    */
   groupSummary?: boolean;
+
   /**
-   * Android only: set the notification channel on which local notification
-   * will generate. If channel with the given name does not exist then the
-   * notification will not fire. If not provided, it will use the default channel.
+   * Specifies the channel the notification should be delivered on.
+   *
+   * If channel with the given name does not exist then the notification will
+   * not fire. If not provided, it will use the default channel.
+   *
+   * Calls `setChannelId()` on
+   * [`NotificationCompat.Builder`](https://developer.android.com/reference/androidx/core/app/NotificationCompat.Builder)
+   * with the provided value.
+   *
+   * Only available for Android 26+.
+   *
+   * @since 1.0.0
    */
   channelId?: string;
+
   /**
-   * Android only: set the notification ongoing.
-   * If set to true the notification can't be swiped away.
+   * If true, the notification can't be swiped away.
+   *
+   * Calls `setOngoing()` on
+   * [`NotificationCompat.Builder`](https://developer.android.com/reference/androidx/core/app/NotificationCompat.Builder)
+   * with the provided value.
+   *
+   * Only available for Android.
+   *
+   * @since 1.0.0
    */
   ongoing?: boolean;
+
   /**
-   * Android only: set the notification to be removed automatically when the user clicks on it
+   * If true, the notification is canceled when the user clicks on it.
+   *
+   * Calls `setAutoCancel()` on
+   * [`NotificationCompat.Builder`](https://developer.android.com/reference/androidx/core/app/NotificationCompat.Builder)
+   * with the provided value.
+   *
+   * Only available for Android.
+   *
+   * @since 1.0.0
    */
   autoCancel?: boolean;
 }
 
-export interface LocalNotificationSchedule {
+/**
+ * Represents a schedule for a notification.
+ *
+ * Use either `at`, `on`, or `every` to schedule notifications.
+ *
+ * @since 1.0.0
+ */
+export interface Schedule {
+  /**
+   * Schedule a notification at a specific date and time.
+   *
+   * @since 1.0.0
+   */
   at?: Date;
+
+  /**
+   * Repeat delivery of this notification at the date and time specified by
+   * `at`.
+   *
+   * Only available for iOS and Android.
+   *
+   * @since 1.0.0
+   */
   repeats?: boolean;
+
+  /**
+   * Schedule a notification on particular interval(s).
+   *
+   * This is similar to scheduling [cron](https://en.wikipedia.org/wiki/Cron)
+   * jobs.
+   *
+   * Only available for iOS and Android.
+   *
+   * @since 1.0.0
+   */
+  on?: {
+    year?: number;
+    month?: number;
+    day?: number;
+    hour?: number;
+    minute?: number;
+  };
+
+  /**
+   * Schedule a notification on a particular interval.
+   *
+   * @since 1.0.0
+   */
   every?:
     | 'year'
     | 'month'
@@ -165,41 +638,146 @@ export interface LocalNotificationSchedule {
     | 'hour'
     | 'minute'
     | 'second';
-  count?: number;
-  on?: {
-    year?: number;
-    month?: number;
-    day?: number;
-    hour?: number;
-    minute?: number;
-  };
-}
 
-export interface LocalNotificationActionPerformed {
-  actionId: string;
-  inputValue?: string;
-  notification: LocalNotification;
-}
-
-export interface LocalNotificationEnabledResult {
   /**
-   * Whether the device has Local Notifications enabled or not
+   * Limit the number times a notification is delivered by the interval
+   * specified by `every`.
+   *
+   * @since 1.0.0
+   */
+  count?: number;
+}
+
+export interface ListChannelsResult {
+  /**
+   * The list of notification channels.
+   *
+   * @since 1.0.0
+   */
+  channels: Channel[];
+}
+
+export interface PermissionStatus {
+  /**
+   * Permission state of displaying notifications.
+   *
+   * @since 1.0.0
+   */
+  display: PermissionState;
+}
+
+export interface ActionPerformed {
+  /**
+   * The identifier of the performed action.
+   *
+   * @since 1.0.0
+   */
+  actionId: string;
+
+  /**
+   * The value entered by the user on the notification.
+   *
+   * Only available on iOS for notifications with `input` set to `true`.
+   *
+   * @since 1.0.0
+   */
+  inputValue?: string;
+
+  /**
+   * The original notification schema.
+   *
+   * @since 1.0.0
+   */
+  notification: LocalNotificationSchema;
+}
+
+/**
+ * @deprecated
+ */
+export interface EnabledResult {
+  /**
+   * Whether or not the device has local notifications enabled.
+   *
+   * @since 1.0.0
    */
   value: boolean;
 }
 
-export interface NotificationChannel {
+export interface Channel {
+  /**
+   * The channel identifier.
+   *
+   * @since 1.0.0
+   */
   id: string;
-  name: string;
-  description?: string;
-  sound?: string;
-  importance: 1 | 2 | 3 | 4 | 5;
-  visibility?: -1 | 0 | 1;
-  lights?: boolean;
-  lightColor?: string;
-  vibration?: boolean;
-}
 
-export interface NotificationChannelList {
-  channels: NotificationChannel[];
+  /**
+   * The channel name.
+   *
+   * @since 1.0.0
+   */
+  name: string;
+
+  /**
+   * The channel description.
+   *
+   * @since 1.0.0
+   */
+  description?: string;
+
+  /**
+   * The sound that is played for notifications posted to this channel.
+   *
+   * @since 1.0.0
+   */
+  sound?: string;
+
+  /**
+   * The level of interruption of notifications posted to this channel.
+   *
+   * See the `PRIORITY_*` constants of
+   * [`NotificationCompat`](https://developer.android.com/reference/androidx/core/app/NotificationCompat)
+   * for more information.
+   *
+   * @since 1.0.0
+   */
+  importance: 1 | 2 | 3 | 4 | 5;
+
+  /**
+   * The visibility level of notifications posted to this channel.
+   *
+   * See the `VISIBILITY_*` constants of
+   * [`NotificationCompat`](https://developer.android.com/reference/androidx/core/app/NotificationCompat)
+   * for more information.
+   *
+   * @since 1.0.0
+   */
+  visibility?: -1 | 0 | 1;
+
+  /**
+   * Whether or not notifications posted to this channel should display
+   * notification lights.
+   *
+   * @since 1.0.0
+   */
+  lights?: boolean;
+
+  /**
+   * The color of notification lights when using the `lights` option.
+   *
+   * This can be any value that
+   * [`Color.parseColor()`](https://developer.android.com/reference/android/graphics/Color#parseColor(java.lang.String))
+   * expects.
+   *
+   * @since 1.0.0
+   */
+  lightColor?: string;
+
+  /**
+   * Whether or not notifications posted to this channel should vibrate the
+   * device.
+   *
+   * @since 1.0.0
+   */
+  vibration?: boolean;
 }

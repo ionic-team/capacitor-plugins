@@ -1,22 +1,6 @@
 import { registerPlugin } from '@capacitor/core';
 
-import type {
-  LocalNotification,
-  LocalNotificationAction,
-  LocalNotificationActionPerformed,
-  LocalNotificationActionType,
-  LocalNotificationAttachment,
-  LocalNotificationAttachmentOptions,
-  LocalNotificationEnabledResult,
-  LocalNotificationPendingList,
-  LocalNotificationRequest,
-  LocalNotificationSchedule,
-  LocalNotificationScheduleResult,
-  LocalNotificationsPlugin,
-  LocalNotificationsPermissionStatus,
-  NotificationChannel,
-  NotificationChannelList,
-} from './definitions';
+import type { LocalNotificationsPlugin } from './definitions';
 
 const LocalNotifications = registerPlugin<LocalNotificationsPlugin>(
   'LocalNotifications',
@@ -25,20 +9,5 @@ const LocalNotifications = registerPlugin<LocalNotificationsPlugin>(
   },
 );
 
-export {
-  LocalNotification,
-  LocalNotificationAction,
-  LocalNotificationActionPerformed,
-  LocalNotificationActionType,
-  LocalNotificationAttachment,
-  LocalNotificationAttachmentOptions,
-  LocalNotificationEnabledResult,
-  LocalNotificationPendingList,
-  LocalNotificationRequest,
-  LocalNotificationSchedule,
-  LocalNotificationScheduleResult,
-  LocalNotifications,
-  LocalNotificationsPermissionStatus,
-  NotificationChannel,
-  NotificationChannelList,
-};
+export * from './definitions';
+export { LocalNotifications };

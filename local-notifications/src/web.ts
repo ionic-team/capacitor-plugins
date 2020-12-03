@@ -2,35 +2,33 @@ import type { PermissionState } from '@capacitor/core';
 import { WebPlugin } from '@capacitor/core';
 
 import type {
-  LocalNotification,
-  LocalNotificationEnabledResult,
-  LocalNotificationPendingList,
-  LocalNotificationScheduleResult,
-  LocalNotificationsPermissionStatus,
+  EnabledResult,
+  ListChannelsResult,
+  LocalNotificationSchema,
   LocalNotificationsPlugin,
-  NotificationChannelList,
+  PermissionStatus,
+  ScheduleOptions,
+  ScheduleResult,
 } from './definitions';
 
 export class LocalNotificationsWeb
   extends WebPlugin
   implements LocalNotificationsPlugin {
-  protected pending: LocalNotification[] = [];
+  protected pending: LocalNotificationSchema[] = [];
 
   async createChannel(): Promise<void> {
-    throw this.unavailable('Feature not available for web.');
+    throw this.unimplemented('Not implemented on web.');
   }
 
   async deleteChannel(): Promise<void> {
-    throw this.unavailable('Feature not available for web.');
+    throw this.unimplemented('Not implemented on web.');
   }
 
-  async listChannels(): Promise<NotificationChannelList> {
-    throw this.unavailable('Feature not available for web.');
+  async listChannels(): Promise<ListChannelsResult> {
+    throw this.unimplemented('Not implemented on web.');
   }
 
-  async schedule(options: {
-    notifications: LocalNotification[];
-  }): Promise<LocalNotificationScheduleResult> {
+  async schedule(options: ScheduleOptions): Promise<ScheduleResult> {
     for (const notification of options.notifications) {
       this.sendNotification(notification);
     }
@@ -42,7 +40,7 @@ export class LocalNotificationsWeb
     };
   }
 
-  async getPending(): Promise<LocalNotificationPendingList> {
+  async getPending(): Promise<ScheduleResult> {
     return {
       notifications: this.pending.map(notification => ({
         id: notification.id.toString(),
@@ -51,17 +49,17 @@ export class LocalNotificationsWeb
   }
 
   async registerActionTypes(): Promise<void> {
-    throw this.unavailable('Feature not available for web.');
+    throw this.unimplemented('Not implemented on web.');
   }
 
-  async cancel(pending: LocalNotificationPendingList): Promise<void> {
+  async cancel(pending: ScheduleResult): Promise<void> {
     this.pending = this.pending.filter(
       notification =>
         !pending.notifications.find(n => n.id === notification.id.toString()),
     );
   }
 
-  async areEnabled(): Promise<LocalNotificationEnabledResult> {
+  async areEnabled(): Promise<EnabledResult> {
     const { display } = await this.checkPermissions();
 
     return {
@@ -69,7 +67,7 @@ export class LocalNotificationsWeb
     };
   }
 
-  async requestPermissions(): Promise<LocalNotificationsPermissionStatus> {
+  async requestPermissions(): Promise<PermissionStatus> {
     const display = this.transformNotificationPermission(
       await Notification.requestPermission(),
     );
@@ -77,7 +75,7 @@ export class LocalNotificationsWeb
     return { display };
   }
 
-  async checkPermissions(): Promise<LocalNotificationsPermissionStatus> {
+  async checkPermissions(): Promise<PermissionStatus> {
     const display = this.transformNotificationPermission(
       Notification.permission,
     );
@@ -99,7 +97,7 @@ export class LocalNotificationsWeb
   }
 
   protected sendPending(): void {
-    const toRemove: LocalNotification[] = [];
+    const toRemove: LocalNotificationSchema[] = [];
     const now = new Date().getTime();
 
     for (const notification of this.pending) {
@@ -117,7 +115,7 @@ export class LocalNotificationsWeb
     );
   }
 
-  protected sendNotification(notification: LocalNotification): void {
+  protected sendNotification(notification: LocalNotificationSchema): void {
     if (notification.schedule?.at) {
       const diff = notification.schedule.at.getTime() - new Date().getTime();
 
@@ -128,7 +126,9 @@ export class LocalNotificationsWeb
     }
   }
 
-  protected buildNotification(notification: LocalNotification): Notification {
+  protected buildNotification(
+    notification: LocalNotificationSchema,
+  ): Notification {
     return new Notification(notification.title, {
       body: notification.body,
     });
