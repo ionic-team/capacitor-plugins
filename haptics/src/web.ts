@@ -9,10 +9,6 @@ import type {
 import { HapticsImpactStyle, HapticsNotificationType } from './definitions';
 
 export class HapticsWeb extends WebPlugin implements HapticsPlugin {
-  constructor() {
-    super({ name: 'Haptics' });
-  }
-
   selectionStarted = false;
 
   async impact(options?: HapticsImpactOptions): Promise<void> {

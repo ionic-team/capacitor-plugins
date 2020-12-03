@@ -1,16 +1,10 @@
-import type { PluginImplementations } from '@capacitor/core';
-import { Plugins, registerPlugin } from '@capacitor/core';
+import { registerPlugin } from '@capacitor/core';
 
 import type { NetworkPlugin } from './definitions';
 import { NetworkStatus } from './definitions';
-import { NetworkWeb } from './web';
 
-const implementations: PluginImplementations<NetworkPlugin> = {
-  android: Plugins.Network,
-  ios: Plugins.Network,
-  web: new NetworkWeb(),
-};
-
-const Network = registerPlugin('Network', implementations).getImplementation();
+const Network = registerPlugin<NetworkPlugin>('Network', {
+  web: () => import('./web').then(m => new m.NetworkWeb()),
+});
 
 export { Network, NetworkStatus };

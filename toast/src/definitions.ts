@@ -1,9 +1,3 @@
-declare module '@capacitor/core' {
-  interface PluginRegistry {
-    Toast: ToastPlugin;
-  }
-}
-
 export interface ToastShowOptions {
   /**
    * Text to display on the Toast

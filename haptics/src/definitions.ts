@@ -1,9 +1,3 @@
-declare module '@capacitor/core' {
-  interface PluginRegistry {
-    Haptics: HapticsPlugin;
-  }
-}
-
 export interface HapticsPlugin {
   /**
    * Trigger a haptics "impact" feedback

@@ -1,9 +1,3 @@
-declare module '@capacitor/core' {
-  interface PluginRegistry {
-    StatusBar: StatusBarPlugin;
-  }
-}
-
 export interface StatusBarStyleOptions {
   /**
    * Style of the text of the status bar.
