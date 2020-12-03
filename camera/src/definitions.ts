@@ -1,11 +1,3 @@
-import {} from '@capacitor/core';
-
-declare module '@capacitor/core' {
-  interface PluginRegistry {
-    Camera: CameraPlugin;
-  }
-}
-
 export type CameraPermissionState = PermissionState | 'limited';
 
 export type CameraPermissionType = 'camera' | 'photos';
@@ -48,28 +40,40 @@ export interface CameraPlugin {
 export interface CameraOptions {
   /**
    * The quality of image to return as JPEG, from 0-100
+   *
+   * @since 1.0.0
    */
   quality?: number;
   /**
    * Whether to allow the user to crop or make small edits (platform specific)
+   *
+   * @since 1.0.0
    */
   allowEditing?: boolean;
   /**
    * How the data should be returned. Currently, only 'Base64', 'DataUrl' or 'Uri' is supported
+   *
+   * @since 1.0.0
    */
   resultType: CameraResultType;
   /**
    * Whether to save the photo to the gallery.
    * If the photo was picked from the gallery, it will only be saved if edited.
-   * Default: false
+   * @default: false
+   *
+   * @since 1.0.0
    */
   saveToGallery?: boolean;
   /**
    * The width of the saved image
+   *
+   * @since 1.0.0
    */
   width?: number;
   /**
    * The height of the saved image
+   *
+   * @since 1.0.0
    */
   height?: number;
   /**
@@ -81,29 +85,37 @@ export interface CameraOptions {
    *
    * A future major version will change this behavior to be default,
    * and may also remove this option altogether.
-   * Default: false
+   * @default: false
+   *
+   * @since 1.0.0
    */
   preserveAspectRatio?: boolean;
   /**
    * Whether to automatically rotate the image "up" to correct for orientation
    * in portrait mode
-   * Default: true
+   * @default: true
    */
   correctOrientation?: boolean;
   /**
    * The source to get the photo from. By default this prompts the user to select
    * either the photo album or take a photo.
-   * Default: CameraSource.Prompt
+   * @default: CameraSource.prompt
+   *
+   * @since 1.0.0
    */
   source?: CameraSource;
   /**
    * iOS and Web only: The camera direction.
-   * Default: CameraDirection.Rear
+   * @default: CameraDirection.rear
+   *
+   * @since 1.0.0
    */
   direction?: CameraDirection;
 
   /**
    * iOS only: The presentation style of the Camera. Defaults to fullscreen.
+   *
+   * @since 1.0.0
    */
   presentationStyle?: 'fullscreen' | 'popover';
 
@@ -113,6 +125,8 @@ export interface CameraOptions {
    * To always use file input, set this to `true`.
    *
    * Learn more about PWA Elements: https://capacitorjs.com/docs/pwa-elements
+   *
+   * @since 1.0.0
    */
   webUseInput?: boolean;
 
@@ -123,6 +137,8 @@ export interface CameraOptions {
    *   promptLabelCancel  : 'Cancel'      // iOS only
    *   promptLabelPhoto   : 'From Photos'
    *   promptLabelPicture : 'Take Picture'
+   *
+   * @since 1.0.0
    */
   promptLabelHeader?: string;
   promptLabelCancel?: string;
@@ -133,24 +149,34 @@ export interface CameraOptions {
 export interface CameraPhoto {
   /**
    * The base64 encoded string representation of the image, if using CameraResultType.Base64.
+   *
+   * @since 1.0.0
    */
   base64String?: string;
   /**
    * The url starting with 'data:image/jpeg;base64,' and the base64 encoded string representation of the image, if using CameraResultType.DataUrl.
+   *
+   * @since 1.0.0
    */
   dataUrl?: string;
   /**
    * If using CameraResultType.Uri, the path will contain a full,
    * platform-specific file URL that can be read later using the Filsystem API.
+   *
+   * @since 1.0.0
    */
   path?: string;
   /**
    * webPath returns a path that can be used to set the src attribute of an image for efficient
    * loading and rendering.
+   *
+   * @since 1.0.0
    */
   webPath?: string;
   /**
    * Exif data, if any, retrieved from the image
+   *
+   * @since 1.0.0
    */
   exif?: any;
   /**
@@ -158,6 +184,8 @@ export interface CameraPhoto {
    *
    * iOS and Android only support jpeg.
    * Web supports jpeg and png. gif is only supported if using file input.
+   *
+   * @since 1.0.0
    */
   format: string;
 }
