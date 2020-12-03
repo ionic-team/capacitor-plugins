@@ -1,13 +1,22 @@
 import Foundation
 import Capacitor
 import Photos
+import PhotosUI
+
+/*
+ Runtime detection of iOS 14 with @available and #available is straightforward but that code will fail to compile
+ under Xcode 11. So we need to use statements in the form of
+ 
+ #if swift(>=5.3)
+ #endif
+ 
+ as a poor proxy for Xcode 12 detection. The conditionals should be removed once Xcode 12 is required.
+ */
 
 @objc(CAPCameraPlugin)
 public class CameraPlugin: CAPPlugin {
     private var call: CAPPluginCall?
     private var settings = CameraSettings()
-    private var imagePicker: UIImagePickerController?
-
     private let defaultSource = CameraSource.prompt
     private let defaultDirection = CameraDirection.rear
 
@@ -21,7 +30,15 @@ public class CameraPlugin: CAPPlugin {
             case .camera:
                 state = AVCaptureDevice.authorizationStatus(for: .video).authorizationState
             case .photos:
+                #if swift(>=5.3)
+                if #available(iOS 14, *) {
+                    state = PHPhotoLibrary.authorizationStatus(for: .readWrite).authorizationState
+                } else {
+                    state = PHPhotoLibrary.authorizationStatus().authorizationState
+                }
+                #else
                 state = PHPhotoLibrary.authorizationStatus().authorizationState
+                #endif
             }
             result[permission.rawValue] = state
         }
@@ -50,10 +67,24 @@ public class CameraPlugin: CAPPlugin {
                 }
             case .photos:
                 group.enter()
+                #if swift(>=5.3)
+                if #available(iOS 14, *) {
+                    PHPhotoLibrary.requestAuthorization(for: .readWrite) { (status) in
+                        result[permission.rawValue] = status.authorizationState
+                        group.leave()
+                    }
+                } else {
+                    PHPhotoLibrary.requestAuthorization({ (status) in
+                        result[permission.rawValue] = status.authorizationState
+                        group.leave()
+                    })
+                }
+                #else
                 PHPhotoLibrary.requestAuthorization({ (status) in
                     result[permission.rawValue] = status.authorizationState
                     group.leave()
                 })
+                #endif
             }
         }
         group.notify(queue: DispatchQueue.main) {
@@ -74,10 +105,6 @@ public class CameraPlugin: CAPPlugin {
         }
 
         DispatchQueue.main.async {
-            self.imagePicker = UIImagePickerController()
-            self.imagePicker?.delegate = self
-            self.imagePicker?.allowsEditing = self.settings.allowEditing
-
             switch self.settings.source {
             case .prompt:
                 self.showPrompt()
@@ -147,12 +174,49 @@ extension CameraPlugin: UIImagePickerControllerDelegate, UINavigationControllerD
     }
 
     public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
-
-        guard let processedImage = self.processImage(from: info) else {
+        picker.dismiss(animated: true, completion: nil)
+        if let processedImage = processImage(from: info) {
+            returnProcessedImage(processedImage)
+        }
+        else {
             self.call?.reject("Error processing image")
+        }
+    }
+}
+
+#if swift(>=5.3)
+@available(iOS 14, *)
+extension CameraPlugin: PHPickerViewControllerDelegate {
+    public func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+        picker.dismiss(animated: true, completion: nil)
+        guard let result = results.first else {
+            self.call?.reject("User cancelled photos app")
             return
         }
+        guard result.itemProvider.canLoadObject(ofClass: UIImage.self) else {
+            self.call?.reject("Error loading image")
+            return
+        }
+        // extract the image
+        result.itemProvider.loadObject(ofClass: UIImage.self) { [weak self] (reading, error) in
+            if let image = reading as? UIImage {
+                var asset: PHAsset?
+                if let assetId = result.assetIdentifier {
+                    asset = PHAsset.fetchAssets(withLocalIdentifiers: [assetId], options: nil).firstObject
+                }
+                if let processedImage = self?.processedImage(from: image, with: asset?.imageData) {
+                    self?.returnProcessedImage(processedImage)
+                    return
+                }
+            }
+            self?.call?.reject("Error loading image")
+        }
+    }
+}
+#endif
 
+private extension CameraPlugin {
+    func returnProcessedImage(_ processedImage: ProcessedImage) {
         guard let jpeg = processedImage.generateJPEG(with: settings.jpegQuality) else {
             self.call?.reject("Unable to convert image to jpeg")
             return
@@ -183,12 +247,8 @@ extension CameraPlugin: UIImagePickerControllerDelegate, UINavigationControllerD
                 "format": "jpeg"
             ])
         }
-
-        picker.dismiss(animated: true, completion: nil)
     }
-}
-
-private extension CameraPlugin {
+    
     func showPrompt() {
         // Build the action sheet
         let alert = UIAlertController(title: settings.userPromptText.title, message: nil, preferredStyle: UIAlertController.Style.actionSheet)
@@ -225,21 +285,7 @@ private extension CameraPlugin {
         AVCaptureDevice.requestAccess(for: .video) { [weak self] granted in
             if granted {
                 DispatchQueue.main.async {
-                    guard let imagePicker = self?.imagePicker, let settings = self?.settings else {
-                        return
-                    }
-                    // select the input
-                    imagePicker.sourceType = .camera
-                    if settings.direction == .rear, UIImagePickerController.isCameraDeviceAvailable(.rear) {
-                        imagePicker.cameraDevice = .rear
-                    } else if settings.direction == .front, UIImagePickerController.isCameraDeviceAvailable(.front) {
-                        imagePicker.cameraDevice = .front
-                    }
-                    // present
-                    imagePicker.modalPresentationStyle = settings.presentationStyle
-                    imagePicker.sourceType = .camera
-
-                    self?.bridge?.viewController?.present(imagePicker, animated: true, completion: nil)
+                    self?.presentCameraPicker()
                 }
             } else {
                 self?.call?.reject("User denied access to camera")
@@ -256,12 +302,12 @@ private extension CameraPlugin {
         }
         // we either already have permission or can prompt
         if authStatus == .authorized {
-            presentPhotoPicker()
+            presentSystemAppropriateImagePicker()
         } else {
             PHPhotoLibrary.requestAuthorization({ [weak self] (status) in
                 if status == PHAuthorizationStatus.authorized {
                     DispatchQueue.main.async { [weak self] in
-                        self?.presentPhotoPicker()
+                        self?.presentSystemAppropriateImagePicker()
                     }
                 } else {
                     self?.call?.reject("User denied access to photos")
@@ -269,19 +315,71 @@ private extension CameraPlugin {
             })
         }
     }
-
-    func presentPhotoPicker() {
-        guard let imagePicker = imagePicker else {
-            return
+    
+    func presentCameraPicker() {
+        let picker = UIImagePickerController()
+        picker.delegate = self
+        picker.allowsEditing = self.settings.allowEditing
+        // select the input
+        picker.sourceType = .camera
+        if settings.direction == .rear, UIImagePickerController.isCameraDeviceAvailable(.rear) {
+            picker.cameraDevice = .rear
+        } else if settings.direction == .front, UIImagePickerController.isCameraDeviceAvailable(.front) {
+            picker.cameraDevice = .front
         }
+        // present
+        picker.modalPresentationStyle = settings.presentationStyle
         if settings.presentationStyle == .popover {
-            imagePicker.modalPresentationStyle = .popover
-            imagePicker.popoverPresentationController?.delegate = self
-            setCenteredPopover(imagePicker)
+            picker.popoverPresentationController?.delegate = self
+            setCenteredPopover(picker)
         }
-        imagePicker.sourceType = .photoLibrary
-        self.bridge?.viewController?.present(imagePicker, animated: true, completion: nil)
+        bridge?.viewController?.present(picker, animated: true, completion: nil)
     }
+    
+    func presentSystemAppropriateImagePicker() {
+        #if swift(>=5.3)
+        if #available(iOS 14, *) {
+            presentPhotoPicker()
+        } else {
+            presentImagePicker()
+        }
+        #else
+        presentImagePicker()
+        #endif
+    }
+    
+    func presentImagePicker() {
+        let picker = UIImagePickerController()
+        picker.delegate = self
+        picker.allowsEditing = self.settings.allowEditing
+        // select the input
+        picker.sourceType = .photoLibrary
+        // present
+        picker.modalPresentationStyle = settings.presentationStyle
+        if settings.presentationStyle == .popover {
+            picker.popoverPresentationController?.delegate = self
+            setCenteredPopover(picker)
+        }
+        bridge?.viewController?.present(picker, animated: true, completion: nil)
+    }
+    
+    #if swift(>=5.3)
+    @available(iOS 14, *)
+    func presentPhotoPicker() {
+        var configuration = PHPickerConfiguration(photoLibrary: PHPhotoLibrary.shared())
+        configuration.selectionLimit = 1
+        configuration.filter = .images
+        let picker = PHPickerViewController(configuration: configuration)
+        picker.delegate = self
+        // present
+        picker.modalPresentationStyle = settings.presentationStyle
+        if settings.presentationStyle == .popover {
+            picker.popoverPresentationController?.delegate = self
+            setCenteredPopover(picker)
+        }
+        bridge?.viewController?.present(picker, animated: true, completion: nil)
+    }
+    #endif
 
     func saveTemporaryImage(_ data: Data) throws -> URL {
         var url: URL
@@ -295,26 +393,39 @@ private extension CameraPlugin {
     }
 
     func processImage(from info: [UIImagePickerController.InfoKey: Any]) -> ProcessedImage? {
-        // get the image
-        var result: ProcessedImage
+        var selectedImage: UIImage?
         var flags: PhotoFlags = []
-        if let image = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {
-            result = ProcessedImage(image: image, metadata: [:]) // use the edited version
+        // get the image
+        if let edited = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {
+            selectedImage = edited // use the edited version
             flags = flags.union([.edited])
-        } else if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
-            result = ProcessedImage(image: image, metadata: [:]) // use the original version
-        } else {
+        } else if let original = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+            selectedImage = original // use the original version
+        }
+        guard let image = selectedImage else {
             return nil
         }
+        var metadata: [String: Any] = [:]
         // get the image's metadata from the picker or from the photo album
         if let photoMetadata = info[UIImagePickerController.InfoKey.mediaMetadata] as? [String: Any] {
-            result.metadata = photoMetadata
+            metadata = photoMetadata
         } else {
             flags = flags.union([.gallery])
         }
         if let asset = info[UIImagePickerController.InfoKey.phAsset] as? PHAsset {
-            result.metadata = asset.imageData
+            metadata = asset.imageData
         }
+        // get the result
+        let result = processedImage(from: image, with: metadata)
+        // conditionally save the image
+        if settings.saveToGallery && (flags.contains(.edited) == true || flags.contains(.gallery) == false) {
+            UIImageWriteToSavedPhotosAlbum(result.image, nil, nil, nil)
+        }
+        return result
+    }
+    
+    func processedImage(from image: UIImage, with metadata: [String: Any]?) -> ProcessedImage {
+        var result = ProcessedImage(image: image, metadata: metadata ?? [:])
         // resizing the image only makes sense if we have real values to which to constrain it
         if settings.shouldResize, settings.width > 0 || settings.height > 0 {
             result.image = result.image.reformat(to: CGSize(width: settings.width, height: settings.height))
@@ -324,11 +435,6 @@ private extension CameraPlugin {
             result.image = result.image.reformat()
             result.overwriteMetadataOrientation(to: 1)
         }
-        // conditionally save the image
-        if settings.saveToGallery && (flags.contains(.edited) == true || flags.contains(.gallery) == false) {
-            UIImageWriteToSavedPhotosAlbum(result.image, nil, nil, nil)
-        }
-
         return result
     }
 }
