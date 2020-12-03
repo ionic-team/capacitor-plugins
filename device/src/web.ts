@@ -107,29 +107,30 @@ export class DeviceWeb extends WebPlugin implements DevicePlugin {
       uaFields.operatingSystem = 'unknown';
     }
 
-    let match =
-      _ua.match(
-        /(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i,
-      ) || [];
-    let versions: RegExpMatchArray | RegExpExecArray | null;
-    if (/trident/i.test(match[1])) {
-      versions = /\brv[ :]+(\d+)/g.exec(_ua) || [];
-      uaFields.browserVersion = versions[1] || '';
-    } else if (match[1] === 'Chrome') {
-      versions = _ua.match(/\bOPR|Edge\/(\d+)/);
-      if (versions !== null) {
-        uaFields.browserVersion = versions[1] || '';
-      }
-    }
+    // Check for browsers based on non-standard javascript apis, not user agent
+    const isFirefox = !!(window as any).InstallTrigger;
+    const isSafari = !!(window as any).ApplePaySession;
+    const isChrome = !!(window as any).chrome;
+    const isEdge = /Edge/.test(navigator.userAgent);
 
-    match = match[2]
-      ? [match[1], match[2]]
-      : [navigator.appName, navigator.appVersion, '-?'];
-    versions = _ua.match(/version\/(\d+)/i);
-    if (versions !== null) {
-      match.splice(1, 1, versions[1]);
+    // FF and Edge User Agents both end with "/MAJOR.MINOR"
+    if (isFirefox || isEdge) {
+      const reverseUA = ua.split('').reverse().join('');
+      const reverseVersion = reverseUA.split('/')[0];
+      const version = reverseVersion.split('').reverse().join('');
+      uaFields.browserVersion = version;
+    } else if (isSafari || isChrome) {
+      // Safari version comes after "... Version/MAJOR.MINOR ...""
+      // Chrome version comes after "... Chrome/MAJOR.MINOR ...""
+      const searchWord = isChrome ? 'Chrome' : 'Version';
+      const words = ua.split(' ');
+      words.forEach(word => {
+        if (word.includes(searchWord)) {
+          const version = word.split('/')[1];
+          uaFields.browserVersion = version;
+        }
+      });
     }
-    uaFields.browserVersion = match[1];
 
     return uaFields;
   }
