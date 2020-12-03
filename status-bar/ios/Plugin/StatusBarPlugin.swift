@@ -9,7 +9,7 @@ import Capacitor
 public class StatusBarPlugin: CAPPlugin {
 
     override public func load() {
-        NotificationCenter.default.addObserver(forName: CAPBridge.statusBarTappedNotification.name, object: .none, queue: .none) { [weak self] _ in
+        NotificationCenter.default.addObserver(forName: Notification.Name.capacitorStatusBarTapped, object: .none, queue: .none) { [weak self] _ in
             self?.bridge?.triggerJSEvent(eventName: "statusTap", target: "window")
         }
     }
@@ -19,15 +19,15 @@ public class StatusBarPlugin: CAPPlugin {
 
         if let style = options["style"] as? String {
             if style == "DARK" {
-                bridge?.setStatusBarStyle(.lightContent)
+                bridge?.statusBarStyle = .lightContent
             } else if style == "LIGHT" {
                 if #available(iOS 13.0, *) {
-                    bridge?.setStatusBarStyle(.darkContent)
+                    bridge?.statusBarStyle = .darkContent
                 } else {
-                    bridge?.setStatusBarStyle(.default)
+                    bridge?.statusBarStyle = .default
                 }
             } else if style == "DEFAULT" {
-                bridge?.setStatusBarStyle(.default)
+                bridge?.statusBarStyle = .default
             }
         }
 
@@ -41,23 +41,23 @@ public class StatusBarPlugin: CAPPlugin {
     func setAnimation(_ call: CAPPluginCall) {
         let animation = call.getString("animation", "SLIDE")
         if animation == "FADE" {
-            bridge?.setStatusBarAnimation(.fade)
+            bridge?.statusBarAnimation = .fade
         } else if animation == "NONE" {
-            bridge?.setStatusBarAnimation(.none)
+            bridge?.statusBarAnimation = .none
         } else {
-            bridge?.setStatusBarAnimation(.slide)
+            bridge?.statusBarAnimation = .slide
         }
     }
 
     @objc func hide(_ call: CAPPluginCall) {
         setAnimation(call)
-        bridge?.setStatusBarVisible(false)
+        bridge?.statusBarVisible = false
         call.resolve()
     }
 
     @objc func show(_ call: CAPPluginCall) {
         setAnimation(call)
-        bridge?.setStatusBarVisible(true)
+        bridge?.statusBarVisible = true
         call.resolve()
     }
 
@@ -68,9 +68,9 @@ public class StatusBarPlugin: CAPPlugin {
             }
             let style: String
             if #available(iOS 13.0, *) {
-                switch bridge.getStatusBarStyle() {
+                switch bridge.statusBarStyle {
                 case .default:
-                    if bridge.getUserInterfaceStyle() == UIUserInterfaceStyle.dark {
+                    if bridge.userInterfaceStyle == UIUserInterfaceStyle.dark {
                         style = "DARK"
                     } else {
                         style = "LIGHT"
@@ -81,7 +81,7 @@ public class StatusBarPlugin: CAPPlugin {
                     style = "LIGHT"
                 }
             } else {
-                if bridge.getStatusBarStyle() == .lightContent {
+                if bridge.statusBarStyle == .lightContent {
                     style = "DARK"
                 } else {
                     style = "LIGHT"
@@ -89,7 +89,7 @@ public class StatusBarPlugin: CAPPlugin {
             }
 
             call.resolve([
-                "visible": bridge.getStatusBarVisible(),
+                "visible": bridge.statusBarVisible,
                 "style": style
             ])
         }
