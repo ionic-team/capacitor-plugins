@@ -206,14 +206,14 @@ Request permission to display local notifications.
 ### addListener(...)
 
 ```typescript
-addListener(eventName: 'localNotificationReceived', listenerFunc: (notification: LocalNotificationSchema) => void) => PluginListenerHandle
+addListener(eventName: 'received', listenerFunc: (notification: LocalNotificationSchema) => void) => PluginListenerHandle
 ```
 
 Listen for when notifications are displayed.
 
 | Param              | Type                                                                                                   |
 | ------------------ | ------------------------------------------------------------------------------------------------------ |
-| **`eventName`**    | <code>"localNotificationReceived"</code>                                                               |
+| **`eventName`**    | <code>"received"</code>                                                                                |
 | **`listenerFunc`** | <code>(notification: <a href="#localnotificationschema">LocalNotificationSchema</a>) =&gt; void</code> |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
@@ -226,14 +226,14 @@ Listen for when notifications are displayed.
 ### addListener(...)
 
 ```typescript
-addListener(eventName: 'localNotificationActionPerformed', listenerFunc: (notificationAction: ActionPerformed) => void) => PluginListenerHandle
+addListener(eventName: 'actionPerformed', listenerFunc: (notificationAction: ActionPerformed) => void) => PluginListenerHandle
 ```
 
 Listen for when an action is performed on a notification.
 
 | Param              | Type                                                                                         |
 | ------------------ | -------------------------------------------------------------------------------------------- |
-| **`eventName`**    | <code>"localNotificationActionPerformed"</code>                                              |
+| **`eventName`**    | <code>"actionPerformed"</code>                                                               |
 | **`listenerFunc`** | <code>(notificationAction: <a href="#actionperformed">ActionPerformed</a>) =&gt; void</code> |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
@@ -427,7 +427,7 @@ An action that can be taken when a notification is displayed.
 
 | Prop                         | Type                 | Description                                                                                                                                                                                                     | Since |
 | ---------------------------- | -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`id`**                     | <code>string</code>  | The action identifier. Referenced in the `'localNotificationActionPerformed'` event as `actionId`.                                                                                                              | 1.0.0 |
+| **`id`**                     | <code>string</code>  | The action identifier. Referenced in the `'actionPerformed'` event as `actionId`.                                                                                                                               | 1.0.0 |
 | **`title`**                  | <code>string</code>  | The title text to display for this action.                                                                                                                                                                      | 1.0.0 |
 | **`requiresAuthentication`** | <code>boolean</code> | Sets `authenticationRequired` in the options of the [`UNNotificationAction`](https://developer.apple.com/documentation/usernotifications/unnotificationaction). Only available for iOS.                         | 1.0.0 |
 | **`foreground`**             | <code>boolean</code> | Sets `foreground` in the options of the [`UNNotificationAction`](https://developer.apple.com/documentation/usernotifications/unnotificationaction). Only available for iOS.                                     | 1.0.0 |

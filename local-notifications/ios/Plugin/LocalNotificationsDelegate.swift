@@ -26,7 +26,7 @@ public class LocalNotificationsDelegate: NSObject, NotificationHandlerProtocol {
     public func willPresent(notification: UNNotification) -> UNNotificationPresentationOptions {
         let notificationData = makeNotificationRequestJSObject(notification.request)
 
-        self.plugin?.notifyListeners("localNotificationReceived", data: notificationData)
+        self.plugin?.notifyListeners("received", data: notificationData)
 
         if let options = notificationRequestLookup[notification.request.identifier] {
             let silent = options["silent"] as? Bool ?? false
@@ -66,7 +66,7 @@ public class LocalNotificationsDelegate: NSObject, NotificationHandlerProtocol {
 
         data["notification"] = makeNotificationRequestJSObject(originalNotificationRequest)
 
-        self.plugin?.notifyListeners("localNotificationActionPerformed", data: data, retainUntilConsumed: true)
+        self.plugin?.notifyListeners("actionPerformed", data: data, retainUntilConsumed: true)
     }
 
     /**

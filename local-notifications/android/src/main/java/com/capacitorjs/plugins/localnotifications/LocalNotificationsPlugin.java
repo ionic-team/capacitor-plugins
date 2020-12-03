@@ -36,7 +36,7 @@ public class LocalNotificationsPlugin extends Plugin {
         }
         JSObject dataJson = manager.handleNotificationActionPerformed(data, notificationStorage);
         if (dataJson != null) {
-            notifyListeners("localNotificationActionPerformed", dataJson, true);
+            notifyListeners("actionPerformed", dataJson, true);
         }
     }
 

@@ -87,7 +87,7 @@ export interface LocalNotificationsPlugin {
    * @since 1.0.0
    */
   addListener(
-    eventName: 'localNotificationReceived',
+    eventName: 'received',
     listenerFunc: (notification: LocalNotificationSchema) => void,
   ): PluginListenerHandle;
 
@@ -97,7 +97,7 @@ export interface LocalNotificationsPlugin {
    * @since 1.0.0
    */
   addListener(
-    eventName: 'localNotificationActionPerformed',
+    eventName: 'actionPerformed',
     listenerFunc: (notificationAction: ActionPerformed) => void,
   ): PluginListenerHandle;
 
@@ -250,8 +250,7 @@ export interface Action {
   /**
    * The action identifier.
    *
-   * Referenced in the `'localNotificationActionPerformed'` event as
-   * `actionId`.
+   * Referenced in the `'actionPerformed'` event as `actionId`.
    *
    * @since 1.0.0
    */
