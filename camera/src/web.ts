@@ -1,4 +1,4 @@
-import { WebPlugin } from '@capacitor/core';
+import { WebPlugin, CapacitorException } from '@capacitor/core';
 
 import type {
   CameraPlugin,
@@ -23,9 +23,9 @@ export class CameraWeb extends WebPlugin implements CameraPlugin {
               const photo = e.detail;
 
               if (photo === null) {
-                reject('User cancelled photos app');
+                reject(new CapacitorException('User cancelled photos app'));
               } else if (photo instanceof Error) {
-                reject(photo.message);
+                reject(photo);
               } else {
                 resolve(await this._getCameraPhoto(photo, options));
               }
