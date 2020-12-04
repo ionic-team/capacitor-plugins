@@ -116,7 +116,7 @@ public class CameraBottomSheetDialogFragment extends BottomSheetDialogFragment {
         CoordinatorLayout.Behavior behavior = params.getBehavior();
 
         if (behavior != null && behavior instanceof BottomSheetBehavior) {
-            ((BottomSheetBehavior) behavior).setBottomSheetCallback(mBottomSheetBehaviorCallback);
+            ((BottomSheetBehavior) behavior).addBottomSheetCallback(mBottomSheetBehaviorCallback);
         }
     }
 }
