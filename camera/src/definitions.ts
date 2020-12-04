@@ -94,6 +94,8 @@ export interface CameraOptions {
    * Whether to automatically rotate the image "up" to correct for orientation
    * in portrait mode
    * @default: true
+   * 
+   * @since 1.0.0
    */
   correctOrientation?: boolean;
   /**
@@ -113,7 +115,8 @@ export interface CameraOptions {
   direction?: CameraDirection;
 
   /**
-   * iOS only: The presentation style of the Camera. Defaults to fullscreen.
+   * iOS only: The presentation style of the Camera.
+   * @default: 'fullscreen'
    *
    * @since 1.0.0
    */
