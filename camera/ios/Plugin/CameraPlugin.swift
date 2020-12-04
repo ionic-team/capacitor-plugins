@@ -43,7 +43,7 @@ public class CameraPlugin: CAPPlugin {
 
     @objc override public func requestPermissions(_ call: CAPPluginCall) {
         // get the list of desired types, if passed
-        let typeList = call.getArray("types", String.self)?.compactMap({ (type) -> CameraPermissionType? in
+        let typeList = call.getArray("permissions", String.self)?.compactMap({ (type) -> CameraPermissionType? in
             return CameraPermissionType(rawValue: type)
         }) ?? []
         // otherwise check everything
@@ -249,7 +249,7 @@ private extension CameraPlugin {
         alert.addAction(UIAlertAction(title: settings.userPromptText.cancelAction, style: .cancel, handler: { [weak self] (_: UIAlertAction) in
             self?.call?.reject("User cancelled photos app")
         }))
-
+        self.setCenteredPopover(alert)
         self.bridge?.viewController?.present(alert, animated: true, completion: nil)
     }
 
