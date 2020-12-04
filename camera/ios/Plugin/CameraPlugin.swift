@@ -30,15 +30,11 @@ public class CameraPlugin: CAPPlugin {
             case .camera:
                 state = AVCaptureDevice.authorizationStatus(for: .video).authorizationState
             case .photos:
-                #if swift(>=5.3)
                 if #available(iOS 14, *) {
                     state = PHPhotoLibrary.authorizationStatus(for: .readWrite).authorizationState
                 } else {
                     state = PHPhotoLibrary.authorizationStatus().authorizationState
                 }
-                #else
-                state = PHPhotoLibrary.authorizationStatus().authorizationState
-                #endif
             }
             result[permission.rawValue] = state
         }
@@ -67,7 +63,6 @@ public class CameraPlugin: CAPPlugin {
                 }
             case .photos:
                 group.enter()
-                #if swift(>=5.3)
                 if #available(iOS 14, *) {
                     PHPhotoLibrary.requestAuthorization(for: .readWrite) { (status) in
                         result[permission.rawValue] = status.authorizationState
@@ -79,12 +74,6 @@ public class CameraPlugin: CAPPlugin {
                         group.leave()
                     })
                 }
-                #else
-                PHPhotoLibrary.requestAuthorization({ (status) in
-                    result[permission.rawValue] = status.authorizationState
-                    group.leave()
-                })
-                #endif
             }
         }
         group.notify(queue: DispatchQueue.main) {
@@ -183,7 +172,6 @@ extension CameraPlugin: UIImagePickerControllerDelegate, UINavigationControllerD
     }
 }
 
-#if swift(>=5.3)
 @available(iOS 14, *)
 extension CameraPlugin: PHPickerViewControllerDelegate {
     public func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
@@ -212,7 +200,6 @@ extension CameraPlugin: PHPickerViewControllerDelegate {
         }
     }
 }
-#endif
 
 private extension CameraPlugin {
     func returnProcessedImage(_ processedImage: ProcessedImage) {
@@ -336,15 +323,11 @@ private extension CameraPlugin {
     }
 
     func presentSystemAppropriateImagePicker() {
-        #if swift(>=5.3)
         if #available(iOS 14, *) {
             presentPhotoPicker()
         } else {
             presentImagePicker()
         }
-        #else
-        presentImagePicker()
-        #endif
     }
 
     func presentImagePicker() {
@@ -362,7 +345,6 @@ private extension CameraPlugin {
         bridge?.viewController?.present(picker, animated: true, completion: nil)
     }
 
-    #if swift(>=5.3)
     @available(iOS 14, *)
     func presentPhotoPicker() {
         var configuration = PHPickerConfiguration(photoLibrary: PHPhotoLibrary.shared())
@@ -378,7 +360,6 @@ private extension CameraPlugin {
         }
         bridge?.viewController?.present(picker, animated: true, completion: nil)
     }
-    #endif
 
     func saveTemporaryImage(_ data: Data) throws -> URL {
         var url: URL
