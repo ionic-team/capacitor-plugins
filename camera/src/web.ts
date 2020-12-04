@@ -164,7 +164,7 @@ export class CameraWeb extends WebPlugin implements CameraPlugin {
       });
       return {
         camera: permission.state,
-        photos: 'denied',
+        photos: 'granted',
       };
     } catch {
       throw this.unavailable(
