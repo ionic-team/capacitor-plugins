@@ -33,7 +33,7 @@ export interface CameraPlugin {
    * @since 1.0.0
    */
   requestPermissions(
-    permissions: CameraPluginPermissions | null,
+    permissions?: CameraPluginPermissions,
   ): Promise<CameraPermissionStatus>;
 }
 
