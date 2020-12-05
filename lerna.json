@@ -12,6 +12,7 @@
     "keyboard",
     "motion",
     "network",
+    "push-notifications",
     "screen-reader",
     "share",
     "status-bar",
