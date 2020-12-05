@@ -1,6 +1,6 @@
 # @capacitor/local-notifications
 
-The Notifications API provides access to native local notifications.
+The Local Notifications API provides a way to schedule device notifications locally (i.e. without a server sending push notifications).
 
 ## Install
 
