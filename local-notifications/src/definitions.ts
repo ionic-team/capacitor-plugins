@@ -490,7 +490,12 @@ export interface LocalNotificationSchema {
   /**
    * Set a custom status bar icon.
    *
-   * If set, this overrides the default icon from Capacitor configuration.
+   * If set, this overrides the `smallIcon` option from Capacitor
+   * configuration.
+   *
+   * Icons should be placed in your app's `res/drawable` folder. The value for
+   * this option should be the drawable resource ID, which is the filename
+   * without an extension.
    *
    * Only available for Android.
    *
