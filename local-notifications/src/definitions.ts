@@ -1,4 +1,46 @@
+/// <reference types="@capacitor/cli" />
+
 import type { PermissionState, PluginListenerHandle } from '@capacitor/core';
+
+declare module '@capacitor/cli' {
+  export interface PluginsConfig {
+    LocalNotifications?: {
+      /**
+       * Set the default status bar icon for notifications.
+       *
+       * Icons should be placed in your app's `res/drawable` folder. The value for
+       * this option should be the drawable resource ID, which is the filename
+       * without an extension.
+       *
+       * Only available for Android.
+       *
+       * @since 1.0.0
+       */
+      smallIcon?: string;
+
+      /**
+       * Set the default color of status bar icons for notifications.
+       *
+       * Only available for Android.
+       *
+       * @since 1.0.0
+       */
+      iconColor?: string;
+
+      /**
+       * Set the default notification sound for notifications.
+       *
+       * On Android 26+ it sets the default channel sound and can't be
+       * changed unless the app is uninstalled.
+       *
+       * Only available for Android.
+       *
+       * @since 1.0.0
+       */
+      sound?: string;
+    };
+  }
+}
 
 export interface LocalNotificationsPlugin {
   /**
