@@ -44,10 +44,10 @@
     "test": "jest"
   },
   "devDependencies": {
-    "@capacitor/android": "next",
-    "@capacitor/core": "next",
+    "@capacitor/android": "^3.0.0-alpha.7",
+    "@capacitor/core": "^3.0.0-alpha.7",
     "@capacitor/docgen": "^0.0.10",
-    "@capacitor/ios": "next",
+    "@capacitor/ios": "^3.0.0-alpha.7",
     "@ionic/eslint-config": "^0.3.0",
     "@ionic/prettier-config": "^1.0.1",
     "@ionic/swiftlint-config": "^1.1.2",
