@@ -240,7 +240,7 @@ export interface ActionType {
    *
    * @since 1.0.0
    */
-  iosHiddenPreviewsBodyPlaceholder?: string; // >= iOS 11 only
+  iosHiddenPreviewsBodyPlaceholder?: string;
 
   /**
    * Sets `customDismissAction` in the options of the
