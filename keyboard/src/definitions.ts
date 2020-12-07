@@ -8,6 +8,8 @@ declare module '@capacitor/cli' {
       /**
        * Configure the way the app is resized when the Keyboard appears.
        *
+       * Only available on iOS.
+       *
        * @since 1.0.0
        * @default native
        */
@@ -15,6 +17,8 @@ declare module '@capacitor/cli' {
 
       /**
        * Use the dark style keyboard instead of the regular one.
+       *
+       * Only available on iOS.
        *
        * @since 1.0.0
        */
