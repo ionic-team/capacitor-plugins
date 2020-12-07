@@ -13,7 +13,6 @@ public class BrowserPlugin extends Plugin {
 
     private Browser implementation;
 
-    @PluginMethod
     public void load() {
         implementation = new Browser(getContext());
         implementation.setBrowserEventListener(this::onBrowserEvent);
