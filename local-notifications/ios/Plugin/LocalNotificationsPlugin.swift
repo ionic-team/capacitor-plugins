@@ -37,14 +37,14 @@ public class LocalNotificationsPlugin: CAPPlugin {
      */
     @objc func schedule(_ call: CAPPluginCall) {
         guard let notifications = call.getArray("notifications", JSObject.self) else {
-            call.error("Must provide notifications array as notifications option")
+            call.reject("Must provide notifications array as notifications option")
             return
         }
         var ids = [String]()
 
         for notification in notifications {
             guard let identifier = notification["id"] as? Int else {
-                call.error("Notification missing identifier")
+                call.reject("Notification missing identifier")
                 return
             }
 
@@ -55,7 +55,7 @@ public class LocalNotificationsPlugin: CAPPlugin {
                 content = try makeNotificationContent(notification)
             } catch {
                 CAPLog.print(error.localizedDescription)
-                call.error("Unable to make notification", error)
+                call.reject("Unable to make notification", nil, error)
                 return
             }
 
@@ -66,7 +66,7 @@ public class LocalNotificationsPlugin: CAPPlugin {
                     try trigger = handleScheduledNotification(call, schedule)
                 }
             } catch {
-                call.error("Unable to create notification, trigger failed", error)
+                call.reject("Unable to create notification, trigger failed", nil, error)
                 return
             }
 
@@ -79,7 +79,7 @@ public class LocalNotificationsPlugin: CAPPlugin {
             center.add(request) { (error: Error?) in
                 if let theError = error {
                     CAPLog.print(theError.localizedDescription)
-                    call.error(theError.localizedDescription)
+                    call.reject(theError.localizedDescription)
                 }
             }
 
@@ -91,7 +91,7 @@ public class LocalNotificationsPlugin: CAPPlugin {
                 "id": id
             ]
         })
-        call.success([
+        call.resolve([
             "notifications": ret
         ])
     }
@@ -102,10 +102,10 @@ public class LocalNotificationsPlugin: CAPPlugin {
     @objc override public func requestPermissions(_ call: CAPPluginCall) {
         self.notificationDelegationHandler.requestPermissions { granted, error in
             guard error == nil else {
-                call.error(error!.localizedDescription)
+                call.reject(error!.localizedDescription)
                 return
             }
-            call.success(["display": granted ? "granted" : "denied"])
+            call.resolve(["display": granted ? "granted" : "denied"])
         }
     }
 
@@ -124,7 +124,7 @@ public class LocalNotificationsPlugin: CAPPlugin {
                 permission = "prompt"
             }
 
-            call.success(["display": permission])
+            call.resolve(["display": permission])
         }
     }
 
@@ -133,14 +133,14 @@ public class LocalNotificationsPlugin: CAPPlugin {
      */
     @objc func cancel(_ call: CAPPluginCall) {
         guard let notifications = call.getArray("notifications", JSObject.self), notifications.count > 0 else {
-            call.error("Must supply notifications to cancel")
+            call.reject("Must supply notifications to cancel")
             return
         }
 
         let ids = notifications.map { $0["id"] as? String ?? "" }
 
         UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: ids)
-        call.success()
+        call.resolve()
     }
 
     /**
@@ -154,7 +154,7 @@ public class LocalNotificationsPlugin: CAPPlugin {
             let ret = notifications.compactMap({ [weak self] (notification) -> JSObject? in
                 return self?.makePendingNotificationRequestJSObject(notification)
             })
-            call.success([
+            call.resolve([
                 "notifications": ret
             ])
         })
@@ -170,7 +170,7 @@ public class LocalNotificationsPlugin: CAPPlugin {
 
         makeActionTypes(types)
 
-        call.success()
+        call.resolve()
     }
 
     /**
@@ -181,7 +181,7 @@ public class LocalNotificationsPlugin: CAPPlugin {
         center.getNotificationSettings { (settings) in
             let authorized = settings.authorizationStatus == UNAuthorizationStatus.authorized
             let enabled = settings.notificationCenterSetting == UNNotificationSetting.enabled
-            call.success([
+            call.resolve([
                 "value": enabled && authorized
             ])
         }
@@ -247,7 +247,7 @@ public class LocalNotificationsPlugin: CAPPlugin {
             let dateInfo = Calendar.current.dateComponents(in: TimeZone.current, from: at)
 
             if dateInfo.date! < Date() {
-                call.error("Scheduled time must be *after* current time")
+                call.reject("Scheduled time must be *after* current time")
                 return nil
             }
 
@@ -359,7 +359,7 @@ public class LocalNotificationsPlugin: CAPPlugin {
         createdCategories.append(generalCategory)
         for type in actionTypes {
             guard let id = type["id"] as? String else {
-                bridge?.modulePrint(self, "Action type must have an id field")
+                CAPLog.print("⚡️ ", self.pluginId, "-", "Action type must have an id field")
                 continue
             }
             let hiddenBodyPlaceholder = type["iosHiddenPreviewsBodyPlaceholder"] as? String ?? ""
@@ -391,7 +391,7 @@ public class LocalNotificationsPlugin: CAPPlugin {
 
         for action in actions {
             guard let id = action["id"] as? String else {
-                bridge?.modulePrint(self, "Action must have an id field")
+                CAPLog.print("⚡️ ", self.pluginId, "-", "Action must have an id field")
                 continue
             }
             let title = action["title"] as? String ?? ""
