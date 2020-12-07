@@ -110,7 +110,22 @@ public class LocalNotificationsPlugin: CAPPlugin {
     }
 
     @objc override public func checkPermissions(_ call: CAPPluginCall) {
-        call.success(["display": "prompt"]) // TODO
+        self.notificationDelegationHandler.checkPermissions { status in
+            let permission: String
+
+            switch status {
+            case .authorized, .ephemeral, .provisional:
+                permission = "granted"
+            case .denied:
+                permission = "denied"
+            case .notDetermined:
+                permission = "prompt"
+            @unknown default:
+                permission = "prompt"
+            }
+
+            call.success(["display": permission])
+        }
     }
 
     /**

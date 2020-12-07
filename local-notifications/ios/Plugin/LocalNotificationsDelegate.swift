@@ -16,10 +16,10 @@ public class LocalNotificationsDelegate: NSObject, NotificationHandlerProtocol {
         }
     }
 
-    public func checkPermissions(with completion: ((Bool, Error?) -> Void)? = nil) {
+    public func checkPermissions(with completion: ((UNAuthorizationStatus) -> Void)? = nil) {
         let center = UNUserNotificationCenter.current()
-        center.requestAuthorization(options: [.badge, .alert, .sound]) { (granted, error) in
-            completion?(granted, error)
+        center.getNotificationSettings { settings in
+            completion?(settings.authorizationStatus)
         }
     }
 
