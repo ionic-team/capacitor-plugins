@@ -134,18 +134,40 @@ export interface CameraOptions {
   webUseInput?: boolean;
 
   /**
-   * If use CameraSource.Prompt only, can change Prompt label.
-   * default:
-   *   promptLabelHeader  : 'Photo'       // iOS only
-   *   promptLabelCancel  : 'Cancel'      // iOS only
-   *   promptLabelPhoto   : 'From Photos'
-   *   promptLabelPicture : 'Take Picture'
+   * Text value to use when displaying the prompt.
+   * iOS only: The title of the action sheet.
+   * @default: 'Photo'
+   *
+   * @since 1.0.0
+   *
+   */
+  promptLabelHeader?: string;
+
+  /**
+   * Text value to use when displaying the prompt.
+   * iOS only: The label of the 'cancel' button.
+   * @default: 'Cancel'
    *
    * @since 1.0.0
    */
-  promptLabelHeader?: string;
   promptLabelCancel?: string;
+
+  /**
+   * Text value to use when displaying the prompt.
+   * The label of the button to select a saved image.
+   * @default: 'From Photos'
+   *
+   * @since 1.0.0
+   */
   promptLabelPhoto?: string;
+
+  /**
+   * Text value to use when displaying the prompt.
+   * The label of the button to open the camera.
+   * @default: 'Take Picture'
+   *
+   * @since 1.0.0
+   */
   promptLabelPicture?: string;
 }
 
