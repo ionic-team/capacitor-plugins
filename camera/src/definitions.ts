@@ -94,7 +94,7 @@ export interface CameraOptions {
    * Whether to automatically rotate the image "up" to correct for orientation
    * in portrait mode
    * @default: true
-   * 
+   *
    * @since 1.0.0
    */
   correctOrientation?: boolean;
