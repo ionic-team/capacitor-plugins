@@ -3,15 +3,6 @@ import Capacitor
 import Photos
 import PhotosUI
 
-/*
- Runtime detection of iOS 14 with @available and #available is straightforward but that code will fail to compile
- under Xcode 11. So we need to use statements in the form of
-
- #if swift(>=5.3)
- #endif
-
- as a poor proxy for Xcode 12 detection. The conditionals should be removed once Xcode 12 is required.
- */
 
 @objc(CAPCameraPlugin)
 public class CameraPlugin: CAPPlugin {
