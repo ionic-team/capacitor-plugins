@@ -236,7 +236,7 @@ export interface ActionType {
    * Sets `hiddenPreviewsBodyPlaceholder` of the
    * [`UNNotificationCategory`](https://developer.apple.com/documentation/usernotifications/unnotificationcategory).
    *
-   * Only available for iOS 11+.
+   * Only available for iOS.
    *
    * @since 1.0.0
    */
