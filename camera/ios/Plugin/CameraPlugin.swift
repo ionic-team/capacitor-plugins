@@ -3,7 +3,6 @@ import Capacitor
 import Photos
 import PhotosUI
 
-
 @objc(CAPCameraPlugin)
 public class CameraPlugin: CAPPlugin {
     private var call: CAPPluginCall?
@@ -40,35 +39,29 @@ public class CameraPlugin: CAPPlugin {
         // otherwise check everything
         let permissions: [CameraPermissionType] = (typeList.count > 0) ? typeList : CameraPermissionType.allCases
         // request the permissions
-        var result: [String: Any] = [:]
         let group = DispatchGroup()
         for permission in permissions {
             switch permission {
             case .camera:
                 group.enter()
                 AVCaptureDevice.requestAccess(for: .video) { granted in
-                    result[permission.rawValue] = granted ?
-                        AVAuthorizationStatus.authorized.authorizationState :
-                        AVAuthorizationStatus.denied.authorizationState
                     group.leave()
                 }
             case .photos:
                 group.enter()
                 if #available(iOS 14, *) {
                     PHPhotoLibrary.requestAuthorization(for: .readWrite) { (status) in
-                        result[permission.rawValue] = status.authorizationState
                         group.leave()
                     }
                 } else {
                     PHPhotoLibrary.requestAuthorization({ (status) in
-                        result[permission.rawValue] = status.authorizationState
                         group.leave()
                     })
                 }
             }
         }
-        group.notify(queue: DispatchQueue.main) {
-            call.resolve(result)
+        group.notify(queue: DispatchQueue.main) { [weak self] in
+            self?.checkPermissions(call)
         }
     }
 
