@@ -89,7 +89,7 @@ export interface LocalNotificationsPlugin {
    *
    * @since 1.0.0
    */
-  createChannel(channel: Channel): Promise<void>;
+  createChannel(channel: NotificationChannel): Promise<void>;
 
   /**
    * Delete a notification channel.
@@ -98,7 +98,7 @@ export interface LocalNotificationsPlugin {
    *
    * @since 1.0.0
    */
-  deleteChannel(channel: Channel): Promise<void>;
+  deleteChannel(channel: NotificationChannel): Promise<void>;
 
   /**
    * Get a list of notification channels.
@@ -700,7 +700,7 @@ export interface ListChannelsResult {
    *
    * @since 1.0.0
    */
-  channels: Channel[];
+  channels: NotificationChannel[];
 }
 
 export interface PermissionStatus {
@@ -749,7 +749,7 @@ export interface EnabledResult {
   value: boolean;
 }
 
-export interface Channel {
+export interface NotificationChannel {
   /**
    * The channel identifier.
    *
@@ -827,3 +827,75 @@ export interface Channel {
    */
   vibration?: boolean;
 }
+
+/**
+ * @deprecated Use `LocalNotificationDescriptor`.
+ * @since 1.0.0
+ */
+export type LocalNotificationRequest = LocalNotificationDescriptor;
+
+/**
+ * @deprecated Use `ScheduleResult`.
+ * @since 1.0.0
+ */
+export type LocalNotificationScheduleResult = ScheduleResult;
+
+/**
+ * @deprecated Use `PendingResult`.
+ * @since 1.0.0
+ */
+export type LocalNotificationPendingList = PendingResult;
+
+/**
+ * @deprecated Use `ActionType`.
+ * @since 1.0.0
+ */
+export type LocalNotificationActionType = ActionType;
+
+/**
+ * @deprecated Use `Action`.
+ * @since 1.0.0
+ */
+export type LocalNotificationAction = Action;
+
+/**
+ * @deprecated Use `EnabledResult`.
+ * @since 1.0.0
+ */
+export type LocalNotificationEnabledResult = EnabledResult;
+
+/**
+ * @deprecated Use `ListChannelsResult`.
+ * @since 1.0.0
+ */
+export type NotificationChannelList = ListChannelsResult;
+
+/**
+ * @deprecated Use `Attachment`.
+ * @since 1.0.0
+ */
+export type LocalNotificationAttachment = Attachment;
+
+/**
+ * @deprecated Use `AttachmentOptions`.
+ * @since 1.0.0
+ */
+export type LocalNotificationAttachmentOptions = AttachmentOptions;
+
+/**
+ * @deprecated Use `LocalNotificationSchema`.
+ * @since 1.0.0
+ */
+export type LocalNotification = LocalNotificationSchema;
+
+/**
+ * @deprecated Use `Schedule`.
+ * @since 1.0.0
+ */
+export type LocalNotificationSchedule = Schedule;
+
+/**
+ * @deprecated Use `ActionPerformed`.
+ * @since 1.0.0
+ */
+export type LocalNotificationActionPerformed = ActionPerformed;
