@@ -121,16 +121,16 @@ Check if notifications are enabled or not.
 ### createChannel(...)
 
 ```typescript
-createChannel(channel: Channel) => Promise<void>
+createChannel(channel: NotificationChannel) => Promise<void>
 ```
 
 Create a notification channel.
 
 Only available for Android.
 
-| Param         | Type                                        |
-| ------------- | ------------------------------------------- |
-| **`channel`** | <code><a href="#channel">Channel</a></code> |
+| Param         | Type                                                                |
+| ------------- | ------------------------------------------------------------------- |
+| **`channel`** | <code><a href="#notificationchannel">NotificationChannel</a></code> |
 
 **Since:** 1.0.0
 
@@ -140,16 +140,16 @@ Only available for Android.
 ### deleteChannel(...)
 
 ```typescript
-deleteChannel(channel: Channel) => Promise<void>
+deleteChannel(channel: NotificationChannel) => Promise<void>
 ```
 
 Delete a notification channel.
 
 Only available for Android.
 
-| Param         | Type                                        |
-| ------------- | ------------------------------------------- |
-| **`channel`** | <code><a href="#channel">Channel</a></code> |
+| Param         | Type                                                                |
+| ------------- | ------------------------------------------------------------------- |
+| **`channel`** | <code><a href="#notificationchannel">NotificationChannel</a></code> |
 
 **Since:** 1.0.0
 
@@ -451,7 +451,7 @@ An action that can be taken when a notification is displayed.
 | **`value`** | <code>boolean</code> | Whether or not the device has local notifications enabled. | 1.0.0 |
 
 
-#### Channel
+#### NotificationChannel
 
 | Prop              | Type                               | Description                                                                                                                                                                                                                     | Since |
 | ----------------- | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
@@ -468,9 +468,9 @@ An action that can be taken when a notification is displayed.
 
 #### ListChannelsResult
 
-| Prop           | Type                   | Description                        | Since |
-| -------------- | ---------------------- | ---------------------------------- | ----- |
-| **`channels`** | <code>Channel[]</code> | The list of notification channels. | 1.0.0 |
+| Prop           | Type                               | Description                        | Since |
+| -------------- | ---------------------------------- | ---------------------------------- | ----- |
+| **`channels`** | <code>NotificationChannel[]</code> | The list of notification channels. | 1.0.0 |
 
 
 #### PermissionStatus
