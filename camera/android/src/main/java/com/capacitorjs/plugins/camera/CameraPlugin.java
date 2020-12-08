@@ -10,6 +10,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
+
+import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 import com.getcapacitor.FileUtils;
 import com.getcapacitor.JSObject;
@@ -134,24 +136,34 @@ public class CameraPlugin extends Plugin {
     }
 
     private boolean checkCameraPermissions(PluginCall call) {
+        // if the manifest does not contain the camera permissions key, we don't need to ask the user
+        boolean needCameraPerms = hasDefinedPermissions(new String[] { Manifest.permission.CAMERA });
+        boolean hasCameraPerms = !needCameraPerms || hasPermission(Manifest.permission.CAMERA);
+        boolean hasPhotoPerms = hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
         // If we want to save to the gallery, we need two permissions
-        if (
-            settings.isSaveToGallery() &&
-            !(hasPermission(Manifest.permission.CAMERA) && hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE))
-        ) {
-            requestPermissions(
-                call,
-                new String[] {
-                    Manifest.permission.CAMERA,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    Manifest.permission.READ_EXTERNAL_STORAGE
-                },
-                CAMERA_REQUEST_PERMISSIONS
-            );
+        if (settings.isSaveToGallery() && !(hasCameraPerms && hasPhotoPerms)) {
+            if (needCameraPerms) {
+                requestPermissions(
+                        call,
+                        new String[] {
+                                Manifest.permission.CAMERA,
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                                Manifest.permission.READ_EXTERNAL_STORAGE
+                        },
+                        CAMERA_REQUEST_PERMISSIONS
+                );
+            } else {
+                requestPermissions(
+                        call,
+                        new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE },
+                        CAMERA_REQUEST_PERMISSIONS
+                );
+            }
             return false;
         }
         // If we don't need to save to the gallery, we can just ask for camera permissions
-        else if (!hasPermission(Manifest.permission.CAMERA)) {
+        else if (!hasCameraPerms) {
             requestPermission(call, Manifest.permission.CAMERA, CAMERA_REQUEST_PERMISSIONS);
             return false;
         }
@@ -441,6 +453,22 @@ public class CameraPlugin extends Plugin {
         data.put("base64String", encoded);
         data.put("exif", exif.toJson());
         call.resolve(data);
+    }
+
+    @Nullable
+    @Override
+    protected String overrideStateForPermission(Permission permission) {
+        if (permission.alias().equals("camera")) {
+            // If the camera permission is defined in the manifest, then we have to prompt the user
+            // or else we will get a security exception when trying to present the camera. If, however,
+            // it is not defined in the manifest then we don't need to prompt and it will just work.
+            if (hasDefinedPermissions(new Permission[]{ permission })) {
+                return null;
+            } else {
+                return "granted";
+            }
+        }
+        return super.overrideStateForPermission(permission);
     }
 
     @Override
