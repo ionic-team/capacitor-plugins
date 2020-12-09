@@ -44,17 +44,17 @@ public class CameraPlugin: CAPPlugin {
             switch permission {
             case .camera:
                 group.enter()
-                AVCaptureDevice.requestAccess(for: .video) { granted in
+                AVCaptureDevice.requestAccess(for: .video) { _ in
                     group.leave()
                 }
             case .photos:
                 group.enter()
                 if #available(iOS 14, *) {
-                    PHPhotoLibrary.requestAuthorization(for: .readWrite) { (status) in
+                    PHPhotoLibrary.requestAuthorization(for: .readWrite) { (_) in
                         group.leave()
                     }
                 } else {
-                    PHPhotoLibrary.requestAuthorization({ (status) in
+                    PHPhotoLibrary.requestAuthorization({ (_) in
                         group.leave()
                     })
                 }

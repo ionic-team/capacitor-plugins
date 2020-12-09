@@ -10,7 +10,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
-
 import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 import com.getcapacitor.FileUtils;
@@ -145,19 +144,19 @@ public class CameraPlugin extends Plugin {
         if (settings.isSaveToGallery() && !(hasCameraPerms && hasPhotoPerms)) {
             if (needCameraPerms) {
                 requestPermissions(
-                        call,
-                        new String[] {
-                                Manifest.permission.CAMERA,
-                                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                                Manifest.permission.READ_EXTERNAL_STORAGE
-                        },
-                        CAMERA_REQUEST_PERMISSIONS
+                    call,
+                    new String[] {
+                        Manifest.permission.CAMERA,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.READ_EXTERNAL_STORAGE
+                    },
+                    CAMERA_REQUEST_PERMISSIONS
                 );
             } else {
                 requestPermissions(
-                        call,
-                        new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE },
-                        CAMERA_REQUEST_PERMISSIONS
+                    call,
+                    new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE },
+                    CAMERA_REQUEST_PERMISSIONS
                 );
             }
             return false;
@@ -462,7 +461,7 @@ public class CameraPlugin extends Plugin {
             // If the camera permission is defined in the manifest, then we have to prompt the user
             // or else we will get a security exception when trying to present the camera. If, however,
             // it is not defined in the manifest then we don't need to prompt and it will just work.
-            if (hasDefinedPermissions(new Permission[]{ permission })) {
+            if (hasDefinedPermissions(new Permission[] { permission })) {
                 return null;
             } else {
                 return "granted";
