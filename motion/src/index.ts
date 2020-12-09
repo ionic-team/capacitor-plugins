@@ -1,17 +1,11 @@
-import type { PluginImplementations } from '@capacitor/core';
 import { registerPlugin } from '@capacitor/core';
 
 import type { MotionPlugin } from './definitions';
-import { MotionWeb } from './web';
 
-const plugin = new MotionWeb();
-
-const implementations: PluginImplementations<MotionPlugin> = {
-  android: plugin,
-  ios: plugin,
-  web: plugin,
-};
-
-const Motion = registerPlugin('Motion', implementations).getImplementation();
+const Motion = registerPlugin<MotionPlugin>('Motion', {
+  android: () => import('./web').then(m => new m.MotionWeb()),
+  ios: () => import('./web').then(m => new m.MotionWeb()),
+  web: () => import('./web').then(m => new m.MotionWeb()),
+});
 
 export { Motion };

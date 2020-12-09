@@ -1,9 +1,3 @@
-declare module '@capacitor/core' {
-  interface PluginRegistry {
-    TextZoom: TextZoomPlugin;
-  }
-}
-
 export interface GetResponse {
   /**
    * The current zoom level (represented as a decimal).

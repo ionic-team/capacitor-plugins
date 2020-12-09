@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - '**'
-  pull_request:
+  pull_request_target:
     branches:
       - '**'
 
@@ -16,9 +16,13 @@ jobs:
       plugins: ${{ steps['set-plugins'].outputs.plugins }}
       changed-directories: ${{ steps['set-changed-directories'].outputs['changed-directories'] }}
     steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@ce177499ccf9fd2aded3b0426c97e5434c2e8a73
+        with:
+          access_token: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/checkout@v2
       - id: files
-        uses: jitterbit/get-changed-files@b17fbb00bdc0c0f63fcf166580804b4d2cdc2a42
+        uses: dwieeb/get-changed-files@main
         if: ${{ github.event_name != 'push' || github.event.before != '0000000000000000000000000000000000000000' }}
         with:
           format: 'json'
@@ -42,7 +46,7 @@ jobs:
           key: ${{ runner.OS }}-dependency-cache-${{ hashFiles('**/package.json') }}
       - run: npm install
       - run: npm run lint
-  verify:
+  verify-ios:
     runs-on: macos-latest
     timeout-minutes: 30
     needs:
@@ -62,7 +66,53 @@ jobs:
           path: ~/.npm
           key: ${{ runner.OS }}-dependency-cache-${{ hashFiles('**/package.json') }}
       - run: npm install
-      - run: npm run verify
+      - run: npm run verify:ios
+        working-directory: ${{ matrix.plugin }}
+        if: ${{ needs.setup.outputs['changed-directories'] && contains(needs.setup.outputs['changed-directories'], matrix.plugin) }}
+  verify-android:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    needs:
+      - setup
+      - lint
+    strategy:
+      matrix:
+        plugin: ${{ fromJson(needs.setup.outputs.plugins) }}
+    steps:
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+      - uses: actions/checkout@v2
+      - name: Restore Dependency Cache
+        uses: actions/cache@v1
+        with:
+          path: ~/.npm
+          key: ${{ runner.OS }}-dependency-cache-${{ hashFiles('**/package.json') }}
+      - run: npm install
+      - run: npm run verify:android
+        working-directory: ${{ matrix.plugin }}
+        if: ${{ needs.setup.outputs['changed-directories'] && contains(needs.setup.outputs['changed-directories'], matrix.plugin) }}
+  verify-web:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    needs:
+      - setup
+      - lint
+    strategy:
+      matrix:
+        plugin: ${{ fromJson(needs.setup.outputs.plugins) }}
+    steps:
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+      - uses: actions/checkout@v2
+      - name: Restore Dependency Cache
+        uses: actions/cache@v1
+        with:
+          path: ~/.npm
+          key: ${{ runner.OS }}-dependency-cache-${{ hashFiles('**/package.json') }}
+      - run: npm install
+      - run: npm run verify:web
         working-directory: ${{ matrix.plugin }}
         if: ${{ needs.setup.outputs['changed-directories'] && contains(needs.setup.outputs['changed-directories'], matrix.plugin) }}
   deploy:
@@ -70,8 +120,11 @@ jobs:
     if: ${{ github.ref == 'refs/heads/main' }}
     timeout-minutes: 30
     needs:
+      - setup
       - lint
-      - verify
+      - verify-ios
+      - verify-android
+      - verify-web
     steps:
       - run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >> ~/.npmrc
       - uses: actions/setup-node@v1
