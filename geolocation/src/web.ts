@@ -21,14 +21,12 @@ export class GeolocationWeb extends WebPlugin implements GeolocationPlugin {
         err => {
           reject(err);
         },
-        extend(
-          {
-            enableHighAccuracy: true,
-            timeout: 10000,
-            maximumAge: 0,
-          },
-          options,
-        ),
+        {
+          enableHighAccuracy: true,
+          timeout: 10000,
+          maximumAge: 0,
+          ...options,
+        },
       );
     });
   }
