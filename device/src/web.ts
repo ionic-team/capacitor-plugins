@@ -12,6 +12,12 @@ declare global {
     getBattery: any;
     oscpu: any;
   }
+
+  interface Window {
+    InstallTrigger?: any;
+    ApplePaySession?: any;
+    chrome?: any;
+  }
 }
 
 export class DeviceWeb extends WebPlugin implements DevicePlugin {
@@ -107,22 +113,40 @@ export class DeviceWeb extends WebPlugin implements DevicePlugin {
       uaFields.operatingSystem = 'unknown';
     }
 
-    // Check for browsers based on non-standard javascript apis, not user agent
-    const isFirefox = !!(window as any).InstallTrigger;
-    const isSafari = !!(window as any).ApplePaySession;
-    const isChrome = !!(window as any).chrome;
-    const isEdge = /Edge/.test(navigator.userAgent);
+    // Check for browsers based on non-standard javascript apis, only not user agent
+    const isFirefox = !!window.InstallTrigger;
+    const isSafari = !!window.ApplePaySession;
+    const isChrome = !!window.chrome;
+    const isEdge = /Edg/.test(ua);
+    const isFirefoxIOS = /FxiOS/.test(ua);
+    const isChromeIOS = /CriOS/.test(ua);
+    const isEdgeIOS = /EdgiOS/.test(ua);
 
     // FF and Edge User Agents both end with "/MAJOR.MINOR"
-    if (isFirefox || isEdge) {
-      const reverseUA = ua.split('').reverse().join('');
-      const reverseVersion = reverseUA.split('/')[0];
-      const version = reverseVersion.split('').reverse().join('');
-      uaFields.browserVersion = version;
-    } else if (isSafari || isChrome) {
-      // Safari version comes after "... Version/MAJOR.MINOR ...""
-      // Chrome version comes after "... Chrome/MAJOR.MINOR ...""
-      const searchWord = isChrome ? 'Chrome' : 'Version';
+    if (
+      isSafari ||
+      (isChrome && !isEdge) ||
+      isFirefoxIOS ||
+      isChromeIOS ||
+      isEdgeIOS
+    ) {
+      // Safari version comes as     "... Version/MAJOR.MINOR ..."
+      // Chrome version comes as     "... Chrome/MAJOR.MINOR ..."
+      // FirefoxIOS version comes as "... FxiOS/MAJOR.MINOR ..."
+      // ChromeIOS version comes as  "... CriOS/MAJOR.MINOR ..."
+      let searchWord: string;
+      if (isFirefoxIOS) {
+        searchWord = 'FxiOS';
+      } else if (isChromeIOS) {
+        searchWord = 'CriOS';
+      } else if (isEdgeIOS) {
+        searchWord = 'EdgiOS';
+      } else if (isSafari) {
+        searchWord = 'Version';
+      } else if (isChrome) {
+        searchWord = 'Chrome';
+      }
+
       const words = ua.split(' ');
       words.forEach(word => {
         if (word.includes(searchWord)) {
@@ -130,6 +154,11 @@ export class DeviceWeb extends WebPlugin implements DevicePlugin {
           uaFields.browserVersion = version;
         }
       });
+    } else if (isFirefox || isEdge) {
+      const reverseUA = ua.split('').reverse().join('');
+      const reverseVersion = reverseUA.split('/')[0];
+      const version = reverseVersion.split('').reverse().join('');
+      uaFields.browserVersion = version;
     }
 
     return uaFields;
