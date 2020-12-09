@@ -136,7 +136,7 @@ public class GeolocationPlugin: CAPPlugin, CLLocationManagerDelegate {
         }
     }
 
-    @objc func checkPermissions(_ call: CAPPluginCall) {
+    @objc public override func checkPermissions(_ call: CAPPluginCall) {
         var status: String = ""
 
         if CLLocationManager.locationServicesEnabled() {
@@ -162,7 +162,7 @@ public class GeolocationPlugin: CAPPlugin, CLLocationManagerDelegate {
         call.resolve(result)
     }
 
-    @objc func requestPermissions(_ call: CAPPluginCall) {
+    @objc public override func requestPermissions(_ call: CAPPluginCall) {
         if CLLocationManager.locationServicesEnabled() {
             // If state is not yet determined, request perms.
             // Otherwise, report back the state right away
