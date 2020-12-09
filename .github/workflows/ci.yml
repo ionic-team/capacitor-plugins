@@ -32,7 +32,7 @@ jobs:
         run: echo "::set-output name=changed-directories::$(echo ${{ toJson(steps.files.outputs.all) }} | jq -cM 'map(split("/")) | map(.[0])')"
         if: ${{ steps.files.outputs.all }}
   lint:
-    runs-on: macos-latest
+    runs-on: macOS
     timeout-minutes: 30
     steps:
       - uses: actions/setup-node@v1
@@ -47,7 +47,7 @@ jobs:
       - run: npm install
       - run: npm run lint
   verify-ios:
-    runs-on: macos-latest
+    runs-on: macOS
     timeout-minutes: 30
     needs:
       - setup
@@ -116,7 +116,7 @@ jobs:
         working-directory: ${{ matrix.plugin }}
         if: ${{ needs.setup.outputs['changed-directories'] && contains(needs.setup.outputs['changed-directories'], matrix.plugin) }}
   deploy:
-    runs-on: macos-latest
+    runs-on: macOS
     if: ${{ github.ref == 'refs/heads/main' }}
     timeout-minutes: 30
     needs:
