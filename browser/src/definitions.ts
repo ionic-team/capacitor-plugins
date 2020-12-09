@@ -1,11 +1,5 @@
 import type { PluginListenerHandle } from '@capacitor/core';
 
-declare module '@capacitor/core' {
-  interface PluginRegistry {
-    Browser: BrowserPlugin;
-  }
-}
-
 export interface BrowserPlugin {
   /**
    * Open a page with the specified options.
