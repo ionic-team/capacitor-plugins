@@ -7,7 +7,6 @@ import type {
   GeolocationWatchCallback,
   GeolocationPermissionStatus,
 } from './definitions';
-import { extend } from './util';
 
 export class GeolocationWeb extends WebPlugin implements GeolocationPlugin {
   async getCurrentPosition(
@@ -42,14 +41,12 @@ export class GeolocationWeb extends WebPlugin implements GeolocationPlugin {
       err => {
         callback(null, err);
       },
-      extend(
-        {
-          enableHighAccuracy: true,
-          timeout: 10000,
-          maximumAge: 0,
-        },
-        options,
-      ),
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 0,
+        ...options,
+      },
     );
 
     return `${id}`;
