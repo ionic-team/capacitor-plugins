@@ -1,19 +1,10 @@
-import type { PluginImplementations } from '@capacitor/core';
-import { Plugins, registerPlugin } from '@capacitor/core';
+import { registerPlugin } from '@capacitor/core';
 
 import type { GeolocationPlugin } from './definitions';
 import { GeolocationPermissionStatus } from './definitions';
-import { GeolocationWeb } from './web';
 
-const implementations: PluginImplementations<GeolocationPlugin> = {
-  android: Plugins.Geolocation,
-  ios: Plugins.Geolocation,
-  web: new GeolocationWeb(),
-};
-
-const Geolocation = registerPlugin(
-  'Geolocation',
-  implementations,
-).getImplementation();
+const Geolocation = registerPlugin<GeolocationPlugin>('Geolocation', {
+  web: () => import('./web').then(m => new m.GeolocationWeb()),
+});
 
 export { Geolocation, GeolocationPermissionStatus };

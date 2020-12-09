@@ -1,9 +1,3 @@
-declare module '@capacitor/core' {
-  interface PluginRegistry {
-    Geolocation: GeolocationPlugin;
-  }
-}
-
 export type CallbackID = string;
 
 export type GeolocationState = PermissionState;

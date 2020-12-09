@@ -10,10 +10,6 @@ import type {
 import { extend } from './util';
 
 export class GeolocationWeb extends WebPlugin implements GeolocationPlugin {
-  constructor() {
-    super({ name: 'Geolocation' });
-  }
-
   async getCurrentPosition(
     options?: GeolocationOptions,
   ): Promise<GeolocationPosition> {
