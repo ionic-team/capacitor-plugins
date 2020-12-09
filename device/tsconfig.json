@@ -15,14 +15,5 @@
     "strict": true,
     "target": "es2017"
   },
-  "files": ["src/index.ts"],
-  "ts-node": {
-    "transpileOnly": true,
-    "compilerOptions": {
-      "module": "commonjs"
-    },
-    "include": [
-      "src/__tests__/**/*"
-    ],
-  },
+  "files": ["src/index.ts"]
 }
