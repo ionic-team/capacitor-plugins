@@ -29,6 +29,8 @@ export interface GeolocationPlugin {
 
   /**
    * Clear a given watch
+   *
+   * @since 1.0.0
    */
   clearWatch(options: { id: string }): Promise<void>;
 
@@ -115,9 +117,29 @@ export interface GeolocationPosition {
 }
 
 export interface GeolocationOptions {
-  enableHighAccuracy?: boolean; // default: false
-  timeout?: number; // default: 10000
-  maximumAge?: number; // default: 0
+  /**
+   * High accuracy mode (such as GPS, if available)
+   *
+   * @default false
+   * @since 1.0.0
+   */
+  enableHighAccuracy?: boolean;
+
+  /**
+   * The maximum wait time in milliseconds for location updates
+   *
+   * @default 10000
+   * @since 1.0.0
+   */
+  timeout?: number;
+
+  /**
+   * The maximum age in milliseconds of a possible cached position that is acceptable to return
+   *
+   * @default 0
+   * @since 1.0.0
+   */
+  maximumAge?: number;
 }
 
 export type GeolocationWatchCallback = (
