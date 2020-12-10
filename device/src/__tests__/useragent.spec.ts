@@ -9,7 +9,9 @@ const web = new DeviceWeb(config);
 
 test('Chrome', () => {
   // Mock empty navigator/window objects
+  (global as any).navigator = {};
   (global as any).window = { chrome: true };
+
   const userAgents = [
     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36', // Chrome 87 on Windows
     'Mozilla/5.0 (Macintosh; Intel Mac OS X 11_0_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36', // Chrome 87 MacOS
@@ -28,12 +30,11 @@ test('Chrome', () => {
     '87.0.4280.77',
   ];
 
-  userAgents.forEach((ua, index) => {
-    (global as any).navigator = { userAgent: userAgents[index] };
+  for (const [index, ua] of userAgents) {
     const parsed = web.parseUa(ua);
     const actual = parsed.browserVersion;
     assert.is(actual, expected[index]);
-  });
+  }
 });
 
 test('Firefox', () => {
@@ -49,11 +50,11 @@ test('Firefox', () => {
 
   const expected = ['83.0', '83.0', '83.0', '83.0', '29.0'];
 
-  userAgents.forEach((ua, index) => {
+  for (const [index, ua] of userAgents) {
     const parsed = web.parseUa(ua);
     const actual = parsed.browserVersion;
     assert.is(actual, expected[index]);
-  });
+  }
 });
 
 test('Safari', () => {
@@ -66,11 +67,11 @@ test('Safari', () => {
 
   const expected = ['14.0.1', '14.0'];
 
-  userAgents.forEach((ua, index) => {
+  for (const [index, ua] of userAgents) {
     const parsed = web.parseUa(ua);
     const actual = parsed.browserVersion;
     assert.is(actual, expected[index]);
-  });
+  }
 });
 
 test('Edge', () => {
@@ -96,19 +97,19 @@ test('Edge', () => {
     '45.11.1',
   ];
 
-  userAgents.forEach((ua, index) => {
+  for (const [index, ua] of userAgents) {
     const parsed = web.parseUa(ua);
     const actual = parsed.browserVersion;
     assert.is(actual, expected[index]);
-  });
+  }
 
   (global as any).window = { chrome: false };
   (global as any).navigator = {};
-  userAgents.forEach((ua, index) => {
+  for (const [index, ua] of userAgents) {
     const parsed = web.parseUa(ua);
     const actual = parsed.browserVersion;
     assert.is(actual, expected[index]);
-  });
+  }
 });
 
 test.run();

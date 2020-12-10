@@ -143,17 +143,17 @@ export class DeviceWeb extends WebPlugin implements DevicePlugin {
         searchWord = 'EdgiOS';
       } else if (isSafari) {
         searchWord = 'Version';
-      } else if (isChrome) {
+      } else {
         searchWord = 'Chrome';
       }
 
       const words = ua.split(' ');
-      words.forEach(word => {
+      for (const word of words) {
         if (word.includes(searchWord)) {
           const version = word.split('/')[1];
           uaFields.browserVersion = version;
         }
-      });
+      }
     } else if (isFirefox || isEdge) {
       const reverseUA = ua.split('').reverse().join('');
       const reverseVersion = reverseUA.split('/')[0];
