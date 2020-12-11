@@ -456,8 +456,11 @@ public class CameraPlugin extends Plugin {
     @Override
     @PluginMethod
     public void requestPermissions(PluginCall call) {
+        // If the camera permission is defined in the manifest, then we have to prompt the user
+        // or else we will get a security exception when trying to present the camera. If, however,
+        // it is not defined in the manifest then we don't need to prompt and it will just work.
         if (hasDefinedPermissions(new String[] { Manifest.permission.CAMERA })) {
-            // If Camera API permission is in Manifest, we need to request it
+            // If Camera API permission is in Manifest, request all permissions (includes camera)
             super.requestPermissions(call);
         } else {
             // Camera not needed, just request storage permissions
@@ -471,7 +474,7 @@ public class CameraPlugin extends Plugin {
     public JSObject getPermissionStates() {
         JSObject permissionStates = super.getPermissionStates();
 
-        // If Camera is not in the manifest, we do not need the permission. Just grant it
+        // If Camera is not in the manifest and therefore not required, say the permission is granted
         if (!hasDefinedPermissions(new String[] { Manifest.permission.CAMERA })) {
             permissionStates.put("camera", "granted");
         }
