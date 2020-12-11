@@ -460,7 +460,7 @@ public class CameraPlugin extends Plugin {
         // or else we will get a security exception when trying to present the camera. If, however,
         // it is not defined in the manifest then we don't need to prompt and it will just work.
         if (hasDefinedPermissions(new String[] { Manifest.permission.CAMERA })) {
-            // If Camera API permission is in Manifest, request all permissions (includes camera)
+            // Request all permissions (includes camera)
             super.requestPermissions(call);
         } else {
             // Camera not needed, just request storage permissions
