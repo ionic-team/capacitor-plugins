@@ -10,9 +10,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
-import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 import com.getcapacitor.FileUtils;
+import com.getcapacitor.JSArray;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Logger;
 import com.getcapacitor.Plugin;
@@ -21,6 +21,7 @@ import com.getcapacitor.PluginMethod;
 import com.getcapacitor.PluginRequestCodes;
 import com.getcapacitor.annotation.CapacitorPlugin;
 import com.getcapacitor.annotation.Permission;
+import org.json.JSONException;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -454,20 +455,47 @@ public class CameraPlugin extends Plugin {
         call.resolve(data);
     }
 
-    @Nullable
     @Override
-    protected String overrideStateForPermission(Permission permission) {
-        if (permission.alias().equals("camera")) {
-            // If the camera permission is defined in the manifest, then we have to prompt the user
-            // or else we will get a security exception when trying to present the camera. If, however,
-            // it is not defined in the manifest then we don't need to prompt and it will just work.
-            if (hasDefinedPermissions(new Permission[] { permission })) {
-                return null;
+    @PluginMethod
+    public void requestPermissions(PluginCall call) {
+        // If the camera permission is defined in the manifest, then we have to prompt the user
+        // or else we will get a security exception when trying to present the camera. If, however,
+        // it is not defined in the manifest then we don't need to prompt and it will just work.
+        if (hasDefinedPermissions(new String[] { Manifest.permission.CAMERA })) {
+            // just request normally
+            super.requestPermissions(call);
+        }
+        else {
+            // the manifest does not define camera permissions, so we need to decide what to do
+            // first, extract the permissions being requested
+            JSArray providedPerms = call.getArray("permissions");
+            List<String> permsList = null;
+            try {
+                permsList = providedPerms.toList();
+            } catch (JSONException e) {
+            }
+
+            if (permsList != null && permsList.size() == 1 && permsList.contains("camera")) {
+                // the only thing being asked for was the camera so we can just return the current state
+                call.resolve(getPermissionStates());
             } else {
-                return "granted";
+                // we need to ask about photos so request storage permissions
+                String[] perms = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+                requestPermissions(call, perms, CameraPlugin.CAMERA_REQUEST_PERMISSIONS);
             }
         }
-        return super.overrideStateForPermission(permission);
+    }
+
+    @Override
+    public JSObject getPermissionStates() {
+        JSObject permissionStates = super.getPermissionStates();
+
+        // If Camera is not in the manifest and therefore not required, say the permission is granted
+        if (!hasDefinedPermissions(new String[] { Manifest.permission.CAMERA })) {
+            permissionStates.put("camera", "granted");
+        }
+
+        return permissionStates;
     }
 
     @Override
