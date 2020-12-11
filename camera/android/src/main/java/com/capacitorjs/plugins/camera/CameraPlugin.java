@@ -21,7 +21,6 @@ import com.getcapacitor.PluginMethod;
 import com.getcapacitor.PluginRequestCodes;
 import com.getcapacitor.annotation.CapacitorPlugin;
 import com.getcapacitor.annotation.Permission;
-import org.json.JSONException;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -31,6 +30,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import org.json.JSONException;
 
 /**
  * The Camera plugin makes it easy to take a photo or have the user select a photo
@@ -464,23 +464,21 @@ public class CameraPlugin extends Plugin {
         if (hasDefinedPermissions(new String[] { Manifest.permission.CAMERA })) {
             // just request normally
             super.requestPermissions(call);
-        }
-        else {
+        } else {
             // the manifest does not define camera permissions, so we need to decide what to do
             // first, extract the permissions being requested
             JSArray providedPerms = call.getArray("permissions");
             List<String> permsList = null;
             try {
                 permsList = providedPerms.toList();
-            } catch (JSONException e) {
-            }
+            } catch (JSONException e) {}
 
             if (permsList != null && permsList.size() == 1 && permsList.contains("camera")) {
                 // the only thing being asked for was the camera so we can just return the current state
                 call.resolve(getPermissionStates());
             } else {
                 // we need to ask about photos so request storage permissions
-                String[] perms = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+                String[] perms = { Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE };
                 requestPermissions(call, perms, CameraPlugin.CAMERA_REQUEST_PERMISSIONS);
             }
         }
