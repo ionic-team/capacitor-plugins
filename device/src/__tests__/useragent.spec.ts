@@ -30,7 +30,7 @@ test('Chrome', () => {
     '87.0.4280.77',
   ];
 
-  for (const [index, ua] of userAgents) {
+  for (const [index, ua] of userAgents.entries()) {
     const parsed = web.parseUa(ua);
     const actual = parsed.browserVersion;
     assert.is(actual, expected[index]);
@@ -50,7 +50,7 @@ test('Firefox', () => {
 
   const expected = ['83.0', '83.0', '83.0', '83.0', '29.0'];
 
-  for (const [index, ua] of userAgents) {
+  for (const [index, ua] of userAgents.entries()) {
     const parsed = web.parseUa(ua);
     const actual = parsed.browserVersion;
     assert.is(actual, expected[index]);
@@ -67,7 +67,7 @@ test('Safari', () => {
 
   const expected = ['14.0.1', '14.0'];
 
-  for (const [index, ua] of userAgents) {
+  for (const [index, ua] of userAgents.entries()) {
     const parsed = web.parseUa(ua);
     const actual = parsed.browserVersion;
     assert.is(actual, expected[index]);
@@ -97,7 +97,7 @@ test('Edge', () => {
     '45.11.1',
   ];
 
-  for (const [index, ua] of userAgents) {
+  for (const [index, ua] of userAgents.entries()) {
     const parsed = web.parseUa(ua);
     const actual = parsed.browserVersion;
     assert.is(actual, expected[index]);
@@ -105,7 +105,7 @@ test('Edge', () => {
 
   (global as any).window = { chrome: false };
   (global as any).navigator = {};
-  for (const [index, ua] of userAgents) {
+  for (const [index, ua] of userAgents.entries()) {
     const parsed = web.parseUa(ua);
     const actual = parsed.browserVersion;
     assert.is(actual, expected[index]);
