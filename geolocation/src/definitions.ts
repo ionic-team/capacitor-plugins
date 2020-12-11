@@ -91,7 +91,7 @@ export interface GeolocationPosition {
      *
      * @since 1.0.0
      */
-    altitudeAccuracy: number | null;
+    altitudeAccuracy: number | null | undefined;
 
     /**
      * The altitude the user is at (if available)
