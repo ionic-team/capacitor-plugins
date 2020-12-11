@@ -10,7 +10,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
-import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 import com.getcapacitor.FileUtils;
 import com.getcapacitor.JSObject;
@@ -454,20 +453,30 @@ public class CameraPlugin extends Plugin {
         call.resolve(data);
     }
 
-    @Nullable
     @Override
-    protected String overrideStateForPermission(Permission permission) {
-        if (permission.alias().equals("camera")) {
-            // If the camera permission is defined in the manifest, then we have to prompt the user
-            // or else we will get a security exception when trying to present the camera. If, however,
-            // it is not defined in the manifest then we don't need to prompt and it will just work.
-            if (hasDefinedPermissions(new Permission[] { permission })) {
-                return null;
-            } else {
-                return "granted";
-            }
+    @PluginMethod
+    public void requestPermissions(PluginCall call) {
+        if (hasDefinedPermissions(new String[] { Manifest.permission.CAMERA })) {
+            // If Camera API permission is in Manifest, we need to request it
+            super.requestPermissions(call);
+        } else {
+            // Camera not needed, just request storage permissions
+            String[] perms = { Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE };
+
+            requestPermissions(call, perms, CameraPlugin.CAMERA_REQUEST_PERMISSIONS);
         }
-        return super.overrideStateForPermission(permission);
+    }
+
+    @Override
+    public JSObject getPermissionStates() {
+        JSObject permissionStates = super.getPermissionStates();
+
+        // If Camera is not in the manifest, we do not need the permission. Just grant it
+        if (!hasDefinedPermissions(new String[] { Manifest.permission.CAMERA })) {
+            permissionStates.put("camera", "granted");
+        }
+
+        return permissionStates;
     }
 
     @Override
