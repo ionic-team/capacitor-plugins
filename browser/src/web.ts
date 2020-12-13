@@ -6,7 +6,7 @@ export class BrowserWeb extends WebPlugin implements BrowserPlugin {
   _lastWindow: Window | null;
 
   constructor() {
-    super({ name: 'Browser' });
+    super();
     this._lastWindow = null;
   }
 

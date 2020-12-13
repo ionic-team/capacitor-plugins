@@ -1,5 +1,3 @@
-import nodeResolve from '@rollup/plugin-node-resolve';
-
 export default {
   input: 'dist/esm/index.js',
   output: {
@@ -10,12 +8,7 @@ export default {
       '@capacitor/core': 'capacitorExports',
     },
     sourcemap: true,
+    inlineDynamicImports: true,
   },
-  plugins: [
-    nodeResolve({
-      // allowlist of dependencies to bundle in
-      // @see https://github.com/rollup/plugins/tree/HEAD/packages/node-resolve#resolveonly
-      resolveOnly: ['lodash'],
-    }),
-  ],
+  external: ['@capacitor/core'],
 };

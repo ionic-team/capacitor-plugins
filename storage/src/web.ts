@@ -14,10 +14,6 @@ import type {
 export class StorageWeb extends WebPlugin implements StoragePlugin {
   private group = 'CapacitorStorage';
 
-  constructor() {
-    super({ name: 'Storage' });
-  }
-
   public async configure({ group }: ConfigureOptions): Promise<void> {
     if (typeof group === 'string') {
       this.group = group;

@@ -10,7 +10,7 @@ import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
 import com.getcapacitor.annotation.Permission;
 
-@CapacitorPlugin(name = "Network", permissions = { @Permission(permission = Manifest.permission.ACCESS_NETWORK_STATE) })
+@CapacitorPlugin(name = "Network", permissions = { @Permission(strings = { Manifest.permission.ACCESS_NETWORK_STATE }) })
 public class NetworkPlugin extends Plugin {
 
     private Network implementation;

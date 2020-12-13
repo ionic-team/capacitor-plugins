@@ -1,11 +1,5 @@
 import type { PluginListenerHandle } from '@capacitor/core';
 
-declare module '@capacitor/core' {
-  interface PluginRegistry {
-    ScreenReader: ScreenReaderPlugin;
-  }
-}
-
 export interface ScreenReaderSpeakOptions {
   /**
    * The text to speak.
