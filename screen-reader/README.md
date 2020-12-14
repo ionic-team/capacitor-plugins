@@ -45,7 +45,7 @@ Readers).
 ### speak(...)
 
 ```typescript
-speak(options: ScreenReaderSpeakOptions) => Promise<void>
+speak(options: SpeakOptions) => Promise<void>
 ```
 
 Text-to-Speech functionality.
@@ -60,9 +60,9 @@ For more text-to-speech capabilities, please see the [Capacitor Community
 Text-to-Speech
 plugin](https://github.com/capacitor-community/text-to-speech).
 
-| Param         | Type                                                                          |
-| ------------- | ----------------------------------------------------------------------------- |
-| **`options`** | <code><a href="#screenreaderspeakoptions">ScreenReaderSpeakOptions</a></code> |
+| Param         | Type                                                  |
+| ------------- | ----------------------------------------------------- |
+| **`options`** | <code><a href="#speakoptions">SpeakOptions</a></code> |
 
 **Since:** 1.0.0
 
@@ -72,7 +72,7 @@ plugin](https://github.com/capacitor-community/text-to-speech).
 ### addListener(...)
 
 ```typescript
-addListener(eventName: 'screenReaderStateChange', listener: ScreenReaderStateChangeListener) => PluginListenerHandle
+addListener(eventName: 'screenReaderStateChange', listener: StateChangeListener) => PluginListenerHandle
 ```
 
 Add a listener
@@ -108,7 +108,7 @@ Remove all the listeners that are attached to this plugin.
 ### Interfaces
 
 
-#### ScreenReaderSpeakOptions
+#### SpeakOptions
 
 | Prop           | Type                | Description                                                                                                                                                               | Since |
 | -------------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
