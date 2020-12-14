@@ -1,6 +1,6 @@
 import type { PluginListenerHandle } from '@capacitor/core';
 
-export interface ScreenReaderSpeakOptions {
+export interface SpeakOptions {
   /**
    * The text to speak.
    *
@@ -19,7 +19,7 @@ export interface ScreenReaderSpeakOptions {
   language?: string;
 }
 
-export type ScreenReaderStateChangeListener = (state: {
+export type StateChangeListener = (state: {
   /**
    * Whether a Screen Reader is currently active.
    *
@@ -54,7 +54,7 @@ export interface ScreenReaderPlugin {
    *
    * @since 1.0.0
    */
-  speak(options: ScreenReaderSpeakOptions): Promise<void>;
+  speak(options: SpeakOptions): Promise<void>;
 
   /**
    * Add a listener
@@ -66,7 +66,7 @@ export interface ScreenReaderPlugin {
    */
   addListener(
     eventName: 'screenReaderStateChange',
-    listener: ScreenReaderStateChangeListener,
+    listener: StateChangeListener,
   ): PluginListenerHandle;
 
   /**
@@ -76,3 +76,15 @@ export interface ScreenReaderPlugin {
    */
   removeAllListeners(): void;
 }
+
+/**
+ * @deprecated Use `SpeakOptions`.
+ * @since 1.0.0
+ */
+export type AccessibilitySpeakOptions = SpeakOptions;
+
+/**
+ * @deprecated Use `StateChangeListener`.
+ * @since 1.0.0
+ */
+export type ScreenReaderStateChangeCallback = StateChangeListener;
