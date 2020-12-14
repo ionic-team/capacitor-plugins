@@ -62,6 +62,7 @@ export interface ScreenReaderPlugin {
    * This method is not supported on web (it is not possible to detect Screen
    * Readers).
    *
+   * @hidden
    * @deprecated Use the 'stateChange' event.
    * @since 1.0.0
    */
@@ -72,6 +73,8 @@ export interface ScreenReaderPlugin {
 
   /**
    * Add a listener for when the screen reader is turned on or off.
+   *
+   * This event used to be named `'accessibilityScreenReaderStateChange'`.
    *
    * This method is not supported on web (it is not possible to detect Screen
    * Readers).
