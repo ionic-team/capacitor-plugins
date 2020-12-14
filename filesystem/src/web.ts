@@ -1,29 +1,29 @@
 import { WebPlugin } from '@capacitor/core';
 
 import type {
+  AppendFileOptions,
   CopyOptions,
-  FileAppendOptions,
-  FileDeleteOptions,
-  FileReadOptions,
-  FileReadResult,
-  PermissionStatus,
+  DeleteFileOptions,
   FilesystemPlugin,
-  FileWriteOptions,
-  FileWriteResult,
   GetUriOptions,
   GetUriResult,
   MkdirOptions,
+  PermissionStatus,
+  ReadFileOptions,
+  ReadFileResult,
   ReaddirOptions,
   ReaddirResult,
   RenameOptions,
   RmdirOptions,
   StatOptions,
   StatResult,
+  WriteFileOptions,
+  WriteFileResult,
 } from './definitions';
-import { FilesystemDirectory } from './definitions';
+import { Directory } from './definitions';
 
 export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
-  DEFAULT_DIRECTORY = FilesystemDirectory.Data;
+  DEFAULT_DIRECTORY = Directory.Data;
   DB_VERSION = 1;
   DB_NAME = 'Disc';
 
@@ -102,7 +102,7 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
   }
 
   private getPath(
-    directory: FilesystemDirectory | undefined,
+    directory: Directory | undefined,
     uriPath: string | undefined,
   ): string {
     directory = directory || this.DEFAULT_DIRECTORY;
@@ -125,7 +125,7 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
    * @param options options for the file read
    * @return a promise that resolves with the read file data result
    */
-  async readFile(options: FileReadOptions): Promise<FileReadResult> {
+  async readFile(options: ReadFileOptions): Promise<ReadFileResult> {
     const path: string = this.getPath(options.directory, options.path);
     // const encoding = options.encoding;
 
@@ -139,7 +139,7 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
    * @param options options for the file write
    * @return a promise that resolves with the file write result
    */
-  async writeFile(options: FileWriteOptions): Promise<FileWriteResult> {
+  async writeFile(options: WriteFileOptions): Promise<WriteFileResult> {
     const path: string = this.getPath(options.directory, options.path);
     const data = options.data;
     const doRecursive = options.recursive;
@@ -184,7 +184,7 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
    * @param options options for the file append
    * @return a promise that resolves with the file write result
    */
-  async appendFile(options: FileAppendOptions): Promise<void> {
+  async appendFile(options: AppendFileOptions): Promise<void> {
     const path: string = this.getPath(options.directory, options.path);
     let data = options.data;
     // const encoding = options.encoding;
@@ -231,7 +231,7 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
    * @param options options for the file delete
    * @return a promise that resolves with the deleted file data result
    */
-  async deleteFile(options: FileDeleteOptions): Promise<void> {
+  async deleteFile(options: DeleteFileOptions): Promise<void> {
     const path: string = this.getPath(options.directory, options.path);
 
     const entry = (await this.dbRequest('get', [path])) as EntryObj;
