@@ -19,14 +19,16 @@ export interface SpeakOptions {
   language?: string;
 }
 
-export type StateChangeListener = (state: {
+export interface ScreenReaderState {
   /**
    * Whether a Screen Reader is currently active.
    *
    * @since 1.0.0
    */
   value: boolean;
-}) => any;
+}
+
+export type StateChangeListener = (state: ScreenReaderState) => void;
 
 export interface ScreenReaderPlugin {
   /**
