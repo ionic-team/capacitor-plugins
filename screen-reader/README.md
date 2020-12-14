@@ -80,10 +80,10 @@ Add a listener
 This method is not supported on web (it is not possible to detect Screen
 Readers).
 
-| Param           | Type                                                |
-| --------------- | --------------------------------------------------- |
-| **`eventName`** | <code>"screenReaderStateChange"</code>              |
-| **`listener`**  | <code>(state: { value: boolean; }) =&gt; any</code> |
+| Param           | Type                                               |
+| --------------- | -------------------------------------------------- |
+| **`eventName`** | <code>"screenReaderStateChange"</code>             |
+| **`listener`**  | <code>(state: ScreenReaderState) =&gt; void</code> |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 

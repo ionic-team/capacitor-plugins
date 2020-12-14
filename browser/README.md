@@ -28,14 +28,14 @@ npx cap sync
 ### open(...)
 
 ```typescript
-open(options: BrowserOpenOptions) => Promise<void>
+open(options: OpenOptions) => Promise<void>
 ```
 
 Open a page with the specified options.
 
-| Param         | Type                                                              |
-| ------------- | ----------------------------------------------------------------- |
-| **`options`** | <code><a href="#browseropenoptions">BrowserOpenOptions</a></code> |
+| Param         | Type                                                |
+| ------------- | --------------------------------------------------- |
+| **`options`** | <code><a href="#openoptions">OpenOptions</a></code> |
 
 **Since:** 1.0.0
 
@@ -113,7 +113,7 @@ Remove all native listeners for this plugin.
 ### Interfaces
 
 
-#### BrowserOpenOptions
+#### OpenOptions
 
 Represents the options passed to `open`.
 

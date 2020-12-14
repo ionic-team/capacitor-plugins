@@ -41,12 +41,12 @@ Return information about the underlying device/os/platform.
 ### getBatteryInfo()
 
 ```typescript
-getBatteryInfo() => Promise<DeviceBatteryInfo>
+getBatteryInfo() => Promise<BatteryInfo>
 ```
 
 Return information about the battery.
 
-**Returns:** <code>Promise&lt;<a href="#devicebatteryinfo">DeviceBatteryInfo</a>&gt;</code>
+**Returns:** <code>Promise&lt;<a href="#batteryinfo">BatteryInfo</a>&gt;</code>
 
 **Since:** 1.0.0
 
@@ -56,12 +56,12 @@ Return information about the battery.
 ### getLanguageCode()
 
 ```typescript
-getLanguageCode() => Promise<DeviceLanguageCodeResult>
+getLanguageCode() => Promise<GetLanguageCodeResult>
 ```
 
 Get the device's current language locale code.
 
-**Returns:** <code>Promise&lt;<a href="#devicelanguagecoderesult">DeviceLanguageCodeResult</a>&gt;</code>
+**Returns:** <code>Promise&lt;<a href="#getlanguagecoderesult">GetLanguageCodeResult</a>&gt;</code>
 
 **Since:** 1.0.0
 
@@ -88,7 +88,7 @@ Get the device's current language locale code.
 | **`diskTotal`**       | <code>number</code>                                                | The total size of the normal data storage path for the OS, in bytes.                                                                         | 1.0.0 |
 
 
-#### DeviceBatteryInfo
+#### BatteryInfo
 
 | Prop               | Type                 | Description                                                       | Since |
 | ------------------ | -------------------- | ----------------------------------------------------------------- | ----- |
@@ -96,7 +96,7 @@ Get the device's current language locale code.
 | **`isCharging`**   | <code>boolean</code> | Whether the device is charging.                                   | 1.0.0 |
 
 
-#### DeviceLanguageCodeResult
+#### GetLanguageCodeResult
 
 | Prop        | Type                | Description                  | Since |
 | ----------- | ------------------- | ---------------------------- | ----- |
