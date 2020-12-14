@@ -45,7 +45,7 @@ export interface AppState {
   isActive: boolean;
 }
 
-export interface AppUrlOpen {
+export interface URLOpenListenerEvent {
   /**
    * The URL the app was opened with.
    *
@@ -79,7 +79,7 @@ export interface AppLaunchUrl {
   url: string;
 }
 
-export interface AppRestoredResult {
+export interface RestoredListenerEvent {
   /**
    * The pluginId this result corresponds to. For example, `Camera`.
    *
@@ -114,6 +114,11 @@ export interface AppRestoredResult {
     message: string;
   };
 }
+
+export type StateChangeListener = (state: AppState) => void;
+export type URLOpenListener = (event: URLOpenListenerEvent) => void;
+export type RestoredListener = (event: RestoredListenerEvent) => void;
+export type BackButtonListener = () => void;
 
 export interface AppPlugin {
   /**
@@ -154,7 +159,7 @@ export interface AppPlugin {
    */
   addListener(
     eventName: 'appStateChange',
-    listenerFunc: (state: AppState) => void,
+    listenerFunc: StateChangeListener,
   ): PluginListenerHandle;
 
   /**
@@ -165,7 +170,7 @@ export interface AppPlugin {
    */
   addListener(
     eventName: 'appUrlOpen',
-    listenerFunc: (data: AppUrlOpen) => void,
+    listenerFunc: URLOpenListener,
   ): PluginListenerHandle;
 
   /**
@@ -177,7 +182,7 @@ export interface AppPlugin {
    */
   addListener(
     eventName: 'appRestoredResult',
-    listenerFunc: (data: AppRestoredResult) => void,
+    listenerFunc: RestoredListener,
   ): PluginListenerHandle;
 
   /**
@@ -189,7 +194,7 @@ export interface AppPlugin {
    */
   addListener(
     eventName: 'backButton',
-    listenerFunc: () => void,
+    listenerFunc: BackButtonListener,
   ): PluginListenerHandle;
 
   /**
@@ -199,3 +204,15 @@ export interface AppPlugin {
    */
   removeAllListeners(): void;
 }
+
+/**
+ * @deprecated Use `RestoredListenerEvent`.
+ * @since 1.0.0
+ */
+export type AppRestoredResult = RestoredListenerEvent;
+
+/**
+ * @deprecated Use `URLOpenListenerEvent`.
+ * @since 1.0.0
+ */
+export type AppUrlOpen = URLOpenListenerEvent;
