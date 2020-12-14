@@ -16,6 +16,7 @@ npx cap sync
 * [`isEnabled()`](#isenabled)
 * [`speak(...)`](#speak)
 * [`addListener(...)`](#addlistener)
+* [`addListener(...)`](#addlistener)
 * [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
 
@@ -72,17 +73,40 @@ plugin](https://github.com/capacitor-community/text-to-speech).
 ### addListener(...)
 
 ```typescript
-addListener(eventName: 'screenReaderStateChange', listener: ScreenReaderStateChangeListener) => PluginListenerHandle
+addListener(eventName: 'accessibilityScreenReaderStateChange', listener: ScreenReaderStateChangeListener) => PluginListenerHandle
 ```
 
-Add a listener
+Add a listener for when the screen reader is turned on or off.
 
 This method is not supported on web (it is not possible to detect Screen
 Readers).
 
 | Param           | Type                                                |
 | --------------- | --------------------------------------------------- |
-| **`eventName`** | <code>"screenReaderStateChange"</code>              |
+| **`eventName`** | <code>"accessibilityScreenReaderStateChange"</code> |
+| **`listener`**  | <code>(state: { value: boolean; }) =&gt; any</code> |
+
+**Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
+
+**Since:** 1.0.0
+
+--------------------
+
+
+### addListener(...)
+
+```typescript
+addListener(eventName: 'stateChange', listener: ScreenReaderStateChangeListener) => PluginListenerHandle
+```
+
+Add a listener for when the screen reader is turned on or off.
+
+This method is not supported on web (it is not possible to detect Screen
+Readers).
+
+| Param           | Type                                                |
+| --------------- | --------------------------------------------------- |
+| **`eventName`** | <code>"stateChange"</code>                          |
 | **`listener`**  | <code>(state: { value: boolean; }) =&gt; any</code> |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
