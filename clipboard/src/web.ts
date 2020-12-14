@@ -1,10 +1,6 @@
 import { WebPlugin } from '@capacitor/core';
 
-import type {
-  ClipboardPlugin,
-  ReadResult,
-  WriteOptions,
-} from './definitions';
+import type { ClipboardPlugin, ReadResult, WriteOptions } from './definitions';
 
 declare global {
   interface Clipboard {
