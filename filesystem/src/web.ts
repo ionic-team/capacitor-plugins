@@ -6,7 +6,7 @@ import type {
   FileDeleteOptions,
   FileReadOptions,
   FileReadResult,
-  FilesystemPermissionStatus,
+  PermissionStatus,
   FilesystemPlugin,
   FileWriteOptions,
   FileWriteResult,
@@ -399,11 +399,11 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
     return this._copy(options, false);
   }
 
-  async requestPermissions(): Promise<FilesystemPermissionStatus> {
+  async requestPermissions(): Promise<PermissionStatus> {
     return { publicStorage: 'granted' };
   }
 
-  async checkPermissions(): Promise<FilesystemPermissionStatus> {
+  async checkPermissions(): Promise<PermissionStatus> {
     return { publicStorage: 'granted' };
   }
 

@@ -1,4 +1,4 @@
-export interface FilesystemPermissionStatus {
+export interface PermissionStatus {
   publicStorage: PermissionState;
 }
 
@@ -487,7 +487,7 @@ export interface FilesystemPlugin {
    *
    * @since 1.0.0
    */
-  checkPermissions(): Promise<FilesystemPermissionStatus>;
+  checkPermissions(): Promise<PermissionStatus>;
 
   /**
    * Request read/write permissions.
@@ -496,5 +496,5 @@ export interface FilesystemPlugin {
    *
    * @since 1.0.0
    */
-  requestPermissions(): Promise<FilesystemPermissionStatus>;
+  requestPermissions(): Promise<PermissionStatus>;
 }
