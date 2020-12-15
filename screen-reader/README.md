@@ -83,10 +83,10 @@ This event used to be named `'accessibilityScreenReaderStateChange'`.
 This method is not supported on web (it is not possible to detect Screen
 Readers).
 
-| Param           | Type                                                |
-| --------------- | --------------------------------------------------- |
-| **`eventName`** | <code>"stateChange"</code>                          |
-| **`listener`**  | <code>(state: { value: boolean; }) =&gt; any</code> |
+| Param           | Type                                                                                        |
+| --------------- | ------------------------------------------------------------------------------------------- |
+| **`eventName`** | <code>"stateChange"</code>                                                                  |
+| **`listener`**  | <code><a href="#screenreaderstatechangelistener">ScreenReaderStateChangeListener</a></code> |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
