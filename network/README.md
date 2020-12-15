@@ -14,7 +14,7 @@ npx cap sync
 <docgen-index>
 
 * [`getStatus()`](#getstatus)
-* [`addListener(...)`](#addlistener)
+* [`addListener('networkStatusChange', ...)`](#addlistenernetworkstatuschange-)
 * [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
 
@@ -38,7 +38,7 @@ Query the current status of the network connection.
 --------------------
 
 
-### addListener(...)
+### addListener('networkStatusChange', ...)
 
 ```typescript
 addListener(eventName: 'networkStatusChange', listenerFunc: (status: NetworkStatus) => void) => PluginListenerHandle

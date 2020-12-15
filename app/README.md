@@ -17,10 +17,10 @@ npx cap sync
 * [`getInfo()`](#getinfo)
 * [`getState()`](#getstate)
 * [`getLaunchUrl()`](#getlaunchurl)
-* [`addListener(...)`](#addlistener)
-* [`addListener(...)`](#addlistener)
-* [`addListener(...)`](#addlistener)
-* [`addListener(...)`](#addlistener)
+* [`addListener('appStateChange', ...)`](#addlistenerappstatechange-)
+* [`addListener('appUrlOpen', ...)`](#addlistenerappurlopen-)
+* [`addListener('appRestoredResult', ...)`](#addlistenerapprestoredresult-)
+* [`addListener('backButton', ...)`](#addlistenerbackbutton-)
 * [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
 
@@ -92,7 +92,7 @@ Get the URL the app was launched with, if any.
 --------------------
 
 
-### addListener(...)
+### addListener('appStateChange', ...)
 
 ```typescript
 addListener(eventName: 'appStateChange', listenerFunc: (state: AppState) => void) => PluginListenerHandle
@@ -112,7 +112,7 @@ Listen for changes in the App's active state (whether the app is in the foregrou
 --------------------
 
 
-### addListener(...)
+### addListener('appUrlOpen', ...)
 
 ```typescript
 addListener(eventName: 'appUrlOpen', listenerFunc: (data: AppUrlOpen) => void) => PluginListenerHandle
@@ -133,7 +133,7 @@ as URLs your app handles (Universal Links on iOS and App Links on Android)
 --------------------
 
 
-### addListener(...)
+### addListener('appRestoredResult', ...)
 
 ```typescript
 addListener(eventName: 'appRestoredResult', listenerFunc: (data: AppRestoredResult) => void) => PluginListenerHandle
@@ -155,7 +155,7 @@ the app was launched with, converted into the form of a result from a plugin cal
 --------------------
 
 
-### addListener(...)
+### addListener('backButton', ...)
 
 ```typescript
 addListener(eventName: 'backButton', listenerFunc: () => void) => PluginListenerHandle
