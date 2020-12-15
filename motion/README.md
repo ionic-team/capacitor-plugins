@@ -13,8 +13,8 @@ npx cap sync
 
 <docgen-index>
 
-* [`addListener(...)`](#addlistener)
-* [`addListener(...)`](#addlistener)
+* [`addListener('accel', ...)`](#addlisteneraccel-)
+* [`addListener('orientation', ...)`](#addlistenerorientation-)
 * [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
 
@@ -23,7 +23,7 @@ npx cap sync
 <docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
 
-### addListener(...)
+### addListener('accel', ...)
 
 ```typescript
 addListener(eventName: 'accel', listenerFunc: (event: MotionEventResult) => void) => PluginListenerHandle
@@ -43,7 +43,7 @@ Add a listener for accelerometer data
 --------------------
 
 
-### addListener(...)
+### addListener('orientation', ...)
 
 ```typescript
 addListener(eventName: 'orientation', listenerFunc: (event: MotionOrientationEventResult) => void) => PluginListenerHandle
