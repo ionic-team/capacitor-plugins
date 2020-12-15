@@ -44,10 +44,10 @@
   },
   "devDependencies": {
     "@capacitor/android": "^3.0.0-alpha.10",
-    "@capacitor/cli": "^3.0.0-alpha.9",
-    "@capacitor/core": "^3.0.0-alpha.9",
+    "@capacitor/cli": "^3.0.0-alpha.10",
+    "@capacitor/core": "^3.0.0-alpha.10",
     "@capacitor/docgen": "0.0.11",
-    "@capacitor/ios": "^3.0.0-alpha.9",
+    "@capacitor/ios": "^3.0.0-alpha.10",
     "@ionic/eslint-config": "^0.3.0",
     "@ionic/prettier-config": "~1.0.1",
     "@ionic/swiftlint-config": "^1.1.2",
@@ -60,7 +60,7 @@
     "typescript": "~4.0.3"
   },
   "peerDependencies": {
-    "@capacitor/core": "^3.0.0-alpha.9"
+    "@capacitor/core": "^3.0.0-alpha.10"
   },
   "prettier": "@ionic/prettier-config",
   "swiftlint": "@ionic/swiftlint-config",
