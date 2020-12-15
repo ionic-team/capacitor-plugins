@@ -19,10 +19,10 @@ npx cap sync
 * [`setScroll(...)`](#setscroll)
 * [`setStyle(...)`](#setstyle)
 * [`setResizeMode(...)`](#setresizemode)
-* [`addListener(...)`](#addlistener)
-* [`addListener(...)`](#addlistener)
-* [`addListener(...)`](#addlistener)
-* [`addListener(...)`](#addlistener)
+* [`addListener('keyboardWillShow', ...)`](#addlistenerkeyboardwillshow-)
+* [`addListener('keyboardDidShow', ...)`](#addlistenerkeyboarddidshow-)
+* [`addListener('keyboardWillHide', ...)`](#addlistenerkeyboardwillhide-)
+* [`addListener('keyboardDidHide', ...)`](#addlistenerkeyboarddidhide-)
 * [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
 * [Enums](#enums)
@@ -137,7 +137,7 @@ This method is only supported on iOS.
 --------------------
 
 
-### addListener(...)
+### addListener('keyboardWillShow', ...)
 
 ```typescript
 addListener(eventName: 'keyboardWillShow', listenerFunc: (info: KeyboardInfo) => void) => PluginListenerHandle
@@ -157,7 +157,7 @@ Listen for when the keyboard is about to be shown.
 --------------------
 
 
-### addListener(...)
+### addListener('keyboardDidShow', ...)
 
 ```typescript
 addListener(eventName: 'keyboardDidShow', listenerFunc: (info: KeyboardInfo) => void) => PluginListenerHandle
@@ -177,7 +177,7 @@ Listen for when the keyboard is shown.
 --------------------
 
 
-### addListener(...)
+### addListener('keyboardWillHide', ...)
 
 ```typescript
 addListener(eventName: 'keyboardWillHide', listenerFunc: () => void) => PluginListenerHandle
@@ -197,7 +197,7 @@ Listen for when the keyboard is about to be hidden.
 --------------------
 
 
-### addListener(...)
+### addListener('keyboardDidHide', ...)
 
 ```typescript
 addListener(eventName: 'keyboardDidHide', listenerFunc: () => void) => PluginListenerHandle
