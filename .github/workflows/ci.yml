@@ -43,6 +43,7 @@ jobs:
       - run: npm run lint
   verify-ios:
     runs-on: macOS
+    if: ${{ needs.setup.outputs['changed-directories'] && contains(needs.setup.outputs['changed-directories'], matrix.plugin) }}
     timeout-minutes: 30
     needs:
       - setup
@@ -58,9 +59,9 @@ jobs:
       - run: npm install
       - run: npm run verify:ios
         working-directory: ${{ matrix.plugin }}
-        if: ${{ needs.setup.outputs['changed-directories'] && contains(needs.setup.outputs['changed-directories'], matrix.plugin) }}
   verify-android:
     runs-on: ubuntu-latest
+    if: ${{ needs.setup.outputs['changed-directories'] && contains(needs.setup.outputs['changed-directories'], matrix.plugin) }}
     timeout-minutes: 30
     needs:
       - setup
@@ -76,9 +77,9 @@ jobs:
       - run: npm install
       - run: npm run verify:android
         working-directory: ${{ matrix.plugin }}
-        if: ${{ needs.setup.outputs['changed-directories'] && contains(needs.setup.outputs['changed-directories'], matrix.plugin) }}
   verify-web:
     runs-on: ubuntu-latest
+    if: ${{ needs.setup.outputs['changed-directories'] && contains(needs.setup.outputs['changed-directories'], matrix.plugin) }}
     timeout-minutes: 30
     needs:
       - setup
@@ -94,7 +95,6 @@ jobs:
       - run: npm install
       - run: npm run verify:web
         working-directory: ${{ matrix.plugin }}
-        if: ${{ needs.setup.outputs['changed-directories'] && contains(needs.setup.outputs['changed-directories'], matrix.plugin) }}
   deploy:
     runs-on: macOS
     if: ${{ github.ref == 'refs/heads/main' }}
