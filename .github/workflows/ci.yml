@@ -43,6 +43,7 @@ jobs:
       - run: npm run lint
   verify-ios:
     runs-on: macOS
+    if: needs.setup.outputs.plugins != '[]'
     timeout-minutes: 30
     needs:
       - setup
@@ -60,6 +61,7 @@ jobs:
         working-directory: ${{ matrix.plugin }}
   verify-android:
     runs-on: ubuntu-latest
+    if: needs.setup.outputs.plugins != '[]'
     timeout-minutes: 30
     needs:
       - setup
@@ -77,6 +79,7 @@ jobs:
         working-directory: ${{ matrix.plugin }}
   verify-web:
     runs-on: ubuntu-latest
+    if: needs.setup.outputs.plugins != '[]'
     timeout-minutes: 30
     needs:
       - setup
