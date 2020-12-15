@@ -15,8 +15,7 @@ npx cap sync
 
 * [`isEnabled()`](#isenabled)
 * [`speak(...)`](#speak)
-* [`addListener(...)`](#addlistener)
-* [`addListener(...)`](#addlistener)
+* [`addListener('screenReaderStateChange', ...)`](#addlistenerscreenreaderstatechange-)
 * [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
 
@@ -70,7 +69,7 @@ plugin](https://github.com/capacitor-community/text-to-speech).
 --------------------
 
 
-### addListener(...)
+### addListener('screenReaderStateChange', ...)
 
 ```typescript
 addListener(eventName: 'accessibilityScreenReaderStateChange', listener: ScreenReaderStateChangeListener) => PluginListenerHandle
