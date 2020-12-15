@@ -23,6 +23,7 @@ npx cap sync
 * [`addListener('backButton', ...)`](#addlistenerbackbutton-)
 * [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
+* [Type Aliases](#type-aliases)
 
 </docgen-index>
 
@@ -100,10 +101,10 @@ addListener(eventName: 'appStateChange', listenerFunc: StateChangeListener) => P
 
 Listen for changes in the App's active state (whether the app is in the foreground or background)
 
-| Param              | Type                                                              |
-| ------------------ | ----------------------------------------------------------------- |
-| **`eventName`**    | <code>"appStateChange"</code>                                     |
-| **`listenerFunc`** | <code>(state: <a href="#appstate">AppState</a>) =&gt; void</code> |
+| Param              | Type                                                                |
+| ------------------ | ------------------------------------------------------------------- |
+| **`eventName`**    | <code>"appStateChange"</code>                                       |
+| **`listenerFunc`** | <code><a href="#statechangelistener">StateChangeListener</a></code> |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
@@ -121,10 +122,10 @@ addListener(eventName: 'appUrlOpen', listenerFunc: URLOpenListener) => PluginLis
 Listen for url open events for the app. This handles both custom URL scheme links as well
 as URLs your app handles (Universal Links on iOS and App Links on Android)
 
-| Param              | Type                                                  |
-| ------------------ | ----------------------------------------------------- |
-| **`eventName`**    | <code>"appUrlOpen"</code>                             |
-| **`listenerFunc`** | <code>(event: URLOpenListenerEvent) =&gt; void</code> |
+| Param              | Type                                                        |
+| ------------------ | ----------------------------------------------------------- |
+| **`eventName`**    | <code>"appUrlOpen"</code>                                   |
+| **`listenerFunc`** | <code><a href="#urlopenlistener">URLOpenListener</a></code> |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
@@ -143,10 +144,10 @@ If the app was launched with previously persisted plugin call data, such as on A
 when an activity returns to an app that was closed, this call will return any data
 the app was launched with, converted into the form of a result from a plugin call.
 
-| Param              | Type                                                   |
-| ------------------ | ------------------------------------------------------ |
-| **`eventName`**    | <code>"appRestoredResult"</code>                       |
-| **`listenerFunc`** | <code>(event: RestoredListenerEvent) =&gt; void</code> |
+| Param              | Type                                                          |
+| ------------------ | ------------------------------------------------------------- |
+| **`eventName`**    | <code>"appRestoredResult"</code>                              |
+| **`listenerFunc`** | <code><a href="#restoredlistener">RestoredListener</a></code> |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
@@ -165,10 +166,10 @@ Listen for the hardware back button event (Android only). Listening for this eve
 default back button behaviour, so you might want to call `window.history.back()` manually.
 If you want to close the app, call `App.exitApp()`.
 
-| Param              | Type                       |
-| ------------------ | -------------------------- |
-| **`eventName`**    | <code>"backButton"</code>  |
-| **`listenerFunc`** | <code>() =&gt; void</code> |
+| Param              | Type                                                              |
+| ------------------ | ----------------------------------------------------------------- |
+| **`eventName`**    | <code>"backButton"</code>                                         |
+| **`listenerFunc`** | <code><a href="#backbuttonlistener">BackButtonListener</a></code> |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
@@ -222,5 +223,48 @@ Remove all native listeners for this plugin
 | Prop         | Type                       |
 | ------------ | -------------------------- |
 | **`remove`** | <code>() =&gt; void</code> |
+
+
+#### URLOpenListenerEvent
+
+| Prop                       | Type                 | Description                                                                                                                                                                        | Since |
+| -------------------------- | -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`url`**                  | <code>string</code>  | The URL the app was opened with.                                                                                                                                                   | 1.0.0 |
+| **`iosSourceApplication`** | <code>any</code>     | The source application opening the app (iOS only) https://developer.apple.com/documentation/uikit/uiapplicationopenurloptionskey/1623128-sourceapplication                         | 1.0.0 |
+| **`iosOpenInPlace`**       | <code>boolean</code> | Whether the app should open the passed document in-place or must copy it first. https://developer.apple.com/documentation/uikit/uiapplicationopenurloptionskey/1623123-openinplace | 1.0.0 |
+
+
+#### RestoredListenerEvent
+
+| Prop             | Type                              | Description                                                                                                                                       | Since |
+| ---------------- | --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`pluginId`**   | <code>string</code>               | The pluginId this result corresponds to. For example, `Camera`.                                                                                   | 1.0.0 |
+| **`methodName`** | <code>string</code>               | The methodName this result corresponds to. For example, `getPhoto`                                                                                | 1.0.0 |
+| **`data`**       | <code>any</code>                  | The result data passed from the plugin. This would be the result you'd expect from normally calling the plugin method. For example, `CameraPhoto` | 1.0.0 |
+| **`success`**    | <code>boolean</code>              | Boolean indicating if the plugin call succeeded.                                                                                                  | 1.0.0 |
+| **`error`**      | <code>{ message: string; }</code> | If the plugin call didn't succeed, it will contain the error message.                                                                             | 1.0.0 |
+
+
+### Type Aliases
+
+
+#### StateChangeListener
+
+<code>(state: <a href="#appstate">AppState</a>): void</code>
+
+
+#### URLOpenListener
+
+<code>(event: <a href="#urlopenlistenerevent">URLOpenListenerEvent</a>): void</code>
+
+
+#### RestoredListener
+
+<code>(event: <a href="#restoredlistenerevent">RestoredListenerEvent</a>): void</code>
+
+
+#### BackButtonListener
+
+<code>(): void</code>
 
 </docgen-api>

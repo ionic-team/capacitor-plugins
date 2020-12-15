@@ -17,6 +17,7 @@ npx cap sync
 * [`addListener('networkStatusChange', ...)`](#addlistenernetworkstatuschange-)
 * [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
+* [Type Aliases](#type-aliases)
 
 </docgen-index>
 
@@ -46,10 +47,10 @@ addListener(eventName: 'networkStatusChange', listenerFunc: ConnectionStatusChan
 
 Listen for changes in the network connection.
 
-| Param              | Type                                                                               |
-| ------------------ | ---------------------------------------------------------------------------------- |
-| **`eventName`**    | <code>"networkStatusChange"</code>                                                 |
-| **`listenerFunc`** | <code>(status: <a href="#connectionstatus">ConnectionStatus</a>) =&gt; void</code> |
+| Param              | Type                                                                                      |
+| ------------------ | ----------------------------------------------------------------------------------------- |
+| **`eventName`**    | <code>"networkStatusChange"</code>                                                        |
+| **`listenerFunc`** | <code><a href="#connectionstatuschangelistener">ConnectionStatusChangeListener</a></code> |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
@@ -78,10 +79,10 @@ Remove all listeners (including the network status changes) for this plugin.
 
 Represents the state and type of the network connection.
 
-| Prop                 | Type                                                     | Description                                                                                                                   | Since |
-| -------------------- | -------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`connected`**      | <code>boolean</code>                                     | Whether there is an active connection or not.                                                                                 | 1.0.0 |
-| **`connectionType`** | <code>"wifi" \| "cellular" \| "none" \| "unknown"</code> | The type of network connection currently in use. If there is no active network connection, `connectionType` will be `'none'`. | 1.0.0 |
+| Prop                 | Type                                                      | Description                                                                                                                   | Since |
+| -------------------- | --------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`connected`**      | <code>boolean</code>                                      | Whether there is an active connection or not.                                                                                 | 1.0.0 |
+| **`connectionType`** | <code><a href="#connectiontype">ConnectionType</a></code> | The type of network connection currently in use. If there is no active network connection, `connectionType` will be `'none'`. | 1.0.0 |
 
 
 #### PluginListenerHandle
@@ -89,5 +90,22 @@ Represents the state and type of the network connection.
 | Prop         | Type                       |
 | ------------ | -------------------------- |
 | **`remove`** | <code>() =&gt; void</code> |
+
+
+### Type Aliases
+
+
+#### ConnectionType
+
+The type of network connection that a device might have.
+
+<code>'wifi'</code>,<code>'cellular'</code>,<code>'none'</code>,<code>'unknown'</code>
+
+
+#### ConnectionStatusChangeListener
+
+Callback to receive the status change notifications.
+
+<code>(status: <a href="#connectionstatus">ConnectionStatus</a>): void</code>
 
 </docgen-api>

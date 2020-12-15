@@ -17,6 +17,7 @@ npx cap sync
 * [`addListener('orientation', ...)`](#addlistenerorientation-)
 * [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
+* [Type Aliases](#type-aliases)
 
 </docgen-index>
 
@@ -31,10 +32,10 @@ addListener(eventName: 'accel', listenerFunc: AccelListener) => PluginListenerHa
 
 Add a listener for accelerometer data
 
-| Param              | Type                                                |
-| ------------------ | --------------------------------------------------- |
-| **`eventName`**    | <code>"accel"</code>                                |
-| **`listenerFunc`** | <code>(event: AccelListenerEvent) =&gt; void</code> |
+| Param              | Type                                                    |
+| ------------------ | ------------------------------------------------------- |
+| **`eventName`**    | <code>"accel"</code>                                    |
+| **`listenerFunc`** | <code><a href="#accellistener">AccelListener</a></code> |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
@@ -51,10 +52,10 @@ addListener(eventName: 'orientation', listenerFunc: OrientationListener) => Plug
 
 Add a listener for device orientation change (compass heading, etc.)
 
-| Param              | Type                                          |
-| ------------------ | --------------------------------------------- |
-| **`eventName`**    | <code>"orientation"</code>                    |
-| **`listenerFunc`** | <code>(event: RotationRate) =&gt; void</code> |
+| Param              | Type                                                                |
+| ------------------ | ------------------------------------------------------------------- |
+| **`eventName`**    | <code>"orientation"</code>                                          |
+| **`listenerFunc`** | <code><a href="#orientationlistener">OrientationListener</a></code> |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
@@ -84,5 +85,51 @@ Remove all the listeners that are attached to this plugin.
 | Prop         | Type                       |
 | ------------ | -------------------------- |
 | **`remove`** | <code>() =&gt; void</code> |
+
+
+#### AccelListenerEvent
+
+| Prop                               | Type                                                  | Description                                                                                                                                                             | Since |
+| ---------------------------------- | ----------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`acceleration`**                 | <code><a href="#acceleration">Acceleration</a></code> | An object giving the acceleration of the device on the three axis X, Y and Z. <a href="#acceleration">Acceleration</a> is expressed in m/s                              | 1.0.0 |
+| **`accelerationIncludingGravity`** | <code><a href="#acceleration">Acceleration</a></code> | An object giving the acceleration of the device on the three axis X, Y and Z with the effect of gravity. <a href="#acceleration">Acceleration</a> is expressed in m/s   | 1.0.0 |
+| **`rotationRate`**                 | <code><a href="#rotationrate">RotationRate</a></code> | An object giving the rate of change of the device's orientation on the three orientation axis alpha, beta and gamma. Rotation rate is expressed in degrees per seconds. | 1.0.0 |
+| **`interval`**                     | <code>number</code>                                   | A number representing the interval of time, in milliseconds, at which data is obtained from the device.                                                                 | 1.0.0 |
+
+
+#### Acceleration
+
+| Prop    | Type                | Description                                  | Since |
+| ------- | ------------------- | -------------------------------------------- | ----- |
+| **`x`** | <code>number</code> | The amount of acceleration along the X axis. | 1.0.0 |
+| **`y`** | <code>number</code> | The amount of acceleration along the Y axis. | 1.0.0 |
+| **`z`** | <code>number</code> | The amount of acceleration along the Z axis. | 1.0.0 |
+
+
+#### RotationRate
+
+| Prop        | Type                | Description                                                      | Since |
+| ----------- | ------------------- | ---------------------------------------------------------------- | ----- |
+| **`alpha`** | <code>number</code> | The amount of rotation around the Z axis, in degrees per second. | 1.0.0 |
+| **`beta`**  | <code>number</code> | The amount of rotation around the X axis, in degrees per second. | 1.0.0 |
+| **`gamma`** | <code>number</code> | The amount of rotation around the Y axis, in degrees per second. | 1.0.0 |
+
+
+### Type Aliases
+
+
+#### AccelListener
+
+<code>(event: <a href="#accellistenerevent">AccelListenerEvent</a>): void</code>
+
+
+#### OrientationListener
+
+<code>(event: <a href="#rotationrate">RotationRate</a>): void</code>
+
+
+#### OrientationListenerEvent
+
+<code><a href="#rotationrate">RotationRate</a></code>
 
 </docgen-api>

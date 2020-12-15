@@ -27,6 +27,7 @@ npx cap sync
 * [`checkPermissions()`](#checkpermissions)
 * [`requestPermissions()`](#requestpermissions)
 * [Interfaces](#interfaces)
+* [Type Aliases](#type-aliases)
 * [Enums](#enums)
 
 </docgen-index>
@@ -402,6 +403,19 @@ Required on Android, only when using <a href="#directory">`Directory.Documents`<
 | Prop                | Type             |
 | ------------------- | ---------------- |
 | **`publicStorage`** | <code>any</code> |
+
+
+### Type Aliases
+
+
+#### RenameOptions
+
+<code><a href="#copyoptions">CopyOptions</a></code>
+
+
+#### PermissionState
+
+<code>'prompt'</code>,<code>'prompt-with-rationale'</code>,<code>'granted'</code>,<code>'denied'</code>
 
 
 ### Enums
