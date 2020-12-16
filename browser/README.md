@@ -15,8 +15,8 @@ npx cap sync
 
 * [`open(...)`](#open)
 * [`close()`](#close)
-* [`addListener(...)`](#addlistener)
-* [`addListener(...)`](#addlistener)
+* [`addListener('browserFinished', ...)`](#addlistenerbrowserfinished-)
+* [`addListener('browserPageLoaded', ...)`](#addlistenerbrowserpageloaded-)
 * [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
 
@@ -57,7 +57,7 @@ No-op on other platforms.
 --------------------
 
 
-### addListener(...)
+### addListener('browserFinished', ...)
 
 ```typescript
 addListener(eventName: 'browserFinished', listenerFunc: () => void) => PluginListenerHandle
@@ -77,7 +77,7 @@ Android & iOS only: Listen for the loading finished event.
 --------------------
 
 
-### addListener(...)
+### addListener('browserPageLoaded', ...)
 
 ```typescript
 addListener(eventName: 'browserPageLoaded', listenerFunc: () => void) => PluginListenerHandle
