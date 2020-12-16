@@ -147,7 +147,7 @@ Listen for when the keyboard is about to be shown.
 
 | Param              | Type                                                                     |
 | ------------------ | ------------------------------------------------------------------------ |
-| **`eventName`**    | <code>"keyboardWillShow"</code>                                          |
+| **`eventName`**    | <code>'keyboardWillShow'</code>                                          |
 | **`listenerFunc`** | <code>(info: <a href="#keyboardinfo">KeyboardInfo</a>) =&gt; void</code> |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
@@ -167,7 +167,7 @@ Listen for when the keyboard is shown.
 
 | Param              | Type                                                                     |
 | ------------------ | ------------------------------------------------------------------------ |
-| **`eventName`**    | <code>"keyboardDidShow"</code>                                           |
+| **`eventName`**    | <code>'keyboardDidShow'</code>                                           |
 | **`listenerFunc`** | <code>(info: <a href="#keyboardinfo">KeyboardInfo</a>) =&gt; void</code> |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
@@ -187,7 +187,7 @@ Listen for when the keyboard is about to be hidden.
 
 | Param              | Type                            |
 | ------------------ | ------------------------------- |
-| **`eventName`**    | <code>"keyboardWillHide"</code> |
+| **`eventName`**    | <code>'keyboardWillHide'</code> |
 | **`listenerFunc`** | <code>() =&gt; void</code>      |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
@@ -207,7 +207,7 @@ Listen for when the keyboard is hidden.
 
 | Param              | Type                           |
 | ------------------ | ------------------------------ |
-| **`eventName`**    | <code>"keyboardDidHide"</code> |
+| **`eventName`**    | <code>'keyboardDidHide'</code> |
 | **`listenerFunc`** | <code>() =&gt; void</code>     |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
