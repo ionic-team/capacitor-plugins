@@ -46,9 +46,8 @@ jobs:
           path: |
             node_modules
             */node_modules
-          key: ${{ runner.OS }}-dependency-cache-${{ hashFiles('package.json', '*/package.json') }}
+          key: dependency-cache-${{ hashFiles('package.json', '*/package.json') }}
       - run: npm install
-        if: steps.cache-modules.outputs.cache-hit != 'true'
       - run: npm run lint
   verify-ios:
     runs-on: macOS
@@ -72,9 +71,8 @@ jobs:
           path: |
             node_modules
             */node_modules
-          key: ${{ runner.OS }}-dependency-cache-${{ hashFiles('package.json', '*/package.json') }}
+          key: dependency-cache-${{ hashFiles('package.json', '*/package.json') }}
       - run: npm install
-        if: steps.cache-modules.outputs.cache-hit != 'true'
       - run: npm run verify:ios
         working-directory: ${{ matrix.plugin }}
   verify-android:
@@ -99,9 +97,8 @@ jobs:
           path: |
             node_modules
             */node_modules
-          key: ${{ runner.OS }}-dependency-cache-${{ hashFiles('package.json', '*/package.json') }}
+          key: dependency-cache-${{ hashFiles('package.json', '*/package.json') }}
       - run: npm install
-        if: steps.cache-modules.outputs.cache-hit != 'true'
       - run: npm run verify:android
         working-directory: ${{ matrix.plugin }}
   verify-web:
@@ -126,9 +123,8 @@ jobs:
           path: |
             node_modules
             */node_modules
-          key: ${{ runner.OS }}-dependency-cache-${{ hashFiles('package.json', '*/package.json') }}
+          key: dependency-cache-${{ hashFiles('package.json', '*/package.json') }}
       - run: npm install
-        if: steps.cache-modules.outputs.cache-hit != 'true'
       - run: npm run verify:web
         working-directory: ${{ matrix.plugin }}
   deploy:
@@ -156,9 +152,8 @@ jobs:
           path: |
             node_modules
             */node_modules
-          key: ${{ runner.OS }}-dependency-cache-${{ hashFiles('package.json', '*/package.json') }}
+          key: dependency-cache-${{ hashFiles('package.json', '*/package.json') }}
       - run: npm install
-        if: steps.cache-modules.outputs.cache-hit != 'true'
       - run: npx lerna publish from-git --yes
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
