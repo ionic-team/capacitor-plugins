@@ -19,6 +19,7 @@ npx cap sync
 * [`checkPermissions()`](#checkpermissions)
 * [`requestPermissions()`](#requestpermissions)
 * [Interfaces](#interfaces)
+* [Type Aliases](#type-aliases)
 
 </docgen-index>
 
@@ -53,10 +54,10 @@ watchPosition(options: GeolocationOptions, callback: GeolocationWatchCallback) =
 Set up a watch for location changes. Note that watching for location changes
 can consume a large amount of energy. Be smart about listening only when you need to.
 
-| Param          | Type                                                                                                          |
-| -------------- | ------------------------------------------------------------------------------------------------------------- |
-| **`options`**  | <code><a href="#geolocationoptions">GeolocationOptions</a></code>                                             |
-| **`callback`** | <code>(position: <a href="#geolocationposition">GeolocationPosition</a> \| null, err?: any) =&gt; void</code> |
+| Param          | Type                                                                          |
+| -------------- | ----------------------------------------------------------------------------- |
+| **`options`**  | <code><a href="#geolocationoptions">GeolocationOptions</a></code>             |
+| **`callback`** | <code><a href="#geolocationwatchcallback">GeolocationWatchCallback</a></code> |
 
 **Returns:** <code>string</code>
 
@@ -134,8 +135,31 @@ Request location permissions
 
 #### GeolocationPermissionStatus
 
-| Prop           | Type                                                                      |
-| -------------- | ------------------------------------------------------------------------- |
-| **`location`** | <code>"prompt" \| "prompt-with-rationale" \| "granted" \| "denied"</code> |
+| Prop           | Type                                                          |
+| -------------- | ------------------------------------------------------------- |
+| **`location`** | <code><a href="#geolocationstate">GeolocationState</a></code> |
+
+
+### Type Aliases
+
+
+#### GeolocationWatchCallback
+
+<code>(position: <a href="#geolocationposition">GeolocationPosition</a> | null, err?: any): void</code>
+
+
+#### CallbackID
+
+<code>string</code>
+
+
+#### GeolocationState
+
+<code><a href="#permissionstate">PermissionState</a></code>
+
+
+#### PermissionState
+
+<code>'prompt' | 'prompt-with-rationale' | 'granted' | 'denied'</code>
 
 </docgen-api>
