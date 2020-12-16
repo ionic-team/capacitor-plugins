@@ -78,7 +78,7 @@ Get the device's current language locale code.
 | --------------------- | ----------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
 | **`name`**            | <code>string</code>                                         | The name of the device. For example, "John's iPhone". This is only supported on iOS and Android 7.1 or above.                                | 1.0.0 |
 | **`model`**           | <code>string</code>                                         | The device model. For example, "iPhone".                                                                                                     | 1.0.0 |
-| **`platform`**        | <code>"ios" \| "android" \| "web"</code>                    | The device platform (lowercase).                                                                                                             | 1.0.0 |
+| **`platform`**        | <code>'ios' \| 'android' \| 'web'</code>                    | The device platform (lowercase).                                                                                                             | 1.0.0 |
 | **`uuid`**            | <code>string</code>                                         | The UUID of the device as available to the app. This identifier may change on modern mobile platforms that only allow per-app install UUIDs. | 1.0.0 |
 | **`operatingSystem`** | <code><a href="#operatingsystem">OperatingSystem</a></code> | The operating system of the device.                                                                                                          | 1.0.0 |
 | **`osVersion`**       | <code>string</code>                                         | The version of the device OS.                                                                                                                | 1.0.0 |
@@ -109,6 +109,6 @@ Get the device's current language locale code.
 
 #### OperatingSystem
 
-<code>'ios'</code>,<code>'android'</code>,<code>'windows'</code>,<code>'mac'</code>,<code>'unknown'</code>
+<code>'ios' | 'android' | 'windows' | 'mac' | 'unknown'</code>
 
 </docgen-api>

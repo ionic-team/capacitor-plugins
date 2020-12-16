@@ -103,7 +103,7 @@ Listen for changes in the App's active state (whether the app is in the foregrou
 
 | Param              | Type                                                                |
 | ------------------ | ------------------------------------------------------------------- |
-| **`eventName`**    | <code>"appStateChange"</code>                                       |
+| **`eventName`**    | <code>'appStateChange'</code>                                       |
 | **`listenerFunc`** | <code><a href="#statechangelistener">StateChangeListener</a></code> |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
@@ -124,7 +124,7 @@ as URLs your app handles (Universal Links on iOS and App Links on Android)
 
 | Param              | Type                                                        |
 | ------------------ | ----------------------------------------------------------- |
-| **`eventName`**    | <code>"appUrlOpen"</code>                                   |
+| **`eventName`**    | <code>'appUrlOpen'</code>                                   |
 | **`listenerFunc`** | <code><a href="#urlopenlistener">URLOpenListener</a></code> |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
@@ -146,7 +146,7 @@ the app was launched with, converted into the form of a result from a plugin cal
 
 | Param              | Type                                                          |
 | ------------------ | ------------------------------------------------------------- |
-| **`eventName`**    | <code>"appRestoredResult"</code>                              |
+| **`eventName`**    | <code>'appRestoredResult'</code>                              |
 | **`listenerFunc`** | <code><a href="#restoredlistener">RestoredListener</a></code> |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
@@ -168,7 +168,7 @@ If you want to close the app, call `App.exitApp()`.
 
 | Param              | Type                                                              |
 | ------------------ | ----------------------------------------------------------------- |
-| **`eventName`**    | <code>"backButton"</code>                                         |
+| **`eventName`**    | <code>'backButton'</code>                                         |
 | **`listenerFunc`** | <code><a href="#backbuttonlistener">BackButtonListener</a></code> |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>

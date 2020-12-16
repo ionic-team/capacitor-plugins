@@ -34,7 +34,7 @@ Add a listener for accelerometer data
 
 | Param              | Type                                                    |
 | ------------------ | ------------------------------------------------------- |
-| **`eventName`**    | <code>"accel"</code>                                    |
+| **`eventName`**    | <code>'accel'</code>                                    |
 | **`listenerFunc`** | <code><a href="#accellistener">AccelListener</a></code> |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
@@ -54,7 +54,7 @@ Add a listener for device orientation change (compass heading, etc.)
 
 | Param              | Type                                                                |
 | ------------------ | ------------------------------------------------------------------- |
-| **`eventName`**    | <code>"orientation"</code>                                          |
+| **`eventName`**    | <code>'orientation'</code>                                          |
 | **`listenerFunc`** | <code><a href="#orientationlistener">OrientationListener</a></code> |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>

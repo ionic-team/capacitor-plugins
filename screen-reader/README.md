@@ -83,7 +83,7 @@ Readers).
 
 | Param           | Type                                                                |
 | --------------- | ------------------------------------------------------------------- |
-| **`eventName`** | <code>"screenReaderStateChange"</code>                              |
+| **`eventName`** | <code>'screenReaderStateChange'</code>                              |
 | **`listener`**  | <code><a href="#statechangelistener">StateChangeListener</a></code> |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>

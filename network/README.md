@@ -49,7 +49,7 @@ Listen for changes in the network connection.
 
 | Param              | Type                                                                                      |
 | ------------------ | ----------------------------------------------------------------------------------------- |
-| **`eventName`**    | <code>"networkStatusChange"</code>                                                        |
+| **`eventName`**    | <code>'networkStatusChange'</code>                                                        |
 | **`listenerFunc`** | <code><a href="#connectionstatuschangelistener">ConnectionStatusChangeListener</a></code> |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
@@ -99,7 +99,7 @@ Represents the state and type of the network connection.
 
 The type of network connection that a device might have.
 
-<code>'wifi'</code>,<code>'cellular'</code>,<code>'none'</code>,<code>'unknown'</code>
+<code>'wifi' | 'cellular' | 'none' | 'unknown'</code>
 
 
 #### ConnectionStatusChangeListener

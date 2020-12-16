@@ -400,9 +400,9 @@ Required on Android, only when using <a href="#directory">`Directory.Documents`<
 
 #### PermissionStatus
 
-| Prop                | Type             |
-| ------------------- | ---------------- |
-| **`publicStorage`** | <code>any</code> |
+| Prop                | Type                                                        |
+| ------------------- | ----------------------------------------------------------- |
+| **`publicStorage`** | <code><a href="#permissionstate">PermissionState</a></code> |
 
 
 ### Type Aliases
@@ -415,7 +415,7 @@ Required on Android, only when using <a href="#directory">`Directory.Documents`<
 
 #### PermissionState
 
-<code>'prompt'</code>,<code>'prompt-with-rationale'</code>,<code>'granted'</code>,<code>'denied'</code>
+<code>'prompt' | 'prompt-with-rationale' | 'granted' | 'denied'</code>
 
 
 ### Enums
