@@ -13,6 +13,7 @@ public class GeolocationPlugin: CAPPlugin, CLLocationManagerDelegate {
     }
 
     var locationManager = CLLocationManager()
+    private var isUpdatingLocation: Bool = false
     private var callQueue: [String: CallType] = [:]
 
     @objc func getCurrentPosition(_ call: CAPPluginCall) {
@@ -22,17 +23,17 @@ public class GeolocationPlugin: CAPPlugin, CLLocationManagerDelegate {
         DispatchQueue.main.async {
             self.locationManager.delegate = self
 
-            if CLLocationManager.authorizationStatus() == .notDetermined {
-                self.locationManager.requestWhenInUseAuthorization()
-            }
-
             if call.getBool("enableHighAccuracy", false) == true {
                 self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
             } else {
                 self.locationManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers
             }
 
-            self.locationManager.requestLocation()
+            if CLLocationManager.authorizationStatus() == .notDetermined {
+                self.locationManager.requestWhenInUseAuthorization()
+            } else {
+                self.locationManager.requestLocation()
+            }
         }
     }
 
@@ -43,17 +44,18 @@ public class GeolocationPlugin: CAPPlugin, CLLocationManagerDelegate {
         DispatchQueue.main.async {
             self.locationManager.delegate = self
 
-            if CLLocationManager.authorizationStatus() == .notDetermined {
-                self.locationManager.requestWhenInUseAuthorization()
-            }
-
             if call.getBool("enableHighAccuracy", false) == true {
                 self.locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
             } else {
                 self.locationManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers
             }
 
-            self.locationManager.startUpdatingLocation()
+            if CLLocationManager.authorizationStatus() == .notDetermined {
+                self.locationManager.requestWhenInUseAuthorization()
+            } else {
+                self.locationManager.startUpdatingLocation()
+                self.isUpdatingLocation = true
+            }
         }
     }
 
@@ -120,10 +122,20 @@ public class GeolocationPlugin: CAPPlugin, CLLocationManagerDelegate {
                 bridge?.releaseCall(call)
             }
         }
+
+        if !(callQueue.filter({ $0.value == .singleUpdate }).isEmpty) {
+            self.locationManager.requestLocation()
+        }
+
+        if !(callQueue.filter({ $0.value == .watch }).isEmpty) && !self.isUpdatingLocation {
+            self.locationManager.startUpdatingLocation()
+            self.isUpdatingLocation = true
+        }
     }
 
     public func stopUpdating() {
         self.locationManager.stopUpdatingLocation()
+        self.isUpdatingLocation = false
     }
 
     private func reportLocation(_ call: CAPPluginCall, _ locations: [CLLocation]) {
@@ -136,7 +148,7 @@ public class GeolocationPlugin: CAPPlugin, CLLocationManagerDelegate {
         }
     }
 
-    @objc public override func checkPermissions(_ call: CAPPluginCall) {
+    @objc override public func checkPermissions(_ call: CAPPluginCall) {
         var status: String = ""
 
         if CLLocationManager.locationServicesEnabled() {
@@ -162,7 +174,7 @@ public class GeolocationPlugin: CAPPlugin, CLLocationManagerDelegate {
         call.resolve(result)
     }
 
-    @objc public override func requestPermissions(_ call: CAPPluginCall) {
+    @objc override public func requestPermissions(_ call: CAPPluginCall) {
         if CLLocationManager.locationServicesEnabled() {
             // If state is not yet determined, request perms.
             // Otherwise, report back the state right away

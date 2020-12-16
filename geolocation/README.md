@@ -77,6 +77,8 @@ Clear a given watch
 | ------------- | ---------------------------- |
 | **`options`** | <code>{ id: string; }</code> |
 
+**Since:** 1.0.0
+
 --------------------
 
 
@@ -123,17 +125,17 @@ Request location permissions
 
 #### GeolocationOptions
 
-| Prop                     | Type                 |
-| ------------------------ | -------------------- |
-| **`enableHighAccuracy`** | <code>boolean</code> |
-| **`timeout`**            | <code>number</code>  |
-| **`maximumAge`**         | <code>number</code>  |
+| Prop                     | Type                 | Description                                                                                | Default            | Since |
+| ------------------------ | -------------------- | ------------------------------------------------------------------------------------------ | ------------------ | ----- |
+| **`enableHighAccuracy`** | <code>boolean</code> | High accuracy mode (such as GPS, if available)                                             | <code>false</code> | 1.0.0 |
+| **`timeout`**            | <code>number</code>  | The maximum wait time in milliseconds for location updates                                 | <code>10000</code> | 1.0.0 |
+| **`maximumAge`**         | <code>number</code>  | The maximum age in milliseconds of a possible cached position that is acceptable to return | <code>0</code>     | 1.0.0 |
 
 
 #### GeolocationPermissionStatus
 
-| Prop           | Type             |
-| -------------- | ---------------- |
-| **`location`** | <code>any</code> |
+| Prop           | Type                                                                      |
+| -------------- | ------------------------------------------------------------------------- |
+| **`location`** | <code>"prompt" \| "prompt-with-rationale" \| "granted" \| "denied"</code> |
 
 </docgen-api>
