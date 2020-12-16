@@ -8,6 +8,7 @@
     "device",
     "dialog",
     "filesystem",
+    "geolocation",
     "haptics",
     "keyboard",
     "motion",
