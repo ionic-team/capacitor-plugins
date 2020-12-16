@@ -1,3 +1,5 @@
+import type { PermissionState } from '@capacitor/core';
+
 export type CallbackID = string;
 
 export type GeolocationState = PermissionState;
