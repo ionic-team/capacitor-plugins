@@ -18,6 +18,7 @@ npx cap sync
 * [`addListener('screenReaderStateChange', ...)`](#addlistenerscreenreaderstatechange-)
 * [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
+* [Type Aliases](#type-aliases)
 
 </docgen-index>
 
@@ -80,10 +81,10 @@ Add a listener
 This method is not supported on web (it is not possible to detect Screen
 Readers).
 
-| Param           | Type                                                |
-| --------------- | --------------------------------------------------- |
-| **`eventName`** | <code>"screenReaderStateChange"</code>              |
-| **`listener`**  | <code>(state: { value: boolean; }) =&gt; any</code> |
+| Param           | Type                                                                                        |
+| --------------- | ------------------------------------------------------------------------------------------- |
+| **`eventName`** | <code>'screenReaderStateChange'</code>                                                      |
+| **`listener`**  | <code><a href="#screenreaderstatechangelistener">ScreenReaderStateChangeListener</a></code> |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
@@ -121,5 +122,13 @@ Remove all the listeners that are attached to this plugin.
 | Prop         | Type                       |
 | ------------ | -------------------------- |
 | **`remove`** | <code>() =&gt; void</code> |
+
+
+### Type Aliases
+
+
+#### ScreenReaderStateChangeListener
+
+<code>(state: { value: boolean; }): any</code>
 
 </docgen-api>

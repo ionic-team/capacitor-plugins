@@ -27,6 +27,7 @@ npx cap sync
 * [`checkPermissions()`](#checkpermissions)
 * [`requestPermissions()`](#requestpermissions)
 * [Interfaces](#interfaces)
+* [Type Aliases](#type-aliases)
 * [Enums](#enums)
 
 </docgen-index>
@@ -399,9 +400,22 @@ FilesystemDirectory.ExternalStorage.
 
 #### FilesystemPermissionStatus
 
-| Prop                | Type             |
-| ------------------- | ---------------- |
-| **`publicStorage`** | <code>any</code> |
+| Prop                | Type                                                        |
+| ------------------- | ----------------------------------------------------------- |
+| **`publicStorage`** | <code><a href="#permissionstate">PermissionState</a></code> |
+
+
+### Type Aliases
+
+
+#### RenameOptions
+
+<code><a href="#copyoptions">CopyOptions</a></code>
+
+
+#### PermissionState
+
+<code>'prompt' | 'prompt-with-rationale' | 'granted' | 'denied'</code>
 
 
 ### Enums

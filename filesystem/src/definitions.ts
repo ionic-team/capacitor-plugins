@@ -1,3 +1,5 @@
+import type { PermissionState } from '@capacitor/core';
+
 export interface FilesystemPermissionStatus {
   publicStorage: PermissionState;
 }
