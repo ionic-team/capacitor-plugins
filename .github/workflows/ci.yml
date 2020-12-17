@@ -30,7 +30,7 @@ jobs:
         run: echo "::set-output name=changed-directories::$(echo ${{ toJson(steps.files.outputs.all) }} | jq -cM 'map(split("/")) | map(.[0])')"
         if: steps.files.outputs.all
       - id: set-plugins
-        run: echo "::set-output name=plugins::$(echo $(jq -cM .packages lerna.json) ${{ toJson(steps['set-changed-directories'].outputs['changed-directories']) }} | jq -cM --slurp '[.[0][] as $x | .[1][] | select($x == .)]')"
+        run: echo "::set-output name=plugins::$(echo $(jq -cM .packages lerna.json) ${{ toJson(steps['set-changed-directories'].outputs['changed-directories']) }} | jq -cM --slurp '[.[0][] as $x | .[1][] | select($x == .)] | unique')"
   lint:
     runs-on: macOS
     timeout-minutes: 30
@@ -46,9 +46,8 @@ jobs:
           path: |
             node_modules
             */node_modules
-          key: ${{ runner.OS }}-dependency-cache-${{ hashFiles('package.json', '*/package.json') }}
+          key: dependency-cache-${{ hashFiles('package.json', '*/package.json') }}
       - run: npm install
-        if: steps.cache-modules.outputs.cache-hit != 'true'
       - run: npm run lint
   verify-ios:
     runs-on: macOS
@@ -72,9 +71,8 @@ jobs:
           path: |
             node_modules
             */node_modules
-          key: ${{ runner.OS }}-dependency-cache-${{ hashFiles('package.json', '*/package.json') }}
+          key: dependency-cache-${{ hashFiles('package.json', '*/package.json') }}
       - run: npm install
-        if: steps.cache-modules.outputs.cache-hit != 'true'
       - run: npm run verify:ios
         working-directory: ${{ matrix.plugin }}
   verify-android:
@@ -99,9 +97,8 @@ jobs:
           path: |
             node_modules
             */node_modules
-          key: ${{ runner.OS }}-dependency-cache-${{ hashFiles('package.json', '*/package.json') }}
+          key: dependency-cache-${{ hashFiles('package.json', '*/package.json') }}
       - run: npm install
-        if: steps.cache-modules.outputs.cache-hit != 'true'
       - run: npm run verify:android
         working-directory: ${{ matrix.plugin }}
   verify-web:
@@ -126,14 +123,13 @@ jobs:
           path: |
             node_modules
             */node_modules
-          key: ${{ runner.OS }}-dependency-cache-${{ hashFiles('package.json', '*/package.json') }}
+          key: dependency-cache-${{ hashFiles('package.json', '*/package.json') }}
       - run: npm install
-        if: steps.cache-modules.outputs.cache-hit != 'true'
       - run: npm run verify:web
         working-directory: ${{ matrix.plugin }}
   deploy:
     runs-on: macOS
-    if: github.ref == 'refs/heads/main'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     timeout-minutes: 30
     needs:
       - setup
@@ -142,7 +138,7 @@ jobs:
       - verify-android
       - verify-web
     steps:
-      - run: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
+      - run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >> .npmrc
       - uses: actions/setup-node@v1
         with:
           node-version: 14.x
@@ -156,9 +152,6 @@ jobs:
           path: |
             node_modules
             */node_modules
-          key: ${{ runner.OS }}-dependency-cache-${{ hashFiles('package.json', '*/package.json') }}
+          key: dependency-cache-${{ hashFiles('package.json', '*/package.json') }}
       - run: npm install
-        if: steps.cache-modules.outputs.cache-hit != 'true'
       - run: npx lerna publish from-git --yes
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

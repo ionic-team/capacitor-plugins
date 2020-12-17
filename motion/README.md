@@ -17,6 +17,7 @@ npx cap sync
 * [`addListener('orientation', ...)`](#addlistenerorientation-)
 * [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
+* [Type Aliases](#type-aliases)
 
 </docgen-index>
 
@@ -33,7 +34,7 @@ Add a listener for accelerometer data
 
 | Param              | Type                                                                                |
 | ------------------ | ----------------------------------------------------------------------------------- |
-| **`eventName`**    | <code>"accel"</code>                                                                |
+| **`eventName`**    | <code>'accel'</code>                                                                |
 | **`listenerFunc`** | <code>(event: <a href="#motioneventresult">MotionEventResult</a>) =&gt; void</code> |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
@@ -53,7 +54,7 @@ Add a listener for device orientation change (compass heading, etc.)
 
 | Param              | Type                                                                                                        |
 | ------------------ | ----------------------------------------------------------------------------------------------------------- |
-| **`eventName`**    | <code>"orientation"</code>                                                                                  |
+| **`eventName`**    | <code>'orientation'</code>                                                                                  |
 | **`listenerFunc`** | <code>(event: <a href="#devicemotioneventrotationrate">DeviceMotionEventRotationRate</a>) =&gt; void</code> |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
@@ -112,5 +113,13 @@ Remove all the listeners that are attached to this plugin.
 | **`alpha`** | <code>number</code> | The amount of rotation around the Z axis, in degrees per second. | 1.0.0 |
 | **`beta`**  | <code>number</code> | The amount of rotation around the X axis, in degrees per second. | 1.0.0 |
 | **`gamma`** | <code>number</code> | The amount of rotation around the Y axis, in degrees per second. | 1.0.0 |
+
+
+### Type Aliases
+
+
+#### MotionOrientationEventResult
+
+<code><a href="#devicemotioneventrotationrate">DeviceMotionEventRotationRate</a></code>
 
 </docgen-api>
