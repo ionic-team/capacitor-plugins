@@ -3,13 +3,13 @@ package com.capacitorjs.plugins.actionsheet;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import com.getcapacitor.Logger;
-import com.getcapacitor.util.WebColor;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
@@ -87,7 +87,7 @@ public class ActionSheet extends BottomSheetDialogFragment {
         layout.setOrientation(LinearLayout.VERTICAL);
         layout.setPadding(layoutPaddingPx16, layoutPaddingPx16, layoutPaddingPx16, layoutPaddingPx16);
         TextView ttv = new TextView(getContext());
-        ttv.setTextColor(WebColor.parseColor("#757575"));
+        ttv.setTextColor(Color.parseColor("#757575"));
         ttv.setPadding(layoutPaddingPx8, layoutPaddingPx8, layoutPaddingPx8, layoutPaddingPx8);
         ttv.setText(title);
         layout.addView(ttv);
@@ -96,7 +96,7 @@ public class ActionSheet extends BottomSheetDialogFragment {
             final int optionIndex = i;
 
             TextView tv = new TextView(getContext());
-            tv.setTextColor(WebColor.parseColor("#000000"));
+            tv.setTextColor(Color.parseColor("#000000"));
             tv.setPadding(layoutPaddingPx12, layoutPaddingPx12, layoutPaddingPx12, layoutPaddingPx12);
             tv.setText(options[i].getTitle());
             tv.setOnClickListener(
