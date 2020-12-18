@@ -25,7 +25,7 @@ public class SplashScreen {
 
     private ImageView splashImage;
     private ProgressBar spinnerBar;
-    private WindowManager wm;
+    private WindowManager windowManager;
     private boolean isVisible = false;
     private boolean isHiding = false;
     private Context context;
@@ -168,7 +168,7 @@ public class SplashScreen {
         final SplashListener splashListener,
         final boolean isLaunchSplash
     ) {
-        wm = (WindowManager) activity.getSystemService(Context.WINDOW_SERVICE);
+        windowManager = (WindowManager) activity.getSystemService(Context.WINDOW_SERVICE);
 
         if (activity.isFinishing()) {
             return;
@@ -228,7 +228,7 @@ public class SplashScreen {
                 params.format = PixelFormat.TRANSLUCENT;
 
                 try {
-                    wm.addView(splashImage, params);
+                    windowManager.addView(splashImage, params);
                 } catch (IllegalStateException | IllegalArgumentException ex) {
                     Logger.debug("Could not add splash view");
                     return;
@@ -250,13 +250,13 @@ public class SplashScreen {
                     spinnerBar.setVisibility(View.INVISIBLE);
 
                     if (spinnerBar.getParent() != null) {
-                        wm.removeView(spinnerBar);
+                        windowManager.removeView(spinnerBar);
                     }
 
                     params.height = WindowManager.LayoutParams.WRAP_CONTENT;
                     params.width = WindowManager.LayoutParams.WRAP_CONTENT;
 
-                    wm.addView(spinnerBar, params);
+                    windowManager.addView(spinnerBar, params);
 
                     if (config.isShowSpinner()) {
                         spinnerBar.setAlpha(0f);
@@ -338,14 +338,14 @@ public class SplashScreen {
             spinnerBar.setVisibility(View.INVISIBLE);
 
             if (removeSpinner) {
-                wm.removeView(spinnerBar);
+                windowManager.removeView(spinnerBar);
             }
         }
 
         if (splashImage != null && splashImage.getParent() != null) {
             splashImage.setVisibility(View.INVISIBLE);
 
-            wm.removeView(splashImage);
+            windowManager.removeView(splashImage);
         }
 
         isHiding = false;
