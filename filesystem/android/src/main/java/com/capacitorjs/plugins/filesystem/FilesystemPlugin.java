@@ -1,7 +1,8 @@
 package com.capacitorjs.plugins.filesystem;
 
+import static com.capacitorjs.plugins.filesystem.FilesystemPlugin.STORAGE_PERMISSION_ALIAS;
+
 import android.Manifest;
-import android.content.pm.PackageManager;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import com.capacitorjs.plugins.filesystem.exceptions.CopyFailedException;
@@ -10,6 +11,7 @@ import com.capacitorjs.plugins.filesystem.exceptions.DirectoryNotFoundException;
 import com.getcapacitor.JSArray;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Logger;
+import com.getcapacitor.PermissionState;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
@@ -18,31 +20,22 @@ import com.getcapacitor.annotation.CapacitorPlugin;
 import com.getcapacitor.annotation.Permission;
 import java.io.*;
 import java.nio.charset.Charset;
+import java.util.Map;
 import org.json.JSONException;
 
 @CapacitorPlugin(
     name = "Filesystem",
-    requestCodes = {
-        PluginRequestCodes.FILESYSTEM_REQUEST_WRITE_FILE_PERMISSIONS,
-        PluginRequestCodes.FILESYSTEM_REQUEST_WRITE_FOLDER_PERMISSIONS,
-        PluginRequestCodes.FILESYSTEM_REQUEST_READ_FILE_PERMISSIONS,
-        PluginRequestCodes.FILESYSTEM_REQUEST_READ_FOLDER_PERMISSIONS,
-        PluginRequestCodes.FILESYSTEM_REQUEST_DELETE_FILE_PERMISSIONS,
-        PluginRequestCodes.FILESYSTEM_REQUEST_DELETE_FOLDER_PERMISSIONS,
-        PluginRequestCodes.FILESYSTEM_REQUEST_URI_PERMISSIONS,
-        PluginRequestCodes.FILESYSTEM_REQUEST_STAT_PERMISSIONS,
-        PluginRequestCodes.FILESYSTEM_REQUEST_RENAME_PERMISSIONS,
-        PluginRequestCodes.FILESYSTEM_REQUEST_COPY_PERMISSIONS
-    },
     permissions = {
         @Permission(
-            strings = { Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE },
-            alias = "publicStorage"
+            alias = STORAGE_PERMISSION_ALIAS,
+            strings = { Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE }
         )
     },
     permissionRequestCode = PluginRequestCodes.FILESYSTEM_REQUEST_ALL_PERMISSIONS
 )
 public class FilesystemPlugin extends Plugin {
+
+    static final String STORAGE_PERMISSION_ALIAS = "publicStorage";
 
     private Filesystem implementation;
 
@@ -457,38 +450,46 @@ public class FilesystemPlugin extends Plugin {
     }
 
     @Override
-    protected void onRequestPermissionsResult(PluginCall savedCall, int requestCode, String[] permissions, int[] grantResults) {
+    protected void onRequestPermissionsResult(PluginCall savedCall, Map<String, PermissionState> permissionStatus) {
         Logger.debug(getLogTag(), "handling request perms result");
-        for (int i = 0; i < grantResults.length; i++) {
-            int result = grantResults[i];
-            String perm = permissions[i];
-            if (result == PackageManager.PERMISSION_DENIED) {
-                Logger.debug(getLogTag(), "User denied storage permission: " + perm);
-                savedCall.reject(PERMISSION_DENIED_ERROR);
-                return;
-            }
+
+        if (permissionStatus.get(STORAGE_PERMISSION_ALIAS) != PermissionState.GRANTED) {
+            Logger.debug(getLogTag(), "User denied storage permission");
+            savedCall.reject(PERMISSION_DENIED_ERROR);
+            return;
         }
 
-        if (requestCode == PluginRequestCodes.FILESYSTEM_REQUEST_WRITE_FILE_PERMISSIONS) {
-            this.writeFile(savedCall);
-        } else if (requestCode == PluginRequestCodes.FILESYSTEM_REQUEST_WRITE_FOLDER_PERMISSIONS) {
-            this.mkdir(savedCall);
-        } else if (requestCode == PluginRequestCodes.FILESYSTEM_REQUEST_READ_FILE_PERMISSIONS) {
-            this.readFile(savedCall);
-        } else if (requestCode == PluginRequestCodes.FILESYSTEM_REQUEST_READ_FOLDER_PERMISSIONS) {
-            this.readdir(savedCall);
-        } else if (requestCode == PluginRequestCodes.FILESYSTEM_REQUEST_DELETE_FILE_PERMISSIONS) {
-            this.deleteFile(savedCall);
-        } else if (requestCode == PluginRequestCodes.FILESYSTEM_REQUEST_DELETE_FOLDER_PERMISSIONS) {
-            this.rmdir(savedCall);
-        } else if (requestCode == PluginRequestCodes.FILESYSTEM_REQUEST_URI_PERMISSIONS) {
-            this.getUri(savedCall);
-        } else if (requestCode == PluginRequestCodes.FILESYSTEM_REQUEST_STAT_PERMISSIONS) {
-            this.stat(savedCall);
-        } else if (requestCode == PluginRequestCodes.FILESYSTEM_REQUEST_RENAME_PERMISSIONS) {
-            this.rename(savedCall);
-        } else if (requestCode == PluginRequestCodes.FILESYSTEM_REQUEST_COPY_PERMISSIONS) {
-            this.copy(savedCall);
+        switch (savedCall.getMethodName()) {
+            case "writeFile":
+                this.writeFile(savedCall);
+                break;
+            case "writeFolder":
+                this.mkdir(savedCall);
+                break;
+            case "readFile":
+                this.readFile(savedCall);
+                break;
+            case "readdir":
+                this.readdir(savedCall);
+                break;
+            case "deleteFile":
+                this.deleteFile(savedCall);
+                break;
+            case "rmdir":
+                this.rmdir(savedCall);
+                break;
+            case "getUri":
+                this.getUri(savedCall);
+                break;
+            case "stat":
+                this.stat(savedCall);
+                break;
+            case "rename":
+                this.rename(savedCall);
+                break;
+            case "copy":
+                this.copy(savedCall);
+                break;
         }
     }
 }

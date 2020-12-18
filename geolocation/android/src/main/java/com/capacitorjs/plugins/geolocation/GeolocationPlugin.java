@@ -1,7 +1,8 @@
 package com.capacitorjs.plugins.geolocation;
 
+import static com.capacitorjs.plugins.geolocation.GeolocationPlugin.GEOLOCATION_REQUEST_PERMISSIONS;
+
 import android.Manifest;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
 import com.getcapacitor.JSObject;
@@ -22,7 +23,7 @@ import java.util.Map;
             strings = { Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION }
         )
     },
-    permissionRequestCode = GeolocationPlugin.GEOLOCATION_REQUEST_PERMISSIONS
+    permissionRequestCode = GEOLOCATION_REQUEST_PERMISSIONS
 )
 public class GeolocationPlugin extends Plugin {
 
