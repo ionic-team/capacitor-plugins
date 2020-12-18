@@ -8,6 +8,7 @@
     "device",
     "dialog",
     "filesystem",
+    "geolocation",
     "haptics",
     "keyboard",
     "motion",
@@ -29,6 +30,7 @@
       "allowBranch": "main",
       "conventionalCommits": true,
       "createRelease": "github",
+      "ignoreChanges": [".npmrc"],
       "message": "chore(release): publish [skip ci]",
       "tagVersionPrefix": ""
     }

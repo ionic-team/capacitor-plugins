@@ -46,7 +46,7 @@ Shows a Toast on the screen
 | Prop           | Type                                       | Description                                                       | Default               | Since |
 | -------------- | ------------------------------------------ | ----------------------------------------------------------------- | --------------------- | ----- |
 | **`text`**     | <code>string</code>                        | Text to display on the Toast                                      |                       | 1.0.0 |
-| **`duration`** | <code>"short" \| "long"</code>             | Duration of the Toast, either 'short' (2000ms) or 'long' (3500ms) | <code>'short'</code>  | 1.0.0 |
-| **`position`** | <code>"top" \| "center" \| "bottom"</code> | Postion of the Toast                                              | <code>'bottom'</code> | 1.0.0 |
+| **`duration`** | <code>'short' \| 'long'</code>             | Duration of the Toast, either 'short' (2000ms) or 'long' (3500ms) | <code>'short'</code>  | 1.0.0 |
+| **`position`** | <code>'top' \| 'center' \| 'bottom'</code> | Postion of the Toast                                              | <code>'bottom'</code> | 1.0.0 |
 
 </docgen-api>
