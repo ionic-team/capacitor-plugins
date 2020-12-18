@@ -19,7 +19,7 @@ public class PushNotificationsDelegate: NSObject, NotificationHandlerProtocol  {
     
     public func willPresent(notification: UNNotification) -> UNNotificationPresentationOptions {
         let notificationData = makeNotificationRequestJSObject(notification.request)        
-        self.plugin?.notifyListeners("received", data: notificationData)
+        self.plugin?.notifyListeners("pushNotificationReceived", data: notificationData)
         
         if let options = notificationRequestLookup[notification.request.identifier] {
             let silent = options["silent"] as? Bool ?? false
@@ -54,7 +54,7 @@ public class PushNotificationsDelegate: NSObject, NotificationHandlerProtocol  {
         
         data["notification"] = makeNotificationRequestJSObject(originalNotificationRequest)
         
-        self.plugin?.notifyListeners("actionPerformed", data: data, retainUntilConsumed: true)
+        self.plugin?.notifyListeners("pushNotificationActionPerformed", data: data, retainUntilConsumed: true)
         
     }
     

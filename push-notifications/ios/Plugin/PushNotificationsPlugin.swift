@@ -85,16 +85,28 @@ public class PushNotificationsPlugin: CAPPlugin {
      * Get notifications in Notification Center
      */
     @objc func getDeliveredNotifications(_ call: CAPPluginCall) {
-       
-        
+        UNUserNotificationCenter.current().getDeliveredNotifications(completionHandler: { (notifications) in
+            let ret = notifications.map({ (notification) -> [String:Any] in
+                return self.notificationDelegateHandler.makeNotificationRequestJSObject(notification.request)
+            })
+            call.resolve([
+                "notifications": ret
+            ])
+        })
     }
     
     /**
      * Remove specified notifications from Notification Center
      */
     @objc func removeDeliveredNotifications(_ call: CAPPluginCall) {
-        // TODO
-        call.unimplemented("not implemented in swift")
+        guard let notifications = call.getArray("notifications", JSObject.self) else {
+            call.reject("Must supply notifications to remove")
+            return
+        }
+        
+        let ids = notifications.map { $0["id"] as? String ?? "" }
+        UNUserNotificationCenter.current().removeDeliveredNotifications(withIdentifiers: ids)
+        call.resolve()
     }
     
     /**
