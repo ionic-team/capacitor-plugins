@@ -33,8 +33,6 @@ public class PushNotificationsDelegate: NSObject, NotificationHandlerProtocol  {
     }
     
     public func didReceive(response: UNNotificationResponse) {
-        print("did receive notification in the background")
-        print("\(response)")
         var data = JSObject()
         
         let originalNotificationRequest = response.notification.request

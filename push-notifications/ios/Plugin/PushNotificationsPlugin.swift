@@ -19,10 +19,6 @@ enum LocationPermissions: String {
 public class PushNotificationsPlugin: CAPPlugin {
     private let notificationDelegateHandler = PushNotificationsDelegate()
     
-    // Local list of notification id -> JSObject for storing options
-    // between notification requets
-    var notificationRequestLookup = [String:JSObject]()
-    
     public override func load() {
         FirebaseApp.configure()
         self.bridge?.notificationRouter.pushNotificationHandler = self.notificationDelegateHandler
@@ -62,6 +58,10 @@ public class PushNotificationsPlugin: CAPPlugin {
         }
     }
     
+    
+    /**
+     * Check notification permission
+     */
     @objc override public func checkPermissions(_ call: CAPPluginCall) {
         self.notificationDelegateHandler.checkPermissions { status in
             var result: LocationPermissions = .prompt
@@ -122,19 +122,18 @@ public class PushNotificationsPlugin: CAPPlugin {
 
     
     @objc func createChannel(_ call: CAPPluginCall) {
-        call.unimplemented()
+        call.unavailable("Not available on iOS")
     }
     
     @objc func deleteChannel(_ call: CAPPluginCall) {
-        call.unimplemented()
+        call.unavailable("Not available on iOS")
     }
     
     @objc func listChannels(_ call: CAPPluginCall) {
-        call.unimplemented()
+        call.unavailable("Not available on iOS")
     }
     
     @objc public func didRegisterForRemoteNotificationsWithDeviceToken(notification: NSNotification){
-        print("calling did register for notifications")
         if let deviceToken = notification.object as? Data {
           let deviceTokenString = deviceToken.reduce("", {$0 + String(format: "%02X", $1)})
             Messaging.messaging().apnsToken = deviceToken
@@ -154,7 +153,6 @@ public class PushNotificationsPlugin: CAPPlugin {
     }
     
     @objc public func didFailToRegisterForRemoteNotificationsWithError(notification: NSNotification){
-        print("calling FAILED register for notifications")
         guard let error = notification.object as? Error else {
           return
         }
