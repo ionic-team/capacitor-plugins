@@ -5,6 +5,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
 import com.getcapacitor.JSObject;
+import com.getcapacitor.PermissionState;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
@@ -16,13 +17,17 @@ import java.util.Map;
 @CapacitorPlugin(
     name = "Geolocation",
     permissions = {
-        @Permission(strings = { Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION }, alias = "location")
+        @Permission(
+            alias = GeolocationPlugin.LOCATION_PERMISSION_ALIAS,
+            strings = { Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION }
+        )
     },
     permissionRequestCode = GeolocationPlugin.GEOLOCATION_REQUEST_PERMISSIONS
 )
 public class GeolocationPlugin extends Plugin {
 
-    public static final int GEOLOCATION_REQUEST_PERMISSIONS = 9030;
+    static final String LOCATION_PERMISSION_ALIAS = "location";
+    static final int GEOLOCATION_REQUEST_PERMISSIONS = 9030;
 
     private Geolocation implementation;
     private Map<String, PluginCall> watchingCalls = new HashMap<>();
@@ -34,7 +39,7 @@ public class GeolocationPlugin extends Plugin {
 
     /**
      * Gets a snapshot of the current device position if permissions are granted. If not,
-     * the call is rejected in {@link #onRequestPermissionsResult(int, String[], int[])}.
+     * the call is rejected in {@link #onRequestPermissionsResult(PluginCall, Map)}.
      *
      * @param call Plugin call
      */
@@ -72,7 +77,7 @@ public class GeolocationPlugin extends Plugin {
 
     /**
      * Begins watching for live location changes if permissions are granted. If not,
-     * the call is rejected in {@link #onRequestPermissionsResult(int, String[], int[])}.
+     * the call is rejected in {@link #onRequestPermissionsResult(PluginCall, Map)}.
      *
      * @param call Plugin call
      */
@@ -144,14 +149,12 @@ public class GeolocationPlugin extends Plugin {
      * The result of a direct call will return the result states for each permission.
      *
      * @param savedCall The original call to the plugin waiting for a response
-     * @param requestCode The code associated with the permission request {@link #GEOLOCATION_REQUEST_PERMISSIONS}
-     * @param permissions The permissions requested
-     * @param grantResults The result status
+     * @param permissionStatus The resulting status of the permissions check
      */
     @Override
-    protected void onRequestPermissionsResult(PluginCall savedCall, int requestCode, String[] permissions, int[] grantResults) {
+    protected void onRequestPermissionsResult(PluginCall savedCall, Map<String, PermissionState> permissionStatus) {
         if (savedCall.getMethodName().equals("getCurrentPosition")) {
-            if (!handleDenied(savedCall, grantResults)) {
+            if (!handleDenied(savedCall, permissionStatus)) {
                 boolean enableHighAccuracy = savedCall.getBoolean("enableHighAccuracy", false);
                 int timeout = savedCall.getInt("timeout", 10000);
 
@@ -173,7 +176,7 @@ public class GeolocationPlugin extends Plugin {
                 );
             }
         } else if (savedCall.getMethodName().equals("watchPosition")) {
-            if (!handleDenied(savedCall, grantResults)) {
+            if (!handleDenied(savedCall, permissionStatus)) {
                 startWatch(savedCall);
             }
         }
@@ -183,15 +186,13 @@ public class GeolocationPlugin extends Plugin {
      * Return rejection if permissions were denied during a request triggered from a plugin call.
      *
      * @param savedCall The cached plugin call to respond to
-     * @param grantResults The plugin permission results
-     * @return true if a denied permission occurred and the rejection is handled, false if not
+     * @param permissionStatus The resulting status of the permissions check
+     * @return true if a permission was not granted and the rejection is handled, false if not
      */
-    private boolean handleDenied(PluginCall savedCall, int[] grantResults) {
-        for (int result : grantResults) {
-            if (result == PackageManager.PERMISSION_DENIED) {
-                savedCall.reject("Location permission was denied");
-                return true;
-            }
+    private boolean handleDenied(PluginCall savedCall, Map<String, PermissionState> permissionStatus) {
+        if (permissionStatus.get(LOCATION_PERMISSION_ALIAS) != PermissionState.GRANTED) {
+            savedCall.reject("Location permission was not granted");
+            return true;
         }
 
         return false;
