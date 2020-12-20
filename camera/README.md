@@ -18,6 +18,7 @@ npx cap sync
 * [`requestPermissions(...)`](#requestpermissions)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
+* [Enums](#enums)
 
 </docgen-index>
 
@@ -27,17 +28,17 @@ npx cap sync
 ### getPhoto(...)
 
 ```typescript
-getPhoto(options: CameraOptions) => Promise<CameraPhoto>
+getPhoto(options: PhotoOptions) => Promise<Photo>
 ```
 
 Prompt the user to pick a photo from an album, or take a new photo
 with the camera.
 
-| Param         | Type                                                    |
-| ------------- | ------------------------------------------------------- |
-| **`options`** | <code><a href="#cameraoptions">CameraOptions</a></code> |
+| Param         | Type                                                  |
+| ------------- | ----------------------------------------------------- |
+| **`options`** | <code><a href="#photooptions">PhotoOptions</a></code> |
 
-**Returns:** <code>Promise&lt;<a href="#cameraphoto">CameraPhoto</a>&gt;</code>
+**Returns:** <code>Promise&lt;<a href="#photo">Photo</a>&gt;</code>
 
 **Since:** 1.0.0
 
@@ -47,12 +48,12 @@ with the camera.
 ### checkPermissions()
 
 ```typescript
-checkPermissions() => Promise<CameraPermissionStatus>
+checkPermissions() => Promise<PermissionStatus>
 ```
 
 Check camera and photo album permissions
 
-**Returns:** <code>Promise&lt;<a href="#camerapermissionstatus">CameraPermissionStatus</a>&gt;</code>
+**Returns:** <code>Promise&lt;<a href="#permissionstatus">PermissionStatus</a>&gt;</code>
 
 **Since:** 1.0.0
 
@@ -62,7 +63,7 @@ Check camera and photo album permissions
 ### requestPermissions(...)
 
 ```typescript
-requestPermissions(permissions?: CameraPluginPermissions | undefined) => Promise<CameraPermissionStatus>
+requestPermissions(permissions?: CameraPluginPermissions | undefined) => Promise<PermissionStatus>
 ```
 
 Request camera and photo album permissions
@@ -71,7 +72,7 @@ Request camera and photo album permissions
 | ----------------- | --------------------------------------------------------------------------- |
 | **`permissions`** | <code><a href="#camerapluginpermissions">CameraPluginPermissions</a></code> |
 
-**Returns:** <code>Promise&lt;<a href="#camerapermissionstatus">CameraPermissionStatus</a>&gt;</code>
+**Returns:** <code>Promise&lt;<a href="#permissionstatus">PermissionStatus</a>&gt;</code>
 
 **Since:** 1.0.0
 
@@ -81,19 +82,19 @@ Request camera and photo album permissions
 ### Interfaces
 
 
-#### CameraPhoto
+#### Photo
 
 | Prop               | Type                | Description                                                                                                                                                                   | Since |
 | ------------------ | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`base64String`** | <code>string</code> | The base64 encoded string representation of the image, if using <a href="#cameraresulttype">CameraResultType</a>.Base64.                                                      | 1.0.0 |
-| **`dataUrl`**      | <code>string</code> | The url starting with 'data:image/jpeg;base64,' and the base64 encoded string representation of the image, if using <a href="#cameraresulttype">CameraResultType</a>.DataUrl. | 1.0.0 |
-| **`path`**         | <code>string</code> | If using <a href="#cameraresulttype">CameraResultType</a>.Uri, the path will contain a full, platform-specific file URL that can be read later using the Filsystem API.       | 1.0.0 |
+| **`base64String`** | <code>string</code> | The base64 encoded string representation of the image, if using <a href="#cameraresulttype">CameraResultType.Base64</a>.                                                      | 1.0.0 |
+| **`dataUrl`**      | <code>string</code> | The url starting with 'data:image/jpeg;base64,' and the base64 encoded string representation of the image, if using <a href="#cameraresulttype">CameraResultType.DataUrl</a>. | 1.0.0 |
+| **`path`**         | <code>string</code> | If using <a href="#cameraresulttype">CameraResultType.Uri</a>, the path will contain a full, platform-specific file URL that can be read later using the Filsystem API.       | 1.0.0 |
 | **`webPath`**      | <code>string</code> | webPath returns a path that can be used to set the src attribute of an image for efficient loading and rendering.                                                             | 1.0.0 |
 | **`exif`**         | <code>any</code>    | Exif data, if any, retrieved from the image                                                                                                                                   | 1.0.0 |
 | **`format`**       | <code>string</code> | The format of the image, ex: jpeg, png, gif. iOS and Android only support jpeg. Web supports jpeg and png. gif is only supported if using file input.                         | 1.0.0 |
 
 
-#### CameraOptions
+#### PhotoOptions
 
 | Prop                      | Type                                                          | Description                                                                                                                                                                                                                                                                                                                                                                                                                                          | Default                             | Since |
 | ------------------------- | ------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------- | ----- |
@@ -105,8 +106,8 @@ Request camera and photo album permissions
 | **`height`**              | <code>number</code>                                           | The height of the saved image                                                                                                                                                                                                                                                                                                                                                                                                                        |                                     | 1.0.0 |
 | **`preserveAspectRatio`** | <code>boolean</code>                                          | Whether to preserve the aspect ratio of the image. If this flag is true, the width and height will be used as max values and the aspect ratio will be preserved. This is only relevant when both a width and height are passed. When only width or height is provided the aspect ratio is always preserved (and this option is a no-op). A future major version will change this behavior to be default, and may also remove this option altogether. | <code>: false</code>                | 1.0.0 |
 | **`correctOrientation`**  | <code>boolean</code>                                          | Whether to automatically rotate the image "up" to correct for orientation in portrait mode                                                                                                                                                                                                                                                                                                                                                           | <code>: true</code>                 | 1.0.0 |
-| **`source`**              | <code><a href="#camerasource">CameraSource</a></code>         | The source to get the photo from. By default this prompts the user to select either the photo album or take a photo.                                                                                                                                                                                                                                                                                                                                 | <code>: CameraSource.prompt</code>  | 1.0.0 |
-| **`direction`**           | <code><a href="#cameradirection">CameraDirection</a></code>   | iOS and Web only: The camera direction.                                                                                                                                                                                                                                                                                                                                                                                                              | <code>: CameraDirection.rear</code> | 1.0.0 |
+| **`source`**              | <code><a href="#camerasource">CameraSource</a></code>         | The source to get the photo from. By default this prompts the user to select either the photo album or take a photo.                                                                                                                                                                                                                                                                                                                                 | <code>: CameraSource.Prompt</code>  | 1.0.0 |
+| **`direction`**           | <code><a href="#cameradirection">CameraDirection</a></code>   | iOS and Web only: The camera direction.                                                                                                                                                                                                                                                                                                                                                                                                              | <code>: CameraDirection.Rear</code> | 1.0.0 |
 | **`presentationStyle`**   | <code>'fullscreen' \| 'popover'</code>                        | iOS only: The presentation style of the Camera.                                                                                                                                                                                                                                                                                                                                                                                                      | <code>: 'fullscreen'</code>         | 1.0.0 |
 | **`webUseInput`**         | <code>boolean</code>                                          | Web only: Whether to use the PWA Element experience or file input. The default is to use PWA Elements if installed and fall back to file input. To always use file input, set this to `true`. Learn more about PWA Elements: https://capacitorjs.com/docs/pwa-elements                                                                                                                                                                               |                                     | 1.0.0 |
 | **`promptLabelHeader`**   | <code>string</code>                                           | Text value to use when displaying the prompt. iOS only: The title of the action sheet.                                                                                                                                                                                                                                                                                                                                                               | <code>: 'Photo'</code>              | 1.0.0 |
@@ -115,7 +116,7 @@ Request camera and photo album permissions
 | **`promptLabelPicture`**  | <code>string</code>                                           | Text value to use when displaying the prompt. The label of the button to open the camera.                                                                                                                                                                                                                                                                                                                                                            | <code>: 'Take Picture'</code>       | 1.0.0 |
 
 
-#### CameraPermissionStatus
+#### PermissionStatus
 
 | Prop         | Type                                                                    |
 | ------------ | ----------------------------------------------------------------------- |
@@ -133,21 +134,6 @@ Request camera and photo album permissions
 ### Type Aliases
 
 
-#### CameraResultType
-
-<code>'uri' | 'base64' | 'dataUrl'</code>
-
-
-#### CameraSource
-
-<code>'prompt' | 'camera' | 'photos'</code>
-
-
-#### CameraDirection
-
-<code>'rear' | 'front'</code>
-
-
 #### CameraPermissionState
 
 <code><a href="#permissionstate">PermissionState</a> | 'limited'</code>
@@ -161,5 +147,34 @@ Request camera and photo album permissions
 #### CameraPermissionType
 
 <code>'camera' | 'photos'</code>
+
+
+### Enums
+
+
+#### CameraResultType
+
+| Members       | Value                  |
+| ------------- | ---------------------- |
+| **`Uri`**     | <code>'uri'</code>     |
+| **`Base64`**  | <code>'base64'</code>  |
+| **`DataUrl`** | <code>'dataUrl'</code> |
+
+
+#### CameraSource
+
+| Members      | Value                 |
+| ------------ | --------------------- |
+| **`Prompt`** | <code>'PROMPT'</code> |
+| **`Camera`** | <code>'CAMERA'</code> |
+| **`Photos`** | <code>'PHOTOS'</code> |
+
+
+#### CameraDirection
+
+| Members     | Value                |
+| ----------- | -------------------- |
+| **`Rear`**  | <code>'REAR'</code>  |
+| **`Front`** | <code>'FRONT'</code> |
 
 </docgen-api>

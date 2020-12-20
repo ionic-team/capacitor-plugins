@@ -2,15 +2,16 @@ import { WebPlugin, CapacitorException } from '@capacitor/core';
 
 import type {
   CameraPlugin,
-  CameraPhoto,
-  CameraOptions,
-  CameraPermissionStatus,
+  PermissionStatus,
+  Photo,
+  PhotoOptions,
 } from './definitions';
+import { CameraSource, CameraDirection } from './definitions';
 
 export class CameraWeb extends WebPlugin implements CameraPlugin {
-  async getPhoto(options: CameraOptions): Promise<CameraPhoto> {
+  async getPhoto(options: PhotoOptions): Promise<Photo> {
     // eslint-disable-next-line no-async-promise-executor
-    return new Promise<CameraPhoto>(async (resolve, reject) => {
+    return new Promise<Photo>(async (resolve, reject) => {
       if (options.webUseInput) {
         this.fileInputExperience(options, resolve);
       } else {
@@ -48,7 +49,7 @@ export class CameraWeb extends WebPlugin implements CameraPlugin {
     });
   }
 
-  private fileInputExperience(options: CameraOptions, resolve: any) {
+  private fileInputExperience(options: PhotoOptions, resolve: any) {
     let input = document.querySelector(
       '#_capacitor-camera-input',
     ) as HTMLInputElement;
@@ -67,11 +68,14 @@ export class CameraWeb extends WebPlugin implements CameraPlugin {
     input.accept = 'image/*';
     (input as any).capture = true;
 
-    if (options.source === 'photos' || options.source === 'prompt') {
+    if (
+      options.source === CameraSource.Photos ||
+      options.source === CameraSource.Prompt
+    ) {
       input.removeAttribute('capture');
-    } else if (options.direction === 'front') {
+    } else if (options.direction === CameraDirection.Front) {
       (input as any).capture = 'user';
-    } else if (options.direction === 'rear') {
+    } else if (options.direction === CameraDirection.Rear) {
       (input as any).capture = 'environment';
     }
 
@@ -93,13 +97,13 @@ export class CameraWeb extends WebPlugin implements CameraPlugin {
             resolve({
               dataUrl: reader.result,
               format,
-            } as CameraPhoto);
+            } as Photo);
           } else if (options.resultType === 'base64') {
             const b64 = (reader.result as string).split(',')[1];
             resolve({
               base64String: b64,
               format,
-            } as CameraPhoto);
+            } as Photo);
           }
 
           cleanup();
@@ -118,8 +122,8 @@ export class CameraWeb extends WebPlugin implements CameraPlugin {
     input.click();
   }
 
-  private _getCameraPhoto(photo: Blob, options: CameraOptions) {
-    return new Promise<CameraPhoto>((resolve, reject) => {
+  private _getCameraPhoto(photo: Blob, options: PhotoOptions) {
+    return new Promise<Photo>((resolve, reject) => {
       const reader = new FileReader();
       const format = photo.type.split('/')[1];
       if (options.resultType === 'uri') {
@@ -150,7 +154,7 @@ export class CameraWeb extends WebPlugin implements CameraPlugin {
     });
   }
 
-  async checkPermissions(): Promise<CameraPermissionStatus> {
+  async checkPermissions(): Promise<PermissionStatus> {
     if (typeof navigator === 'undefined' || !navigator.permissions) {
       throw this.unavailable('Permissions API not available in this browser');
     }
@@ -173,7 +177,7 @@ export class CameraWeb extends WebPlugin implements CameraPlugin {
     }
   }
 
-  async requestPermissions(): Promise<CameraPermissionStatus> {
+  async requestPermissions(): Promise<PermissionStatus> {
     throw this.unimplemented('Not implemented on web.');
   }
 }
