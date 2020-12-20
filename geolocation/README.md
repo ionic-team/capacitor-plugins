@@ -9,6 +9,42 @@ npm install @capacitor/geolocation
 npx cap sync
 ```
 
+## iOS Notes
+
+Apple requires privacy descriptions to be specified in `Info.plist` for location information:
+
+- `NSLocationAlwaysUsageDescription` (`Privacy - Location Always Usage Description`)
+- `NSLocationWhenInUseUsageDescription` (`Privacy - Location When In Use Usage Description`)
+
+Read about [Configuring `Info.plist`](https://capacitorjs.com/docs/ios/configuration#configuring-infoplist) in the [iOS Guide](https://capacitorjs.com/docs/ios) for more information on setting iOS permissions in Xcode
+
+## Android Notes
+
+This API requires the following permissions be added to your `AndroidManifest.xml`:
+
+```xml
+<!-- Geolocation API -->
+<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+<uses-feature android:name="android.hardware.location.gps" />
+```
+
+The first two permissions ask for location data, both fine and coarse, and the last line is optional but necessary if your app _requires_ GPS to function. You may leave it out, though keep in mind that this may mean your app is installed on devices lacking GPS hardware.
+
+Read about [Setting Permissions](https://capacitorjs.com/docs/android/configuration#setting-permissions) in the [Android Guide](https://capacitorjs.com/docs/android) for more information on setting Android permissions.
+
+## Example
+
+```typescript
+import { Geolocation } from '@capacitor/geolocation';
+
+const printCurrentPosition = async () {
+  const coordinates = await Geolocation.getCurrentPosition();
+
+  console.log('Current position:', coordinates);
+};
+```
+
 ## API
 
 <docgen-index>
