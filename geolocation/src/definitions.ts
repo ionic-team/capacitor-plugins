@@ -2,10 +2,8 @@ import type { PermissionState } from '@capacitor/core';
 
 export type CallbackID = string;
 
-export type GeolocationState = PermissionState;
-
-export interface GeolocationPermissionStatus {
-  location: GeolocationState;
+export interface PermissionStatus {
+  location: PermissionState;
 }
 
 export interface GeolocationPlugin {
@@ -14,9 +12,7 @@ export interface GeolocationPlugin {
    *
    * @since 1.0.0
    */
-  getCurrentPosition(
-    options?: GeolocationOptions,
-  ): Promise<GeolocationPosition>;
+  getCurrentPosition(options?: PositionOptions): Promise<Position>;
 
   /**
    * Set up a watch for location changes. Note that watching for location changes
@@ -25,8 +21,8 @@ export interface GeolocationPlugin {
    * @since 1.0.0
    */
   watchPosition(
-    options: GeolocationOptions,
-    callback: GeolocationWatchCallback,
+    options: PositionOptions,
+    callback: WatchPositionCallback,
   ): CallbackID;
 
   /**
@@ -34,24 +30,28 @@ export interface GeolocationPlugin {
    *
    * @since 1.0.0
    */
-  clearWatch(options: { id: string }): Promise<void>;
+  clearWatch(options: ClearWatchOptions): Promise<void>;
 
   /**
    * Check location permissions
    *
    * @since 1.0.0
    */
-  checkPermissions(): Promise<GeolocationPermissionStatus>;
+  checkPermissions(): Promise<PermissionStatus>;
 
   /**
    * Request location permissions
    *
    * @since 1.0.0
    */
-  requestPermissions(): Promise<GeolocationPermissionStatus>;
+  requestPermissions(): Promise<PermissionStatus>;
 }
 
-export interface GeolocationPosition {
+export interface ClearWatchOptions {
+  id: CallbackID;
+}
+
+export interface Position {
   /**
    * Creation timestamp for coords
    *
@@ -118,7 +118,7 @@ export interface GeolocationPosition {
   };
 }
 
-export interface GeolocationOptions {
+export interface PositionOptions {
   /**
    * High accuracy mode (such as GPS, if available)
    *
@@ -144,11 +144,25 @@ export interface GeolocationOptions {
   maximumAge?: number;
 }
 
-export type GeolocationWatchCallback = (
-  position: GeolocationPosition | null,
+export type WatchPositionCallback = (
+  position: Position | null,
   err?: any,
 ) => void;
 
-export interface PermissionsRequestResult {
-  results: any[];
-}
+/**
+ * @deprecated Use `PositionOptions`.
+ * @since 1.0.0
+ */
+export type GeolocationOptions = PositionOptions;
+
+/**
+ * @deprecated Use `WatchPositionCallback`.
+ * @since 1.0.0
+ */
+export type GeolocationWatchCallback = WatchPositionCallback;
+
+/**
+ * @deprecated Use `Position`.
+ * @since 1.0.0
+ */
+export type GeolocationPosition = Position;

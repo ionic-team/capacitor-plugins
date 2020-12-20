@@ -4,7 +4,7 @@ export type CameraPermissionState = PermissionState | 'limited';
 
 export type CameraPermissionType = 'camera' | 'photos';
 
-export interface CameraPermissionStatus {
+export interface PermissionStatus {
   camera: CameraPermissionState;
   photos: CameraPermissionState;
 }
@@ -20,14 +20,14 @@ export interface CameraPlugin {
    *
    * @since 1.0.0
    */
-  getPhoto(options: CameraOptions): Promise<CameraPhoto>;
+  getPhoto(options: PhotoOptions): Promise<Photo>;
 
   /**
    * Check camera and photo album permissions
    *
    * @since 1.0.0
    */
-  checkPermissions(): Promise<CameraPermissionStatus>;
+  checkPermissions(): Promise<PermissionStatus>;
 
   /**
    * Request camera and photo album permissions
@@ -36,10 +36,10 @@ export interface CameraPlugin {
    */
   requestPermissions(
     permissions?: CameraPluginPermissions,
-  ): Promise<CameraPermissionStatus>;
+  ): Promise<PermissionStatus>;
 }
 
-export interface CameraOptions {
+export interface PhotoOptions {
   /**
    * The quality of image to return as JPEG, from 0-100
    *
@@ -103,14 +103,14 @@ export interface CameraOptions {
   /**
    * The source to get the photo from. By default this prompts the user to select
    * either the photo album or take a photo.
-   * @default: CameraSource.prompt
+   * @default: CameraSource.Prompt
    *
    * @since 1.0.0
    */
   source?: CameraSource;
   /**
    * iOS and Web only: The camera direction.
-   * @default: CameraDirection.rear
+   * @default: CameraDirection.Rear
    *
    * @since 1.0.0
    */
@@ -173,7 +173,7 @@ export interface CameraOptions {
   promptLabelPicture?: string;
 }
 
-export interface CameraPhoto {
+export interface Photo {
   /**
    * The base64 encoded string representation of the image, if using CameraResultType.Base64.
    *
@@ -217,8 +217,31 @@ export interface CameraPhoto {
   format: string;
 }
 
-export type CameraSource = 'prompt' | 'camera' | 'photos';
+export enum CameraSource {
+  Prompt = 'PROMPT',
+  Camera = 'CAMERA',
+  Photos = 'PHOTOS',
+}
 
-export type CameraDirection = 'rear' | 'front';
+export enum CameraDirection {
+  Rear = 'REAR',
+  Front = 'FRONT',
+}
 
-export type CameraResultType = 'uri' | 'base64' | 'dataUrl';
+export enum CameraResultType {
+  Uri = 'uri',
+  Base64 = 'base64',
+  DataUrl = 'dataUrl',
+}
+
+/**
+ * @deprecated Use `Photo`.
+ * @since 1.0.0
+ */
+export type CameraPhoto = Photo;
+
+/**
+ * @deprecated Use `PhotoOptions`.
+ * @since 1.0.0
+ */
+export type CameraOptions = PhotoOptions;

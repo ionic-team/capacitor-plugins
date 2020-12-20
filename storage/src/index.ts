@@ -6,4 +6,5 @@ const Storage = registerPlugin<StoragePlugin>('Storage', {
   web: () => import('./web').then(m => new m.StorageWeb()),
 });
 
+export * from './definitions';
 export { Storage };

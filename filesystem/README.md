@@ -38,16 +38,16 @@ npx cap sync
 ### readFile(...)
 
 ```typescript
-readFile(options: FileReadOptions) => Promise<FileReadResult>
+readFile(options: ReadFileOptions) => Promise<ReadFileResult>
 ```
 
 Read a file from disk
 
 | Param         | Type                                                        |
 | ------------- | ----------------------------------------------------------- |
-| **`options`** | <code><a href="#filereadoptions">FileReadOptions</a></code> |
+| **`options`** | <code><a href="#readfileoptions">ReadFileOptions</a></code> |
 
-**Returns:** <code>Promise&lt;<a href="#filereadresult">FileReadResult</a>&gt;</code>
+**Returns:** <code>Promise&lt;<a href="#readfileresult">ReadFileResult</a>&gt;</code>
 
 **Since:** 1.0.0
 
@@ -57,16 +57,16 @@ Read a file from disk
 ### writeFile(...)
 
 ```typescript
-writeFile(options: FileWriteOptions) => Promise<FileWriteResult>
+writeFile(options: WriteFileOptions) => Promise<WriteFileResult>
 ```
 
 Write a file to disk in the specified location on device
 
 | Param         | Type                                                          |
 | ------------- | ------------------------------------------------------------- |
-| **`options`** | <code><a href="#filewriteoptions">FileWriteOptions</a></code> |
+| **`options`** | <code><a href="#writefileoptions">WriteFileOptions</a></code> |
 
-**Returns:** <code>Promise&lt;<a href="#filewriteresult">FileWriteResult</a>&gt;</code>
+**Returns:** <code>Promise&lt;<a href="#writefileresult">WriteFileResult</a>&gt;</code>
 
 **Since:** 1.0.0
 
@@ -76,14 +76,14 @@ Write a file to disk in the specified location on device
 ### appendFile(...)
 
 ```typescript
-appendFile(options: FileAppendOptions) => Promise<void>
+appendFile(options: AppendFileOptions) => Promise<void>
 ```
 
 Append to a file on disk in the specified location on device
 
 | Param         | Type                                                            |
 | ------------- | --------------------------------------------------------------- |
-| **`options`** | <code><a href="#fileappendoptions">FileAppendOptions</a></code> |
+| **`options`** | <code><a href="#appendfileoptions">AppendFileOptions</a></code> |
 
 **Since:** 1.0.0
 
@@ -93,14 +93,14 @@ Append to a file on disk in the specified location on device
 ### deleteFile(...)
 
 ```typescript
-deleteFile(options: FileDeleteOptions) => Promise<void>
+deleteFile(options: DeleteFileOptions) => Promise<void>
 ```
 
 Delete a file from disk
 
 | Param         | Type                                                            |
 | ------------- | --------------------------------------------------------------- |
-| **`options`** | <code><a href="#filedeleteoptions">FileDeleteOptions</a></code> |
+| **`options`** | <code><a href="#deletefileoptions">DeleteFileOptions</a></code> |
 
 **Since:** 1.0.0
 
@@ -235,14 +235,14 @@ Copy a file or directory
 ### checkPermissions()
 
 ```typescript
-checkPermissions() => Promise<FilesystemPermissionStatus>
+checkPermissions() => Promise<PermissionStatus>
 ```
 
 Check read/write permissions.
-Required on Android, only when using <a href="#filesystemdirectory">FilesystemDirectory.Documents</a> or
-FilesystemDirectory.ExternalStorage.
+Required on Android, only when using <a href="#directory">`Directory.Documents`</a> or
+`Directory.ExternalStorage`.
 
-**Returns:** <code>Promise&lt;<a href="#filesystempermissionstatus">FilesystemPermissionStatus</a>&gt;</code>
+**Returns:** <code>Promise&lt;<a href="#permissionstatus">PermissionStatus</a>&gt;</code>
 
 **Since:** 1.0.0
 
@@ -252,14 +252,14 @@ FilesystemDirectory.ExternalStorage.
 ### requestPermissions()
 
 ```typescript
-requestPermissions() => Promise<FilesystemPermissionStatus>
+requestPermissions() => Promise<PermissionStatus>
 ```
 
 Request read/write permissions.
-Required on Android, only when using <a href="#filesystemdirectory">FilesystemDirectory.Documents</a> or
-FilesystemDirectory.ExternalStorage.
+Required on Android, only when using <a href="#directory">`Directory.Documents`</a> or
+`Directory.ExternalStorage`.
 
-**Returns:** <code>Promise&lt;<a href="#filesystempermissionstatus">FilesystemPermissionStatus</a>&gt;</code>
+**Returns:** <code>Promise&lt;<a href="#permissionstatus">PermissionStatus</a>&gt;</code>
 
 **Since:** 1.0.0
 
@@ -269,74 +269,74 @@ FilesystemDirectory.ExternalStorage.
 ### Interfaces
 
 
-#### FileReadResult
+#### ReadFileResult
 
 | Prop       | Type                | Description                                                 | Since |
 | ---------- | ------------------- | ----------------------------------------------------------- | ----- |
 | **`data`** | <code>string</code> | The string representation of the data contained in the file | 1.0.0 |
 
 
-#### FileReadOptions
+#### ReadFileOptions
 
-| Prop            | Type                                                                | Description                                                                                                                                                                                     | Since |
-| --------------- | ------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`path`**      | <code>string</code>                                                 | The path of the file to read                                                                                                                                                                    | 1.0.0 |
-| **`directory`** | <code><a href="#filesystemdirectory">FilesystemDirectory</a></code> | The <a href="#filesystemdirectory">FilesystemDirectory</a> to read the file from                                                                                                                | 1.0.0 |
-| **`encoding`**  | <code><a href="#filesystemencoding">FilesystemEncoding</a></code>   | The encoding to read the file in, if not provided, data is read as binary and returned as base64 encoded. Pass <a href="#filesystemencoding">FilesystemEncoding.UTF8</a> to read data as string | 1.0.0 |
+| Prop            | Type                                            | Description                                                                                                                                                                 | Since |
+| --------------- | ----------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`path`**      | <code>string</code>                             | The path of the file to read                                                                                                                                                | 1.0.0 |
+| **`directory`** | <code><a href="#directory">Directory</a></code> | The <a href="#directory">`Directory`</a> to read the file from                                                                                                              | 1.0.0 |
+| **`encoding`**  | <code><a href="#encoding">Encoding</a></code>   | The encoding to read the file in, if not provided, data is read as binary and returned as base64 encoded. Pass <a href="#encoding">Encoding.UTF8</a> to read data as string | 1.0.0 |
 
 
-#### FileWriteResult
+#### WriteFileResult
 
 | Prop      | Type                | Description                             | Since |
 | --------- | ------------------- | --------------------------------------- | ----- |
 | **`uri`** | <code>string</code> | The uri where the file was written into | 1.0.0 |
 
 
-#### FileWriteOptions
+#### WriteFileOptions
 
-| Prop            | Type                                                                | Description                                                                                                                                                                   | Default            | Since |
-| --------------- | ------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
-| **`path`**      | <code>string</code>                                                 | The path of the file to write                                                                                                                                                 |                    | 1.0.0 |
-| **`data`**      | <code>string</code>                                                 | The data to write                                                                                                                                                             |                    | 1.0.0 |
-| **`directory`** | <code><a href="#filesystemdirectory">FilesystemDirectory</a></code> | The <a href="#filesystemdirectory">FilesystemDirectory</a> to store the file in                                                                                               |                    | 1.0.0 |
-| **`encoding`**  | <code><a href="#filesystemencoding">FilesystemEncoding</a></code>   | The encoding to write the file in. If not provided, data is written as base64 encoded. Pass <a href="#filesystemencoding">FilesystemEncoding.UTF8</a> to write data as string |                    | 1.0.0 |
-| **`recursive`** | <code>boolean</code>                                                | Whether to create any missing parent directories.                                                                                                                             | <code>false</code> | 1.0.0 |
-
-
-#### FileAppendOptions
-
-| Prop            | Type                                                                | Description                                                                                                                                                                   | Since |
-| --------------- | ------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`path`**      | <code>string</code>                                                 | The path of the file to append                                                                                                                                                | 1.0.0 |
-| **`data`**      | <code>string</code>                                                 | The data to write                                                                                                                                                             | 1.0.0 |
-| **`directory`** | <code><a href="#filesystemdirectory">FilesystemDirectory</a></code> | The <a href="#filesystemdirectory">FilesystemDirectory</a> to store the file in                                                                                               | 1.0.0 |
-| **`encoding`**  | <code><a href="#filesystemencoding">FilesystemEncoding</a></code>   | The encoding to write the file in. If not provided, data is written as base64 encoded. Pass <a href="#filesystemencoding">FilesystemEncoding.UTF8</a> to write data as string | 1.0.0 |
+| Prop            | Type                                            | Description                                                                                                                                               | Default            | Since |
+| --------------- | ----------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
+| **`path`**      | <code>string</code>                             | The path of the file to write                                                                                                                             |                    | 1.0.0 |
+| **`data`**      | <code>string</code>                             | The data to write                                                                                                                                         |                    | 1.0.0 |
+| **`directory`** | <code><a href="#directory">Directory</a></code> | The <a href="#directory">`Directory`</a> to store the file in                                                                                             |                    | 1.0.0 |
+| **`encoding`**  | <code><a href="#encoding">Encoding</a></code>   | The encoding to write the file in. If not provided, data is written as base64 encoded. Pass <a href="#encoding">Encoding.UTF8</a> to write data as string |                    | 1.0.0 |
+| **`recursive`** | <code>boolean</code>                            | Whether to create any missing parent directories.                                                                                                         | <code>false</code> | 1.0.0 |
 
 
-#### FileDeleteOptions
+#### AppendFileOptions
 
-| Prop            | Type                                                                | Description                                                                        | Since |
-| --------------- | ------------------------------------------------------------------- | ---------------------------------------------------------------------------------- | ----- |
-| **`path`**      | <code>string</code>                                                 | The path of the file to delete                                                     | 1.0.0 |
-| **`directory`** | <code><a href="#filesystemdirectory">FilesystemDirectory</a></code> | The <a href="#filesystemdirectory">FilesystemDirectory</a> to delete the file from | 1.0.0 |
+| Prop            | Type                                            | Description                                                                                                                                 | Since |
+| --------------- | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`path`**      | <code>string</code>                             | The path of the file to append                                                                                                              | 1.0.0 |
+| **`data`**      | <code>string</code>                             | The data to write                                                                                                                           | 1.0.0 |
+| **`directory`** | <code><a href="#directory">Directory</a></code> | The <a href="#directory">`Directory`</a> to store the file in                                                                               | 1.0.0 |
+| **`encoding`**  | <code><a href="#encoding">Encoding</a></code>   | The encoding to write the file in. If not provided, data is written as base64 encoded. Pass FilesystemEncoding.UTF8 to write data as string | 1.0.0 |
+
+
+#### DeleteFileOptions
+
+| Prop            | Type                                            | Description                                                      | Since |
+| --------------- | ----------------------------------------------- | ---------------------------------------------------------------- | ----- |
+| **`path`**      | <code>string</code>                             | The path of the file to delete                                   | 1.0.0 |
+| **`directory`** | <code><a href="#directory">Directory</a></code> | The <a href="#directory">`Directory`</a> to delete the file from | 1.0.0 |
 
 
 #### MkdirOptions
 
-| Prop            | Type                                                                | Description                                                                             | Default            | Since |
-| --------------- | ------------------------------------------------------------------- | --------------------------------------------------------------------------------------- | ------------------ | ----- |
-| **`path`**      | <code>string</code>                                                 | The path of the new directory                                                           |                    | 1.0.0 |
-| **`directory`** | <code><a href="#filesystemdirectory">FilesystemDirectory</a></code> | The <a href="#filesystemdirectory">FilesystemDirectory</a> to make the new directory in |                    | 1.0.0 |
-| **`recursive`** | <code>boolean</code>                                                | Whether to create any missing parent directories as well.                               | <code>false</code> | 1.0.0 |
+| Prop            | Type                                            | Description                                                           | Default            | Since |
+| --------------- | ----------------------------------------------- | --------------------------------------------------------------------- | ------------------ | ----- |
+| **`path`**      | <code>string</code>                             | The path of the new directory                                         |                    | 1.0.0 |
+| **`directory`** | <code><a href="#directory">Directory</a></code> | The <a href="#directory">`Directory`</a> to make the new directory in |                    | 1.0.0 |
+| **`recursive`** | <code>boolean</code>                            | Whether to create any missing parent directories as well.             | <code>false</code> | 1.0.0 |
 
 
 #### RmdirOptions
 
-| Prop            | Type                                                                | Description                                                                             | Default            | Since |
-| --------------- | ------------------------------------------------------------------- | --------------------------------------------------------------------------------------- | ------------------ | ----- |
-| **`path`**      | <code>string</code>                                                 | The path of the directory to remove                                                     |                    | 1.0.0 |
-| **`directory`** | <code><a href="#filesystemdirectory">FilesystemDirectory</a></code> | The <a href="#filesystemdirectory">FilesystemDirectory</a> to remove the directory from |                    | 1.0.0 |
-| **`recursive`** | <code>boolean</code>                                                | Whether to recursively remove the contents of the directory                             | <code>false</code> | 1.0.0 |
+| Prop            | Type                                            | Description                                                           | Default            | Since |
+| --------------- | ----------------------------------------------- | --------------------------------------------------------------------- | ------------------ | ----- |
+| **`path`**      | <code>string</code>                             | The path of the directory to remove                                   |                    | 1.0.0 |
+| **`directory`** | <code><a href="#directory">Directory</a></code> | The <a href="#directory">`Directory`</a> to remove the directory from |                    | 1.0.0 |
+| **`recursive`** | <code>boolean</code>                            | Whether to recursively remove the contents of the directory           | <code>false</code> | 1.0.0 |
 
 
 #### ReaddirResult
@@ -348,10 +348,10 @@ FilesystemDirectory.ExternalStorage.
 
 #### ReaddirOptions
 
-| Prop            | Type                                                                | Description                                                                   | Since |
-| --------------- | ------------------------------------------------------------------- | ----------------------------------------------------------------------------- | ----- |
-| **`path`**      | <code>string</code>                                                 | The path of the directory to read                                             | 1.0.0 |
-| **`directory`** | <code><a href="#filesystemdirectory">FilesystemDirectory</a></code> | The <a href="#filesystemdirectory">FilesystemDirectory</a> to list files from | 1.0.0 |
+| Prop            | Type                                            | Description                                                 | Since |
+| --------------- | ----------------------------------------------- | ----------------------------------------------------------- | ----- |
+| **`path`**      | <code>string</code>                             | The path of the directory to read                           | 1.0.0 |
+| **`directory`** | <code><a href="#directory">Directory</a></code> | The <a href="#directory">`Directory`</a> to list files from | 1.0.0 |
 
 
 #### GetUriResult
@@ -363,10 +363,10 @@ FilesystemDirectory.ExternalStorage.
 
 #### GetUriOptions
 
-| Prop            | Type                                                                | Description                                                                      | Since |
-| --------------- | ------------------------------------------------------------------- | -------------------------------------------------------------------------------- | ----- |
-| **`path`**      | <code>string</code>                                                 | The path of the file to get the URI for                                          | 1.0.0 |
-| **`directory`** | <code><a href="#filesystemdirectory">FilesystemDirectory</a></code> | The <a href="#filesystemdirectory">FilesystemDirectory</a> to get the file under | 1.0.0 |
+| Prop            | Type                                            | Description                                                    | Since |
+| --------------- | ----------------------------------------------- | -------------------------------------------------------------- | ----- |
+| **`path`**      | <code>string</code>                             | The path of the file to get the URI for                        | 1.0.0 |
+| **`directory`** | <code><a href="#directory">Directory</a></code> | The <a href="#directory">`Directory`</a> to get the file under | 1.0.0 |
 
 
 #### StatResult
@@ -382,23 +382,23 @@ FilesystemDirectory.ExternalStorage.
 
 #### StatOptions
 
-| Prop            | Type                                                                | Description                                                                      | Since |
-| --------------- | ------------------------------------------------------------------- | -------------------------------------------------------------------------------- | ----- |
-| **`path`**      | <code>string</code>                                                 | The path of the file to get data about                                           | 1.0.0 |
-| **`directory`** | <code><a href="#filesystemdirectory">FilesystemDirectory</a></code> | The <a href="#filesystemdirectory">FilesystemDirectory</a> to get the file under | 1.0.0 |
+| Prop            | Type                                            | Description                                                    | Since |
+| --------------- | ----------------------------------------------- | -------------------------------------------------------------- | ----- |
+| **`path`**      | <code>string</code>                             | The path of the file to get data about                         | 1.0.0 |
+| **`directory`** | <code><a href="#directory">Directory</a></code> | The <a href="#directory">`Directory`</a> to get the file under | 1.0.0 |
 
 
 #### CopyOptions
 
-| Prop              | Type                                                                | Description                                                                                                                                                                    | Since |
-| ----------------- | ------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
-| **`from`**        | <code>string</code>                                                 | The existing file or directory                                                                                                                                                 | 1.0.0 |
-| **`to`**          | <code>string</code>                                                 | The destination file or directory                                                                                                                                              | 1.0.0 |
-| **`directory`**   | <code><a href="#filesystemdirectory">FilesystemDirectory</a></code> | The <a href="#filesystemdirectory">FilesystemDirectory</a> containing the existing file or directory                                                                           | 1.0.0 |
-| **`toDirectory`** | <code><a href="#filesystemdirectory">FilesystemDirectory</a></code> | The <a href="#filesystemdirectory">FilesystemDirectory</a> containing the destination file or directory. If not supplied will use the 'directory' parameter as the destination | 1.0.0 |
+| Prop              | Type                                            | Description                                                                                                                                                  | Since |
+| ----------------- | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
+| **`from`**        | <code>string</code>                             | The existing file or directory                                                                                                                               | 1.0.0 |
+| **`to`**          | <code>string</code>                             | The destination file or directory                                                                                                                            | 1.0.0 |
+| **`directory`**   | <code><a href="#directory">Directory</a></code> | The <a href="#directory">`Directory`</a> containing the existing file or directory                                                                           | 1.0.0 |
+| **`toDirectory`** | <code><a href="#directory">Directory</a></code> | The <a href="#directory">`Directory`</a> containing the destination file or directory. If not supplied will use the 'directory' parameter as the destination | 1.0.0 |
 
 
-#### FilesystemPermissionStatus
+#### PermissionStatus
 
 | Prop                | Type                                                        |
 | ------------------- | ----------------------------------------------------------- |
@@ -421,7 +421,7 @@ FilesystemDirectory.ExternalStorage.
 ### Enums
 
 
-#### FilesystemDirectory
+#### Directory
 
 | Members               | Value                           | Description                                                                                                                                                                                                                                                                                                                                                                                           | Since |
 | --------------------- | ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
@@ -432,7 +432,7 @@ FilesystemDirectory.ExternalStorage.
 | **`ExternalStorage`** | <code>'EXTERNAL_STORAGE'</code> | The external storage directory On iOS it will use the Documents directory On Android it's the primary shared/external storage directory. It's not accesible on Android 10 unless the app enables legacy External Storage by adding `android:requestLegacyExternalStorage="true"` in the `application` tag in the `AndroidManifest.xml`                                                                | 1.0.0 |
 
 
-#### FilesystemEncoding
+#### Encoding
 
 | Members     | Value                | Description                                                                                                                              | Since |
 | ----------- | -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ----- |

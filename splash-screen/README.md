@@ -25,14 +25,14 @@ npx cap sync
 ### show(...)
 
 ```typescript
-show(options?: SplashScreenShowOptions | undefined) => Promise<void>
+show(options?: ShowOptions | undefined) => Promise<void>
 ```
 
 Show the splash screen
 
-| Param         | Type                                                                        |
-| ------------- | --------------------------------------------------------------------------- |
-| **`options`** | <code><a href="#splashscreenshowoptions">SplashScreenShowOptions</a></code> |
+| Param         | Type                                                |
+| ------------- | --------------------------------------------------- |
+| **`options`** | <code><a href="#showoptions">ShowOptions</a></code> |
 
 **Since:** 1.0.0
 
@@ -42,14 +42,14 @@ Show the splash screen
 ### hide(...)
 
 ```typescript
-hide(options?: SplashScreenHideOptions | undefined) => Promise<void>
+hide(options?: HideOptions | undefined) => Promise<void>
 ```
 
 Hide the splash screen
 
-| Param         | Type                                                                        |
-| ------------- | --------------------------------------------------------------------------- |
-| **`options`** | <code><a href="#splashscreenhideoptions">SplashScreenHideOptions</a></code> |
+| Param         | Type                                                |
+| ------------- | --------------------------------------------------- |
+| **`options`** | <code><a href="#hideoptions">HideOptions</a></code> |
 
 **Since:** 1.0.0
 
@@ -59,7 +59,7 @@ Hide the splash screen
 ### Interfaces
 
 
-#### SplashScreenShowOptions
+#### ShowOptions
 
 | Prop                  | Type                 | Description                                                         | Default           | Since |
 | --------------------- | -------------------- | ------------------------------------------------------------------- | ----------------- | ----- |
@@ -69,7 +69,7 @@ Hide the splash screen
 | **`showDuration`**    | <code>number</code>  | How long to show the splash screen when autoHide is enabled (in ms) | <code>3000</code> | 1.0.0 |
 
 
-#### SplashScreenHideOptions
+#### HideOptions
 
 | Prop                  | Type                | Description                   | Default          | Since |
 | --------------------- | ------------------- | ----------------------------- | ---------------- | ----- |

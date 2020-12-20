@@ -2,16 +2,14 @@ import { WebPlugin } from '@capacitor/core';
 
 import type {
   GeolocationPlugin,
-  GeolocationOptions,
-  GeolocationPosition,
-  GeolocationWatchCallback,
-  GeolocationPermissionStatus,
+  PermissionStatus,
+  Position,
+  PositionOptions,
+  WatchPositionCallback,
 } from './definitions';
 
 export class GeolocationWeb extends WebPlugin implements GeolocationPlugin {
-  async getCurrentPosition(
-    options?: GeolocationOptions,
-  ): Promise<GeolocationPosition> {
+  async getCurrentPosition(options?: PositionOptions): Promise<Position> {
     return new Promise((resolve, reject) => {
       navigator.geolocation.getCurrentPosition(
         pos => {
@@ -31,8 +29,8 @@ export class GeolocationWeb extends WebPlugin implements GeolocationPlugin {
   }
 
   watchPosition(
-    options: GeolocationOptions,
-    callback: GeolocationWatchCallback,
+    options: PositionOptions,
+    callback: WatchPositionCallback,
   ): string {
     const id = navigator.geolocation.watchPosition(
       pos => {
@@ -56,7 +54,7 @@ export class GeolocationWeb extends WebPlugin implements GeolocationPlugin {
     window.navigator.geolocation.clearWatch(parseInt(options.id, 10));
   }
 
-  async checkPermissions(): Promise<GeolocationPermissionStatus> {
+  async checkPermissions(): Promise<PermissionStatus> {
     if (typeof navigator === 'undefined' || !navigator.permissions) {
       throw this.unavailable('Permissions API not available in this browser');
     }
@@ -67,7 +65,7 @@ export class GeolocationWeb extends WebPlugin implements GeolocationPlugin {
     return { location: permission.state };
   }
 
-  async requestPermissions(): Promise<GeolocationPermissionStatus> {
+  async requestPermissions(): Promise<PermissionStatus> {
     throw this.unimplemented('Not implemented on web.');
   }
 }

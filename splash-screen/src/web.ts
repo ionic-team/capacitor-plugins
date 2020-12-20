@@ -1,17 +1,17 @@
 import { WebPlugin } from '@capacitor/core';
 
 import type {
+  HideOptions,
+  ShowOptions,
   SplashScreenPlugin,
-  SplashScreenShowOptions,
-  SplashScreenHideOptions,
 } from './definitions';
 
 export class SplashScreenWeb extends WebPlugin implements SplashScreenPlugin {
-  async show(_options?: SplashScreenShowOptions): Promise<void> {
+  async show(_options?: ShowOptions): Promise<void> {
     return undefined;
   }
 
-  async hide(_options?: SplashScreenHideOptions): Promise<void> {
+  async hide(_options?: HideOptions): Promise<void> {
     return undefined;
   }
 }

@@ -114,7 +114,7 @@ declare module '@capacitor/cli' {
   }
 }
 
-export interface SplashScreenShowOptions {
+export interface ShowOptions {
   /**
    * Whether to auto hide the splash after showDuration
    *
@@ -144,7 +144,7 @@ export interface SplashScreenShowOptions {
   showDuration?: number;
 }
 
-export interface SplashScreenHideOptions {
+export interface HideOptions {
   /**
    * How long (in ms) to fade out.
    *
@@ -160,11 +160,23 @@ export interface SplashScreenPlugin {
    *
    * @since 1.0.0
    */
-  show(options?: SplashScreenShowOptions): Promise<void>;
+  show(options?: ShowOptions): Promise<void>;
   /**
    * Hide the splash screen
    *
    * @since 1.0.0
    */
-  hide(options?: SplashScreenHideOptions): Promise<void>;
+  hide(options?: HideOptions): Promise<void>;
 }
+
+/**
+ * @deprecated Use `ShowOptions`.
+ * @since 1.0.0
+ */
+export type SplashScreenShowOptions = ShowOptions;
+
+/**
+ * @deprecated Use `HideOptions`.
+ * @since 1.0.0
+ */
+export type SplashScreenHideOptions = HideOptions;

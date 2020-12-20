@@ -10,12 +10,28 @@ export interface AppLauncherPlugin {
    *
    * @since 1.0.0
    */
-  canOpenUrl(options: { url: string }): Promise<{ value: boolean }>;
+  canOpenUrl(options: CanOpenURLOptions): Promise<CanOpenURLResult>;
 
   /**
    * Open an app with the given URL.
    *
    * @since 1.0.0
    */
-  openUrl(options: { url: string }): Promise<{ completed: boolean }>;
+  openUrl(options: OpenURLOptions): Promise<OpenURLResult>;
+}
+
+export interface CanOpenURLOptions {
+  url: string;
+}
+
+export interface CanOpenURLResult {
+  value: boolean;
+}
+
+export interface OpenURLOptions {
+  url: string;
+}
+
+export interface OpenURLResult {
+  completed: boolean;
 }

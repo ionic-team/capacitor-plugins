@@ -1,10 +1,10 @@
 import { WebPlugin } from '@capacitor/core';
 
 import type {
-  DeviceBatteryInfo,
+  BatteryInfo,
   DeviceInfo,
-  DeviceLanguageCodeResult,
   DevicePlugin,
+  GetLanguageCodeResult,
 } from './definitions';
 
 declare global {
@@ -41,7 +41,7 @@ export class DeviceWeb extends WebPlugin implements DevicePlugin {
     };
   }
 
-  async getBatteryInfo(): Promise<DeviceBatteryInfo> {
+  async getBatteryInfo(): Promise<BatteryInfo> {
     if (typeof navigator === 'undefined' || !navigator.getBattery) {
       throw this.unavailable('Device API not available in this browser');
     }
@@ -59,7 +59,7 @@ export class DeviceWeb extends WebPlugin implements DevicePlugin {
     };
   }
 
-  async getLanguageCode(): Promise<DeviceLanguageCodeResult> {
+  async getLanguageCode(): Promise<GetLanguageCodeResult> {
     return {
       value: navigator.language,
     };

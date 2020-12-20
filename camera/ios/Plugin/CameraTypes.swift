@@ -3,14 +3,14 @@ import UIKit
 // MARK: - Public
 
 public enum CameraSource: String {
-    case prompt
-    case camera
-    case photos
+    case prompt = "PROMPT"
+    case camera = "CAMERA"
+    case photos = "PHOTOS"
 }
 
 public enum CameraDirection: String {
-    case rear
-    case front
+    case rear = "REAR"
+    case front = "FRONT"
 }
 
 public enum CameraResultType: String {
