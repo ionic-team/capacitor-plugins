@@ -9,6 +9,26 @@ npm install @capacitor/screen-reader
 npx cap sync
 ```
 
+## Example
+
+```typescript
+import { ScreenReader } from '@capacitor/screen-reader';
+
+ScreenReader.addListener('screenReaderStateChange', ({ value }) => {
+  console.log(`Screen reader is now ${value ? 'on' : 'off'}`);
+});
+
+const checkScreenReaderEnabled = async () => {
+  const { value } = await ScreenReader.isEnabled();
+
+  alert('Voice over enabled? ' + value);
+};
+
+const sayHello = async () => {
+  await ScreenReader.speak({ value: 'Hello World!' });
+};
+```
+
 ## API
 
 <docgen-index>

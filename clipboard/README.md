@@ -9,6 +9,24 @@ npm install @capacitor/clipboard
 npx cap sync
 ```
 
+## Example
+
+```typescript
+import { Clipboard } from '@capacitor/clipboard';
+
+const writeToClipboard = async () => {
+  await Clipboard.write({
+    string: "Hello World!"
+  });
+};
+
+const checkClipboard = async () => {
+  const { type, value } = await Clipboard.read();
+
+  alert(`Got ${type} from clipboard: ${value}`);
+};
+```
+
 ## API
 
 <docgen-index>

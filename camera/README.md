@@ -9,6 +9,58 @@ npm install @capacitor/camera
 npx cap sync
 ```
 
+## iOS Notes
+
+iOS requires the following usage description be added and filled out for your app in `Info.plist`:
+
+- `NSCameraUsageDescription` (`Privacy - Camera Usage Description`)
+- `NSPhotoLibraryAddUsageDescription` (`Privacy - Photo Library Additions Usage Description`)
+- `NSPhotoLibraryUsageDescription` (`Privacy - Photo Library Usage Description`)
+
+Read about [Configuring `Info.plist`](https://capacitorjs.com/docs/ios/configuration#configuring-infoplist) in the [iOS Guide](https://capacitorjs.com/docs/ios) for more information on setting iOS permissions in Xcode
+
+## Android Notes
+
+This API requires the following permissions be added to your `AndroidManifest.xml`:
+
+```xml
+<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+```
+
+The storage permissions are for reading/saving photo files.
+
+Read about [Setting Permissions](https://capacitorjs.com/docs/android/configuration#setting-permissions) in the [Android Guide](https://capacitorjs.com/docs/android) for more information on setting Android permissions.
+
+Additionally, because the Camera API launches a separate Activity to handle taking the photo, you should listen for `appRestoredResult` in the `App` plugin to handle any camera data that was sent in the case your app was terminated by the operating system while the Activity was running.
+
+## PWA Notes
+
+[PWA Elements](https://capacitorjs.com/docs/web/pwa-elements) are required for Camera plugin to work.
+
+## Example
+
+```typescript
+import { Camera, CameraResultType } from '@capacitor/camera';
+
+const takePicture = async () {
+  const image = await Camera.getPhoto({
+    quality: 90,
+    allowEditing: true,
+    resultType: CameraResultType.Uri
+  });
+
+  // image.webPath will contain a path that can be set as an image src.
+  // You can access the original file using image.path, which can be
+  // passed to the Filesystem API to read the raw data of the image,
+  // if desired (or pass resultType: CameraResultType.Base64 to getPhoto)
+  var imageUrl = image.webPath;
+
+  // Can be set to the src of an image now
+  imageElement.src = imageUrl;
+};
+```
+
 ## API
 
 <docgen-index>

@@ -9,6 +9,18 @@ npm install @capacitor/toast
 npx cap sync
 ```
 
+## Example
+
+```typescript
+import { Toast } from '@capacitor/toast';
+
+const showHelloToast = async () => {
+  await Toast.show({
+    text: 'Hello!',
+  });
+};
+```
+
 ## API
 
 <docgen-index>

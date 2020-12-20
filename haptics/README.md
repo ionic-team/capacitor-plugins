@@ -9,6 +9,36 @@ npm install @capacitor/haptics
 npx cap sync
 ```
 
+## Example
+
+```typescript
+import { Haptics, HapticsImpactStyle } from '@capacitor/haptics';
+
+const hapticsImpactMedium = async () => {
+  await Haptics.impact({ style: HapticsImpactStyle.Medium });
+};
+
+const hapticsImpactLight = async () => {
+  await Haptics.impact({ style: HapticsImpactStyle.Light });
+};
+
+const hapticsVibrate = async () => {
+  await Haptics.vibrate();
+};
+
+const hapticsSelectionStart = async () => {
+  await Haptics.selectionStart();
+};
+
+const hapticsSelectionChanged = async () => {
+  await Haptics.selectionChanged();
+};
+
+const hapticsSelectionEnd = async () => {
+  await Haptics.selectionEnd();
+};
+```
+
 ## API
 
 <docgen-index>
