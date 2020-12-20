@@ -41,28 +41,29 @@ API to understand the data supplied in the 'accel' event.
 
 <docgen-index>
 
-* [`addListener(...)`](#addlistener)
-* [`addListener(...)`](#addlistener)
+* [`addListener('accel', ...)`](#addlisteneraccel-)
+* [`addListener('orientation', ...)`](#addlistenerorientation-)
 * [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
+* [Type Aliases](#type-aliases)
 
 </docgen-index>
 
 <docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
 
-### addListener(...)
+### addListener('accel', ...)
 
 ```typescript
-addListener(eventName: 'accel', listenerFunc: (event: MotionEventResult) => void) => PluginListenerHandle
+addListener(eventName: 'accel', listenerFunc: AccelListener) => PluginListenerHandle
 ```
 
 Add a listener for accelerometer data
 
-| Param              | Type                                                                                |
-| ------------------ | ----------------------------------------------------------------------------------- |
-| **`eventName`**    | <code>"accel"</code>                                                                |
-| **`listenerFunc`** | <code>(event: <a href="#motioneventresult">MotionEventResult</a>) =&gt; void</code> |
+| Param              | Type                                                    |
+| ------------------ | ------------------------------------------------------- |
+| **`eventName`**    | <code>'accel'</code>                                    |
+| **`listenerFunc`** | <code><a href="#accellistener">AccelListener</a></code> |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
@@ -71,18 +72,18 @@ Add a listener for accelerometer data
 --------------------
 
 
-### addListener(...)
+### addListener('orientation', ...)
 
 ```typescript
-addListener(eventName: 'orientation', listenerFunc: (event: MotionOrientationEventResult) => void) => PluginListenerHandle
+addListener(eventName: 'orientation', listenerFunc: OrientationListener) => PluginListenerHandle
 ```
 
 Add a listener for device orientation change (compass heading, etc.)
 
-| Param              | Type                                                                                                        |
-| ------------------ | ----------------------------------------------------------------------------------------------------------- |
-| **`eventName`**    | <code>"orientation"</code>                                                                                  |
-| **`listenerFunc`** | <code>(event: <a href="#devicemotioneventrotationrate">DeviceMotionEventRotationRate</a>) =&gt; void</code> |
+| Param              | Type                                                                |
+| ------------------ | ------------------------------------------------------------------- |
+| **`eventName`**    | <code>'orientation'</code>                                          |
+| **`listenerFunc`** | <code><a href="#orientationlistener">OrientationListener</a></code> |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
@@ -114,17 +115,17 @@ Remove all the listeners that are attached to this plugin.
 | **`remove`** | <code>() =&gt; void</code> |
 
 
-#### MotionEventResult
+#### AccelListenerEvent
 
-| Prop                               | Type                                                                                    | Description                                                                                                                                                             | Since |
-| ---------------------------------- | --------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`acceleration`**                 | <code><a href="#devicemotioneventacceleration">DeviceMotionEventAcceleration</a></code> | An object giving the acceleration of the device on the three axis X, Y and Z. Acceleration is expressed in m/s                                                          | 1.0.0 |
-| **`accelerationIncludingGravity`** | <code><a href="#devicemotioneventacceleration">DeviceMotionEventAcceleration</a></code> | An object giving the acceleration of the device on the three axis X, Y and Z with the effect of gravity. Acceleration is expressed in m/s                               | 1.0.0 |
-| **`rotationRate`**                 | <code><a href="#devicemotioneventrotationrate">DeviceMotionEventRotationRate</a></code> | An object giving the rate of change of the device's orientation on the three orientation axis alpha, beta and gamma. Rotation rate is expressed in degrees per seconds. | 1.0.0 |
-| **`interval`**                     | <code>number</code>                                                                     | A number representing the interval of time, in milliseconds, at which data is obtained from the device.                                                                 | 1.0.0 |
+| Prop                               | Type                                                  | Description                                                                                                                                                             | Since |
+| ---------------------------------- | ----------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`acceleration`**                 | <code><a href="#acceleration">Acceleration</a></code> | An object giving the acceleration of the device on the three axis X, Y and Z. <a href="#acceleration">Acceleration</a> is expressed in m/s                              | 1.0.0 |
+| **`accelerationIncludingGravity`** | <code><a href="#acceleration">Acceleration</a></code> | An object giving the acceleration of the device on the three axis X, Y and Z with the effect of gravity. <a href="#acceleration">Acceleration</a> is expressed in m/s   | 1.0.0 |
+| **`rotationRate`**                 | <code><a href="#rotationrate">RotationRate</a></code> | An object giving the rate of change of the device's orientation on the three orientation axis alpha, beta and gamma. Rotation rate is expressed in degrees per seconds. | 1.0.0 |
+| **`interval`**                     | <code>number</code>                                   | A number representing the interval of time, in milliseconds, at which data is obtained from the device.                                                                 | 1.0.0 |
 
 
-#### DeviceMotionEventAcceleration
+#### Acceleration
 
 | Prop    | Type                | Description                                  | Since |
 | ------- | ------------------- | -------------------------------------------- | ----- |
@@ -133,12 +134,30 @@ Remove all the listeners that are attached to this plugin.
 | **`z`** | <code>number</code> | The amount of acceleration along the Z axis. | 1.0.0 |
 
 
-#### DeviceMotionEventRotationRate
+#### RotationRate
 
 | Prop        | Type                | Description                                                      | Since |
 | ----------- | ------------------- | ---------------------------------------------------------------- | ----- |
 | **`alpha`** | <code>number</code> | The amount of rotation around the Z axis, in degrees per second. | 1.0.0 |
 | **`beta`**  | <code>number</code> | The amount of rotation around the X axis, in degrees per second. | 1.0.0 |
 | **`gamma`** | <code>number</code> | The amount of rotation around the Y axis, in degrees per second. | 1.0.0 |
+
+
+### Type Aliases
+
+
+#### AccelListener
+
+<code>(event: <a href="#accellistenerevent">AccelListenerEvent</a>): void</code>
+
+
+#### OrientationListener
+
+<code>(event: <a href="#rotationrate">RotationRate</a>): void</code>
+
+
+#### OrientationListenerEvent
+
+<code><a href="#rotationrate">RotationRate</a></code>
 
 </docgen-api>

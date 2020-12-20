@@ -27,8 +27,8 @@ const openCapacitorSite = async () => {
 
 * [`open(...)`](#open)
 * [`close()`](#close)
-* [`addListener(...)`](#addlistener)
-* [`addListener(...)`](#addlistener)
+* [`addListener('browserFinished', ...)`](#addlistenerbrowserfinished-)
+* [`addListener('browserPageLoaded', ...)`](#addlistenerbrowserpageloaded-)
 * [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
 
@@ -40,14 +40,14 @@ const openCapacitorSite = async () => {
 ### open(...)
 
 ```typescript
-open(options: BrowserOpenOptions) => Promise<void>
+open(options: OpenOptions) => Promise<void>
 ```
 
 Open a page with the specified options.
 
-| Param         | Type                                                              |
-| ------------- | ----------------------------------------------------------------- |
-| **`options`** | <code><a href="#browseropenoptions">BrowserOpenOptions</a></code> |
+| Param         | Type                                                |
+| ------------- | --------------------------------------------------- |
+| **`options`** | <code><a href="#openoptions">OpenOptions</a></code> |
 
 **Since:** 1.0.0
 
@@ -69,7 +69,7 @@ No-op on other platforms.
 --------------------
 
 
-### addListener(...)
+### addListener('browserFinished', ...)
 
 ```typescript
 addListener(eventName: 'browserFinished', listenerFunc: () => void) => PluginListenerHandle
@@ -79,7 +79,7 @@ Android & iOS only: Listen for the loading finished event.
 
 | Param              | Type                           |
 | ------------------ | ------------------------------ |
-| **`eventName`**    | <code>"browserFinished"</code> |
+| **`eventName`**    | <code>'browserFinished'</code> |
 | **`listenerFunc`** | <code>() =&gt; void</code>     |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
@@ -89,7 +89,7 @@ Android & iOS only: Listen for the loading finished event.
 --------------------
 
 
-### addListener(...)
+### addListener('browserPageLoaded', ...)
 
 ```typescript
 addListener(eventName: 'browserPageLoaded', listenerFunc: () => void) => PluginListenerHandle
@@ -99,7 +99,7 @@ Android & iOS only: Listen for the page loaded event.
 
 | Param              | Type                             |
 | ------------------ | -------------------------------- |
-| **`eventName`**    | <code>"browserPageLoaded"</code> |
+| **`eventName`**    | <code>'browserPageLoaded'</code> |
 | **`listenerFunc`** | <code>() =&gt; void</code>       |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
@@ -125,7 +125,7 @@ Remove all native listeners for this plugin.
 ### Interfaces
 
 
-#### BrowserOpenOptions
+#### OpenOptions
 
 Represents the options passed to `open`.
 
@@ -134,7 +134,7 @@ Represents the options passed to `open`.
 | **`url`**               | <code>string</code>                    | The URL to which the browser is opened.                                                                                                    | 1.0.0 |
 | **`windowName`**        | <code>string</code>                    | Web only: Optional target for browser open. Follows the `target` property for window.open. Defaults to _blank. Ignored on other platforms. | 1.0.0 |
 | **`toolbarColor`**      | <code>string</code>                    | A hex color to which the toolbar color is set.                                                                                             | 1.0.0 |
-| **`presentationStyle`** | <code>"fullscreen" \| "popover"</code> | iOS only: The presentation style of the browser. Defaults to fullscreen. Ignored on other platforms.                                       | 1.0.0 |
+| **`presentationStyle`** | <code>'fullscreen' \| 'popover'</code> | iOS only: The presentation style of the browser. Defaults to fullscreen. Ignored on other platforms.                                       | 1.0.0 |
 
 
 #### PluginListenerHandle

@@ -6,4 +6,5 @@ const Toast = registerPlugin<ToastPlugin>('Toast', {
   web: () => import('./web').then(m => new m.ToastWeb()),
 });
 
+export * from './definitions';
 export { Toast };

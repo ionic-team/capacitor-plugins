@@ -1,16 +1,22 @@
 import { WebPlugin } from '@capacitor/core';
 
 import type {
-  DeviceBatteryInfo,
+  BatteryInfo,
   DeviceInfo,
-  DeviceLanguageCodeResult,
   DevicePlugin,
+  GetLanguageCodeResult,
 } from './definitions';
 
 declare global {
   interface Navigator {
     getBattery: any;
     oscpu: any;
+  }
+
+  interface Window {
+    InstallTrigger?: any;
+    ApplePaySession?: any;
+    chrome?: any;
   }
 }
 
@@ -31,10 +37,11 @@ export class DeviceWeb extends WebPlugin implements DevicePlugin {
       manufacturer: navigator.vendor,
       isVirtual: false,
       uuid: this.getUid(),
+      webViewVersion: uaFields.browserVersion,
     };
   }
 
-  async getBatteryInfo(): Promise<DeviceBatteryInfo> {
+  async getBatteryInfo(): Promise<BatteryInfo> {
     if (typeof navigator === 'undefined' || !navigator.getBattery) {
       throw this.unavailable('Device API not available in this browser');
     }
@@ -52,7 +59,7 @@ export class DeviceWeb extends WebPlugin implements DevicePlugin {
     };
   }
 
-  async getLanguageCode(): Promise<DeviceLanguageCodeResult> {
+  async getLanguageCode(): Promise<GetLanguageCodeResult> {
     return {
       value: navigator.language,
     };
@@ -104,6 +111,54 @@ export class DeviceWeb extends WebPlugin implements DevicePlugin {
       uaFields.operatingSystem = 'mac';
     } else {
       uaFields.operatingSystem = 'unknown';
+    }
+
+    // Check for browsers based on non-standard javascript apis, only not user agent
+    const isFirefox = !!window.InstallTrigger;
+    const isSafari = !!window.ApplePaySession;
+    const isChrome = !!window.chrome;
+    const isEdge = /Edg/.test(ua);
+    const isFirefoxIOS = /FxiOS/.test(ua);
+    const isChromeIOS = /CriOS/.test(ua);
+    const isEdgeIOS = /EdgiOS/.test(ua);
+
+    // FF and Edge User Agents both end with "/MAJOR.MINOR"
+    if (
+      isSafari ||
+      (isChrome && !isEdge) ||
+      isFirefoxIOS ||
+      isChromeIOS ||
+      isEdgeIOS
+    ) {
+      // Safari version comes as     "... Version/MAJOR.MINOR ..."
+      // Chrome version comes as     "... Chrome/MAJOR.MINOR ..."
+      // FirefoxIOS version comes as "... FxiOS/MAJOR.MINOR ..."
+      // ChromeIOS version comes as  "... CriOS/MAJOR.MINOR ..."
+      let searchWord: string;
+      if (isFirefoxIOS) {
+        searchWord = 'FxiOS';
+      } else if (isChromeIOS) {
+        searchWord = 'CriOS';
+      } else if (isEdgeIOS) {
+        searchWord = 'EdgiOS';
+      } else if (isSafari) {
+        searchWord = 'Version';
+      } else {
+        searchWord = 'Chrome';
+      }
+
+      const words = ua.split(' ');
+      for (const word of words) {
+        if (word.includes(searchWord)) {
+          const version = word.split('/')[1];
+          uaFields.browserVersion = version;
+        }
+      }
+    } else if (isFirefox || isEdge) {
+      const reverseUA = ua.split('').reverse().join('');
+      const reverseVersion = reverseUA.split('/')[0];
+      const version = reverseVersion.split('').reverse().join('');
+      uaFields.browserVersion = version;
     }
 
     return uaFields;

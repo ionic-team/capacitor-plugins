@@ -41,12 +41,13 @@ const checkAppLaunchUrl = async () => {
 * [`getInfo()`](#getinfo)
 * [`getState()`](#getstate)
 * [`getLaunchUrl()`](#getlaunchurl)
-* [`addListener(...)`](#addlistener)
-* [`addListener(...)`](#addlistener)
-* [`addListener(...)`](#addlistener)
-* [`addListener(...)`](#addlistener)
+* [`addListener('appStateChange', ...)`](#addlistenerappstatechange-)
+* [`addListener('appUrlOpen', ...)`](#addlistenerappurlopen-)
+* [`addListener('appRestoredResult', ...)`](#addlistenerapprestoredresult-)
+* [`addListener('backButton', ...)`](#addlistenerbackbutton-)
 * [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
+* [Type Aliases](#type-aliases)
 
 </docgen-index>
 
@@ -116,18 +117,18 @@ Get the URL the app was launched with, if any.
 --------------------
 
 
-### addListener(...)
+### addListener('appStateChange', ...)
 
 ```typescript
-addListener(eventName: 'appStateChange', listenerFunc: (state: AppState) => void) => PluginListenerHandle
+addListener(eventName: 'appStateChange', listenerFunc: StateChangeListener) => PluginListenerHandle
 ```
 
 Listen for changes in the App's active state (whether the app is in the foreground or background)
 
-| Param              | Type                                                              |
-| ------------------ | ----------------------------------------------------------------- |
-| **`eventName`**    | <code>"appStateChange"</code>                                     |
-| **`listenerFunc`** | <code>(state: <a href="#appstate">AppState</a>) =&gt; void</code> |
+| Param              | Type                                                                |
+| ------------------ | ------------------------------------------------------------------- |
+| **`eventName`**    | <code>'appStateChange'</code>                                       |
+| **`listenerFunc`** | <code><a href="#statechangelistener">StateChangeListener</a></code> |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
@@ -136,19 +137,19 @@ Listen for changes in the App's active state (whether the app is in the foregrou
 --------------------
 
 
-### addListener(...)
+### addListener('appUrlOpen', ...)
 
 ```typescript
-addListener(eventName: 'appUrlOpen', listenerFunc: (data: AppUrlOpen) => void) => PluginListenerHandle
+addListener(eventName: 'appUrlOpen', listenerFunc: URLOpenListener) => PluginListenerHandle
 ```
 
 Listen for url open events for the app. This handles both custom URL scheme links as well
 as URLs your app handles (Universal Links on iOS and App Links on Android)
 
-| Param              | Type                                                                 |
-| ------------------ | -------------------------------------------------------------------- |
-| **`eventName`**    | <code>"appUrlOpen"</code>                                            |
-| **`listenerFunc`** | <code>(data: <a href="#appurlopen">AppUrlOpen</a>) =&gt; void</code> |
+| Param              | Type                                                        |
+| ------------------ | ----------------------------------------------------------- |
+| **`eventName`**    | <code>'appUrlOpen'</code>                                   |
+| **`listenerFunc`** | <code><a href="#urlopenlistener">URLOpenListener</a></code> |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
@@ -157,10 +158,10 @@ as URLs your app handles (Universal Links on iOS and App Links on Android)
 --------------------
 
 
-### addListener(...)
+### addListener('appRestoredResult', ...)
 
 ```typescript
-addListener(eventName: 'appRestoredResult', listenerFunc: (data: AppRestoredResult) => void) => PluginListenerHandle
+addListener(eventName: 'appRestoredResult', listenerFunc: RestoredListener) => PluginListenerHandle
 ```
 
 If the app was launched with previously persisted plugin call data, such as on Android
@@ -185,10 +186,10 @@ proper tab.
 We recommend every Android app using plugins that rely on external
 Activities (for example, Camera) to have this event and process handled.
 
-| Param              | Type                                                                               |
-| ------------------ | ---------------------------------------------------------------------------------- |
-| **`eventName`**    | <code>"appRestoredResult"</code>                                                   |
-| **`listenerFunc`** | <code>(data: <a href="#apprestoredresult">AppRestoredResult</a>) =&gt; void</code> |
+| Param              | Type                                                          |
+| ------------------ | ------------------------------------------------------------- |
+| **`eventName`**    | <code>'appRestoredResult'</code>                              |
+| **`listenerFunc`** | <code><a href="#restoredlistener">RestoredListener</a></code> |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
@@ -197,20 +198,20 @@ Activities (for example, Camera) to have this event and process handled.
 --------------------
 
 
-### addListener(...)
+### addListener('backButton', ...)
 
 ```typescript
-addListener(eventName: 'backButton', listenerFunc: () => void) => PluginListenerHandle
+addListener(eventName: 'backButton', listenerFunc: BackButtonListener) => PluginListenerHandle
 ```
 
 Listen for the hardware back button event (Android only). Listening for this event will disable the
 default back button behaviour, so you might want to call `window.history.back()` manually.
 If you want to close the app, call `App.exitApp()`.
 
-| Param              | Type                       |
-| ------------------ | -------------------------- |
-| **`eventName`**    | <code>"backButton"</code>  |
-| **`listenerFunc`** | <code>() =&gt; void</code> |
+| Param              | Type                                                              |
+| ------------------ | ----------------------------------------------------------------- |
+| **`eventName`**    | <code>'backButton'</code>                                         |
+| **`listenerFunc`** | <code><a href="#backbuttonlistener">BackButtonListener</a></code> |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
@@ -266,7 +267,7 @@ Remove all native listeners for this plugin
 | **`remove`** | <code>() =&gt; void</code> |
 
 
-#### AppUrlOpen
+#### URLOpenListenerEvent
 
 | Prop                       | Type                 | Description                                                                                                                                                                        | Since |
 | -------------------------- | -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
@@ -275,7 +276,7 @@ Remove all native listeners for this plugin
 | **`iosOpenInPlace`**       | <code>boolean</code> | Whether the app should open the passed document in-place or must copy it first. https://developer.apple.com/documentation/uikit/uiapplicationopenurloptionskey/1623123-openinplace | 1.0.0 |
 
 
-#### AppRestoredResult
+#### RestoredListenerEvent
 
 | Prop             | Type                              | Description                                                                                                                                       | Since |
 | ---------------- | --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
@@ -284,5 +285,28 @@ Remove all native listeners for this plugin
 | **`data`**       | <code>any</code>                  | The result data passed from the plugin. This would be the result you'd expect from normally calling the plugin method. For example, `CameraPhoto` | 1.0.0 |
 | **`success`**    | <code>boolean</code>              | Boolean indicating if the plugin call succeeded.                                                                                                  | 1.0.0 |
 | **`error`**      | <code>{ message: string; }</code> | If the plugin call didn't succeed, it will contain the error message.                                                                             | 1.0.0 |
+
+
+### Type Aliases
+
+
+#### StateChangeListener
+
+<code>(state: <a href="#appstate">AppState</a>): void</code>
+
+
+#### URLOpenListener
+
+<code>(event: <a href="#urlopenlistenerevent">URLOpenListenerEvent</a>): void</code>
+
+
+#### RestoredListener
+
+<code>(event: <a href="#restoredlistenerevent">RestoredListenerEvent</a>): void</code>
+
+
+#### BackButtonListener
+
+<code>(): void</code>
 
 </docgen-api>

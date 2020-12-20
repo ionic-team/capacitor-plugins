@@ -74,14 +74,14 @@ const showStatusBar = async () => {
 ### setStyle(...)
 
 ```typescript
-setStyle(options: StatusBarStyleOptions) => Promise<void>
+setStyle(options: StyleOptions) => Promise<void>
 ```
 
 Set the current style of the status bar.
 
-| Param         | Type                                                                    |
-| ------------- | ----------------------------------------------------------------------- |
-| **`options`** | <code><a href="#statusbarstyleoptions">StatusBarStyleOptions</a></code> |
+| Param         | Type                                                  |
+| ------------- | ----------------------------------------------------- |
+| **`options`** | <code><a href="#styleoptions">StyleOptions</a></code> |
 
 **Since:** 1.0.0
 
@@ -91,16 +91,16 @@ Set the current style of the status bar.
 ### setBackgroundColor(...)
 
 ```typescript
-setBackgroundColor(options: StatusBarBackgroundColorOptions) => Promise<void>
+setBackgroundColor(options: BackgroundColorOptions) => Promise<void>
 ```
 
 Set the background color of the status bar.
 
 This method is only supported on Android.
 
-| Param         | Type                                                                                        |
-| ------------- | ------------------------------------------------------------------------------------------- |
-| **`options`** | <code><a href="#statusbarbackgroundcoloroptions">StatusBarBackgroundColorOptions</a></code> |
+| Param         | Type                                                                      |
+| ------------- | ------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#backgroundcoloroptions">BackgroundColorOptions</a></code> |
 
 **Since:** 1.0.0
 
@@ -110,14 +110,14 @@ This method is only supported on Android.
 ### show(...)
 
 ```typescript
-show(options?: StatusBarAnimationOptions | undefined) => Promise<void>
+show(options?: AnimationOptions | undefined) => Promise<void>
 ```
 
 Show the status bar.
 
-| Param         | Type                                                                            |
-| ------------- | ------------------------------------------------------------------------------- |
-| **`options`** | <code><a href="#statusbaranimationoptions">StatusBarAnimationOptions</a></code> |
+| Param         | Type                                                          |
+| ------------- | ------------------------------------------------------------- |
+| **`options`** | <code><a href="#animationoptions">AnimationOptions</a></code> |
 
 **Since:** 1.0.0
 
@@ -127,14 +127,14 @@ Show the status bar.
 ### hide(...)
 
 ```typescript
-hide(options?: StatusBarAnimationOptions | undefined) => Promise<void>
+hide(options?: AnimationOptions | undefined) => Promise<void>
 ```
 
 Hide the status bar.
 
-| Param         | Type                                                                            |
-| ------------- | ------------------------------------------------------------------------------- |
-| **`options`** | <code><a href="#statusbaranimationoptions">StatusBarAnimationOptions</a></code> |
+| Param         | Type                                                          |
+| ------------- | ------------------------------------------------------------- |
+| **`options`** | <code><a href="#animationoptions">AnimationOptions</a></code> |
 
 **Since:** 1.0.0
 
@@ -144,12 +144,12 @@ Hide the status bar.
 ### getInfo()
 
 ```typescript
-getInfo() => Promise<StatusBarInfoResult>
+getInfo() => Promise<StatusBarInfo>
 ```
 
 Get info about the current state of the status bar.
 
-**Returns:** <code>Promise&lt;<a href="#statusbarinforesult">StatusBarInfoResult</a>&gt;</code>
+**Returns:** <code>Promise&lt;<a href="#statusbarinfo">StatusBarInfo</a>&gt;</code>
 
 **Since:** 1.0.0
 
@@ -159,7 +159,7 @@ Get info about the current state of the status bar.
 ### setOverlaysWebView(...)
 
 ```typescript
-setOverlaysWebView(options: StatusBarOverlaysWebviewOptions) => Promise<void>
+setOverlaysWebView(options: SetOverlaysWebViewOptions) => Promise<void>
 ```
 
 Set whether or not the status bar should overlay the webview to allow usage
@@ -167,9 +167,9 @@ of the space underneath it.
 
 This method is only supported on Android.
 
-| Param         | Type                                                                                        |
-| ------------- | ------------------------------------------------------------------------------------------- |
-| **`options`** | <code><a href="#statusbaroverlayswebviewoptions">StatusBarOverlaysWebviewOptions</a></code> |
+| Param         | Type                                                                            |
+| ------------- | ------------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#setoverlayswebviewoptions">SetOverlaysWebViewOptions</a></code> |
 
 **Since:** 1.0.0
 
@@ -179,38 +179,38 @@ This method is only supported on Android.
 ### Interfaces
 
 
-#### StatusBarStyleOptions
+#### StyleOptions
 
-| Prop        | Type                                                      | Description                          | Since |
-| ----------- | --------------------------------------------------------- | ------------------------------------ | ----- |
-| **`style`** | <code><a href="#statusbarstyle">StatusBarStyle</a></code> | Style of the text of the status bar. | 1.0.0 |
+| Prop        | Type                                    | Description                                               | Since |
+| ----------- | --------------------------------------- | --------------------------------------------------------- | ----- |
+| **`style`** | <code><a href="#style">Style</a></code> | <a href="#style">Style</a> of the text of the status bar. | 1.0.0 |
 
 
-#### StatusBarBackgroundColorOptions
+#### BackgroundColorOptions
 
 | Prop        | Type                | Description                                                                                 | Since |
 | ----------- | ------------------- | ------------------------------------------------------------------------------------------- | ----- |
 | **`color`** | <code>string</code> | A hex color to which the status bar color is set. This option is only supported on Android. | 1.0.0 |
 
 
-#### StatusBarAnimationOptions
+#### AnimationOptions
 
-| Prop            | Type                                                              | Description                                                                                         | Since |
-| --------------- | ----------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- | ----- |
-| **`animation`** | <code><a href="#statusbaranimation">StatusBarAnimation</a></code> | The type of status bar animation used when showing or hiding. This option is only supported on iOS. | 1.0.0 |
-
-
-#### StatusBarInfoResult
-
-| Prop           | Type                                                      | Description                                                                         | Since |
-| -------------- | --------------------------------------------------------- | ----------------------------------------------------------------------------------- | ----- |
-| **`visible`**  | <code>boolean</code>                                      | Whether the status bar is visible or not.                                           | 1.0.0 |
-| **`style`**    | <code><a href="#statusbarstyle">StatusBarStyle</a></code> | The current status bar style.                                                       | 1.0.0 |
-| **`color`**    | <code>string</code>                                       | The current status bar color. This option is only supported on Android.             | 1.0.0 |
-| **`overlays`** | <code>boolean</code>                                      | Whether the statusbar is overlaid or not. This option is only supported on Android. | 1.0.0 |
+| Prop            | Type                                            | Description                                                                                         | Since |
+| --------------- | ----------------------------------------------- | --------------------------------------------------------------------------------------------------- | ----- |
+| **`animation`** | <code><a href="#animation">Animation</a></code> | The type of status bar animation used when showing or hiding. This option is only supported on iOS. | 1.0.0 |
 
 
-#### StatusBarOverlaysWebviewOptions
+#### StatusBarInfo
+
+| Prop           | Type                                    | Description                                                                         | Since |
+| -------------- | --------------------------------------- | ----------------------------------------------------------------------------------- | ----- |
+| **`visible`**  | <code>boolean</code>                    | Whether the status bar is visible or not.                                           | 1.0.0 |
+| **`style`**    | <code><a href="#style">Style</a></code> | The current status bar style.                                                       | 1.0.0 |
+| **`color`**    | <code>string</code>                     | The current status bar color. This option is only supported on Android.             | 1.0.0 |
+| **`overlays`** | <code>boolean</code>                    | Whether the statusbar is overlaid or not. This option is only supported on Android. | 1.0.0 |
+
+
+#### SetOverlaysWebViewOptions
 
 | Prop          | Type                 | Description                               | Since |
 | ------------- | -------------------- | ----------------------------------------- | ----- |
@@ -220,7 +220,7 @@ This method is only supported on Android.
 ### Enums
 
 
-#### StatusBarStyle
+#### Style
 
 | Members       | Value                  | Description                                                                                                                                                                                                                                                                                                                     | Since |
 | ------------- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
@@ -229,7 +229,7 @@ This method is only supported on Android.
 | **`Default`** | <code>'DEFAULT'</code> | On iOS 13 and newer the style is based on the device appearance. If the device is using Dark mode, the statusbar text will be light. If the device is using Light mode, the statusbar text will be dark. On iOS 12 and older the statusbar text will be dark. On Android the default will be the one the app was launched with. | 1.0.0 |
 
 
-#### StatusBarAnimation
+#### Animation
 
 | Members     | Value                | Description                       | Since |
 | ----------- | -------------------- | --------------------------------- | ----- |

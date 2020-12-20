@@ -31,6 +31,7 @@ const openPortfolioPage = async () => {
 
 * [`canOpenUrl(...)`](#canopenurl)
 * [`openUrl(...)`](#openurl)
+* [Interfaces](#interfaces)
 
 </docgen-index>
 
@@ -40,7 +41,7 @@ const openPortfolioPage = async () => {
 ### canOpenUrl(...)
 
 ```typescript
-canOpenUrl(options: { url: string; }) => Promise<{ value: boolean; }>
+canOpenUrl(options: CanOpenURLOptions) => Promise<CanOpenURLResult>
 ```
 
 Check if an app can be opened with the given URL.
@@ -54,11 +55,11 @@ This method always returns false for undeclared schemes, whether or not an
 appropriate app is installed. To learn more about the key, see
 [LSApplicationQueriesSchemes](https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/LaunchServicesKeys.html#//apple_ref/doc/plist/info/LSApplicationQueriesSchemes).
 
-| Param         | Type                          |
-| ------------- | ----------------------------- |
-| **`options`** | <code>{ url: string; }</code> |
+| Param         | Type                                                            |
+| ------------- | --------------------------------------------------------------- |
+| **`options`** | <code><a href="#canopenurloptions">CanOpenURLOptions</a></code> |
 
-**Returns:** <code>Promise&lt;{ value: boolean; }&gt;</code>
+**Returns:** <code>Promise&lt;<a href="#canopenurlresult">CanOpenURLResult</a>&gt;</code>
 
 **Since:** 1.0.0
 
@@ -68,19 +69,50 @@ appropriate app is installed. To learn more about the key, see
 ### openUrl(...)
 
 ```typescript
-openUrl(options: { url: string; }) => Promise<{ completed: boolean; }>
+openUrl(options: OpenURLOptions) => Promise<OpenURLResult>
 ```
 
 Open an app with the given URL.
 
-| Param         | Type                          |
-| ------------- | ----------------------------- |
-| **`options`** | <code>{ url: string; }</code> |
+| Param         | Type                                                      |
+| ------------- | --------------------------------------------------------- |
+| **`options`** | <code><a href="#openurloptions">OpenURLOptions</a></code> |
 
-**Returns:** <code>Promise&lt;{ completed: boolean; }&gt;</code>
+**Returns:** <code>Promise&lt;<a href="#openurlresult">OpenURLResult</a>&gt;</code>
 
 **Since:** 1.0.0
 
 --------------------
+
+
+### Interfaces
+
+
+#### CanOpenURLResult
+
+| Prop        | Type                 |
+| ----------- | -------------------- |
+| **`value`** | <code>boolean</code> |
+
+
+#### CanOpenURLOptions
+
+| Prop      | Type                |
+| --------- | ------------------- |
+| **`url`** | <code>string</code> |
+
+
+#### OpenURLResult
+
+| Prop            | Type                 |
+| --------------- | -------------------- |
+| **`completed`** | <code>boolean</code> |
+
+
+#### OpenURLOptions
+
+| Prop      | Type                |
+| --------- | ------------------- |
+| **`url`** | <code>string</code> |
 
 </docgen-api>

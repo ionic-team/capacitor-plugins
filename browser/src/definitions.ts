@@ -6,7 +6,7 @@ export interface BrowserPlugin {
    *
    * @since 1.0.0
    */
-  open(options: BrowserOpenOptions): Promise<void>;
+  open(options: OpenOptions): Promise<void>;
 
   /**
    * Web & iOS only: Close an open browser window.
@@ -50,7 +50,7 @@ export interface BrowserPlugin {
  *
  * @since 1.0.0
  */
-export interface BrowserOpenOptions {
+export interface OpenOptions {
   /**
    * The URL to which the browser is opened.
    *
@@ -85,3 +85,9 @@ export interface BrowserOpenOptions {
    */
   presentationStyle?: 'fullscreen' | 'popover';
 }
+
+/**
+ * @deprecated Use `OpenOptions`.
+ * @since 1.0.0
+ */
+export type BrowserOpenOptions = OpenOptions;

@@ -1,4 +1,4 @@
-export interface GetResponse {
+export interface GetResult {
   /**
    * The current zoom level (represented as a decimal).
    *
@@ -7,7 +7,7 @@ export interface GetResponse {
   value: number;
 }
 
-export interface GetPreferredResponse {
+export interface GetPreferredResult {
   /**
    * The preferred zoom level (represented as a decimal).
    *
@@ -33,7 +33,7 @@ export interface TextZoomPlugin {
    *
    * @since 1.0.0
    */
-  get(): Promise<GetResponse>;
+  get(): Promise<GetResult>;
 
   /**
    * Get the preferred zoom level.
@@ -42,7 +42,7 @@ export interface TextZoomPlugin {
    *
    * @since 1.0.0
    */
-  getPreferred(): Promise<GetPreferredResponse>;
+  getPreferred(): Promise<GetPreferredResult>;
 
   /**
    * Set the current zoom level.

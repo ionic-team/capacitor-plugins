@@ -43,14 +43,14 @@ const checkClipboard = async () => {
 ### write(...)
 
 ```typescript
-write(options: ClipboardWriteOptions) => Promise<void>
+write(options: WriteOptions) => Promise<void>
 ```
 
 Write a value to the clipboard (the "copy" action)
 
-| Param         | Type                                                                    |
-| ------------- | ----------------------------------------------------------------------- |
-| **`options`** | <code><a href="#clipboardwriteoptions">ClipboardWriteOptions</a></code> |
+| Param         | Type                                                  |
+| ------------- | ----------------------------------------------------- |
+| **`options`** | <code><a href="#writeoptions">WriteOptions</a></code> |
 
 **Since:** 1.0.0
 
@@ -60,12 +60,12 @@ Write a value to the clipboard (the "copy" action)
 ### read()
 
 ```typescript
-read() => Promise<ClipboardReadResult>
+read() => Promise<ReadResult>
 ```
 
 Read a value from the clipboard (the "paste" action)
 
-**Returns:** <code>Promise&lt;<a href="#clipboardreadresult">ClipboardReadResult</a>&gt;</code>
+**Returns:** <code>Promise&lt;<a href="#readresult">ReadResult</a>&gt;</code>
 
 **Since:** 1.0.0
 
@@ -75,7 +75,7 @@ Read a value from the clipboard (the "paste" action)
 ### Interfaces
 
 
-#### ClipboardWriteOptions
+#### WriteOptions
 
 Represents the data to be written to the clipboard.
 
@@ -87,7 +87,7 @@ Represents the data to be written to the clipboard.
 | **`label`**  | <code>string</code> | User visible label to accompany the copied data (Android Only).                                                 | 1.0.0 |
 
 
-#### ClipboardReadResult
+#### ReadResult
 
 Represents the data read from the clipboard.
 
