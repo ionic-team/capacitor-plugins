@@ -138,7 +138,6 @@ jobs:
       - verify-android
       - verify-web
     steps:
-      - run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >> .npmrc
       - uses: actions/setup-node@v1
         with:
           node-version: 14.x
@@ -154,4 +153,5 @@ jobs:
             */node_modules
           key: dependency-cache-${{ hashFiles('package.json', '*/package.json') }}
       - run: npm install
+      - run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >> .npmrc
       - run: npx lerna publish from-git --yes
