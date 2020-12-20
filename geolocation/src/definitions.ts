@@ -12,9 +12,7 @@ export interface GeolocationPlugin {
    *
    * @since 1.0.0
    */
-  getCurrentPosition(
-    options?: PositionOptions,
-  ): Promise<Position>;
+  getCurrentPosition(options?: PositionOptions): Promise<Position>;
 
   /**
    * Set up a watch for location changes. Note that watching for location changes

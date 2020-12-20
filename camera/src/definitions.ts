@@ -220,7 +220,7 @@ export interface Photo {
 export enum CameraSource {
   Prompt = 'PROMPT',
   Camera = 'CAMERA',
-  Photos = 'PHOTOS'
+  Photos = 'PHOTOS',
 }
 
 export enum CameraDirection {
@@ -231,7 +231,7 @@ export enum CameraDirection {
 export enum CameraResultType {
   Uri = 'uri',
   Base64 = 'base64',
-  DataUrl = 'dataUrl'
+  DataUrl = 'dataUrl',
 }
 
 /**

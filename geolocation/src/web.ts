@@ -9,9 +9,7 @@ import type {
 } from './definitions';
 
 export class GeolocationWeb extends WebPlugin implements GeolocationPlugin {
-  async getCurrentPosition(
-    options?: PositionOptions,
-  ): Promise<Position> {
+  async getCurrentPosition(options?: PositionOptions): Promise<Position> {
     return new Promise((resolve, reject) => {
       navigator.geolocation.getCurrentPosition(
         pos => {
