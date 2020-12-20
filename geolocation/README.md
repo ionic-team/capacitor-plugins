@@ -29,16 +29,16 @@ npx cap sync
 ### getCurrentPosition(...)
 
 ```typescript
-getCurrentPosition(options?: GeolocationOptions | undefined) => Promise<GeolocationPosition>
+getCurrentPosition(options?: PositionOptions | undefined) => Promise<Position>
 ```
 
 Get the current GPS location of the device
 
-| Param         | Type                                                              |
-| ------------- | ----------------------------------------------------------------- |
-| **`options`** | <code><a href="#geolocationoptions">GeolocationOptions</a></code> |
+| Param         | Type                                                        |
+| ------------- | ----------------------------------------------------------- |
+| **`options`** | <code><a href="#positionoptions">PositionOptions</a></code> |
 
-**Returns:** <code>Promise&lt;<a href="#geolocationposition">GeolocationPosition</a>&gt;</code>
+**Returns:** <code>Promise&lt;<a href="#position">Position</a>&gt;</code>
 
 **Since:** 1.0.0
 
@@ -48,16 +48,16 @@ Get the current GPS location of the device
 ### watchPosition(...)
 
 ```typescript
-watchPosition(options: GeolocationOptions, callback: GeolocationWatchCallback) => CallbackID
+watchPosition(options: PositionOptions, callback: WatchPositionCallback) => CallbackID
 ```
 
 Set up a watch for location changes. Note that watching for location changes
 can consume a large amount of energy. Be smart about listening only when you need to.
 
-| Param          | Type                                                                          |
-| -------------- | ----------------------------------------------------------------------------- |
-| **`options`**  | <code><a href="#geolocationoptions">GeolocationOptions</a></code>             |
-| **`callback`** | <code><a href="#geolocationwatchcallback">GeolocationWatchCallback</a></code> |
+| Param          | Type                                                                    |
+| -------------- | ----------------------------------------------------------------------- |
+| **`options`**  | <code><a href="#positionoptions">PositionOptions</a></code>             |
+| **`callback`** | <code><a href="#watchpositioncallback">WatchPositionCallback</a></code> |
 
 **Returns:** <code>string</code>
 
@@ -69,14 +69,14 @@ can consume a large amount of energy. Be smart about listening only when you nee
 ### clearWatch(...)
 
 ```typescript
-clearWatch(options: { id: string; }) => Promise<void>
+clearWatch(options: ClearWatchOptions) => Promise<void>
 ```
 
 Clear a given watch
 
-| Param         | Type                         |
-| ------------- | ---------------------------- |
-| **`options`** | <code>{ id: string; }</code> |
+| Param         | Type                                                            |
+| ------------- | --------------------------------------------------------------- |
+| **`options`** | <code><a href="#clearwatchoptions">ClearWatchOptions</a></code> |
 
 **Since:** 1.0.0
 
@@ -86,12 +86,12 @@ Clear a given watch
 ### checkPermissions()
 
 ```typescript
-checkPermissions() => Promise<GeolocationPermissionStatus>
+checkPermissions() => Promise<PermissionStatus>
 ```
 
 Check location permissions
 
-**Returns:** <code>Promise&lt;<a href="#geolocationpermissionstatus">GeolocationPermissionStatus</a>&gt;</code>
+**Returns:** <code>Promise&lt;<a href="#permissionstatus">PermissionStatus</a>&gt;</code>
 
 **Since:** 1.0.0
 
@@ -101,12 +101,12 @@ Check location permissions
 ### requestPermissions()
 
 ```typescript
-requestPermissions() => Promise<GeolocationPermissionStatus>
+requestPermissions() => Promise<PermissionStatus>
 ```
 
 Request location permissions
 
-**Returns:** <code>Promise&lt;<a href="#geolocationpermissionstatus">GeolocationPermissionStatus</a>&gt;</code>
+**Returns:** <code>Promise&lt;<a href="#permissionstatus">PermissionStatus</a>&gt;</code>
 
 **Since:** 1.0.0
 
@@ -116,7 +116,7 @@ Request location permissions
 ### Interfaces
 
 
-#### GeolocationPosition
+#### Position
 
 | Prop            | Type                                                                                                                                                                                | Description                                             | Since |
 | --------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- | ----- |
@@ -124,7 +124,7 @@ Request location permissions
 | **`coords`**    | <code>{ latitude: number; longitude: number; accuracy: number; altitudeAccuracy: number \| null; altitude: number \| null; speed: number \| null; heading: number \| null; }</code> | The GPS coordinates along with the accuracy of the data | 1.0.0 |
 
 
-#### GeolocationOptions
+#### PositionOptions
 
 | Prop                     | Type                 | Description                                                                                | Default            | Since |
 | ------------------------ | -------------------- | ------------------------------------------------------------------------------------------ | ------------------ | ----- |
@@ -133,29 +133,31 @@ Request location permissions
 | **`maximumAge`**         | <code>number</code>  | The maximum age in milliseconds of a possible cached position that is acceptable to return | <code>0</code>     | 1.0.0 |
 
 
-#### GeolocationPermissionStatus
+#### ClearWatchOptions
 
-| Prop           | Type                                                          |
-| -------------- | ------------------------------------------------------------- |
-| **`location`** | <code><a href="#geolocationstate">GeolocationState</a></code> |
+| Prop     | Type                                              |
+| -------- | ------------------------------------------------- |
+| **`id`** | <code><a href="#callbackid">CallbackID</a></code> |
+
+
+#### PermissionStatus
+
+| Prop           | Type                                                        |
+| -------------- | ----------------------------------------------------------- |
+| **`location`** | <code><a href="#permissionstate">PermissionState</a></code> |
 
 
 ### Type Aliases
 
 
-#### GeolocationWatchCallback
+#### WatchPositionCallback
 
-<code>(position: <a href="#geolocationposition">GeolocationPosition</a> | null, err?: any): void</code>
+<code>(position: <a href="#position">Position</a> | null, err?: any): void</code>
 
 
 #### CallbackID
 
 <code>string</code>
-
-
-#### GeolocationState
-
-<code><a href="#permissionstate">PermissionState</a></code>
 
 
 #### PermissionState
