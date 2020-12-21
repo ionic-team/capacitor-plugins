@@ -52,10 +52,14 @@ public class BrowserPlugin extends Plugin {
         call.resolve();
     }
 
-    @PluginMethod
-    public void close(PluginCall call) {
-        call.unimplemented();
-    }
+  @PluginMethod
+  public void close(PluginCall call) {
+    Context context = getActivity().getBaseContext();
+    Intent myIntent = new Intent(context, getActivity().getClass());
+    myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+    myIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    context.startActivity(myIntent);
+  }
 
     @Override
     protected void handleOnResume() {
