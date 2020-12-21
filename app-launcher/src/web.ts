@@ -13,7 +13,8 @@ export class AppLauncherWeb extends WebPlugin implements AppLauncherPlugin {
     return { value: true };
   }
 
-  async openUrl(_options: OpenURLOptions): Promise<OpenURLResult> {
+  async openUrl(options: OpenURLOptions): Promise<OpenURLResult> {
+    window.open(options.url, '_blank');
     return { completed: true };
   }
 }
