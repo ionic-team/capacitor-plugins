@@ -12,7 +12,11 @@ public class SharePlugin: CAPPlugin {
         }
 
         if let url = call.getString("url"), let urlObj = URL(string: url) {
-            items.append(urlObj)
+            if let imageData = try? Data(contentsOf: urlObj), let image = UIImage(data: imageData) {
+                items.append(image)
+            } else {
+                items.append(urlObj)
+            }
         }
 
         let title = call.getString("title")
