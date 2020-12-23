@@ -127,31 +127,31 @@ jobs:
       - run: npm install
       - run: npm run verify:web
         working-directory: ${{ matrix.plugin }}
-  deploy:
-    runs-on: macOS
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    timeout-minutes: 30
-    needs:
-      - setup
-      - lint
-      - verify-ios
-      - verify-android
-      - verify-web
-    steps:
-      - uses: actions/setup-node@v1
-        with:
-          node-version: 14.x
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - name: Restore Dependency Cache
-        id: cache-modules
-        uses: actions/cache@v2
-        with:
-          path: |
-            node_modules
-            */node_modules
-          key: dependency-cache-${{ hashFiles('package.json', '*/package.json') }}
-      - run: npm install
-      - run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >> .npmrc
-      - run: npx lerna publish from-git --yes
+# deploy:
+#   runs-on: macOS
+#   if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+#   timeout-minutes: 30
+#   needs:
+#     - setup
+#     - lint
+#     - verify-ios
+#     - verify-android
+#     - verify-web
+#   steps:
+#     - uses: actions/setup-node@v1
+#       with:
+#         node-version: 14.x
+#     - uses: actions/checkout@v2
+#       with:
+#         fetch-depth: 0
+#     - name: Restore Dependency Cache
+#       id: cache-modules
+#       uses: actions/cache@v2
+#       with:
+#         path: |
+#           node_modules
+#           */node_modules
+#         key: dependency-cache-${{ hashFiles('package.json', '*/package.json') }}
+#     - run: npm install
+#     - run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >> .npmrc
+#     - run: npx lerna publish from-git --yes
