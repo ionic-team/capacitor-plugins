@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.service.notification.StatusBarNotification;
+import androidx.annotation.NonNull;
 import com.getcapacitor.Bridge;
 import com.getcapacitor.JSArray;
 import com.getcapacitor.JSObject;
@@ -22,6 +23,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,18 +36,40 @@ public class PushNotificationsPlugin extends Plugin {
     public static Bridge staticBridge = null;
     public static RemoteMessage lastMessage = null;
     public NotificationManager notificationManager;
+    public MessagingService firebaseMessagingService;
     private NotificationChannelManager notificationChannelManager;
 
     private static final String EVENT_TOKEN_CHANGE = "registration";
     private static final String EVENT_TOKEN_ERROR = "registrationError";
 
+    public static class MessagingService extends FirebaseMessagingService {
+
+        @Override
+        public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
+            super.onMessageReceived(remoteMessage);
+            PushNotificationsPlugin pushPlugin = PushNotificationsPlugin.getPushNotificationsInstance();
+            if (pushPlugin != null) {
+                pushPlugin.fireNotification(remoteMessage);
+            }
+        }
+
+        @Override
+        public void onNewToken(@NonNull String s) {
+            super.onNewToken(s);
+            PushNotificationsPlugin.onNewToken(s);
+        }
+    }
+
     public void load() {
         notificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
+        firebaseMessagingService = new MessagingService();
+
         staticBridge = this.bridge;
         if (lastMessage != null) {
             fireNotification(lastMessage);
             lastMessage = null;
         }
+
         notificationChannelManager = new NotificationChannelManager(getActivity(), notificationManager);
     }
 
@@ -98,7 +122,7 @@ public class PushNotificationsPlugin extends Plugin {
                     }
                 }
             );
-        call.success();
+        call.resolve();
     }
 
     @PluginMethod
@@ -166,7 +190,7 @@ public class PushNotificationsPlugin extends Plugin {
     @PluginMethod
     public void removeAllDeliveredNotifications(PluginCall call) {
         notificationManager.cancelAll();
-        call.success();
+        call.resolve();
     }
 
     @PluginMethod
