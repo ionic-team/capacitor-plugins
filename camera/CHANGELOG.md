@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@0.1.0...@capacitor/camera@0.1.1) (2020-12-27)
+
+
+### Bug Fixes
+
+* **camera:** query IMAGE_CAPTURE intent required by SDK 30 ([#160](https://github.com/ionic-team/capacitor-plugins/issues/160)) ([6484991](https://github.com/ionic-team/capacitor-plugins/commit/6484991d76d57bac0cbc82b9f050e146ec4732da))
+
+
+
+
+
 # 0.1.0 (2020-12-20)
 
 

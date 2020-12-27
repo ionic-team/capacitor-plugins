@@ -1,6 +1,6 @@
 {
   "name": "@capacitor/storage",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "The Storage API provides a simple key/value persistent store for lightweight data.",
   "main": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
