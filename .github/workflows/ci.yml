@@ -115,8 +115,8 @@ jobs:
     if: needs.setup.outputs.plugins != '[]'
     timeout-minutes: 30
     needs:
-      - lint
       - setup
+      - lint
     strategy:
       matrix:
         plugin: ${{ fromJson(needs.setup.outputs.plugins) }}
@@ -141,8 +141,8 @@ jobs:
 #   if: github.event_name == 'push' && github.ref == 'refs/heads/main'
 #   timeout-minutes: 30
 #   needs:
-#     - lint
 #     - setup
+#     - lint
 #     - verify-ios
 #     - verify-android
 #     - verify-web
