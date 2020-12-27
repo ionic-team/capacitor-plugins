@@ -11,7 +11,8 @@ execute(async () => {
   const changedFiles = JSON.parse(core.getInput('changed-files', '[]')).map(f => resolve(root, f));
   const packages = (await ls()).map(pkg => ({ ...pkg, relativeLocation: relative(root, pkg.location) }));
   const changedPackages = packages.filter(pkg => changedFiles.some(f => f.startsWith(pkg.location)));
+  const changedPackagesFormatted = JSON.stringify(changedPackages);
 
-  core.info(`Changed packages: ${changedPackages}`);
-  core.setOutput('changed-packages', changedPackages);
+  core.info(`Changed packages: ${changedPackagesFormatted}`);
+  core.setOutput('changed-packages', changedPackagesFormatted);
 });
