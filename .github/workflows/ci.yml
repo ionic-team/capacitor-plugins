@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     outputs:
-      plugins: ${{ toJson(steps.packages.outputs.changed-packages.*.relativeLocation) }}
+      plugins: ${{ toJson(steps.packages.outputs.changed-packages) }}
     steps:
       - name: Cancel Previous Runs
         uses: styfle/cancel-workflow-action@ce177499ccf9fd2aded3b0426c97e5434c2e8a73
