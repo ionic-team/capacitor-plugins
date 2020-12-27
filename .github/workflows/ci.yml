@@ -38,109 +38,104 @@ jobs:
         uses: ./.github/actions/changed-packages
         with:
           files: ${{ steps.files.outputs.all }}
-  test:
-    runs-on: ubuntu-latest
+  lint:
+    runs-on: macOS
     timeout-minutes: 30
     needs:
       - setup
     steps:
-      - run: echo ${{ needs.setup.outputs.plugins }}
-
-# lint:
-#   runs-on: macOS
-#   timeout-minutes: 30
-#   needs:
-#     - setup
-#   steps:
-#     - uses: actions/setup-node@v1
-#       with:
-#         node-version: 14.x
-#     - uses: actions/checkout@v2
-#     - name: Restore Dependency Cache
-#       id: cache-modules
-#       uses: actions/cache@v2
-#       with:
-#         path: |
-#           node_modules
-#           */node_modules
-#         key: dependency-cache-${{ hashFiles('package.json', '*/package.json') }}
-#     - run: npm install
-#     - run: npm run lint
-# verify-ios:
-#   runs-on: macOS
-#   timeout-minutes: 30
-#   needs:
-#     - setup
-#     - lint
-#   strategy:
-#     matrix:
-#       plugin: ${{ fromJson(needs.setup.outputs.plugins) }}
-#   steps:
-#     - uses: actions/setup-node@v1
-#       with:
-#         node-version: 14.x
-#     - uses: actions/checkout@v2
-#     - name: Restore Dependency Cache
-#       id: cache-modules
-#       uses: actions/cache@v2
-#       with:
-#         path: |
-#           node_modules
-#           */node_modules
-#         key: dependency-cache-${{ hashFiles('package.json', '*/package.json') }}
-#     - run: npm install
-#     - run: npm run verify:ios
-#       working-directory: ${{ matrix.plugin }}
-# verify-android:
-#   runs-on: ubuntu-latest
-#   timeout-minutes: 30
-#   needs:
-#     - setup
-#     - lint
-#   strategy:
-#     matrix:
-#       plugin: ${{ fromJson(needs.setup.outputs.plugins) }}
-#   steps:
-#     - uses: actions/setup-node@v1
-#       with:
-#         node-version: 14.x
-#     - uses: actions/checkout@v2
-#     - name: Restore Dependency Cache
-#       id: cache-modules
-#       uses: actions/cache@v2
-#       with:
-#         path: |
-#           node_modules
-#           */node_modules
-#         key: dependency-cache-${{ hashFiles('package.json', '*/package.json') }}
-#     - run: npm install
-#     - run: npm run verify:android
-#       working-directory: ${{ matrix.plugin }}
-# verify-web:
-#   runs-on: ubuntu-latest
-#   timeout-minutes: 30
-#   needs:
-#     - setup
-#     - lint
-#   strategy:
-#     matrix:
-#       plugin: ${{ fromJson(needs.setup.outputs.plugins) }}
-#   steps:
-#     - uses: actions/setup-node@v1
-#       with:
-#         node-version: 14.x
-#     - uses: actions/checkout@v2
-#     - name: Restore Dependency Cache
-#       id: cache-modules
-#       uses: actions/cache@v2
-#       with:
-#         path: |
-#           node_modules
-#           */node_modules
-#         key: dependency-cache-${{ hashFiles('package.json', '*/package.json') }}
-#     - run: npm install
-#     - run: npm run verify:web
-#       working-directory: ${{ matrix.plugin }}
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+      - uses: actions/checkout@v2
+      - name: Restore Dependency Cache
+        id: cache-modules
+        uses: actions/cache@v2
+        with:
+          path: |
+            node_modules
+            */node_modules
+          key: dependency-cache-${{ hashFiles('package.json', '*/package.json') }}
+      - run: npm install
+      - run: npm run lint
+  verify-ios:
+    runs-on: macOS
+    if: needs.setup.outputs.plugins != '[]'
+    timeout-minutes: 30
+    needs:
+      - setup
+      - lint
+    strategy:
+      matrix:
+        plugin: ${{ fromJson(needs.setup.outputs.plugins) }}
+    steps:
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+      - uses: actions/checkout@v2
+      - name: Restore Dependency Cache
+        id: cache-modules
+        uses: actions/cache@v2
+        with:
+          path: |
+            node_modules
+            */node_modules
+          key: dependency-cache-${{ hashFiles('package.json', '*/package.json') }}
+      - run: npm install
+      - run: npm run verify:ios
+        working-directory: ${{ matrix.plugin }}
+  verify-android:
+    runs-on: ubuntu-latest
+    if: needs.setup.outputs.plugins != '[]'
+    timeout-minutes: 30
+    needs:
+      - setup
+      - lint
+    strategy:
+      matrix:
+        plugin: ${{ fromJson(needs.setup.outputs.plugins) }}
+    steps:
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+      - uses: actions/checkout@v2
+      - name: Restore Dependency Cache
+        id: cache-modules
+        uses: actions/cache@v2
+        with:
+          path: |
+            node_modules
+            */node_modules
+          key: dependency-cache-${{ hashFiles('package.json', '*/package.json') }}
+      - run: npm install
+      - run: npm run verify:android
+        working-directory: ${{ matrix.plugin }}
+  verify-web:
+    runs-on: ubuntu-latest
+    if: needs.setup.outputs.plugins != '[]'
+    timeout-minutes: 30
+    needs:
+      - setup
+      - lint
+    strategy:
+      matrix:
+        plugin: ${{ fromJson(needs.setup.outputs.plugins) }}
+    steps:
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+      - uses: actions/checkout@v2
+      - name: Restore Dependency Cache
+        id: cache-modules
+        uses: actions/cache@v2
+        with:
+          path: |
+            node_modules
+            */node_modules
+          key: dependency-cache-${{ hashFiles('package.json', '*/package.json') }}
+      - run: npm install
+      - run: npm run verify:web
+        working-directory: ${{ matrix.plugin }}
 # deploy:
 #   runs-on: macOS
 #   if: github.event_name == 'push' && github.ref == 'refs/heads/main'
