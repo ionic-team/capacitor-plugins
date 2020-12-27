@@ -44,7 +44,7 @@ jobs:
     needs:
       - setup
     steps:
-      - run: echo ${{ fromJson(needs.setup.outputs.plugins).*.relativeLocation }}
+      - run: echo ${{ toJson(fromJson(needs.setup.outputs.plugins).*.relativeLocation) }}
 
 # lint:
 #   runs-on: macOS
