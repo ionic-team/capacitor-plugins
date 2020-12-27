@@ -1,5 +1,5 @@
 name: Changed Packages
 description: Action for determining the changed Lerna packages
 runs:
-  using: node14
+  using: node12
   main: main.mjs
