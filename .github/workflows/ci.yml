@@ -46,6 +46,8 @@ jobs:
   lint:
     runs-on: macOS
     timeout-minutes: 30
+    needs:
+      - setup
     steps:
       - uses: actions/setup-node@v1
         with:
@@ -66,7 +68,6 @@ jobs:
     if: needs.setup.outputs.plugins != '[]'
     timeout-minutes: 30
     needs:
-      - setup
       - lint
     strategy:
       matrix:
@@ -92,7 +93,6 @@ jobs:
     if: needs.setup.outputs.plugins != '[]'
     timeout-minutes: 30
     needs:
-      - setup
       - lint
     strategy:
       matrix:
@@ -118,7 +118,6 @@ jobs:
     if: needs.setup.outputs.plugins != '[]'
     timeout-minutes: 30
     needs:
-      - setup
       - lint
     strategy:
       matrix:
@@ -144,8 +143,6 @@ jobs:
 #   if: github.event_name == 'push' && github.ref == 'refs/heads/main'
 #   timeout-minutes: 30
 #   needs:
-#     - setup
-#     - lint
 #     - verify-ios
 #     - verify-android
 #     - verify-web
