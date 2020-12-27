@@ -26,11 +26,12 @@ jobs:
         if: github.event_name != 'push' || github.event.before != '0000000000000000000000000000000000000000'
         with:
           format: 'json'
-      - id: set-changed-directories
-        run: echo "::set-output name=changed-directories::$(echo ${{ toJson(steps.files.outputs.all) }} | jq -cM 'map(split("/")) | map(.[0])')"
-        if: steps.files.outputs.all
-      - id: set-plugins
-        run: echo "::set-output name=plugins::$(echo $(jq -cM .packages lerna.json) ${{ toJson(steps['set-changed-directories'].outputs['changed-directories']) }} | jq -cM --slurp '[.[0][] as $x | .[1][] | select($x == .)] | unique')"
+      - uses: .github/actions/changed-packages
+#     - id: set-changed-directories
+#       run: echo "::set-output name=changed-directories::$(echo ${{ toJson(steps.files.outputs.all) }} | jq -cM 'map(split("/")) | map(.[0])')"
+#       if: steps.files.outputs.all
+#     - id: set-plugins
+#       run: echo "::set-output name=plugins::$(echo $(jq -cM .packages lerna.json) ${{ toJson(steps['set-changed-directories'].outputs['changed-directories']) }} | jq -cM --slurp '[.[0][] as $x | .[1][] | select($x == .)] | unique')"
   lint:
     runs-on: macOS
     timeout-minutes: 30
