@@ -8,11 +8,11 @@ const { execute } = require('../../../scripts/lib/cli.mjs');
 const { ls } = require('../../../scripts/lib/lerna.mjs');
 
 execute(async () => {
-  const changedFiles = JSON.parse(core.getInput('changed-files', '[]')).map(f => resolve(root, f));
-  const packages = (await ls()).map(pkg => ({ ...pkg, relativeLocation: relative(root, pkg.location) }));
-  const changedPackages = packages.filter(pkg => changedFiles.some(f => f.startsWith(pkg.location)));
-  const changedPackagesFormatted = JSON.stringify(changedPackages);
+  const files = JSON.parse(core.getInput('files', '[]')).map(f => resolve(root, f));
+  const packages = await ls();
+  const changedPackages = packages.filter(pkg => files.some(f => f.startsWith(pkg.location)));
+  const paths = JSON.stringify(changedPackages.map(pkg => relative(root, pkg.location)));
 
-  core.info(`Changed packages: ${changedPackagesFormatted}`);
-  core.setOutput('changed-packages', changedPackagesFormatted);
+  core.info(`Changed package paths: ${paths}`);
+  core.setOutput('paths', paths);
 });
