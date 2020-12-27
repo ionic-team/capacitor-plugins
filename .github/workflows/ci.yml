@@ -21,12 +21,23 @@ jobs:
         with:
           access_token: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/checkout@v2
+      - name: Restore Dependency Cache
+        id: cache-modules
+        uses: actions/cache@v2
+        with:
+          path: |
+            node_modules
+            */node_modules
+          key: dependency-cache-${{ hashFiles('package.json', '*/package.json') }}
+      - run: npm install
       - id: files
         uses: dwieeb/get-changed-files@main
         if: github.event_name != 'push' || github.event.before != '0000000000000000000000000000000000000000'
         with:
           format: 'json'
       - uses: ./.github/actions/changed-packages
+        with:
+          changed-files: ${{ steps.files.outputs.all }}
 #     - id: set-changed-directories
 #       run: echo "::set-output name=changed-directories::$(echo ${{ toJson(steps.files.outputs.all) }} | jq -cM 'map(split("/")) | map(.[0])')"
 #       if: steps.files.outputs.all

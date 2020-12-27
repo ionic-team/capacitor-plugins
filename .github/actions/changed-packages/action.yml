@@ -1,5 +1,9 @@
 name: Changed Packages
 description: Action for determining the changed Lerna packages
+inputs:
+  changed-files:
+    description: An array of changed files in a commit
+    required: true
 runs:
   using: node12
-  main: main.mjs
+  main: main.js
