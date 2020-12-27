@@ -13,8 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     outputs:
-      plugins: ${{ steps['set-plugins'].outputs.plugins }}
-      changed-directories: ${{ steps['set-changed-directories'].outputs['changed-directories'] }}
+      plugins: ${{ steps.packages.outputs.changed-packages.*.relativeLocation }}
     steps:
       - name: Cancel Previous Runs
         uses: styfle/cancel-workflow-action@ce177499ccf9fd2aded3b0426c97e5434c2e8a73
@@ -35,14 +34,10 @@ jobs:
         if: github.event_name != 'push' || github.event.before != '0000000000000000000000000000000000000000'
         with:
           format: 'json'
-      - uses: ./.github/actions/changed-packages
+      - id: packages
+        uses: ./.github/actions/changed-packages
         with:
           changed-files: ${{ steps.files.outputs.all }}
-#     - id: set-changed-directories
-#       run: echo "::set-output name=changed-directories::$(echo ${{ toJson(steps.files.outputs.all) }} | jq -cM 'map(split("/")) | map(.[0])')"
-#       if: steps.files.outputs.all
-#     - id: set-plugins
-#       run: echo "::set-output name=plugins::$(echo $(jq -cM .packages lerna.json) ${{ toJson(steps['set-changed-directories'].outputs['changed-directories']) }} | jq -cM --slurp '[.[0][] as $x | .[1][] | select($x == .)] | unique')"
   lint:
     runs-on: macOS
     timeout-minutes: 30
