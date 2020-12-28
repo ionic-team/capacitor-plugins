@@ -1,9 +1,9 @@
 package com.capacitorjs.plugins.camera;
 
 public enum CameraSource {
-    prompt("PROMPT"),
-    camera("CAMERA"),
-    photos("PHOTOS");
+    PROMPT("PROMPT"),
+    CAMERA("CAMERA"),
+    PHOTOS("PHOTOS");
 
     private String source;
 
