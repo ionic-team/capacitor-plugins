@@ -1,19 +1,18 @@
 package com.capacitorjs.plugins.browser;
 
-import android.graphics.Color;
 import android.net.Uri;
 import com.getcapacitor.Logger;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
+import com.getcapacitor.util.WebColor;
 
 @CapacitorPlugin(name = "Browser")
 public class BrowserPlugin extends Plugin {
 
     private Browser implementation;
 
-    @PluginMethod
     public void load() {
         implementation = new Browser(getContext());
         implementation.setBrowserEventListener(this::onBrowserEvent);
@@ -43,7 +42,7 @@ public class BrowserPlugin extends Plugin {
         String colorString = call.getString("toolbarColor");
         Integer toolbarColor = null;
         if (colorString != null) try {
-            toolbarColor = Color.parseColor(colorString);
+            toolbarColor = WebColor.parseColor(colorString);
         } catch (IllegalArgumentException ex) {
             Logger.error(getLogTag(), "Invalid color provided for toolbarColor. Using default", null);
         }

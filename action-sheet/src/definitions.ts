@@ -1,4 +1,4 @@
-export interface ActionSheetOptions {
+export interface ShowActionsOptions {
   /**
    * The title of the Action Sheet.
    *
@@ -20,10 +20,10 @@ export interface ActionSheetOptions {
    *
    * @since 1.0.0
    */
-  options: ActionSheetOption[];
+  options: ActionSheetSchema[];
 }
 
-export enum ActionSheetOptionStyle {
+export enum ActionSheetSchemaStyle {
   /**
    * Default style of the option.
    *
@@ -47,7 +47,7 @@ export enum ActionSheetOptionStyle {
   Cancel = 'CANCEL',
 }
 
-export interface ActionSheetOption {
+export interface ActionSheetSchema {
   /**
    * The title of the option
    *
@@ -62,7 +62,7 @@ export interface ActionSheetOption {
    *
    * @since 1.0.0
    */
-  style?: ActionSheetOptionStyle;
+  style?: ActionSheetSchemaStyle;
 
   /**
    * Icon for the option (ionicon naming convention)
@@ -74,7 +74,7 @@ export interface ActionSheetOption {
   icon?: string;
 }
 
-export interface ActionSheetResult {
+export interface ShowActionsResult {
   /**
    * The index of the clicked option (Zero-based)
    *
@@ -90,5 +90,23 @@ export interface ActionSheetPlugin {
    *
    * @since 1.0.0
    */
-  showActions(options: ActionSheetOptions): Promise<ActionSheetResult>;
+  showActions(options: ShowActionsOptions): Promise<ShowActionsResult>;
 }
+
+/**
+ * @deprecated Use `ShowActionsOptions`.
+ * @since 1.0.0
+ */
+export type ActionSheetOptions = ShowActionsOptions;
+
+/**
+ * @deprecated Use `ShowActionsResult`.
+ * @since 1.0.0
+ */
+export type ActionSheetResult = ShowActionsResult;
+
+/**
+ * @deprecated Use `ActionSheetSchema`.
+ * @since 1.0.0
+ */
+export type ActionSheetOption = ActionSheetSchema;

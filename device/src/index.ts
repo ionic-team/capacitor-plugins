@@ -6,4 +6,5 @@ const Device = registerPlugin<DevicePlugin>('Device', {
   web: () => import('./web').then(m => new m.DeviceWeb()),
 });
 
+export * from './definitions';
 export { Device };

@@ -6,4 +6,5 @@ const App = registerPlugin<AppPlugin>('App', {
   web: () => import('./web').then(m => new m.AppWeb()),
 });
 
+export * from './definitions';
 export { App };

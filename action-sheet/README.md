@@ -9,6 +9,33 @@ npm install @capacitor/action-sheet
 npx cap sync
 ```
 
+## Example
+
+```typescript
+import { ActionSheet, ActionSheetOptionStyle } from '@capacitor/action-sheet';
+
+const showActions = async () => {
+  const result = await ActionSheet.showActions({
+    title: 'Photo Options',
+    message: 'Select an option to perform',
+    options: [
+      {
+        title: 'Upload',
+      },
+      {
+        title: 'Share',
+      },
+      {
+        title: 'Remove',
+        style: ActionSheetOptionStyle.Destructive,
+      },
+    ],
+  });
+
+  console.log('Action Sheet result:', result);
+};
+```
+
 ## API
 
 <docgen-index>
@@ -25,7 +52,7 @@ npx cap sync
 ### showActions(...)
 
 ```typescript
-showActions(options: ActionSheetOptions) => Promise<ActionSheetResult>
+showActions(options: ShowActionsOptions) => Promise<ShowActionsResult>
 ```
 
 Show an Action Sheet style modal with various options for the user
@@ -33,9 +60,9 @@ to select.
 
 | Param         | Type                                                              |
 | ------------- | ----------------------------------------------------------------- |
-| **`options`** | <code><a href="#actionsheetoptions">ActionSheetOptions</a></code> |
+| **`options`** | <code><a href="#showactionsoptions">ShowActionsOptions</a></code> |
 
-**Returns:** <code>Promise&lt;<a href="#actionsheetresult">ActionSheetResult</a>&gt;</code>
+**Returns:** <code>Promise&lt;<a href="#showactionsresult">ShowActionsResult</a>&gt;</code>
 
 **Since:** 1.0.0
 
@@ -45,35 +72,35 @@ to select.
 ### Interfaces
 
 
-#### ActionSheetResult
+#### ShowActionsResult
 
 | Prop        | Type                | Description                                  | Since |
 | ----------- | ------------------- | -------------------------------------------- | ----- |
 | **`index`** | <code>number</code> | The index of the clicked option (Zero-based) | 1.0.0 |
 
 
-#### ActionSheetOptions
+#### ShowActionsOptions
 
 | Prop          | Type                             | Description                                                              | Since |
 | ------------- | -------------------------------- | ------------------------------------------------------------------------ | ----- |
 | **`title`**   | <code>string</code>              | The title of the Action Sheet.                                           | 1.0.0 |
 | **`message`** | <code>string</code>              | A message to show under the title. This option is only supported on iOS. | 1.0.0 |
-| **`options`** | <code>ActionSheetOption[]</code> | Options the user can choose from.                                        | 1.0.0 |
+| **`options`** | <code>ActionSheetSchema[]</code> | Options the user can choose from.                                        | 1.0.0 |
 
 
-#### ActionSheetOption
+#### ActionSheetSchema
 
 | Prop        | Type                                                                      | Description                                                                           | Since |
 | ----------- | ------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- | ----- |
 | **`title`** | <code>string</code>                                                       | The title of the option                                                               | 1.0.0 |
-| **`style`** | <code><a href="#actionsheetoptionstyle">ActionSheetOptionStyle</a></code> | The style of the option This option is only supported on iOS.                         | 1.0.0 |
+| **`style`** | <code><a href="#actionsheetschemastyle">ActionSheetSchemaStyle</a></code> | The style of the option This option is only supported on iOS.                         | 1.0.0 |
 | **`icon`**  | <code>string</code>                                                       | Icon for the option (ionicon naming convention) This option is only supported on Web. | 1.0.0 |
 
 
 ### Enums
 
 
-#### ActionSheetOptionStyle
+#### ActionSheetSchemaStyle
 
 | Members           | Value                      | Description                                                                                                 | Since |
 | ----------------- | -------------------------- | ----------------------------------------------------------------------------------------------------------- | ----- |
