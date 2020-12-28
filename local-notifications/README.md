@@ -23,10 +23,11 @@ npx cap sync
 * [`listChannels()`](#listchannels)
 * [`checkPermissions()`](#checkpermissions)
 * [`requestPermissions()`](#requestpermissions)
-* [`addListener(...)`](#addlistener)
-* [`addListener(...)`](#addlistener)
+* [`addListener('received', ...)`](#addlistenerreceived-)
+* [`addListener('actionPerformed', ...)`](#addlisteneractionperformed-)
 * [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
+* [Type Aliases](#type-aliases)
 
 </docgen-index>
 
@@ -203,7 +204,7 @@ Request permission to display local notifications.
 --------------------
 
 
-### addListener(...)
+### addListener('received', ...)
 
 ```typescript
 addListener(eventName: 'received', listenerFunc: (notification: LocalNotificationSchema) => void) => PluginListenerHandle
@@ -213,7 +214,7 @@ Listen for when notifications are displayed.
 
 | Param              | Type                                                                                                   |
 | ------------------ | ------------------------------------------------------------------------------------------------------ |
-| **`eventName`**    | <code>"received"</code>                                                                                |
+| **`eventName`**    | <code>'received'</code>                                                                                |
 | **`listenerFunc`** | <code>(notification: <a href="#localnotificationschema">LocalNotificationSchema</a>) =&gt; void</code> |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
@@ -223,7 +224,7 @@ Listen for when notifications are displayed.
 --------------------
 
 
-### addListener(...)
+### addListener('actionPerformed', ...)
 
 ```typescript
 addListener(eventName: 'actionPerformed', listenerFunc: (notificationAction: ActionPerformed) => void) => PluginListenerHandle
@@ -233,7 +234,7 @@ Listen for when an action is performed on a notification.
 
 | Param              | Type                                                                                         |
 | ------------------ | -------------------------------------------------------------------------------------------- |
-| **`eventName`**    | <code>"actionPerformed"</code>                                                               |
+| **`eventName`**    | <code>'actionPerformed'</code>                                                               |
 | **`listenerFunc`** | <code>(notificationAction: <a href="#actionperformed">ActionPerformed</a>) =&gt; void</code> |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
@@ -316,7 +317,7 @@ Use either `at`, `on`, or `every` to schedule notifications.
 | **`at`**      | <code><a href="#date">Date</a></code>                                                              | <a href="#schedule">Schedule</a> a notification at a specific date and time.                                                                                                                  | 1.0.0 |
 | **`repeats`** | <code>boolean</code>                                                                               | Repeat delivery of this notification at the date and time specified by `at`. Only available for iOS and Android.                                                                              | 1.0.0 |
 | **`on`**      | <code>{ year?: number; month?: number; day?: number; hour?: number; minute?: number; }</code>      | <a href="#schedule">Schedule</a> a notification on particular interval(s). This is similar to scheduling [cron](https://en.wikipedia.org/wiki/Cron) jobs. Only available for iOS and Android. | 1.0.0 |
-| **`every`**   | <code>"year" \| "month" \| "two-weeks" \| "week" \| "day" \| "hour" \| "minute" \| "second"</code> | <a href="#schedule">Schedule</a> a notification on a particular interval.                                                                                                                     | 1.0.0 |
+| **`every`**   | <code>'year' \| 'month' \| 'two-weeks' \| 'week' \| 'day' \| 'hour' \| 'minute' \| 'second'</code> | <a href="#schedule">Schedule</a> a notification on a particular interval.                                                                                                                     | 1.0.0 |
 | **`count`**   | <code>number</code>                                                                                | Limit the number times a notification is delivered by the interval specified by `every`.                                                                                                      | 1.0.0 |
 
 
@@ -475,9 +476,9 @@ An action that can be taken when a notification is displayed.
 
 #### PermissionStatus
 
-| Prop          | Type                                                                      | Description                                   | Since |
-| ------------- | ------------------------------------------------------------------------- | --------------------------------------------- | ----- |
-| **`display`** | <code>"prompt" \| "prompt-with-rationale" \| "granted" \| "denied"</code> | Permission state of displaying notifications. | 1.0.0 |
+| Prop          | Type                                                        | Description                                   | Since |
+| ------------- | ----------------------------------------------------------- | --------------------------------------------- | ----- |
+| **`display`** | <code><a href="#permissionstate">PermissionState</a></code> | Permission state of displaying notifications. | 1.0.0 |
 
 
 #### PluginListenerHandle
@@ -494,5 +495,13 @@ An action that can be taken when a notification is displayed.
 | **`actionId`**     | <code>string</code>                                                         | The identifier of the performed action.                                                                                | 1.0.0 |
 | **`inputValue`**   | <code>string</code>                                                         | The value entered by the user on the notification. Only available on iOS for notifications with `input` set to `true`. | 1.0.0 |
 | **`notification`** | <code><a href="#localnotificationschema">LocalNotificationSchema</a></code> | The original notification schema.                                                                                      | 1.0.0 |
+
+
+### Type Aliases
+
+
+#### PermissionState
+
+<code>'prompt' | 'prompt-with-rationale' | 'granted' | 'denied'</code>
 
 </docgen-api>
