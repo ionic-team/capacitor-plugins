@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@0.1.1...@capacitor/camera@0.1.2) (2020-12-28)
+
+
+### Bug Fixes
+
+* **camera:** fix camera source on Android ([#164](https://github.com/ionic-team/capacitor-plugins/issues/164)) ([e67f7c6](https://github.com/ionic-team/capacitor-plugins/commit/e67f7c6b06b20d7c3e8f0925c40fd75d23d9d717))
+
+
+
+
+
 ## [0.1.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@0.1.0...@capacitor/camera@0.1.1) (2020-12-27)
 
 
