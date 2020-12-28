@@ -1,9 +1,9 @@
 import { WebPlugin } from '@capacitor/core';
 
-import type { ToastPlugin, ToastShowOptions } from './definitions';
+import type { ToastPlugin, ShowOptions } from './definitions';
 
 export class ToastWeb extends WebPlugin implements ToastPlugin {
-  async show(options: ToastShowOptions): Promise<void> {
+  async show(options: ShowOptions): Promise<void> {
     if (typeof document !== 'undefined') {
       let duration = 2000;
       if (options.duration) {

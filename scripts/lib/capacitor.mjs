@@ -1,1 +1,1 @@
-export const PROJECTS = ['android', 'core', 'ios'];
+export const PROJECTS = ['android', 'cli', 'core', 'ios'];

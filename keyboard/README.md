@@ -9,6 +9,61 @@ npm install @capacitor/keyboard
 npx cap sync
 ```
 
+## Example
+
+```typescript
+import { Keyboard } from '@capacitor/keyboard';
+
+Keyboard.addListener('keyboardWillShow', info => {
+  console.log('keyboard will show with height:', info.keyboardHeight);
+});
+
+Keyboard.addListener('keyboardDidShow', info => {
+  console.log('keyboard did show with height:', info.keyboardHeight);
+});
+
+Keyboard.addListener('keyboardWillHide', () => {
+  console.log('keyboard will hide');
+});
+
+Keyboard.addListener('keyboardDidHide', () => {
+  console.log('keyboard did hide');
+});
+```
+
+## Configuration
+
+On iOS, the keyboard can be configured with the following options:
+
+- `resize`: Configures the way the app is resized when the keyboard appears. Allowed values are:
+  - `none`: Neither the app nor the Web View are resized
+  - `native`: (default) The whole native Web View will be resized when the keyboard shows/hides. This affects the `vh` relative unit.
+  - `body`: Only the `<body>` HTML element will be resized. Relative units are not affected, because the viewport does not change.
+  - `ionic`: Only the `<ion-app>` HTML element will be resized. Use it only for Ionic Framework apps.
+- `style`: If set to `dark` it will use dark style keyboard instead of the regular one.
+
+```json
+{
+  "pluginsConfig": {
+    "Keyboard": {
+      "resize": "body",
+      "style": "dark"
+    }
+  }
+}
+```
+
+## Compatibility with `cordova-plugin-ionic-keyboard`
+
+To maintain compatibility with
+[`cordova-plugin-ionic-keyboard`](https://github.com/ionic-team/cordova-plugin-ionic-keyboard),
+the following events also work with `window.addEventListener`:
+
+- `keyboardWillShow`
+- `keyboardDidShow`
+- `keyboardWillHide`
+- `keyboardDidHide`
+
 ## API
 
 <docgen-index>
@@ -147,7 +202,7 @@ Listen for when the keyboard is about to be shown.
 
 | Param              | Type                                                                     |
 | ------------------ | ------------------------------------------------------------------------ |
-| **`eventName`**    | <code>"keyboardWillShow"</code>                                          |
+| **`eventName`**    | <code>'keyboardWillShow'</code>                                          |
 | **`listenerFunc`** | <code>(info: <a href="#keyboardinfo">KeyboardInfo</a>) =&gt; void</code> |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
@@ -167,7 +222,7 @@ Listen for when the keyboard is shown.
 
 | Param              | Type                                                                     |
 | ------------------ | ------------------------------------------------------------------------ |
-| **`eventName`**    | <code>"keyboardDidShow"</code>                                           |
+| **`eventName`**    | <code>'keyboardDidShow'</code>                                           |
 | **`listenerFunc`** | <code>(info: <a href="#keyboardinfo">KeyboardInfo</a>) =&gt; void</code> |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
@@ -187,7 +242,7 @@ Listen for when the keyboard is about to be hidden.
 
 | Param              | Type                            |
 | ------------------ | ------------------------------- |
-| **`eventName`**    | <code>"keyboardWillHide"</code> |
+| **`eventName`**    | <code>'keyboardWillHide'</code> |
 | **`listenerFunc`** | <code>() =&gt; void</code>      |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
@@ -207,7 +262,7 @@ Listen for when the keyboard is hidden.
 
 | Param              | Type                           |
 | ------------------ | ------------------------------ |
-| **`eventName`**    | <code>"keyboardDidHide"</code> |
+| **`eventName`**    | <code>'keyboardDidHide'</code> |
 | **`listenerFunc`** | <code>() =&gt; void</code>     |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>

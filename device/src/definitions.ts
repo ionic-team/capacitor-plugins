@@ -82,9 +82,16 @@ export interface DeviceInfo {
    * @since 1.0.0
    */
   diskTotal?: number;
+
+  /**
+   * The web view browser version
+   *
+   * @since 1.0.0
+   */
+  webViewVersion: string;
 }
 
-export interface DeviceBatteryInfo {
+export interface BatteryInfo {
   /**
    * A percentage (0 to 1) indicating how much the battery is charged.
    *
@@ -100,7 +107,7 @@ export interface DeviceBatteryInfo {
   isCharging?: boolean;
 }
 
-export interface DeviceLanguageCodeResult {
+export interface GetLanguageCodeResult {
   /**
    * Two character language code.
    *
@@ -122,12 +129,24 @@ export interface DevicePlugin {
    *
    * @since 1.0.0
    */
-  getBatteryInfo(): Promise<DeviceBatteryInfo>;
+  getBatteryInfo(): Promise<BatteryInfo>;
 
   /**
    * Get the device's current language locale code.
    *
    * @since 1.0.0
    */
-  getLanguageCode(): Promise<DeviceLanguageCodeResult>;
+  getLanguageCode(): Promise<GetLanguageCodeResult>;
 }
+
+/**
+ * @deprecated Use `BatteryInfo`.
+ * @since 1.0.0
+ */
+export type DeviceBatteryInfo = BatteryInfo;
+
+/**
+ * @deprecated Use `GetLanguageCodeResult`.
+ * @since 1.0.0
+ */
+export type DeviceLanguageCodeResult = GetLanguageCodeResult;

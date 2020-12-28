@@ -2,9 +2,10 @@ import type { PluginListenerHandle } from '@capacitor/core';
 import { WebPlugin } from '@capacitor/core';
 
 import type {
+  ConnectionStatusChangeListener,
+  ConnectionStatus,
+  ConnectionType,
   NetworkPlugin,
-  NetworkStatus,
-  NetworkStatusConnectionType,
 } from './definitions';
 
 declare global {
@@ -15,12 +16,12 @@ declare global {
   }
 }
 
-function translatedConnection(): NetworkStatusConnectionType {
+function translatedConnection(): ConnectionType {
   const connection =
     window.navigator.connection ||
     window.navigator.mozConnection ||
     window.navigator.webkitConnection;
-  let result: NetworkStatusConnectionType = 'unknown';
+  let result: ConnectionType = 'unknown';
   const type = connection ? connection.type || connection.effectiveType : null;
   if (type && typeof type === 'string') {
     switch (type) {
@@ -58,7 +59,7 @@ function translatedConnection(): NetworkStatusConnectionType {
 }
 
 export class NetworkWeb extends WebPlugin implements NetworkPlugin {
-  async getStatus(): Promise<NetworkStatus> {
+  async getStatus(): Promise<ConnectionStatus> {
     if (!window.navigator) {
       throw this.unavailable(
         'Browser does not support the Network Information API',
@@ -68,7 +69,7 @@ export class NetworkWeb extends WebPlugin implements NetworkPlugin {
     const connected = window.navigator.onLine;
     const connectionType = translatedConnection();
 
-    const status: NetworkStatus = {
+    const status: ConnectionStatus = {
       connected: connected,
       connectionType: connected ? connectionType : 'none',
     };
@@ -78,7 +79,7 @@ export class NetworkWeb extends WebPlugin implements NetworkPlugin {
 
   addListener(
     eventName: 'networkStatusChange',
-    listenerFunc: (status: NetworkStatus) => void,
+    listenerFunc: ConnectionStatusChangeListener,
   ): PluginListenerHandle {
     const thisRef = this;
     const connectionType = translatedConnection();
