@@ -38,7 +38,7 @@ public class PushNotificationsDelegate: NSObject, NotificationHandlerProtocol {
                     presentationOptions.insert(.alert)
                     break
                 case "badge":
-                    presentationOptions.insert(.badge)x
+                    presentationOptions.insert(.badge)
                     break
                 case "sound":
                     presentationOptions.insert(.sound)
