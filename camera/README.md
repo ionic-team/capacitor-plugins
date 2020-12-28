@@ -21,18 +21,7 @@ Read about [Configuring `Info.plist`](https://capacitorjs.com/docs/ios/configura
 
 ## Android Notes
 
-This API requires the following permissions be added to your `AndroidManifest.xml`:
-
-```xml
-<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-```
-
-The storage permissions are for reading/saving photo files.
-
-Read about [Setting Permissions](https://capacitorjs.com/docs/android/configuration#setting-permissions) in the [Android Guide](https://capacitorjs.com/docs/android) for more information on setting Android permissions.
-
-Additionally, because the Camera API launches a separate Activity to handle taking the photo, you should listen for `appRestoredResult` in the `App` plugin to handle any camera data that was sent in the case your app was terminated by the operating system while the Activity was running.
+Because the Camera API launches a separate activity to handle taking the photo, you might want to listen for `appRestoredResult` in the `App` plugin to handle any camera data that was sent in the case your app was terminated by the operating system while the activity was running.
 
 ## PWA Notes
 
