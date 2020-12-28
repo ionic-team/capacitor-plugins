@@ -14,7 +14,7 @@ public class CameraSettings {
     private boolean allowEditing = false;
     private int width = 0;
     private int height = 0;
-    private CameraSource source = CameraSource.prompt;
+    private CameraSource source = CameraSource.PROMPT;
 
     public CameraResultType getResultType() {
         return resultType;
