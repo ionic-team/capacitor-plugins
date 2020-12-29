@@ -13,8 +13,10 @@
     "postinstall": "lerna bootstrap"
   },
   "devDependencies": {
+    "@actions/core": "^1.2.6",
     "@ionic/prettier-config": "^1.0.1",
     "@types/prompts": "^2.0.8",
+    "esm": "^3.2.25",
     "lerna": "^3.22.1",
     "prettier": "^2.1.2",
     "prompts": "^2.3.2"

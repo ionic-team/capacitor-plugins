@@ -1,0 +1,12 @@
+name: Changed Packages
+description: Action for determining the changed Lerna packages
+inputs:
+  files:
+    description: An array of changed files
+    required: true
+outputs:
+  paths:
+    description: An array of relative paths to packages that were changed
+runs:
+  using: node12
+  main: main.js

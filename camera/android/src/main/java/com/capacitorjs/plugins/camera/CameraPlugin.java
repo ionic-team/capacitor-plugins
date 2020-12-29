@@ -87,10 +87,10 @@ public class CameraPlugin extends Plugin {
 
     private void doShow(PluginCall call) {
         switch (settings.getSource()) {
-            case camera:
+            case CAMERA:
                 showCamera(call);
                 break;
-            case photos:
+            case PHOTOS:
                 showPhotos(call);
                 break;
             default:
@@ -111,10 +111,10 @@ public class CameraPlugin extends Plugin {
             options,
             index -> {
                 if (index == 0) {
-                    settings.setSource(CameraSource.photos);
+                    settings.setSource(CameraSource.PHOTOS);
                     openPhotos(call);
                 } else if (index == 1) {
-                    settings.setSource(CameraSource.camera);
+                    settings.setSource(CameraSource.CAMERA);
                     openCamera(call);
                 }
             },
@@ -189,9 +189,9 @@ public class CameraPlugin extends Plugin {
         settings.setShouldResize(settings.getWidth() > 0 || settings.getHeight() > 0);
         settings.setShouldCorrectOrientation(call.getBoolean("correctOrientation", CameraSettings.DEFAULT_CORRECT_ORIENTATION));
         try {
-            settings.setSource(CameraSource.valueOf(call.getString("source", CameraSource.prompt.getSource())));
+            settings.setSource(CameraSource.valueOf(call.getString("source", CameraSource.PROMPT.getSource())));
         } catch (IllegalArgumentException ex) {
-            settings.setSource(CameraSource.prompt);
+            settings.setSource(CameraSource.PROMPT);
         }
         return settings;
     }
