@@ -32,12 +32,14 @@ public class GeolocationPlugin extends Plugin {
         implementation = new Geolocation(getContext());
 
         // register the permission callback for getCurrentPosition
-        registerPermissionCallback(CURRENT_POSITION_CALLBACK_ID, (call, status) -> {
-            if (status.get("location") == PermissionState.GRANTED) {
-                boolean enableHighAccuracy = call.getBoolean("enableHighAccuracy", false);
-                int timeout = call.getInt("timeout", 10000);
+        registerPermissionCallback(
+            CURRENT_POSITION_CALLBACK_ID,
+            (call, status) -> {
+                if (status.get("location") == PermissionState.GRANTED) {
+                    boolean enableHighAccuracy = call.getBoolean("enableHighAccuracy", false);
+                    int timeout = call.getInt("timeout", 10000);
 
-                implementation.sendLocation(
+                    implementation.sendLocation(
                         enableHighAccuracy,
                         timeout,
                         true,
@@ -52,20 +54,24 @@ public class GeolocationPlugin extends Plugin {
                                 call.reject(message);
                             }
                         }
-                );
-            } else {
-                call.reject("Location permission was denied");
+                    );
+                } else {
+                    call.reject("Location permission was denied");
+                }
             }
-        });
+        );
 
         // register the permission callback for watchPosition
-        registerPermissionCallback(WATCH_POSITION_CALLBACK_ID, (call, status) -> {
-            if (status.get("location") == PermissionState.GRANTED) {
-                startWatch(call);
-            } else {
-                call.reject("Location permission was denied");
+        registerPermissionCallback(
+            WATCH_POSITION_CALLBACK_ID,
+            (call, status) -> {
+                if (status.get("location") == PermissionState.GRANTED) {
+                    startWatch(call);
+                } else {
+                    call.reject("Location permission was denied");
+                }
             }
-        });
+        );
     }
 
     /**
@@ -105,20 +111,20 @@ public class GeolocationPlugin extends Plugin {
         int timeout = call.getInt("timeout", 10000);
 
         implementation.sendLocation(
-                enableHighAccuracy,
-                timeout,
-                false,
-                new LocationResultCallback() {
-                    @Override
-                    public void success(Location location) {
-                        call.resolve(getJSObjectForLocation(location));
-                    }
-
-                    @Override
-                    public void error(String message) {
-                        call.reject(message);
-                    }
+            enableHighAccuracy,
+            timeout,
+            false,
+            new LocationResultCallback() {
+                @Override
+                public void success(Location location) {
+                    call.resolve(getJSObjectForLocation(location));
                 }
+
+                @Override
+                public void error(String message) {
+                    call.reject(message);
+                }
+            }
         );
     }
 
