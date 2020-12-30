@@ -85,7 +85,7 @@ public class PushNotificationsPlugin: CAPPlugin {
                 result = .denied
             case .ephemeral, .authorized, .provisional:
                 result = .granted
-            default:
+            @unknown default:
                 result = .prompt
             }
 
