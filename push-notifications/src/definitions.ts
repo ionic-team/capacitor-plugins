@@ -145,12 +145,16 @@ export interface PushNotificationSchema {
   /**
    * Android only: set the group identifier for notification grouping, like
    * threadIdentifier on iOS.
+   *
+   * @since 1.0.0
    */
   group?: string;
 
   /**
    * Android only: designate this notification as the summary for a group
    * (should be used with the `group` property).
+   *
+   * @since 1.0.0
    */
   groupSummary?: boolean;
 }
