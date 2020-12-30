@@ -9,7 +9,7 @@ enum PushNotificationError: Error {
     case tokenRegistrationFailed
 }
 
-enum LocationPermissions: String {
+enum PushNotificationsPermissions: String {
     case prompt
     case denied
     case granted
@@ -61,7 +61,7 @@ public class PushNotificationsPlugin: CAPPlugin {
                 return
             }
 
-            var result: LocationPermissions = .denied
+            var result: PushNotificationsPermissions = .denied
 
             if granted {
                 result = .granted
@@ -76,7 +76,7 @@ public class PushNotificationsPlugin: CAPPlugin {
      */
     @objc override public func checkPermissions(_ call: CAPPluginCall) {
         self.notificationDelegateHandler.checkPermissions { status in
-            var result: LocationPermissions = .prompt
+            var result: PushNotificationsPermissions = .prompt
 
             switch status {
             case .notDetermined:
