@@ -9,6 +9,55 @@ npm install @capacitor/push-notifications
 npx cap sync
 ```
 
+## iOS
+
+TODO: On iOS you must enable the Push Notifications capability. See [Setting Capabilities](https://capacitorjs.com/docs/v3/ios/configuration#setting-capabilities) for 
+
+TODO: mention `GoogleServices-Info.plist`
+
+TODO: mention AppDelegate.swift
+
+## Android
+
+TODO: mention `google-services.json`
+
+---
+
+OLD STUFF
+
+## Push Notifications icon
+
+On Android, the Push Notifications icon with the appropriate name should be added to the `AndroidManifest.xml` file:
+
+```xml
+<meta-data android:name="com.google.firebase.messaging.default_notification_icon" android:resource="@mipmap/push_icon_name" />
+```
+
+If no icon is specified Android will use the application icon, but push icon should be white pixels on a transparent backdrop. As the application icon is not usually like that, it will show a white square or circle. So it's recommended to provide the separate icon for Push Notifications.
+
+Android Studio has an icon generator you can use to create your Push Notifications icon.
+
+## Push notifications appearance in foreground
+
+On iOS you can configure the way the push notifications are displayed when the app is in foreground by providing the `presentationOptions` in your `capacitor.config.json` as an Array of Strings you can combine.
+
+Possible values are:
+* `badge`: badge count on the app icon is updated (default value)
+* `sound`: the device will ring/vibrate when the push notification is received
+* `alert`: the push notification is displayed in a native dialog
+
+An empty Array can be provided if none of the previous options are desired. `pushNotificationReceived` event will still be fired with the push notification information.
+
+```json
+"plugins": {
+  "PushNotifications": {
+    "presentationOptions": ["badge", "sound", "alert"]
+  }
+}
+```
+
+---
+
 ## API
 
 <docgen-index>
@@ -41,9 +90,12 @@ register() => Promise<void>
 ```
 
 Register the app to receive push notifications.
-Will trigger registration event with the push token
-or registrationError if there was some problem.
+
+Will trigger registration event with the push token or registrationError if there was some problem.
+
 Doesn't prompt the user for notification permissions, use requestPermission() first.
+
+**Since:** 1.0.0
 
 --------------------
 
@@ -57,6 +109,8 @@ getDeliveredNotifications() => Promise<PushNotificationDeliveredList>
 Returns the notifications that are visible on the notifications screen.
 
 **Returns:** <code>Promise&lt;<a href="#pushnotificationdeliveredlist">PushNotificationDeliveredList</a>&gt;</code>
+
+**Since:** 1.0.0
 
 --------------------
 
@@ -73,6 +127,8 @@ Removes the specified notifications from the notifications screen.
 | --------------- | --------------------------------------------------------------------------------------- | -------------------------------- |
 | **`delivered`** | <code><a href="#pushnotificationdeliveredlist">PushNotificationDeliveredList</a></code> | list of delivered notifications. |
 
+**Since:** 1.0.0
+
 --------------------
 
 
@@ -83,6 +139,8 @@ removeAllDeliveredNotifications() => Promise<void>
 ```
 
 Removes all the notifications from the notifications screen.
+
+**Since:** 1.0.0
 
 --------------------
 
@@ -99,6 +157,8 @@ On Android O or newer (SDK 26+) creates a notification channel.
 | ------------- | ------------------------------------------- | ----------- |
 | **`channel`** | <code><a href="#channel">Channel</a></code> | to create.  |
 
+**Since:** 1.0.0
+
 --------------------
 
 
@@ -114,6 +174,8 @@ On Android O or newer (SDK 26+) deletes a notification channel.
 | ------------- | ------------------------------------------- | ----------- |
 | **`channel`** | <code><a href="#channel">Channel</a></code> | to delete.  |
 
+**Since:** 1.0.0
+
 --------------------
 
 
@@ -126,6 +188,8 @@ listChannels() => Promise<ListChannelsResult>
 On Android O or newer (SDK 26+) list the available notification channels.
 
 **Returns:** <code>Promise&lt;<a href="#listchannelsresult">ListChannelsResult</a>&gt;</code>
+
+**Since:** 1.0.0
 
 --------------------
 
@@ -176,6 +240,8 @@ Provides the push notification token.
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
+**Since:** 1.0.0
+
 --------------------
 
 
@@ -195,6 +261,8 @@ Provides an error with the registration problem.
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
+**Since:** 1.0.0
+
 --------------------
 
 
@@ -212,6 +280,8 @@ Event called when the device receives a push notification.
 | **`listenerFunc`** | <code>(notification: <a href="#pushnotificationschema">PushNotificationSchema</a>) =&gt; void</code> | callback with the received notification. |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
+
+**Since:** 1.0.0
 
 --------------------
 
@@ -231,6 +301,8 @@ Event called when an action is performed on a pusn notification.
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
+**Since:** 1.0.0
+
 --------------------
 
 
@@ -241,6 +313,8 @@ removeAllListeners() => void
 ```
 
 Remove all native listeners for this plugin.
+
+**Since:** 1.0.0
 
 --------------------
 
