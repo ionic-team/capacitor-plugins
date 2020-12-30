@@ -10,9 +10,9 @@ enum PushNotificationError: Error {
 }
 
 enum LocationPermissions: String {
-    case prompt = "prompt"
-    case denied = "denied"
-    case granted = "granted"
+    case prompt
+    case denied
+    case granted
 }
 
 @objc(PushNotificationsPlugin)
@@ -25,8 +25,15 @@ public class PushNotificationsPlugin: CAPPlugin {
         self.bridge?.notificationRouter.pushNotificationHandler = self.notificationDelegateHandler
         self.notificationDelegateHandler.plugin = self
 
-        NotificationCenter.default.addObserver(self, selector: #selector(self.didRegisterForRemoteNotificationsWithDeviceToken(notification:)), name: Notification.Name(Notification.Name.capacitorDidRegisterForRemoteNotifications.self.rawValue), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.didFailToRegisterForRemoteNotificationsWithError(notification:)), name: Notification.Name(Notification.Name.capacitorDidFailToRegisterForRemoteNotifications.self.rawValue), object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(self.didRegisterForRemoteNotificationsWithDeviceToken(notification:)),
+                                               name: Notification.Name(Notification.Name.capacitorDidRegisterForRemoteNotifications.self.rawValue),
+                                               object: nil)
+
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(self.didFailToRegisterForRemoteNotificationsWithError(notification:)),
+                                               name: Notification.Name(Notification.Name.capacitorDidFailToRegisterForRemoteNotifications.self.rawValue),
+                                               object: nil)
     }
 
     /**
@@ -45,7 +52,12 @@ public class PushNotificationsPlugin: CAPPlugin {
     @objc override public func requestPermissions(_ call: CAPPluginCall) {
         self.notificationDelegateHandler.requestPermissions { granted, error in
             guard error == nil else {
-                call.reject(error!.localizedDescription)
+                if let err = error {
+                    call.reject(err.localizedDescription)
+                    return
+                }
+
+                call.reject("unknown error in permissions request")
                 return
             }
 

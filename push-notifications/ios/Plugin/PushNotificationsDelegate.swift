@@ -36,18 +36,14 @@ public class PushNotificationsDelegate: NSObject, NotificationHandlerProtocol {
                 switch option {
                 case "alert":
                     presentationOptions.insert(.alert)
-                    break
                 case "badge":
                     presentationOptions.insert(.badge)
-                    break
+
                 case "sound":
                     presentationOptions.insert(.sound)
-                    break
                 default:
                     print("Unrecogizned presentation option: \(option)")
-                    break
                 }
-
             }
 
             return presentationOptions
