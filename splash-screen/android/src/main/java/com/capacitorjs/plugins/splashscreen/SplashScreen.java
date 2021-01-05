@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
+import android.content.res.Configuration;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
@@ -130,8 +131,19 @@ public class SplashScreen {
             // https://stackoverflow.com/a/21847579/32140
             splashImage.setDrawingCacheEnabled(true);
 
-            if (config.getBackgroundColor() != null) {
-                splashImage.setBackgroundColor(config.getBackgroundColor());
+            int currentNightMode = context.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+
+            switch (currentNightMode) {
+                case Configuration.UI_MODE_NIGHT_NO:
+                    if(config.getBackgroundColor() != null){
+                        splashImage.setBackgroundColor(config.getBackgroundColor());
+                    }
+                    break;
+                case Configuration.UI_MODE_NIGHT_YES:
+                    if(config.getBackgroundColorDarkMode() != null){
+                        splashImage.setBackgroundColor(config.getBackgroundColorDarkMode());
+                    }
+                break;
             }
 
             splashImage.setScaleType(config.getScaleType());
