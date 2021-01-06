@@ -11,19 +11,27 @@ npx cap sync
 
 ## iOS
 
-TODO: On iOS you must enable the Push Notifications capability. See [Setting Capabilities](https://capacitorjs.com/docs/v3/ios/configuration#setting-capabilities) for 
+On iOS you must enable the Push Notifications capability. See [Setting Capabilities](https://capacitorjs.com/docs/v3/ios/configuration#setting-capabilities) for instructions on how to enable the capability.
 
-TODO: mention `GoogleServices-Info.plist`
+The Push Notification API uses [Firebase Cloud Messaging](https://firebase.google.com/docs/cloud-messaging) SDK for handling notifications.  See [Set up a Firebase Cloud Messaging client app on iOS](https://firebase.google.com/docs/cloud-messaging/ios/client) and follow the instructions for creating a Firebase project and registering your application.  Do not add the Firebase SDK to your app - the Push Notifications provides that for you.  All that is required is your Firebase project `GoogleService-Info.plist` file added to your Xcode project.
 
-TODO: mention AppDelegate.swift
+After setting up your Firebase project, add the following to your application AppDelegate.swift
+
+```swift
+func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+  NotificationCenter.default.post(name: .capacitorDidRegisterForRemoteNotifications, object: deviceToken)
+}
+
+func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+  NotificationCenter.default.post(name: .capacitorDidFailToRegisterForRemoteNotifications, object: error)
+}
+```
 
 ## Android
 
-TODO: mention `google-services.json`
+The Push Notification API uses [Firebase Cloud Messaging](https://firebase.google.com/docs/cloud-messaging) SDK for handling notifications.  See [Set up a Firebase Cloud Messaging client app on Android](https://firebase.google.com/docs/cloud-messaging/android/client) and follow the instructions for creating a Firebase project and registering your application.  There is no need to add the Firebase SDK to your app or edit your app manifest - the Push Notifications provides that for you.  All that is required is your Firebase project's `google-services.json` file added to the module (app-level) directory of your app.
 
 ---
-
-OLD STUFF
 
 ## Push Notifications icon
 
@@ -324,55 +332,55 @@ Remove all native listeners for this plugin.
 
 #### PushNotificationDeliveredList
 
-| Prop                | Type                                  |
-| ------------------- | ------------------------------------- |
-| **`notifications`** | <code>PushNotificationSchema[]</code> |
+| Prop                | Type                                  | Since |
+| ------------------- | ------------------------------------- | ----- |
+| **`notifications`** | <code>PushNotificationSchema[]</code> | 1.0.0 |
 
 
 #### PushNotificationSchema
 
-| Prop               | Type                 | Description                                                                                                      |
-| ------------------ | -------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| **`title`**        | <code>string</code>  |                                                                                                                  |
-| **`subtitle`**     | <code>string</code>  |                                                                                                                  |
-| **`body`**         | <code>string</code>  |                                                                                                                  |
-| **`id`**           | <code>string</code>  |                                                                                                                  |
-| **`badge`**        | <code>number</code>  |                                                                                                                  |
-| **`notification`** | <code>any</code>     |                                                                                                                  |
-| **`data`**         | <code>any</code>     |                                                                                                                  |
-| **`click_action`** | <code>string</code>  |                                                                                                                  |
-| **`link`**         | <code>string</code>  |                                                                                                                  |
-| **`group`**        | <code>string</code>  | Android only: set the group identifier for notification grouping, like threadIdentifier on iOS.                  |
-| **`groupSummary`** | <code>boolean</code> | Android only: designate this notification as the summary for a group (should be used with the `group` property). |
+| Prop               | Type                 | Description                                                                                                      | Since |
+| ------------------ | -------------------- | ---------------------------------------------------------------------------------------------------------------- | ----- |
+| **`title`**        | <code>string</code>  | The notification title                                                                                           | 1.0.0 |
+| **`subtitle`**     | <code>string</code>  | The notification sub title                                                                                       | 1.0.0 |
+| **`body`**         | <code>string</code>  | The main text payload for the notification                                                                       | 1.0.0 |
+| **`id`**           | <code>string</code>  | The notification identifier                                                                                      | 1.0.0 |
+| **`badge`**        | <code>number</code>  | The number to display for the app icon badge                                                                     | 1.0.0 |
+| **`notification`** | <code>any</code>     |                                                                                                                  | 1.0.0 |
+| **`data`**         | <code>any</code>     | The notification identifier                                                                                      | 1.0.0 |
+| **`click_action`** | <code>string</code>  |                                                                                                                  | 1.0.0 |
+| **`link`**         | <code>string</code>  |                                                                                                                  | 1.0.0 |
+| **`group`**        | <code>string</code>  | Android only: set the group identifier for notification grouping, like threadIdentifier on iOS.                  | 1.0.0 |
+| **`groupSummary`** | <code>boolean</code> | Android only: designate this notification as the summary for a group (should be used with the `group` property). | 1.0.0 |
 
 
 #### Channel
 
-| Prop              | Type                               |
-| ----------------- | ---------------------------------- |
-| **`id`**          | <code>string</code>                |
-| **`name`**        | <code>string</code>                |
-| **`description`** | <code>string</code>                |
-| **`sound`**       | <code>string</code>                |
-| **`importance`**  | <code>1 \| 2 \| 5 \| 4 \| 3</code> |
-| **`visibility`**  | <code>0 \| 1 \| -1</code>          |
-| **`lights`**      | <code>boolean</code>               |
-| **`lightColor`**  | <code>string</code>                |
-| **`vibration`**   | <code>boolean</code>               |
+| Prop              | Type                               | Description                                                                                                                                                                                                                                                                                                                                                                                                                             | Since |
+| ----------------- | ---------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`id`**          | <code>string</code>                | Android only: The channel identifier                                                                                                                                                                                                                                                                                                                                                                                                    | 1.0.0 |
+| **`name`**        | <code>string</code>                | Android only: Sets the user visible name of this channel.                                                                                                                                                                                                                                                                                                                                                                               | 1.0.0 |
+| **`description`** | <code>string</code>                | Android only: Sets the user visible description of this channel.                                                                                                                                                                                                                                                                                                                                                                        | 1.0.0 |
+| **`sound`**       | <code>string</code>                | Android only: Sets the sound that should be played for notifications posted to this channel. Notification channels with an importance of at least 3 should have a sound. Should specifify the file name of a sound file relative to the android app res/raw directory.                                                                                                                                                                  | 1.0.0 |
+| **`importance`**  | <code>1 \| 2 \| 5 \| 4 \| 3</code> | Android only: Sets the level of interruption of this notification channel.                                                                                                                                                                                                                                                                                                                                                              | 1.0.0 |
+| **`visibility`**  | <code>0 \| 1 \| -1</code>          | Android only: Sets whether notifications posted to this channel appear on the lockscreen or not, and if so, whether they appear in a redacted form.                                                                                                                                                                                                                                                                                     | 1.0.0 |
+| **`lights`**      | <code>boolean</code>               | Android only: Sets whether notifications posted to this channel should display notification lights, on devices that support that feature.                                                                                                                                                                                                                                                                                               | 1.0.0 |
+| **`lightColor`**  | <code>string</code>                | Android only: Sets the notification light color for notifications posted to this channel, if lights are enabled on this channel and the device supports that feature. Supported color formats: #RRGGBB #AARRGGBB The following names are also accepted: red, blue, green, black, white, gray, cyan, magenta, yellow, lightgray, darkgray, grey, lightgrey, darkgrey, aqua, fuchsia, lime, maroon, navy, olive, purple, silver, and teal | 1.0.0 |
+| **`vibration`**   | <code>boolean</code>               | Android only: Sets whether notification posted to this channel should vibrate.                                                                                                                                                                                                                                                                                                                                                          | 1.0.0 |
 
 
 #### ListChannelsResult
 
-| Prop           | Type                   |
-| -------------- | ---------------------- |
-| **`channels`** | <code>Channel[]</code> |
+| Prop           | Type                   | Since |
+| -------------- | ---------------------- | ----- |
+| **`channels`** | <code>Channel[]</code> | 1.0.0 |
 
 
 #### PermissionStatus
 
-| Prop          | Type                                                                      |
-| ------------- | ------------------------------------------------------------------------- |
-| **`receive`** | <code>"prompt" \| "prompt-with-rationale" \| "granted" \| "denied"</code> |
+| Prop          | Type                                                                      | Since |
+| ------------- | ------------------------------------------------------------------------- | ----- |
+| **`receive`** | <code>"prompt" \| "prompt-with-rationale" \| "granted" \| "denied"</code> | 1.0.0 |
 
 
 #### PluginListenerHandle
@@ -384,17 +392,17 @@ Remove all native listeners for this plugin.
 
 #### PushNotificationToken
 
-| Prop        | Type                |
-| ----------- | ------------------- |
-| **`value`** | <code>string</code> |
+| Prop        | Type                | Since |
+| ----------- | ------------------- | ----- |
+| **`value`** | <code>string</code> | 1.0.0 |
 
 
 #### PushNotificationActionPerformed
 
-| Prop               | Type                                                                      |
-| ------------------ | ------------------------------------------------------------------------- |
-| **`actionId`**     | <code>string</code>                                                       |
-| **`inputValue`**   | <code>string</code>                                                       |
-| **`notification`** | <code><a href="#pushnotificationschema">PushNotificationSchema</a></code> |
+| Prop               | Type                                                                      | Since |
+| ------------------ | ------------------------------------------------------------------------- | ----- |
+| **`actionId`**     | <code>string</code>                                                       | 1.0.0 |
+| **`inputValue`**   | <code>string</code>                                                       | 1.0.0 |
+| **`notification`** | <code><a href="#pushnotificationschema">PushNotificationSchema</a></code> | 1.0.0 |
 
 </docgen-api>
