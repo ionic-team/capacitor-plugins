@@ -4,7 +4,6 @@ import android.Manifest;
 import android.location.Location;
 import android.os.Build;
 import com.getcapacitor.JSObject;
-import com.getcapacitor.PermissionResponse;
 import com.getcapacitor.PermissionState;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
@@ -36,8 +35,7 @@ public class GeolocationPlugin extends Plugin {
      *
      * @param call Plugin call
      */
-    @PluginMethod
-    @PermissionResponse("completeCurrentPosition")
+    @PluginMethod(permissionCallback = "completeCurrentPosition")
     public void getCurrentPosition(final PluginCall call) {
         if (!hasRequiredPermissions()) {
             requestAllPermissions(call);
@@ -78,8 +76,7 @@ public class GeolocationPlugin extends Plugin {
      *
      * @param call Plugin call
      */
-    @PluginMethod(returnType = PluginMethod.RETURN_CALLBACK)
-    @PermissionResponse("completeWatchPosition")
+    @PluginMethod(returnType = PluginMethod.RETURN_CALLBACK, permissionCallback = "completeWatchPosition")
     public void watchPosition(PluginCall call) {
         call.save();
         if (!hasRequiredPermissions()) {

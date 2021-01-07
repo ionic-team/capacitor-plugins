@@ -75,7 +75,7 @@ public class CameraPlugin extends Plugin {
 
     private CameraSettings settings = new CameraSettings();
 
-    @PluginMethod
+    @PluginMethod(permissionCallback = "cameraPermissionsResponse")
     public void getPhoto(PluginCall call) {
         isEdited = false;
 
@@ -136,7 +136,6 @@ public class CameraPlugin extends Plugin {
         openPhotos(call);
     }
 
-    @PermissionResponse("cameraPermissionsResponse")
     private boolean checkCameraPermissions(PluginCall call) {
         // if the manifest does not contain the camera permissions key, we don't need to ask the user
         boolean needCameraPerms = hasDefinedPermissions(new String[] { Manifest.permission.CAMERA });
@@ -162,7 +161,6 @@ public class CameraPlugin extends Plugin {
         return true;
     }
 
-    @PermissionResponse("cameraPermissionsResponse")
     private boolean checkPhotosPermissions(PluginCall call) {
         if (!hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE)) {
             requestPermissionForAlias("photos", call);
