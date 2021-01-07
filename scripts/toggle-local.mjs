@@ -13,16 +13,20 @@ execute(async () => {
   const [path] = (await ls()).map(p => p.location);
   const pkg = await readJson(resolve(path, 'package.json'));
 
-  const packages = Object.fromEntries(
-    await Promise.all(
-      PROJECTS.map(async project => [
+  const entries = new Map();
+
+  for (const project of PROJECTS) {
+    if (pkg.devDependencies[`@capacitor/${project}`]) {
+      entries.set(
         `@capacitor/${project}`,
         pkg.devDependencies[`@capacitor/${project}`].startsWith('file:')
           ? `^${await getLatestVersion(`@capacitor/${project}`, 'next')}`
           : `file:../../capacitor/${project}`,
-      ]),
-    ),
-  );
+      );
+    }
+  }
+
+  const packages = Object.fromEntries(entries);
 
   await setLernaPackageDependencies(packages, 'devDependencies');
   await bootstrap();

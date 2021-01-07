@@ -110,3 +110,9 @@ export type ActionSheetResult = ShowActionsResult;
  * @since 1.0.0
  */
 export type ActionSheetOption = ActionSheetSchema;
+
+/**
+ * @deprecated Use `ActionSheetSchemaStyle`.
+ * @since 1.0.0
+ */
+export const ActionSheetOptionStyle = ActionSheetSchemaStyle;
