@@ -74,7 +74,7 @@ public class CameraPlugin extends Plugin {
 
     private CameraSettings settings = new CameraSettings();
 
-    @PluginMethod(permissionCallback = "cameraPermissionsResponse")
+    @PluginMethod(permissionCallback = "cameraPermissionsCallback")
     public void getPhoto(PluginCall call) {
         isEdited = false;
 
@@ -168,7 +168,14 @@ public class CameraPlugin extends Plugin {
         return true;
     }
 
-    private void cameraPermissionsResponse(PluginCall call, Map<String, PermissionState> permissionStatus) {
+    /**
+     * Completes the plugin call after a camera permission request
+     *
+     * @see #getPhoto(PluginCall)
+     * @param call the plugin call
+     * @param permissionStatus the results of the permission request
+     */
+    private void cameraPermissionsCallback(PluginCall call, Map<String, PermissionState> permissionStatus) {
         if (settings.getSource() == CameraSource.CAMERA && permissionStatus.get("camera") == PermissionState.DENIED) {
             Logger.debug(getLogTag(), "User denied camera permission: " + permissionStatus.toString());
             call.reject(PERMISSION_DENIED_ERROR);

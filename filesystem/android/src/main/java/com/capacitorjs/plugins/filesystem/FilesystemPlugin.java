@@ -41,7 +41,7 @@ public class FilesystemPlugin extends Plugin {
 
     private static final String PERMISSION_DENIED_ERROR = "Unable to do file operation, user denied permission request";
 
-    @PluginMethod(permissionCallback = "completeReadOperations")
+    @PluginMethod(permissionCallback = "readPermissionsCallback")
     public void readFile(PluginCall call) {
         String path = call.getString("path");
         String directory = getDirectoryParameter(call);
@@ -71,7 +71,7 @@ public class FilesystemPlugin extends Plugin {
         }
     }
 
-    @PluginMethod(permissionCallback = "completeWriteOperations")
+    @PluginMethod(permissionCallback = "writePermissionsCallback")
     public void writeFile(PluginCall call) {
         String path = call.getString("path");
         String data = call.getString("data");
@@ -164,7 +164,7 @@ public class FilesystemPlugin extends Plugin {
         }
     }
 
-    @PluginMethod(permissionCallback = "completeWriteOperations")
+    @PluginMethod(permissionCallback = "writePermissionsCallback")
     public void appendFile(PluginCall call) {
         try {
             call.getData().putOpt("append", true);
@@ -173,7 +173,7 @@ public class FilesystemPlugin extends Plugin {
         this.writeFile(call);
     }
 
-    @PluginMethod(permissionCallback = "completeWriteOperations")
+    @PluginMethod(permissionCallback = "writePermissionsCallback")
     public void deleteFile(PluginCall call) {
         String file = call.getString("path");
         String directory = getDirectoryParameter(call);
@@ -193,7 +193,7 @@ public class FilesystemPlugin extends Plugin {
         }
     }
 
-    @PluginMethod(permissionCallback = "completeWriteOperations")
+    @PluginMethod(permissionCallback = "writePermissionsCallback")
     public void mkdir(PluginCall call) {
         String path = call.getString("path");
         String directory = getDirectoryParameter(call);
@@ -214,7 +214,7 @@ public class FilesystemPlugin extends Plugin {
         }
     }
 
-    @PluginMethod(permissionCallback = "completeWriteOperations")
+    @PluginMethod(permissionCallback = "writePermissionsCallback")
     public void rmdir(PluginCall call) {
         String path = call.getString("path");
         String directory = getDirectoryParameter(call);
@@ -250,7 +250,7 @@ public class FilesystemPlugin extends Plugin {
         }
     }
 
-    @PluginMethod(permissionCallback = "completeReadOperations")
+    @PluginMethod(permissionCallback = "readPermissionsCallback")
     public void readdir(PluginCall call) {
         String path = call.getString("path");
         String directory = getDirectoryParameter(call);
@@ -273,7 +273,7 @@ public class FilesystemPlugin extends Plugin {
         }
     }
 
-    @PluginMethod(permissionCallback = "completeReadOperations")
+    @PluginMethod(permissionCallback = "readPermissionsCallback")
     public void getUri(PluginCall call) {
         String path = call.getString("path");
         String directory = getDirectoryParameter(call);
@@ -289,7 +289,7 @@ public class FilesystemPlugin extends Plugin {
         }
     }
 
-    @PluginMethod(permissionCallback = "completeReadOperations")
+    @PluginMethod(permissionCallback = "readPermissionsCallback")
     public void stat(PluginCall call) {
         String path = call.getString("path");
         String directory = getDirectoryParameter(call);
@@ -314,12 +314,12 @@ public class FilesystemPlugin extends Plugin {
         }
     }
 
-    @PluginMethod(permissionCallback = "completeWriteOperations")
+    @PluginMethod(permissionCallback = "writePermissionsCallback")
     public void rename(PluginCall call) {
         this._copy(call, true);
     }
 
-    @PluginMethod(permissionCallback = "completeWriteOperations")
+    @PluginMethod(permissionCallback = "writePermissionsCallback")
     public void copy(PluginCall call) {
         this._copy(call, false);
     }
@@ -349,7 +349,7 @@ public class FilesystemPlugin extends Plugin {
         }
     }
 
-    private void completeReadOperations(PluginCall call, Map<String, PermissionState> status) {
+    private void readPermissionsCallback(PluginCall call, Map<String, PermissionState> status) {
         if (status.get(READ_STORAGE) != PermissionState.GRANTED) {
             Logger.debug(getLogTag(), "User denied read storage permission");
             call.reject(PERMISSION_DENIED_ERROR);
@@ -372,7 +372,7 @@ public class FilesystemPlugin extends Plugin {
         }
     }
 
-    private void completeWriteOperations(PluginCall call, Map<String, PermissionState> status) {
+    private void writePermissionsCallback(PluginCall call, Map<String, PermissionState> status) {
         if (status.get(WRITE_STORAGE) != PermissionState.GRANTED) {
             Logger.debug(getLogTag(), "User denied write storage permission");
             call.reject(PERMISSION_DENIED_ERROR);
