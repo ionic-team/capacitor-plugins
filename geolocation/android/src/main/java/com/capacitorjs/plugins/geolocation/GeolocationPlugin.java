@@ -4,6 +4,7 @@ import android.Manifest;
 import android.location.Location;
 import android.os.Build;
 import com.getcapacitor.JSObject;
+import com.getcapacitor.PermissionResponse;
 import com.getcapacitor.PermissionState;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
@@ -21,57 +22,12 @@ import java.util.Map;
 )
 public class GeolocationPlugin extends Plugin {
 
-    private static final int CURRENT_POSITION_CALLBACK_ID = 1;
-    private static final int WATCH_POSITION_CALLBACK_ID = 2;
-
     private Geolocation implementation;
     private Map<String, PluginCall> watchingCalls = new HashMap<>();
 
     @Override
     public void load() {
         implementation = new Geolocation(getContext());
-
-        // register the permission callback for getCurrentPosition
-        registerPermissionCallback(
-            CURRENT_POSITION_CALLBACK_ID,
-            (call, status) -> {
-                if (status.get("location") == PermissionState.GRANTED) {
-                    boolean enableHighAccuracy = call.getBoolean("enableHighAccuracy", false);
-                    int timeout = call.getInt("timeout", 10000);
-
-                    implementation.sendLocation(
-                        enableHighAccuracy,
-                        timeout,
-                        true,
-                        new LocationResultCallback() {
-                            @Override
-                            public void success(Location location) {
-                                call.resolve(getJSObjectForLocation(location));
-                            }
-
-                            @Override
-                            public void error(String message) {
-                                call.reject(message);
-                            }
-                        }
-                    );
-                } else {
-                    call.reject("Location permission was denied");
-                }
-            }
-        );
-
-        // register the permission callback for watchPosition
-        registerPermissionCallback(
-            WATCH_POSITION_CALLBACK_ID,
-            (call, status) -> {
-                if (status.get("location") == PermissionState.GRANTED) {
-                    startWatch(call);
-                } else {
-                    call.reject("Location permission was denied");
-                }
-            }
-        );
     }
 
     /**
@@ -81,11 +37,38 @@ public class GeolocationPlugin extends Plugin {
      * @param call Plugin call
      */
     @PluginMethod
+    @PermissionResponse("completeCurrentPosition")
     public void getCurrentPosition(final PluginCall call) {
         if (!hasRequiredPermissions()) {
-            requestAllPermissions(call, CURRENT_POSITION_CALLBACK_ID);
+            requestAllPermissions(call);
         } else {
             getPosition(call);
+        }
+    }
+
+    private void completeCurrentPosition(PluginCall call, Map<String, PermissionState> status) {
+        if (status.get("location") == PermissionState.GRANTED) {
+            boolean enableHighAccuracy = call.getBoolean("enableHighAccuracy", false);
+            int timeout = call.getInt("timeout", 10000);
+
+            implementation.sendLocation(
+                enableHighAccuracy,
+                timeout,
+                true,
+                new LocationResultCallback() {
+                    @Override
+                    public void success(Location location) {
+                        call.resolve(getJSObjectForLocation(location));
+                    }
+
+                    @Override
+                    public void error(String message) {
+                        call.reject(message);
+                    }
+                }
+            );
+        } else {
+            call.reject("Location permission was denied");
         }
     }
 
@@ -96,12 +79,21 @@ public class GeolocationPlugin extends Plugin {
      * @param call Plugin call
      */
     @PluginMethod(returnType = PluginMethod.RETURN_CALLBACK)
+    @PermissionResponse("completeWatchPosition")
     public void watchPosition(PluginCall call) {
         call.save();
         if (!hasRequiredPermissions()) {
-            requestAllPermissions(call, WATCH_POSITION_CALLBACK_ID);
+            requestAllPermissions(call);
         } else {
             startWatch(call);
+        }
+    }
+
+    private void completeWatchPosition(PluginCall call, Map<String, PermissionState> status) {
+        if (status.get("location") == PermissionState.GRANTED) {
+            startWatch(call);
+        } else {
+            call.reject("Location permission was denied");
         }
     }
 

@@ -15,7 +15,7 @@ import com.getcapacitor.FileUtils;
 import com.getcapacitor.JSArray;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Logger;
-import com.getcapacitor.PermissionCallback;
+import com.getcapacitor.PermissionResponse;
 import com.getcapacitor.PermissionState;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
@@ -53,8 +53,6 @@ import org.json.JSONException;
 )
 public class CameraPlugin extends Plugin {
 
-    private static final int GET_PHOTO_CALLBACK_ID = 1;
-
     // Request codes
     static final int REQUEST_IMAGE_CAPTURE = PluginRequestCodes.CAMERA_IMAGE_CAPTURE;
     static final int REQUEST_IMAGE_PICK = PluginRequestCodes.CAMERA_IMAGE_PICK;
@@ -76,26 +74,6 @@ public class CameraPlugin extends Plugin {
     private boolean isEdited = false;
 
     private CameraSettings settings = new CameraSettings();
-
-    @Override
-    public void load() {
-        registerPermissionCallback(
-            GET_PHOTO_CALLBACK_ID,
-            (call, permissionStatus) -> {
-                if (settings.getSource() == CameraSource.CAMERA && permissionStatus.get("camera") == PermissionState.DENIED) {
-                    Logger.debug(getLogTag(), "User denied camera permission: " + permissionStatus.toString());
-                    call.reject(PERMISSION_DENIED_ERROR);
-                    return;
-                } else if (settings.getSource() == CameraSource.PHOTOS && permissionStatus.get("photos") == PermissionState.DENIED) {
-                    Logger.debug(getLogTag(), "User denied photos permission: " + permissionStatus.toString());
-                    call.reject(PERMISSION_DENIED_ERROR);
-                    return;
-                }
-
-                doShow(call);
-            }
-        );
-    }
 
     @PluginMethod
     public void getPhoto(PluginCall call) {
@@ -158,6 +136,7 @@ public class CameraPlugin extends Plugin {
         openPhotos(call);
     }
 
+    @PermissionResponse("cameraPermissionsResponse")
     private boolean checkCameraPermissions(PluginCall call) {
         // if the manifest does not contain the camera permissions key, we don't need to ask the user
         boolean needCameraPerms = hasDefinedPermissions(new String[] { Manifest.permission.CAMERA });
@@ -172,23 +151,38 @@ public class CameraPlugin extends Plugin {
             } else {
                 aliases = new String[] { "photos" };
             }
-            requestPermissionForAliases(aliases, call, GET_PHOTO_CALLBACK_ID);
+            requestPermissionForAliases(aliases, call);
             return false;
         }
         // If we don't need to save to the gallery, we can just ask for camera permissions
         else if (!hasCameraPerms) {
-            requestPermissionForAlias("camera", call, GET_PHOTO_CALLBACK_ID);
+            requestPermissionForAlias("camera", call);
             return false;
         }
         return true;
     }
 
+    @PermissionResponse("cameraPermissionsResponse")
     private boolean checkPhotosPermissions(PluginCall call) {
         if (!hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE)) {
-            requestPermissionForAlias("photos", call, GET_PHOTO_CALLBACK_ID);
+            requestPermissionForAlias("photos", call);
             return false;
         }
         return true;
+    }
+
+    private void cameraPermissionsResponse(PluginCall call, Map<String, PermissionState> permissionStatus) {
+        if (settings.getSource() == CameraSource.CAMERA && permissionStatus.get("camera") == PermissionState.DENIED) {
+            Logger.debug(getLogTag(), "User denied camera permission: " + permissionStatus.toString());
+            call.reject(PERMISSION_DENIED_ERROR);
+            return;
+        } else if (settings.getSource() == CameraSource.PHOTOS && permissionStatus.get("photos") == PermissionState.DENIED) {
+            Logger.debug(getLogTag(), "User denied photos permission: " + permissionStatus.toString());
+            call.reject(PERMISSION_DENIED_ERROR);
+            return;
+        }
+
+        doShow(call);
     }
 
     private CameraSettings getSettings(PluginCall call) {
@@ -492,6 +486,7 @@ public class CameraPlugin extends Plugin {
             } else {
                 // we need to ask about photos so request storage permissions
                 requestPermissionForAliases(new String[] { "photos" }, call, basePermissionLauncher);
+                //requestPermissionForAliases(new String[] { "photos" }, call);
             }
         }
     }
