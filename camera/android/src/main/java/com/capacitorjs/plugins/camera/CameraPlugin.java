@@ -15,7 +15,6 @@ import com.getcapacitor.FileUtils;
 import com.getcapacitor.JSArray;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Logger;
-import com.getcapacitor.PermissionResponse;
 import com.getcapacitor.PermissionState;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
@@ -483,8 +482,7 @@ public class CameraPlugin extends Plugin {
                 checkPermissions(call);
             } else {
                 // we need to ask about photos so request storage permissions
-                requestPermissionForAliases(new String[] { "photos" }, call, basePermissionLauncher);
-                //requestPermissionForAliases(new String[] { "photos" }, call);
+                requestPermissionForAlias("photos", call);
             }
         }
     }

@@ -9,7 +9,6 @@ import com.capacitorjs.plugins.filesystem.exceptions.DirectoryNotFoundException;
 import com.getcapacitor.JSArray;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Logger;
-import com.getcapacitor.PermissionResponse;
 import com.getcapacitor.PermissionState;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;

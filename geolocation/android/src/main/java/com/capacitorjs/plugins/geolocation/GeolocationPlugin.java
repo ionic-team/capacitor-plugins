@@ -30,8 +30,8 @@ public class GeolocationPlugin extends Plugin {
     }
 
     /**
-     * Gets a snapshot of the current device position if permissions are granted. If not,
-     * the call is rejected in ####.
+     * Gets a snapshot of the current device position if permission is granted. The call continues
+     * in the {@link #completeCurrentPosition(PluginCall, Map)} method if a permission request is required.
      *
      * @param call Plugin call
      */
@@ -44,6 +44,12 @@ public class GeolocationPlugin extends Plugin {
         }
     }
 
+    /**
+     * Completes the getCurrentPosition plugin call after a permission request
+     * @see #getCurrentPosition(PluginCall)
+     * @param call the plugin call
+     * @param status the results of the permission request
+     */
     private void completeCurrentPosition(PluginCall call, Map<String, PermissionState> status) {
         if (status.get("location") == PermissionState.GRANTED) {
             boolean enableHighAccuracy = call.getBoolean("enableHighAccuracy", false);
@@ -71,10 +77,10 @@ public class GeolocationPlugin extends Plugin {
     }
 
     /**
-     * Begins watching for live location changes if permissions are granted. If not,
-     * the call is rejected in ####)}.
+     * Begins watching for live location changes if permission is granted. The call continues
+     * in the {@link #completeWatchPosition(PluginCall, Map)} method if a permission request is required.
      *
-     * @param call Plugin call
+     * @param call the plugin call
      */
     @PluginMethod(returnType = PluginMethod.RETURN_CALLBACK, permissionCallback = "completeWatchPosition")
     public void watchPosition(PluginCall call) {
@@ -86,6 +92,12 @@ public class GeolocationPlugin extends Plugin {
         }
     }
 
+    /**
+     * Completes the watchPosition plugin call after a permission request
+     * @see #watchPosition(PluginCall)
+     * @param call the plugin call
+     * @param status the results of the permission request
+     */
     private void completeWatchPosition(PluginCall call, Map<String, PermissionState> status) {
         if (status.get("location") == PermissionState.GRANTED) {
             startWatch(call);
