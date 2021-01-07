@@ -211,7 +211,7 @@ private extension CameraPlugin {
                 return
             }
             call?.resolve([
-                "path": fileURL.path,
+                "path": fileURL.absoluteString,
                 "exif": processedImage.exifData,
                 "webPath": webURL.path,
                 "format": "jpeg"
