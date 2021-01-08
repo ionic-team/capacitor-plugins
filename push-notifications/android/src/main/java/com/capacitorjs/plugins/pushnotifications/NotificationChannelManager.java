@@ -12,6 +12,8 @@ import com.getcapacitor.JSArray;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Logger;
 import com.getcapacitor.PluginCall;
+import com.getcapacitor.util.WebColor;
+
 import java.util.List;
 
 public class NotificationChannelManager {
@@ -67,7 +69,7 @@ public class NotificationChannelManager {
             String lightColor = channel.getString(CHANNEL_LIGHT_COLOR);
             if (lightColor != null) {
                 try {
-                    notificationChannel.setLightColor(Color.parseColor(lightColor));
+                    notificationChannel.setLightColor(WebColor.parseColor(lightColor));
                 } catch (IllegalArgumentException ex) {
                     Logger.error(Logger.tags("NotificationChannel"), "Invalid color provided for light color.", null);
                 }

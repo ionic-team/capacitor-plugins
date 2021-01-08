@@ -270,10 +270,9 @@ export interface Channel {
   /**
    * Android only: Sets the notification light color for notifications posted to this channel, if lights are enabled on this channel and the device supports that feature.
    *
-   * Supported color formats:
-   *
-   * #RRGGBB
-   * #AARRGGBB
+   * Supported color formats: 
+   * #RRGGBB 
+   * #RRGGBBAA
    *
    * The following names are also accepted: red, blue, green, black, white, gray, cyan, magenta, yellow, lightgray, darkgray, grey, lightgrey, darkgrey, aqua, fuchsia, lime, maroon, navy, olive, purple, silver, and teal
    *
