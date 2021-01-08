@@ -13,7 +13,6 @@ import com.getcapacitor.JSObject;
 import com.getcapacitor.Logger;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.util.WebColor;
-
 import java.util.List;
 
 public class NotificationChannelManager {
