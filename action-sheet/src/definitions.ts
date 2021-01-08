@@ -20,10 +20,10 @@ export interface ShowActionsOptions {
    *
    * @since 1.0.0
    */
-  options: ActionSheetSchema[];
+  options: ActionSheetButton[];
 }
 
-export enum ActionSheetSchemaStyle {
+export enum ActionSheetButtonStyle {
   /**
    * Default style of the option.
    *
@@ -47,7 +47,7 @@ export enum ActionSheetSchemaStyle {
   Cancel = 'CANCEL',
 }
 
-export interface ActionSheetSchema {
+export interface ActionSheetButton {
   /**
    * The title of the option
    *
@@ -62,7 +62,7 @@ export interface ActionSheetSchema {
    *
    * @since 1.0.0
    */
-  style?: ActionSheetSchemaStyle;
+  style?: ActionSheetButtonStyle;
 
   /**
    * Icon for the option (ionicon naming convention)
@@ -106,13 +106,13 @@ export type ActionSheetOptions = ShowActionsOptions;
 export type ActionSheetResult = ShowActionsResult;
 
 /**
- * @deprecated Use `ActionSheetSchema`.
+ * @deprecated Use `ActionSheetButton`.
  * @since 1.0.0
  */
-export type ActionSheetOption = ActionSheetSchema;
+export type ActionSheetOption = ActionSheetButton;
 
 /**
- * @deprecated Use `ActionSheetSchemaStyle`.
+ * @deprecated Use `ActionSheetButtonStyle`.
  * @since 1.0.0
  */
-export const ActionSheetOptionStyle = ActionSheetSchemaStyle;
+export const ActionSheetOptionStyle = ActionSheetButtonStyle;
