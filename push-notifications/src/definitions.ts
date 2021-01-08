@@ -301,7 +301,7 @@ export interface Channel {
    * Only supported if lights are enabled on this channel and the device
    * supports it.
    *
-   * Supported color formats are `#RRGGBB` and `#AARRGGBB`.
+   * Supported color formats are `#RRGGBB` and `#RRGGBBAA`.
    *
    * @since 1.0.0
    */
