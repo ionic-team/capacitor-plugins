@@ -44,7 +44,7 @@
   },
   "devDependencies": {
     "@capacitor/android": "^3.0.0-alpha.12",
-    "@capacitor/cli": "^3.0.0-alpha.9",
+    "@capacitor/cli": "^3.0.0-alpha.12",
     "@capacitor/core": "^3.0.0-alpha.12",
     "@capacitor/docgen": "0.0.14",
     "@capacitor/ios": "^3.0.0-alpha.12",
@@ -60,7 +60,7 @@
     "typescript": "~4.0.3"
   },
   "peerDependencies": {
-    "@capacitor/core": "^3.0.0-alpha.9"
+    "@capacitor/core": "^3.0.0-alpha.12"
   },
   "prettier": "@ionic/prettier-config",
   "swiftlint": "@ionic/swiftlint-config",
