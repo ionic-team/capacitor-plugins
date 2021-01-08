@@ -99,9 +99,9 @@ register() => Promise<void>
 
 Register the app to receive push notifications.
 
-Will trigger registration event with the push token or registrationError if there was some problem.
-
-Doesn't prompt the user for notification permissions, use requestPermission() first.
+This method will trigger the `'registration'` event with the push token or
+`'registrationError'` if there was a problem. It does prompt the user for
+notification permissions, use `requestPermissions()` first.
 
 **Since:** 1.0.0
 
@@ -114,7 +114,7 @@ Doesn't prompt the user for notification permissions, use requestPermission() fi
 getDeliveredNotifications() => Promise<PushNotificationDeliveredList>
 ```
 
-Returns the notifications that are visible on the notifications screen.
+Get a list of notifications that are visible on the notifications screen.
 
 **Returns:** <code>Promise&lt;<a href="#pushnotificationdeliveredlist">PushNotificationDeliveredList</a>&gt;</code>
 
@@ -129,11 +129,11 @@ Returns the notifications that are visible on the notifications screen.
 removeDeliveredNotifications(delivered: PushNotificationDeliveredList) => Promise<void>
 ```
 
-Removes the specified notifications from the notifications screen.
+Remove the specified notifications from the notifications screen.
 
-| Param           | Type                                                                                    | Description                      |
-| --------------- | --------------------------------------------------------------------------------------- | -------------------------------- |
-| **`delivered`** | <code><a href="#pushnotificationdeliveredlist">PushNotificationDeliveredList</a></code> | list of delivered notifications. |
+| Param           | Type                                                                                    |
+| --------------- | --------------------------------------------------------------------------------------- |
+| **`delivered`** | <code><a href="#pushnotificationdeliveredlist">PushNotificationDeliveredList</a></code> |
 
 **Since:** 1.0.0
 
@@ -146,7 +146,7 @@ Removes the specified notifications from the notifications screen.
 removeAllDeliveredNotifications() => Promise<void>
 ```
 
-Removes all the notifications from the notifications screen.
+Remove all the notifications from the notifications screen.
 
 **Since:** 1.0.0
 
@@ -159,11 +159,13 @@ Removes all the notifications from the notifications screen.
 createChannel(channel: Channel) => Promise<void>
 ```
 
-On Android O or newer (SDK 26+) creates a notification channel.
+Create a notification channel.
 
-| Param         | Type                                        | Description |
-| ------------- | ------------------------------------------- | ----------- |
-| **`channel`** | <code><a href="#channel">Channel</a></code> | to create.  |
+Only available on Android O or newer (SDK 26+).
+
+| Param         | Type                                        |
+| ------------- | ------------------------------------------- |
+| **`channel`** | <code><a href="#channel">Channel</a></code> |
 
 **Since:** 1.0.0
 
@@ -176,11 +178,13 @@ On Android O or newer (SDK 26+) creates a notification channel.
 deleteChannel(channel: Channel) => Promise<void>
 ```
 
-On Android O or newer (SDK 26+) deletes a notification channel.
+Delete a notification channel.
 
-| Param         | Type                                        | Description |
-| ------------- | ------------------------------------------- | ----------- |
-| **`channel`** | <code><a href="#channel">Channel</a></code> | to delete.  |
+Only available on Android O or newer (SDK 26+).
+
+| Param         | Type                                        |
+| ------------- | ------------------------------------------- |
+| **`channel`** | <code><a href="#channel">Channel</a></code> |
 
 **Since:** 1.0.0
 
@@ -193,7 +197,9 @@ On Android O or newer (SDK 26+) deletes a notification channel.
 listChannels() => Promise<ListChannelsResult>
 ```
 
-On Android O or newer (SDK 26+) list the available notification channels.
+List the available notification channels.
+
+Only available on Android O or newer (SDK 26+).
 
 **Returns:** <code>Promise&lt;<a href="#listchannelsresult">ListChannelsResult</a>&gt;</code>
 
@@ -238,13 +244,14 @@ Request permission to receive push notifications.
 addListener(eventName: 'registration', listenerFunc: (token: PushNotificationToken) => void) => PluginListenerHandle
 ```
 
-Event called when the push notification registration finished without problems.
+Called when the push notification registration finishes without problems.
+
 Provides the push notification token.
 
-| Param              | Type                                                                                        | Description                   |
-| ------------------ | ------------------------------------------------------------------------------------------- | ----------------------------- |
-| **`eventName`**    | <code>"registration"</code>                                                                 | registration.                 |
-| **`listenerFunc`** | <code>(token: <a href="#pushnotificationtoken">PushNotificationToken</a>) =&gt; void</code> | callback with the push token. |
+| Param              | Type                                                                                        |
+| ------------------ | ------------------------------------------------------------------------------------------- |
+| **`eventName`**    | <code>"registration"</code>                                                                 |
+| **`listenerFunc`** | <code>(token: <a href="#pushnotificationtoken">PushNotificationToken</a>) =&gt; void</code> |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
@@ -259,13 +266,14 @@ Provides the push notification token.
 addListener(eventName: 'registrationError', listenerFunc: (error: any) => void) => PluginListenerHandle
 ```
 
-Event called when the push notification registration finished with problems.
+Called when the push notification registration finished with problems.
+
 Provides an error with the registration problem.
 
-| Param              | Type                                 | Description                           |
-| ------------------ | ------------------------------------ | ------------------------------------- |
-| **`eventName`**    | <code>"registrationError"</code>     | registrationError.                    |
-| **`listenerFunc`** | <code>(error: any) =&gt; void</code> | callback with the registration error. |
+| Param              | Type                                 |
+| ------------------ | ------------------------------------ |
+| **`eventName`**    | <code>"registrationError"</code>     |
+| **`listenerFunc`** | <code>(error: any) =&gt; void</code> |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
@@ -280,12 +288,12 @@ Provides an error with the registration problem.
 addListener(eventName: 'pushNotificationReceived', listenerFunc: (notification: PushNotificationSchema) => void) => PluginListenerHandle
 ```
 
-Event called when the device receives a push notification.
+Called when the device receives a push notification.
 
-| Param              | Type                                                                                                 | Description                              |
-| ------------------ | ---------------------------------------------------------------------------------------------------- | ---------------------------------------- |
-| **`eventName`**    | <code>"pushNotificationReceived"</code>                                                              | pushNotificationReceived.                |
-| **`listenerFunc`** | <code>(notification: <a href="#pushnotificationschema">PushNotificationSchema</a>) =&gt; void</code> | callback with the received notification. |
+| Param              | Type                                                                                                 |
+| ------------------ | ---------------------------------------------------------------------------------------------------- |
+| **`eventName`**    | <code>"pushNotificationReceived"</code>                                                              |
+| **`listenerFunc`** | <code>(notification: <a href="#pushnotificationschema">PushNotificationSchema</a>) =&gt; void</code> |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
@@ -300,12 +308,12 @@ Event called when the device receives a push notification.
 addListener(eventName: 'pushNotificationActionPerformed', listenerFunc: (notification: PushNotificationActionPerformed) => void) => PluginListenerHandle
 ```
 
-Event called when an action is performed on a pusn notification.
+Called when an action is performed on a push notification.
 
-| Param              | Type                                                                                                                   | Description                            |
-| ------------------ | ---------------------------------------------------------------------------------------------------------------------- | -------------------------------------- |
-| **`eventName`**    | <code>"pushNotificationActionPerformed"</code>                                                                         | pushNotificationActionPerformed.       |
-| **`listenerFunc`** | <code>(notification: <a href="#pushnotificationactionperformed">PushNotificationActionPerformed</a>) =&gt; void</code> | callback with the notification action. |
+| Param              | Type                                                                                                                   |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------------- |
+| **`eventName`**    | <code>"pushNotificationActionPerformed"</code>                                                                         |
+| **`listenerFunc`** | <code>(notification: <a href="#pushnotificationactionperformed">PushNotificationActionPerformed</a>) =&gt; void</code> |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
@@ -339,34 +347,34 @@ Remove all native listeners for this plugin.
 
 #### PushNotificationSchema
 
-| Prop               | Type                 | Description                                                                                                      | Since |
-| ------------------ | -------------------- | ---------------------------------------------------------------------------------------------------------------- | ----- |
-| **`title`**        | <code>string</code>  | The notification title                                                                                           | 1.0.0 |
-| **`subtitle`**     | <code>string</code>  | The notification sub title                                                                                       | 1.0.0 |
-| **`body`**         | <code>string</code>  | The main text payload for the notification                                                                       | 1.0.0 |
-| **`id`**           | <code>string</code>  | The notification identifier                                                                                      | 1.0.0 |
-| **`badge`**        | <code>number</code>  | The number to display for the app icon badge                                                                     | 1.0.0 |
-| **`notification`** | <code>any</code>     |                                                                                                                  | 1.0.0 |
-| **`data`**         | <code>any</code>     | The notification identifier                                                                                      | 1.0.0 |
-| **`click_action`** | <code>string</code>  |                                                                                                                  | 1.0.0 |
-| **`link`**         | <code>string</code>  |                                                                                                                  | 1.0.0 |
-| **`group`**        | <code>string</code>  | Android only: set the group identifier for notification grouping, like threadIdentifier on iOS.                  | 1.0.0 |
-| **`groupSummary`** | <code>boolean</code> | Android only: designate this notification as the summary for a group (should be used with the `group` property). | 1.0.0 |
+| Prop               | Type                 | Description                                                                                                         | Since |
+| ------------------ | -------------------- | ------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`title`**        | <code>string</code>  | The notification title.                                                                                             | 1.0.0 |
+| **`subtitle`**     | <code>string</code>  | The notification subtitle.                                                                                          | 1.0.0 |
+| **`body`**         | <code>string</code>  | The main text payload for the notification.                                                                         | 1.0.0 |
+| **`id`**           | <code>string</code>  | The notification identifier.                                                                                        | 1.0.0 |
+| **`badge`**        | <code>number</code>  | The number to display for the app icon badge.                                                                       | 1.0.0 |
+| **`notification`** | <code>any</code>     |                                                                                                                     | 1.0.0 |
+| **`data`**         | <code>any</code>     |                                                                                                                     | 1.0.0 |
+| **`click_action`** | <code>string</code>  |                                                                                                                     | 1.0.0 |
+| **`link`**         | <code>string</code>  |                                                                                                                     | 1.0.0 |
+| **`group`**        | <code>string</code>  | Set the group identifier for notification grouping Only available on Android. Works like `threadIdentifier` on iOS. | 1.0.0 |
+| **`groupSummary`** | <code>boolean</code> | Designate this notification as the summary for an associated `group`. Only available on Android.                    | 1.0.0 |
 
 
 #### Channel
 
-| Prop              | Type                               | Description                                                                                                                                                                                                                                                                                                                                                                                                                             | Since |
-| ----------------- | ---------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`id`**          | <code>string</code>                | Android only: The channel identifier                                                                                                                                                                                                                                                                                                                                                                                                    | 1.0.0 |
-| **`name`**        | <code>string</code>                | Android only: Sets the user visible name of this channel.                                                                                                                                                                                                                                                                                                                                                                               | 1.0.0 |
-| **`description`** | <code>string</code>                | Android only: Sets the user visible description of this channel.                                                                                                                                                                                                                                                                                                                                                                        | 1.0.0 |
-| **`sound`**       | <code>string</code>                | Android only: Sets the sound that should be played for notifications posted to this channel. Notification channels with an importance of at least 3 should have a sound. Should specifify the file name of a sound file relative to the android app res/raw directory.                                                                                                                                                                  | 1.0.0 |
-| **`importance`**  | <code>1 \| 2 \| 5 \| 4 \| 3</code> | Android only: Sets the level of interruption of this notification channel.                                                                                                                                                                                                                                                                                                                                                              | 1.0.0 |
-| **`visibility`**  | <code>0 \| 1 \| -1</code>          | Android only: Sets whether notifications posted to this channel appear on the lockscreen or not, and if so, whether they appear in a redacted form.                                                                                                                                                                                                                                                                                     | 1.0.0 |
-| **`lights`**      | <code>boolean</code>               | Android only: Sets whether notifications posted to this channel should display notification lights, on devices that support that feature.                                                                                                                                                                                                                                                                                               | 1.0.0 |
-| **`lightColor`**  | <code>string</code>                | Android only: Sets the notification light color for notifications posted to this channel, if lights are enabled on this channel and the device supports that feature. Supported color formats: #RRGGBB #AARRGGBB The following names are also accepted: red, blue, green, black, white, gray, cyan, magenta, yellow, lightgray, darkgray, grey, lightgrey, darkgrey, aqua, fuchsia, lime, maroon, navy, olive, purple, silver, and teal | 1.0.0 |
-| **`vibration`**   | <code>boolean</code>               | Android only: Sets whether notification posted to this channel should vibrate.                                                                                                                                                                                                                                                                                                                                                          | 1.0.0 |
+| Prop              | Type                               | Description                                                                                                                                                                                                                                                | Since |
+| ----------------- | ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`id`**          | <code>string</code>                | The channel identifier.                                                                                                                                                                                                                                    | 1.0.0 |
+| **`name`**        | <code>string</code>                | The human-friendly name of this channel (presented to the user).                                                                                                                                                                                           | 1.0.0 |
+| **`description`** | <code>string</code>                | The description of this channel (presented to the user).                                                                                                                                                                                                   | 1.0.0 |
+| **`sound`**       | <code>string</code>                | The sound that should be played for notifications posted to this channel. Notification channels with an importance of at least `3` should have a sound. The file name of a sound file should be specified relative to the android app `res/raw` directory. | 1.0.0 |
+| **`importance`**  | <code>1 \| 2 \| 5 \| 4 \| 3</code> | The level of interruption for notifications posted to this channel.                                                                                                                                                                                        | 1.0.0 |
+| **`visibility`**  | <code>0 \| 1 \| -1</code>          | The visibility of notifications posted to this channel. This setting is for whether notifications posted to this channel appear on the lockscreen or not, and if so, whether they appear in a redacted form.                                               | 1.0.0 |
+| **`lights`**      | <code>boolean</code>               | Whether notifications posted to this channel should display notification lights, on devices that support it.                                                                                                                                               | 1.0.0 |
+| **`lightColor`**  | <code>string</code>                | The light color for notifications posted to this channel. Only supported if lights are enabled on this channel and the device supports it. Supported color formats are `#RRGGBB` and `#AARRGGBB`.                                                          | 1.0.0 |
+| **`vibration`**   | <code>boolean</code>               | Whether notifications posted to this channel should vibrate.                                                                                                                                                                                               | 1.0.0 |
 
 
 #### ListChannelsResult
