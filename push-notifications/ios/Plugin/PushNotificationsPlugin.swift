@@ -156,7 +156,7 @@ public class PushNotificationsPlugin: CAPPlugin {
     @objc public func didRegisterForRemoteNotificationsWithDeviceToken(notification: NSNotification) {
         appDelegateRegistrationCalled = true
         if let deviceToken = notification.object as? Data {
-            let deviceTokenString = deviceToken.reduce("", {$0 + String(format: "%02X", $1)})            
+            let deviceTokenString = deviceToken.reduce("", {$0 + String(format: "%02X", $1)})
             notifyListeners("registration", data: [
                 "value": deviceTokenString
             ])
