@@ -234,8 +234,8 @@ public class LocalNotificationsPlugin: CAPPlugin {
      */
     func handleScheduledNotification(_ call: CAPPluginCall, _ schedule: JSObject) throws -> UNNotificationTrigger? {
         var at: Date?
-        if let dateString = schedule["at"] as? String, let date = CAPPluginCall.jsDateFormatter.date(from: dateString) {
-            at = date
+        if let scheduleDate = schedule["at"] as? NSDate {
+            at = scheduleDate as Date
         }
         let every = schedule["every"] as? String
         let count = schedule["count"] as? Int ?? 1
@@ -533,9 +533,19 @@ public class LocalNotificationsPlugin: CAPPlugin {
     }
 
     func makePendingNotificationRequestJSObject(_ request: UNNotificationRequest) -> JSObject {
-        return [
-            "id": request.identifier
+        var jsObject: JSObject = [
+            "id": request.identifier,
+            "title": request.content.title,
+            "repeats": request.trigger?.repeats ?? false,
         ]
+        
+        if let trigger = request.trigger as? UNTimeIntervalNotificationTrigger {
+            let interval = trigger.timeInterval
+            let scheduleDate = Date(timeIntervalSinceNow: interval)            
+            jsObject["schedule"] = ISO8601DateFormatter().string(from: scheduleDate)
+        }
+        
+        return jsObject
     }
 
     @objc func createChannel(_ call: CAPPluginCall) {
