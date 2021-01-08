@@ -1,7 +1,5 @@
 import Foundation
 import Capacitor
-import FirebaseCore
-import FirebaseMessaging
 import UserNotifications
 
 enum PushNotificationError: Error {
@@ -21,7 +19,6 @@ public class PushNotificationsPlugin: CAPPlugin {
     private var appDelegateRegistrationCalled: Bool = false
 
     override public func load() {
-        FirebaseApp.configure()
         self.bridge?.notificationRouter.pushNotificationHandler = self.notificationDelegateHandler
         self.notificationDelegateHandler.plugin = self
 
@@ -159,13 +156,11 @@ public class PushNotificationsPlugin: CAPPlugin {
     @objc public func didRegisterForRemoteNotificationsWithDeviceToken(notification: NSNotification) {
         appDelegateRegistrationCalled = true
         if let deviceToken = notification.object as? Data {
-            let deviceTokenString = deviceToken.reduce("", {$0 + String(format: "%02X", $1)})
-            Messaging.messaging().apnsToken = deviceToken
+            let deviceTokenString = deviceToken.reduce("", {$0 + String(format: "%02X", $1)})            
             notifyListeners("registration", data: [
                 "value": deviceTokenString
             ])
         } else if let stringToken = notification.object as? String {
-            Messaging.messaging().apnsToken = stringToken.data(using: .utf8)
             notifyListeners("registration", data: [
                 "value": stringToken
             ])

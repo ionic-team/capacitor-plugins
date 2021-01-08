@@ -9,7 +9,6 @@ end
 
 target 'Plugin' do
   capacitor_pods
-  pod 'Firebase/Messaging', '~> 7.3'
 end
 
 target 'PluginTests' do
