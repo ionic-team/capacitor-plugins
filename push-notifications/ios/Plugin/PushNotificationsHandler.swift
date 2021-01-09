@@ -1,8 +1,8 @@
 import Capacitor
 import UserNotifications
 
-public class PushNotificationsDelegate: NSObject, NotificationHandlerProtocol {
-    public var plugin: CAPPlugin?
+public class PushNotificationsHandler: NSObject, NotificationHandlerProtocol {
+    public weak var plugin: CAPPlugin?
     var notificationRequestLookup = [String: JSObject]()
 
     public func requestPermissions(with completion: ((Bool, Error?) -> Void)? = nil) {

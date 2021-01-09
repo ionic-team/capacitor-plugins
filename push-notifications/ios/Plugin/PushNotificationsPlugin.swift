@@ -15,7 +15,7 @@ enum PushNotificationsPermissions: String {
 
 @objc(PushNotificationsPlugin)
 public class PushNotificationsPlugin: CAPPlugin {
-    private let notificationDelegateHandler = PushNotificationsDelegate()
+    private let notificationDelegateHandler = PushNotificationsHandler()
     private var appDelegateRegistrationCalled: Bool = false
 
     override public func load() {
@@ -24,12 +24,12 @@ public class PushNotificationsPlugin: CAPPlugin {
 
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(self.didRegisterForRemoteNotificationsWithDeviceToken(notification:)),
-                                               name: Notification.Name(Notification.Name.capacitorDidRegisterForRemoteNotifications.self.rawValue),
+                                               name: .capacitorDidRegisterForRemoteNotifications,
                                                object: nil)
 
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(self.didFailToRegisterForRemoteNotificationsWithError(notification:)),
-                                               name: Notification.Name(Notification.Name.capacitorDidFailToRegisterForRemoteNotifications.self.rawValue),
+                                               name: .capacitorDidFailToRegisterForRemoteNotifications,
                                                object: nil)
     }
 
