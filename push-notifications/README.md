@@ -79,12 +79,13 @@ An empty Array can be provided if none of the previous options are desired. `pus
 * [`listChannels()`](#listchannels)
 * [`checkPermissions()`](#checkpermissions)
 * [`requestPermissions()`](#requestpermissions)
-* [`addListener(...)`](#addlistener)
-* [`addListener(...)`](#addlistener)
-* [`addListener(...)`](#addlistener)
-* [`addListener(...)`](#addlistener)
+* [`addListener('registration', ...)`](#addlistenerregistration-)
+* [`addListener('registrationError', ...)`](#addlistenerregistrationerror-)
+* [`addListener('pushNotificationReceived', ...)`](#addlistenerpushnotificationreceived-)
+* [`addListener('pushNotificationActionPerformed', ...)`](#addlistenerpushnotificationactionperformed-)
 * [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
+* [Type Aliases](#type-aliases)
 
 </docgen-index>
 
@@ -238,7 +239,7 @@ Request permission to receive push notifications.
 --------------------
 
 
-### addListener(...)
+### addListener('registration', ...)
 
 ```typescript
 addListener(eventName: 'registration', listenerFunc: (token: PushNotificationToken) => void) => PluginListenerHandle
@@ -250,7 +251,7 @@ Provides the push notification token.
 
 | Param              | Type                                                                                        |
 | ------------------ | ------------------------------------------------------------------------------------------- |
-| **`eventName`**    | <code>"registration"</code>                                                                 |
+| **`eventName`**    | <code>'registration'</code>                                                                 |
 | **`listenerFunc`** | <code>(token: <a href="#pushnotificationtoken">PushNotificationToken</a>) =&gt; void</code> |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
@@ -260,7 +261,7 @@ Provides the push notification token.
 --------------------
 
 
-### addListener(...)
+### addListener('registrationError', ...)
 
 ```typescript
 addListener(eventName: 'registrationError', listenerFunc: (error: any) => void) => PluginListenerHandle
@@ -272,7 +273,7 @@ Provides an error with the registration problem.
 
 | Param              | Type                                 |
 | ------------------ | ------------------------------------ |
-| **`eventName`**    | <code>"registrationError"</code>     |
+| **`eventName`**    | <code>'registrationError'</code>     |
 | **`listenerFunc`** | <code>(error: any) =&gt; void</code> |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
@@ -282,7 +283,7 @@ Provides an error with the registration problem.
 --------------------
 
 
-### addListener(...)
+### addListener('pushNotificationReceived', ...)
 
 ```typescript
 addListener(eventName: 'pushNotificationReceived', listenerFunc: (notification: PushNotificationSchema) => void) => PluginListenerHandle
@@ -292,7 +293,7 @@ Called when the device receives a push notification.
 
 | Param              | Type                                                                                                 |
 | ------------------ | ---------------------------------------------------------------------------------------------------- |
-| **`eventName`**    | <code>"pushNotificationReceived"</code>                                                              |
+| **`eventName`**    | <code>'pushNotificationReceived'</code>                                                              |
 | **`listenerFunc`** | <code>(notification: <a href="#pushnotificationschema">PushNotificationSchema</a>) =&gt; void</code> |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
@@ -302,7 +303,7 @@ Called when the device receives a push notification.
 --------------------
 
 
-### addListener(...)
+### addListener('pushNotificationActionPerformed', ...)
 
 ```typescript
 addListener(eventName: 'pushNotificationActionPerformed', listenerFunc: (notification: PushNotificationActionPerformed) => void) => PluginListenerHandle
@@ -312,7 +313,7 @@ Called when an action is performed on a push notification.
 
 | Param              | Type                                                                                                                   |
 | ------------------ | ---------------------------------------------------------------------------------------------------------------------- |
-| **`eventName`**    | <code>"pushNotificationActionPerformed"</code>                                                                         |
+| **`eventName`**    | <code>'pushNotificationActionPerformed'</code>                                                                         |
 | **`listenerFunc`** | <code>(notification: <a href="#pushnotificationactionperformed">PushNotificationActionPerformed</a>) =&gt; void</code> |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
@@ -386,9 +387,9 @@ Remove all native listeners for this plugin.
 
 #### PermissionStatus
 
-| Prop          | Type                                                                      | Since |
-| ------------- | ------------------------------------------------------------------------- | ----- |
-| **`receive`** | <code>"prompt" \| "prompt-with-rationale" \| "granted" \| "denied"</code> | 1.0.0 |
+| Prop          | Type                                                        | Since |
+| ------------- | ----------------------------------------------------------- | ----- |
+| **`receive`** | <code><a href="#permissionstate">PermissionState</a></code> | 1.0.0 |
 
 
 #### PluginListenerHandle
@@ -412,5 +413,13 @@ Remove all native listeners for this plugin.
 | **`actionId`**     | <code>string</code>                                                       | 1.0.0 |
 | **`inputValue`**   | <code>string</code>                                                       | 1.0.0 |
 | **`notification`** | <code><a href="#pushnotificationschema">PushNotificationSchema</a></code> | 1.0.0 |
+
+
+### Type Aliases
+
+
+#### PermissionState
+
+<code>'prompt' | 'prompt-with-rationale' | 'granted' | 'denied'</code>
 
 </docgen-api>
