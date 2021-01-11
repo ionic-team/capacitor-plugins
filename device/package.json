@@ -2,7 +2,8 @@
   "name": "@capacitor/device",
   "version": "0.3.2",
   "description": "The Device API exposes internal information about the device, such as the model and operating system version, along with user information such as unique ids.",
-  "main": "dist/esm/index.js",
+  "main": "dist/plugin.cjs.js",
+  "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
   "unpkg": "dist/plugin.js",
   "files": [
