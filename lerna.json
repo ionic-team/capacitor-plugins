@@ -15,6 +15,7 @@
     "local-notifications",
     "motion",
     "network",
+    "push-notifications",
     "screen-reader",
     "share",
     "splash-screen",
