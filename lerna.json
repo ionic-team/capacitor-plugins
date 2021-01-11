@@ -14,6 +14,7 @@
     "keyboard",
     "motion",
     "network",
+    "push-notifications",
     "screen-reader",
     "share",
     "splash-screen",
