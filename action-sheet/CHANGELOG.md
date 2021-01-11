@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.3](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/action-sheet@0.2.2...@capacitor/action-sheet@0.2.3) (2021-01-08)
+
+
+### Bug Fixes
+
+* **action-sheet:** add back deprecated `ActionSheetOptionStyle` type ([e026425](https://github.com/ionic-team/capacitor-plugins/commit/e0264256532624d5892e9b5468be89cd400cf823))
+
+
+
+
+
 ## [0.2.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/action-sheet@0.2.1...@capacitor/action-sheet@0.2.2) (2020-12-27)
 
 **Note:** Version bump only for package @capacitor/action-sheet
