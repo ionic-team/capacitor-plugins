@@ -129,9 +129,9 @@ Create a notification channel.
 
 Only available for Android.
 
-| Param         | Type                                                                |
-| ------------- | ------------------------------------------------------------------- |
-| **`channel`** | <code><a href="#notificationchannel">NotificationChannel</a></code> |
+| Param         | Type                                        |
+| ------------- | ------------------------------------------- |
+| **`channel`** | <code><a href="#channel">Channel</a></code> |
 
 **Since:** 1.0.0
 
@@ -148,9 +148,9 @@ Delete a notification channel.
 
 Only available for Android.
 
-| Param         | Type                                                                |
-| ------------- | ------------------------------------------------------------------- |
-| **`channel`** | <code><a href="#notificationchannel">NotificationChannel</a></code> |
+| Param         | Type                                        |
+| ------------- | ------------------------------------------- |
+| **`channel`** | <code><a href="#channel">Channel</a></code> |
 
 **Since:** 1.0.0
 
@@ -452,26 +452,26 @@ An action that can be taken when a notification is displayed.
 | **`value`** | <code>boolean</code> | Whether or not the device has local notifications enabled. | 1.0.0 |
 
 
-#### NotificationChannel
+#### Channel
 
-| Prop              | Type                               | Description                                                                                                                                                                                                                     | Since |
-| ----------------- | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`id`**          | <code>string</code>                | The channel identifier.                                                                                                                                                                                                         | 1.0.0 |
-| **`name`**        | <code>string</code>                | The channel name.                                                                                                                                                                                                               | 1.0.0 |
-| **`description`** | <code>string</code>                | The channel description.                                                                                                                                                                                                        | 1.0.0 |
-| **`sound`**       | <code>string</code>                | The sound that is played for notifications posted to this channel.                                                                                                                                                              | 1.0.0 |
-| **`importance`**  | <code>1 \| 2 \| 5 \| 4 \| 3</code> | The level of interruption of notifications posted to this channel. See the `PRIORITY_*` constants of [`NotificationCompat`](https://developer.android.com/reference/androidx/core/app/NotificationCompat) for more information. | 1.0.0 |
-| **`visibility`**  | <code>0 \| 1 \| -1</code>          | The visibility level of notifications posted to this channel. See the `VISIBILITY_*` constants of [`NotificationCompat`](https://developer.android.com/reference/androidx/core/app/NotificationCompat) for more information.    | 1.0.0 |
-| **`lights`**      | <code>boolean</code>               | Whether or not notifications posted to this channel should display notification lights.                                                                                                                                         | 1.0.0 |
-| **`lightColor`**  | <code>string</code>                | The color of notification lights when using the `lights` option. This can be any value that [`Color.parseColor()`](https://developer.android.com/reference/android/graphics/Color#parseColor(java.lang.String)) expects.        | 1.0.0 |
-| **`vibration`**   | <code>boolean</code>               | Whether or not notifications posted to this channel should vibrate the device.                                                                                                                                                  | 1.0.0 |
+| Prop              | Type                               | Description                                                                                                                                                                                                                                                | Since |
+| ----------------- | ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`id`**          | <code>string</code>                | The channel identifier.                                                                                                                                                                                                                                    | 1.0.0 |
+| **`name`**        | <code>string</code>                | The human-friendly name of this channel (presented to the user).                                                                                                                                                                                           | 1.0.0 |
+| **`description`** | <code>string</code>                | The description of this channel (presented to the user).                                                                                                                                                                                                   | 1.0.0 |
+| **`sound`**       | <code>string</code>                | The sound that should be played for notifications posted to this channel. Notification channels with an importance of at least `3` should have a sound. The file name of a sound file should be specified relative to the android app `res/raw` directory. | 1.0.0 |
+| **`importance`**  | <code>1 \| 2 \| 5 \| 4 \| 3</code> | The level of interruption for notifications posted to this channel.                                                                                                                                                                                        | 1.0.0 |
+| **`visibility`**  | <code>0 \| 1 \| -1</code>          | The visibility of notifications posted to this channel. This setting is for whether notifications posted to this channel appear on the lockscreen or not, and if so, whether they appear in a redacted form.                                               | 1.0.0 |
+| **`lights`**      | <code>boolean</code>               | Whether notifications posted to this channel should display notification lights, on devices that support it.                                                                                                                                               | 1.0.0 |
+| **`lightColor`**  | <code>string</code>                | The light color for notifications posted to this channel. Only supported if lights are enabled on this channel and the device supports it. Supported color formats are `#RRGGBB` and `#RRGGBBAA`.                                                          | 1.0.0 |
+| **`vibration`**   | <code>boolean</code>               | Whether notifications posted to this channel should vibrate.                                                                                                                                                                                               | 1.0.0 |
 
 
 #### ListChannelsResult
 
-| Prop           | Type                               | Description                        | Since |
-| -------------- | ---------------------------------- | ---------------------------------- | ----- |
-| **`channels`** | <code>NotificationChannel[]</code> | The list of notification channels. | 1.0.0 |
+| Prop           | Type                   | Description                        | Since |
+| -------------- | ---------------------- | ---------------------------------- | ----- |
+| **`channels`** | <code>Channel[]</code> | The list of notification channels. | 1.0.0 |
 
 
 #### PermissionStatus
@@ -498,6 +498,11 @@ An action that can be taken when a notification is displayed.
 
 
 ### Type Aliases
+
+
+#### NotificationChannel
+
+<code><a href="#channel">Channel</a></code>
 
 
 #### PermissionState
