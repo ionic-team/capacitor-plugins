@@ -700,7 +700,7 @@ export interface ListChannelsResult {
    *
    * @since 1.0.0
    */
-  channels: NotificationChannel[];
+  channels: Channel[];
 }
 
 export interface PermissionStatus {
@@ -749,7 +749,7 @@ export interface EnabledResult {
   value: boolean;
 }
 
-export interface NotificationChannel {
+export interface Channel {
   /**
    * The channel identifier.
    *
@@ -758,75 +758,83 @@ export interface NotificationChannel {
   id: string;
 
   /**
-   * The channel name.
+   * The human-friendly name of this channel (presented to the user).
    *
    * @since 1.0.0
    */
   name: string;
 
   /**
-   * The channel description.
+   * The description of this channel (presented to the user).
    *
    * @since 1.0.0
    */
   description?: string;
 
   /**
-   * The sound that is played for notifications posted to this channel.
+   * The sound that should be played for notifications posted to this channel.
+   *
+   * Notification channels with an importance of at least `3` should have a
+   * sound.
+   *
+   * The file name of a sound file should be specified relative to the android
+   * app `res/raw` directory.
    *
    * @since 1.0.0
+   * @example "jingle.wav"
    */
   sound?: string;
 
   /**
-   * The level of interruption of notifications posted to this channel.
-   *
-   * See the `PRIORITY_*` constants of
-   * [`NotificationCompat`](https://developer.android.com/reference/androidx/core/app/NotificationCompat)
-   * for more information.
+   * The level of interruption for notifications posted to this channel.
    *
    * @since 1.0.0
    */
   importance: 1 | 2 | 3 | 4 | 5;
 
   /**
-   * The visibility level of notifications posted to this channel.
+   * The visibility of notifications posted to this channel.
    *
-   * See the `VISIBILITY_*` constants of
-   * [`NotificationCompat`](https://developer.android.com/reference/androidx/core/app/NotificationCompat)
-   * for more information.
+   * This setting is for whether notifications posted to this channel appear on
+   * the lockscreen or not, and if so, whether they appear in a redacted form.
    *
    * @since 1.0.0
    */
   visibility?: -1 | 0 | 1;
 
   /**
-   * Whether or not notifications posted to this channel should display
-   * notification lights.
+   * Whether notifications posted to this channel should display notification
+   * lights, on devices that support it.
    *
    * @since 1.0.0
    */
   lights?: boolean;
 
   /**
-   * The color of notification lights when using the `lights` option.
+   * The light color for notifications posted to this channel.
    *
-   * This can be any value that
-   * [`Color.parseColor()`](https://developer.android.com/reference/android/graphics/Color#parseColor(java.lang.String))
-   * expects.
+   * Only supported if lights are enabled on this channel and the device
+   * supports it.
+   *
+   * Supported color formats are `#RRGGBB` and `#RRGGBBAA`.
    *
    * @since 1.0.0
    */
   lightColor?: string;
 
   /**
-   * Whether or not notifications posted to this channel should vibrate the
-   * device.
+   * Whether notifications posted to this channel should vibrate.
    *
    * @since 1.0.0
    */
   vibration?: boolean;
 }
+
+/**
+ * @deprecated Use 'Channel`.
+ * @since 1.0.0
+ */
+export type NotificationChannel = Channel;
 
 /**
  * @deprecated Use `LocalNotificationDescriptor`.
