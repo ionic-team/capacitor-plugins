@@ -282,8 +282,8 @@ public class LocalNotificationsPlugin: CAPPlugin {
      * that only contains the components passed in.
      */
     func getDateComponents(_ at: JSObject) -> DateComponents {
-        //var dateInfo = Calendar.current.dateComponents(in: TimeZone.current, from: Date())
-        //dateInfo.calendar = Calendar.current
+        // var dateInfo = Calendar.current.dateComponents(in: TimeZone.current, from: Date())
+        // dateInfo.calendar = Calendar.current
         var dateInfo = DateComponents()
 
         if let year = at["year"] as? Int {
@@ -536,15 +536,15 @@ public class LocalNotificationsPlugin: CAPPlugin {
         var jsObject: JSObject = [
             "id": request.identifier,
             "title": request.content.title,
-            "repeats": request.trigger?.repeats ?? false,
+            "repeats": request.trigger?.repeats ?? false
         ]
-        
+
         if let trigger = request.trigger as? UNTimeIntervalNotificationTrigger {
             let interval = trigger.timeInterval
-            let scheduleDate = Date(timeIntervalSinceNow: interval)            
+            let scheduleDate = Date(timeIntervalSinceNow: interval)
             jsObject["schedule"] = ISO8601DateFormatter().string(from: scheduleDate)
         }
-        
+
         return jsObject
     }
 
