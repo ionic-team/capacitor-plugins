@@ -1,9 +1,9 @@
 import Capacitor
 import UserNotifications
 
-public class LocalNotificationsDelegate: NSObject, NotificationHandlerProtocol {
+public class LocalNotificationsHandler: NSObject, NotificationHandlerProtocol {
 
-    public var plugin: CAPPlugin?
+    public weak var plugin: CAPPlugin?
 
     // Local list of notification id -> JSObject for storing options
     // between notification requets

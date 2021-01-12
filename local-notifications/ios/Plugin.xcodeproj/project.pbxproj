@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		03FC29A292ACC40490383A1F /* Pods_Plugin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B2A61DA5A1F2DD4F959604D /* Pods_Plugin.framework */; };
 		20C0B05DCFC8E3958A738AF2 /* Pods_PluginTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F6753A823D3815DB436415E3 /* Pods_PluginTests.framework */; };
-		37F524A5255A0D730085E3FD /* LocalNotificationsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F524A4255A0D730085E3FD /* LocalNotificationsDelegate.swift */; };
+		37F524A5255A0D730085E3FD /* LocalNotificationsHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F524A4255A0D730085E3FD /* LocalNotificationsHandler.swift */; };
 		50ADFF92201F53D600D50D53 /* Plugin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50ADFF88201F53D600D50D53 /* Plugin.framework */; };
 		50ADFF97201F53D600D50D53 /* LocalNotificationsPluginTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50ADFF96201F53D600D50D53 /* LocalNotificationsPluginTests.swift */; };
 		50ADFF99201F53D600D50D53 /* LocalNotificationsPlugin.h in Headers */ = {isa = PBXBuildFile; fileRef = 50ADFF8B201F53D600D50D53 /* LocalNotificationsPlugin.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -29,7 +29,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		37F524A4255A0D730085E3FD /* LocalNotificationsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalNotificationsDelegate.swift; sourceTree = "<group>"; };
+		37F524A4255A0D730085E3FD /* LocalNotificationsHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalNotificationsHandler.swift; sourceTree = "<group>"; };
 		3B2A61DA5A1F2DD4F959604D /* Pods_Plugin.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Plugin.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		50ADFF88201F53D600D50D53 /* Plugin.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Plugin.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		50ADFF8B201F53D600D50D53 /* LocalNotificationsPlugin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LocalNotificationsPlugin.h; sourceTree = "<group>"; };
@@ -96,7 +96,7 @@
 				50ADFF8B201F53D600D50D53 /* LocalNotificationsPlugin.h */,
 				50ADFFA72020EE4F00D50D53 /* LocalNotificationsPlugin.m */,
 				50ADFF8C201F53D600D50D53 /* Info.plist */,
-				37F524A4255A0D730085E3FD /* LocalNotificationsDelegate.swift */,
+				37F524A4255A0D730085E3FD /* LocalNotificationsHandler.swift */,
 			);
 			path = Plugin;
 			sourceTree = "<group>";
@@ -306,7 +306,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				37F524A5255A0D730085E3FD /* LocalNotificationsDelegate.swift in Sources */,
+				37F524A5255A0D730085E3FD /* LocalNotificationsHandler.swift in Sources */,
 				50E1A94820377CB70090CE1A /* LocalNotificationsPlugin.swift in Sources */,
 				50ADFFA82020EE4F00D50D53 /* LocalNotificationsPlugin.m in Sources */,
 			);

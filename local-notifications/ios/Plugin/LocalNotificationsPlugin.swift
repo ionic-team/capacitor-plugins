@@ -25,7 +25,7 @@ enum LocalNotificationError: LocalizedError {
 
 @objc(LocalNotificationsPlugin)
 public class LocalNotificationsPlugin: CAPPlugin {
-    private let notificationDelegationHandler = LocalNotificationsDelegate()
+    private let notificationDelegationHandler = LocalNotificationsHandler()
 
     override public func load() {
         self.bridge?.notificationRouter.localNotificationHandler = self.notificationDelegationHandler
