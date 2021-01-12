@@ -533,19 +533,9 @@ public class LocalNotificationsPlugin: CAPPlugin {
     }
 
     func makePendingNotificationRequestJSObject(_ request: UNNotificationRequest) -> JSObject {
-        let jsObject: JSObject = [
+        return [
             "id": request.identifier
-            // "title": request.content.title,
-            // "repeats": request.trigger?.repeats ?? false
         ]
-
-        //        if let trigger = request.trigger as? UNTimeIntervalNotificationTrigger {
-        //            let interval = trigger.timeInterval
-        //            let scheduleDate = Date(timeIntervalSinceNow: interval)
-        //            jsObject["schedule"] = ISO8601DateFormatter().string(from: scheduleDate)
-        //        }
-
-        return jsObject
     }
 
     @objc func createChannel(_ call: CAPPluginCall) {
