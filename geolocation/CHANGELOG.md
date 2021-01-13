@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.3](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/geolocation@0.1.2...@capacitor/geolocation@0.1.3) (2021-01-13)
+
+**Note:** Version bump only for package @capacitor/geolocation
+
+
+
+
+
 ## [0.1.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/geolocation@0.1.1...@capacitor/geolocation@0.1.2) (2021-01-08)
 
 **Note:** Version bump only for package @capacitor/geolocation

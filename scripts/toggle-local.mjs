@@ -2,32 +2,67 @@ import { resolve } from 'path';
 
 import { PROJECTS } from './lib/capacitor.mjs';
 import { execute } from './lib/cli.mjs';
-import { readJson } from './lib/fs.mjs';
+import { unlink, readJSON, writeJSON } from './lib/fs.mjs';
+import { root } from './lib/repo.mjs';
 import { bootstrap, ls } from './lib/lerna.mjs';
-import {
-  getLatestVersion,
-  setLernaPackageDependencies,
-} from './lib/version.mjs';
+import { setPackageJsonDependencies } from './lib/version.mjs';
+
+const readMarkerFile = async p => {
+  try {
+    return await readJSON(p);
+  } catch (e) {
+    if (e.code === 'ENOENT') {
+      return null;
+    }
+
+    throw e;
+  }
+};
 
 execute(async () => {
-  const [path] = (await ls()).map(p => p.location);
-  const pkg = await readJson(resolve(path, 'package.json'));
+  const packages = await ls();
 
-  const entries = new Map();
+  const markerFilePath = resolve(root, '.local');
+  const markerFile = await readMarkerFile(markerFilePath);
+  const markerFileContents = Object.fromEntries(
+    await Promise.all(
+      packages.map(async p => {
+        const pkg = await readJSON(resolve(p.location, 'package.json'));
 
-  for (const project of PROJECTS) {
-    if (pkg.devDependencies[`@capacitor/${project}`]) {
-      entries.set(
-        `@capacitor/${project}`,
-        pkg.devDependencies[`@capacitor/${project}`].startsWith('file:')
-          ? `^${await getLatestVersion(`@capacitor/${project}`, 'next')}`
-          : `file:../../capacitor/${project}`,
-      );
-    }
-  }
+        return [
+          p.name,
+          Object.fromEntries(
+            Object.entries(pkg.devDependencies).filter(([k]) =>
+              PROJECTS.some(project => k === `@capacitor/${project}`),
+            ),
+          ),
+        ];
+      }),
+    ),
+  );
 
-  const packages = Object.fromEntries(entries);
+  await Promise.all(
+    packages.map(async p =>
+      setPackageJsonDependencies(
+        resolve(p.location, 'package.json'),
+        markerFile
+          ? markerFile[p.name]
+          : Object.fromEntries(
+              Object.entries(markerFileContents[p.name]).map(([k]) => [
+                k,
+                `file:../../capacitor/${k.replace(/^@capacitor\//, '')}`,
+              ]),
+            ),
+        'devDependencies',
+      ),
+    ),
+  );
 
-  await setLernaPackageDependencies(packages, 'devDependencies');
   await bootstrap();
+
+  if (markerFile) {
+    await unlink(markerFilePath);
+  } else {
+    await writeJSON(markerFilePath, markerFileContents);
+  }
 });
