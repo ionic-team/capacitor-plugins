@@ -1,6 +1,6 @@
 import { resolve } from 'path';
 
-import { readJson, writeJson } from './fs.mjs';
+import { readJSON, writeJSON } from './fs.mjs';
 import { ls } from './lerna.mjs';
 import * as cp from './subprocess.mjs';
 
@@ -9,7 +9,7 @@ export const setPackageJsonDependencies = async (
   packages,
   key = 'dependencies',
 ) => {
-  const pkg = await readJson(path);
+  const pkg = await readJSON(path);
 
   for (const [dep, version] of Object.entries(packages)) {
     if (pkg[key][dep]) {
@@ -17,7 +17,7 @@ export const setPackageJsonDependencies = async (
     }
   }
 
-  await writeJson(path, pkg);
+  await writeJSON(path, pkg);
 };
 
 export const setLernaPackageDependencies = async (
