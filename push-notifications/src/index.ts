@@ -7,4 +7,5 @@ const PushNotifications = registerPlugin<PushNotificationsPlugin>(
   {},
 );
 
+export * from './definitions';
 export { PushNotifications };
