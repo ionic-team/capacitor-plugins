@@ -1,6 +1,6 @@
 {
   "name": "@capacitor/text-zoom",
-  "version": "0.1.4",
+  "version": "0.2.0",
   "description": "The Text Zoom API provides the ability to change Web View text size for visual accessibility.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
