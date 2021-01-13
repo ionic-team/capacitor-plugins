@@ -1,6 +1,6 @@
 {
   "name": "@capacitor/push-notifications",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "The Push Notifications API provides access to native push notifications.",
   "main": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",

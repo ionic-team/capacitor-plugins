@@ -1,6 +1,6 @@
 {
   "name": "@capacitor/app-launcher",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "The AppLauncher API allows to open other apps",
   "main": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
