@@ -17,7 +17,6 @@ import com.getcapacitor.annotation.CapacitorPlugin;
 import com.getcapacitor.annotation.Permission;
 import java.io.*;
 import java.nio.charset.Charset;
-import java.util.Map;
 import org.json.JSONException;
 
 @CapacitorPlugin(
@@ -349,8 +348,8 @@ public class FilesystemPlugin extends Plugin {
         }
     }
 
-    private void readPermissionsCallback(PluginCall call, Map<String, PermissionState> status) {
-        if (status.get(READ_STORAGE) != PermissionState.GRANTED) {
+    private void readPermissionsCallback(PluginCall call) {
+        if (getPermissionState(READ_STORAGE) != PermissionState.GRANTED) {
             Logger.debug(getLogTag(), "User denied read storage permission");
             call.reject(PERMISSION_DENIED_ERROR);
             return;
@@ -372,8 +371,8 @@ public class FilesystemPlugin extends Plugin {
         }
     }
 
-    private void writePermissionsCallback(PluginCall call, Map<String, PermissionState> status) {
-        if (status.get(WRITE_STORAGE) != PermissionState.GRANTED) {
+    private void writePermissionsCallback(PluginCall call) {
+        if (getPermissionState(WRITE_STORAGE) != PermissionState.GRANTED) {
             Logger.debug(getLogTag(), "User denied write storage permission");
             call.reject(PERMISSION_DENIED_ERROR);
             return;
@@ -408,7 +407,7 @@ public class FilesystemPlugin extends Plugin {
      * @return Returns true if the permission is granted and false if it is denied.
      */
     private boolean isStoragePermissionGranted(String alias) {
-        return getPermissionStates().get(alias) == PermissionState.GRANTED;
+        return getPermissionState(alias) == PermissionState.GRANTED;
     }
 
     /**

@@ -138,8 +138,8 @@ public class CameraPlugin extends Plugin {
     private boolean checkCameraPermissions(PluginCall call) {
         // if the manifest does not contain the camera permissions key, we don't need to ask the user
         boolean needCameraPerms = hasDefinedPermissions(new String[] { Manifest.permission.CAMERA });
-        boolean hasCameraPerms = !needCameraPerms || hasPermission(Manifest.permission.CAMERA);
-        boolean hasPhotoPerms = hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        boolean hasCameraPerms = !needCameraPerms || getPermissionState("camera") == PermissionState.GRANTED;
+        boolean hasPhotoPerms = getPermissionState("photos") == PermissionState.GRANTED;
 
         // If we want to save to the gallery, we need two permissions
         if (settings.isSaveToGallery() && !(hasCameraPerms && hasPhotoPerms)) {
@@ -161,7 +161,7 @@ public class CameraPlugin extends Plugin {
     }
 
     private boolean checkPhotosPermissions(PluginCall call) {
-        if (!hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE)) {
+        if (getPermissionState("photos") != PermissionState.GRANTED) {
             requestPermissionForAlias("photos", call);
             return false;
         }
@@ -173,15 +173,14 @@ public class CameraPlugin extends Plugin {
      *
      * @see #getPhoto(PluginCall)
      * @param call the plugin call
-     * @param permissionStatus the results of the permission request
      */
-    private void cameraPermissionsCallback(PluginCall call, Map<String, PermissionState> permissionStatus) {
-        if (settings.getSource() == CameraSource.CAMERA && permissionStatus.get("camera") == PermissionState.DENIED) {
-            Logger.debug(getLogTag(), "User denied camera permission: " + permissionStatus.toString());
+    private void cameraPermissionsCallback(PluginCall call) {
+        if (settings.getSource() == CameraSource.CAMERA && getPermissionState("camera") != PermissionState.GRANTED) {
+            Logger.debug(getLogTag(), "User denied camera permission: " + getPermissionState("camera").toString());
             call.reject(PERMISSION_DENIED_ERROR);
             return;
-        } else if (settings.getSource() == CameraSource.PHOTOS && permissionStatus.get("photos") == PermissionState.DENIED) {
-            Logger.debug(getLogTag(), "User denied photos permission: " + permissionStatus.toString());
+        } else if (settings.getSource() == CameraSource.PHOTOS && getPermissionState("photos") != PermissionState.GRANTED) {
+            Logger.debug(getLogTag(), "User denied photos permission: " + getPermissionState("photos").toString());
             call.reject(PERMISSION_DENIED_ERROR);
             return;
         }
