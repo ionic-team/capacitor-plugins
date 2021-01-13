@@ -1,6 +1,6 @@
 {
   "name": "@capacitor/toast",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "The Toast API provides a notification pop up for displaying important information to a user. Just like real toast!",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
@@ -47,7 +47,7 @@
     "@capacitor/android": "^3.0.0-alpha.12",
     "@capacitor/core": "^3.0.0-alpha.12",
     "@capacitor/docgen": "0.0.14",
-    "@capacitor/ios": "^3.0.0-alpha.12",
+    "@capacitor/ios": "^3.0.0-alpha.13",
     "@ionic/eslint-config": "^0.3.0",
     "@ionic/prettier-config": "~1.0.1",
     "@ionic/swiftlint-config": "^1.1.2",

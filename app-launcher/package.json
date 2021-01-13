@@ -1,6 +1,6 @@
 {
   "name": "@capacitor/app-launcher",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "The AppLauncher API allows to open other apps",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
@@ -47,7 +47,7 @@
     "@capacitor/android": "^3.0.0-alpha.12",
     "@capacitor/core": "^3.0.0-alpha.12",
     "@capacitor/docgen": "0.0.14",
-    "@capacitor/ios": "^3.0.0-alpha.12",
+    "@capacitor/ios": "^3.0.0-alpha.13",
     "@ionic/eslint-config": "^0.3.0",
     "@ionic/prettier-config": "~1.0.1",
     "@ionic/swiftlint-config": "^1.1.2",
