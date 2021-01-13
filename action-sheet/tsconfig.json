@@ -3,7 +3,7 @@
     "allowUnreachableCode": false,
     "declaration": true,
     "esModuleInterop": true,
-    "lib": ["dom"],
+    "lib": ["dom", "es2017"],
     "module": "esnext",
     "moduleResolution": "node",
     "noFallthroughCasesInSwitch": true,

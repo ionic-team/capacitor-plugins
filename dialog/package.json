@@ -2,7 +2,8 @@
   "name": "@capacitor/dialog",
   "version": "0.2.4",
   "description": "The Dialog API provides methods for triggering native dialog windows for alerts, confirmations, and input prompts",
-  "main": "dist/esm/index.js",
+  "main": "dist/plugin.cjs.js",
+  "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
   "unpkg": "dist/plugin.js",
   "files": [
