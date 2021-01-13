@@ -58,11 +58,11 @@ execute(async () => {
     ),
   );
 
+  await bootstrap();
+
   if (markerFile) {
     await unlink(markerFilePath);
   } else {
-    // await bootstrap();
-
     await writeJSON(markerFilePath, markerFileContents);
   }
 });
