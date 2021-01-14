@@ -662,28 +662,14 @@ export interface Schedule {
    *
    * @since 1.0.0
    */
-  on?: {
-    year?: number;
-    month?: number;
-    day?: number;
-    hour?: number;
-    minute?: number;
-  };
+  on?: ScheduleOn;
 
   /**
    * Schedule a notification on a particular interval.
    *
    * @since 1.0.0
    */
-  every?:
-    | 'year'
-    | 'month'
-    | 'two-weeks'
-    | 'week'
-    | 'day'
-    | 'hour'
-    | 'minute'
-    | 'second';
+  every?: ScheduleEvery;
 
   /**
    * Limit the number times a notification is delivered by the interval
@@ -693,6 +679,24 @@ export interface Schedule {
    */
   count?: number;
 }
+
+export interface ScheduleOn {
+  year?: number;
+  month?: number;
+  day?: number;
+  hour?: number;
+  minute?: number;
+}
+
+export type ScheduleEvery =
+  | 'year'
+  | 'month'
+  | 'two-weeks'
+  | 'week'
+  | 'day'
+  | 'hour'
+  | 'minute'
+  | 'second';
 
 export interface ListChannelsResult {
   /**
@@ -790,7 +794,7 @@ export interface Channel {
    *
    * @since 1.0.0
    */
-  importance: 1 | 2 | 3 | 4 | 5;
+  importance: Importance;
 
   /**
    * The visibility of notifications posted to this channel.
@@ -800,7 +804,7 @@ export interface Channel {
    *
    * @since 1.0.0
    */
-  visibility?: -1 | 0 | 1;
+  visibility?: Visibility;
 
   /**
    * Whether notifications posted to this channel should display notification
@@ -829,6 +833,9 @@ export interface Channel {
    */
   vibration?: boolean;
 }
+
+export type Importance = 1 | 2 | 3 | 4 | 5;
+export type Visibility = -1 | 0 | 1;
 
 /**
  * @deprecated Use 'Channel`.
