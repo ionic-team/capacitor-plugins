@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.net.Uri;
+import androidx.activity.OnBackPressedCallback;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Logger;
 import com.getcapacitor.Plugin;
@@ -38,31 +39,20 @@ public class AppPlugin extends Plugin {
                     notifyListeners(EVENT_RESTORED_RESULT, result.getWrappedResult(), true);
                 }
             );
-    }
-
-    @Override
-    @PluginMethod(returnType = PluginMethod.RETURN_NONE)
-    public void addListener(PluginCall call) {
-        super.addListener(call);
-        String eventName = call.getString("eventName");
-        if (eventName.equals(EVENT_BACK_BUTTON)) {
-            bridge
-                .getApp()
-                .setBackButtonListener(
-                    () -> {
-                        notifyListeners(EVENT_BACK_BUTTON, new JSObject(), true);
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (!hasListeners(EVENT_BACK_BUTTON)) {
+                    if (bridge.getWebView().canGoBack()) {
+                        bridge.getWebView().goBack();
                     }
-                );
-        }
-    }
-
-    @Override
-    @PluginMethod(returnType = PluginMethod.RETURN_NONE)
-    public void removeListener(PluginCall call) {
-        super.removeListener(call);
-        if (!hasListeners(EVENT_BACK_BUTTON)) {
-            bridge.getApp().setBackButtonListener(null);
-        }
+                } else {
+                    notifyListeners(EVENT_BACK_BUTTON, new JSObject(), true);
+                    bridge.triggerJSEvent("backbutton", "document");
+                }
+            }
+        };
+        getActivity().getOnBackPressedDispatcher().addCallback(getActivity(), callback);
     }
 
     @Override
@@ -122,7 +112,6 @@ public class AppPlugin extends Plugin {
     @Override
     protected void handleOnNewIntent(Intent intent) {
         super.handleOnNewIntent(intent);
-        System.out.println("handle on new intent");
         // read intent
         String action = intent.getAction();
         Uri url = intent.getData();
@@ -142,7 +131,6 @@ public class AppPlugin extends Plugin {
     }
 
     private void unsetAppListeners() {
-        bridge.getApp().setBackButtonListener(null);
         bridge.getApp().setStatusChangeListener(null);
         bridge.getApp().setAppRestoredListener(null);
     }
