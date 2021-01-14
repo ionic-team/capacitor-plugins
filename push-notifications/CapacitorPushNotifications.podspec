@@ -15,4 +15,7 @@ Pod::Spec.new do |s|
   s.dependency 'Capacitor'
   s.static_framework = true
   s.swift_version = '5.1'
+  s.user_target_xcconfig = {
+    'SWIFT_ACTIVE_COMPILATION_CONDITIONS' => 'USE_PUSH'
+  }
 end
