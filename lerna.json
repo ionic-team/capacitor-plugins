@@ -12,6 +12,7 @@
     "geolocation",
     "haptics",
     "keyboard",
+    "local-notifications",
     "motion",
     "network",
     "push-notifications",
