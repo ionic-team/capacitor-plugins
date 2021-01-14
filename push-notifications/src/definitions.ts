@@ -301,7 +301,7 @@ export interface Channel {
    *
    * @since 1.0.0
    */
-  importance: 1 | 2 | 3 | 4 | 5;
+  importance: Importance;
 
   /**
    * The visibility of notifications posted to this channel.
@@ -311,7 +311,7 @@ export interface Channel {
    *
    * @since 1.0.0
    */
-  visibility?: -1 | 0 | 1;
+  visibility?: Visibility;
 
   /**
    * Whether notifications posted to this channel should display notification
@@ -340,6 +340,9 @@ export interface Channel {
    */
   vibration?: boolean;
 }
+
+export type Importance = 1 | 2 | 3 | 4 | 5;
+export type Visibility = -1 | 0 | 1;
 
 export interface ListChannelsResult {
   /**
