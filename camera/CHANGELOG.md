@@ -3,6 +3,41 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.2.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@0.1.4...@capacitor/camera@0.2.0) (2021-01-13)
+
+
+### Bug Fixes
+
+* add es2017 lib to tsconfig ([#180](https://github.com/ionic-team/capacitor-plugins/issues/180)) ([2c3776c](https://github.com/ionic-team/capacitor-plugins/commit/2c3776c38ca025c5ee965dec10ccf1cdb6c02e2f))
+
+
+### Features
+
+* add commonjs output format ([#179](https://github.com/ionic-team/capacitor-plugins/issues/179)) ([8e9e098](https://github.com/ionic-team/capacitor-plugins/commit/8e9e09862064b3f6771d7facbc4008e995d9b463))
+
+
+
+
+
+## [0.1.4](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@0.1.3...@capacitor/camera@0.1.4) (2021-01-13)
+
+**Note:** Version bump only for package @capacitor/camera
+
+
+
+
+
+## [0.1.3](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@0.1.2...@capacitor/camera@0.1.3) (2021-01-08)
+
+
+### Bug Fixes
+
+* **camera:** return file URL for path, not system path ([#170](https://github.com/ionic-team/capacitor-plugins/issues/170)) ([8a9e5c3](https://github.com/ionic-team/capacitor-plugins/commit/8a9e5c3dba3b232a1cca9f9a1e9b4520022abc09))
+
+
+
+
+
 ## [0.1.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@0.1.1...@capacitor/camera@0.1.2) (2020-12-28)
 
 
