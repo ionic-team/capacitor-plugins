@@ -43,7 +43,15 @@ public class LocalNotificationsPlugin: CAPPlugin {
         var ids = [String]()
 
         for notification in notifications {
-            guard let identifier = notification["id"] as? Int else {
+            var identifierValue = notification["id"] as? Int
+
+            if identifierValue == nil {
+                if let identifierString = notification["id"] as? String {
+                    identifierValue = Int(identifierString)
+                }
+            }
+
+            guard let identifier = identifierValue else {
                 call.reject("Notification missing identifier")
                 return
             }
