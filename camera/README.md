@@ -9,7 +9,7 @@ npm install @capacitor/camera
 npx cap sync
 ```
 
-## iOS Notes
+## iOS
 
 iOS requires the following usage description be added and filled out for your app in `Info.plist`:
 
@@ -19,7 +19,7 @@ iOS requires the following usage description be added and filled out for your ap
 
 Read about [Configuring `Info.plist`](https://capacitorjs.com/docs/ios/configuration#configuring-infoplist) in the [iOS Guide](https://capacitorjs.com/docs/ios) for more information on setting iOS permissions in Xcode
 
-## Android Notes
+## Android
 
 This API requires the following permissions be added to your `AndroidManifest.xml`:
 
@@ -33,6 +33,12 @@ The storage permissions are for reading/saving photo files.
 Read about [Setting Permissions](https://capacitorjs.com/docs/android/configuration#setting-permissions) in the [Android Guide](https://capacitorjs.com/docs/android) for more information on setting Android permissions.
 
 Additionally, because the Camera API launches a separate Activity to handle taking the photo, you should listen for `appRestoredResult` in the `App` plugin to handle any camera data that was sent in the case your app was terminated by the operating system while the Activity was running.
+
+### Variables
+
+This plugin will use the following project variables (defined in your app's `variables.gradle` file):
+
+- `androidxExifInterfaceVersion` (version of `androidx.exifinterface:exifinterface` to use)
 
 ## PWA Notes
 

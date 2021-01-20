@@ -11,6 +11,14 @@ npm install @capacitor/browser
 npx cap sync
 ```
 
+## Android
+
+### Variables
+
+This plugin will use the following project variables (defined in your app's `variables.gradle` file):
+
+- `androidxBrowserVersion` (version of `androidx.browser:browser` to use)
+
 ## Example
 
 ```typescript
