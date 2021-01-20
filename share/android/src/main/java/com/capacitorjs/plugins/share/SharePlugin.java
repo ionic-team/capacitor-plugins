@@ -6,18 +6,22 @@ import android.content.*;
 import android.net.Uri;
 import android.os.Build;
 import android.webkit.MimeTypeMap;
+
+import androidx.activity.result.ActivityResult;
 import androidx.core.content.FileProvider;
+
+import com.getcapacitor.ActivityCallback;
+import com.getcapacitor.Callback;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
+import com.getcapacitor.annotation.ActivityResultCallback;
 import com.getcapacitor.annotation.CapacitorPlugin;
 import java.io.File;
 
-@CapacitorPlugin(name = "Share", requestCodes = { SharePlugin.REQUEST_SHARE })
+@CapacitorPlugin(name = "Share")
 public class SharePlugin extends Plugin {
-
-    static final int REQUEST_SHARE = 9023;
 
     private BroadcastReceiver broadcastReceiver;
     private boolean stopped = false;
@@ -34,6 +38,17 @@ public class SharePlugin extends Plugin {
                     }
                 };
             getActivity().registerReceiver(broadcastReceiver, new IntentFilter(Intent.EXTRA_CHOSEN_COMPONENT));
+        }
+    }
+
+    @ActivityResultCallback
+    private void activityResult(PluginCall call, ActivityResult result) {
+        if (result.getResultCode() == Activity.RESULT_CANCELED) {
+            call.reject("Share canceled");
+        } else {
+            JSObject callResult = new JSObject();
+            callResult.put("activityType", chosenComponent != null ? chosenComponent.getPackageName() : "");
+            call.resolve(callResult);
         }
     }
 
@@ -89,7 +104,7 @@ public class SharePlugin extends Plugin {
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
             PendingIntent pi = PendingIntent.getBroadcast(
                 getContext(),
-                REQUEST_SHARE,
+                123,
                 new Intent(Intent.EXTRA_CHOSEN_COMPONENT),
                 PendingIntent.FLAG_UPDATE_CURRENT
             );
@@ -100,22 +115,7 @@ public class SharePlugin extends Plugin {
         }
         chooser.addCategory(Intent.CATEGORY_DEFAULT);
         stopped = false;
-        startActivityForResult(call, chooser, REQUEST_SHARE);
-    }
-
-    @Override
-    protected void handleOnActivityResult(PluginCall savedCall, int requestCode, int resultCode, Intent data) {
-        if (savedCall == null) {
-            return;
-        }
-
-        if (resultCode == Activity.RESULT_CANCELED && !stopped) {
-            savedCall.reject("Share canceled");
-        } else {
-            JSObject result = new JSObject();
-            result.put("activityType", chosenComponent != null ? chosenComponent.getPackageName() : "");
-            savedCall.resolve(result);
-        }
+        startActivityForResult(call, chooser, "activityResult");
     }
 
     @Override

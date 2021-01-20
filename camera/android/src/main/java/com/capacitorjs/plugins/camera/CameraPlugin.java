@@ -1,7 +1,6 @@
 package com.capacitorjs.plugins.camera;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -10,7 +9,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
+
+import androidx.activity.result.ActivityResult;
 import androidx.core.content.FileProvider;
+
 import com.getcapacitor.FileUtils;
 import com.getcapacitor.JSArray;
 import com.getcapacitor.JSObject;
@@ -19,7 +21,7 @@ import com.getcapacitor.PermissionState;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
-import com.getcapacitor.PluginRequestCodes;
+import com.getcapacitor.annotation.ActivityResultCallback;
 import com.getcapacitor.annotation.CapacitorPlugin;
 import com.getcapacitor.annotation.Permission;
 import java.io.ByteArrayInputStream;
@@ -45,17 +47,16 @@ import org.json.JSONException;
 @CapacitorPlugin(
     name = "Camera",
     permissions = {
-        @Permission(strings = { Manifest.permission.CAMERA }, alias = "camera"),
-        @Permission(strings = { Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE }, alias = "photos")
-    },
-    requestCodes = { CameraPlugin.REQUEST_IMAGE_CAPTURE, CameraPlugin.REQUEST_IMAGE_PICK, CameraPlugin.REQUEST_IMAGE_EDIT }
+        @Permission(strings = { Manifest.permission.CAMERA }, alias = CameraPlugin.CAMERA),
+        @Permission(strings = { Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE }, alias = CameraPlugin.PHOTOS)
+    }
 )
 public class CameraPlugin extends Plugin {
 
-    // Request codes
-    static final int REQUEST_IMAGE_CAPTURE = PluginRequestCodes.CAMERA_IMAGE_CAPTURE;
-    static final int REQUEST_IMAGE_PICK = PluginRequestCodes.CAMERA_IMAGE_PICK;
-    static final int REQUEST_IMAGE_EDIT = PluginRequestCodes.CAMERA_IMAGE_EDIT;
+    // Permission alias constants
+    static final String CAMERA = "camera";
+    static final String PHOTOS = "photos";
+
     // Message constants
     private static final String INVALID_RESULT_TYPE_ERROR = "Invalid resultType option";
     private static final String PERMISSION_DENIED_ERROR = "Unable to access camera, user denied permission request";
@@ -74,7 +75,7 @@ public class CameraPlugin extends Plugin {
 
     private CameraSettings settings = new CameraSettings();
 
-    @PluginMethod(permissionCallback = "cameraPermissionsCallback")
+    @PluginMethod
     public void getPhoto(PluginCall call) {
         isEdited = false;
 
@@ -138,31 +139,31 @@ public class CameraPlugin extends Plugin {
     private boolean checkCameraPermissions(PluginCall call) {
         // if the manifest does not contain the camera permissions key, we don't need to ask the user
         boolean needCameraPerms = hasDefinedPermissions(new String[] { Manifest.permission.CAMERA });
-        boolean hasCameraPerms = !needCameraPerms || getPermissionState("camera") == PermissionState.GRANTED;
-        boolean hasPhotoPerms = getPermissionState("photos") == PermissionState.GRANTED;
+        boolean hasCameraPerms = !needCameraPerms || getPermissionState(CAMERA) == PermissionState.GRANTED;
+        boolean hasPhotoPerms = getPermissionState(PHOTOS) == PermissionState.GRANTED;
 
         // If we want to save to the gallery, we need two permissions
         if (settings.isSaveToGallery() && !(hasCameraPerms && hasPhotoPerms)) {
             String[] aliases;
             if (needCameraPerms) {
-                aliases = new String[] { "camera", "photos" };
+                aliases = new String[] { CAMERA, PHOTOS };
             } else {
-                aliases = new String[] { "photos" };
+                aliases = new String[] { PHOTOS };
             }
-            requestPermissionForAliases(aliases, call);
+            requestPermissionForAliases(aliases, call, "cameraPermissionsCallback");
             return false;
         }
         // If we don't need to save to the gallery, we can just ask for camera permissions
         else if (!hasCameraPerms) {
-            requestPermissionForAlias("camera", call);
+            requestPermissionForAlias(CAMERA, call, "cameraPermissionsCallback");
             return false;
         }
         return true;
     }
 
     private boolean checkPhotosPermissions(PluginCall call) {
-        if (getPermissionState("photos") != PermissionState.GRANTED) {
-            requestPermissionForAlias("photos", call);
+        if (getPermissionState(PHOTOS) != PermissionState.GRANTED) {
+            requestPermissionForAlias(PHOTOS, call, "cameraPermissionsCallback");
             return false;
         }
         return true;
@@ -174,13 +175,14 @@ public class CameraPlugin extends Plugin {
      * @see #getPhoto(PluginCall)
      * @param call the plugin call
      */
+    @ActivityResultCallback
     private void cameraPermissionsCallback(PluginCall call) {
-        if (settings.getSource() == CameraSource.CAMERA && getPermissionState("camera") != PermissionState.GRANTED) {
-            Logger.debug(getLogTag(), "User denied camera permission: " + getPermissionState("camera").toString());
+        if (settings.getSource() == CameraSource.CAMERA && getPermissionState(CAMERA) != PermissionState.GRANTED) {
+            Logger.debug(getLogTag(), "User denied camera permission: " + getPermissionState(CAMERA).toString());
             call.reject(PERMISSION_DENIED_ERROR);
             return;
-        } else if (settings.getSource() == CameraSource.PHOTOS && getPermissionState("photos") != PermissionState.GRANTED) {
-            Logger.debug(getLogTag(), "User denied photos permission: " + getPermissionState("photos").toString());
+        } else if (settings.getSource() == CameraSource.PHOTOS && getPermissionState(PHOTOS) != PermissionState.GRANTED) {
+            Logger.debug(getLogTag(), "User denied photos permission: " + getPermissionState(PHOTOS).toString());
             call.reject(PERMISSION_DENIED_ERROR);
             return;
         }
@@ -235,7 +237,7 @@ public class CameraPlugin extends Plugin {
                     return;
                 }
 
-                startActivityForResult(call, takePictureIntent, REQUEST_IMAGE_CAPTURE);
+                startActivityForResult(call, takePictureIntent, "processCameraImage");
             } else {
                 call.reject(NO_CAMERA_ACTIVITY_ERROR);
             }
@@ -246,11 +248,12 @@ public class CameraPlugin extends Plugin {
         if (checkPhotosPermissions(call)) {
             Intent intent = new Intent(Intent.ACTION_PICK);
             intent.setType("image/*");
-            startActivityForResult(call, intent, REQUEST_IMAGE_PICK);
+            startActivityForResult(call, intent, "processPickedImage");
         }
     }
 
-    public void processCameraImage(PluginCall call) {
+    @ActivityResultCallback
+    public void processCameraImage(PluginCall call, ActivityResult result) {
         if (imageFileSavePath == null) {
             call.reject(IMAGE_PROCESS_NO_FILE_ERROR);
             return;
@@ -269,7 +272,9 @@ public class CameraPlugin extends Plugin {
         returnResult(call, bitmap, contentUri);
     }
 
-    public void processPickedImage(PluginCall call, Intent data) {
+    @ActivityResultCallback
+    public void processPickedImage(PluginCall call, ActivityResult result) {
+        Intent data = result.getData();
         if (data == null) {
             call.reject("No image picked");
             return;
@@ -302,6 +307,12 @@ public class CameraPlugin extends Plugin {
                 }
             }
         }
+    }
+
+    @ActivityResultCallback
+    private void processEditedImage(PluginCall call, ActivityResult result) {
+        isEdited = true;
+        processPickedImage(call, result);
     }
 
     /**
@@ -483,12 +494,12 @@ public class CameraPlugin extends Plugin {
                 permsList = providedPerms.toList();
             } catch (JSONException e) {}
 
-            if (permsList != null && permsList.size() == 1 && permsList.contains("camera")) {
+            if (permsList != null && permsList.size() == 1 && permsList.contains(CAMERA)) {
                 // the only thing being asked for was the camera so we can just return the current state
                 checkPermissions(call);
             } else {
                 // we need to ask about photos so request storage permissions
-                requestPermissionForAlias("photos", call);
+                requestPermissionForAlias(PHOTOS, call, "checkPermissions");
             }
         }
     }
@@ -499,32 +510,10 @@ public class CameraPlugin extends Plugin {
 
         // If Camera is not in the manifest and therefore not required, say the permission is granted
         if (!hasDefinedPermissions(new String[] { Manifest.permission.CAMERA })) {
-            permissionStates.put("camera", PermissionState.GRANTED);
+            permissionStates.put(CAMERA, PermissionState.GRANTED);
         }
 
         return permissionStates;
-    }
-
-    @Override
-    protected void handleOnActivityResult(PluginCall savedCall, int requestCode, int resultCode, Intent data) {
-        if (savedCall == null) {
-            return;
-        }
-
-        settings = getSettings(savedCall);
-
-        if (requestCode == REQUEST_IMAGE_CAPTURE) {
-            processCameraImage(savedCall);
-        } else if (requestCode == REQUEST_IMAGE_PICK) {
-            processPickedImage(savedCall, data);
-        } else if (requestCode == REQUEST_IMAGE_EDIT && resultCode == Activity.RESULT_OK) {
-            isEdited = true;
-            processPickedImage(savedCall, data);
-        } else if (resultCode == Activity.RESULT_CANCELED && imageFileSavePath != null) {
-            imageEditedFileSavePath = null;
-            isEdited = true;
-            processCameraImage(savedCall);
-        }
     }
 
     private void editImage(PluginCall call, Bitmap bitmap, Uri uri, ByteArrayOutputStream bitmapOutputStream) {
@@ -534,12 +523,12 @@ public class CameraPlugin extends Plugin {
         }
         try {
             Intent editIntent = createEditIntent(origPhotoUri, false);
-            startActivityForResult(call, editIntent, REQUEST_IMAGE_EDIT);
+            startActivityForResult(call, editIntent, "processEditedImage");
         } catch (SecurityException ex) {
             Uri tempImage = getTempImage(bitmap, uri, bitmapOutputStream);
             Intent editIntent = createEditIntent(tempImage, true);
             if (editIntent != null) {
-                startActivityForResult(call, editIntent, REQUEST_IMAGE_EDIT);
+                startActivityForResult(call, editIntent, "processEditedImage");
             } else {
                 call.reject(IMAGE_EDIT_ERROR);
             }
