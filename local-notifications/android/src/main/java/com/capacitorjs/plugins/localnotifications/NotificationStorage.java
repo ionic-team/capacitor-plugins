@@ -54,6 +54,43 @@ public class NotificationStorage {
         return new ArrayList<>();
     }
 
+    public List<LocalNotification> getSavedNotifications() {
+        SharedPreferences storage = getStorage(NOTIFICATION_STORE_ID);
+        Map<String, ?> all = storage.getAll();
+        if (all != null) {
+            ArrayList<LocalNotification> notifications = new ArrayList<>();
+            for (String key : all.keySet()) {
+                String notificationString = (String) all.get(key);
+                JSObject jsNotification = getNotificationFromJSONString(notificationString);
+                if (jsNotification != null) {
+                    try {
+                        LocalNotification notification = LocalNotification.buildNotificationFromJSObject(jsNotification);
+                        notifications.add(notification);
+                    } catch (ParseException ex) {}
+                }
+            }
+
+            return notifications;
+        }
+
+        return new ArrayList<>();
+    }
+
+    public JSObject getNotificationFromJSONString(String notificationString) {
+        if (notificationString == null) {
+            return null;
+        }
+
+        JSObject jsNotification;
+        try {
+            jsNotification = new JSObject(notificationString);
+        } catch (JSONException ex) {
+            return null;
+        }
+
+        return jsNotification;
+    }
+
     public JSObject getSavedNotificationAsJSObject(String key) {
         SharedPreferences storage = getStorage(NOTIFICATION_STORE_ID);
         String notificationString = storage.getString(key, null);
