@@ -37,6 +37,9 @@ public class LocalNotificationSchedule {
     private void buildEveryElement(JSObject schedule) {
         // 'year'|'month'|'two-weeks'|'week'|'day'|'hour'|'minute'|'second';
         this.every = schedule.getString("every");
+        if (this.every != null) {
+            this.repeats = true;
+        }
     }
 
     private void buildCountElement(JSObject schedule) {
@@ -44,9 +47,9 @@ public class LocalNotificationSchedule {
     }
 
     private void buildAtElement(JSObject schedule) throws ParseException {
-        this.repeats = schedule.getBool("repeats");
         String dateString = schedule.getString("at");
         if (dateString != null) {
+            this.repeats = schedule.getBool("repeats");
             SimpleDateFormat sdf = new SimpleDateFormat(JS_DATE_FORMAT);
             sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
             this.at = sdf.parse(dateString);
