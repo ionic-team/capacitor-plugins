@@ -22,14 +22,13 @@ import org.json.JSONException;
 @CapacitorPlugin(
     name = "Filesystem",
     permissions = {
-        @Permission(strings = { Manifest.permission.READ_EXTERNAL_STORAGE }, alias = FilesystemPlugin.READ_STORAGE),
-        @Permission(strings = { Manifest.permission.WRITE_EXTERNAL_STORAGE }, alias = FilesystemPlugin.WRITE_STORAGE)
+        @Permission(
+            strings = { Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE },
+            alias = "publicStorage"
+        )
     }
 )
 public class FilesystemPlugin extends Plugin {
-
-    static final String READ_STORAGE = "readStorage";
-    static final String WRITE_STORAGE = "writeStorage";
 
     private Filesystem implementation;
 
@@ -40,7 +39,7 @@ public class FilesystemPlugin extends Plugin {
 
     private static final String PERMISSION_DENIED_ERROR = "Unable to do file operation, user denied permission request";
 
-    @PluginMethod(permissionCallback = "readPermissionsCallback")
+    @PluginMethod(permissionCallback = "permissionCallback")
     public void readFile(PluginCall call) {
         String path = call.getString("path");
         String directory = getDirectoryParameter(call);
@@ -52,8 +51,8 @@ public class FilesystemPlugin extends Plugin {
             return;
         }
 
-        if (!isPublicDirectory(directory) && !isStoragePermissionGranted(READ_STORAGE)) {
-            requestPermissionForAlias(READ_STORAGE, call);
+        if (!isPublicDirectory(directory) && !isStoragePermissionGranted()) {
+            requestAllPermissions(call);
         } else {
             try {
                 String dataStr = implementation.readFile(path, directory, charset);
@@ -70,7 +69,7 @@ public class FilesystemPlugin extends Plugin {
         }
     }
 
-    @PluginMethod(permissionCallback = "writePermissionsCallback")
+    @PluginMethod(permissionCallback = "permissionCallback")
     public void writeFile(PluginCall call) {
         String path = call.getString("path");
         String data = call.getString("data");
@@ -90,8 +89,8 @@ public class FilesystemPlugin extends Plugin {
 
         String directory = getDirectoryParameter(call);
         if (directory != null) {
-            if (!isPublicDirectory(directory) && !isStoragePermissionGranted(WRITE_STORAGE)) {
-                requestPermissionForAlias(WRITE_STORAGE, call);
+            if (!isPublicDirectory(directory) && !isStoragePermissionGranted()) {
+                requestAllPermissions(call);
             } else {
                 // create directory because it might not exist
                 File androidDir = implementation.getDirectory(directory);
@@ -120,8 +119,8 @@ public class FilesystemPlugin extends Plugin {
                 File fileObject = new File(u.getPath());
                 // do not know where the file is being store so checking the permission to be secure
                 // TODO to prevent permission checking we need a property from the call
-                if (!isStoragePermissionGranted(WRITE_STORAGE)) {
-                    requestPermissionForAlias(WRITE_STORAGE, call);
+                if (!isStoragePermissionGranted()) {
+                    requestAllPermissions(call);
                 } else {
                     if (fileObject.getParentFile().exists() || (recursive && fileObject.getParentFile().mkdirs())) {
                         saveFile(call, fileObject, data);
@@ -163,7 +162,7 @@ public class FilesystemPlugin extends Plugin {
         }
     }
 
-    @PluginMethod(permissionCallback = "writePermissionsCallback")
+    @PluginMethod(permissionCallback = "permissionCallback")
     public void appendFile(PluginCall call) {
         try {
             call.getData().putOpt("append", true);
@@ -172,12 +171,12 @@ public class FilesystemPlugin extends Plugin {
         this.writeFile(call);
     }
 
-    @PluginMethod(permissionCallback = "writePermissionsCallback")
+    @PluginMethod(permissionCallback = "permissionCallback")
     public void deleteFile(PluginCall call) {
         String file = call.getString("path");
         String directory = getDirectoryParameter(call);
-        if (!isPublicDirectory(directory) && !isStoragePermissionGranted(WRITE_STORAGE)) {
-            requestPermissionForAlias(WRITE_STORAGE, call);
+        if (!isPublicDirectory(directory) && !isStoragePermissionGranted()) {
+            requestAllPermissions(call);
         } else {
             try {
                 boolean deleted = implementation.deleteFile(file, directory);
@@ -192,13 +191,13 @@ public class FilesystemPlugin extends Plugin {
         }
     }
 
-    @PluginMethod(permissionCallback = "writePermissionsCallback")
+    @PluginMethod(permissionCallback = "permissionCallback")
     public void mkdir(PluginCall call) {
         String path = call.getString("path");
         String directory = getDirectoryParameter(call);
         boolean recursive = call.getBoolean("recursive", false).booleanValue();
-        if (!isPublicDirectory(directory) && !isStoragePermissionGranted(WRITE_STORAGE)) {
-            requestPermissionForAlias(WRITE_STORAGE, call);
+        if (!isPublicDirectory(directory) && !isStoragePermissionGranted()) {
+            requestAllPermissions(call);
         } else {
             try {
                 boolean created = implementation.mkdir(path, directory, recursive);
@@ -213,7 +212,7 @@ public class FilesystemPlugin extends Plugin {
         }
     }
 
-    @PluginMethod(permissionCallback = "writePermissionsCallback")
+    @PluginMethod(permissionCallback = "permissionCallback")
     public void rmdir(PluginCall call) {
         String path = call.getString("path");
         String directory = getDirectoryParameter(call);
@@ -221,8 +220,8 @@ public class FilesystemPlugin extends Plugin {
 
         File fileObject = implementation.getFileObject(path, directory);
 
-        if (!isPublicDirectory(directory) && !isStoragePermissionGranted(WRITE_STORAGE)) {
-            requestPermissionForAlias(WRITE_STORAGE, call);
+        if (!isPublicDirectory(directory) && !isStoragePermissionGranted()) {
+            requestAllPermissions(call);
         } else {
             if (!fileObject.exists()) {
                 call.reject("Directory does not exist");
@@ -249,13 +248,13 @@ public class FilesystemPlugin extends Plugin {
         }
     }
 
-    @PluginMethod(permissionCallback = "readPermissionsCallback")
+    @PluginMethod(permissionCallback = "permissionCallback")
     public void readdir(PluginCall call) {
         String path = call.getString("path");
         String directory = getDirectoryParameter(call);
 
-        if (!isPublicDirectory(directory) && !isStoragePermissionGranted(READ_STORAGE)) {
-            requestPermissionForAlias(READ_STORAGE, call);
+        if (!isPublicDirectory(directory) && !isStoragePermissionGranted()) {
+            requestAllPermissions(call);
         } else {
             try {
                 String[] files = implementation.readdir(path, directory);
@@ -272,15 +271,15 @@ public class FilesystemPlugin extends Plugin {
         }
     }
 
-    @PluginMethod(permissionCallback = "readPermissionsCallback")
+    @PluginMethod(permissionCallback = "permissionCallback")
     public void getUri(PluginCall call) {
         String path = call.getString("path");
         String directory = getDirectoryParameter(call);
 
         File fileObject = implementation.getFileObject(path, directory);
 
-        if (!isPublicDirectory(directory) && !isStoragePermissionGranted(READ_STORAGE)) {
-            requestPermissionForAlias(READ_STORAGE, call);
+        if (!isPublicDirectory(directory) && !isStoragePermissionGranted()) {
+            requestAllPermissions(call);
         } else {
             JSObject data = new JSObject();
             data.put("uri", Uri.fromFile(fileObject).toString());
@@ -288,15 +287,15 @@ public class FilesystemPlugin extends Plugin {
         }
     }
 
-    @PluginMethod(permissionCallback = "readPermissionsCallback")
+    @PluginMethod(permissionCallback = "permissionCallback")
     public void stat(PluginCall call) {
         String path = call.getString("path");
         String directory = getDirectoryParameter(call);
 
         File fileObject = implementation.getFileObject(path, directory);
 
-        if (!isPublicDirectory(directory) && !isStoragePermissionGranted(READ_STORAGE)) {
-            requestPermissionForAlias(READ_STORAGE, call);
+        if (!isPublicDirectory(directory) && !isStoragePermissionGranted()) {
+            requestAllPermissions(call);
         } else {
             if (!fileObject.exists()) {
                 call.reject("File does not exist");
@@ -313,12 +312,12 @@ public class FilesystemPlugin extends Plugin {
         }
     }
 
-    @PluginMethod(permissionCallback = "writePermissionsCallback")
+    @PluginMethod(permissionCallback = "permissionCallback")
     public void rename(PluginCall call) {
         this._copy(call, true);
     }
 
-    @PluginMethod(permissionCallback = "writePermissionsCallback")
+    @PluginMethod(permissionCallback = "permissionCallback")
     public void copy(PluginCall call) {
         this._copy(call, false);
     }
@@ -334,8 +333,8 @@ public class FilesystemPlugin extends Plugin {
             return;
         }
         if (isPublicDirectory(directory) || isPublicDirectory(toDirectory)) {
-            if (!isStoragePermissionGranted(WRITE_STORAGE)) {
-                requestPermissionForAlias(WRITE_STORAGE, call);
+            if (!isStoragePermissionGranted()) {
+                requestAllPermissions(call);
                 return;
             }
         }
@@ -348,32 +347,9 @@ public class FilesystemPlugin extends Plugin {
         }
     }
 
-    private void readPermissionsCallback(PluginCall call) {
-        if (getPermissionState(READ_STORAGE) != PermissionState.GRANTED) {
-            Logger.debug(getLogTag(), "User denied read storage permission");
-            call.reject(PERMISSION_DENIED_ERROR);
-            return;
-        }
-
-        switch (call.getMethodName()) {
-            case "readFile":
-                readFile(call);
-                break;
-            case "readdir":
-                readdir(call);
-                break;
-            case "getUri":
-                getUri(call);
-                break;
-            case "stat":
-                stat(call);
-                break;
-        }
-    }
-
-    private void writePermissionsCallback(PluginCall call) {
-        if (getPermissionState(WRITE_STORAGE) != PermissionState.GRANTED) {
-            Logger.debug(getLogTag(), "User denied write storage permission");
+    private void permissionCallback(PluginCall call) {
+        if (!isStoragePermissionGranted()) {
+            Logger.debug(getLogTag(), "User denied storage permission");
             call.reject(PERMISSION_DENIED_ERROR);
             return;
         }
@@ -398,16 +374,27 @@ public class FilesystemPlugin extends Plugin {
             case "copy":
                 copy(call);
                 break;
+            case "readFile":
+                readFile(call);
+                break;
+            case "readdir":
+                readdir(call);
+                break;
+            case "getUri":
+                getUri(call);
+                break;
+            case "stat":
+                stat(call);
+                break;
         }
     }
 
     /**
      * Checks the the given permission is granted or not
-     * @param alias the permission alias "readStorage" or "writeStorage"
      * @return Returns true if the permission is granted and false if it is denied.
      */
-    private boolean isStoragePermissionGranted(String alias) {
-        return getPermissionState(alias) == PermissionState.GRANTED;
+    private boolean isStoragePermissionGranted() {
+        return getPermissionState("publicStorage") == PermissionState.GRANTED;
     }
 
     /**
