@@ -199,12 +199,17 @@ public class LocalNotificationsPlugin: CAPPlugin {
         }
 
         let extra = notification["extra"] as? JSObject ?? [:]
+        let schedule = notification["schedule"] as? JSObject ?? [:]
         let content = UNMutableNotificationContent()
         content.title = NSString.localizedUserNotificationString(forKey: title, arguments: nil)
         content.body = NSString.localizedUserNotificationString(forKey: body,
                                                                 arguments: nil)
 
-        content.userInfo = extra
+        content.userInfo = [
+            "cap_extra": extra,
+            "cap_schedule": schedule
+        ]
+
         if let actionTypeId = notification["actionTypeId"] as? String {
             content.categoryIdentifier = actionTypeId
         }
@@ -533,9 +538,37 @@ public class LocalNotificationsPlugin: CAPPlugin {
     }
 
     func makePendingNotificationRequestJSObject(_ request: UNNotificationRequest) -> JSObject {
-        return [
-            "id": request.identifier
+        var notification: JSObject = [
+            "id": request.identifier,
+            "title": request.content.title,
+            "body": request.content.body,
+            "repeats": request.trigger?.repeats ?? false
         ]
+
+        var notificationExtras = request.content.userInfo["cap_extra"] as? [String: Any?]
+
+        if notificationExtras == nil {
+            notificationExtras = request.content.userInfo as? [String: Any?]
+        }
+
+        if let notificationExtras = notificationExtras {
+            var extra: JSObject = [:]
+            for(key, value) in notificationExtras {
+                extra[key] = value as? JSValue
+            }
+            notification["extra"] = extra
+        }
+
+        if let notificationSchedule = request.content.userInfo["cap_schedule"] as? [String: Any?] {
+            var schedule: JSObject = [:]
+            for(key, value) in notificationSchedule {
+                schedule[key] = value as? JSValue
+            }
+            notification["schedule"] = schedule
+        }
+
+        return notification
+
     }
 
     @objc func createChannel(_ call: CAPPluginCall) {
