@@ -5,13 +5,10 @@ import android.content.SharedPreferences;
 import com.getcapacitor.JSObject;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 /**
  * Class used to abstract storage for notification data

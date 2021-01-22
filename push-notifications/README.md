@@ -13,9 +13,7 @@ npx cap sync
 
 On iOS you must enable the Push Notifications capability. See [Setting Capabilities](https://capacitorjs.com/docs/v3/ios/configuration#setting-capabilities) for instructions on how to enable the capability.
 
-The Push Notification API uses [Firebase Cloud Messaging](https://firebase.google.com/docs/cloud-messaging) SDK for handling notifications.  See [Set up a Firebase Cloud Messaging client app on iOS](https://firebase.google.com/docs/cloud-messaging/ios/client) and follow the instructions for creating a Firebase project and registering your application.  Do not add the Firebase SDK to your app - the Push Notifications provides that for you.  All that is required is your Firebase project `GoogleService-Info.plist` file added to your Xcode project.
-
-After setting up your Firebase project, add the following to your application AppDelegate.swift
+After enabling the Push Notifications capability, add the following to your app's `AppDelegate.swift`:
 
 ```swift
 func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
