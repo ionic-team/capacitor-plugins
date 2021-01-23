@@ -3,6 +3,8 @@ name: Bot
 on:
   issues:
     types: [opened, edited]
+  pull_request:
+    types: [opened]
   issue_comment:
     types: [created]
 
