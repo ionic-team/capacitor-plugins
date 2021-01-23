@@ -17,7 +17,7 @@ npx cap sync
 
 This plugin will use the following project variables (defined in your app's `variables.gradle` file):
 
-- `androidxBrowserVersion` (version of `androidx.browser:browser` to use)
+- `$androidxBrowserVersion`: version of `androidx.browser:browser` (default: `1.3.0`)
 
 ## Example
 
