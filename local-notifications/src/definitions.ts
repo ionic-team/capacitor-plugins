@@ -162,7 +162,7 @@ export interface LocalNotificationDescriptor {
    *
    * @since 1.0.0
    */
-  id: number | string;
+  id: number;
 }
 
 export interface ScheduleOptions {
@@ -462,7 +462,7 @@ export interface LocalNotificationSchema {
    *
    * @since 1.0.0
    */
-  id: number | string;
+  id: number;
 
   /**
    * Schedule this notification for a later time.
