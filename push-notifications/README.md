@@ -110,12 +110,12 @@ notification permissions, use `requestPermissions()` first.
 ### getDeliveredNotifications()
 
 ```typescript
-getDeliveredNotifications() => Promise<PushNotificationDeliveredList>
+getDeliveredNotifications() => Promise<DeliveredNotifications>
 ```
 
 Get a list of notifications that are visible on the notifications screen.
 
-**Returns:** <code>Promise&lt;<a href="#pushnotificationdeliveredlist">PushNotificationDeliveredList</a>&gt;</code>
+**Returns:** <code>Promise&lt;<a href="#deliverednotifications">DeliveredNotifications</a>&gt;</code>
 
 **Since:** 1.0.0
 
@@ -125,14 +125,14 @@ Get a list of notifications that are visible on the notifications screen.
 ### removeDeliveredNotifications(...)
 
 ```typescript
-removeDeliveredNotifications(delivered: PushNotificationDeliveredList) => Promise<void>
+removeDeliveredNotifications(delivered: DeliveredNotifications) => Promise<void>
 ```
 
 Remove the specified notifications from the notifications screen.
 
-| Param           | Type                                                                                    |
-| --------------- | --------------------------------------------------------------------------------------- |
-| **`delivered`** | <code><a href="#pushnotificationdeliveredlist">PushNotificationDeliveredList</a></code> |
+| Param           | Type                                                                      |
+| --------------- | ------------------------------------------------------------------------- |
+| **`delivered`** | <code><a href="#deliverednotifications">DeliveredNotifications</a></code> |
 
 **Since:** 1.0.0
 
@@ -240,17 +240,17 @@ Request permission to receive push notifications.
 ### addListener('registration', ...)
 
 ```typescript
-addListener(eventName: 'registration', listenerFunc: (token: PushNotificationToken) => void) => PluginListenerHandle
+addListener(eventName: 'registration', listenerFunc: (token: Token) => void) => PluginListenerHandle
 ```
 
 Called when the push notification registration finishes without problems.
 
 Provides the push notification token.
 
-| Param              | Type                                                                                        |
-| ------------------ | ------------------------------------------------------------------------------------------- |
-| **`eventName`**    | <code>'registration'</code>                                                                 |
-| **`listenerFunc`** | <code>(token: <a href="#pushnotificationtoken">PushNotificationToken</a>) =&gt; void</code> |
+| Param              | Type                                                        |
+| ------------------ | ----------------------------------------------------------- |
+| **`eventName`**    | <code>'registration'</code>                                 |
+| **`listenerFunc`** | <code>(token: <a href="#token">Token</a>) =&gt; void</code> |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
@@ -304,15 +304,15 @@ Called when the device receives a push notification.
 ### addListener('pushNotificationActionPerformed', ...)
 
 ```typescript
-addListener(eventName: 'pushNotificationActionPerformed', listenerFunc: (notification: PushNotificationActionPerformed) => void) => PluginListenerHandle
+addListener(eventName: 'pushNotificationActionPerformed', listenerFunc: (notification: ActionPerformed) => void) => PluginListenerHandle
 ```
 
 Called when an action is performed on a push notification.
 
-| Param              | Type                                                                                                                   |
-| ------------------ | ---------------------------------------------------------------------------------------------------------------------- |
-| **`eventName`**    | <code>'pushNotificationActionPerformed'</code>                                                                         |
-| **`listenerFunc`** | <code>(notification: <a href="#pushnotificationactionperformed">PushNotificationActionPerformed</a>) =&gt; void</code> |
+| Param              | Type                                                                                   |
+| ------------------ | -------------------------------------------------------------------------------------- |
+| **`eventName`**    | <code>'pushNotificationActionPerformed'</code>                                         |
+| **`listenerFunc`** | <code>(notification: <a href="#actionperformed">ActionPerformed</a>) =&gt; void</code> |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
@@ -337,7 +337,7 @@ Remove all native listeners for this plugin.
 ### Interfaces
 
 
-#### PushNotificationDeliveredList
+#### DeliveredNotifications
 
 | Prop                | Type                                  | Since |
 | ------------------- | ------------------------------------- | ----- |
@@ -397,14 +397,14 @@ Remove all native listeners for this plugin.
 | **`remove`** | <code>() =&gt; void</code> |
 
 
-#### PushNotificationToken
+#### Token
 
 | Prop        | Type                | Since |
 | ----------- | ------------------- | ----- |
 | **`value`** | <code>string</code> | 1.0.0 |
 
 
-#### PushNotificationActionPerformed
+#### ActionPerformed
 
 | Prop               | Type                                                                      | Since |
 | ------------------ | ------------------------------------------------------------------------- | ----- |
