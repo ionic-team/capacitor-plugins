@@ -8,9 +8,9 @@ import com.getcapacitor.PermissionState;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
-import com.getcapacitor.annotation.ActivityResultCallback;
 import com.getcapacitor.annotation.CapacitorPlugin;
 import com.getcapacitor.annotation.Permission;
+import com.getcapacitor.annotation.PermissionCallback;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -50,7 +50,7 @@ public class GeolocationPlugin extends Plugin {
      * @see #getCurrentPosition(PluginCall)
      * @param call the plugin call
      */
-    @ActivityResultCallback
+    @PermissionCallback
     private void completeCurrentPosition(PluginCall call) {
         if (getPermissionState("location") == PermissionState.GRANTED) {
             boolean enableHighAccuracy = call.getBoolean("enableHighAccuracy", false);
@@ -98,7 +98,7 @@ public class GeolocationPlugin extends Plugin {
      * @see #watchPosition(PluginCall)
      * @param call the plugin call
      */
-    @ActivityResultCallback
+    @PermissionCallback
     private void completeWatchPosition(PluginCall call) {
         if (getPermissionState("location") == PermissionState.GRANTED) {
             startWatch(call);

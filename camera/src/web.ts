@@ -2,14 +2,14 @@ import { WebPlugin, CapacitorException } from '@capacitor/core';
 
 import type {
   CameraPlugin,
+  ImageOptions,
   PermissionStatus,
   Photo,
-  PhotoOptions,
 } from './definitions';
 import { CameraSource, CameraDirection } from './definitions';
 
 export class CameraWeb extends WebPlugin implements CameraPlugin {
-  async getPhoto(options: PhotoOptions): Promise<Photo> {
+  async getPhoto(options: ImageOptions): Promise<Photo> {
     // eslint-disable-next-line no-async-promise-executor
     return new Promise<Photo>(async (resolve, reject) => {
       if (options.webUseInput) {
@@ -49,7 +49,7 @@ export class CameraWeb extends WebPlugin implements CameraPlugin {
     });
   }
 
-  private fileInputExperience(options: PhotoOptions, resolve: any) {
+  private fileInputExperience(options: ImageOptions, resolve: any) {
     let input = document.querySelector(
       '#_capacitor-camera-input',
     ) as HTMLInputElement;
@@ -122,7 +122,7 @@ export class CameraWeb extends WebPlugin implements CameraPlugin {
     input.click();
   }
 
-  private _getCameraPhoto(photo: Blob, options: PhotoOptions) {
+  private _getCameraPhoto(photo: Blob, options: ImageOptions) {
     return new Promise<Photo>((resolve, reject) => {
       const reader = new FileReader();
       const format = photo.type.split('/')[1];

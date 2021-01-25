@@ -9,10 +9,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
-
 import androidx.activity.result.ActivityResult;
 import androidx.core.content.FileProvider;
-
 import com.getcapacitor.FileUtils;
 import com.getcapacitor.JSArray;
 import com.getcapacitor.JSObject;
@@ -21,9 +19,10 @@ import com.getcapacitor.PermissionState;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
-import com.getcapacitor.annotation.ActivityResultCallback;
+import com.getcapacitor.annotation.ActivityCallback;
 import com.getcapacitor.annotation.CapacitorPlugin;
 import com.getcapacitor.annotation.Permission;
+import com.getcapacitor.annotation.PermissionCallback;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -48,7 +47,10 @@ import org.json.JSONException;
     name = "Camera",
     permissions = {
         @Permission(strings = { Manifest.permission.CAMERA }, alias = CameraPlugin.CAMERA),
-        @Permission(strings = { Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE }, alias = CameraPlugin.PHOTOS)
+        @Permission(
+            strings = { Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE },
+            alias = CameraPlugin.PHOTOS
+        )
     }
 )
 public class CameraPlugin extends Plugin {
@@ -175,7 +177,7 @@ public class CameraPlugin extends Plugin {
      * @see #getPhoto(PluginCall)
      * @param call the plugin call
      */
-    @ActivityResultCallback
+    @PermissionCallback
     private void cameraPermissionsCallback(PluginCall call) {
         if (settings.getSource() == CameraSource.CAMERA && getPermissionState(CAMERA) != PermissionState.GRANTED) {
             Logger.debug(getLogTag(), "User denied camera permission: " + getPermissionState(CAMERA).toString());
@@ -252,7 +254,7 @@ public class CameraPlugin extends Plugin {
         }
     }
 
-    @ActivityResultCallback
+    @ActivityCallback
     public void processCameraImage(PluginCall call, ActivityResult result) {
         if (imageFileSavePath == null) {
             call.reject(IMAGE_PROCESS_NO_FILE_ERROR);
@@ -272,7 +274,7 @@ public class CameraPlugin extends Plugin {
         returnResult(call, bitmap, contentUri);
     }
 
-    @ActivityResultCallback
+    @ActivityCallback
     public void processPickedImage(PluginCall call, ActivityResult result) {
         Intent data = result.getData();
         if (data == null) {
@@ -309,7 +311,7 @@ public class CameraPlugin extends Plugin {
         }
     }
 
-    @ActivityResultCallback
+    @ActivityCallback
     private void processEditedImage(PluginCall call, ActivityResult result) {
         isEdited = true;
         processPickedImage(call, result);

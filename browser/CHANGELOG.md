@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.4.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/browser@0.3.0...@capacitor/browser@0.4.0) (2021-01-14)
+
+**Note:** Version bump only for package @capacitor/browser
+
+
+
+
+
 # [0.3.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/browser@0.2.4...@capacitor/browser@0.3.0) (2021-01-13)
 
 

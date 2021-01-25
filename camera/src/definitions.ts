@@ -20,7 +20,7 @@ export interface CameraPlugin {
    *
    * @since 1.0.0
    */
-  getPhoto(options: PhotoOptions): Promise<Photo>;
+  getPhoto(options: ImageOptions): Promise<Photo>;
 
   /**
    * Check camera and photo album permissions
@@ -39,7 +39,7 @@ export interface CameraPlugin {
   ): Promise<PermissionStatus>;
 }
 
-export interface PhotoOptions {
+export interface ImageOptions {
   /**
    * The quality of image to return as JPEG, from 0-100
    *
@@ -241,7 +241,7 @@ export enum CameraResultType {
 export type CameraPhoto = Photo;
 
 /**
- * @deprecated Use `PhotoOptions`.
+ * @deprecated Use `ImageOptions`.
  * @since 1.0.0
  */
-export type CameraOptions = PhotoOptions;
+export type CameraOptions = ImageOptions;

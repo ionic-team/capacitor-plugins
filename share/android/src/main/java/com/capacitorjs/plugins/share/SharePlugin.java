@@ -6,17 +6,13 @@ import android.content.*;
 import android.net.Uri;
 import android.os.Build;
 import android.webkit.MimeTypeMap;
-
 import androidx.activity.result.ActivityResult;
 import androidx.core.content.FileProvider;
-
-import com.getcapacitor.ActivityCallback;
-import com.getcapacitor.Callback;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
-import com.getcapacitor.annotation.ActivityResultCallback;
+import com.getcapacitor.annotation.ActivityCallback;
 import com.getcapacitor.annotation.CapacitorPlugin;
 import java.io.File;
 
@@ -41,7 +37,7 @@ public class SharePlugin extends Plugin {
         }
     }
 
-    @ActivityResultCallback
+    @ActivityCallback
     private void activityResult(PluginCall call, ActivityResult result) {
         if (result.getResultCode() == Activity.RESULT_CANCELED) {
             call.reject("Share canceled");

@@ -85,22 +85,22 @@ to select.
 | ------------- | -------------------------------- | ------------------------------------------------------------------------ | ----- |
 | **`title`**   | <code>string</code>              | The title of the Action Sheet.                                           | 1.0.0 |
 | **`message`** | <code>string</code>              | A message to show under the title. This option is only supported on iOS. | 1.0.0 |
-| **`options`** | <code>ActionSheetSchema[]</code> | Options the user can choose from.                                        | 1.0.0 |
+| **`options`** | <code>ActionSheetButton[]</code> | Options the user can choose from.                                        | 1.0.0 |
 
 
-#### ActionSheetSchema
+#### ActionSheetButton
 
 | Prop        | Type                                                                      | Description                                                                           | Since |
 | ----------- | ------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- | ----- |
 | **`title`** | <code>string</code>                                                       | The title of the option                                                               | 1.0.0 |
-| **`style`** | <code><a href="#actionsheetschemastyle">ActionSheetSchemaStyle</a></code> | The style of the option This option is only supported on iOS.                         | 1.0.0 |
+| **`style`** | <code><a href="#actionsheetbuttonstyle">ActionSheetButtonStyle</a></code> | The style of the option This option is only supported on iOS.                         | 1.0.0 |
 | **`icon`**  | <code>string</code>                                                       | Icon for the option (ionicon naming convention) This option is only supported on Web. | 1.0.0 |
 
 
 ### Enums
 
 
-#### ActionSheetSchemaStyle
+#### ActionSheetButtonStyle
 
 | Members           | Value                      | Description                                                                                                 | Since |
 | ----------------- | -------------------------- | ----------------------------------------------------------------------------------------------------------- | ----- |

@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.5.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/keyboard@0.4.0...@capacitor/keyboard@0.5.0) (2021-01-14)
+
+**Note:** Version bump only for package @capacitor/keyboard
+
+
+
+
+
 # [0.4.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/keyboard@0.3.3...@capacitor/keyboard@0.4.0) (2021-01-13)
 
 

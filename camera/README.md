@@ -80,7 +80,7 @@ const takePicture = async () {
 ### getPhoto(...)
 
 ```typescript
-getPhoto(options: PhotoOptions) => Promise<Photo>
+getPhoto(options: ImageOptions) => Promise<Photo>
 ```
 
 Prompt the user to pick a photo from an album, or take a new photo
@@ -88,7 +88,7 @@ with the camera.
 
 | Param         | Type                                                  |
 | ------------- | ----------------------------------------------------- |
-| **`options`** | <code><a href="#photooptions">PhotoOptions</a></code> |
+| **`options`** | <code><a href="#imageoptions">ImageOptions</a></code> |
 
 **Returns:** <code>Promise&lt;<a href="#photo">Photo</a>&gt;</code>
 
@@ -146,7 +146,7 @@ Request camera and photo album permissions
 | **`format`**       | <code>string</code> | The format of the image, ex: jpeg, png, gif. iOS and Android only support jpeg. Web supports jpeg and png. gif is only supported if using file input.                         | 1.0.0 |
 
 
-#### PhotoOptions
+#### ImageOptions
 
 | Prop                      | Type                                                          | Description                                                                                                                                                                                                                                                                                                                                                                                                                                          | Default                             | Since |
 | ------------------------- | ------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------- | ----- |
