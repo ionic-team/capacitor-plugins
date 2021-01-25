@@ -43,15 +43,7 @@ public class LocalNotificationsPlugin: CAPPlugin {
         var ids = [String]()
 
         for notification in notifications {
-            var identifierValue = notification["id"] as? Int
-
-            if identifierValue == nil {
-                if let identifierString = notification["id"] as? String {
-                    identifierValue = Int(identifierString)
-                }
-            }
-
-            guard let identifier = identifierValue else {
+            guard let identifier = notification["id"] as? Int else {
                 call.reject("Notification missing identifier")
                 return
             }
@@ -549,7 +541,7 @@ public class LocalNotificationsPlugin: CAPPlugin {
 
     func makePendingNotificationRequestJSObject(_ request: UNNotificationRequest) -> JSObject {
         return [
-            "id": request.identifier
+            "id": Int(request.identifier) ?? -1
         ]
     }
 
