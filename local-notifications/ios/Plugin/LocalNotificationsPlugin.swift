@@ -88,7 +88,7 @@ public class LocalNotificationsPlugin: CAPPlugin {
 
         let ret = ids.map({ (id) -> JSObject in
             return [
-                "id": id
+                "id": Int(id) ?? -1
             ]
         })
         call.resolve([
