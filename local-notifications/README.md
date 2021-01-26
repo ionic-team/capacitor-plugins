@@ -23,8 +23,8 @@ npx cap sync
 * [`listChannels()`](#listchannels)
 * [`checkPermissions()`](#checkpermissions)
 * [`requestPermissions()`](#requestpermissions)
-* [`addListener('received', ...)`](#addlistenerreceived-)
-* [`addListener('actionPerformed', ...)`](#addlisteneractionperformed-)
+* [`addListener('localNotificationReceived', ...)`](#addlistenerlocalnotificationreceived-)
+* [`addListener('localNotificationActionPerformed', ...)`](#addlistenerlocalnotificationactionperformed-)
 * [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
@@ -204,17 +204,17 @@ Request permission to display local notifications.
 --------------------
 
 
-### addListener('received', ...)
+### addListener('localNotificationReceived', ...)
 
 ```typescript
-addListener(eventName: 'received', listenerFunc: (notification: LocalNotificationSchema) => void) => PluginListenerHandle
+addListener(eventName: 'localNotificationReceived', listenerFunc: (notification: LocalNotificationSchema) => void) => PluginListenerHandle
 ```
 
 Listen for when notifications are displayed.
 
 | Param              | Type                                                                                                   |
 | ------------------ | ------------------------------------------------------------------------------------------------------ |
-| **`eventName`**    | <code>'received'</code>                                                                                |
+| **`eventName`**    | <code>'localNotificationReceived'</code>                                                               |
 | **`listenerFunc`** | <code>(notification: <a href="#localnotificationschema">LocalNotificationSchema</a>) =&gt; void</code> |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
@@ -224,17 +224,17 @@ Listen for when notifications are displayed.
 --------------------
 
 
-### addListener('actionPerformed', ...)
+### addListener('localNotificationActionPerformed', ...)
 
 ```typescript
-addListener(eventName: 'actionPerformed', listenerFunc: (notificationAction: ActionPerformed) => void) => PluginListenerHandle
+addListener(eventName: 'localNotificationActionPerformed', listenerFunc: (notificationAction: ActionPerformed) => void) => PluginListenerHandle
 ```
 
 Listen for when an action is performed on a notification.
 
 | Param              | Type                                                                                         |
 | ------------------ | -------------------------------------------------------------------------------------------- |
-| **`eventName`**    | <code>'actionPerformed'</code>                                                               |
+| **`eventName`**    | <code>'localNotificationActionPerformed'</code>                                              |
 | **`listenerFunc`** | <code>(notificationAction: <a href="#actionperformed">ActionPerformed</a>) =&gt; void</code> |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
