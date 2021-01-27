@@ -7,6 +7,7 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import com.getcapacitor.JSObject;
 import com.getcapacitor.Logger;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -31,6 +32,9 @@ public class TimedNotificationPublisher extends BroadcastReceiver {
         if (id == Integer.MIN_VALUE) {
             Logger.error(Logger.tags("LN"), "No valid id supplied", null);
         }
+        NotificationStorage storage = new NotificationStorage(context);
+        JSObject notificationJson = storage.getSavedNotificationAsJSObject(Integer.toString(id));
+        LocalNotificationsPlugin.fireReceived(notificationJson);
         notificationManager.notify(id, notification);
         rescheduleNotificationIfNeeded(context, intent, id);
     }
