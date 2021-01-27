@@ -135,5 +135,4 @@ public class LocalNotificationsPlugin extends Plugin {
         }
         return null;
     }
-
 }
