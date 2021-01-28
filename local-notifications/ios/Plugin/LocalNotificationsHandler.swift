@@ -75,7 +75,7 @@ public class LocalNotificationsHandler: NSObject, NotificationHandlerProtocol {
     func makeNotificationRequestJSObject(_ request: UNNotificationRequest) -> JSObject {
         let notificationRequest = notificationRequestLookup[request.identifier] ?? [:]
         return [
-            "id": request.identifier,
+            "id": Int(request.identifier) ?? -1,
             "title": request.content.title,
             "sound": notificationRequest["sound"]  ?? "",
             "body": request.content.body,
