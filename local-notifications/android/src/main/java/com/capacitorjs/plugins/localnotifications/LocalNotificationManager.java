@@ -221,6 +221,10 @@ public class LocalNotificationManager {
         if (localNotification.isScheduled()) {
             triggerScheduledNotification(buildNotification, localNotification);
         } else {
+            try {
+                JSObject notificationJson = new JSObject(localNotification.getSource());
+                LocalNotificationsPlugin.fireReceived(notificationJson);
+            } catch (JSONException e) {}
             notificationManager.notify(localNotification.getId(), buildNotification);
         }
     }
