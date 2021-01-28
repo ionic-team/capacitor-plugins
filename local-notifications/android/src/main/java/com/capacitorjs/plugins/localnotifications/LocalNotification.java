@@ -252,7 +252,12 @@ public class LocalNotification {
         JSArray jsArray = new JSArray();
         for (String id : ids) {
             JSObject notification = new JSObject();
-            notification.put("id", id);
+            try {
+                int intId = Integer.parseInt(id);
+                notification.put("id", intId);
+            } catch (NumberFormatException ex) {
+                notification.put("id", -1);
+            }
             jsArray.put(notification);
         }
         result.put("notifications", jsArray);
