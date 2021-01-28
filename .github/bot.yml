@@ -3,6 +3,8 @@ tasks:
     on:
       issues:
         types: [opened]
+    condition: |-
+      !(await getTeamMembers('capacitor')).includes(payload.sender.login)
     config:
       label: 'triage'
   - name: remove-label
@@ -22,7 +24,8 @@ tasks:
         types: [opened]
       pull_request:
         types: [opened]
-    condition: (await getTeamMembers('capacitor')).includes(payload.sender.login)
+    condition: |-
+      (await getTeamMembers('capacitor')).includes(payload.sender.login)
     config:
       columns:
         issue: 10495656
