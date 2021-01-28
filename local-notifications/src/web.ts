@@ -6,6 +6,7 @@ import type {
   ListChannelsResult,
   LocalNotificationSchema,
   LocalNotificationsPlugin,
+  PendingResult,
   PermissionStatus,
   ScheduleOptions,
   ScheduleResult,
@@ -40,11 +41,9 @@ export class LocalNotificationsWeb
     };
   }
 
-  async getPending(): Promise<ScheduleResult> {
+  async getPending(): Promise<PendingResult> {
     return {
-      notifications: this.pending.map(notification => ({
-        id: notification.id.toString(),
-      })),
+      notifications: this.pending,
     };
   }
 

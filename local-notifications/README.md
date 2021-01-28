@@ -406,9 +406,9 @@ Represents a notification attachment.
 
 #### PendingResult
 
-| Prop                | Type                                       | Description                        | Since |
-| ------------------- | ------------------------------------------ | ---------------------------------- | ----- |
-| **`notifications`** | <code>LocalNotificationDescriptor[]</code> | The list of pending notifications. | 1.0.0 |
+| Prop                | Type                                   | Description                        | Since |
+| ------------------- | -------------------------------------- | ---------------------------------- | ----- |
+| **`notifications`** | <code>LocalNotificationSchema[]</code> | The list of pending notifications. | 1.0.0 |
 
 
 #### RegisterActionTypesOptions
