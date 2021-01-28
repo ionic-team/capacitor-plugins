@@ -133,7 +133,9 @@ export class LocalNotificationsWeb
       setTimeout(() => {
         this.sendPending();
       }, diff);
+      return;
     }
+    this.buildNotification(notification);
   }
 
   protected buildNotification(
