@@ -548,7 +548,7 @@ public class LocalNotificationsPlugin: CAPPlugin {
         var notification: JSObject = [
             "id": Int(request.identifier) ?? -1,
             "title": request.content.title,
-            "body": request.content.body,
+            "body": request.content.body
         ]
 
         var notificationExtras = request.content.userInfo["cap_extra"] as? [String: Any?]
