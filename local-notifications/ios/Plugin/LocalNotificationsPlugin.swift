@@ -549,7 +549,6 @@ public class LocalNotificationsPlugin: CAPPlugin {
             "id": Int(request.identifier) ?? -1,
             "title": request.content.title,
             "body": request.content.body,
-            "repeats": request.trigger?.repeats ?? false       
         ]
 
         var notificationExtras = request.content.userInfo["cap_extra"] as? [String: Any?]
