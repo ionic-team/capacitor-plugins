@@ -105,7 +105,17 @@ export class LocalNotificationsWeb
         notification.schedule?.at &&
         notification.schedule.at.getTime() <= now
       ) {
-        this.buildNotification(notification);
+        const localNotification = this.buildNotification(notification);
+        localNotification.addEventListener(
+          'click',
+          this.onClick.bind(this, notification),
+          false,
+        );
+        localNotification.addEventListener(
+          'show',
+          this.onShow.bind(this, notification),
+          false,
+        );
         toRemove.push(notification);
       }
     }
@@ -132,5 +142,17 @@ export class LocalNotificationsWeb
     return new Notification(notification.title, {
       body: notification.body,
     });
+  }
+
+  protected onClick(notification: LocalNotificationSchema): void {
+    const data = {
+      actionId: 'tap',
+      notification,
+    };
+    this.notifyListeners('localNotificationActionPerformed', data);
+  }
+
+  protected onShow(notification: LocalNotificationSchema): void {
+    this.notifyListeners('localNotificationReceived', notification);
   }
 }
