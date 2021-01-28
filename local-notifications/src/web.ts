@@ -36,7 +36,7 @@ export class LocalNotificationsWeb
 
     return {
       notifications: options.notifications.map(notification => ({
-        id: notification.id.toString(),
+        id: notification.id,
       })),
     };
   }
@@ -54,7 +54,7 @@ export class LocalNotificationsWeb
   async cancel(pending: ScheduleResult): Promise<void> {
     this.pending = this.pending.filter(
       notification =>
-        !pending.notifications.find(n => n.id === notification.id.toString()),
+        !pending.notifications.find(n => n.id === notification.id),
     );
   }
 
@@ -122,7 +122,9 @@ export class LocalNotificationsWeb
       setTimeout(() => {
         this.sendPending();
       }, diff);
+      return;
     }
+    this.buildNotification(notification);
   }
 
   protected buildNotification(

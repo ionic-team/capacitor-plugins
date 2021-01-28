@@ -1,10 +1,12 @@
 package com.capacitorjs.plugins.localnotifications;
 
 import android.content.Intent;
+import com.getcapacitor.Bridge;
 import com.getcapacitor.JSArray;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
+import com.getcapacitor.PluginHandle;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
 import com.getcapacitor.annotation.Permission;
@@ -15,6 +17,7 @@ import org.json.JSONArray;
 @CapacitorPlugin(name = "LocalNotifications", permissions = @Permission(strings = {}, alias = "display"))
 public class LocalNotificationsPlugin extends Plugin {
 
+    private static Bridge staticBridge = null;
     private LocalNotificationManager manager;
     private NotificationStorage notificationStorage;
     private NotificationChannelManager notificationChannelManager;
@@ -26,6 +29,7 @@ public class LocalNotificationsPlugin extends Plugin {
         manager = new LocalNotificationManager(notificationStorage, getActivity(), getContext(), this.bridge.getConfig());
         manager.createNotificationChannel();
         notificationChannelManager = new NotificationChannelManager(getActivity());
+        staticBridge = this.bridge;
     }
 
     @Override
@@ -36,7 +40,7 @@ public class LocalNotificationsPlugin extends Plugin {
         }
         JSObject dataJson = manager.handleNotificationActionPerformed(data, notificationStorage);
         if (dataJson != null) {
-            notifyListeners("actionPerformed", dataJson, true);
+            notifyListeners("localNotificationActionPerformed", dataJson, true);
         }
     }
 
@@ -63,7 +67,7 @@ public class LocalNotificationsPlugin extends Plugin {
             JSArray jsArray = new JSArray();
             for (int i = 0; i < ids.length(); i++) {
                 try {
-                    JSObject notification = new JSObject().put("id", ids.getString(i));
+                    JSObject notification = new JSObject().put("id", ids.getInt(i));
                     jsArray.put(notification);
                 } catch (Exception ex) {}
             }
@@ -112,5 +116,23 @@ public class LocalNotificationsPlugin extends Plugin {
     @PluginMethod
     public void listChannels(PluginCall call) {
         notificationChannelManager.listChannels(call);
+    }
+
+    public static void fireReceived(JSObject notification) {
+        LocalNotificationsPlugin localNotificationsPlugin = LocalNotificationsPlugin.getLocalNotificationsInstance();
+        if (localNotificationsPlugin != null) {
+            localNotificationsPlugin.notifyListeners("localNotificationReceived", notification, true);
+        }
+    }
+
+    public static LocalNotificationsPlugin getLocalNotificationsInstance() {
+        if (staticBridge != null && staticBridge.getWebView() != null) {
+            PluginHandle handle = staticBridge.getPlugin("LocalNotifications");
+            if (handle == null) {
+                return null;
+            }
+            return (LocalNotificationsPlugin) handle.getInstance();
+        }
+        return null;
     }
 }

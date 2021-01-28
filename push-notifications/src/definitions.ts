@@ -43,7 +43,7 @@ export interface PushNotificationsPlugin {
    *
    * @since 1.0.0
    */
-  getDeliveredNotifications(): Promise<PushNotificationDeliveredList>;
+  getDeliveredNotifications(): Promise<DeliveredNotifications>;
 
   /**
    * Remove the specified notifications from the notifications screen.
@@ -51,7 +51,7 @@ export interface PushNotificationsPlugin {
    * @since 1.0.0
    */
   removeDeliveredNotifications(
-    delivered: PushNotificationDeliveredList,
+    delivered: DeliveredNotifications,
   ): Promise<void>;
 
   /**
@@ -111,7 +111,7 @@ export interface PushNotificationsPlugin {
    */
   addListener(
     eventName: 'registration',
-    listenerFunc: (token: PushNotificationToken) => void,
+    listenerFunc: (token: Token) => void,
   ): PluginListenerHandle;
 
   /**
@@ -143,7 +143,7 @@ export interface PushNotificationsPlugin {
    */
   addListener(
     eventName: 'pushNotificationActionPerformed',
-    listenerFunc: (notification: PushNotificationActionPerformed) => void,
+    listenerFunc: (notification: ActionPerformed) => void,
   ): PluginListenerHandle;
 
   /**
@@ -229,7 +229,7 @@ export interface PushNotificationSchema {
   groupSummary?: boolean;
 }
 
-export interface PushNotificationActionPerformed {
+export interface ActionPerformed {
   /**
    * @since 1.0.0
    */
@@ -246,14 +246,14 @@ export interface PushNotificationActionPerformed {
   notification: PushNotificationSchema;
 }
 
-export interface PushNotificationToken {
+export interface Token {
   /**
    * @since 1.0.0
    */
   value: string;
 }
 
-export interface PushNotificationDeliveredList {
+export interface DeliveredNotifications {
   /**
    * @since 1.0.0
    */
@@ -357,3 +357,39 @@ export interface PermissionStatus {
    */
   receive: PermissionState;
 }
+
+/**
+ * @deprecated Use 'Channel`.
+ * @since 1.0.0
+ */
+export type NotificationChannel = Channel;
+
+/**
+ * @deprecated Use `ListChannelsResult`.
+ * @since 1.0.0
+ */
+export type NotificationChannelList = ListChannelsResult;
+
+/**
+ * @deprecated Use `PushNotificationSchema`.
+ * @since 1.0.0
+ */
+export type PushNotification = PushNotificationSchema;
+
+/**
+ * @deprecated Use `ActionPerformed`.
+ * @since 1.0.0
+ */
+export type PushNotificationActionPerformed = ActionPerformed;
+
+/**
+ * @deprecated Use `DeliveredNotifications`.
+ * @since 1.0.0
+ */
+export type PushNotificationDeliveredList = DeliveredNotifications;
+
+/**
+ * @deprecated Use `Token`.
+ * @since 1.0.0
+ */
+export type PushNotificationToken = Token;

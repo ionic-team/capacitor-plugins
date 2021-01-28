@@ -88,7 +88,7 @@ public class LocalNotificationsPlugin: CAPPlugin {
 
         let ret = ids.map({ (id) -> JSObject in
             return [
-                "id": id
+                "id": Int(id) ?? -1
             ]
         })
         call.resolve([
@@ -137,7 +137,14 @@ public class LocalNotificationsPlugin: CAPPlugin {
             return
         }
 
-        let ids = notifications.map { $0["id"] as? String ?? "" }
+        let ids = notifications.map({ (value: JSObject) -> String in
+            if let idString = value["id"] as? String {
+                return idString
+            } else if let idNum = value["id"] as? NSNumber {
+                return idNum.stringValue
+            }
+            return ""
+        })
 
         UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: ids)
         call.resolve()
@@ -539,10 +546,10 @@ public class LocalNotificationsPlugin: CAPPlugin {
 
     func makePendingNotificationRequestJSObject(_ request: UNNotificationRequest) -> JSObject {
         var notification: JSObject = [
-            "id": request.identifier,
+            "id": Int(request.identifier) ?? -1,
             "title": request.content.title,
             "body": request.content.body,
-            "repeats": request.trigger?.repeats ?? false
+            "repeats": request.trigger?.repeats ?? false       
         ]
 
         var notificationExtras = request.content.userInfo["cap_extra"] as? [String: Any?]

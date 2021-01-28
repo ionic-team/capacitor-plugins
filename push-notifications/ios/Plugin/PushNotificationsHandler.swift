@@ -49,7 +49,7 @@ public class PushNotificationsHandler: NSObject, NotificationHandlerProtocol {
             return presentationOptions
         }
 
-        return [.badge, .sound, .alert]
+        return []
     }
 
     public func didReceive(response: UNNotificationResponse) {

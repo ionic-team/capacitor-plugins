@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/push-notifications@0.3.0...@capacitor/push-notifications@0.3.1) (2021-01-26)
+
+
+### Bug Fixes
+
+* support deprecated types from Capacitor 2 ([#210](https://github.com/ionic-team/capacitor-plugins/issues/210)) ([b559e24](https://github.com/ionic-team/capacitor-plugins/commit/b559e24b24174be60129217e87c0bff14bcdd573))
+* **ios:** do not show notifications when in foreground ([#209](https://github.com/ionic-team/capacitor-plugins/issues/209)) ([1994997](https://github.com/ionic-team/capacitor-plugins/commit/1994997a100d7c57477305d933fb835cf9f7c9c8))
+
+
+
+
+
 # [0.3.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/push-notifications@0.2.0...@capacitor/push-notifications@0.3.0) (2021-01-14)
 
 **Note:** Version bump only for package @capacitor/push-notifications

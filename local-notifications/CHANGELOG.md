@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/local-notifications@0.2.0...@capacitor/local-notifications@0.2.1) (2021-01-26)
+
+
+### Bug Fixes
+
+* Use the event names from Capacitor 2 ([#215](https://github.com/ionic-team/capacitor-plugins/issues/215)) ([008fe9e](https://github.com/ionic-team/capacitor-plugins/commit/008fe9e9bf6a960b0ab7b6fc4d5014f10ba13df8))
+
+
+
+
+
 # [0.2.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/local-notifications@0.1.0...@capacitor/local-notifications@0.2.0) (2021-01-14)
 
 **Note:** Version bump only for package @capacitor/local-notifications
