@@ -63,7 +63,7 @@ public class LocalNotificationsPlugin extends Plugin {
             JSArray jsArray = new JSArray();
             for (int i = 0; i < ids.length(); i++) {
                 try {
-                    JSObject notification = new JSObject().put("id", ids.getString(i));
+                    JSObject notification = new JSObject().put("id", ids.getInt(i));
                     jsArray.put(notification);
                 } catch (Exception ex) {}
             }

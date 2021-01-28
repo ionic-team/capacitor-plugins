@@ -273,7 +273,7 @@ The object that describes a local notification.
 
 | Prop     | Type                | Description                  | Since |
 | -------- | ------------------- | ---------------------------- | ----- |
-| **`id`** | <code>string</code> | The notification identifier. | 1.0.0 |
+| **`id`** | <code>number</code> | The notification identifier. | 1.0.0 |
 
 
 #### ScheduleOptions

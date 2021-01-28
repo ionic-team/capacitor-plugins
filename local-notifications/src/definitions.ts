@@ -162,7 +162,7 @@ export interface LocalNotificationDescriptor {
    *
    * @since 1.0.0
    */
-  id: string;
+  id: number;
 }
 
 export interface ScheduleOptions {
