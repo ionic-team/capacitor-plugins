@@ -83,8 +83,13 @@ public class LocalNotificationsPlugin extends Plugin {
 
     @PluginMethod
     public void getPending(PluginCall call) {
-        List<LocalNotification> notifications = notificationStorage.getSavedNotifications();
-        JSObject result = LocalNotification.buildLocalNotificationPendingList(notifications);
+        List<JSObject> notifications = notificationStorage.getSavedNotifications();
+        JSObject result = new JSObject();
+        JSArray jsArray = new JSArray();
+        for (JSObject notification : notifications) {
+            jsArray.put(notification);
+        }
+        result.put("notifications", jsArray);
         call.resolve(result);
     }
 

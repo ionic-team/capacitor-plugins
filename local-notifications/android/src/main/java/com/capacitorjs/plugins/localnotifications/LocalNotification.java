@@ -247,33 +247,6 @@ public class LocalNotification {
         return notificationsList;
     }
 
-    public static JSObject buildLocalNotificationPendingList(List<LocalNotification> notifications) {
-        JSObject result = new JSObject();
-        JSArray jsArray = new JSArray();
-        for (LocalNotification notification : notifications) {
-            JSObject jsNotification = new JSObject();
-            jsNotification.put("id", notification.getId());
-            jsNotification.put("title", notification.getTitle());
-            jsNotification.put("body", notification.getBody());
-            LocalNotificationSchedule schedule = notification.getSchedule();
-            if (schedule != null) {
-                JSObject jsSchedule = new JSObject();
-                jsSchedule.put("at", schedule.getAt());
-                jsSchedule.put("every", schedule.getEvery());
-                jsSchedule.put("count", schedule.getCount());
-                jsSchedule.put("on", schedule.getOn());
-                jsSchedule.put("repeats", schedule.isRepeating());
-                jsNotification.put("schedule", jsSchedule);
-            }
-
-            jsNotification.put("extra", notification.getExtra());
-
-            jsArray.put(jsNotification);
-        }
-        result.put("notifications", jsArray);
-        return result;
-    }
-
     public int getSmallIcon(Context context, int defaultIcon) {
         int resId = AssetUtil.RESOURCE_ID_ZERO_VALUE;
 
