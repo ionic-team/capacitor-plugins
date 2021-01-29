@@ -131,7 +131,7 @@ export interface LocalNotificationsPlugin {
   addListener(
     eventName: 'localNotificationReceived',
     listenerFunc: (notification: LocalNotificationSchema) => void,
-  ): PluginListenerHandle;
+  ): Promise<PluginListenerHandle> & PluginListenerHandle;
 
   /**
    * Listen for when an action is performed on a notification.
@@ -141,14 +141,14 @@ export interface LocalNotificationsPlugin {
   addListener(
     eventName: 'localNotificationActionPerformed',
     listenerFunc: (notificationAction: ActionPerformed) => void,
-  ): PluginListenerHandle;
+  ): Promise<PluginListenerHandle> & PluginListenerHandle;
 
   /**
    * Remove all listeners for this plugin.
    *
    * @since 1.0.0
    */
-  removeAllListeners(): void;
+  removeAllListeners(): Promise<void>;
 }
 
 /**
