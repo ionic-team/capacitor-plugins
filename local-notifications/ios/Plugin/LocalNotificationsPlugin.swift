@@ -161,6 +161,7 @@ public class LocalNotificationsPlugin: CAPPlugin {
             let ret = notifications.compactMap({ [weak self] (notification) -> JSObject? in
                 return self?.makePendingNotificationRequestJSObject(notification)
             })
+
             call.resolve([
                 "notifications": ret
             ])
@@ -551,26 +552,28 @@ public class LocalNotificationsPlugin: CAPPlugin {
             "body": request.content.body
         ]
 
-        var notificationExtras = request.content.userInfo["cap_extra"] as? [String: Any?]
+        if let userInfo = JSTypes.coerceDictionaryToJSObject(request.content.userInfo) {
+            var extra = userInfo["cap_extra"] as? JSObject ?? userInfo
 
-        if notificationExtras == nil {
-            notificationExtras = request.content.userInfo as? [String: Any?]
-        }
-
-        if let notificationExtras = notificationExtras {
-            var extra: JSObject = [:]
-            for(key, value) in notificationExtras {
-                extra[key] = value as? JSValue
+            // check for any dates and convert them to strings
+            for(key, value) in extra {
+                if let date = value as? Date {
+                    let dateString = ISO8601DateFormatter().string(from: date)
+                    extra[key] = dateString
+                }
             }
+
             notification["extra"] = extra
-        }
 
-        if let notificationSchedule = request.content.userInfo["cap_schedule"] as? [String: Any?] {
-            var schedule: JSObject = [:]
-            for(key, value) in notificationSchedule {
-                schedule[key] = value as? JSValue
+            if var schedule = userInfo["cap_schedule"] as? JSObject {
+                // convert schedule at date to string
+                if let date = schedule["at"] as? Date {
+                    let dateString = ISO8601DateFormatter().string(from: date)
+                    schedule["at"] = dateString
+                }
+
+                notification["schedule"] = schedule
             }
-            notification["schedule"] = schedule
         }
 
         return notification
