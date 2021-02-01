@@ -129,7 +129,7 @@ export interface LocalNotificationsPlugin {
    * @since 1.0.0
    */
   addListener(
-    eventName: 'received',
+    eventName: 'localNotificationReceived',
     listenerFunc: (notification: LocalNotificationSchema) => void,
   ): PluginListenerHandle;
 
@@ -139,7 +139,7 @@ export interface LocalNotificationsPlugin {
    * @since 1.0.0
    */
   addListener(
-    eventName: 'actionPerformed',
+    eventName: 'localNotificationActionPerformed',
     listenerFunc: (notificationAction: ActionPerformed) => void,
   ): PluginListenerHandle;
 
@@ -162,7 +162,7 @@ export interface LocalNotificationDescriptor {
    *
    * @since 1.0.0
    */
-  id: string;
+  id: number;
 }
 
 export interface ScheduleOptions {

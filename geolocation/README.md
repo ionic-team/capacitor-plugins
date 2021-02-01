@@ -9,7 +9,7 @@ npm install @capacitor/geolocation
 npx cap sync
 ```
 
-## iOS Notes
+## iOS
 
 Apple requires privacy descriptions to be specified in `Info.plist` for location information:
 
@@ -18,7 +18,7 @@ Apple requires privacy descriptions to be specified in `Info.plist` for location
 
 Read about [Configuring `Info.plist`](https://capacitorjs.com/docs/ios/configuration#configuring-infoplist) in the [iOS Guide](https://capacitorjs.com/docs/ios) for more information on setting iOS permissions in Xcode
 
-## Android Notes
+## Android
 
 This API requires the following permissions be added to your `AndroidManifest.xml`:
 
@@ -32,6 +32,12 @@ This API requires the following permissions be added to your `AndroidManifest.xm
 The first two permissions ask for location data, both fine and coarse, and the last line is optional but necessary if your app _requires_ GPS to function. You may leave it out, though keep in mind that this may mean your app is installed on devices lacking GPS hardware.
 
 Read about [Setting Permissions](https://capacitorjs.com/docs/android/configuration#setting-permissions) in the [Android Guide](https://capacitorjs.com/docs/android) for more information on setting Android permissions.
+
+### Variables
+
+This plugin will use the following project variables (defined in your app's `variables.gradle` file):
+
+- `$playServicesLocationVersion` version of `com.google.android.gms:play-services-location` (default: `17.1.0`)
 
 ## Example
 
