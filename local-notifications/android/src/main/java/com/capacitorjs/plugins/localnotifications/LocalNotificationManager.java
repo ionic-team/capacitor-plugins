@@ -328,7 +328,11 @@ public class LocalNotificationManager {
                 long interval = at.getTime() - new Date().getTime();
                 alarmManager.setRepeating(AlarmManager.RTC, at.getTime(), interval, pendingIntent);
             } else {
-                alarmManager.setExact(AlarmManager.RTC, at.getTime(), pendingIntent);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC, at.getTime(), pendingIntent);
+                } else {
+                    alarmManager.setExact(AlarmManager.RTC, at.getTime(), pendingIntent);
+                }
             }
             return;
         }
