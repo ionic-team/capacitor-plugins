@@ -656,7 +656,7 @@ export interface Schedule {
    * Allow this notification to fire while in [Doze](https://developer.android.com/training/monitoring-device-state/doze-standby)
    *
    * Only available for Android 23+.
-   * 
+   *
    * Note that these notifications can only fire [once per 9 minutes, per app](https://developer.android.com/training/monitoring-device-state/doze-standby#assessing_your_app).
    *
    * @since 1.0.0

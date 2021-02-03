@@ -328,7 +328,7 @@ public class LocalNotificationManager {
                 long interval = at.getTime() - new Date().getTime();
                 alarmManager.setRepeating(AlarmManager.RTC, at.getTime(), interval, pendingIntent);
             } else {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && schedule.allowWhileIdle()) {
                     alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC, at.getTime(), pendingIntent);
                 } else {
                     alarmManager.setExact(AlarmManager.RTC, at.getTime(), pendingIntent);
@@ -354,7 +354,12 @@ public class LocalNotificationManager {
             long trigger = on.nextTrigger(new Date());
             notificationIntent.putExtra(TimedNotificationPublisher.CRON_KEY, on.toMatchString());
             pendingIntent = PendingIntent.getBroadcast(context, request.getId(), notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-            alarmManager.setExact(AlarmManager.RTC, trigger, pendingIntent);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && schedule.allowWhileIdle()) {
+                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC, trigger, pendingIntent);
+            } else {
+                alarmManager.setExact(AlarmManager.RTC, trigger, pendingIntent);
+            }
+
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
             Logger.debug(Logger.tags("LN"), "notification " + request.getId() + " will next fire at " + sdf.format(new Date(trigger)));
         }
