@@ -83,7 +83,7 @@ public class PushNotificationsHandler: NSObject, NotificationHandlerProtocol {
             "title": request.content.title,
             "sound": notificationRequest["sound"]  ?? "",
             "body": request.content.body,
-            "extra": request.content.userInfo as? JSObject ?? [:],
+            "extra": JSTypes.coerceDictionaryToJSObject(request.content.userInfo) ?? [:],
             "actionTypeId": request.content.categoryIdentifier,
             "attachments": notificationRequest["attachments"]  ?? []
         ]
