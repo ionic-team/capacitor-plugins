@@ -39,7 +39,7 @@ public class SharePlugin extends Plugin {
 
     @ActivityCallback
     private void activityResult(PluginCall call, ActivityResult result) {
-        if (result.getResultCode() == Activity.RESULT_CANCELED) {
+        if (result.getResultCode() == Activity.RESULT_CANCELED && !stopped) {
             call.reject("Share canceled");
         } else {
             JSObject callResult = new JSObject();
