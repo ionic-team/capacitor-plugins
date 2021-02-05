@@ -130,8 +130,31 @@ export class LocalNotificationsWeb
   protected buildNotification(
     notification: LocalNotificationSchema,
   ): Notification {
-    return new Notification(notification.title, {
+    const localNotification = new Notification(notification.title, {
       body: notification.body,
     });
+    localNotification.addEventListener(
+      'click',
+      this.onClick.bind(this, notification),
+      false,
+    );
+    localNotification.addEventListener(
+      'show',
+      this.onShow.bind(this, notification),
+      false,
+    );
+    return localNotification;
+  }
+
+  protected onClick(notification: LocalNotificationSchema): void {
+    const data = {
+      actionId: 'tap',
+      notification,
+    };
+    this.notifyListeners('localNotificationActionPerformed', data);
+  }
+
+  protected onShow(notification: LocalNotificationSchema): void {
+    this.notifyListeners('localNotificationReceived', notification);
   }
 }
