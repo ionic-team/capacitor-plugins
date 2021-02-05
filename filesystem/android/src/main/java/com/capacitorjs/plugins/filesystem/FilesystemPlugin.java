@@ -340,6 +340,7 @@ public class FilesystemPlugin extends Plugin {
         }
         try {
             implementation.copy(from, directory, to, toDirectory, doRename);
+            call.resolve();
         } catch (CopyFailedException ex) {
             call.reject(ex.getMessage());
         } catch (IOException ex) {
