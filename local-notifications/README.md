@@ -407,9 +407,20 @@ Represents a notification attachment.
 
 #### PendingResult
 
-| Prop                | Type                                       | Description                        | Since |
-| ------------------- | ------------------------------------------ | ---------------------------------- | ----- |
-| **`notifications`** | <code>LocalNotificationDescriptor[]</code> | The list of pending notifications. | 1.0.0 |
+| Prop                | Type                                          | Description                        | Since |
+| ------------------- | --------------------------------------------- | ---------------------------------- | ----- |
+| **`notifications`** | <code>PendingLocalNotificationSchema[]</code> | The list of pending notifications. | 1.0.0 |
+
+
+#### PendingLocalNotificationSchema
+
+| Prop           | Type                                          | Description                                                          | Since |
+| -------------- | --------------------------------------------- | -------------------------------------------------------------------- | ----- |
+| **`title`**    | <code>string</code>                           | The title of the notification.                                       | 1.0.0 |
+| **`body`**     | <code>string</code>                           | The body of the notification, shown below the title.                 | 1.0.0 |
+| **`id`**       | <code>number</code>                           | The notification identifier.                                         | 1.0.0 |
+| **`schedule`** | <code><a href="#schedule">Schedule</a></code> | <a href="#schedule">Schedule</a> this notification for a later time. | 1.0.0 |
+| **`extra`**    | <code>any</code>                              | Set extra data to store within this notification.                    | 1.0.0 |
 
 
 #### RegisterActionTypesOptions

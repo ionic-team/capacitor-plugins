@@ -189,7 +189,7 @@ export interface PendingResult {
    *
    * @since 1.0.0
    */
-  notifications: LocalNotificationDescriptor[];
+  notifications: PendingLocalNotificationSchema[];
 }
 
 export interface RegisterActionTypesOptions {
@@ -440,6 +440,43 @@ export interface AttachmentOptions {
    * @since 1.0.0
    */
   iosUNNotificationAttachmentOptionsThumbnailTimeKey?: string;
+}
+
+export interface PendingLocalNotificationSchema {
+  /**
+   * The title of the notification.
+   *
+   * @since 1.0.0
+   */
+  title: string;
+
+  /**
+   * The body of the notification, shown below the title.
+   *
+   * @since 1.0.0
+   */
+  body: string;
+
+  /**
+   * The notification identifier.
+   *
+   * @since 1.0.0
+   */
+  id: number;
+
+  /**
+   * Schedule this notification for a later time.
+   *
+   * @since 1.0.0
+   */
+  schedule?: Schedule;
+
+  /**
+   * Set extra data to store within this notification.
+   *
+   * @since 1.0.0
+   */
+  extra?: any;
 }
 
 export interface LocalNotificationSchema {
