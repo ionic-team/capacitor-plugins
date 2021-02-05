@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/push-notifications@0.3.1...@capacitor/push-notifications@0.3.2) (2021-02-05)
+
+
+### Bug Fixes
+
+* **ios:** Coerce 'extra' field to add missing notification data on events ([#231](https://github.com/ionic-team/capacitor-plugins/issues/231)) ([46ce6b2](https://github.com/ionic-team/capacitor-plugins/commit/46ce6b2a72e4b107702b0cfb97007aaf385a3106))
+
+
+
+
+
 ## [0.3.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/push-notifications@0.3.0...@capacitor/push-notifications@0.3.1) (2021-01-26)
 
 
