@@ -312,13 +312,14 @@ Represents a schedule for a notification.
 
 Use either `at`, `on`, or `every` to schedule notifications.
 
-| Prop          | Type                                                    | Description                                                                                                                                                                                   | Since |
-| ------------- | ------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`at`**      | <code><a href="#date">Date</a></code>                   | <a href="#schedule">Schedule</a> a notification at a specific date and time.                                                                                                                  | 1.0.0 |
-| **`repeats`** | <code>boolean</code>                                    | Repeat delivery of this notification at the date and time specified by `at`. Only available for iOS and Android.                                                                              | 1.0.0 |
-| **`on`**      | <code><a href="#scheduleon">ScheduleOn</a></code>       | <a href="#schedule">Schedule</a> a notification on particular interval(s). This is similar to scheduling [cron](https://en.wikipedia.org/wiki/Cron) jobs. Only available for iOS and Android. | 1.0.0 |
-| **`every`**   | <code><a href="#scheduleevery">ScheduleEvery</a></code> | <a href="#schedule">Schedule</a> a notification on a particular interval.                                                                                                                     | 1.0.0 |
-| **`count`**   | <code>number</code>                                     | Limit the number times a notification is delivered by the interval specified by `every`.                                                                                                      | 1.0.0 |
+| Prop                 | Type                                                    | Description                                                                                                                                                                                                                                                                                                                             | Since |
+| -------------------- | ------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`at`**             | <code><a href="#date">Date</a></code>                   | <a href="#schedule">Schedule</a> a notification at a specific date and time.                                                                                                                                                                                                                                                            | 1.0.0 |
+| **`repeats`**        | <code>boolean</code>                                    | Repeat delivery of this notification at the date and time specified by `at`. Only available for iOS and Android.                                                                                                                                                                                                                        | 1.0.0 |
+| **`allowWhileIdle`** | <code>boolean</code>                                    | Allow this notification to fire while in [Doze](https://developer.android.com/training/monitoring-device-state/doze-standby) Only available for Android 23+. Note that these notifications can only fire [once per 9 minutes, per app](https://developer.android.com/training/monitoring-device-state/doze-standby#assessing_your_app). | 1.0.0 |
+| **`on`**             | <code><a href="#scheduleon">ScheduleOn</a></code>       | <a href="#schedule">Schedule</a> a notification on particular interval(s). This is similar to scheduling [cron](https://en.wikipedia.org/wiki/Cron) jobs. Only available for iOS and Android.                                                                                                                                           | 1.0.0 |
+| **`every`**          | <code><a href="#scheduleevery">ScheduleEvery</a></code> | <a href="#schedule">Schedule</a> a notification on a particular interval.                                                                                                                                                                                                                                                               | 1.0.0 |
+| **`count`**          | <code>number</code>                                     | Limit the number times a notification is delivered by the interval specified by `every`.                                                                                                                                                                                                                                                | 1.0.0 |
 
 
 #### Date
@@ -406,9 +407,20 @@ Represents a notification attachment.
 
 #### PendingResult
 
-| Prop                | Type                                       | Description                        | Since |
-| ------------------- | ------------------------------------------ | ---------------------------------- | ----- |
-| **`notifications`** | <code>LocalNotificationDescriptor[]</code> | The list of pending notifications. | 1.0.0 |
+| Prop                | Type                                          | Description                        | Since |
+| ------------------- | --------------------------------------------- | ---------------------------------- | ----- |
+| **`notifications`** | <code>PendingLocalNotificationSchema[]</code> | The list of pending notifications. | 1.0.0 |
+
+
+#### PendingLocalNotificationSchema
+
+| Prop           | Type                                          | Description                                                          | Since |
+| -------------- | --------------------------------------------- | -------------------------------------------------------------------- | ----- |
+| **`title`**    | <code>string</code>                           | The title of the notification.                                       | 1.0.0 |
+| **`body`**     | <code>string</code>                           | The body of the notification, shown below the title.                 | 1.0.0 |
+| **`id`**       | <code>number</code>                           | The notification identifier.                                         | 1.0.0 |
+| **`schedule`** | <code><a href="#schedule">Schedule</a></code> | <a href="#schedule">Schedule</a> this notification for a later time. | 1.0.0 |
+| **`extra`**    | <code>any</code>                              | Set extra data to store within this notification.                    | 1.0.0 |
 
 
 #### RegisterActionTypesOptions
