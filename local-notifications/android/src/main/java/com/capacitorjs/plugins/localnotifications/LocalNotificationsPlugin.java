@@ -83,8 +83,8 @@ public class LocalNotificationsPlugin extends Plugin {
 
     @PluginMethod
     public void getPending(PluginCall call) {
-        List<String> ids = notificationStorage.getSavedNotificationIds();
-        JSObject result = LocalNotification.buildLocalNotificationPendingList(ids);
+        List<LocalNotification> notifications = notificationStorage.getSavedNotifications();
+        JSObject result = LocalNotification.buildLocalNotificationPendingList(notifications);
         call.resolve(result);
     }
 

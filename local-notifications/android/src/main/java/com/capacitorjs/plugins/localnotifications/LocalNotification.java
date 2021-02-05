@@ -247,18 +247,28 @@ public class LocalNotification {
         return notificationsList;
     }
 
-    public static JSObject buildLocalNotificationPendingList(List<String> ids) {
+    public static JSObject buildLocalNotificationPendingList(List<LocalNotification> notifications) {
         JSObject result = new JSObject();
         JSArray jsArray = new JSArray();
-        for (String id : ids) {
-            JSObject notification = new JSObject();
-            try {
-                int intId = Integer.parseInt(id);
-                notification.put("id", intId);
-            } catch (NumberFormatException ex) {
-                notification.put("id", -1);
+        for (LocalNotification notification : notifications) {
+            JSObject jsNotification = new JSObject();
+            jsNotification.put("id", notification.getId());
+            jsNotification.put("title", notification.getTitle());
+            jsNotification.put("body", notification.getBody());
+            LocalNotificationSchedule schedule = notification.getSchedule();
+            if (schedule != null) {
+                JSObject jsSchedule = new JSObject();
+                jsSchedule.put("at", schedule.getAt());
+                jsSchedule.put("every", schedule.getEvery());
+                jsSchedule.put("count", schedule.getCount());
+                jsSchedule.put("on", schedule.getOn());
+                jsSchedule.put("repeats", schedule.isRepeating());
+                jsNotification.put("schedule", jsSchedule);
             }
-            jsArray.put(notification);
+
+            jsNotification.put("extra", notification.getExtra());
+
+            jsArray.put(jsNotification);
         }
         result.put("notifications", jsArray);
         return result;

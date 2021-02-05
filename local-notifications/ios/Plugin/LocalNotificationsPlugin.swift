@@ -161,6 +161,7 @@ public class LocalNotificationsPlugin: CAPPlugin {
             let ret = notifications.compactMap({ [weak self] (notification) -> JSObject? in
                 return self?.makePendingNotificationRequestJSObject(notification)
             })
+
             call.resolve([
                 "notifications": ret
             ])
@@ -206,12 +207,17 @@ public class LocalNotificationsPlugin: CAPPlugin {
         }
 
         let extra = notification["extra"] as? JSObject ?? [:]
+        let schedule = notification["schedule"] as? JSObject ?? [:]
         let content = UNMutableNotificationContent()
         content.title = NSString.localizedUserNotificationString(forKey: title, arguments: nil)
         content.body = NSString.localizedUserNotificationString(forKey: body,
                                                                 arguments: nil)
 
-        content.userInfo = extra
+        content.userInfo = [
+            "cap_extra": extra,
+            "cap_schedule": schedule
+        ]
+
         if let actionTypeId = notification["actionTypeId"] as? String {
             content.categoryIdentifier = actionTypeId
         }
@@ -540,9 +546,38 @@ public class LocalNotificationsPlugin: CAPPlugin {
     }
 
     func makePendingNotificationRequestJSObject(_ request: UNNotificationRequest) -> JSObject {
-        return [
-            "id": Int(request.identifier) ?? -1
+        var notification: JSObject = [
+            "id": Int(request.identifier) ?? -1,
+            "title": request.content.title,
+            "body": request.content.body
         ]
+
+        if let userInfo = JSTypes.coerceDictionaryToJSObject(request.content.userInfo) {
+            var extra = userInfo["cap_extra"] as? JSObject ?? userInfo
+
+            // check for any dates and convert them to strings
+            for(key, value) in extra {
+                if let date = value as? Date {
+                    let dateString = ISO8601DateFormatter().string(from: date)
+                    extra[key] = dateString
+                }
+            }
+
+            notification["extra"] = extra
+
+            if var schedule = userInfo["cap_schedule"] as? JSObject {
+                // convert schedule at date to string
+                if let date = schedule["at"] as? Date {
+                    let dateString = ISO8601DateFormatter().string(from: date)
+                    schedule["at"] = dateString
+                }
+
+                notification["schedule"] = schedule
+            }
+        }
+
+        return notification
+
     }
 
     @objc func createChannel(_ call: CAPPluginCall) {
