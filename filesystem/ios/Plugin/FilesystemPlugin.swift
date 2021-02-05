@@ -165,6 +165,7 @@ public class FilesystemPlugin: CAPPlugin {
 
         do {
             try implementation.rmdir(at: fileUrl, recursive: recursive)
+            call.resolve()
         } catch let error as NSError {
             handleError(call, error.localizedDescription, error)
         }
