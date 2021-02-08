@@ -37,7 +37,7 @@ public class GeolocationPlugin extends Plugin {
      */
     @PluginMethod(permissionCallback = "completeCurrentPosition")
     public void getCurrentPosition(final PluginCall call) {
-        if (!hasRequiredPermissions()) {
+        if (getPermissionState("location") != PermissionState.GRANTED) {
             requestAllPermissions(call);
         } else {
             getPosition(call);
@@ -84,7 +84,7 @@ public class GeolocationPlugin extends Plugin {
     @PluginMethod(returnType = PluginMethod.RETURN_CALLBACK, permissionCallback = "completeWatchPosition")
     public void watchPosition(PluginCall call) {
         call.save();
-        if (!hasRequiredPermissions()) {
+        if (getPermissionState("location") != PermissionState.GRANTED) {
             requestAllPermissions(call);
         } else {
             startWatch(call);
