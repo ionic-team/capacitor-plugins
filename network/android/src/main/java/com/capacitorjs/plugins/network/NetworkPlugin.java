@@ -42,7 +42,7 @@ public class NetworkPlugin extends Plugin {
     @SuppressWarnings("MissingPermission")
     @PluginMethod
     public void getStatus(PluginCall call) {
-        if (hasRequiredPermissions()) {
+        if (isPermissionDeclared("Network")) {
             call.resolve(getStatusJSObject(implementation.getNetworkStatus()));
         } else {
             call.reject(PERMISSION_NOT_SET);
@@ -67,7 +67,7 @@ public class NetworkPlugin extends Plugin {
 
     @SuppressWarnings("MissingPermission")
     private void updateNetworkStatus() {
-        if (hasRequiredPermissions()) {
+        if (isPermissionDeclared("Network")) {
             notifyListeners(NETWORK_CHANGE_EVENT, getStatusJSObject(implementation.getNetworkStatus()));
         } else {
             Logger.error(getLogTag(), PERMISSION_NOT_SET, null);
