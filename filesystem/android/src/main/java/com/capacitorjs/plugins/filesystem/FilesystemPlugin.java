@@ -113,21 +113,27 @@ public class FilesystemPlugin extends Plugin {
                 }
             }
         } else {
-            // check if file://
+            // check file:// or no scheme uris
             Uri u = Uri.parse(path);
-            if ("file".equals(u.getScheme())) {
+            if (u.getScheme() == null || u.getScheme().equals("file")) {
                 File fileObject = new File(u.getPath());
                 // do not know where the file is being store so checking the permission to be secure
                 // TODO to prevent permission checking we need a property from the call
                 if (!isStoragePermissionGranted()) {
                     requestAllPermissions(call);
                 } else {
-                    if (fileObject.getParentFile().exists() || (recursive && fileObject.getParentFile().mkdirs())) {
+                    if (
+                        fileObject.getParentFile() == null ||
+                        fileObject.getParentFile().exists() ||
+                        (recursive && fileObject.getParentFile().mkdirs())
+                    ) {
                         saveFile(call, fileObject, data);
                     } else {
                         call.reject("Parent folder doesn't exist");
                     }
                 }
+            } else {
+                call.reject(u.getScheme() + " scheme not supported");
             }
         }
     }
@@ -340,6 +346,7 @@ public class FilesystemPlugin extends Plugin {
         }
         try {
             implementation.copy(from, directory, to, toDirectory, doRename);
+            call.resolve();
         } catch (CopyFailedException ex) {
             call.reject(ex.getMessage());
         } catch (IOException ex) {

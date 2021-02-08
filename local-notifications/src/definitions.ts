@@ -189,7 +189,7 @@ export interface PendingResult {
    *
    * @since 1.0.0
    */
-  notifications: LocalNotificationDescriptor[];
+  notifications: PendingLocalNotificationSchema[];
 }
 
 export interface RegisterActionTypesOptions {
@@ -442,6 +442,43 @@ export interface AttachmentOptions {
   iosUNNotificationAttachmentOptionsThumbnailTimeKey?: string;
 }
 
+export interface PendingLocalNotificationSchema {
+  /**
+   * The title of the notification.
+   *
+   * @since 1.0.0
+   */
+  title: string;
+
+  /**
+   * The body of the notification, shown below the title.
+   *
+   * @since 1.0.0
+   */
+  body: string;
+
+  /**
+   * The notification identifier.
+   *
+   * @since 1.0.0
+   */
+  id: number;
+
+  /**
+   * Schedule this notification for a later time.
+   *
+   * @since 1.0.0
+   */
+  schedule?: Schedule;
+
+  /**
+   * Set extra data to store within this notification.
+   *
+   * @since 1.0.0
+   */
+  extra?: any;
+}
+
 export interface LocalNotificationSchema {
   /**
    * The title of the notification.
@@ -651,6 +688,17 @@ export interface Schedule {
    * @since 1.0.0
    */
   repeats?: boolean;
+
+  /**
+   * Allow this notification to fire while in [Doze](https://developer.android.com/training/monitoring-device-state/doze-standby)
+   *
+   * Only available for Android 23+.
+   *
+   * Note that these notifications can only fire [once per 9 minutes, per app](https://developer.android.com/training/monitoring-device-state/doze-standby#assessing_your_app).
+   *
+   * @since 1.0.0
+   */
+  allowWhileIdle?: boolean;
 
   /**
    * Schedule a notification on particular interval(s).

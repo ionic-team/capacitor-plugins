@@ -18,6 +18,8 @@ public class LocalNotificationSchedule {
 
     private DateMatch on;
 
+    private Boolean whileIdle;
+
     public LocalNotificationSchedule(JSObject jsonNotification) throws ParseException {
         JSObject schedule = jsonNotification.getJSObject("schedule");
         if (schedule != null) {
@@ -29,6 +31,9 @@ public class LocalNotificationSchedule {
             buildAtElement(schedule);
             // Build on - recurring times. For e.g. every 1st day of the month at 8:30.
             buildOnElement(schedule);
+
+            // Schedule this notification to fire even if app is idled (Doze)
+            this.whileIdle = schedule.getBoolean("allowWhileIdle", false);
         }
     }
 
@@ -103,6 +108,10 @@ public class LocalNotificationSchedule {
 
     public void setCount(int count) {
         this.count = count;
+    }
+
+    public boolean allowWhileIdle() {
+        return this.whileIdle;
     }
 
     public boolean isRepeating() {
