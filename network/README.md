@@ -58,7 +58,7 @@ Query the current status of the network connection.
 ### addListener('networkStatusChange', ...)
 
 ```typescript
-addListener(eventName: 'networkStatusChange', listenerFunc: ConnectionStatusChangeListener) => PluginListenerHandle
+addListener(eventName: 'networkStatusChange', listenerFunc: ConnectionStatusChangeListener) => Promise<PluginListenerHandle> & PluginListenerHandle
 ```
 
 Listen for changes in the network connection.
@@ -68,7 +68,7 @@ Listen for changes in the network connection.
 | **`eventName`**    | <code>'networkStatusChange'</code>                                                        |
 | **`listenerFunc`** | <code><a href="#connectionstatuschangelistener">ConnectionStatusChangeListener</a></code> |
 
-**Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt; & <a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
 **Since:** 1.0.0
 
@@ -78,7 +78,7 @@ Listen for changes in the network connection.
 ### removeAllListeners()
 
 ```typescript
-removeAllListeners() => void
+removeAllListeners() => Promise<void>
 ```
 
 Remove all listeners (including the network status changes) for this plugin.
@@ -103,9 +103,9 @@ Represents the state and type of the network connection.
 
 #### PluginListenerHandle
 
-| Prop         | Type                       |
-| ------------ | -------------------------- |
-| **`remove`** | <code>() =&gt; void</code> |
+| Prop         | Type                                      |
+| ------------ | ----------------------------------------- |
+| **`remove`** | <code>() =&gt; Promise&lt;void&gt;</code> |
 
 
 ### Type Aliases
