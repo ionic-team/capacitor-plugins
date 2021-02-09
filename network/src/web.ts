@@ -1,8 +1,6 @@
-import type { PluginListenerHandle } from '@capacitor/core';
 import { WebPlugin } from '@capacitor/core';
 
 import type {
-  ConnectionStatusChangeListener,
   ConnectionStatus,
   ConnectionType,
   NetworkPlugin,
@@ -59,6 +57,12 @@ function translatedConnection(): ConnectionType {
 }
 
 export class NetworkWeb extends WebPlugin implements NetworkPlugin {
+  constructor() {
+    super();
+    window.addEventListener('online', this.handleOnline);
+    window.addEventListener('offline', this.handleOffline);
+  }
+
   async getStatus(): Promise<ConnectionStatus> {
     if (!window.navigator) {
       throw this.unavailable(
@@ -70,46 +74,32 @@ export class NetworkWeb extends WebPlugin implements NetworkPlugin {
     const connectionType = translatedConnection();
 
     const status: ConnectionStatus = {
-      connected: connected,
+      connected,
       connectionType: connected ? connectionType : 'none',
     };
 
     return status;
   }
 
-  addListener(
-    eventName: 'networkStatusChange',
-    listenerFunc: ConnectionStatusChangeListener,
-  ): PluginListenerHandle {
-    const thisRef = this;
+  private handleOnline = () => {
     const connectionType = translatedConnection();
 
-    const onlineBindFunc = listenerFunc.bind(thisRef, {
+    const status: ConnectionStatus = {
       connected: true,
       connectionType: connectionType,
-    });
-    const offlineBindFunc = listenerFunc.bind(thisRef, {
+    };
+
+    this.notifyListeners('networkStatusChange', status);
+  };
+
+  private handleOffline = () => {
+    const status: ConnectionStatus = {
       connected: false,
       connectionType: 'none',
-    });
+    };
 
-    if (eventName.localeCompare('networkStatusChange') === 0) {
-      window.addEventListener('online', onlineBindFunc);
-      window.addEventListener('offline', offlineBindFunc);
-      return {
-        remove: () => {
-          window.removeEventListener('online', onlineBindFunc);
-          window.removeEventListener('offline', offlineBindFunc);
-        },
-      };
-    } else {
-      return {
-        remove: () => {
-          /* do nothing */
-        },
-      };
-    }
-  }
+    this.notifyListeners('networkStatusChange', status);
+  };
 }
 
 const Network = new NetworkWeb();

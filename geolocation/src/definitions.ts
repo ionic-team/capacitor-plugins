@@ -23,7 +23,7 @@ export interface GeolocationPlugin {
   watchPosition(
     options: PositionOptions,
     callback: WatchPositionCallback,
-  ): CallbackID;
+  ): Promise<CallbackID>;
 
   /**
    * Clear a given watch

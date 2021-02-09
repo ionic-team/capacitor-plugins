@@ -25,7 +25,7 @@ export interface BrowserPlugin {
   addListener(
     eventName: 'browserFinished',
     listenerFunc: () => void,
-  ): PluginListenerHandle;
+  ): Promise<PluginListenerHandle> & PluginListenerHandle;
 
   /**
    * Android & iOS only: Listen for the page loaded event.
@@ -35,14 +35,14 @@ export interface BrowserPlugin {
   addListener(
     eventName: 'browserPageLoaded',
     listenerFunc: () => void,
-  ): PluginListenerHandle;
+  ): Promise<PluginListenerHandle> & PluginListenerHandle;
 
   /**
    * Remove all native listeners for this plugin.
    *
    * @since 1.0.0
    */
-  removeAllListeners(): void;
+  removeAllListeners(): Promise<void>;
 }
 
 /**

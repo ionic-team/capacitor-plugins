@@ -160,7 +160,7 @@ export interface AppPlugin {
   addListener(
     eventName: 'appStateChange',
     listenerFunc: StateChangeListener,
-  ): PluginListenerHandle;
+  ): Promise<PluginListenerHandle> & PluginListenerHandle;
 
   /**
    * Listen for url open events for the app. This handles both custom URL scheme links as well
@@ -171,7 +171,7 @@ export interface AppPlugin {
   addListener(
     eventName: 'appUrlOpen',
     listenerFunc: URLOpenListener,
-  ): PluginListenerHandle;
+  ): Promise<PluginListenerHandle> & PluginListenerHandle;
 
   /**
    * If the app was launched with previously persisted plugin call data, such as on Android
@@ -201,7 +201,7 @@ export interface AppPlugin {
   addListener(
     eventName: 'appRestoredResult',
     listenerFunc: RestoredListener,
-  ): PluginListenerHandle;
+  ): Promise<PluginListenerHandle> & PluginListenerHandle;
 
   /**
    * Listen for the hardware back button event (Android only). Listening for this event will disable the
@@ -213,14 +213,14 @@ export interface AppPlugin {
   addListener(
     eventName: 'backButton',
     listenerFunc: BackButtonListener,
-  ): PluginListenerHandle;
+  ): Promise<PluginListenerHandle> & PluginListenerHandle;
 
   /**
    * Remove all native listeners for this plugin
    *
    * @since 1.0.0
    */
-  removeAllListeners(): void;
+  removeAllListeners(): Promise<void>;
 }
 
 /**

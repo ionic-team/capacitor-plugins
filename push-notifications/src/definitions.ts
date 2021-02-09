@@ -112,7 +112,7 @@ export interface PushNotificationsPlugin {
   addListener(
     eventName: 'registration',
     listenerFunc: (token: Token) => void,
-  ): PluginListenerHandle;
+  ): Promise<PluginListenerHandle> & PluginListenerHandle;
 
   /**
    * Called when the push notification registration finished with problems.
@@ -124,7 +124,7 @@ export interface PushNotificationsPlugin {
   addListener(
     eventName: 'registrationError',
     listenerFunc: (error: any) => void,
-  ): PluginListenerHandle;
+  ): Promise<PluginListenerHandle> & PluginListenerHandle;
 
   /**
    * Called when the device receives a push notification.
@@ -134,7 +134,7 @@ export interface PushNotificationsPlugin {
   addListener(
     eventName: 'pushNotificationReceived',
     listenerFunc: (notification: PushNotificationSchema) => void,
-  ): PluginListenerHandle;
+  ): Promise<PluginListenerHandle> & PluginListenerHandle;
 
   /**
    * Called when an action is performed on a push notification.
@@ -144,14 +144,14 @@ export interface PushNotificationsPlugin {
   addListener(
     eventName: 'pushNotificationActionPerformed',
     listenerFunc: (notification: ActionPerformed) => void,
-  ): PluginListenerHandle;
+  ): Promise<PluginListenerHandle> & PluginListenerHandle;
 
   /**
    * Remove all native listeners for this plugin.
    *
    * @since 1.0.0
    */
-  removeAllListeners(): void;
+  removeAllListeners(): Promise<void>;
 }
 
 export interface PushNotificationSchema {
