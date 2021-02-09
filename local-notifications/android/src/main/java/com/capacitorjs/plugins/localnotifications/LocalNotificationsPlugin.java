@@ -44,12 +44,6 @@ public class LocalNotificationsPlugin extends Plugin {
         }
     }
 
-    @Override
-    protected void handleOnActivityResult(PluginCall savedCall, int requestCode, int resultCode, Intent data) {
-        super.handleOnActivityResult(savedCall, requestCode, resultCode, data);
-        this.handleOnNewIntent(data);
-    }
-
     /**
      * Schedule a notification call from JavaScript
      * Creates local notification in system.
