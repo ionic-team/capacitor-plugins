@@ -81,7 +81,7 @@ export class NetworkWeb extends WebPlugin implements NetworkPlugin {
     return status;
   }
 
-  handleOnline = () => {
+  private handleOnline = () => {
     const connectionType = translatedConnection();
 
     const status: ConnectionStatus = {
@@ -92,7 +92,7 @@ export class NetworkWeb extends WebPlugin implements NetworkPlugin {
     this.notifyListeners('networkStatusChange', status);
   };
 
-  handleOffline = () => {
+  private handleOffline = () => {
     const status: ConnectionStatus = {
       connected: false,
       connectionType: 'none',
