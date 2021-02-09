@@ -6,6 +6,7 @@ import type {
   ListChannelsResult,
   LocalNotificationSchema,
   LocalNotificationsPlugin,
+  PendingResult,
   PermissionStatus,
   ScheduleOptions,
   ScheduleResult,
@@ -40,11 +41,9 @@ export class LocalNotificationsWeb
     };
   }
 
-  async getPending(): Promise<ScheduleResult> {
+  async getPending(): Promise<PendingResult> {
     return {
-      notifications: this.pending.map(notification => ({
-        id: notification.id,
-      })),
+      notifications: this.pending,
     };
   }
 
@@ -131,8 +130,31 @@ export class LocalNotificationsWeb
   protected buildNotification(
     notification: LocalNotificationSchema,
   ): Notification {
-    return new Notification(notification.title, {
+    const localNotification = new Notification(notification.title, {
       body: notification.body,
     });
+    localNotification.addEventListener(
+      'click',
+      this.onClick.bind(this, notification),
+      false,
+    );
+    localNotification.addEventListener(
+      'show',
+      this.onShow.bind(this, notification),
+      false,
+    );
+    return localNotification;
+  }
+
+  protected onClick(notification: LocalNotificationSchema): void {
+    const data = {
+      actionId: 'tap',
+      notification,
+    };
+    this.notifyListeners('localNotificationActionPerformed', data);
+  }
+
+  protected onShow(notification: LocalNotificationSchema): void {
+    this.notifyListeners('localNotificationReceived', notification);
   }
 }

@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@0.3.1...@capacitor/filesystem@0.3.2) (2021-02-05)
+
+
+### Bug Fixes
+
+* **android:** support writing files without scheme ([#241](https://github.com/ionic-team/capacitor-plugins/issues/241)) ([4285cb1](https://github.com/ionic-team/capacitor-plugins/commit/4285cb1d37ec3361e7ec4da4786502693b04d478))
+* **filesystem:** copy doesn't resolve on Android ([#233](https://github.com/ionic-team/capacitor-plugins/issues/233)) ([17cbf3b](https://github.com/ionic-team/capacitor-plugins/commit/17cbf3b0ada97f1279fba32b551c380c0e669406))
+* **filesystem:** rmdir doesn't resolve on iOS ([#239](https://github.com/ionic-team/capacitor-plugins/issues/239)) ([7ca538b](https://github.com/ionic-team/capacitor-plugins/commit/7ca538bb47e2e00080eadfe8d875323c1e198cb2))
+
+
+
+
+
 ## [0.3.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@0.3.0...@capacitor/filesystem@0.3.1) (2021-01-26)
 
 
