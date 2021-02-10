@@ -1,6 +1,6 @@
 {
   "name": "@capacitor/splash-screen",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "The Splash Screen API provides methods for showing or hiding a Splash image.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
@@ -61,7 +61,7 @@
     "typescript": "~4.0.3"
   },
   "peerDependencies": {
-    "@capacitor/core": "^3.0.0-beta.1"
+    "@capacitor/core": "^3.0.0-beta.2"
   },
   "prettier": "@ionic/prettier-config",
   "swiftlint": "@ionic/swiftlint-config",

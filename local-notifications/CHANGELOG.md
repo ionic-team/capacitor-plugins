@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.4.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/local-notifications@0.3.0...@capacitor/local-notifications@0.4.0) (2021-02-10)
+
+
+### Features
+
+* **android:** implements Activity Result API changes for permissions and activity results ([#222](https://github.com/ionic-team/capacitor-plugins/issues/222)) ([f671b9f](https://github.com/ionic-team/capacitor-plugins/commit/f671b9f4b472806ef43db6dcf302d4503cf1828c))
+
+
+
+
+
 # [0.3.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/local-notifications@0.2.1...@capacitor/local-notifications@0.3.0) (2021-02-05)
 
 
