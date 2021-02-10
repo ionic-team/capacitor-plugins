@@ -10,6 +10,7 @@ import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
 import com.getcapacitor.annotation.Permission;
+import com.getcapacitor.annotation.PermissionCallback;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,10 +36,10 @@ public class GeolocationPlugin extends Plugin {
      *
      * @param call Plugin call
      */
-    @PluginMethod(permissionCallback = "completeCurrentPosition")
+    @PluginMethod
     public void getCurrentPosition(final PluginCall call) {
         if (!hasRequiredPermissions()) {
-            requestAllPermissions(call);
+            requestAllPermissions(call, "completeCurrentPosition");
         } else {
             getPosition(call);
         }
@@ -49,6 +50,7 @@ public class GeolocationPlugin extends Plugin {
      * @see #getCurrentPosition(PluginCall)
      * @param call the plugin call
      */
+    @PermissionCallback
     private void completeCurrentPosition(PluginCall call) {
         if (getPermissionState("location") == PermissionState.GRANTED) {
             boolean enableHighAccuracy = call.getBoolean("enableHighAccuracy", false);
@@ -81,11 +83,11 @@ public class GeolocationPlugin extends Plugin {
      *
      * @param call the plugin call
      */
-    @PluginMethod(returnType = PluginMethod.RETURN_CALLBACK, permissionCallback = "completeWatchPosition")
+    @PluginMethod(returnType = PluginMethod.RETURN_CALLBACK)
     public void watchPosition(PluginCall call) {
         call.save();
         if (!hasRequiredPermissions()) {
-            requestAllPermissions(call);
+            requestAllPermissions(call, "completeWatchPosition");
         } else {
             startWatch(call);
         }
@@ -96,6 +98,7 @@ public class GeolocationPlugin extends Plugin {
      * @see #watchPosition(PluginCall)
      * @param call the plugin call
      */
+    @PermissionCallback
     private void completeWatchPosition(PluginCall call) {
         if (getPermissionState("location") == PermissionState.GRANTED) {
             startWatch(call);

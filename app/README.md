@@ -154,7 +154,7 @@ Get the URL the app was launched with, if any.
 ### addListener('appStateChange', ...)
 
 ```typescript
-addListener(eventName: 'appStateChange', listenerFunc: StateChangeListener) => PluginListenerHandle
+addListener(eventName: 'appStateChange', listenerFunc: StateChangeListener) => Promise<PluginListenerHandle> & PluginListenerHandle
 ```
 
 Listen for changes in the App's active state (whether the app is in the foreground or background)
@@ -164,7 +164,7 @@ Listen for changes in the App's active state (whether the app is in the foregrou
 | **`eventName`**    | <code>'appStateChange'</code>                                       |
 | **`listenerFunc`** | <code><a href="#statechangelistener">StateChangeListener</a></code> |
 
-**Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt; & <a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
 **Since:** 1.0.0
 
@@ -174,7 +174,7 @@ Listen for changes in the App's active state (whether the app is in the foregrou
 ### addListener('appUrlOpen', ...)
 
 ```typescript
-addListener(eventName: 'appUrlOpen', listenerFunc: URLOpenListener) => PluginListenerHandle
+addListener(eventName: 'appUrlOpen', listenerFunc: URLOpenListener) => Promise<PluginListenerHandle> & PluginListenerHandle
 ```
 
 Listen for url open events for the app. This handles both custom URL scheme links as well
@@ -185,7 +185,7 @@ as URLs your app handles (Universal Links on iOS and App Links on Android)
 | **`eventName`**    | <code>'appUrlOpen'</code>                                   |
 | **`listenerFunc`** | <code><a href="#urlopenlistener">URLOpenListener</a></code> |
 
-**Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt; & <a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
 **Since:** 1.0.0
 
@@ -195,7 +195,7 @@ as URLs your app handles (Universal Links on iOS and App Links on Android)
 ### addListener('appRestoredResult', ...)
 
 ```typescript
-addListener(eventName: 'appRestoredResult', listenerFunc: RestoredListener) => PluginListenerHandle
+addListener(eventName: 'appRestoredResult', listenerFunc: RestoredListener) => Promise<PluginListenerHandle> & PluginListenerHandle
 ```
 
 If the app was launched with previously persisted plugin call data, such as on Android
@@ -225,7 +225,7 @@ Activities (for example, Camera) to have this event and process handled.
 | **`eventName`**    | <code>'appRestoredResult'</code>                              |
 | **`listenerFunc`** | <code><a href="#restoredlistener">RestoredListener</a></code> |
 
-**Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt; & <a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
 **Since:** 1.0.0
 
@@ -235,7 +235,7 @@ Activities (for example, Camera) to have this event and process handled.
 ### addListener('backButton', ...)
 
 ```typescript
-addListener(eventName: 'backButton', listenerFunc: BackButtonListener) => PluginListenerHandle
+addListener(eventName: 'backButton', listenerFunc: BackButtonListener) => Promise<PluginListenerHandle> & PluginListenerHandle
 ```
 
 Listen for the hardware back button event (Android only). Listening for this event will disable the
@@ -247,7 +247,7 @@ If you want to close the app, call `App.exitApp()`.
 | **`eventName`**    | <code>'backButton'</code>                                         |
 | **`listenerFunc`** | <code><a href="#backbuttonlistener">BackButtonListener</a></code> |
 
-**Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt; & <a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
 **Since:** 1.0.0
 
@@ -257,7 +257,7 @@ If you want to close the app, call `App.exitApp()`.
 ### removeAllListeners()
 
 ```typescript
-removeAllListeners() => void
+removeAllListeners() => Promise<void>
 ```
 
 Remove all native listeners for this plugin
@@ -296,9 +296,9 @@ Remove all native listeners for this plugin
 
 #### PluginListenerHandle
 
-| Prop         | Type                       |
-| ------------ | -------------------------- |
-| **`remove`** | <code>() =&gt; void</code> |
+| Prop         | Type                                      |
+| ------------ | ----------------------------------------- |
+| **`remove`** | <code>() =&gt; Promise&lt;void&gt;</code> |
 
 
 #### URLOpenListenerEvent

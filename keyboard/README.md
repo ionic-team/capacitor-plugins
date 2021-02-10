@@ -195,7 +195,7 @@ This method is only supported on iOS.
 ### addListener('keyboardWillShow', ...)
 
 ```typescript
-addListener(eventName: 'keyboardWillShow', listenerFunc: (info: KeyboardInfo) => void) => PluginListenerHandle
+addListener(eventName: 'keyboardWillShow', listenerFunc: (info: KeyboardInfo) => void) => Promise<PluginListenerHandle> & PluginListenerHandle
 ```
 
 Listen for when the keyboard is about to be shown.
@@ -205,7 +205,7 @@ Listen for when the keyboard is about to be shown.
 | **`eventName`**    | <code>'keyboardWillShow'</code>                                          |
 | **`listenerFunc`** | <code>(info: <a href="#keyboardinfo">KeyboardInfo</a>) =&gt; void</code> |
 
-**Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt; & <a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
 **Since:** 1.0.0
 
@@ -215,7 +215,7 @@ Listen for when the keyboard is about to be shown.
 ### addListener('keyboardDidShow', ...)
 
 ```typescript
-addListener(eventName: 'keyboardDidShow', listenerFunc: (info: KeyboardInfo) => void) => PluginListenerHandle
+addListener(eventName: 'keyboardDidShow', listenerFunc: (info: KeyboardInfo) => void) => Promise<PluginListenerHandle> & PluginListenerHandle
 ```
 
 Listen for when the keyboard is shown.
@@ -225,7 +225,7 @@ Listen for when the keyboard is shown.
 | **`eventName`**    | <code>'keyboardDidShow'</code>                                           |
 | **`listenerFunc`** | <code>(info: <a href="#keyboardinfo">KeyboardInfo</a>) =&gt; void</code> |
 
-**Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt; & <a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
 **Since:** 1.0.0
 
@@ -235,7 +235,7 @@ Listen for when the keyboard is shown.
 ### addListener('keyboardWillHide', ...)
 
 ```typescript
-addListener(eventName: 'keyboardWillHide', listenerFunc: () => void) => PluginListenerHandle
+addListener(eventName: 'keyboardWillHide', listenerFunc: () => void) => Promise<PluginListenerHandle> & PluginListenerHandle
 ```
 
 Listen for when the keyboard is about to be hidden.
@@ -245,7 +245,7 @@ Listen for when the keyboard is about to be hidden.
 | **`eventName`**    | <code>'keyboardWillHide'</code> |
 | **`listenerFunc`** | <code>() =&gt; void</code>      |
 
-**Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt; & <a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
 **Since:** 1.0.0
 
@@ -255,7 +255,7 @@ Listen for when the keyboard is about to be hidden.
 ### addListener('keyboardDidHide', ...)
 
 ```typescript
-addListener(eventName: 'keyboardDidHide', listenerFunc: () => void) => PluginListenerHandle
+addListener(eventName: 'keyboardDidHide', listenerFunc: () => void) => Promise<PluginListenerHandle> & PluginListenerHandle
 ```
 
 Listen for when the keyboard is hidden.
@@ -265,7 +265,7 @@ Listen for when the keyboard is hidden.
 | **`eventName`**    | <code>'keyboardDidHide'</code> |
 | **`listenerFunc`** | <code>() =&gt; void</code>     |
 
-**Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt; & <a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
 **Since:** 1.0.0
 
@@ -275,7 +275,7 @@ Listen for when the keyboard is hidden.
 ### removeAllListeners()
 
 ```typescript
-removeAllListeners() => void
+removeAllListeners() => Promise<void>
 ```
 
 Remove all native listeners for this plugin.
@@ -304,9 +304,9 @@ Remove all native listeners for this plugin.
 
 #### PluginListenerHandle
 
-| Prop         | Type                       |
-| ------------ | -------------------------- |
-| **`remove`** | <code>() =&gt; void</code> |
+| Prop         | Type                                      |
+| ------------ | ----------------------------------------- |
+| **`remove`** | <code>() =&gt; Promise&lt;void&gt;</code> |
 
 
 #### KeyboardInfo
