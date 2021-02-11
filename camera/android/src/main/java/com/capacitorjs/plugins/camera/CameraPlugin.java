@@ -484,7 +484,7 @@ public class CameraPlugin extends Plugin {
         // If the camera permission is defined in the manifest, then we have to prompt the user
         // or else we will get a security exception when trying to present the camera. If, however,
         // it is not defined in the manifest then we don't need to prompt and it will just work.
-        if (isPermissionDeclared("camera")) {
+        if (isPermissionDeclared(CAMERA)) {
             // just request normally
             super.requestPermissions(call);
         } else {
