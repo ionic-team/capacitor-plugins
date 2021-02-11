@@ -10,18 +10,16 @@ import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
 import com.getcapacitor.annotation.Permission;
 
-@CapacitorPlugin(name = "Network", permissions = { @Permission(strings = { Manifest.permission.ACCESS_NETWORK_STATE }) })
+@CapacitorPlugin(name = "Network")
 public class NetworkPlugin extends Plugin {
 
     private Network implementation;
     public static final String NETWORK_CHANGE_EVENT = "networkStatusChange";
-    private static final String PERMISSION_NOT_SET = Manifest.permission.ACCESS_NETWORK_STATE + " not set in AndroidManifest.xml";
 
     /**
      * Monitor for network status changes and fire our event.
      */
     @Override
-    @SuppressWarnings("MissingPermission")
     public void load() {
         implementation = new Network(getContext());
         implementation.setStatusChangeListener(this::updateNetworkStatus);
@@ -39,14 +37,9 @@ public class NetworkPlugin extends Plugin {
      * Get current network status information.
      * @param call
      */
-    @SuppressWarnings("MissingPermission")
     @PluginMethod
     public void getStatus(PluginCall call) {
-        if (isPermissionDeclared("Network")) {
-            call.resolve(getStatusJSObject(implementation.getNetworkStatus()));
-        } else {
-            call.reject(PERMISSION_NOT_SET);
-        }
+        call.resolve(getStatusJSObject(implementation.getNetworkStatus()));
     }
 
     /**
@@ -65,13 +58,8 @@ public class NetworkPlugin extends Plugin {
         implementation.stopMonitoring(getActivity());
     }
 
-    @SuppressWarnings("MissingPermission")
     private void updateNetworkStatus() {
-        if (isPermissionDeclared("Network")) {
-            notifyListeners(NETWORK_CHANGE_EVENT, getStatusJSObject(implementation.getNetworkStatus()));
-        } else {
-            Logger.error(getLogTag(), PERMISSION_NOT_SET, null);
-        }
+        notifyListeners(NETWORK_CHANGE_EVENT, getStatusJSObject(implementation.getNetworkStatus()));
     }
 
     /**
