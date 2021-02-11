@@ -17,7 +17,7 @@ about [Configuring iOS](https://capacitorjs.com/docs/ios/configuration) for
 help.
 
 The status bar visibility defaults to visible and the style defaults to
-`StatusBarStyle.Default`. You can change these defaults by adding
+`Style.Default`. You can change these defaults by adding
 `UIStatusBarHidden` and/or `UIStatusBarStyle` in `Info.plist`.
 
 `setBackgroundColor` and `setOverlaysWebView` are currently not supported on
@@ -26,7 +26,7 @@ iOS devices.
 ## Example
 
 ```typescript
-import { StatusBar, StatusBarStyle } from '@capacitor/status-bar';
+import { StatusBar, Style } from '@capacitor/status-bar';
 
 // iOS only
 window.addEventListener('statusTap', function () {
@@ -37,11 +37,11 @@ window.addEventListener('statusTap', function () {
 StatusBar.setOverlaysWebView({ overlay: true });
 
 const setStatusBarStyleDark = async () => {
-  await StatusBar.setStyle({ style: StatusBarStyle.Dark });
+  await StatusBar.setStyle({ style: Style.Dark });
 };
 
 const setStatusBarStyleLight = async () => {
-  await StatusBar.setStyle({ style: StatusBarStyle.Light });
+  await StatusBar.setStyle({ style: Style.Light });
 };
 
 const hideStatusBar = async () => {
