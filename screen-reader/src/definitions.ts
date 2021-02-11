@@ -69,14 +69,14 @@ export interface ScreenReaderPlugin {
   addListener(
     eventName: 'screenReaderStateChange',
     listener: StateChangeListener,
-  ): PluginListenerHandle;
+  ): Promise<PluginListenerHandle> & PluginListenerHandle;
 
   /**
    * Remove all the listeners that are attached to this plugin.
    *
    * @since 1.0.0
    */
-  removeAllListeners(): void;
+  removeAllListeners(): Promise<void>;
 }
 
 /**

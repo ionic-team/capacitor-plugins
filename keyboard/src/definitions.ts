@@ -162,7 +162,7 @@ export interface KeyboardPlugin {
   addListener(
     eventName: 'keyboardWillShow',
     listenerFunc: (info: KeyboardInfo) => void,
-  ): PluginListenerHandle;
+  ): Promise<PluginListenerHandle> & PluginListenerHandle;
 
   /**
    * Listen for when the keyboard is shown.
@@ -172,7 +172,7 @@ export interface KeyboardPlugin {
   addListener(
     eventName: 'keyboardDidShow',
     listenerFunc: (info: KeyboardInfo) => void,
-  ): PluginListenerHandle;
+  ): Promise<PluginListenerHandle> & PluginListenerHandle;
 
   /**
    * Listen for when the keyboard is about to be hidden.
@@ -182,7 +182,7 @@ export interface KeyboardPlugin {
   addListener(
     eventName: 'keyboardWillHide',
     listenerFunc: () => void,
-  ): PluginListenerHandle;
+  ): Promise<PluginListenerHandle> & PluginListenerHandle;
 
   /**
    * Listen for when the keyboard is hidden.
@@ -192,12 +192,12 @@ export interface KeyboardPlugin {
   addListener(
     eventName: 'keyboardDidHide',
     listenerFunc: () => void,
-  ): PluginListenerHandle;
+  ): Promise<PluginListenerHandle> & PluginListenerHandle;
 
   /**
    * Remove all native listeners for this plugin.
    *
    * @since 1.0.0
    */
-  removeAllListeners(): void;
+  removeAllListeners(): Promise<void>;
 }

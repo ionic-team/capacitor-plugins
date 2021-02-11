@@ -1,6 +1,7 @@
 import { WebPlugin } from '@capacitor/core';
 
 import type {
+  CallbackID,
   GeolocationPlugin,
   PermissionStatus,
   Position,
@@ -28,10 +29,10 @@ export class GeolocationWeb extends WebPlugin implements GeolocationPlugin {
     });
   }
 
-  watchPosition(
+  async watchPosition(
     options: PositionOptions,
     callback: WatchPositionCallback,
-  ): string {
+  ): Promise<CallbackID> {
     const id = navigator.geolocation.watchPosition(
       pos => {
         callback(pos);

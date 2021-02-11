@@ -80,7 +80,7 @@ No-op on other platforms.
 ### addListener('browserFinished', ...)
 
 ```typescript
-addListener(eventName: 'browserFinished', listenerFunc: () => void) => PluginListenerHandle
+addListener(eventName: 'browserFinished', listenerFunc: () => void) => Promise<PluginListenerHandle> & PluginListenerHandle
 ```
 
 Android & iOS only: Listen for the loading finished event.
@@ -90,7 +90,7 @@ Android & iOS only: Listen for the loading finished event.
 | **`eventName`**    | <code>'browserFinished'</code> |
 | **`listenerFunc`** | <code>() =&gt; void</code>     |
 
-**Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt; & <a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
 **Since:** 1.0.0
 
@@ -100,7 +100,7 @@ Android & iOS only: Listen for the loading finished event.
 ### addListener('browserPageLoaded', ...)
 
 ```typescript
-addListener(eventName: 'browserPageLoaded', listenerFunc: () => void) => PluginListenerHandle
+addListener(eventName: 'browserPageLoaded', listenerFunc: () => void) => Promise<PluginListenerHandle> & PluginListenerHandle
 ```
 
 Android & iOS only: Listen for the page loaded event.
@@ -110,7 +110,7 @@ Android & iOS only: Listen for the page loaded event.
 | **`eventName`**    | <code>'browserPageLoaded'</code> |
 | **`listenerFunc`** | <code>() =&gt; void</code>       |
 
-**Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt; & <a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
 **Since:** 1.0.0
 
@@ -120,7 +120,7 @@ Android & iOS only: Listen for the page loaded event.
 ### removeAllListeners()
 
 ```typescript
-removeAllListeners() => void
+removeAllListeners() => Promise<void>
 ```
 
 Remove all native listeners for this plugin.
@@ -147,8 +147,8 @@ Represents the options passed to `open`.
 
 #### PluginListenerHandle
 
-| Prop         | Type                       |
-| ------------ | -------------------------- |
-| **`remove`** | <code>() =&gt; void</code> |
+| Prop         | Type                                      |
+| ------------ | ----------------------------------------- |
+| **`remove`** | <code>() =&gt; Promise&lt;void&gt;</code> |
 
 </docgen-api>

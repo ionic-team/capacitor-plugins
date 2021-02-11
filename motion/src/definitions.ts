@@ -9,7 +9,7 @@ export interface MotionPlugin {
   addListener(
     eventName: 'accel',
     listenerFunc: AccelListener,
-  ): PluginListenerHandle;
+  ): Promise<PluginListenerHandle> & PluginListenerHandle;
 
   /**
    * Add a listener for device orientation change (compass heading, etc.)
@@ -19,14 +19,14 @@ export interface MotionPlugin {
   addListener(
     eventName: 'orientation',
     listenerFunc: OrientationListener,
-  ): PluginListenerHandle;
+  ): Promise<PluginListenerHandle> & PluginListenerHandle;
 
   /**
    * Remove all the listeners that are attached to this plugin.
    *
    * @since 1.0.0
    */
-  removeAllListeners(): void;
+  removeAllListeners(): Promise<void>;
 }
 
 export type AccelListener = (event: AccelListenerEvent) => void;

@@ -93,7 +93,7 @@ plugin](https://github.com/capacitor-community/text-to-speech).
 ### addListener('screenReaderStateChange', ...)
 
 ```typescript
-addListener(eventName: 'screenReaderStateChange', listener: StateChangeListener) => PluginListenerHandle
+addListener(eventName: 'screenReaderStateChange', listener: StateChangeListener) => Promise<PluginListenerHandle> & PluginListenerHandle
 ```
 
 Add a listener
@@ -106,7 +106,7 @@ Readers).
 | **`eventName`** | <code>'screenReaderStateChange'</code>                              |
 | **`listener`**  | <code><a href="#statechangelistener">StateChangeListener</a></code> |
 
-**Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt; & <a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
 **Since:** 1.0.0
 
@@ -116,7 +116,7 @@ Readers).
 ### removeAllListeners()
 
 ```typescript
-removeAllListeners() => void
+removeAllListeners() => Promise<void>
 ```
 
 Remove all the listeners that are attached to this plugin.
@@ -139,9 +139,9 @@ Remove all the listeners that are attached to this plugin.
 
 #### PluginListenerHandle
 
-| Prop         | Type                       |
-| ------------ | -------------------------- |
-| **`remove`** | <code>() =&gt; void</code> |
+| Prop         | Type                                      |
+| ------------ | ----------------------------------------- |
+| **`remove`** | <code>() =&gt; Promise&lt;void&gt;</code> |
 
 
 #### ScreenReaderState
