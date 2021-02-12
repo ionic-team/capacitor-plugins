@@ -64,9 +64,13 @@ public class DateMatch {
         this.minute = minute;
     }
 
-    public Integer getSecond() { return second; }
+    public Integer getSecond() {
+        return second;
+    }
 
-    public void setSecond(Integer second) { this.second = second; }
+    public void setSecond(Integer second) {
+        this.second = second;
+    }
 
     /**
      * Gets a calendar instance pointing to the specified date.
@@ -148,7 +152,22 @@ public class DateMatch {
 
     @Override
     public String toString() {
-        return "DateMatch{" + "year=" + year + ", month=" + month + ", day=" + day + ", hour=" + hour + ", minute=" + minute + ", second=" + second + '}';
+        return (
+            "DateMatch{" +
+            "year=" +
+            year +
+            ", month=" +
+            month +
+            ", day=" +
+            day +
+            ", hour=" +
+            hour +
+            ", minute=" +
+            minute +
+            ", second=" +
+            second +
+            '}'
+        );
     }
 
     @Override
@@ -183,7 +202,8 @@ public class DateMatch {
      * @return
      */
     public String toMatchString() {
-        String matchString = year + separator + month + separator + day + separator + hour + separator + minute + separator + second + separator + unit;
+        String matchString =
+            year + separator + month + separator + day + separator + hour + separator + minute + separator + second + separator + unit;
         return matchString.replace("null", "*");
     }
 
