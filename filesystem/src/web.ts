@@ -252,7 +252,6 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
     const path: string = this.getPath(options.directory, options.path);
     const doRecursive = options.recursive;
     const parentPath = path.substr(0, path.lastIndexOf('/'));
-    console.log('redusie', doRecursive);
 
     const depth = (path.match(/\//g) || []).length;
     const parentEntry = (await this.dbRequest('get', [parentPath])) as EntryObj;
