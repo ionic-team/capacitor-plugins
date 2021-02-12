@@ -136,14 +136,14 @@ import Foundation
     /**
      * Get the SearchPathDirectory corresponding to the JS string
      */
-    @objc public func getDirectory(directory: String) -> FileManager.SearchPathDirectory {
+    public func getDirectory(directory: String?) -> FileManager.SearchPathDirectory? {
         switch directory {
         case "DOCUMENTS":
             return .documentDirectory
         case "CACHE":
             return .cachesDirectory
         default:
-            return .documentDirectory
+            return nil
         }
     }
 
@@ -151,17 +151,15 @@ import Foundation
      * Get the URL for this file, supporting file:// paths and
      * files with directory mappings.
      */
-    @objc public func getFileUrl(at path: String, in directory: String) -> URL? {
-        if path.starts(with: "file://") {
+    @objc public func getFileUrl(at path: String, in directory: String?) -> URL? {
+        if let directory = getDirectory(directory: directory) {
+            guard let dir = FileManager.default.urls(for: directory, in: .userDomainMask).first else {
+                return nil
+            }
+
+            return dir.appendingPathComponent(path)
+        } else {
             return URL(string: path)
         }
-
-        let directory = getDirectory(directory: directory)
-
-        guard let dir = FileManager.default.urls(for: directory, in: .userDomainMask).first else {
-            return nil
-        }
-
-        return dir.appendingPathComponent(path)
     }
 }
