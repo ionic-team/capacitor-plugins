@@ -16,6 +16,7 @@ public class DateMatch {
     private Integer day;
     private Integer hour;
     private Integer minute;
+    private Integer second;
 
     // Unit used to save the last used unit for a trigger.
     // One of the Calendar constants values
@@ -63,6 +64,10 @@ public class DateMatch {
         this.minute = minute;
     }
 
+    public Integer getSecond() { return second; }
+
+    public void setSecond(Integer second) { this.second = second; }
+
     /**
      * Gets a calendar instance pointing to the specified date.
      *
@@ -102,6 +107,8 @@ public class DateMatch {
                 incrementUnit = Calendar.DAY_OF_MONTH;
             } else if (unit == Calendar.MINUTE) {
                 incrementUnit = Calendar.HOUR_OF_DAY;
+            } else if (unit == Calendar.SECOND) {
+                incrementUnit = Calendar.MINUTE;
             }
 
             if (incrementUnit != -1) {
@@ -133,12 +140,16 @@ public class DateMatch {
             next.set(Calendar.MINUTE, minute);
             if (unit == -1) unit = Calendar.MINUTE;
         }
+        if (second != null) {
+            next.set(Calendar.SECOND, second);
+            if (unit == -1) unit = Calendar.SECOND;
+        }
         return next;
     }
 
     @Override
     public String toString() {
-        return "DateMatch{" + "year=" + year + ", month=" + month + ", day=" + day + ", hour=" + hour + ", minute=" + minute + '}';
+        return "DateMatch{" + "year=" + year + ", month=" + month + ", day=" + day + ", hour=" + hour + ", minute=" + minute + ", second=" + second + '}';
     }
 
     @Override
@@ -152,7 +163,8 @@ public class DateMatch {
         if (month != null ? !month.equals(dateMatch.month) : dateMatch.month != null) return false;
         if (day != null ? !day.equals(dateMatch.day) : dateMatch.day != null) return false;
         if (hour != null ? !hour.equals(dateMatch.hour) : dateMatch.hour != null) return false;
-        return minute != null ? minute.equals(dateMatch.minute) : dateMatch.minute == null;
+        if (minute != null ? !minute.equals(dateMatch.minute) : dateMatch.minute != null) return false;
+        return second != null ? second.equals(dateMatch.second) : dateMatch.second == null;
     }
 
     @Override
@@ -162,6 +174,7 @@ public class DateMatch {
         result = 31 * result + (day != null ? day.hashCode() : 0);
         result = 31 * result + (hour != null ? hour.hashCode() : 0);
         result = 31 * result + (minute != null ? minute.hashCode() : 0);
+        result = 31 + result + (second != null ? second.hashCode() : 0);
         return result;
     }
 
@@ -171,7 +184,7 @@ public class DateMatch {
      * @return
      */
     public String toMatchString() {
-        String matchString = year + separator + month + separator + day + separator + hour + separator + minute + separator + unit;
+        String matchString = year + separator + month + separator + day + separator + hour + separator + minute + separator + second + separator + unit;
         return matchString.replace("null", "*");
     }
 
@@ -192,6 +205,17 @@ public class DateMatch {
             date.setMinute(getValueFromCronElement(split[4]));
             date.setUnit(getValueFromCronElement(split[5]));
         }
+
+        if (split != null && split.length == 7) {
+            date.setYear(getValueFromCronElement(split[0]));
+            date.setMonth(getValueFromCronElement(split[1]));
+            date.setDay(getValueFromCronElement(split[2]));
+            date.setHour(getValueFromCronElement(split[3]));
+            date.setMinute(getValueFromCronElement(split[4]));
+            date.setSecond(getValueFromCronElement(split[5]));
+            date.setUnit(getValueFromCronElement(split[6]));
+        }
+
         return date;
     }
 
