@@ -137,14 +137,15 @@ import Foundation
      * Get the SearchPathDirectory corresponding to the JS string
      */
     public func getDirectory(directory: String?) -> FileManager.SearchPathDirectory? {
-        switch directory {
-        case "DOCUMENTS":
-            return .documentDirectory
-        case "CACHE":
-            return .cachesDirectory
-        default:
-            return nil
+        if let directory = directory {
+            switch directory {
+            case "CACHE":
+                return .cachesDirectory
+            default:
+                return .documentDirectory
+            }
         }
+        return nil
     }
 
     /**
