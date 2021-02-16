@@ -132,6 +132,16 @@ public class NotificationStorage {
     }
 
     /**
+     * Update an existing stored notifications
+     */
+    public void updateNotification(LocalNotification localNotification) {
+        SharedPreferences storage = getStorage(NOTIFICATION_STORE_ID);
+        SharedPreferences.Editor editor = storage.edit();
+        editor.putString(localNotification.getId().toString(), localNotification.getSource());
+        editor.apply();
+    }
+
+    /**
      * Shared private preferences for the application.
      */
     private SharedPreferences getStorage(String key) {

@@ -37,6 +37,12 @@ public class TimedNotificationPublisher extends BroadcastReceiver {
         LocalNotificationsPlugin.fireReceived(notificationJson);
         notificationManager.notify(id, notification);
         rescheduleNotificationIfNeeded(context, intent, id);
+
+        try {
+            notificationJson.put("visible", true);
+            LocalNotification localNotification = LocalNotification.buildNotificationFromJSObject(notificationJson);
+            storage.updateNotification(localNotification);
+        } catch (Exception ex) {}
     }
 
     private void rescheduleNotificationIfNeeded(Context context, Intent intent, int id) {
