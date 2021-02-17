@@ -20,8 +20,7 @@ public class LocalNotificationSchedule {
 
     private Boolean whileIdle;
 
-    public LocalNotificationSchedule(JSObject jsonNotification) throws ParseException {
-        JSObject schedule = jsonNotification.getJSObject("schedule");
+    public LocalNotificationSchedule(JSObject schedule) throws ParseException {
         if (schedule != null) {
             // Every specific unit of time (always constant)
             buildEveryElement(schedule);
