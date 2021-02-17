@@ -382,6 +382,7 @@ Enables basic storage and retrieval of dates and times.
 | **`day`**    | <code>number</code> |
 | **`hour`**   | <code>number</code> |
 | **`minute`** | <code>number</code> |
+| **`second`** | <code>number</code> |
 
 
 #### Attachment
