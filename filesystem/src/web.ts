@@ -19,11 +19,10 @@ import type {
   StatResult,
   WriteFileOptions,
   WriteFileResult,
+  Directory,
 } from './definitions';
-import { Directory } from './definitions';
 
 export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
-  DEFAULT_DIRECTORY = Directory.Data;
   DB_VERSION = 1;
   DB_NAME = 'Disc';
 
@@ -105,10 +104,10 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
     directory: Directory | undefined,
     uriPath: string | undefined,
   ): string {
-    directory = directory || this.DEFAULT_DIRECTORY;
     const cleanedUriPath =
       uriPath !== undefined ? uriPath.replace(/^[/]+|[/]+$/g, '') : '';
-    let fsPath = '/' + directory;
+    let fsPath = '';
+    if (directory !== undefined) fsPath += '/' + directory;
     if (uriPath !== '') fsPath += '/' + cleanedUriPath;
     return fsPath;
   }
@@ -351,10 +350,8 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
     if (entry === undefined) {
       entry = (await this.dbRequest('get', [path + '/'])) as EntryObj;
     }
-    if (entry === undefined) throw Error('Entry does not exist.');
-
     return {
-      uri: entry.path,
+      uri: entry?.path || path,
     };
   }
 

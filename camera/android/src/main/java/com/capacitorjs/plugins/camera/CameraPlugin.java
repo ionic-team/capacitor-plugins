@@ -140,7 +140,7 @@ public class CameraPlugin extends Plugin {
 
     private boolean checkCameraPermissions(PluginCall call) {
         // if the manifest does not contain the camera permissions key, we don't need to ask the user
-        boolean needCameraPerms = hasDefinedPermissions(new String[] { Manifest.permission.CAMERA });
+        boolean needCameraPerms = isPermissionDeclared(CAMERA);
         boolean hasCameraPerms = !needCameraPerms || getPermissionState(CAMERA) == PermissionState.GRANTED;
         boolean hasPhotoPerms = getPermissionState(PHOTOS) == PermissionState.GRANTED;
 
@@ -484,7 +484,7 @@ public class CameraPlugin extends Plugin {
         // If the camera permission is defined in the manifest, then we have to prompt the user
         // or else we will get a security exception when trying to present the camera. If, however,
         // it is not defined in the manifest then we don't need to prompt and it will just work.
-        if (hasDefinedPermissions(new String[] { Manifest.permission.CAMERA })) {
+        if (isPermissionDeclared(CAMERA)) {
             // just request normally
             super.requestPermissions(call);
         } else {
@@ -511,7 +511,7 @@ public class CameraPlugin extends Plugin {
         Map<String, PermissionState> permissionStates = super.getPermissionStates();
 
         // If Camera is not in the manifest and therefore not required, say the permission is granted
-        if (!hasDefinedPermissions(new String[] { Manifest.permission.CAMERA })) {
+        if (!isPermissionDeclared(CAMERA)) {
             permissionStates.put(CAMERA, PermissionState.GRANTED);
         }
 
