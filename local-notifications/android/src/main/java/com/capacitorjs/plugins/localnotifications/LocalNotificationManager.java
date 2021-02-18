@@ -74,16 +74,6 @@ public class LocalNotificationManager {
         boolean isRemovable = data.getBooleanExtra(LocalNotificationManager.NOTIFICATION_IS_REMOVABLE_KEY, true);
         if (isRemovable) {
             notificationStorage.deleteNotification(Integer.toString(notificationId));
-        } else {
-            try {
-                String notificationJsonString = data.getStringExtra(LocalNotificationManager.NOTIFICATION_OBJ_INTENT_KEY);
-                if (notificationJsonString != null) {
-                    JSObject jsNotification = new JSObject(notificationJsonString);
-                    jsNotification.put("visible", false);
-                    LocalNotification localNotification = LocalNotification.buildNotificationFromJSObject(jsNotification);
-                    storage.updateNotification(localNotification);
-                }
-            } catch (Exception ex) {}
         }
         JSObject dataJson = new JSObject();
 

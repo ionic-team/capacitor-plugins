@@ -33,7 +33,6 @@ public class LocalNotification {
     private List<LocalNotificationAttachment> attachments;
     private LocalNotificationSchedule schedule;
     private String channelId;
-    private boolean visible;
     private String source;
 
     public String getTitle() {
@@ -169,14 +168,6 @@ public class LocalNotification {
         this.channelId = channelId;
     }
 
-    public void setVisible(boolean visible) {
-        this.visible = visible;
-    }
-
-    public boolean isVisible() {
-        return this.visible;
-    }
-
     /**
      * Build list of the notifications from remote plugin call
      */
@@ -233,7 +224,6 @@ public class LocalNotification {
         localNotification.setExtra(jsonObject.getJSObject("extra"));
         localNotification.setOngoing(jsonObject.getBoolean("ongoing", false));
         localNotification.setAutoCancel(jsonObject.getBoolean("autoCancel", true));
-        localNotification.setVisible(jsonObject.getBoolean("visible", false));
 
         return localNotification;
     }
@@ -260,26 +250,24 @@ public class LocalNotification {
         JSObject result = new JSObject();
         JSArray jsArray = new JSArray();
         for (LocalNotification notification : notifications) {
-            if (!notification.isVisible()) {
-                JSObject jsNotification = new JSObject();
-                jsNotification.put("id", notification.getId());
-                jsNotification.put("title", notification.getTitle());
-                jsNotification.put("body", notification.getBody());
-                LocalNotificationSchedule schedule = notification.getSchedule();
-                if (schedule != null) {
-                    JSObject jsSchedule = new JSObject();
-                    jsSchedule.put("at", schedule.getAt());
-                    jsSchedule.put("every", schedule.getEvery());
-                    jsSchedule.put("count", schedule.getCount());
-                    jsSchedule.put("on", schedule.getOn());
-                    jsSchedule.put("repeats", schedule.isRepeating());
-                    jsNotification.put("schedule", jsSchedule);
-                }
-
-                jsNotification.put("extra", notification.getExtra());
-
-                jsArray.put(jsNotification);
+            JSObject jsNotification = new JSObject();
+            jsNotification.put("id", notification.getId());
+            jsNotification.put("title", notification.getTitle());
+            jsNotification.put("body", notification.getBody());
+            LocalNotificationSchedule schedule = notification.getSchedule();
+            if (schedule != null) {
+                JSObject jsSchedule = new JSObject();
+                jsSchedule.put("at", schedule.getAt());
+                jsSchedule.put("every", schedule.getEvery());
+                jsSchedule.put("count", schedule.getCount());
+                jsSchedule.put("on", schedule.getOn());
+                jsSchedule.put("repeats", schedule.isRepeating());
+                jsNotification.put("schedule", jsSchedule);
             }
+
+            jsNotification.put("extra", notification.getExtra());
+
+            jsArray.put(jsNotification);
         }
         result.put("notifications", jsArray);
         return result;
