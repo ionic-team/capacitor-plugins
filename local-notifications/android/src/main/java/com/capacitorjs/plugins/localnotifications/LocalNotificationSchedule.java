@@ -21,19 +21,17 @@ public class LocalNotificationSchedule {
     private Boolean whileIdle;
 
     public LocalNotificationSchedule(JSObject schedule) throws ParseException {
-        if (schedule != null) {
-            // Every specific unit of time (always constant)
-            buildEveryElement(schedule);
-            // Count of units of time from every to repeat on
-            buildCountElement(schedule);
-            // At specific moment of time (with repeating option)
-            buildAtElement(schedule);
-            // Build on - recurring times. For e.g. every 1st day of the month at 8:30.
-            buildOnElement(schedule);
+        // Every specific unit of time (always constant)
+        buildEveryElement(schedule);
+        // Count of units of time from every to repeat on
+        buildCountElement(schedule);
+        // At specific moment of time (with repeating option)
+        buildAtElement(schedule);
+        // Build on - recurring times. For e.g. every 1st day of the month at 8:30.
+        buildOnElement(schedule);
 
-            // Schedule this notification to fire even if app is idled (Doze)
-            this.whileIdle = schedule.getBoolean("allowWhileIdle", false);
-        }
+        // Schedule this notification to fire even if app is idled (Doze)
+        this.whileIdle = schedule.getBoolean("allowWhileIdle", false);
     }
 
     public LocalNotificationSchedule() {}
