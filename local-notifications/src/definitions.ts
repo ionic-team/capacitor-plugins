@@ -734,6 +734,7 @@ export interface ScheduleOn {
   day?: number;
   hour?: number;
   minute?: number;
+  second?: number;
 }
 
 export type ScheduleEvery =
