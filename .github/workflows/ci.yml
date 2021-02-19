@@ -21,13 +21,6 @@ jobs:
           access_token: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/checkout@v2
       - name: Restore Dependency Cache
-        id: cache-modules
-        uses: actions/cache@v2
-        with:
-          path: |
-            node_modules
-            */node_modules
-          key: dependency-cache-${{ hashFiles('package.json', '*/package.json') }}
       - run: npm install
       - id: files
         uses: dwieeb/get-changed-files@main
@@ -47,14 +40,6 @@ jobs:
         with:
           node-version: 14.x
       - uses: actions/checkout@v2
-      - name: Restore Dependency Cache
-        id: cache-modules
-        uses: actions/cache@v2
-        with:
-          path: |
-            node_modules
-            */node_modules
-          key: dependency-cache-${{ hashFiles('package.json', '*/package.json') }}
       - run: npm install
       - run: npm run lint
   verify-ios:
@@ -72,14 +57,6 @@ jobs:
         with:
           node-version: 14.x
       - uses: actions/checkout@v2
-      - name: Restore Dependency Cache
-        id: cache-modules
-        uses: actions/cache@v2
-        with:
-          path: |
-            node_modules
-            */node_modules
-          key: dependency-cache-${{ hashFiles('package.json', '*/package.json') }}
       - run: npm install
       - run: npm run verify:ios
         working-directory: ${{ matrix.plugin }}
@@ -98,14 +75,6 @@ jobs:
         with:
           node-version: 14.x
       - uses: actions/checkout@v2
-      - name: Restore Dependency Cache
-        id: cache-modules
-        uses: actions/cache@v2
-        with:
-          path: |
-            node_modules
-            */node_modules
-          key: dependency-cache-${{ hashFiles('package.json', '*/package.json') }}
       - run: npm install
       - run: npm run verify:android
         working-directory: ${{ matrix.plugin }}
@@ -124,14 +93,6 @@ jobs:
         with:
           node-version: 14.x
       - uses: actions/checkout@v2
-      - name: Restore Dependency Cache
-        id: cache-modules
-        uses: actions/cache@v2
-        with:
-          path: |
-            node_modules
-            */node_modules
-          key: dependency-cache-${{ hashFiles('package.json', '*/package.json') }}
       - run: npm install
       - run: npm run verify:web
         working-directory: ${{ matrix.plugin }}
