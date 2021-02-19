@@ -30,6 +30,7 @@ public class LocalNotificationsPlugin: CAPPlugin {
     override public func load() {
         self.bridge?.notificationRouter.localNotificationHandler = self.notificationDelegationHandler
         self.notificationDelegationHandler.plugin = self
+        self.shouldStringifyDatesInCalls = false
     }
 
     /**
