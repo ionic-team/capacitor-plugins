@@ -321,6 +321,13 @@ Remove all native listeners for this plugin
 | **`error`**      | <code>{ message: string; }</code> | If the plugin call didn't succeed, it will contain the error message.                                                                             | 1.0.0 |
 
 
+#### BackButtonListenerEvent
+
+| Prop            | Type                 | Description                                                                                               | Since |
+| --------------- | -------------------- | --------------------------------------------------------------------------------------------------------- | ----- |
+| **`canGoBack`** | <code>boolean</code> | Indicates whether the browser can go back in history. False when the history stack is on the first entry. | 3.0.0 |
+
+
 ### Type Aliases
 
 
@@ -341,6 +348,6 @@ Remove all native listeners for this plugin
 
 #### BackButtonListener
 
-<code>(): void</code>
+<code>(event: <a href="#backbuttonlistenerevent">BackButtonListenerEvent</a>): void</code>
 
 </docgen-api>
