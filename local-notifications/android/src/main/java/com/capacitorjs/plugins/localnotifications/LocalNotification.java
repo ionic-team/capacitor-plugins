@@ -33,7 +33,6 @@ public class LocalNotification {
     private List<LocalNotificationAttachment> attachments;
     private LocalNotificationSchedule schedule;
     private String channelId;
-
     private String source;
 
     public String getTitle() {
