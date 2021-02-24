@@ -38,7 +38,7 @@ jobs:
         with:
           files: ${{ steps.files.outputs.all }}
   lint:
-    runs-on: macOS
+    runs-on: macos-latest
     timeout-minutes: 30
     needs:
       - setup
@@ -58,7 +58,7 @@ jobs:
       - run: npm install
       - run: npm run lint
   verify-ios:
-    runs-on: macOS
+    runs-on: macos-latest
     if: needs.setup.outputs.plugins != '[]'
     timeout-minutes: 30
     needs:
@@ -136,7 +136,7 @@ jobs:
       - run: npm run verify:web
         working-directory: ${{ matrix.plugin }}
 # deploy:
-#   runs-on: macOS
+#   runs-on: macos-latest
 #   if: github.event_name == 'push' && github.ref == 'refs/heads/main'
 #   timeout-minutes: 30
 #   needs:
