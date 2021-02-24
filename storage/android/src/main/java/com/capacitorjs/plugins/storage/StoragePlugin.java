@@ -30,7 +30,9 @@ public class StoragePlugin extends Plugin {
             storage = new Storage(getContext(), configuration);
         } catch (CloneNotSupportedException e) {
             call.reject("Error while configuring", e);
+            return;
         }
+        call.resolve();
     }
 
     @PluginMethod
