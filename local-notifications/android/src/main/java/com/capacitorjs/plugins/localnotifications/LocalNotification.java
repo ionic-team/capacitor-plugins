@@ -33,7 +33,6 @@ public class LocalNotification {
     private List<LocalNotificationAttachment> attachments;
     private LocalNotificationSchedule schedule;
     private String channelId;
-
     private String source;
 
     public String getTitle() {
@@ -221,7 +220,12 @@ public class LocalNotification {
         localNotification.setAttachments(LocalNotificationAttachment.getAttachments(jsonObject));
         localNotification.setGroupSummary(jsonObject.getBoolean("groupSummary", false));
         localNotification.setChannelId(jsonObject.getString("channelId"));
-        localNotification.setSchedule(new LocalNotificationSchedule(jsonObject));
+
+        JSObject schedule = jsonObject.getJSObject("schedule");
+        if (schedule != null) {
+            localNotification.setSchedule(new LocalNotificationSchedule(schedule));
+        }
+
         localNotification.setExtra(jsonObject.getJSObject("extra"));
         localNotification.setOngoing(jsonObject.getBoolean("ongoing", false));
         localNotification.setAutoCancel(jsonObject.getBoolean("autoCancel", true));
