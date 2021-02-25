@@ -44,7 +44,7 @@ On iOS, the keyboard can be configured with the following options:
 
 ```json
 {
-  "pluginsConfig": {
+  "plugins": {
     "Keyboard": {
       "resize": "body",
       "style": "dark"
