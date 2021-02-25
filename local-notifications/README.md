@@ -9,6 +9,10 @@ npm install @capacitor/local-notifications
 npx cap sync
 ```
 
+## Doze
+
+If the device has entered [Doze](https://developer.android.com/training/monitoring-device-state/doze-standby) mode, your application may have restricted capabilities. If you need your notification to fire even during Doze, schedule your notification by using `allowWhileIdle: true`. Make use of `allowWhileIdle` judiciously, as these notifications [can only fire once per 9 minutes, per app.](https://developer.android.com/training/monitoring-device-state/doze-standby#assessing_your_app)
+
 ## API
 
 <docgen-index>
