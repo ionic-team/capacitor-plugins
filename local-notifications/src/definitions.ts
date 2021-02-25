@@ -495,6 +495,21 @@ export interface LocalNotificationSchema {
   body: string;
 
   /**
+   * Sets a multiline text block for display in a big text notification style.
+   *
+   * @since 1.0.0
+   */
+  largeBody?: string;
+
+  /**
+   * Used to set the summary text detail in inbox and big text notification styles.
+   *
+   * Only available for Android.
+   *
+   * @since 1.0.0
+   */
+  summaryText?: string;
+  /**
    * The notification identifier.
    *
    * @since 1.0.0
@@ -542,13 +557,13 @@ export interface LocalNotificationSchema {
 
   /**
    * Set a large icon for notifications.
-   * 
+   *
    * Icons should be placed in your app's `res/drawable` folder. The value for
    * this option should be the drawable resource ID, which is the filename
    * without an extension.
-   * 
+   *
    * Only available for Android.
-   * 
+   *
    * @since 1.0.0
    */
   largeIcon?: string;
@@ -677,12 +692,12 @@ export interface LocalNotificationSchema {
   autoCancel?: boolean;
 
   /**
-   * Sets list of strings for display in an inbox style notification.
-   * 
+   * Sets a list of strings for display in an inbox style notification.
+   *
    * Up to 5 strings are allowed.
-   * 
-   * Only available for Android when `notificationStyle` is set to `inbox`.
-   * 
+   *
+   * Only available for Android.
+   *
    * @since 1.0.0
    */
   inboxList?: string[];

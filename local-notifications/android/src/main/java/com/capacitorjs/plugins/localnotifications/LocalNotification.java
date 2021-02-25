@@ -23,6 +23,8 @@ public class LocalNotification {
 
     private String title;
     private String body;
+    private String largeBody;
+    private String summaryText;
     private Integer id;
     private String sound;
     private String smallIcon;
@@ -54,6 +56,22 @@ public class LocalNotification {
 
     public void setBody(String body) {
         this.body = body;
+    }
+
+    public void setLargeBody(String largeBody) {
+        this.largeBody = largeBody;
+    }
+
+    public String getLargeBody() {
+        return this.largeBody;
+    }
+
+    public void setSummaryText(String summaryText) {
+        this.summaryText = summaryText;
+    }
+
+    public String getSummaryText() {
+        return this.summaryText;
     }
 
     public LocalNotificationSchedule getSchedule() {
@@ -228,6 +246,8 @@ public class LocalNotification {
         localNotification.setSource(jsonObject.toString());
         localNotification.setId(jsonObject.getInteger("id"));
         localNotification.setBody(jsonObject.getString("body"));
+        localNotification.setLargeBody(jsonObject.getString("largeBody"));
+        localNotification.setSummaryText(jsonObject.getString("summaryText"));
         localNotification.setActionTypeId(jsonObject.getString("actionTypeId"));
         localNotification.setGroup(jsonObject.getString("group"));
         localNotification.setSound(jsonObject.getString("sound"));
@@ -255,7 +275,7 @@ public class LocalNotification {
                 }
                 localNotification.setInboxList(inboxStringList);
             }
-        } catch(Exception ex) {}
+        } catch (Exception ex) {}
 
         return localNotification;
     }
@@ -386,14 +406,17 @@ public class LocalNotification {
 
         if (title != null ? !title.equals(that.title) : that.title != null) return false;
         if (body != null ? !body.equals(that.body) : that.body != null) return false;
+        if (largeBody != null ? !largeBody.equals(that.largeBody) : that.largeBody != null) return false;
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (sound != null ? !sound.equals(that.sound) : that.sound != null) return false;
         if (smallIcon != null ? !smallIcon.equals(that.smallIcon) : that.smallIcon != null) return false;
+        if (largeIcon != null ? !largeIcon.equals(that.largeIcon) : that.largeIcon != null) return false;
         if (iconColor != null ? !iconColor.equals(that.iconColor) : that.iconColor != null) return false;
         if (actionTypeId != null ? !actionTypeId.equals(that.actionTypeId) : that.actionTypeId != null) return false;
         if (group != null ? !group.equals(that.group) : that.group != null) return false;
         if (extra != null ? !extra.equals(that.extra) : that.extra != null) return false;
         if (attachments != null ? !attachments.equals(that.attachments) : that.attachments != null) return false;
+        if (inboxList != null ? !inboxList.equals(that.inboxList) : that.inboxList != null) return false;
         if (groupSummary != that.groupSummary) return false;
         if (ongoing != that.ongoing) return false;
         if (autoCancel != that.autoCancel) return false;

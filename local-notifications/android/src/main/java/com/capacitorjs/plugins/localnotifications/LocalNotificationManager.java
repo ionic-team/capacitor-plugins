@@ -174,8 +174,14 @@ public class LocalNotificationManager {
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setGroupSummary(localNotification.isGroupSummary());
 
-        // support multiline text
-        mBuilder.setStyle(new NotificationCompat.BigTextStyle().bigText(localNotification.getBody()));
+        if (localNotification.getLargeBody() != null) {
+            // support multiline text
+            mBuilder.setStyle(
+                new NotificationCompat.BigTextStyle()
+                    .bigText(localNotification.getLargeBody())
+                    .setSummaryText(localNotification.getSummaryText())
+            );
+        }
 
         if (localNotification.getInboxList() != null) {
             NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
@@ -183,6 +189,7 @@ public class LocalNotificationManager {
                 inboxStyle.addLine(line);
             }
             inboxStyle.setBigContentTitle(localNotification.getTitle());
+            inboxStyle.setSummaryText(localNotification.getSummaryText());
             mBuilder.setStyle(inboxStyle);
         }
 
