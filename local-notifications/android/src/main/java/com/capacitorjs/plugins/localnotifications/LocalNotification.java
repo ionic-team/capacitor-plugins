@@ -2,6 +2,8 @@ package com.capacitorjs.plugins.localnotifications;
 
 import android.content.ContentResolver;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import com.getcapacitor.JSArray;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Logger;
@@ -10,6 +12,7 @@ import com.getcapacitor.plugin.util.AssetUtil;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -23,9 +26,11 @@ public class LocalNotification {
     private Integer id;
     private String sound;
     private String smallIcon;
+    private String largeIcon;
     private String iconColor;
     private String actionTypeId;
     private String group;
+    private List<String> inboxList;
     private boolean groupSummary;
     private boolean ongoing;
     private boolean autoCancel;
@@ -81,6 +86,18 @@ public class LocalNotification {
 
     public void setSmallIcon(String smallIcon) {
         this.smallIcon = AssetUtil.getResourceBaseName(smallIcon);
+    }
+
+    public void setLargeIcon(String largeIcon) {
+        this.largeIcon = AssetUtil.getResourceBaseName(largeIcon);
+    }
+
+    public void setInboxList(List<String> inboxList) {
+        this.inboxList = inboxList;
+    }
+
+    public List<String> getInboxList() {
+        return this.inboxList;
     }
 
     public String getIconColor(String globalColor) {
@@ -216,19 +233,29 @@ public class LocalNotification {
         localNotification.setSound(jsonObject.getString("sound"));
         localNotification.setTitle(jsonObject.getString("title"));
         localNotification.setSmallIcon(jsonObject.getString("smallIcon"));
+        localNotification.setLargeIcon(jsonObject.getString("largeIcon"));
         localNotification.setIconColor(jsonObject.getString("iconColor"));
         localNotification.setAttachments(LocalNotificationAttachment.getAttachments(jsonObject));
         localNotification.setGroupSummary(jsonObject.getBoolean("groupSummary", false));
         localNotification.setChannelId(jsonObject.getString("channelId"));
-
         JSObject schedule = jsonObject.getJSObject("schedule");
         if (schedule != null) {
             localNotification.setSchedule(new LocalNotificationSchedule(schedule));
         }
-
         localNotification.setExtra(jsonObject.getJSObject("extra"));
         localNotification.setOngoing(jsonObject.getBoolean("ongoing", false));
         localNotification.setAutoCancel(jsonObject.getBoolean("autoCancel", true));
+
+        try {
+            JSONArray inboxList = jsonObject.getJSONArray("inboxList");
+            if (inboxList != null) {
+                List<String> inboxStringList = new ArrayList<>();
+                for (int i = 0; i < inboxList.length(); i++) {
+                    inboxStringList.add(inboxList.getString(i));
+                }
+                localNotification.setInboxList(inboxStringList);
+            }
+        } catch(Exception ex) {}
 
         return localNotification;
     }
@@ -290,6 +317,15 @@ public class LocalNotification {
         }
 
         return resId;
+    }
+
+    public Bitmap getLargeIcon(Context context) {
+        if (largeIcon != null) {
+            int resId = AssetUtil.getResourceID(context, largeIcon, "drawable");
+            return BitmapFactory.decodeResource(context.getResources(), resId);
+        }
+
+        return null;
     }
 
     public boolean isScheduled() {

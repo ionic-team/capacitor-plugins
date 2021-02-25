@@ -541,6 +541,19 @@ export interface LocalNotificationSchema {
   smallIcon?: string;
 
   /**
+   * Set a large icon for notifications.
+   * 
+   * Icons should be placed in your app's `res/drawable` folder. The value for
+   * this option should be the drawable resource ID, which is the filename
+   * without an extension.
+   * 
+   * Only available for Android.
+   * 
+   * @since 1.0.0
+   */
+  largeIcon?: string;
+
+  /**
    * Set the color of the notification icon.
    *
    * Only available for Android.
@@ -662,6 +675,17 @@ export interface LocalNotificationSchema {
    * @since 1.0.0
    */
   autoCancel?: boolean;
+
+  /**
+   * Sets list of strings for display in an inbox style notification.
+   * 
+   * Up to 5 strings are allowed.
+   * 
+   * Only available for Android when `notificationStyle` is set to `inbox`.
+   * 
+   * @since 1.0.0
+   */
+  inboxList?: string[];
 }
 
 /**

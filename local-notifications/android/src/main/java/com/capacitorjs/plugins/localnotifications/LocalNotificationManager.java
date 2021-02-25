@@ -177,6 +177,15 @@ public class LocalNotificationManager {
         // support multiline text
         mBuilder.setStyle(new NotificationCompat.BigTextStyle().bigText(localNotification.getBody()));
 
+        if (localNotification.getInboxList() != null) {
+            NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
+            for (String line : localNotification.getInboxList()) {
+                inboxStyle.addLine(line);
+            }
+            inboxStyle.setBigContentTitle(localNotification.getTitle());
+            mBuilder.setStyle(inboxStyle);
+        }
+
         String sound = localNotification.getSound(context, getDefaultSound(context));
         if (sound != null) {
             Uri soundUri = Uri.parse(sound);
@@ -202,6 +211,7 @@ public class LocalNotificationManager {
         mBuilder.setOnlyAlertOnce(true);
 
         mBuilder.setSmallIcon(localNotification.getSmallIcon(context, getDefaultSmallIcon(context)));
+        mBuilder.setLargeIcon(localNotification.getLargeIcon(context));
 
         String iconColor = localNotification.getIconColor(config.getString(CONFIG_KEY_PREFIX + "iconColor"));
         if (iconColor != null) {
