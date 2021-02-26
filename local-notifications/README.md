@@ -9,6 +9,26 @@ npm install @capacitor/local-notifications
 npx cap sync
 ```
 
+## Configuration
+
+On Android, the Local Notifications can be configured with the following options:
+
+- `smallIcon`: It allows you to set the default icon for the local notification.
+- `iconColor`: It allows you to set the default color for the local notification icon.
+- `sound`: It allows you to set the default notification sound. On Android 26+ it sets the default channel sound and can’t be changed unless the app is uninstalled.
+
+```json
+{
+  "plugins": {
+    "LocalNotifications": {
+      "smallIcon": "ic_stat_icon_config_sample",
+      "iconColor": "#488AFF",
+      "sound": "beep.wav"
+    }
+  }
+}
+```
+
 ## Doze
 
 If the device has entered [Doze](https://developer.android.com/training/monitoring-device-state/doze-standby) mode, your application may have restricted capabilities. If you need your notification to fire even during Doze, schedule your notification by using `allowWhileIdle: true`. Make use of `allowWhileIdle` judiciously, as these notifications [can only fire once per 9 minutes, per app.](https://developer.android.com/training/monitoring-device-state/doze-standby#assessing_your_app)
