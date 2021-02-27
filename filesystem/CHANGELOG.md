@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.5.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@0.4.0...@capacitor/filesystem@0.5.0) (2021-02-27)
+
+
+### Bug Fixes
+
+* **filesystem:** is not requesting permission on public directories ([#246](https://github.com/ionic-team/capacitor-plugins/issues/246)) ([aa897ab](https://github.com/ionic-team/capacitor-plugins/commit/aa897ab4269e34cd5d762ed645030054ddda7dd6))
+
+
+### Features
+
+* **filesystem:** Allow the use of absolute urls on iOS and web ([#250](https://github.com/ionic-team/capacitor-plugins/issues/250)) ([03ad97c](https://github.com/ionic-team/capacitor-plugins/commit/03ad97c1b7450e864504198853aac2b3bdc4b8a4))
+
+
+
+
+
 # [0.4.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@0.3.2...@capacitor/filesystem@0.4.0) (2021-02-10)
 
 

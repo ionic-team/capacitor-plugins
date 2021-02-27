@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.5.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/local-notifications@0.4.0...@capacitor/local-notifications@0.5.0) (2021-02-27)
+
+
+### Bug Fixes
+
+* **local-notifications:** Checking for null schedule in notification JSObject ([#258](https://github.com/ionic-team/capacitor-plugins/issues/258)) ([73cb416](https://github.com/ionic-team/capacitor-plugins/commit/73cb4168329622bb5a6625c900090a01fc5eca99))
+* **local-notifications:** Make getPending not return already fired notifications ([#256](https://github.com/ionic-team/capacitor-plugins/issues/256)) ([fb96f8a](https://github.com/ionic-team/capacitor-plugins/commit/fb96f8ab8c4776528e5825be6c2e19567462eef8))
+* **local-notifications:** Opt out of Capacitor date serialization ([#264](https://github.com/ionic-team/capacitor-plugins/issues/264)) ([6e447d5](https://github.com/ionic-team/capacitor-plugins/commit/6e447d54aff3cac47df540addf2a0bf05238c158))
+
+
+### Features
+
+* **local-notifications:** Support setting seconds in Schedule "on" ([#253](https://github.com/ionic-team/capacitor-plugins/issues/253)) ([4ec8d06](https://github.com/ionic-team/capacitor-plugins/commit/4ec8d06e0cb52403e541a05e5c3518d4c5ea754e))
+
+
+
+
+
 # [0.4.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/local-notifications@0.3.0...@capacitor/local-notifications@0.4.0) (2021-02-10)
 
 
