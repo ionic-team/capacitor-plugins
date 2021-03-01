@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.4](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/storage@0.3.3...@capacitor/storage@0.3.4) (2021-02-27)
+
+
+### Bug Fixes
+
+* **storage:** configure doesn't resolve on Android and iOS ([#266](https://github.com/ionic-team/capacitor-plugins/issues/266)) ([4f51b24](https://github.com/ionic-team/capacitor-plugins/commit/4f51b24d18890ae207090304c153af6c0067fdff))
+
+
+
+
+
 ## [0.3.3](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/storage@0.3.2...@capacitor/storage@0.3.3) (2021-02-10)
 
 **Note:** Version bump only for package @capacitor/storage

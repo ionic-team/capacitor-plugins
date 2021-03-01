@@ -30,7 +30,7 @@ jobs:
           key: dependency-cache-${{ hashFiles('package.json', '*/package.json') }}
       - run: npm install
       - id: files
-        uses: dwieeb/get-changed-files@main
+        uses: imhoffd/get-changed-files@v2
         with:
           format: 'json'
       - id: packages
