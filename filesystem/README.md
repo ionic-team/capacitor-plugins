@@ -354,12 +354,12 @@ Required on Android, only when using <a href="#directory">`Directory.Documents`<
 
 #### AppendFileOptions
 
-| Prop            | Type                                            | Description                                                                                                                                 | Since |
-| --------------- | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`path`**      | <code>string</code>                             | The path of the file to append                                                                                                              | 1.0.0 |
-| **`data`**      | <code>string</code>                             | The data to write                                                                                                                           | 1.0.0 |
-| **`directory`** | <code><a href="#directory">Directory</a></code> | The <a href="#directory">`Directory`</a> to store the file in                                                                               | 1.0.0 |
-| **`encoding`**  | <code><a href="#encoding">Encoding</a></code>   | The encoding to write the file in. If not provided, data is written as base64 encoded. Pass Encoding.UTF8 to write data as string | 1.0.0 |
+| Prop            | Type                                            | Description                                                                                                                                               | Since |
+| --------------- | ----------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`path`**      | <code>string</code>                             | The path of the file to append                                                                                                                            | 1.0.0 |
+| **`data`**      | <code>string</code>                             | The data to write                                                                                                                                         | 1.0.0 |
+| **`directory`** | <code><a href="#directory">Directory</a></code> | The <a href="#directory">`Directory`</a> to store the file in                                                                                             | 1.0.0 |
+| **`encoding`**  | <code><a href="#encoding">Encoding</a></code>   | The encoding to write the file in. If not provided, data is written as base64 encoded. Pass <a href="#encoding">Encoding.UTF8</a> to write data as string | 1.0.0 |
 
 
 #### DeleteFileOptions
