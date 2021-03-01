@@ -157,7 +157,7 @@ export interface AppendFileOptions {
    * The encoding to write the file in. If not provided, data
    * is written as base64 encoded.
    *
-   * Pass FilesystemEncoding.UTF8 to write data as string
+   * Pass Encoding.UTF8 to write data as string
    *
    * @since 1.0.0
    */
