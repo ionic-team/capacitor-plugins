@@ -15,6 +15,7 @@ declare module '@capacitor/cli' {
        *
        * @since 1.0.0
        * @default native
+       * @example "body"
        */
       resize?: KeyboardResize;
 
@@ -24,6 +25,7 @@ declare module '@capacitor/cli' {
        * Only available on iOS.
        *
        * @since 1.0.0
+       * @example "dark"
        */
       style?: 'dark';
     };
@@ -75,28 +77,31 @@ export interface KeyboardResizeOptions {
 
 export enum KeyboardResize {
   /**
-   * Resizes the html body.
+   * Only the `body` HTML element will be resized.
+   * Relative units are not affected, because the viewport does not change.
    *
    * @since 1.0.0
    */
   Body = 'body',
 
   /**
-   * Resizes Ionic app
+   * Only the `ion-app` HTML element will be resized.
+   * Use it only for Ionic Framework apps.
    *
    * @since 1.0.0
    */
   Ionic = 'ionic',
 
   /**
-   * Resizes the WebView.
+   * The whole native Web View will be resized when the keyboard shows/hides.
+   * This affects the `vh` relative unit.
    *
    * @since 1.0.0
    */
   Native = 'native',
 
   /**
-   * Don't resize anything.
+   * Neither the app nor the Web View are resized.
    *
    * @since 1.0.0
    */

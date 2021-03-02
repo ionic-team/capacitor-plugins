@@ -38,26 +38,14 @@ Keyboard.addListener('keyboardDidHide', () => {
 
 On iOS, the keyboard can be configured with the following options:
 
-- `resize`: Configure the way the app is resized when the Keyboard appears.
+| Prop         | Type                                                      | Description                                                                            | Default             | Since |
+| ------------ | --------------------------------------------------------- | -------------------------------------------------------------------------------------- | ------------------- | ----- |
+| **`resize`** | <code><a href="#keyboardresize">KeyboardResize</a></code> | Configure the way the app is resized when the Keyboard appears. Only available on iOS. | <code>native</code> | 1.0.0 |
+| **`style`**  | <code>'dark'</code>                                       | Use the dark style keyboard instead of the regular one. Only available on iOS.         |                     | 1.0.0 |
 
-Only available on iOS.
-<code><a href="#keyboardresize">KeyboardResize</a></code>
+### Examples
 
-- `style`: Use the dark style keyboard instead of the regular one.
-
-Only available on iOS.
-<code>'dark'</code>
-
-
-</docgen-config>
-
-
-- `resize`: Configures the way the app is resized when the keyboard appears. Allowed values are:
-  - `none`: Neither the app nor the Web View are resized
-  - `native`: (default) The whole native Web View will be resized when the keyboard shows/hides. This affects the `vh` relative unit.
-  - `body`: Only the `<body>` HTML element will be resized. Relative units are not affected, because the viewport does not change.
-  - `ionic`: Only the `<ion-app>` HTML element will be resized. Use it only for Ionic Framework apps.
-- `style`: If set to `dark` it will use dark style keyboard instead of the regular one.
+In `capacitor.config.json`:
 
 ```json
 {
@@ -69,6 +57,27 @@ Only available on iOS.
   }
 }
 ```
+
+In `capacitor.config.ts`:
+
+```ts
+/// <reference types="@capacitor/keyboard" />
+
+import { CapacitorConfig } from '@capacitor/cli';
+
+const config: CapacitorConfig = {
+  plugins: {
+    Keyboard: {
+      resize: "body",
+      style: "dark",
+    },
+  },
+};
+
+export = config;
+```
+
+</docgen-config>
 
 ## Compatibility with `cordova-plugin-ionic-keyboard`
 
@@ -346,11 +355,11 @@ Remove all native listeners for this plugin.
 
 #### KeyboardResize
 
-| Members      | Value                 | Description            | Since |
-| ------------ | --------------------- | ---------------------- | ----- |
-| **`Body`**   | <code>'body'</code>   | Resizes the html body. | 1.0.0 |
-| **`Ionic`**  | <code>'ionic'</code>  | Resizes Ionic app      | 1.0.0 |
-| **`Native`** | <code>'native'</code> | Resizes the WebView.   | 1.0.0 |
-| **`None`**   | <code>'none'</code>   | Don't resize anything. | 1.0.0 |
+| Members      | Value                 | Description                                                                                                          | Since |
+| ------------ | --------------------- | -------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`Body`**   | <code>'body'</code>   | Only the `body` HTML element will be resized. Relative units are not affected, because the viewport does not change. | 1.0.0 |
+| **`Ionic`**  | <code>'ionic'</code>  | Only the `ion-app` HTML element will be resized. Use it only for Ionic Framework apps.                               | 1.0.0 |
+| **`Native`** | <code>'native'</code> | The whole native Web View will be resized when the keyboard shows/hides. This affects the `vh` relative unit.        | 1.0.0 |
+| **`None`**   | <code>'none'</code>   | Neither the app nor the Web View are resized.                                                                        | 1.0.0 |
 
 </docgen-api>

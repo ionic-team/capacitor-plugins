@@ -9,13 +9,22 @@ npm install @capacitor/local-notifications
 npx cap sync
 ```
 
+<docgen-config>
+<!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
+
 ## Configuration
 
 On Android, the Local Notifications can be configured with the following options:
 
-- `smallIcon`: It allows you to set the default icon for the local notification.
-- `iconColor`: It allows you to set the default color for the local notification icon.
-- `sound`: It allows you to set the default notification sound. On Android 26+ it sets the default channel sound and can’t be changed unless the app is uninstalled.
+| Prop            | Type                | Description                                                                                                                                                                                                                                          | Since |
+| --------------- | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`smallIcon`** | <code>string</code> | Set the default status bar icon for notifications. Icons should be placed in your app's `res/drawable` folder. The value for this option should be the drawable resource ID, which is the filename without an extension. Only available for Android. | 1.0.0 |
+| **`iconColor`** | <code>string</code> | Set the default color of status bar icons for notifications. Only available for Android.                                                                                                                                                             | 1.0.0 |
+| **`sound`**     | <code>string</code> | Set the default notification sound for notifications. On Android 26+ it sets the default channel sound and can't be changed unless the app is uninstalled. Only available for Android.                                                               | 1.0.0 |
+
+### Examples
+
+In `capacitor.config.json`:
 
 ```json
 {
@@ -28,6 +37,28 @@ On Android, the Local Notifications can be configured with the following options
   }
 }
 ```
+
+In `capacitor.config.ts`:
+
+```ts
+/// <reference types="@capacitor/localnotifications" />
+
+import { CapacitorConfig } from '@capacitor/cli';
+
+const config: CapacitorConfig = {
+  plugins: {
+    LocalNotifications: {
+      smallIcon: "ic_stat_icon_config_sample",
+      iconColor: "#488AFF",
+      sound: "beep.wav",
+    },
+  },
+};
+
+export = config;
+```
+
+</docgen-config>
 
 ## Doze
 

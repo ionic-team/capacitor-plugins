@@ -65,13 +65,30 @@ For iOS, `iosSpinnerStyle` has the following options:
 
 To set the color of the spinner use `spinnerColor`, values are either `#RRGGBB` or `#RRGGBBAA`.
 
-## Full Screen & Immersive (Android only)
-
-You can enable `splashFullScreen` to hide status bar, or `splashImmersive` to hide both status bar and software navigation buttons. If both options are enabled `splashImmersive` takes priority, as it also fulfils `splashFullScreen` functionality.
+<docgen-config>
+<!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
 
 ## Configuration
 
 These config values are available:
+
+| Prop                            | Type                                                                                                                          | Description                                                                                                                                                             | Default             | Since |
+| ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- | ----- |
+| **`launchShowDuration`**        | <code>number</code>                                                                                                           | How long to show the launch splash screen when autoHide is enabled (in ms)                                                                                              | <code>0</code>      | 1.0.0 |
+| **`launchAutoHide`**            | <code>boolean</code>                                                                                                          | Whether to auto hide the splash after launchShowDuration.                                                                                                               | <code>true</code>   | 1.0.0 |
+| **`backgroundColor`**           | <code>string</code>                                                                                                           | Color of the background of the Splash Screen in hex format, #RRGGBB or #RRGGBBAA.                                                                                       |                     | 1.0.0 |
+| **`androidSplashResourceName`** | <code>string</code>                                                                                                           | Name of the resource to be used as Splash Screen. Only available on Android.                                                                                            | <code>splash</code> | 1.0.0 |
+| **`androidScaleType`**          | <code>'CENTER' \| 'CENTER_CROP' \| 'CENTER_INSIDE' \| 'FIT_CENTER' \| 'FIT_END' \| 'FIT_START' \| 'FIT_XY' \| 'MATRIX'</code> | The [ImageView.ScaleType](https://developer.android.com/reference/android/widget/ImageView.ScaleType) used to scale the Splash Screen image. Only available on Android. | <code>FIT_XY</code> | 1.0.0 |
+| **`showSpinner`**               | <code>boolean</code>                                                                                                          | Show a loading spinner on the Splash Screen.                                                                                                                            |                     | 1.0.0 |
+| **`androidSpinnerStyle`**       | <code>'horizontal' \| 'small' \| 'large' \| 'inverse' \| 'smallInverse' \| 'largeInverse'</code>                              | Style of the Android spinner.                                                                                                                                           | <code>large</code>  | 1.0.0 |
+| **`iosSpinnerStyle`**           | <code>'small' \| 'large'</code>                                                                                               | Style of the iOS spinner. Only available on iOS.                                                                                                                        | <code>large</code>  | 1.0.0 |
+| **`spinnerColor`**              | <code>string</code>                                                                                                           | Color of the spinner in hex format, #RRGGBB or #RRGGBBAA.                                                                                                               |                     | 1.0.0 |
+| **`splashFullScreen`**          | <code>boolean</code>                                                                                                          | Hide the status bar on the Splash Screen. Only available on Android.                                                                                                    |                     | 1.0.0 |
+| **`splashImmersive`**           | <code>boolean</code>                                                                                                          | Hide the status bar and the software navigation buttons on the Splash Screen. Only available on Android.                                                                |                     | 1.0.0 |
+
+### Examples
+
+In `capacitor.config.json`:
 
 ```json
 {
@@ -82,16 +99,46 @@ These config values are available:
       "backgroundColor": "#ffffffff",
       "androidSplashResourceName": "splash",
       "androidScaleType": "CENTER_CROP",
+      "showSpinner": true,
       "androidSpinnerStyle": "large",
       "iosSpinnerStyle": "small",
       "spinnerColor": "#999999",
-      "showSpinner": true,
       "splashFullScreen": true,
       "splashImmersive": true
     }
   }
 }
 ```
+
+In `capacitor.config.ts`:
+
+```ts
+/// <reference types="@capacitor/splash-screen" />
+
+import { CapacitorConfig } from '@capacitor/cli';
+
+const config: CapacitorConfig = {
+  plugins: {
+    SplashScreen: {
+      launchShowDuration: 3000,
+      launchAutoHide: true,
+      backgroundColor: "#ffffffff",
+      androidSplashResourceName: "splash",
+      androidScaleType: "CENTER_CROP",
+      showSpinner: true,
+      androidSpinnerStyle: "large",
+      iosSpinnerStyle: "small",
+      spinnerColor: "#999999",
+      splashFullScreen: true,
+      splashImmersive: true,
+    },
+  },
+};
+
+export = config;
+```
+
+</docgen-config>
 
 ### Android
 
