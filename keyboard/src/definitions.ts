@@ -4,6 +4,9 @@ import type { PluginListenerHandle } from '@capacitor/core';
 
 declare module '@capacitor/cli' {
   export interface PluginsConfig {
+    /**
+     * On iOS, the keyboard can be configured with the following options:
+     */
     Keyboard?: {
       /**
        * Configure the way the app is resized when the Keyboard appears.
@@ -13,7 +16,7 @@ declare module '@capacitor/cli' {
        * @since 1.0.0
        * @default native
        */
-      resize?: 'none' | 'native' | 'body' | 'ionic';
+      resize?: KeyboardResize;
 
       /**
        * Use the dark style keyboard instead of the regular one.

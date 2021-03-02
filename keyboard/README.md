@@ -31,9 +31,26 @@ Keyboard.addListener('keyboardDidHide', () => {
 });
 ```
 
+<docgen-config>
+<!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
+
 ## Configuration
 
 On iOS, the keyboard can be configured with the following options:
+
+- `resize`: Configure the way the app is resized when the Keyboard appears.
+
+Only available on iOS.
+<code><a href="#keyboardresize">KeyboardResize</a></code>
+
+- `style`: Use the dark style keyboard instead of the regular one.
+
+Only available on iOS.
+<code>'dark'</code>
+
+
+</docgen-config>
+
 
 - `resize`: Configures the way the app is resized when the keyboard appears. Allowed values are:
   - `none`: Neither the app nor the Web View are resized
