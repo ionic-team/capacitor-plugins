@@ -18,7 +18,7 @@ Additionally, the Filesystem API supports using full `file://` paths, or reading
 ## Example
 
 ```typescript
-import { Filesystem, Directory, Encoding } from '@capacitor/core';
+import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
 
 const writeSecretFile = async () {
   await Filesystem.writeFile({
