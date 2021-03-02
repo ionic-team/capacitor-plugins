@@ -75,6 +75,10 @@ export class LocalNotificationsWeb
   }
 
   async checkPermissions(): Promise<PermissionStatus> {
+    if (!('Notification' in window)) {
+      throw this.unimplemented('Not implemented on web.');
+    }
+
     const display = this.transformNotificationPermission(
       Notification.permission,
     );
