@@ -9,10 +9,10 @@ npm install @capacitor/local-notifications
 npx cap sync
 ```
 
+## Configuration
+
 <docgen-config>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
-
-## Configuration
 
 On Android, the Local Notifications can be configured with the following options:
 
@@ -41,7 +41,7 @@ In `capacitor.config.json`:
 In `capacitor.config.ts`:
 
 ```ts
-/// <reference types="@capacitor/localnotifications" />
+/// <reference types="@capacitor/local-notifications" />
 
 import { CapacitorConfig } from '@capacitor/cli';
 

@@ -31,10 +31,10 @@ Keyboard.addListener('keyboardDidHide', () => {
 });
 ```
 
+## Configuration
+
 <docgen-config>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
-
-## Configuration
 
 On iOS, the keyboard can be configured with the following options:
 

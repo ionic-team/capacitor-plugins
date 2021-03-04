@@ -65,10 +65,10 @@ For iOS, `iosSpinnerStyle` has the following options:
 
 To set the color of the spinner use `spinnerColor`, values are either `#RRGGBB` or `#RRGGBBAA`.
 
+## Configuration
+
 <docgen-config>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
-
-## Configuration
 
 These config values are available:
 

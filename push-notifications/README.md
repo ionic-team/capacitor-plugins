@@ -49,10 +49,10 @@ If no icon is specified Android will use the application icon, but push icon sho
 
 Android Studio has an icon generator you can use to create your Push Notifications icon.
 
+## Push notifications appearance in foreground
+
 <docgen-config>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
-
-## Configuration
 
 On iOS you can configure the way the push notifications are displayed when the app is in foreground.
 
