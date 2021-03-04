@@ -20,7 +20,7 @@ Additionally, the Filesystem API supports using full `file://` paths, or reading
 ```typescript
 import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
 
-const writeSecretFile = async () {
+const writeSecretFile = async () => {
   await Filesystem.writeFile({
     path: 'secrets/text.txt',
     data: "This is a test",
@@ -29,7 +29,7 @@ const writeSecretFile = async () {
   });
 };
 
-const readSecretFile = async () {
+const readSecretFile = async () => {
   const contents = await Filesystem.readFile({
     path: 'secrets/text.txt',
     directory: Directory.Documents,
@@ -39,14 +39,14 @@ const readSecretFile = async () {
   console.log('secrets:', contents);
 };
 
-const deleteSecretFile = async () {
+const deleteSecretFile = async () => {
   await Filesystem.deleteFile({
     path: 'secrets/text.txt',
     directory: Directory.Documents,
   });
 };
 
-const readFilePath = async () {
+const readFilePath = async () => {
   // Here's an example of reading a file with a full file path. Use this to
   // read binary data (base64 encoded) from plugins that return File URIs, such as
   // the Camera.

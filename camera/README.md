@@ -50,7 +50,7 @@ This plugin will use the following project variables (defined in your app's `var
 ```typescript
 import { Camera, CameraResultType } from '@capacitor/camera';
 
-const takePicture = async () {
+const takePicture = async () => {
   const image = await Camera.getPhoto({
     quality: 90,
     allowEditing: true,

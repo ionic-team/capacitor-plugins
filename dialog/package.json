@@ -1,6 +1,6 @@
 {
   "name": "@capacitor/dialog",
-  "version": "0.4.4",
+  "version": "0.4.5",
   "description": "The Dialog API provides methods for triggering native dialog windows for alerts, confirmations, and input prompts",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
@@ -46,7 +46,7 @@
   "devDependencies": {
     "@capacitor/android": "3.0.0-beta.6",
     "@capacitor/core": "3.0.0-beta.6",
-    "@capacitor/docgen": "0.0.15",
+    "@capacitor/docgen": "0.0.16",
     "@capacitor/ios": "3.0.0-beta.6",
     "@ionic/eslint-config": "^0.3.0",
     "@ionic/prettier-config": "~1.0.1",

@@ -174,8 +174,24 @@ public class LocalNotificationManager {
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setGroupSummary(localNotification.isGroupSummary());
 
-        // support multiline text
-        mBuilder.setStyle(new NotificationCompat.BigTextStyle().bigText(localNotification.getBody()));
+        if (localNotification.getLargeBody() != null) {
+            // support multiline text
+            mBuilder.setStyle(
+                new NotificationCompat.BigTextStyle()
+                    .bigText(localNotification.getLargeBody())
+                    .setSummaryText(localNotification.getSummaryText())
+            );
+        }
+
+        if (localNotification.getInboxList() != null) {
+            NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
+            for (String line : localNotification.getInboxList()) {
+                inboxStyle.addLine(line);
+            }
+            inboxStyle.setBigContentTitle(localNotification.getTitle());
+            inboxStyle.setSummaryText(localNotification.getSummaryText());
+            mBuilder.setStyle(inboxStyle);
+        }
 
         String sound = localNotification.getSound(context, getDefaultSound(context));
         if (sound != null) {
@@ -202,6 +218,7 @@ public class LocalNotificationManager {
         mBuilder.setOnlyAlertOnce(true);
 
         mBuilder.setSmallIcon(localNotification.getSmallIcon(context, getDefaultSmallIcon(context)));
+        mBuilder.setLargeIcon(localNotification.getLargeIcon(context));
 
         String iconColor = localNotification.getIconColor(config.getString(CONFIG_KEY_PREFIX + "iconColor"));
         if (iconColor != null) {

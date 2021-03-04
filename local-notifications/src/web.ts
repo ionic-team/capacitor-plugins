@@ -30,6 +30,10 @@ export class LocalNotificationsWeb
   }
 
   async schedule(options: ScheduleOptions): Promise<ScheduleResult> {
+    if (!('Notification' in window)) {
+      throw this.unavailable('Notifications not supported in this browser.');
+    }
+
     for (const notification of options.notifications) {
       this.sendNotification(notification);
     }
@@ -67,6 +71,10 @@ export class LocalNotificationsWeb
   }
 
   async requestPermissions(): Promise<PermissionStatus> {
+    if (!('Notification' in window)) {
+      throw this.unavailable('Notifications not supported in this browser.');
+    }
+
     const display = this.transformNotificationPermission(
       await Notification.requestPermission(),
     );
@@ -75,6 +83,10 @@ export class LocalNotificationsWeb
   }
 
   async checkPermissions(): Promise<PermissionStatus> {
+    if (!('Notification' in window)) {
+      throw this.unavailable('Notifications not supported in this browser.');
+    }
+
     const display = this.transformNotificationPermission(
       Notification.permission,
     );

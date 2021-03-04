@@ -1,6 +1,6 @@
 {
   "name": "@capacitor/app",
-  "version": "0.3.4",
+  "version": "0.3.5",
   "description": "The App API handles high level App state and events.For example, this API emits events when the app enters and leaves the foreground, handles deeplinks, opens other apps, and manages persisted plugin state.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
@@ -46,7 +46,7 @@
   "devDependencies": {
     "@capacitor/android": "3.0.0-beta.6",
     "@capacitor/core": "3.0.0-beta.6",
-    "@capacitor/docgen": "0.0.15",
+    "@capacitor/docgen": "0.0.16",
     "@capacitor/ios": "3.0.0-beta.6",
     "@ionic/eslint-config": "^0.3.0",
     "@ionic/prettier-config": "~1.0.1",
