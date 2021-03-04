@@ -95,15 +95,19 @@ export class LocalNotificationsWeb
   }
 
   protected checkNotificationSupport = (): boolean => {
-    if (!('Notification' in window)) {
+    if (!window.Notification || !Notification.requestPermission) {
       return false;
     }
 
-    try {
-      new Notification('');
-    } catch (e) {
-      if (e.name == 'TypeError') {
-        return false;
+    if (Notification.permission !== 'granted') {
+      // don't test for `new Notification` if permission has already been granted
+      // otherwise this sends a real notification on supported browsers
+      try {
+        new Notification('');
+      } catch (e) {
+        if (e.name == 'TypeError') {
+          return false;
+        }
       }
     }
 
