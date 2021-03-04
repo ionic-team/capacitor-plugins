@@ -207,7 +207,6 @@ public class LocalNotificationManager {
         String group = localNotification.getGroup();
         if (group != null) {
             mBuilder.setGroup(group);
-
             if (localNotification.isGroupSummary()) {
                 mBuilder.setSubText(localNotification.getSummaryText());
             }
