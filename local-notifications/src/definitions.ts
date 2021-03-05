@@ -4,6 +4,9 @@ import type { PermissionState, PluginListenerHandle } from '@capacitor/core';
 
 declare module '@capacitor/cli' {
   export interface PluginsConfig {
+    /**
+     * On Android, the Local Notifications can be configured with the following options:
+     */
     LocalNotifications?: {
       /**
        * Set the default status bar icon for notifications.
@@ -15,6 +18,7 @@ declare module '@capacitor/cli' {
        * Only available for Android.
        *
        * @since 1.0.0
+       * @example "ic_stat_icon_config_sample"
        */
       smallIcon?: string;
 
@@ -24,6 +28,7 @@ declare module '@capacitor/cli' {
        * Only available for Android.
        *
        * @since 1.0.0
+       * @example "#488AFF"
        */
       iconColor?: string;
 
@@ -36,6 +41,7 @@ declare module '@capacitor/cli' {
        * Only available for Android.
        *
        * @since 1.0.0
+       * @example "beep.wav"
        */
       sound?: string;
     };
