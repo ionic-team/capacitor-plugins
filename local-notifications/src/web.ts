@@ -95,7 +95,7 @@ export class LocalNotificationsWeb
   }
 
   protected checkNotificationSupport = (): boolean => {
-    if (!window.Notification || !Notification.requestPermission) {
+    if (!('Notification' in window) || !Notification.requestPermission) {
       return false;
     }
 
