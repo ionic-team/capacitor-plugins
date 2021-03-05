@@ -30,7 +30,7 @@ export class LocalNotificationsWeb
   }
 
   async schedule(options: ScheduleOptions): Promise<ScheduleResult> {
-    if (!this.checkNotificationSupport()) {
+    if (!this.hasNotificationSupport()) {
       throw this.unavailable('Notifications not supported in this browser.');
     }
 
@@ -71,7 +71,7 @@ export class LocalNotificationsWeb
   }
 
   async requestPermissions(): Promise<PermissionStatus> {
-    if (!this.checkNotificationSupport()) {
+    if (!this.hasNotificationSupport()) {
       throw this.unavailable('Notifications not supported in this browser.');
     }
 
@@ -83,7 +83,7 @@ export class LocalNotificationsWeb
   }
 
   async checkPermissions(): Promise<PermissionStatus> {
-    if (!this.checkNotificationSupport()) {
+    if (!this.hasNotificationSupport()) {
       throw this.unavailable('Notifications not supported in this browser.');
     }
 
@@ -94,7 +94,7 @@ export class LocalNotificationsWeb
     return { display };
   }
 
-  protected checkNotificationSupport = (): boolean => {
+  protected hasNotificationSupport = (): boolean => {
     if (!('Notification' in window) || !Notification.requestPermission) {
       return false;
     }
