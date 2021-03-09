@@ -207,6 +207,9 @@ public class LocalNotificationManager {
         String group = localNotification.getGroup();
         if (group != null) {
             mBuilder.setGroup(group);
+            if (localNotification.isGroupSummary()) {
+                mBuilder.setSubText(localNotification.getSummaryText());
+            }
         }
 
         // make sure scheduled time is shown instead of display time
