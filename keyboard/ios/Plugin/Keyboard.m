@@ -21,6 +21,7 @@
 #import <objc/runtime.h>
 #import <Capacitor/Capacitor-Swift.h>
 #import <Capacitor/Capacitor.h>
+#import "CAPBridgedJSTypes.h"
 
 typedef enum : NSUInteger {
   ResizeNone,
@@ -285,7 +286,7 @@ static IMP WKOriginalImp;
 
 - (void)setAccessoryBarVisible:(CAPPluginCall *)call
 {
-  BOOL value = [self getBool:call field:@"isVisible" defaultValue:FALSE];
+  BOOL value = [call getBool:@"isVisible" defaultValue:FALSE];
 
   NSLog(@"Accessory bar visible change %d", value);
   self.hideFormAccessoryBar = !value;
@@ -307,13 +308,13 @@ static IMP WKOriginalImp;
 
 - (void)setStyle:(CAPPluginCall *)call
 {
-  self.keyboardStyle = [self getString:call field:@"style" defaultValue:@"LIGHT"];
+  self.keyboardStyle = [call getString:@"style" defaultValue:@"LIGHT"];
   [call resolve];
 }
 
 - (void)setResizeMode:(CAPPluginCall *)call
 {
-  NSString * mode = [self getString:call field:@"mode" defaultValue:@"none"];
+  NSString * mode = [call getString:@"mode" defaultValue:@"none"];
   if ([mode isEqualToString:@"ionic"]) {
     self.keyboardResizes = ResizeIonic;
   } else if ([mode isEqualToString:@"body"]) {
@@ -327,7 +328,7 @@ static IMP WKOriginalImp;
 }
 
 - (void)setScroll:(CAPPluginCall *)call {
-  self.disableScroll = [self getBool:call field:@"isDisabled" defaultValue:FALSE];
+  self.disableScroll = [call getBool:@"isDisabled" defaultValue:FALSE];
   [call resolve];
 }
 
