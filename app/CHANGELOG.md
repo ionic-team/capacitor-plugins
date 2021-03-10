@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.6](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/app@0.3.5...@capacitor/app@0.3.6) (2021-03-10)
+
+
+### Bug Fixes
+
+* **app:** Update getLaunchUrl return type as can be undefined ([#299](https://github.com/ionic-team/capacitor-plugins/issues/299)) ([cdc446b](https://github.com/ionic-team/capacitor-plugins/commit/cdc446b1349ef55717b12756d3fcb2fbec671a28))
+
+
+
+
+
 ## [0.3.5](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/app@0.3.4...@capacitor/app@0.3.5) (2021-03-02)
 
 **Note:** Version bump only for package @capacitor/app

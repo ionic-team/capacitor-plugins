@@ -11,7 +11,8 @@
     "toggle-local": "node ./scripts/toggle-local.mjs",
     "update-all": "node ./scripts/update-all.mjs",
     "set-capacitor-version": "node ./scripts/set-capacitor-version.mjs",
-    "postinstall": "lerna bootstrap"
+    "postinstall": "lerna bootstrap",
+    "release": "lerna publish"
   },
   "devDependencies": {
     "@actions/core": "^1.2.6",
