@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.6.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/local-notifications@0.5.1...@capacitor/local-notifications@0.6.0) (2021-03-10)
+
+
+### Bug Fixes
+
+* **local-notification:** Throw unavailable if Notification API not supported ([#285](https://github.com/ionic-team/capacitor-plugins/issues/285)) ([a90a88b](https://github.com/ionic-team/capacitor-plugins/commit/a90a88b217f5fa2a257416050afb476dd84d8051))
+* **local-notifications:** Adding check for `new Notification` support ([#295](https://github.com/ionic-team/capacitor-plugins/issues/295)) ([a806f22](https://github.com/ionic-team/capacitor-plugins/commit/a806f22577209322bdc93ef7fe5490d3b0b6e42f))
+
+
+### Features
+
+* **local-notifications:** Adding summary text to grouped notifications ([#296](https://github.com/ionic-team/capacitor-plugins/issues/296)) ([f625bd2](https://github.com/ionic-team/capacitor-plugins/commit/f625bd28bc00dbd0b51d7bdecf5e6f3077dcc7a9))
+* **local-notifications:** Support for Big Text and Inbox Notification Style ([#280](https://github.com/ionic-team/capacitor-plugins/issues/280)) ([dc96ef9](https://github.com/ionic-team/capacitor-plugins/commit/dc96ef923725f5b53346431d35f82d5ff13f4e17))
+
+
+
+
+
 ## [0.5.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/local-notifications@0.5.0...@capacitor/local-notifications@0.5.1) (2021-03-02)
 
 **Note:** Version bump only for package @capacitor/local-notifications
