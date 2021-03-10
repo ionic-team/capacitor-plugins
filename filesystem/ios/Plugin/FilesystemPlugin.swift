@@ -93,6 +93,7 @@ public class FilesystemPlugin: CAPPlugin {
 
         do {
             try implementation.appendFile(at: fileUrl, with: data, recursive: false, with: encoding)
+            call.resolve()
         } catch let error as NSError {
             handleError(call, error.localizedDescription, error)
         }
