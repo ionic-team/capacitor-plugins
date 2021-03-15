@@ -12,14 +12,14 @@ npx cap sync
 ## Example
 
 ```typescript
-import { Haptics, HapticsImpactStyle } from '@capacitor/haptics';
+import { Haptics, ImpactStyle } from '@capacitor/haptics';
 
 const hapticsImpactMedium = async () => {
-  await Haptics.impact({ style: HapticsImpactStyle.Medium });
+  await Haptics.impact({ style: ImpactStyle.Medium });
 };
 
 const hapticsImpactLight = async () => {
-  await Haptics.impact({ style: HapticsImpactStyle.Light });
+  await Haptics.impact({ style: ImpactStyle.Light });
 };
 
 const hapticsVibrate = async () => {
