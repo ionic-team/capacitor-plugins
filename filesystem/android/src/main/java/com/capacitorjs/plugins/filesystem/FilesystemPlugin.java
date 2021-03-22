@@ -3,6 +3,7 @@ package com.capacitorjs.plugins.filesystem;
 import android.Manifest;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
+import android.os.Build;
 import com.capacitorjs.plugins.filesystem.exceptions.CopyFailedException;
 import com.capacitorjs.plugins.filesystem.exceptions.DirectoryExistsException;
 import com.capacitorjs.plugins.filesystem.exceptions.DirectoryNotFoundException;
@@ -18,6 +19,8 @@ import com.getcapacitor.annotation.Permission;
 import com.getcapacitor.annotation.PermissionCallback;
 import java.io.*;
 import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.attribute.BasicFileAttributes;
 import org.json.JSONException;
 
 @CapacitorPlugin(
@@ -315,6 +318,14 @@ public class FilesystemPlugin extends Plugin {
             data.put("ctime", null);
             data.put("mtime", fileObject.lastModified());
             data.put("uri", Uri.fromFile(fileObject).toString());
+
+            if (Build.VERSION.SDK_INT >= 26) {
+                try {
+                    BasicFileAttributes attr = Files.readAttributes(fileObject.toPath(), BasicFileAttributes.class);
+                    long fileCreatedAt = attr.creationTime().toMillis();
+                    data.put("ctime", fileCreatedAt);
+                } catch (Exception ex) {}
+            }
             call.resolve(data);
         }
     }
