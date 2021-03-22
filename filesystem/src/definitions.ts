@@ -387,14 +387,14 @@ export interface StatResult {
   size: number;
 
   /**
-   * Time of creation
+   * Time of creation in milliseconds
    *
    * @since 1.0.0
    */
   ctime: number;
 
   /**
-   * Time of last modification
+   * Time of last modification in milliseconds
    *
    * @since 1.0.0
    */
