@@ -218,11 +218,11 @@ public class FilesystemPlugin: CAPPlugin {
             var mtime = ""
 
             if let ctimeSeconds = (attr[.creationDate] as? Date)?.timeIntervalSince1970 {
-                ctime = String(format: "%f", ctimeSeconds * 1000)
+                ctime = String(format: "%.0f", ctimeSeconds * 1000)
             }
 
             if let mtimeSeconds = (attr[.modificationDate] as? Date)?.timeIntervalSince1970 {
-                mtime = String(format: "%f", mtimeSeconds * 1000)
+                mtime = String(format: "%.0f", mtimeSeconds * 1000)
             }
 
             call.resolve([
