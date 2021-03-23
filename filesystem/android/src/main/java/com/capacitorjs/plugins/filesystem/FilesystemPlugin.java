@@ -315,17 +315,24 @@ public class FilesystemPlugin extends Plugin {
             JSObject data = new JSObject();
             data.put("type", fileObject.isDirectory() ? "directory" : "file");
             data.put("size", fileObject.length());
-            data.put("ctime", null);
             data.put("mtime", fileObject.lastModified());
             data.put("uri", Uri.fromFile(fileObject).toString());
 
-            if (Build.VERSION.SDK_INT >= 26) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 try {
                     BasicFileAttributes attr = Files.readAttributes(fileObject.toPath(), BasicFileAttributes.class);
-                    long fileCreatedAt = attr.creationTime().toMillis();
-                    data.put("ctime", fileCreatedAt);
+
+                    // use whichever is the oldest between creationTime and lastAccessTime
+                    if (attr.creationTime().toMillis() < attr.lastAccessTime().toMillis()) {
+                        data.put("ctime", attr.creationTime().toMillis());
+                    } else {
+                        data.put("ctime", attr.lastAccessTime().toMillis());
+                    }
                 } catch (Exception ex) {}
+            } else {
+                data.put("ctime", null);
             }
+
             call.resolve(data);
         }
     }
