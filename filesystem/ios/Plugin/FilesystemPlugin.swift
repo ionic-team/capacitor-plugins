@@ -213,11 +213,23 @@ public class FilesystemPlugin: CAPPlugin {
 
         do {
             let attr = try implementation.stat(at: fileUrl)
+
+            var ctime = ""
+            var mtime = ""
+
+            if let ctimeSeconds = (attr[.creationDate] as? Date)?.timeIntervalSince1970 {
+                ctime = String(format: "%.0f", ctimeSeconds * 1000)
+            }
+
+            if let mtimeSeconds = (attr[.modificationDate] as? Date)?.timeIntervalSince1970 {
+                mtime = String(format: "%.0f", mtimeSeconds * 1000)
+            }
+
             call.resolve([
                 "type": attr[.type] as? String ?? "",
                 "size": attr[.size] as? UInt64 ?? "",
-                "ctime": (attr[.creationDate] as? Date)?.timeIntervalSince1970 ?? "",
-                "mtime": (attr[.modificationDate] as? Date)?.timeIntervalSince1970 ?? "",
+                "ctime": ctime,
+                "mtime": mtime,
                 "uri": fileUrl.absoluteString
             ])
         } catch {
