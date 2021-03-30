@@ -31,7 +31,7 @@ SplashScreen.show({
 
 ## Hiding the Splash Screen
 
-By default, the Splash Screen is set to automatically hide after a certain amount of time (500 ms).
+By default, the Splash Screen is set to automatically hide after 500 ms.
 
 If you want to be sure the splash never hides before the app is fully loaded, set `launchAutoHide` to `false`. You should hide the splash screen when your app is ready to be used by calling `hide()` as soon as possible.
 
