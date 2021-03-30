@@ -35,7 +35,7 @@ By default, the Splash Screen is set to automatically hide after 500 ms.
 
 If you want to be sure the splash screen never disappears before your app is ready, set `launchAutoHide` to `false`; the splash screen will then stay visible until manually hidden. For the best user experience, your app should call `hide()` as soon as possible.
 
-If your you want to show the splash for a fixed amount of time, configure the default duration by setting `launchShowDuration` in your [Capacitor configuration file](https://capacitorjs.com/docs/config).
+If, instead, you want to show the splash screen for a fixed amount of time, set `launchShowDuration` in your [Capacitor configuration file](https://capacitorjs.com/docs/config).
 
 
 ## Background Color
