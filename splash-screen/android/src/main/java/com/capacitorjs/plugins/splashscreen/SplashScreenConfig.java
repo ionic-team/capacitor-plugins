@@ -8,7 +8,7 @@ public class SplashScreenConfig {
     private Integer spinnerStyle;
     private Integer spinnerColor;
     private boolean showSpinner = false;
-    private Integer launchShowDuration = 0;
+    private Integer launchShowDuration = 500;
     private boolean launchAutoHide = true;
     private Integer launchFadeInDuration = 0;
     private String resourceName = "splash";
