@@ -38,10 +38,10 @@ Keyboard.addListener('keyboardDidHide', () => {
 
 On iOS, the keyboard can be configured with the following options:
 
-| Prop         | Type                                                      | Description                                                                            | Default             | Since |
-| ------------ | --------------------------------------------------------- | -------------------------------------------------------------------------------------- | ------------------- | ----- |
-| **`resize`** | <code><a href="#keyboardresize">KeyboardResize</a></code> | Configure the way the app is resized when the Keyboard appears. Only available on iOS. | <code>native</code> | 1.0.0 |
-| **`style`**  | <code>'dark'</code>                                       | Use the dark style keyboard instead of the regular one. Only available on iOS.         |                     | 1.0.0 |
+| Prop         | Type                                                      | Description                                                                                                                                                                   | Default             | Since |
+| ------------ | --------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- | ----- |
+| **`resize`** | <code><a href="#keyboardresize">KeyboardResize</a></code> | Configure the way the app is resized when the Keyboard appears. Only available on iOS.                                                                                        | <code>native</code> | 1.0.0 |
+| **`style`**  | <code>'dark' \| 'light'</code>                            | Override the keyboard style if your app doesn't support dark/light theme changes. If not set, the keyboard style will depend on the device appearance. Only available on iOS. |                     | 1.0.0 |
 
 ### Examples
 
@@ -316,9 +316,9 @@ Remove all native listeners for this plugin.
 
 #### KeyboardStyleOptions
 
-| Prop        | Type                                                    | Description            | Since |
-| ----------- | ------------------------------------------------------- | ---------------------- | ----- |
-| **`style`** | <code><a href="#keyboardstyle">KeyboardStyle</a></code> | Style of the keyboard. | 1.0.0 |
+| Prop        | Type                                                    | Description            | Default                            | Since |
+| ----------- | ------------------------------------------------------- | ---------------------- | ---------------------------------- | ----- |
+| **`style`** | <code><a href="#keyboardstyle">KeyboardStyle</a></code> | Style of the keyboard. | <code>KeyboardStyle.Default</code> | 1.0.0 |
 
 
 #### KeyboardResizeOptions
@@ -347,10 +347,11 @@ Remove all native listeners for this plugin.
 
 #### KeyboardStyle
 
-| Members     | Value                | Description     | Since |
-| ----------- | -------------------- | --------------- | ----- |
-| **`Dark`**  | <code>'DARK'</code>  | Dark keyboard.  | 1.0.0 |
-| **`Light`** | <code>'LIGHT'</code> | Light keyboard. | 1.0.0 |
+| Members       | Value                  | Description                                                                                                                                                                                                                                 | Since |
+| ------------- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`Dark`**    | <code>'DARK'</code>    | Dark keyboard.                                                                                                                                                                                                                              | 1.0.0 |
+| **`Light`**   | <code>'LIGHT'</code>   | Light keyboard.                                                                                                                                                                                                                             | 1.0.0 |
+| **`Default`** | <code>'DEFAULT'</code> | On iOS 13 and newer the keyboard style is based on the device appearance. If the device is using Dark mode, the keyboard will be dark. If the device is using Light mode, the keyboard will be light. On iOS 12 the keyboard will be light. | 1.0.0 |
 
 
 #### KeyboardResize
