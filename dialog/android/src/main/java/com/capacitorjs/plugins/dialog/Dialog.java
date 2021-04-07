@@ -44,7 +44,7 @@ public class Dialog {
         final String alertOkButtonTitle = okButtonTitle == null ? "OK" : okButtonTitle;
 
         new Handler(Looper.getMainLooper())
-        .post(
+            .post(
                 () -> {
                     AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
@@ -89,7 +89,7 @@ public class Dialog {
         final String confirmCancelButtonTitle = cancelButtonTitle == null ? "Cancel" : cancelButtonTitle;
 
         new Handler(Looper.getMainLooper())
-        .post(
+            .post(
                 () -> {
                     final AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
@@ -145,7 +145,7 @@ public class Dialog {
         final String promptInputText = inputText == null ? "" : inputText;
 
         new Handler(Looper.getMainLooper())
-        .post(
+            .post(
                 () -> {
                     final AlertDialog.Builder builder = new AlertDialog.Builder(context);
                     final EditText input = new EditText(context);
