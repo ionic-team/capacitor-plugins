@@ -107,7 +107,3 @@ export class ClipboardWeb extends WebPlugin implements ClipboardPlugin {
     });
   }
 }
-
-const Clipboard = new ClipboardWeb();
-
-export { Clipboard };
