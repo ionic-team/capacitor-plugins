@@ -76,8 +76,7 @@ public class PushNotificationsHandler: NSObject, NotificationHandlerProtocol {
 
     }
 
-    func makeNotificationRequestJSObject(_ request: UNNotificationRequest) -> JSObject {
-        let notificationRequest = notificationRequestLookup[request.identifier] ?? [:]
+    func makeNotificationRequestJSObject(_ request: UNNotificationRequest) -> JSObject {        
         return [
             "id": request.identifier,
             "title": request.content.title,
