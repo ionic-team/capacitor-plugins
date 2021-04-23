@@ -16,6 +16,9 @@ public class LocalNotificationSchedule {
     private String every;
     private Integer count;
 
+    private String type;
+
+
     private DateMatch on;
 
     private Boolean whileIdle;
@@ -162,5 +165,13 @@ public class LocalNotificationSchedule {
      */
     public Long getNextOnSchedule(Date currentTime) {
         return this.on.nextTrigger(currentTime);
+    }
+    
+    public String getType() {
+        return type;
+    }
+
+    public void setEvery(String type) {
+        this.type = type;
     }
 }
