@@ -26,6 +26,8 @@ public class LocalNotificationSchedule {
     public LocalNotificationSchedule(JSObject schedule) throws ParseException {
         // Every specific unit of time (always constant)
         buildEveryElement(schedule);
+        // Type of notification
+        buildTypeElement(schedule);
         // Count of units of time from every to repeat on
         buildCountElement(schedule);
         // At specific moment of time (with repeating option)
