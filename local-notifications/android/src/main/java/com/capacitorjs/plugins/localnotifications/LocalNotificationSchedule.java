@@ -43,6 +43,11 @@ public class LocalNotificationSchedule {
         // 'year'|'month'|'two-weeks'|'week'|'day'|'hour'|'minute'|'second';
         this.every = schedule.getString("every");
     }
+    
+     private void buildTypeElement(JSObject schedule) {
+        // 'RTC'|'RTC_WAKEUP';
+        this.type = schedule.getString("type");
+    }
 
     private void buildCountElement(JSObject schedule) {
         this.count = schedule.getInteger("count", 1);
@@ -101,6 +106,14 @@ public class LocalNotificationSchedule {
 
     public void setEvery(String every) {
         this.every = every;
+    }
+    
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public int getCount() {
@@ -167,11 +180,4 @@ public class LocalNotificationSchedule {
         return this.on.nextTrigger(currentTime);
     }
     
-    public String getType() {
-        return type;
-    }
-
-    public void setEvery(String type) {
-        this.type = type;
-    }
 }
