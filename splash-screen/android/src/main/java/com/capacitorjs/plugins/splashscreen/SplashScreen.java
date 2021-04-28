@@ -188,7 +188,7 @@ public class SplashScreen {
 
                 if (settings.isAutoHide()) {
                     new Handler()
-                    .postDelayed(
+                        .postDelayed(
                             () -> {
                                 hide(settings.getFadeOutDuration(), isLaunchSplash);
 
