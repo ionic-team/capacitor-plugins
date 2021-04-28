@@ -76,14 +76,14 @@ public class PushNotificationsHandler: NSObject, NotificationHandlerProtocol {
 
     }
 
-    func makeNotificationRequestJSObject(_ request: UNNotificationRequest) -> JSObject {        
+    func makeNotificationRequestJSObject(_ request: UNNotificationRequest) -> JSObject {
         return [
             "id": request.identifier,
             "title": request.content.title,
-            "subtitle": request.content.subtitle,            
-            "badge" : request.content.badge ?? 1,
+            "subtitle": request.content.subtitle,
+            "badge": request.content.badge ?? 1,
             "body": request.content.body,
-            "data": JSTypes.coerceDictionaryToJSObject(request.content.userInfo) ?? [:],            
+            "data": JSTypes.coerceDictionaryToJSObject(request.content.userInfo) ?? [:]
         ]
     }
 }
