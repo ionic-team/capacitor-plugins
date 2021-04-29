@@ -20,14 +20,15 @@ declare module '@capacitor/cli' {
       resize?: KeyboardResize;
 
       /**
-       * Use the dark style keyboard instead of the regular one.
+       * Override the keyboard style if your app doesn't support dark/light theme changes.
+       * If not set, the keyboard style will depend on the device appearance.
        *
        * Only available on iOS.
        *
        * @since 1.0.0
        * @example "dark"
        */
-      style?: 'dark';
+      style?: 'dark' | 'light';
     };
   }
 }
@@ -46,6 +47,7 @@ export interface KeyboardStyleOptions {
    * Style of the keyboard.
    *
    * @since 1.0.0
+   * @default KeyboardStyle.Default
    */
   style: KeyboardStyle;
 }
@@ -64,6 +66,16 @@ export enum KeyboardStyle {
    * @since 1.0.0
    */
   Light = 'LIGHT',
+
+  /**
+   * On iOS 13 and newer the keyboard style is based on the device appearance.
+   * If the device is using Dark mode, the keyboard will be dark.
+   * If the device is using Light mode, the keyboard will be light.
+   * On iOS 12 the keyboard will be light.
+   *
+   * @since 1.0.0
+   */
+  Default = 'DEFAULT',
 }
 
 export interface KeyboardResizeOptions {
