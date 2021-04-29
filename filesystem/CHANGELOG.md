@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.5.3](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@0.5.2...@capacitor/filesystem@0.5.3) (2021-04-29)
+
+
+### Bug Fixes
+
+* **filesystem:** Append doesn't resolve on iOS ([#305](https://github.com/ionic-team/capacitor-plugins/issues/305)) ([98e91cd](https://github.com/ionic-team/capacitor-plugins/commit/98e91cd745fb12bf46f99233bb527f147dbba58b))
+* **filesystem:** Convert stat ctime/mtime timestamp to milliseconds ([#321](https://github.com/ionic-team/capacitor-plugins/issues/321)) ([d978986](https://github.com/ionic-team/capacitor-plugins/commit/d97898662d0ba037e5f8448990a91de5ec6a4234))
+
+
+
+
+
 ## [0.5.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@0.5.1...@capacitor/filesystem@0.5.2) (2021-03-10)
 
 **Note:** Version bump only for package @capacitor/filesystem
