@@ -55,7 +55,7 @@ NSString* UITraitsClassString;
 
 - (void)load
 {
-  self.disableScroll = !self.bridge.config.enableScrolling;
+  self.disableScroll = !self.bridge.config.scrollingEnabled;
 
   UIClassString = [@[@"UI", @"Web", @"Browser", @"View"] componentsJoinedByString:@""];
   WKClassString = [@[@"WK", @"Content", @"View"] componentsJoinedByString:@""];
