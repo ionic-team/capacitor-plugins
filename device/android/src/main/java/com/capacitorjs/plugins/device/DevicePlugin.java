@@ -18,6 +18,15 @@ public class DevicePlugin extends Plugin {
     }
 
     @PluginMethod
+    public void getId(PluginCall call) {
+        JSObject r = new JSObject();
+
+        r.put("uuid", implementation.getUuid());
+
+        call.resolve(r);
+    }
+
+    @PluginMethod
     public void getInfo(PluginCall call) {
         JSObject r = new JSObject();
 
@@ -29,7 +38,6 @@ public class DevicePlugin extends Plugin {
         r.put("osVersion", android.os.Build.VERSION.RELEASE);
         r.put("platform", implementation.getPlatform());
         r.put("manufacturer", android.os.Build.MANUFACTURER);
-        r.put("uuid", implementation.getUuid());
         r.put("isVirtual", implementation.isVirtual());
         r.put("name", implementation.getName());
         r.put("webViewVersion", implementation.getWebViewVersion());

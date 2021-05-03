@@ -25,14 +25,6 @@ export interface DeviceInfo {
   platform: 'ios' | 'android' | 'web';
 
   /**
-   * The UUID of the device as available to the app. This identifier may change
-   * on modern mobile platforms that only allow per-app install UUIDs.
-   *
-   * @since 1.0.0
-   */
-  uuid: string;
-
-  /**
    * The operating system of the device.
    *
    * @since 1.0.0
@@ -91,6 +83,18 @@ export interface DeviceInfo {
   webViewVersion: string;
 }
 
+export interface DeviceId {
+  /**
+   * The UUID of the device as available to the app. This identifier may change
+   * on modern mobile platforms that only allow per-app install UUIDs.
+   *
+   * On web, a random identifier is generated and stored on localStorage for subsequent calls.
+   *
+   * @since 1.0.0
+   */
+  uuid: string;
+}
+
 export interface BatteryInfo {
   /**
    * A percentage (0 to 1) indicating how much the battery is charged.
@@ -123,6 +127,13 @@ export interface DevicePlugin {
    * @since 1.0.0
    */
   getInfo(): Promise<DeviceInfo>;
+
+  /**
+   * Return information about the underlying device/os/platform.
+   *
+   * @since 1.0.0
+   */
+  getId(): Promise<DeviceId>;
 
   /**
    * Return information about the battery.
