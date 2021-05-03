@@ -31,8 +31,8 @@ const logBatteryInfo = async () => {
 
 <docgen-index>
 
-* [`getInfo()`](#getinfo)
 * [`getId()`](#getid)
+* [`getInfo()`](#getinfo)
 * [`getBatteryInfo()`](#getbatteryinfo)
 * [`getLanguageCode()`](#getlanguagecode)
 * [Interfaces](#interfaces)
@@ -43,6 +43,21 @@ const logBatteryInfo = async () => {
 <docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
 
+### getId()
+
+```typescript
+getId() => Promise<DeviceId>
+```
+
+Return an unique identifier for the device.
+
+**Returns:** <code>Promise&lt;<a href="#deviceid">DeviceId</a>&gt;</code>
+
+**Since:** 1.0.0
+
+--------------------
+
+
 ### getInfo()
 
 ```typescript
@@ -52,21 +67,6 @@ getInfo() => Promise<DeviceInfo>
 Return information about the underlying device/os/platform.
 
 **Returns:** <code>Promise&lt;<a href="#deviceinfo">DeviceInfo</a>&gt;</code>
-
-**Since:** 1.0.0
-
---------------------
-
-
-### getId()
-
-```typescript
-getId() => Promise<DeviceId>
-```
-
-Return information about the underlying device/os/platform.
-
-**Returns:** <code>Promise&lt;<a href="#deviceid">DeviceId</a>&gt;</code>
 
 **Since:** 1.0.0
 
@@ -106,6 +106,13 @@ Get the device's current language locale code.
 ### Interfaces
 
 
+#### DeviceId
+
+| Prop       | Type                | Description                                                                                                                                                                                                                            | Since |
+| ---------- | ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`uuid`** | <code>string</code> | The UUID of the device as available to the app. This identifier may change on modern mobile platforms that only allow per-app install UUIDs. On web, a random identifier is generated and stored on localStorage for subsequent calls. | 1.0.0 |
+
+
 #### DeviceInfo
 
 | Prop                  | Type                                                        | Description                                                                                                   | Since |
@@ -121,13 +128,6 @@ Get the device's current language locale code.
 | **`diskFree`**        | <code>number</code>                                         | How much free disk space is available on the the normal data storage. path for the os, in bytes               | 1.0.0 |
 | **`diskTotal`**       | <code>number</code>                                         | The total size of the normal data storage path for the OS, in bytes.                                          | 1.0.0 |
 | **`webViewVersion`**  | <code>string</code>                                         | The web view browser version                                                                                  | 1.0.0 |
-
-
-#### DeviceId
-
-| Prop       | Type                | Description                                                                                                                                                                                                                            | Since |
-| ---------- | ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`uuid`** | <code>string</code> | The UUID of the device as available to the app. This identifier may change on modern mobile platforms that only allow per-app install UUIDs. On web, a random identifier is generated and stored on localStorage for subsequent calls. | 1.0.0 |
 
 
 #### BatteryInfo
