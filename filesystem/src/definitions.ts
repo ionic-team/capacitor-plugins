@@ -387,14 +387,16 @@ export interface StatResult {
   size: number;
 
   /**
-   * Time of creation in milliseconds
+   * Time of creation in milliseconds.
+   *
+   * It's not available on Android 7 and older devices.
    *
    * @since 1.0.0
    */
-  ctime: number;
+  ctime?: number;
 
   /**
-   * Time of last modification in milliseconds
+   * Time of last modification in milliseconds.
    *
    * @since 1.0.0
    */
