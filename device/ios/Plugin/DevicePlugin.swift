@@ -6,9 +6,13 @@ public class DevicePlugin: CAPPlugin {
     private let implementation = Device()
 
     @objc func getId(_ call: CAPPluginCall) {
-        call.resolve([
-            "uuid": UIDevice.current.identifierForVendor!.uuidString
-        ])
+        if let uuid = UIDevice.current.identifierForVendor {
+            call.resolve([
+                "uuid": uuid.uuidString
+            ])
+        } else {
+            call.reject("Id not available")
+        }
     }
     @objc func getInfo(_ call: CAPPluginCall) {
         var isSimulator = false
