@@ -481,6 +481,8 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
       await this.dbRequest('put', [entry]);
     };
 
+    const ctime = fromObj.ctime ? fromObj.ctime : Date.now();
+
     switch (fromObj.type) {
       // The "from" object is a file
       case 'file': {
@@ -507,7 +509,7 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
 
         // Copy the mtime/ctime of a renamed file
         if (doRename) {
-          await updateTime(to, fromObj.ctime, fromObj.mtime);
+          await updateTime(to, ctime, fromObj.mtime);
         }
 
         // Resolve promise
@@ -528,7 +530,7 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
 
           // Copy the mtime/ctime of a renamed directory
           if (doRename) {
-            await updateTime(to, fromObj.ctime, fromObj.mtime);
+            await updateTime(to, ctime, fromObj.mtime);
           }
         } catch (e) {
           // ignore
