@@ -85,7 +85,7 @@ public class GeolocationPlugin extends Plugin {
      */
     @PluginMethod(returnType = PluginMethod.RETURN_CALLBACK)
     public void watchPosition(PluginCall call) {
-        call.save();
+        call.setKeepAlive(true);
         if (getPermissionState("location") != PermissionState.GRANTED) {
             requestAllPermissions(call, "completeWatchPosition");
         } else {
