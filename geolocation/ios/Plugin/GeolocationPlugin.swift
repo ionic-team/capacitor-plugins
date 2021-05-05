@@ -17,7 +17,7 @@ public class GeolocationPlugin: CAPPlugin, CLLocationManagerDelegate {
     private var callQueue: [String: CallType] = [:]
 
     @objc func getCurrentPosition(_ call: CAPPluginCall) {
-        call.keepAlive = true
+        bridge?.saveCall(call)
         callQueue[call.callbackId] = .singleUpdate
 
         DispatchQueue.main.async {
@@ -179,7 +179,7 @@ public class GeolocationPlugin: CAPPlugin, CLLocationManagerDelegate {
             // If state is not yet determined, request perms.
             // Otherwise, report back the state right away
             if CLLocationManager.authorizationStatus() == .notDetermined {
-                call.keepAlive = true
+                bridge?.saveCall(call)
                 callQueue[call.callbackId] = .permissions
 
                 DispatchQueue.main.async {
