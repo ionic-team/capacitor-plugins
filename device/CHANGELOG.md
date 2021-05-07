@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.6.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/device@0.5.7...@capacitor/device@0.6.0) (2021-05-07)
+
+
+### Features
+
+* **device:** Add getId function ([#370](https://github.com/ionic-team/capacitor-plugins/issues/370)) ([96664c6](https://github.com/ionic-team/capacitor-plugins/commit/96664c630140112af7e50569b98b00f774480949))
+
+
+
+
+
 ## [0.5.7](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/device@0.5.6...@capacitor/device@0.5.7) (2021-04-29)
 
 **Note:** Version bump only for package @capacitor/device
