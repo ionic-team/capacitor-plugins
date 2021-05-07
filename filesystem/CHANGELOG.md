@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.5.4](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@0.5.3...@capacitor/filesystem@0.5.4) (2021-05-07)
+
+
+### Bug Fixes
+
+* **filesystem:** Make ctime optional ([#373](https://github.com/ionic-team/capacitor-plugins/issues/373)) ([e3c6212](https://github.com/ionic-team/capacitor-plugins/commit/e3c6212b94c75cf747a8768af5056963683953b2))
+
+
+
+
+
 ## [0.5.3](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@0.5.2...@capacitor/filesystem@0.5.3) (2021-04-29)
 
 

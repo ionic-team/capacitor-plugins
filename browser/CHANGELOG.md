@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.4.8](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/browser@0.4.7...@capacitor/browser@0.4.8) (2021-05-07)
+
+
+### Bug Fixes
+
+* **browser:** prevent crash on popover presentation ([#369](https://github.com/ionic-team/capacitor-plugins/issues/369)) ([a9d4380](https://github.com/ionic-team/capacitor-plugins/commit/a9d43805f35ebaeaaed3285adc2e1f7e1062e009))
+
+
+
+
+
 ## [0.4.7](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/browser@0.4.6...@capacitor/browser@0.4.7) (2021-04-29)
 
 **Note:** Version bump only for package @capacitor/browser
