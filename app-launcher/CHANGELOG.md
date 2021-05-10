@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.5.9](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/app-launcher@0.5.8...@capacitor/app-launcher@0.5.9) (2021-05-10)
+
+**Note:** Version bump only for package @capacitor/app-launcher
+
+
+
+
+
 ## [0.5.8](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/app-launcher@0.5.7...@capacitor/app-launcher@0.5.8) (2021-05-07)
 
 **Note:** Version bump only for package @capacitor/app-launcher
