@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.10](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/app@0.3.9...@capacitor/app@0.3.10) (2021-05-11)
+
+**Note:** Version bump only for package @capacitor/app
+
+
+
+
+
 ## [0.3.9](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/app@0.3.8...@capacitor/app@0.3.9) (2021-05-10)
 
 **Note:** Version bump only for package @capacitor/app
