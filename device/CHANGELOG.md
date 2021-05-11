@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.6.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/device@0.6.0...@capacitor/device@0.6.1) (2021-05-10)
+
+**Note:** Version bump only for package @capacitor/device
+
+
+
+
+
 # [0.6.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/device@0.5.7...@capacitor/device@0.6.0) (2021-05-07)
 
 

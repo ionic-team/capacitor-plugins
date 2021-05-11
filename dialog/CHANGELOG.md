@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.4.9](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/dialog@0.4.8...@capacitor/dialog@0.4.9) (2021-05-10)
+
+**Note:** Version bump only for package @capacitor/dialog
+
+
+
+
+
 ## [0.4.8](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/dialog@0.4.7...@capacitor/dialog@0.4.8) (2021-05-07)
 
 **Note:** Version bump only for package @capacitor/dialog
