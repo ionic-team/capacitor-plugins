@@ -30,9 +30,9 @@ jobs:
           key: dependency-cache-${{ hashFiles('package.json', '*/package.json') }}
       - run: npm install
       - id: files
-        uses: imhoffd/get-changed-files@v2
+        uses: lots0logs/gh-action-get-changed-files@2.1.4
         with:
-          format: 'json'
+          token: ${{ secrets.GITHUB_TOKEN }}
       - id: packages
         uses: ./.github/actions/changed-packages
         with:
