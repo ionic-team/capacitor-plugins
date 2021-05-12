@@ -22,7 +22,7 @@ export class ActionSheetWeb extends WebPlugin implements ActionSheetPlugin {
         resolve({
           index: selection,
         });
-      });;
+      });
     });
   }
 }

@@ -21,7 +21,7 @@ export class BrowserWeb extends WebPlugin implements BrowserPlugin {
         this._lastWindow = null;
         resolve();
       } else {
-        reject('No active windows to close!');
+        reject('No active window to close!');
       }
     });
   }
