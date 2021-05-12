@@ -45,7 +45,7 @@ public class SharePlugin: CAPPlugin {
 
             }
 
-            self?.setCenteredPopovers(actionController)
+            self?.setCenteredPopover(actionController)
             self?.bridge?.viewController?.present(actionController, animated: true, completion: nil)
         }
 
