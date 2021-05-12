@@ -113,7 +113,7 @@ public class ActionSheet extends BottomSheetDialogFragment {
 
         parentLayout.addView(layout.getRootView());
 
-        dialog.setContentView(parentLayout.getRootView());
+        dialog.setContentViews(parentLayout.getRootView());
 
         CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) ((View) parentLayout.getParent()).getLayoutParams();
         CoordinatorLayout.Behavior behavior = params.getBehavior();
