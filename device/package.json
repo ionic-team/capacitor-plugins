@@ -1,6 +1,6 @@
 {
   "name": "@capacitor/device",
-  "version": "0.5.6",
+  "version": "0.6.2",
   "description": "The Device API exposes internal information about the device, such as the model and operating system version, along with user information such as unique ids.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
@@ -45,17 +45,17 @@
     "prepublishOnly": "npm run build"
   },
   "devDependencies": {
-    "@capacitor/android": "3.0.0-rc.0",
-    "@capacitor/core": "3.0.0-rc.0",
+    "@capacitor/android": "3.0.0-rc.3",
+    "@capacitor/core": "3.0.0-rc.3",
     "@capacitor/docgen": "0.0.16",
-    "@capacitor/ios": "3.0.0-rc.0",
+    "@capacitor/ios": "3.0.0-rc.3",
     "@ionic/eslint-config": "^0.3.0",
     "@ionic/prettier-config": "~1.0.1",
     "@ionic/swiftlint-config": "^1.1.2",
     "eslint": "^7.11.0",
     "esm": "^3.2.25",
     "prettier": "~2.2.0",
-    "prettier-plugin-java": "~1.0.0",
+    "prettier-plugin-java": "~1.0.2",
     "rimraf": "^3.0.0",
     "rollup": "^2.29.0",
     "swiftlint": "^1.0.1",
@@ -64,7 +64,7 @@
     "uvu": "^0.5.1"
   },
   "peerDependencies": {
-    "@capacitor/core": "3.0.0-rc.0"
+    "@capacitor/core": "3.0.0-rc.3"
   },
   "prettier": "@ionic/prettier-config",
   "swiftlint": "@ionic/swiftlint-config",

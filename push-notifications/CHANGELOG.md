@@ -3,6 +3,41 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.10](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/push-notifications@0.3.9...@capacitor/push-notifications@0.3.10) (2021-05-11)
+
+**Note:** Version bump only for package @capacitor/push-notifications
+
+
+
+
+
+## [0.3.9](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/push-notifications@0.3.8...@capacitor/push-notifications@0.3.9) (2021-05-10)
+
+**Note:** Version bump only for package @capacitor/push-notifications
+
+
+
+
+
+## [0.3.8](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/push-notifications@0.3.7...@capacitor/push-notifications@0.3.8) (2021-05-07)
+
+**Note:** Version bump only for package @capacitor/push-notifications
+
+
+
+
+
+## [0.3.7](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/push-notifications@0.3.6...@capacitor/push-notifications@0.3.7) (2021-04-29)
+
+
+### Bug Fixes
+
+* **push-notifications:** proper return of push notification object properties ([#349](https://github.com/ionic-team/capacitor-plugins/issues/349)) ([733fc06](https://github.com/ionic-team/capacitor-plugins/commit/733fc06af7b62a576fb6214a7fe42838a3bcb93a))
+
+
+
+
+
 ## [0.3.6](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/push-notifications@0.3.5...@capacitor/push-notifications@0.3.6) (2021-03-10)
 
 **Note:** Version bump only for package @capacitor/push-notifications

@@ -16,12 +16,12 @@
  */
 
 #import "Keyboard.h"
-#import "CAPBridgedPlugin.h"
 #import <Foundation/Foundation.h>
 #import <objc/runtime.h>
-#import <Capacitor/Capacitor-Swift.h>
 #import <Capacitor/Capacitor.h>
-#import "CAPBridgedJSTypes.h"
+#import <Capacitor/Capacitor-Swift.h>
+#import <Capacitor/CAPBridgedPlugin.h>
+#import <Capacitor/CAPBridgedJSTypes.h>
 
 typedef enum : NSUInteger {
   ResizeNone,
@@ -55,7 +55,7 @@ NSString* UITraitsClassString;
 
 - (void)load
 {
-  self.disableScroll = !self.bridge.config.enableScrolling;
+  self.disableScroll = !self.bridge.config.scrollingEnabled;
 
   UIClassString = [@[@"UI", @"Web", @"Browser", @"View"] componentsJoinedByString:@""];
   WKClassString = [@[@"WK", @"Content", @"View"] componentsJoinedByString:@""];

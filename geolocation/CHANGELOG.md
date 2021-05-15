@@ -3,6 +3,42 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.4.7](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/geolocation@0.4.6...@capacitor/geolocation@0.4.7) (2021-05-11)
+
+**Note:** Version bump only for package @capacitor/geolocation
+
+
+
+
+
+## [0.4.6](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/geolocation@0.4.5...@capacitor/geolocation@0.4.6) (2021-05-10)
+
+**Note:** Version bump only for package @capacitor/geolocation
+
+
+
+
+
+## [0.4.5](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/geolocation@0.4.4...@capacitor/geolocation@0.4.5) (2021-05-07)
+
+
+### Bug Fixes
+
+* **geolocation:** Replace deprecated call.save with new keepAlive API ([#375](https://github.com/ionic-team/capacitor-plugins/issues/375)) ([e4e7cf4](https://github.com/ionic-team/capacitor-plugins/commit/e4e7cf4afd4a70bf48359c625fa7a548211876d5))
+* **geolocation:** Use the new APIs for handling/saving calls ([#374](https://github.com/ionic-team/capacitor-plugins/issues/374)) ([ebd5b52](https://github.com/ionic-team/capacitor-plugins/commit/ebd5b527cb7f8b6c0016e82d03a0e84287913d3e))
+
+
+
+
+
+## [0.4.4](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/geolocation@0.4.3...@capacitor/geolocation@0.4.4) (2021-04-29)
+
+**Note:** Version bump only for package @capacitor/geolocation
+
+
+
+
+
 ## [0.4.3](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/geolocation@0.4.2...@capacitor/geolocation@0.4.3) (2021-03-10)
 
 **Note:** Version bump only for package @capacitor/geolocation

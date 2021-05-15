@@ -3,6 +3,46 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.6.3](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/keyboard@0.6.2...@capacitor/keyboard@0.6.3) (2021-05-11)
+
+**Note:** Version bump only for package @capacitor/keyboard
+
+
+
+
+
+## [0.6.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/keyboard@0.6.1...@capacitor/keyboard@0.6.2) (2021-05-10)
+
+**Note:** Version bump only for package @capacitor/keyboard
+
+
+
+
+
+## [0.6.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/keyboard@0.6.0...@capacitor/keyboard@0.6.1) (2021-05-07)
+
+**Note:** Version bump only for package @capacitor/keyboard
+
+
+
+
+
+# [0.6.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/keyboard@0.5.6...@capacitor/keyboard@0.6.0) (2021-04-29)
+
+
+### Bug Fixes
+
+* **keyboard:** Use new Config name for scroll ([#335](https://github.com/ionic-team/capacitor-plugins/issues/335)) ([bec3d22](https://github.com/ionic-team/capacitor-plugins/commit/bec3d22e67dfb22db5b5bb774f53fb01a34f116f))
+
+
+### Features
+
+* **keyboard:** Add default style option for setStyle ([#334](https://github.com/ionic-team/capacitor-plugins/issues/334)) ([9dbb809](https://github.com/ionic-team/capacitor-plugins/commit/9dbb809ce3219d517e62b235406d2b798c95425c))
+
+
+
+
+
 ## [0.5.6](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/keyboard@0.5.5...@capacitor/keyboard@0.5.6) (2021-03-10)
 
 **Note:** Version bump only for package @capacitor/keyboard

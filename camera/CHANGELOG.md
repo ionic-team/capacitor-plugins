@@ -3,6 +3,38 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.4.7](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@0.4.6...@capacitor/camera@0.4.7) (2021-05-11)
+
+**Note:** Version bump only for package @capacitor/camera
+
+
+
+
+
+## [0.4.6](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@0.4.5...@capacitor/camera@0.4.6) (2021-05-10)
+
+**Note:** Version bump only for package @capacitor/camera
+
+
+
+
+
+## [0.4.5](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@0.4.4...@capacitor/camera@0.4.5) (2021-05-07)
+
+**Note:** Version bump only for package @capacitor/camera
+
+
+
+
+
+## [0.4.4](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@0.4.3...@capacitor/camera@0.4.4) (2021-04-29)
+
+**Note:** Version bump only for package @capacitor/camera
+
+
+
+
+
 ## [0.4.3](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@0.4.2...@capacitor/camera@0.4.3) (2021-03-10)
 
 **Note:** Version bump only for package @capacitor/camera

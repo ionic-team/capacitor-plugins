@@ -2,6 +2,7 @@ import { WebPlugin } from '@capacitor/core';
 
 import type {
   BatteryInfo,
+  DeviceId,
   DeviceInfo,
   DevicePlugin,
   GetLanguageCodeResult,
@@ -21,6 +22,12 @@ declare global {
 }
 
 export class DeviceWeb extends WebPlugin implements DevicePlugin {
+  async getId(): Promise<DeviceId> {
+    return {
+      uuid: this.getUid(),
+    };
+  }
+
   async getInfo(): Promise<DeviceInfo> {
     if (typeof navigator === 'undefined' || !navigator.userAgent) {
       throw this.unavailable('Device API not available in this browser');
@@ -36,7 +43,6 @@ export class DeviceWeb extends WebPlugin implements DevicePlugin {
       osVersion: uaFields.osVersion,
       manufacturer: navigator.vendor,
       isVirtual: false,
-      uuid: this.getUid(),
       webViewVersion: uaFields.browserVersion,
     };
   }

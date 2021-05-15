@@ -3,6 +3,38 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.5.10](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/app-launcher@0.5.9...@capacitor/app-launcher@0.5.10) (2021-05-11)
+
+**Note:** Version bump only for package @capacitor/app-launcher
+
+
+
+
+
+## [0.5.9](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/app-launcher@0.5.8...@capacitor/app-launcher@0.5.9) (2021-05-10)
+
+**Note:** Version bump only for package @capacitor/app-launcher
+
+
+
+
+
+## [0.5.8](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/app-launcher@0.5.7...@capacitor/app-launcher@0.5.8) (2021-05-07)
+
+**Note:** Version bump only for package @capacitor/app-launcher
+
+
+
+
+
+## [0.5.7](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/app-launcher@0.5.6...@capacitor/app-launcher@0.5.7) (2021-04-29)
+
+**Note:** Version bump only for package @capacitor/app-launcher
+
+
+
+
+
 ## [0.5.6](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/app-launcher@0.5.5...@capacitor/app-launcher@0.5.6) (2021-03-10)
 
 **Note:** Version bump only for package @capacitor/app-launcher

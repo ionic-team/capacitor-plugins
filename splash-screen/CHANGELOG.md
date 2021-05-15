@@ -3,6 +3,41 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.10](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/splash-screen@0.3.9...@capacitor/splash-screen@0.3.10) (2021-05-11)
+
+**Note:** Version bump only for package @capacitor/splash-screen
+
+
+
+
+
+## [0.3.9](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/splash-screen@0.3.8...@capacitor/splash-screen@0.3.9) (2021-05-10)
+
+**Note:** Version bump only for package @capacitor/splash-screen
+
+
+
+
+
+## [0.3.8](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/splash-screen@0.3.7...@capacitor/splash-screen@0.3.8) (2021-05-07)
+
+**Note:** Version bump only for package @capacitor/splash-screen
+
+
+
+
+
+## [0.3.7](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/splash-screen@0.3.6...@capacitor/splash-screen@0.3.7) (2021-04-29)
+
+
+### Bug Fixes
+
+* **splash-screen:** launchAutoHide not working on iOS ([#319](https://github.com/ionic-team/capacitor-plugins/issues/319)) ([2a83fcb](https://github.com/ionic-team/capacitor-plugins/commit/2a83fcb536cdfc5b601f363212353201de40ca5b))
+
+
+
+
+
 ## [0.3.6](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/splash-screen@0.3.5...@capacitor/splash-screen@0.3.6) (2021-03-10)
 
 **Note:** Version bump only for package @capacitor/splash-screen
