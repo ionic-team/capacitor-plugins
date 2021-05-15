@@ -8,6 +8,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.service.notification.StatusBarNotification;
+import android.util.Log;
+import androidx.annotation.NonNull;
 import com.getcapacitor.Bridge;
 import com.getcapacitor.JSArray;
 import com.getcapacitor.JSObject;
@@ -17,16 +19,14 @@ import com.getcapacitor.PluginHandle;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
 import com.getcapacitor.annotation.Permission;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.RemoteMessage;
-import java.util.ArrayList;
-import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
+import java.util.ArrayList;
+import java.util.List;
 
 @CapacitorPlugin(name = "PushNotifications", permissions = @Permission(strings = {}, alias = "receive"))
 public class PushNotificationsPlugin extends Plugin {
@@ -80,28 +80,19 @@ public class PushNotificationsPlugin extends Plugin {
     @PluginMethod
     public void register(PluginCall call) {
         FirebaseMessaging.getInstance().setAutoInitEnabled(true);
-        FirebaseInstanceId
-            .getInstance()
-            .getInstanceId()
-            .addOnSuccessListener(
-                getActivity(),
-                new OnSuccessListener<InstanceIdResult>() {
-                    @Override
-                    public void onSuccess(InstanceIdResult instanceIdResult) {
-                        sendToken(instanceIdResult.getToken());
+        FirebaseMessaging.getInstance().getToken()
+            .addOnCompleteListener(new OnCompleteListener<String>() {
+                @Override
+                public void onComplete(@NonNull Task<String> task) {
+                    if (!task.isSuccessful()) {
+                        sendError(task.getException().getLocalizedMessage());
+                        return;
                     }
+                    
+                    String token = task.getResult();
+                    sendToken(token);
                 }
-            );
-        FirebaseInstanceId
-            .getInstance()
-            .getInstanceId()
-            .addOnFailureListener(
-                new OnFailureListener() {
-                    public void onFailure(Exception e) {
-                        sendError(e.getLocalizedMessage());
-                    }
-                }
-            );
+            });
         call.resolve();
     }
 
