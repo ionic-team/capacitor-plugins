@@ -52,7 +52,7 @@ repositories {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation project(':capacitor-android')
+    compileOnly project(':capacitor-android')
     implementation "androidx.exifinterface:exifinterface:$androidxExifInterfaceVersion"
     implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"
     implementation "com.google.android.material:material:$androidxMaterialVersion"
