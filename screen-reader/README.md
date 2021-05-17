@@ -85,7 +85,7 @@ Readers).
 
 | Param           | Type                                                                                        |
 | --------------- | ------------------------------------------------------------------------------------------- |
-| **`eventName`** | <code>"stateChange"</code>                                                                  |
+| **`eventName`** | <code>'stateChange'</code>                                                                  |
 | **`listener`**  | <code><a href="#screenreaderstatechangelistener">ScreenReaderStateChangeListener</a></code> |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
@@ -121,9 +121,9 @@ Remove all the listeners that are attached to this plugin.
 
 #### PluginListenerHandle
 
-| Prop         | Type                       |
-| ------------ | -------------------------- |
-| **`remove`** | <code>() =&gt; void</code> |
+| Prop         | Type                                      |
+| ------------ | ----------------------------------------- |
+| **`remove`** | <code>() =&gt; Promise&lt;void&gt;</code> |
 
 
 ### Type Aliases
