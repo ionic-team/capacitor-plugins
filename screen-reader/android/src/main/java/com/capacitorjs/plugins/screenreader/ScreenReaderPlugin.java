@@ -9,7 +9,6 @@ import com.getcapacitor.annotation.CapacitorPlugin;
 @CapacitorPlugin(name = "ScreenReader")
 public class ScreenReaderPlugin extends Plugin {
 
-    public static final String EVENT_LEGACY_STATE_CHANGE = "accessibilityScreenReaderStateChange";
     public static final String EVENT_STATE_CHANGE = "stateChange";
     private ScreenReader screenReader;
 
@@ -20,7 +19,6 @@ public class ScreenReaderPlugin extends Plugin {
             enabled -> {
                 JSObject ret = new JSObject();
                 ret.put("value", enabled);
-                notifyListeners(EVENT_LEGACY_STATE_CHANGE, ret);
                 notifyListeners(EVENT_STATE_CHANGE, ret);
             }
         );
