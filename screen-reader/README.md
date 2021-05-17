@@ -93,7 +93,7 @@ plugin](https://github.com/capacitor-community/text-to-speech).
 ### addListener('stateChange', ...)
 
 ```typescript
-addListener(eventName: 'stateChange', listener: ScreenReaderStateChangeListener) => PluginListenerHandle
+addListener(eventName: 'stateChange', listener: StateChangeListener) => Promise<PluginListenerHandle> & PluginListenerHandle
 ```
 
 Add a listener for when the screen reader is turned on or off.
@@ -103,10 +103,10 @@ This event used to be named `'accessibilityScreenReaderStateChange'`.
 This method is not supported on web (it is not possible to detect Screen
 Readers).
 
-| Param           | Type                                                                                        |
-| --------------- | ------------------------------------------------------------------------------------------- |
-| **`eventName`** | <code>'stateChange'</code>                                                                  |
-| **`listener`**  | <code><a href="#screenreaderstatechangelistener">ScreenReaderStateChangeListener</a></code> |
+| Param           | Type                                                                |
+| --------------- | ------------------------------------------------------------------- |
+| **`eventName`** | <code>'stateChange'</code>                                          |
+| **`listener`**  | <code><a href="#statechangelistener">StateChangeListener</a></code> |
 
 **Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt; & <a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
@@ -146,7 +146,6 @@ Remove all the listeners that are attached to this plugin.
 | **`remove`** | <code>() =&gt; Promise&lt;void&gt;</code> |
 
 
-
 #### ScreenReaderState
 
 | Prop        | Type                 | Description                                  | Since |
@@ -160,6 +159,5 @@ Remove all the listeners that are attached to this plugin.
 #### StateChangeListener
 
 <code>(state: <a href="#screenreaderstate">ScreenReaderState</a>): void</code>
-
 
 </docgen-api>
