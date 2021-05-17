@@ -3,11 +3,14 @@ package com.capacitorjs.plugins.device;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
 import android.provider.Settings;
+import android.webkit.WebView;
 
 public class Device {
 
@@ -77,5 +80,28 @@ public class Device {
         }
 
         return null;
+    }
+
+    public String getWebViewVersion() {
+        PackageInfo info = null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            info = WebView.getCurrentWebViewPackage();
+        } else {
+            String webViewPackage = "com.google.android.webview";
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                webViewPackage = "com.android.chrome";
+            }
+            PackageManager pm = this.context.getPackageManager();
+            try {
+                info = pm.getPackageInfo(webViewPackage, 0);
+            } catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+        if (info != null) {
+            return info.versionName;
+        }
+
+        return android.os.Build.VERSION.RELEASE;
     }
 }

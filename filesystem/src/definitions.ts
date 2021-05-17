@@ -1,8 +1,10 @@
-export interface FilesystemPermissionStatus {
+import type { PermissionState } from '@capacitor/core';
+
+export interface PermissionStatus {
   publicStorage: PermissionState;
 }
 
-export enum FilesystemDirectory {
+export enum Directory {
   /**
    * The Documents directory
    * On iOS it's the app's documents directory.
@@ -61,7 +63,7 @@ export enum FilesystemDirectory {
   ExternalStorage = 'EXTERNAL_STORAGE',
 }
 
-export enum FilesystemEncoding {
+export enum Encoding {
   /**
    * Eight-bit UCS Transformation Format
    *
@@ -88,7 +90,7 @@ export enum FilesystemEncoding {
   UTF16 = 'utf16',
 }
 
-export interface FileWriteOptions {
+export interface WriteFileOptions {
   /**
    * The path of the file to write
    *
@@ -104,21 +106,21 @@ export interface FileWriteOptions {
   data: string;
 
   /**
-   * The FilesystemDirectory to store the file in
+   * The `Directory` to store the file in
    *
    * @since 1.0.0
    */
-  directory?: FilesystemDirectory;
+  directory?: Directory;
 
   /**
    * The encoding to write the file in. If not provided, data
    * is written as base64 encoded.
    *
-   * Pass FilesystemEncoding.UTF8 to write data as string
+   * Pass Encoding.UTF8 to write data as string
    *
    * @since 1.0.0
    */
-  encoding?: FilesystemEncoding;
+  encoding?: Encoding;
 
   /**
    * Whether to create any missing parent directories.
@@ -129,7 +131,7 @@ export interface FileWriteOptions {
   recursive?: boolean;
 }
 
-export interface FileAppendOptions {
+export interface AppendFileOptions {
   /**
    * The path of the file to append
    *
@@ -145,24 +147,24 @@ export interface FileAppendOptions {
   data: string;
 
   /**
-   * The FilesystemDirectory to store the file in
+   * The `Directory` to store the file in
    *
    * @since 1.0.0
    */
-  directory?: FilesystemDirectory;
+  directory?: Directory;
 
   /**
    * The encoding to write the file in. If not provided, data
    * is written as base64 encoded.
    *
-   * Pass FilesystemEncoding.UTF8 to write data as string
+   * Pass Encoding.UTF8 to write data as string
    *
    * @since 1.0.0
    */
-  encoding?: FilesystemEncoding;
+  encoding?: Encoding;
 }
 
-export interface FileReadOptions {
+export interface ReadFileOptions {
   /**
    * The path of the file to read
    *
@@ -171,24 +173,24 @@ export interface FileReadOptions {
   path: string;
 
   /**
-   * The FilesystemDirectory to read the file from
+   * The `Directory` to read the file from
    *
    * @since 1.0.0
    */
-  directory?: FilesystemDirectory;
+  directory?: Directory;
 
   /**
    * The encoding to read the file in, if not provided, data
    * is read as binary and returned as base64 encoded.
    *
-   * Pass FilesystemEncoding.UTF8 to read data as string
+   * Pass Encoding.UTF8 to read data as string
    *
    * @since 1.0.0
    */
-  encoding?: FilesystemEncoding;
+  encoding?: Encoding;
 }
 
-export interface FileDeleteOptions {
+export interface DeleteFileOptions {
   /**
    * The path of the file to delete
    *
@@ -197,11 +199,11 @@ export interface FileDeleteOptions {
   path: string;
 
   /**
-   * The FilesystemDirectory to delete the file from
+   * The `Directory` to delete the file from
    *
    * @since 1.0.0
    */
-  directory?: FilesystemDirectory;
+  directory?: Directory;
 }
 
 export interface MkdirOptions {
@@ -213,11 +215,11 @@ export interface MkdirOptions {
   path: string;
 
   /**
-   * The FilesystemDirectory to make the new directory in
+   * The `Directory` to make the new directory in
    *
    * @since 1.0.0
    */
-  directory?: FilesystemDirectory;
+  directory?: Directory;
 
   /**
    * Whether to create any missing parent directories as well.
@@ -237,11 +239,11 @@ export interface RmdirOptions {
   path: string;
 
   /**
-   * The FilesystemDirectory to remove the directory from
+   * The `Directory` to remove the directory from
    *
    * @since 1.0.0
    */
-  directory?: FilesystemDirectory;
+  directory?: Directory;
 
   /**
    * Whether to recursively remove the contents of the directory
@@ -261,11 +263,11 @@ export interface ReaddirOptions {
   path: string;
 
   /**
-   * The FilesystemDirectory to list files from
+   * The `Directory` to list files from
    *
    * @since 1.0.0
    */
-  directory?: FilesystemDirectory;
+  directory?: Directory;
 }
 
 export interface GetUriOptions {
@@ -277,11 +279,11 @@ export interface GetUriOptions {
   path: string;
 
   /**
-   * The FilesystemDirectory to get the file under
+   * The `Directory` to get the file under
    *
    * @since 1.0.0
    */
-  directory: FilesystemDirectory;
+  directory: Directory;
 }
 
 export interface StatOptions {
@@ -293,11 +295,11 @@ export interface StatOptions {
   path: string;
 
   /**
-   * The FilesystemDirectory to get the file under
+   * The `Directory` to get the file under
    *
    * @since 1.0.0
    */
-  directory?: FilesystemDirectory;
+  directory?: Directory;
 }
 
 export interface CopyOptions {
@@ -316,24 +318,24 @@ export interface CopyOptions {
   to: string;
 
   /**
-   * The FilesystemDirectory containing the existing file or directory
+   * The `Directory` containing the existing file or directory
    *
    * @since 1.0.0
    */
-  directory?: FilesystemDirectory;
+  directory?: Directory;
 
   /**
-   * The FilesystemDirectory containing the destination file or directory. If not supplied will use the 'directory'
+   * The `Directory` containing the destination file or directory. If not supplied will use the 'directory'
    * parameter as the destination
    *
    * @since 1.0.0
    */
-  toDirectory?: FilesystemDirectory;
+  toDirectory?: Directory;
 }
 
 export type RenameOptions = CopyOptions;
 
-export interface FileReadResult {
+export interface ReadFileResult {
   /**
    * The string representation of the data contained in the file
    *
@@ -341,7 +343,8 @@ export interface FileReadResult {
    */
   data: string;
 }
-export interface FileWriteResult {
+
+export interface WriteFileResult {
   /**
    * The uri where the file was written into
    *
@@ -349,6 +352,7 @@ export interface FileWriteResult {
    */
   uri: string;
 }
+
 export interface ReaddirResult {
   /**
    * List of files and directories inside the directory
@@ -357,6 +361,7 @@ export interface ReaddirResult {
    */
   files: string[];
 }
+
 export interface GetUriResult {
   /**
    * The uri of the file
@@ -365,6 +370,7 @@ export interface GetUriResult {
    */
   uri: string;
 }
+
 export interface StatResult {
   /**
    * Type of the file
@@ -381,14 +387,16 @@ export interface StatResult {
   size: number;
 
   /**
-   * Time of creation
+   * Time of creation in milliseconds.
+   *
+   * It's not available on Android 7 and older devices.
    *
    * @since 1.0.0
    */
-  ctime: number;
+  ctime?: number;
 
   /**
-   * Time of last modification
+   * Time of last modification in milliseconds.
    *
    * @since 1.0.0
    */
@@ -408,28 +416,28 @@ export interface FilesystemPlugin {
    *
    * @since 1.0.0
    */
-  readFile(options: FileReadOptions): Promise<FileReadResult>;
+  readFile(options: ReadFileOptions): Promise<ReadFileResult>;
 
   /**
    * Write a file to disk in the specified location on device
    *
    * @since 1.0.0
    */
-  writeFile(options: FileWriteOptions): Promise<FileWriteResult>;
+  writeFile(options: WriteFileOptions): Promise<WriteFileResult>;
 
   /**
    * Append to a file on disk in the specified location on device
    *
    * @since 1.0.0
    */
-  appendFile(options: FileAppendOptions): Promise<void>;
+  appendFile(options: AppendFileOptions): Promise<void>;
 
   /**
    * Delete a file from disk
    *
    * @since 1.0.0
    */
-  deleteFile(options: FileDeleteOptions): Promise<void>;
+  deleteFile(options: DeleteFileOptions): Promise<void>;
 
   /**
    * Create a directory.
@@ -482,19 +490,67 @@ export interface FilesystemPlugin {
 
   /**
    * Check read/write permissions.
-   * Required on Android, only when using FilesystemDirectory.Documents or
-   * FilesystemDirectory.ExternalStorage.
+   * Required on Android, only when using `Directory.Documents` or
+   * `Directory.ExternalStorage`.
    *
    * @since 1.0.0
    */
-  checkPermissions(): Promise<FilesystemPermissionStatus>;
+  checkPermissions(): Promise<PermissionStatus>;
 
   /**
    * Request read/write permissions.
-   * Required on Android, only when using FilesystemDirectory.Documents or
-   * FilesystemDirectory.ExternalStorage.
+   * Required on Android, only when using `Directory.Documents` or
+   * `Directory.ExternalStorage`.
    *
    * @since 1.0.0
    */
-  requestPermissions(): Promise<FilesystemPermissionStatus>;
+  requestPermissions(): Promise<PermissionStatus>;
 }
+
+/**
+ * @deprecated Use `ReadFileOptions`.
+ * @since 1.0.0
+ */
+export type FileReadOptions = ReadFileOptions;
+
+/**
+ * @deprecated Use `ReadFileResult`.
+ * @since 1.0.0
+ */
+export type FileReadResult = ReadFileResult;
+
+/**
+ * @deprecated Use `WriteFileOptions`.
+ * @since 1.0.0
+ */
+export type FileWriteOptions = WriteFileOptions;
+
+/**
+ * @deprecated Use `WriteFileResult`.
+ * @since 1.0.0
+ */
+export type FileWriteResult = WriteFileResult;
+
+/**
+ * @deprecated Use `AppendFileOptions`.
+ * @since 1.0.0
+ */
+export type FileAppendOptions = AppendFileOptions;
+
+/**
+ * @deprecated Use `DeleteFileOptions`.
+ * @since 1.0.0
+ */
+export type FileDeleteOptions = DeleteFileOptions;
+
+/**
+ * @deprecated Use `Directory`.
+ * @since 1.0.0
+ */
+export const FilesystemDirectory = Directory;
+
+/**
+ * @deprecated Use `Encoding`.
+ * @since 1.0.0
+ */
+export const FilesystemEncoding = Encoding;

@@ -1,5 +1,17 @@
 export type OperatingSystem = 'ios' | 'android' | 'windows' | 'mac' | 'unknown';
 
+export interface DeviceId {
+  /**
+   * The UUID of the device as available to the app. This identifier may change
+   * on modern mobile platforms that only allow per-app install UUIDs.
+   *
+   * On web, a random identifier is generated and stored on localStorage for subsequent calls.
+   *
+   * @since 1.0.0
+   */
+  uuid: string;
+}
+
 export interface DeviceInfo {
   /**
    * The name of the device. For example, "John's iPhone".
@@ -23,14 +35,6 @@ export interface DeviceInfo {
    * @since 1.0.0
    */
   platform: 'ios' | 'android' | 'web';
-
-  /**
-   * The UUID of the device as available to the app. This identifier may change
-   * on modern mobile platforms that only allow per-app install UUIDs.
-   *
-   * @since 1.0.0
-   */
-  uuid: string;
 
   /**
    * The operating system of the device.
@@ -82,9 +86,16 @@ export interface DeviceInfo {
    * @since 1.0.0
    */
   diskTotal?: number;
+
+  /**
+   * The web view browser version
+   *
+   * @since 1.0.0
+   */
+  webViewVersion: string;
 }
 
-export interface DeviceBatteryInfo {
+export interface BatteryInfo {
   /**
    * A percentage (0 to 1) indicating how much the battery is charged.
    *
@@ -100,7 +111,7 @@ export interface DeviceBatteryInfo {
   isCharging?: boolean;
 }
 
-export interface DeviceLanguageCodeResult {
+export interface GetLanguageCodeResult {
   /**
    * Two character language code.
    *
@@ -110,6 +121,13 @@ export interface DeviceLanguageCodeResult {
 }
 
 export interface DevicePlugin {
+  /**
+   * Return an unique identifier for the device.
+   *
+   * @since 1.0.0
+   */
+  getId(): Promise<DeviceId>;
+
   /**
    * Return information about the underlying device/os/platform.
    *
@@ -122,12 +140,24 @@ export interface DevicePlugin {
    *
    * @since 1.0.0
    */
-  getBatteryInfo(): Promise<DeviceBatteryInfo>;
+  getBatteryInfo(): Promise<BatteryInfo>;
 
   /**
    * Get the device's current language locale code.
    *
    * @since 1.0.0
    */
-  getLanguageCode(): Promise<DeviceLanguageCodeResult>;
+  getLanguageCode(): Promise<GetLanguageCodeResult>;
 }
+
+/**
+ * @deprecated Use `BatteryInfo`.
+ * @since 1.0.0
+ */
+export type DeviceBatteryInfo = BatteryInfo;
+
+/**
+ * @deprecated Use `GetLanguageCodeResult`.
+ * @since 1.0.0
+ */
+export type DeviceLanguageCodeResult = GetLanguageCodeResult;

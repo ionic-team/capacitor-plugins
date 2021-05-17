@@ -20,6 +20,7 @@ public class StoragePlugin: CAPPlugin {
         }
 
         storage = Storage(with: configuration)
+        call.resolve()
     }
 
     @objc func get(_ call: CAPPluginCall) {

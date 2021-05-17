@@ -1,10 +1,6 @@
 import { WebPlugin } from '@capacitor/core';
 
-import type {
-  ClipboardPlugin,
-  ClipboardWriteOptions,
-  ClipboardReadResult,
-} from './definitions';
+import type { ClipboardPlugin, ReadResult, WriteOptions } from './definitions';
 
 declare global {
   interface Clipboard {
@@ -16,7 +12,7 @@ declare global {
 declare let ClipboardItem: any;
 
 export class ClipboardWeb extends WebPlugin implements ClipboardPlugin {
-  async write(options: ClipboardWriteOptions): Promise<void> {
+  async write(options: WriteOptions): Promise<void> {
     if (typeof navigator === 'undefined' || !navigator.clipboard) {
       throw this.unavailable('Clipboard API not available in this browser');
     }
@@ -44,7 +40,7 @@ export class ClipboardWeb extends WebPlugin implements ClipboardPlugin {
     }
   }
 
-  async read(): Promise<ClipboardReadResult> {
+  async read(): Promise<ReadResult> {
     if (typeof navigator === 'undefined' || !navigator.clipboard) {
       throw this.unavailable('Clipboard API not available in this browser');
     }
@@ -111,7 +107,3 @@ export class ClipboardWeb extends WebPlugin implements ClipboardPlugin {
     });
   }
 }
-
-const Clipboard = new ClipboardWeb();
-
-export { Clipboard };

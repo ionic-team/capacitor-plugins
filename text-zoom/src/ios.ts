@@ -1,22 +1,27 @@
 import { Plugins } from '@capacitor/core';
 
-import type { TextZoomPlugin } from './definitions';
+import type {
+  GetPreferredResult,
+  GetResult,
+  SetOptions,
+  TextZoomPlugin,
+} from './definitions';
 
 export class TextZoomIOS implements TextZoomPlugin {
   static readonly TEXT_SIZE_REGEX = /(\d+)%/;
 
-  async get(): Promise<{ value: number }> {
+  async get(): Promise<GetResult> {
     const percentage = this.getRaw();
     const value = this.textSizePercentageToNumber(percentage);
 
     return { value };
   }
 
-  async getPreferred(): Promise<{ value: number }> {
+  async getPreferred(): Promise<GetPreferredResult> {
     return Plugins.TextZoom.getPreferred();
   }
 
-  async set(options: { value: number }): Promise<void> {
+  async set(options: SetOptions): Promise<void> {
     const num = this.textSizeNumberToPercentage(options.value);
     this.setRaw(num);
   }

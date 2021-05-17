@@ -3,6 +3,8 @@ tasks:
     on:
       issues:
         types: [opened]
+    condition: |-
+      !(await getTeamMembers('capacitor')).includes(payload.sender.login)
     config:
       label: 'triage'
   - name: remove-label
@@ -16,3 +18,16 @@ tasks:
     on:
       issues:
         types: [opened, edited]
+  - name: assign-to-project
+    on:
+      issues:
+        types: [opened]
+      pull_request:
+        types: [opened]
+    condition: |-
+      (await getTeamMembers('capacitor')).includes(payload.sender.login)
+    config:
+      columns:
+        issue: 10495656
+        pr: 10495659
+        draft-pr: 10495658

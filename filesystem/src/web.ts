@@ -1,29 +1,28 @@
 import { WebPlugin } from '@capacitor/core';
 
 import type {
+  AppendFileOptions,
   CopyOptions,
-  FileAppendOptions,
-  FileDeleteOptions,
-  FileReadOptions,
-  FileReadResult,
-  FilesystemPermissionStatus,
+  DeleteFileOptions,
   FilesystemPlugin,
-  FileWriteOptions,
-  FileWriteResult,
   GetUriOptions,
   GetUriResult,
   MkdirOptions,
+  PermissionStatus,
+  ReadFileOptions,
+  ReadFileResult,
   ReaddirOptions,
   ReaddirResult,
   RenameOptions,
   RmdirOptions,
   StatOptions,
   StatResult,
+  WriteFileOptions,
+  WriteFileResult,
+  Directory,
 } from './definitions';
-import { FilesystemDirectory } from './definitions';
 
 export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
-  DEFAULT_DIRECTORY = FilesystemDirectory.Data;
   DB_VERSION = 1;
   DB_NAME = 'Disc';
 
@@ -102,13 +101,13 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
   }
 
   private getPath(
-    directory: FilesystemDirectory | undefined,
+    directory: Directory | undefined,
     uriPath: string | undefined,
   ): string {
-    directory = directory || this.DEFAULT_DIRECTORY;
     const cleanedUriPath =
       uriPath !== undefined ? uriPath.replace(/^[/]+|[/]+$/g, '') : '';
-    let fsPath = '/' + directory;
+    let fsPath = '';
+    if (directory !== undefined) fsPath += '/' + directory;
     if (uriPath !== '') fsPath += '/' + cleanedUriPath;
     return fsPath;
   }
@@ -125,7 +124,7 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
    * @param options options for the file read
    * @return a promise that resolves with the read file data result
    */
-  async readFile(options: FileReadOptions): Promise<FileReadResult> {
+  async readFile(options: ReadFileOptions): Promise<ReadFileResult> {
     const path: string = this.getPath(options.directory, options.path);
     // const encoding = options.encoding;
 
@@ -139,7 +138,7 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
    * @param options options for the file write
    * @return a promise that resolves with the file write result
    */
-  async writeFile(options: FileWriteOptions): Promise<FileWriteResult> {
+  async writeFile(options: WriteFileOptions): Promise<WriteFileResult> {
     const path: string = this.getPath(options.directory, options.path);
     const data = options.data;
     const doRecursive = options.recursive;
@@ -184,7 +183,7 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
    * @param options options for the file append
    * @return a promise that resolves with the file write result
    */
-  async appendFile(options: FileAppendOptions): Promise<void> {
+  async appendFile(options: AppendFileOptions): Promise<void> {
     const path: string = this.getPath(options.directory, options.path);
     let data = options.data;
     // const encoding = options.encoding;
@@ -231,7 +230,7 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
    * @param options options for the file delete
    * @return a promise that resolves with the deleted file data result
    */
-  async deleteFile(options: FileDeleteOptions): Promise<void> {
+  async deleteFile(options: DeleteFileOptions): Promise<void> {
     const path: string = this.getPath(options.directory, options.path);
 
     const entry = (await this.dbRequest('get', [path])) as EntryObj;
@@ -351,10 +350,8 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
     if (entry === undefined) {
       entry = (await this.dbRequest('get', [path + '/'])) as EntryObj;
     }
-    if (entry === undefined) throw Error('Entry does not exist.');
-
     return {
-      uri: entry.path,
+      uri: entry?.path || path,
     };
   }
 
@@ -399,11 +396,11 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
     return this._copy(options, false);
   }
 
-  async requestPermissions(): Promise<FilesystemPermissionStatus> {
+  async requestPermissions(): Promise<PermissionStatus> {
     return { publicStorage: 'granted' };
   }
 
-  async checkPermissions(): Promise<FilesystemPermissionStatus> {
+  async checkPermissions(): Promise<PermissionStatus> {
     return { publicStorage: 'granted' };
   }
 
@@ -484,6 +481,8 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
       await this.dbRequest('put', [entry]);
     };
 
+    const ctime = fromObj.ctime ? fromObj.ctime : Date.now();
+
     switch (fromObj.type) {
       // The "from" object is a file
       case 'file': {
@@ -510,7 +509,7 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
 
         // Copy the mtime/ctime of a renamed file
         if (doRename) {
-          await updateTime(to, fromObj.ctime, fromObj.mtime);
+          await updateTime(to, ctime, fromObj.mtime);
         }
 
         // Resolve promise
@@ -531,7 +530,7 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
 
           // Copy the mtime/ctime of a renamed directory
           if (doRename) {
-            await updateTime(to, fromObj.ctime, fromObj.mtime);
+            await updateTime(to, ctime, fromObj.mtime);
           }
         } catch (e) {
           // ignore

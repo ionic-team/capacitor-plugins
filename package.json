@@ -9,12 +9,16 @@
     "scripts:prettier": "npx prettier \"scripts/**/*.mjs\"",
     "apply-patches": "node ./scripts/apply-patches.mjs",
     "toggle-local": "node ./scripts/toggle-local.mjs",
+    "update-all": "node ./scripts/update-all.mjs",
     "set-capacitor-version": "node ./scripts/set-capacitor-version.mjs",
-    "postinstall": "lerna bootstrap"
+    "postinstall": "lerna bootstrap",
+    "release": "lerna publish"
   },
   "devDependencies": {
+    "@actions/core": "^1.2.6",
     "@ionic/prettier-config": "^1.0.1",
     "@types/prompts": "^2.0.8",
+    "esm": "^3.2.25",
     "lerna": "^3.22.1",
     "prettier": "^2.1.2",
     "prompts": "^2.3.2"

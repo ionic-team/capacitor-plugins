@@ -1,13 +1,20 @@
 import { WebPlugin } from '@capacitor/core';
 
-import type { AppLauncherPlugin } from './definitions';
+import type {
+  AppLauncherPlugin,
+  CanOpenURLOptions,
+  CanOpenURLResult,
+  OpenURLOptions,
+  OpenURLResult,
+} from './definitions';
 
 export class AppLauncherWeb extends WebPlugin implements AppLauncherPlugin {
-  async canOpenUrl(_options: { url: string }): Promise<{ value: boolean }> {
+  async canOpenUrl(_options: CanOpenURLOptions): Promise<CanOpenURLResult> {
     return { value: true };
   }
 
-  async openUrl(_options: { url: string }): Promise<{ completed: boolean }> {
+  async openUrl(options: OpenURLOptions): Promise<OpenURLResult> {
+    window.open(options.url, '_blank');
     return { completed: true };
   }
 }

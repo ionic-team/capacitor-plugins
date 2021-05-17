@@ -5,6 +5,15 @@ import Capacitor
 public class DevicePlugin: CAPPlugin {
     private let implementation = Device()
 
+    @objc func getId(_ call: CAPPluginCall) {
+        if let uuid = UIDevice.current.identifierForVendor {
+            call.resolve([
+                "uuid": uuid.uuidString
+            ])
+        } else {
+            call.reject("Id not available")
+        }
+    }
     @objc func getInfo(_ call: CAPPluginCall) {
         var isSimulator = false
         #if arch(i386) || arch(x86_64)
@@ -25,8 +34,8 @@ public class DevicePlugin: CAPPlugin {
             "osVersion": UIDevice.current.systemVersion,
             "platform": "ios",
             "manufacturer": "Apple",
-            "uuid": UIDevice.current.identifierForVendor!.uuidString,
-            "isVirtual": isSimulator
+            "isVirtual": isSimulator,
+            "webViewVersion": UIDevice.current.systemVersion
         ])
     }
 

@@ -8,7 +8,6 @@ import Capacitor
 @objc(FilesystemPlugin)
 public class FilesystemPlugin: CAPPlugin {
     private let implementation = Filesystem()
-    let defaultDirectory = "DOCUMENTS"
 
     /**
      * Read a file from the filesystem.
@@ -20,7 +19,7 @@ public class FilesystemPlugin: CAPPlugin {
             handleError(call, "path must be provided and must be a string.")
             return
         }
-        let directory = call.getString("directory") ?? defaultDirectory
+        let directory = call.getString("directory")
 
         guard let fileUrl = implementation.getFileUrl(at: file, in: directory) else {
             handleError(call, "Invalid path")
@@ -53,7 +52,7 @@ public class FilesystemPlugin: CAPPlugin {
             return
         }
 
-        let directory = call.getString("directory") ?? defaultDirectory
+        let directory = call.getString("directory")
 
         guard let fileUrl = implementation.getFileUrl(at: file, in: directory) else {
             handleError(call, "Invalid path")
@@ -86,7 +85,7 @@ public class FilesystemPlugin: CAPPlugin {
             return
         }
 
-        let directory = call.getString("directory") ?? defaultDirectory
+        let directory = call.getString("directory")
         guard let fileUrl = implementation.getFileUrl(at: file, in: directory) else {
             handleError(call, "Invalid path")
             return
@@ -94,6 +93,7 @@ public class FilesystemPlugin: CAPPlugin {
 
         do {
             try implementation.appendFile(at: fileUrl, with: data, recursive: false, with: encoding)
+            call.resolve()
         } catch let error as NSError {
             handleError(call, error.localizedDescription, error)
         }
@@ -108,7 +108,7 @@ public class FilesystemPlugin: CAPPlugin {
             return
         }
 
-        let directory = call.getString("directory") ?? defaultDirectory
+        let directory = call.getString("directory")
         guard let fileUrl = implementation.getFileUrl(at: file, in: directory) else {
             handleError(call, "Invalid path")
             return
@@ -132,7 +132,7 @@ public class FilesystemPlugin: CAPPlugin {
         }
 
         let recursive = call.getBool("recursive") ?? false
-        let directory = call.getString("directory") ?? defaultDirectory
+        let directory = call.getString("directory")
         guard let fileUrl = implementation.getFileUrl(at: path, in: directory) else {
             handleError(call, "Invalid path")
             return
@@ -155,7 +155,7 @@ public class FilesystemPlugin: CAPPlugin {
             return
         }
 
-        let directory = call.getString("directory") ?? defaultDirectory
+        let directory = call.getString("directory")
         guard let fileUrl = implementation.getFileUrl(at: path, in: directory) else {
             handleError(call, "Invalid path")
             return
@@ -165,6 +165,7 @@ public class FilesystemPlugin: CAPPlugin {
 
         do {
             try implementation.rmdir(at: fileUrl, recursive: recursive)
+            call.resolve()
         } catch let error as NSError {
             handleError(call, error.localizedDescription, error)
         }
@@ -179,7 +180,7 @@ public class FilesystemPlugin: CAPPlugin {
             return
         }
 
-        let directory = call.getString("directory") ?? defaultDirectory
+        let directory = call.getString("directory")
         guard let fileUrl = implementation.getFileUrl(at: path, in: directory) else {
             handleError(call, "Invalid path")
             return
@@ -204,7 +205,7 @@ public class FilesystemPlugin: CAPPlugin {
             return
         }
 
-        let directory = call.getString("directory") ?? defaultDirectory
+        let directory = call.getString("directory")
         guard let fileUrl = implementation.getFileUrl(at: path, in: directory) else {
             handleError(call, "Invalid path")
             return
@@ -212,11 +213,23 @@ public class FilesystemPlugin: CAPPlugin {
 
         do {
             let attr = try implementation.stat(at: fileUrl)
+
+            var ctime = ""
+            var mtime = ""
+
+            if let ctimeSeconds = (attr[.creationDate] as? Date)?.timeIntervalSince1970 {
+                ctime = String(format: "%.0f", ctimeSeconds * 1000)
+            }
+
+            if let mtimeSeconds = (attr[.modificationDate] as? Date)?.timeIntervalSince1970 {
+                mtime = String(format: "%.0f", mtimeSeconds * 1000)
+            }
+
             call.resolve([
                 "type": attr[.type] as? String ?? "",
                 "size": attr[.size] as? UInt64 ?? "",
-                "ctime": (attr[.creationDate] as? Date)?.timeIntervalSince1970 ?? "",
-                "mtime": (attr[.modificationDate] as? Date)?.timeIntervalSince1970 ?? "",
+                "ctime": ctime,
+                "mtime": mtime,
                 "uri": fileUrl.absoluteString
             ])
         } catch {
@@ -230,7 +243,7 @@ public class FilesystemPlugin: CAPPlugin {
             return
         }
 
-        let directory = call.getString("directory") ?? defaultDirectory
+        let directory = call.getString("directory")
         guard let fileUrl = implementation.getFileUrl(at: path, in: directory) else {
             handleError(call, "Invalid path")
             return
@@ -251,7 +264,7 @@ public class FilesystemPlugin: CAPPlugin {
             return
         }
 
-        let directory = call.getString("directory") ?? defaultDirectory
+        let directory = call.getString("directory")
         let toDirectory = call.getString("toDirectory") ?? directory
 
         guard let fromUrl = implementation.getFileUrl(at: from, in: directory) else {
@@ -280,7 +293,7 @@ public class FilesystemPlugin: CAPPlugin {
             return
         }
 
-        let directory = call.getString("directory") ?? defaultDirectory
+        let directory = call.getString("directory")
         let toDirectory = call.getString("toDirectory") ?? directory
 
         guard let fromUrl = implementation.getFileUrl(at: from, in: directory) else {

@@ -1,4 +1,13 @@
-export interface ToastShowOptions {
+export interface ToastPlugin {
+  /**
+   * Shows a Toast on the screen
+   *
+   * @since 1.0.0
+   */
+  show(options: ShowOptions): Promise<void>;
+}
+
+export interface ShowOptions {
   /**
    * Text to display on the Toast
    *
@@ -23,11 +32,8 @@ export interface ToastShowOptions {
   position?: 'top' | 'center' | 'bottom';
 }
 
-export interface ToastPlugin {
-  /**
-   * Shows a Toast on the screen
-   *
-   * @since 1.0.0
-   */
-  show(options: ToastShowOptions): Promise<void>;
-}
+/**
+ * @deprecated Use `ToastShowOptions`.
+ * @since 1.0.0
+ */
+export type ToastShowOptions = ShowOptions;

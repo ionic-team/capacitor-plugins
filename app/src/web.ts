@@ -5,13 +5,11 @@ import type { AppInfo, AppPlugin, AppLaunchUrl, AppState } from './definitions';
 export class AppWeb extends WebPlugin implements AppPlugin {
   constructor() {
     super();
-    if (typeof document !== 'undefined') {
-      document.addEventListener(
-        'visibilitychange',
-        this.handleVisibilityChange.bind(this),
-        false,
-      );
-    }
+    document.addEventListener(
+      'visibilitychange',
+      this.handleVisibilityChange,
+      false,
+    );
   }
 
   exitApp(): never {
@@ -30,11 +28,11 @@ export class AppWeb extends WebPlugin implements AppPlugin {
     return { isActive: document.hidden !== true };
   }
 
-  handleVisibilityChange(): void {
+  private handleVisibilityChange = () => {
     const data = {
       isActive: document.hidden !== true,
     };
 
     this.notifyListeners('appStateChange', data);
-  }
+  };
 }

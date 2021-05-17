@@ -6,7 +6,7 @@ export interface NetworkPlugin {
    *
    * @since 1.0.0
    */
-  getStatus(): Promise<NetworkStatus>;
+  getStatus(): Promise<ConnectionStatus>;
 
   /**
    * Listen for changes in the network connection.
@@ -15,15 +15,15 @@ export interface NetworkPlugin {
    */
   addListener(
     eventName: 'networkStatusChange',
-    listenerFunc: (status: NetworkStatus) => void,
-  ): PluginListenerHandle;
+    listenerFunc: ConnectionStatusChangeListener,
+  ): Promise<PluginListenerHandle> & PluginListenerHandle;
 
   /**
    * Remove all listeners (including the network status changes) for this plugin.
    *
    * @since 1.0.0
    */
-  removeAllListeners(): void;
+  removeAllListeners(): Promise<void>;
 }
 
 /**
@@ -31,7 +31,7 @@ export interface NetworkPlugin {
  *
  * @since 1.0.0
  */
-export interface NetworkStatus {
+export interface ConnectionStatus {
   /**
    * Whether there is an active connection or not.
    *
@@ -46,7 +46,7 @@ export interface NetworkStatus {
    *
    * @since 1.0.0
    */
-  connectionType: NetworkStatusConnectionType;
+  connectionType: ConnectionType;
 }
 
 /**
@@ -54,15 +54,23 @@ export interface NetworkStatus {
  *
  * @since 1.0.0
  */
-export type NetworkStatusChangeCallback = (status: NetworkStatus) => void;
+export type ConnectionStatusChangeListener = (status: ConnectionStatus) => void;
 
 /**
  * The type of network connection that a device might have.
  *
  * @since 1.0.0
  */
-export type NetworkStatusConnectionType =
-  | 'wifi'
-  | 'cellular'
-  | 'none'
-  | 'unknown';
+export type ConnectionType = 'wifi' | 'cellular' | 'none' | 'unknown';
+
+/**
+ * @deprecated Use `ConnectionStatus`.
+ * @since 1.0.0
+ */
+export type NetworkStatus = ConnectionStatus;
+
+/**
+ * @deprecated Use `ConnectionStatusChangeListener`.
+ * @since 1.0.0
+ */
+export type NetworkStatusChangeCallback = ConnectionStatusChangeListener;

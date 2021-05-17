@@ -45,7 +45,7 @@ export interface AppState {
   isActive: boolean;
 }
 
-export interface AppUrlOpen {
+export interface URLOpenListenerEvent {
   /**
    * The URL the app was opened with.
    *
@@ -79,7 +79,7 @@ export interface AppLaunchUrl {
   url: string;
 }
 
-export interface AppRestoredResult {
+export interface RestoredListenerEvent {
   /**
    * The pluginId this result corresponds to. For example, `Camera`.
    *
@@ -115,6 +115,11 @@ export interface AppRestoredResult {
   };
 }
 
+export type StateChangeListener = (state: AppState) => void;
+export type URLOpenListener = (event: URLOpenListenerEvent) => void;
+export type RestoredListener = (event: RestoredListenerEvent) => void;
+export type BackButtonListener = () => void;
+
 export interface AppPlugin {
   /**
    * Force exit the app. This should only be used in conjunction with the `backButton` handler for Android to
@@ -145,7 +150,7 @@ export interface AppPlugin {
    *
    * @since 1.0.0
    */
-  getLaunchUrl(): Promise<AppLaunchUrl>;
+  getLaunchUrl(): Promise<AppLaunchUrl | undefined>;
 
   /**
    * Listen for changes in the App's active state (whether the app is in the foreground or background)
@@ -154,8 +159,8 @@ export interface AppPlugin {
    */
   addListener(
     eventName: 'appStateChange',
-    listenerFunc: (state: AppState) => void,
-  ): PluginListenerHandle;
+    listenerFunc: StateChangeListener,
+  ): Promise<PluginListenerHandle> & PluginListenerHandle;
 
   /**
    * Listen for url open events for the app. This handles both custom URL scheme links as well
@@ -165,20 +170,38 @@ export interface AppPlugin {
    */
   addListener(
     eventName: 'appUrlOpen',
-    listenerFunc: (data: AppUrlOpen) => void,
-  ): PluginListenerHandle;
+    listenerFunc: URLOpenListener,
+  ): Promise<PluginListenerHandle> & PluginListenerHandle;
 
   /**
    * If the app was launched with previously persisted plugin call data, such as on Android
    * when an activity returns to an app that was closed, this call will return any data
    * the app was launched with, converted into the form of a result from a plugin call.
    *
+   * On Android, due to memory constraints on low-end devices, it's possible
+   * that, if your app launches a new activity, your app will be terminated by
+   * the operating system in order to reduce memory consumption.
+   *
+   * For example, that means the Camera API, which launches a new Activity to
+   * take a photo, may not be able to return data back to your app.
+   *
+   * To avoid this, Capacitor stores all restored activity results on launch.
+   * You should add a listener for `appRestoredResult` in order to handle any
+   * plugin call results that were delivered when your app was not running.
+   *
+   * Once you have that result (if any), you can update the UI to restore a
+   * logical experience for the user, such as navigating or selecting the
+   * proper tab.
+   *
+   * We recommend every Android app using plugins that rely on external
+   * Activities (for example, Camera) to have this event and process handled.
+   *
    * @since 1.0.0
    */
   addListener(
     eventName: 'appRestoredResult',
-    listenerFunc: (data: AppRestoredResult) => void,
-  ): PluginListenerHandle;
+    listenerFunc: RestoredListener,
+  ): Promise<PluginListenerHandle> & PluginListenerHandle;
 
   /**
    * Listen for the hardware back button event (Android only). Listening for this event will disable the
@@ -189,13 +212,25 @@ export interface AppPlugin {
    */
   addListener(
     eventName: 'backButton',
-    listenerFunc: () => void,
-  ): PluginListenerHandle;
+    listenerFunc: BackButtonListener,
+  ): Promise<PluginListenerHandle> & PluginListenerHandle;
 
   /**
    * Remove all native listeners for this plugin
    *
    * @since 1.0.0
    */
-  removeAllListeners(): void;
+  removeAllListeners(): Promise<void>;
 }
+
+/**
+ * @deprecated Use `RestoredListenerEvent`.
+ * @since 1.0.0
+ */
+export type AppRestoredResult = RestoredListenerEvent;
+
+/**
+ * @deprecated Use `URLOpenListenerEvent`.
+ * @since 1.0.0
+ */
+export type AppUrlOpen = URLOpenListenerEvent;
