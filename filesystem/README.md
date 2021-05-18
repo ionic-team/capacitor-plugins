@@ -18,35 +18,35 @@ Additionally, the Filesystem API supports using full `file://` paths, or reading
 ## Example
 
 ```typescript
-import { Filesystem, FilesystemDirectory, FilesystemEncoding } from '@capacitor/core';
+import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
 
-const writeSecretFile = async () {
+const writeSecretFile = async () => {
   await Filesystem.writeFile({
     path: 'secrets/text.txt',
     data: "This is a test",
-    directory: FilesystemDirectory.Documents,
-    encoding: FilesystemEncoding.UTF8,
+    directory: Directory.Documents,
+    encoding: Encoding.UTF8,
   });
 };
 
-const readSecretFile = async () {
+const readSecretFile = async () => {
   const contents = await Filesystem.readFile({
     path: 'secrets/text.txt',
-    directory: FilesystemDirectory.Documents,
-    encoding: FilesystemEncoding.UTF8,
+    directory: Directory.Documents,
+    encoding: Encoding.UTF8,
   });
 
   console.log('secrets:', contents);
 };
 
-const deleteSecretFile = async () {
+const deleteSecretFile = async () => {
   await Filesystem.deleteFile({
     path: 'secrets/text.txt',
-    directory: FilesystemDirectory.Documents,
+    directory: Directory.Documents,
   });
 };
 
-const readFilePath = async () {
+const readFilePath = async () => {
   // Here's an example of reading a file with a full file path. Use this to
   // read binary data (base64 encoded) from plugins that return File URIs, such as
   // the Camera.
@@ -354,12 +354,12 @@ Required on Android, only when using <a href="#directory">`Directory.Documents`<
 
 #### AppendFileOptions
 
-| Prop            | Type                                            | Description                                                                                                                                 | Since |
-| --------------- | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`path`**      | <code>string</code>                             | The path of the file to append                                                                                                              | 1.0.0 |
-| **`data`**      | <code>string</code>                             | The data to write                                                                                                                           | 1.0.0 |
-| **`directory`** | <code><a href="#directory">Directory</a></code> | The <a href="#directory">`Directory`</a> to store the file in                                                                               | 1.0.0 |
-| **`encoding`**  | <code><a href="#encoding">Encoding</a></code>   | The encoding to write the file in. If not provided, data is written as base64 encoded. Pass FilesystemEncoding.UTF8 to write data as string | 1.0.0 |
+| Prop            | Type                                            | Description                                                                                                                                               | Since |
+| --------------- | ----------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`path`**      | <code>string</code>                             | The path of the file to append                                                                                                                            | 1.0.0 |
+| **`data`**      | <code>string</code>                             | The data to write                                                                                                                                         | 1.0.0 |
+| **`directory`** | <code><a href="#directory">Directory</a></code> | The <a href="#directory">`Directory`</a> to store the file in                                                                                             | 1.0.0 |
+| **`encoding`**  | <code><a href="#encoding">Encoding</a></code>   | The encoding to write the file in. If not provided, data is written as base64 encoded. Pass <a href="#encoding">Encoding.UTF8</a> to write data as string | 1.0.0 |
 
 
 #### DeleteFileOptions
@@ -420,13 +420,13 @@ Required on Android, only when using <a href="#directory">`Directory.Documents`<
 
 #### StatResult
 
-| Prop        | Type                | Description               | Since |
-| ----------- | ------------------- | ------------------------- | ----- |
-| **`type`**  | <code>string</code> | Type of the file          | 1.0.0 |
-| **`size`**  | <code>number</code> | Size of the file          | 1.0.0 |
-| **`ctime`** | <code>number</code> | Time of creation          | 1.0.0 |
-| **`mtime`** | <code>number</code> | Time of last modification | 1.0.0 |
-| **`uri`**   | <code>string</code> | The uri of the file       | 1.0.0 |
+| Prop        | Type                | Description                                                                          | Since |
+| ----------- | ------------------- | ------------------------------------------------------------------------------------ | ----- |
+| **`type`**  | <code>string</code> | Type of the file                                                                     | 1.0.0 |
+| **`size`**  | <code>number</code> | Size of the file                                                                     | 1.0.0 |
+| **`ctime`** | <code>number</code> | Time of creation in milliseconds. It's not available on Android 7 and older devices. | 1.0.0 |
+| **`mtime`** | <code>number</code> | Time of last modification in milliseconds.                                           | 1.0.0 |
+| **`uri`**   | <code>string</code> | The uri of the file                                                                  | 1.0.0 |
 
 
 #### StatOptions

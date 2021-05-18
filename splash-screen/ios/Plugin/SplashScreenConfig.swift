@@ -5,7 +5,7 @@ public struct SplashScreenConfig {
     var spinnerStyle: UIActivityIndicatorView.Style?
     var spinnerColor: UIColor?
     var showSpinner = false
-    var launchShowDuration = 0
+    var launchShowDuration = 500
     var launchAutoHide = true
     let launchFadeInDuration = 0
 }

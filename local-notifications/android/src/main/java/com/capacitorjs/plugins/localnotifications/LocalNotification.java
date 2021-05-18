@@ -2,6 +2,8 @@ package com.capacitorjs.plugins.localnotifications;
 
 import android.content.ContentResolver;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import com.getcapacitor.JSArray;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Logger;
@@ -10,6 +12,7 @@ import com.getcapacitor.plugin.util.AssetUtil;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -20,12 +23,16 @@ public class LocalNotification {
 
     private String title;
     private String body;
+    private String largeBody;
+    private String summaryText;
     private Integer id;
     private String sound;
     private String smallIcon;
+    private String largeIcon;
     private String iconColor;
     private String actionTypeId;
     private String group;
+    private List<String> inboxList;
     private boolean groupSummary;
     private boolean ongoing;
     private boolean autoCancel;
@@ -49,6 +56,22 @@ public class LocalNotification {
 
     public void setBody(String body) {
         this.body = body;
+    }
+
+    public void setLargeBody(String largeBody) {
+        this.largeBody = largeBody;
+    }
+
+    public String getLargeBody() {
+        return this.largeBody;
+    }
+
+    public void setSummaryText(String summaryText) {
+        this.summaryText = summaryText;
+    }
+
+    public String getSummaryText() {
+        return this.summaryText;
     }
 
     public LocalNotificationSchedule getSchedule() {
@@ -81,6 +104,18 @@ public class LocalNotification {
 
     public void setSmallIcon(String smallIcon) {
         this.smallIcon = AssetUtil.getResourceBaseName(smallIcon);
+    }
+
+    public void setLargeIcon(String largeIcon) {
+        this.largeIcon = AssetUtil.getResourceBaseName(largeIcon);
+    }
+
+    public void setInboxList(List<String> inboxList) {
+        this.inboxList = inboxList;
+    }
+
+    public List<String> getInboxList() {
+        return this.inboxList;
     }
 
     public String getIconColor(String globalColor) {
@@ -211,24 +246,36 @@ public class LocalNotification {
         localNotification.setSource(jsonObject.toString());
         localNotification.setId(jsonObject.getInteger("id"));
         localNotification.setBody(jsonObject.getString("body"));
+        localNotification.setLargeBody(jsonObject.getString("largeBody"));
+        localNotification.setSummaryText(jsonObject.getString("summaryText"));
         localNotification.setActionTypeId(jsonObject.getString("actionTypeId"));
         localNotification.setGroup(jsonObject.getString("group"));
         localNotification.setSound(jsonObject.getString("sound"));
         localNotification.setTitle(jsonObject.getString("title"));
         localNotification.setSmallIcon(jsonObject.getString("smallIcon"));
+        localNotification.setLargeIcon(jsonObject.getString("largeIcon"));
         localNotification.setIconColor(jsonObject.getString("iconColor"));
         localNotification.setAttachments(LocalNotificationAttachment.getAttachments(jsonObject));
         localNotification.setGroupSummary(jsonObject.getBoolean("groupSummary", false));
         localNotification.setChannelId(jsonObject.getString("channelId"));
-
         JSObject schedule = jsonObject.getJSObject("schedule");
         if (schedule != null) {
             localNotification.setSchedule(new LocalNotificationSchedule(schedule));
         }
-
         localNotification.setExtra(jsonObject.getJSObject("extra"));
         localNotification.setOngoing(jsonObject.getBoolean("ongoing", false));
         localNotification.setAutoCancel(jsonObject.getBoolean("autoCancel", true));
+
+        try {
+            JSONArray inboxList = jsonObject.getJSONArray("inboxList");
+            if (inboxList != null) {
+                List<String> inboxStringList = new ArrayList<>();
+                for (int i = 0; i < inboxList.length(); i++) {
+                    inboxStringList.add(inboxList.getString(i));
+                }
+                localNotification.setInboxList(inboxStringList);
+            }
+        } catch (Exception ex) {}
 
         return localNotification;
     }
@@ -292,6 +339,15 @@ public class LocalNotification {
         return resId;
     }
 
+    public Bitmap getLargeIcon(Context context) {
+        if (largeIcon != null) {
+            int resId = AssetUtil.getResourceID(context, largeIcon, "drawable");
+            return BitmapFactory.decodeResource(context.getResources(), resId);
+        }
+
+        return null;
+    }
+
     public boolean isScheduled() {
         return (
             this.schedule != null && (this.schedule.getOn() != null || this.schedule.getAt() != null || this.schedule.getEvery() != null)
@@ -350,14 +406,17 @@ public class LocalNotification {
 
         if (title != null ? !title.equals(that.title) : that.title != null) return false;
         if (body != null ? !body.equals(that.body) : that.body != null) return false;
+        if (largeBody != null ? !largeBody.equals(that.largeBody) : that.largeBody != null) return false;
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (sound != null ? !sound.equals(that.sound) : that.sound != null) return false;
         if (smallIcon != null ? !smallIcon.equals(that.smallIcon) : that.smallIcon != null) return false;
+        if (largeIcon != null ? !largeIcon.equals(that.largeIcon) : that.largeIcon != null) return false;
         if (iconColor != null ? !iconColor.equals(that.iconColor) : that.iconColor != null) return false;
         if (actionTypeId != null ? !actionTypeId.equals(that.actionTypeId) : that.actionTypeId != null) return false;
         if (group != null ? !group.equals(that.group) : that.group != null) return false;
         if (extra != null ? !extra.equals(that.extra) : that.extra != null) return false;
         if (attachments != null ? !attachments.equals(that.attachments) : that.attachments != null) return false;
+        if (inboxList != null ? !inboxList.equals(that.inboxList) : that.inboxList != null) return false;
         if (groupSummary != that.groupSummary) return false;
         if (ongoing != that.ongoing) return false;
         if (autoCancel != that.autoCancel) return false;

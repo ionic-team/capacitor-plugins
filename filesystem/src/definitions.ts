@@ -157,7 +157,7 @@ export interface AppendFileOptions {
    * The encoding to write the file in. If not provided, data
    * is written as base64 encoded.
    *
-   * Pass FilesystemEncoding.UTF8 to write data as string
+   * Pass Encoding.UTF8 to write data as string
    *
    * @since 1.0.0
    */
@@ -387,14 +387,16 @@ export interface StatResult {
   size: number;
 
   /**
-   * Time of creation
+   * Time of creation in milliseconds.
+   *
+   * It's not available on Android 7 and older devices.
    *
    * @since 1.0.0
    */
-  ctime: number;
+  ctime?: number;
 
   /**
-   * Time of last modification
+   * Time of last modification in milliseconds.
    *
    * @since 1.0.0
    */

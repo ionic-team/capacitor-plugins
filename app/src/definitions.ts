@@ -115,10 +115,20 @@ export interface RestoredListenerEvent {
   };
 }
 
+export interface BackButtonListenerEvent {
+  /**
+   * Indicates whether the browser can go back in history.
+   * False when the history stack is on the first entry.
+   *
+   * @since 1.0.0
+   */
+  canGoBack: boolean;
+}
+
 export type StateChangeListener = (state: AppState) => void;
 export type URLOpenListener = (event: URLOpenListenerEvent) => void;
 export type RestoredListener = (event: RestoredListenerEvent) => void;
-export type BackButtonListener = () => void;
+export type BackButtonListener = (event: BackButtonListenerEvent) => void;
 
 export interface AppPlugin {
   /**
@@ -150,7 +160,7 @@ export interface AppPlugin {
    *
    * @since 1.0.0
    */
-  getLaunchUrl(): Promise<AppLaunchUrl>;
+  getLaunchUrl(): Promise<AppLaunchUrl | undefined>;
 
   /**
    * Listen for changes in the App's active state (whether the app is in the foreground or background)

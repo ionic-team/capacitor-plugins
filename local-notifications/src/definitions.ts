@@ -4,6 +4,9 @@ import type { PermissionState, PluginListenerHandle } from '@capacitor/core';
 
 declare module '@capacitor/cli' {
   export interface PluginsConfig {
+    /**
+     * On Android, the Local Notifications can be configured with the following options:
+     */
     LocalNotifications?: {
       /**
        * Set the default status bar icon for notifications.
@@ -15,6 +18,7 @@ declare module '@capacitor/cli' {
        * Only available for Android.
        *
        * @since 1.0.0
+       * @example "ic_stat_icon_config_sample"
        */
       smallIcon?: string;
 
@@ -24,6 +28,7 @@ declare module '@capacitor/cli' {
        * Only available for Android.
        *
        * @since 1.0.0
+       * @example "#488AFF"
        */
       iconColor?: string;
 
@@ -36,6 +41,7 @@ declare module '@capacitor/cli' {
        * Only available for Android.
        *
        * @since 1.0.0
+       * @example "beep.wav"
        */
       sound?: string;
     };
@@ -495,6 +501,21 @@ export interface LocalNotificationSchema {
   body: string;
 
   /**
+   * Sets a multiline text block for display in a big text notification style.
+   *
+   * @since 1.0.0
+   */
+  largeBody?: string;
+
+  /**
+   * Used to set the summary text detail in inbox and big text notification styles.
+   *
+   * Only available for Android.
+   *
+   * @since 1.0.0
+   */
+  summaryText?: string;
+  /**
    * The notification identifier.
    *
    * @since 1.0.0
@@ -539,6 +560,19 @@ export interface LocalNotificationSchema {
    * @since 1.0.0
    */
   smallIcon?: string;
+
+  /**
+   * Set a large icon for notifications.
+   *
+   * Icons should be placed in your app's `res/drawable` folder. The value for
+   * this option should be the drawable resource ID, which is the filename
+   * without an extension.
+   *
+   * Only available for Android.
+   *
+   * @since 1.0.0
+   */
+  largeIcon?: string;
 
   /**
    * Set the color of the notification icon.
@@ -662,6 +696,17 @@ export interface LocalNotificationSchema {
    * @since 1.0.0
    */
   autoCancel?: boolean;
+
+  /**
+   * Sets a list of strings for display in an inbox style notification.
+   *
+   * Up to 5 strings are allowed.
+   *
+   * Only available for Android.
+   *
+   * @since 1.0.0
+   */
+  inboxList?: string[];
 }
 
 /**

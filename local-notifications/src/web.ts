@@ -30,6 +30,10 @@ export class LocalNotificationsWeb
   }
 
   async schedule(options: ScheduleOptions): Promise<ScheduleResult> {
+    if (!this.hasNotificationSupport()) {
+      throw this.unavailable('Notifications not supported in this browser.');
+    }
+
     for (const notification of options.notifications) {
       this.sendNotification(notification);
     }
@@ -67,6 +71,10 @@ export class LocalNotificationsWeb
   }
 
   async requestPermissions(): Promise<PermissionStatus> {
+    if (!this.hasNotificationSupport()) {
+      throw this.unavailable('Notifications not supported in this browser.');
+    }
+
     const display = this.transformNotificationPermission(
       await Notification.requestPermission(),
     );
@@ -75,12 +83,36 @@ export class LocalNotificationsWeb
   }
 
   async checkPermissions(): Promise<PermissionStatus> {
+    if (!this.hasNotificationSupport()) {
+      throw this.unavailable('Notifications not supported in this browser.');
+    }
+
     const display = this.transformNotificationPermission(
       Notification.permission,
     );
 
     return { display };
   }
+
+  protected hasNotificationSupport = (): boolean => {
+    if (!('Notification' in window) || !Notification.requestPermission) {
+      return false;
+    }
+
+    if (Notification.permission !== 'granted') {
+      // don't test for `new Notification` if permission has already been granted
+      // otherwise this sends a real notification on supported browsers
+      try {
+        new Notification('');
+      } catch (e) {
+        if (e.name == 'TypeError') {
+          return false;
+        }
+      }
+    }
+
+    return true;
+  };
 
   protected transformNotificationPermission(
     permission: NotificationPermission,

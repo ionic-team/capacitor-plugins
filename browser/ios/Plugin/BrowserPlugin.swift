@@ -27,10 +27,10 @@ public class CAPBrowserPlugin: CAPPlugin {
         }
         // display
         DispatchQueue.main.async { [weak self] in
+            if style == .popover {
+                self?.setCenteredPopover(viewController)
+            }
             self?.bridge?.presentVC(viewController, animated: true, completion: {
-                if style == .popover {
-                    self?.setCenteredPopover(viewController)
-                }
                 call.resolve()
             })
         }
