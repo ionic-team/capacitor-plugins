@@ -420,13 +420,13 @@ Required on Android, only when using <a href="#directory">`Directory.Documents`<
 
 #### StatResult
 
-| Prop        | Type                | Description                               | Since |
-| ----------- | ------------------- | ----------------------------------------- | ----- |
-| **`type`**  | <code>string</code> | Type of the file                          | 1.0.0 |
-| **`size`**  | <code>number</code> | Size of the file                          | 1.0.0 |
-| **`ctime`** | <code>number</code> | Time of creation in milliseconds          | 1.0.0 |
-| **`mtime`** | <code>number</code> | Time of last modification in milliseconds | 1.0.0 |
-| **`uri`**   | <code>string</code> | The uri of the file                       | 1.0.0 |
+| Prop        | Type                | Description                                                                          | Since |
+| ----------- | ------------------- | ------------------------------------------------------------------------------------ | ----- |
+| **`type`**  | <code>string</code> | Type of the file                                                                     | 1.0.0 |
+| **`size`**  | <code>number</code> | Size of the file                                                                     | 1.0.0 |
+| **`ctime`** | <code>number</code> | Time of creation in milliseconds. It's not available on Android 7 and older devices. | 1.0.0 |
+| **`mtime`** | <code>number</code> | Time of last modification in milliseconds.                                           | 1.0.0 |
+| **`uri`**   | <code>string</code> | The uri of the file                                                                  | 1.0.0 |
 
 
 #### StatOptions

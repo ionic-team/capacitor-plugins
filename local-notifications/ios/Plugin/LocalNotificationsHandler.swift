@@ -74,14 +74,46 @@ public class LocalNotificationsHandler: NSObject, NotificationHandlerProtocol {
      */
     func makeNotificationRequestJSObject(_ request: UNNotificationRequest) -> JSObject {
         let notificationRequest = notificationRequestLookup[request.identifier] ?? [:]
-        return [
+        var notification = makePendingNotificationRequestJSObject(request)
+        notification["sound"] = notificationRequest["sound"]  ?? ""
+        notification["actionTypeId"] = request.content.categoryIdentifier
+        notification["attachments"] = notificationRequest["attachments"]  ?? []
+        return notification
+
+    }
+
+    func makePendingNotificationRequestJSObject(_ request: UNNotificationRequest) -> JSObject {
+        var notification: JSObject = [
             "id": Int(request.identifier) ?? -1,
             "title": request.content.title,
-            "sound": notificationRequest["sound"]  ?? "",
-            "body": request.content.body,
-            "extra": request.content.userInfo as? JSObject ?? [:],
-            "actionTypeId": request.content.categoryIdentifier,
-            "attachments": notificationRequest["attachments"]  ?? []
+            "body": request.content.body
         ]
+
+        if let userInfo = JSTypes.coerceDictionaryToJSObject(request.content.userInfo) {
+            var extra = userInfo["cap_extra"] as? JSObject ?? userInfo
+
+            // check for any dates and convert them to strings
+            for(key, value) in extra {
+                if let date = value as? Date {
+                    let dateString = ISO8601DateFormatter().string(from: date)
+                    extra[key] = dateString
+                }
+            }
+
+            notification["extra"] = extra
+
+            if var schedule = userInfo["cap_schedule"] as? JSObject {
+                // convert schedule at date to string
+                if let date = schedule["at"] as? Date {
+                    let dateString = ISO8601DateFormatter().string(from: date)
+                    schedule["at"] = dateString
+                }
+
+                notification["schedule"] = schedule
+            }
+        }
+
+        return notification
+
     }
 }

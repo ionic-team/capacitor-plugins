@@ -80,11 +80,7 @@ public class CameraPlugin extends Plugin {
     @PluginMethod
     public void getPhoto(PluginCall call) {
         isEdited = false;
-
-        saveCall(call);
-
         settings = getSettings(call);
-
         doShow(call);
     }
 
@@ -327,7 +323,7 @@ public class CameraPlugin extends Plugin {
      * @throws IOException
      */
     private Uri saveTemporaryImage(Bitmap bitmap, Uri contentUri, InputStream is) throws IOException {
-        String filename = contentUri.getLastPathSegment();
+        String filename = Uri.parse(Uri.decode(contentUri.toString())).getLastPathSegment();
         if (!filename.contains(".jpg") && !filename.contains(".jpeg")) {
             filename += "." + (new java.util.Date()).getTime() + ".jpeg";
         }

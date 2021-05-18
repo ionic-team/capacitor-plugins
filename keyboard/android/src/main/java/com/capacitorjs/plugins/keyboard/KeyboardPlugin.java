@@ -27,7 +27,7 @@ public class KeyboardPlugin extends Plugin {
         execute(
             () ->
                 new Handler()
-                .postDelayed(
+                    .postDelayed(
                         () -> {
                             implementation.show();
                             call.resolve();

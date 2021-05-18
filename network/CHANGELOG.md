@@ -3,6 +3,38 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.4.10](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/network@0.4.9...@capacitor/network@0.4.10) (2021-05-11)
+
+**Note:** Version bump only for package @capacitor/network
+
+
+
+
+
+## [0.4.9](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/network@0.4.8...@capacitor/network@0.4.9) (2021-05-10)
+
+**Note:** Version bump only for package @capacitor/network
+
+
+
+
+
+## [0.4.8](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/network@0.4.7...@capacitor/network@0.4.8) (2021-05-07)
+
+**Note:** Version bump only for package @capacitor/network
+
+
+
+
+
+## [0.4.7](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/network@0.4.6...@capacitor/network@0.4.7) (2021-04-29)
+
+**Note:** Version bump only for package @capacitor/network
+
+
+
+
+
 ## [0.4.6](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/network@0.4.5...@capacitor/network@0.4.6) (2021-03-10)
 
 **Note:** Version bump only for package @capacitor/network

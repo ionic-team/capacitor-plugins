@@ -20,7 +20,7 @@ public class Toast {
 
     public static void show(final Context c, final String text, final int duration, final String position) {
         new Handler(Looper.getMainLooper())
-        .post(
+            .post(
                 () -> {
                     android.widget.Toast toast = android.widget.Toast.makeText(c, text, duration);
                     if ("top".equals(position)) {

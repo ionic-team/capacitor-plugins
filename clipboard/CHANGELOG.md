@@ -3,6 +3,41 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.4.10](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/clipboard@0.4.9...@capacitor/clipboard@0.4.10) (2021-05-11)
+
+**Note:** Version bump only for package @capacitor/clipboard
+
+
+
+
+
+## [0.4.9](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/clipboard@0.4.8...@capacitor/clipboard@0.4.9) (2021-05-10)
+
+**Note:** Version bump only for package @capacitor/clipboard
+
+
+
+
+
+## [0.4.8](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/clipboard@0.4.7...@capacitor/clipboard@0.4.8) (2021-05-07)
+
+**Note:** Version bump only for package @capacitor/clipboard
+
+
+
+
+
+## [0.4.7](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/clipboard@0.4.6...@capacitor/clipboard@0.4.7) (2021-04-29)
+
+
+### Bug Fixes
+
+* **clipboard:** prevent NotAllowedError on first method invocation ([#342](https://github.com/ionic-team/capacitor-plugins/issues/342)) ([ab8eecb](https://github.com/ionic-team/capacitor-plugins/commit/ab8eecb873999d6f4321218c60b45335998189eb))
+
+
+
+
+
 ## [0.4.6](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/clipboard@0.4.5...@capacitor/clipboard@0.4.6) (2021-03-10)
 
 **Note:** Version bump only for package @capacitor/clipboard

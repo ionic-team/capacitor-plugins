@@ -16,12 +16,12 @@
  */
 
 #import "Keyboard.h"
-#import "CAPBridgedPlugin.h"
 #import <Foundation/Foundation.h>
 #import <objc/runtime.h>
-#import <Capacitor/Capacitor-Swift.h>
 #import <Capacitor/Capacitor.h>
-#import "CAPBridgedJSTypes.h"
+#import <Capacitor/Capacitor-Swift.h>
+#import <Capacitor/CAPBridgedPlugin.h>
+#import <Capacitor/CAPBridgedJSTypes.h>
 
 typedef enum : NSUInteger {
   ResizeNone,
@@ -55,7 +55,7 @@ NSString* UITraitsClassString;
 
 - (void)load
 {
-  self.disableScroll = !self.bridge.config.enableScrolling;
+  self.disableScroll = !self.bridge.config.scrollingEnabled;
 
   UIClassString = [@[@"UI", @"Web", @"Browser", @"View"] componentsJoinedByString:@""];
   WKClassString = [@[@"WK", @"Content", @"View"] componentsJoinedByString:@""];
@@ -63,9 +63,7 @@ NSString* UITraitsClassString;
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(statusBarDidChangeFrame:) name:UIApplicationDidChangeStatusBarFrameNotification object: nil];
     
   NSString * style = [self getConfigValue:@"style"];
-  if ([style isEqualToString:@"dark"]) {
-    [self changeKeyboardStyle:style.uppercaseString];
-  }
+  [self changeKeyboardStyle:style.uppercaseString];
 
   self.keyboardResizes = ResizeNative;
   NSString * resizeMode = [self getConfigValue:@"resize"];
@@ -334,11 +332,20 @@ static IMP WKOriginalImp;
 
 - (void)changeKeyboardStyle:(NSString*)style
 {
-  IMP newImp = [style isEqualToString:@"DARK"] ? imp_implementationWithBlock(^(id _s) {
-    return UIKeyboardAppearanceDark;
-  }) : imp_implementationWithBlock(^(id _s) {
-    return UIKeyboardAppearanceLight;
-  });
+  IMP newImp = nil;
+  if ([style isEqualToString:@"DARK"]) {
+    newImp = imp_implementationWithBlock(^(id _s) {
+      return UIKeyboardAppearanceDark;
+    });
+  } else if ([style isEqualToString:@"LIGHT"]) {
+    newImp = imp_implementationWithBlock(^(id _s) {
+      return UIKeyboardAppearanceLight;
+    });
+  } else {
+    newImp = imp_implementationWithBlock(^(id _s) {
+      return UIKeyboardAppearanceDefault;
+    });
+  }
   for (NSString* classString in @[WKClassString, UITraitsClassString]) {
     Class c = NSClassFromString(classString);
     Method m = class_getInstanceMethod(c, @selector(keyboardAppearance));
