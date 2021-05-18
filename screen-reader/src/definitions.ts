@@ -59,7 +59,9 @@ export interface ScreenReaderPlugin {
   speak(options: SpeakOptions): Promise<void>;
 
   /**
-   * Add a listener
+   * Add a listener for when the screen reader is turned on or off.
+   *
+   * This event used to be named `'accessibilityScreenReaderStateChange'`.
    *
    * This method is not supported on web (it is not possible to detect Screen
    * Readers).
@@ -67,7 +69,7 @@ export interface ScreenReaderPlugin {
    * @since 1.0.0
    */
   addListener(
-    eventName: 'screenReaderStateChange',
+    eventName: 'stateChange',
     listener: StateChangeListener,
   ): Promise<PluginListenerHandle> & PluginListenerHandle;
 
