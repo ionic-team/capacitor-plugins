@@ -117,9 +117,10 @@ export interface RestoredListenerEvent {
 
 export interface BackButtonListenerEvent {
   /**
-   * Indicates whether the browser can go back in history. False when the history stack is on the first entry.
+   * Indicates whether the browser can go back in history.
+   * False when the history stack is on the first entry.
    *
-   * @since 3.0.0
+   * @since 1.0.0
    */
   canGoBack: boolean;
 }

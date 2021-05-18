@@ -325,7 +325,7 @@ Remove all native listeners for this plugin
 
 | Prop            | Type                 | Description                                                                                               | Since |
 | --------------- | -------------------- | --------------------------------------------------------------------------------------------------------- | ----- |
-| **`canGoBack`** | <code>boolean</code> | Indicates whether the browser can go back in history. False when the history stack is on the first entry. | 3.0.0 |
+| **`canGoBack`** | <code>boolean</code> | Indicates whether the browser can go back in history. False when the history stack is on the first entry. | 1.0.0 |
 
 
 ### Type Aliases
