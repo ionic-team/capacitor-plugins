@@ -1,4 +1,3 @@
-import type { PermissionState } from '@capacitor/core';
 import { WebPlugin } from '@capacitor/core';
 
 import type {
@@ -11,6 +10,7 @@ import type {
   ScheduleOptions,
   ScheduleResult,
 } from './definitions';
+import type { PermissionState } from '@capacitor/core';
 
 export class LocalNotificationsWeb
   extends WebPlugin
