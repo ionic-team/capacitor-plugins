@@ -3,7 +3,7 @@ import Capacitor
 
 @objc(ScreenReaderPlugin)
 public class ScreenReaderPlugin: CAPPlugin {
-    static let screenReaderStateChangeEvent = "screenReaderStateChange"
+    static let stateChangeEvent = "stateChange"
 
     override public func load() {
         NotificationCenter.default.addObserver(self,
@@ -40,7 +40,7 @@ public class ScreenReaderPlugin: CAPPlugin {
     }
 
     @objc private func onVoiceOverStateChanged(notification: NSNotification) {
-        notifyListeners(ScreenReaderPlugin.screenReaderStateChangeEvent, data: [
+        notifyListeners(ScreenReaderPlugin.stateChangeEvent, data: [
             "value": UIAccessibility.isVoiceOverRunning
         ])
     }

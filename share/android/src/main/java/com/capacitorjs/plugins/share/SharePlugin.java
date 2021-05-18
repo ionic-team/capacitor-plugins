@@ -79,6 +79,9 @@ public class SharePlugin extends Plugin {
             intent.setTypeAndNormalize("text/plain");
         } else if (url != null && isFileUrl(url)) {
             String type = getMimeType(url);
+            if (type == null) {
+                type = "*/*";
+            }
             intent.setType(type);
             Uri fileUrl = FileProvider.getUriForFile(
                 getActivity(),
