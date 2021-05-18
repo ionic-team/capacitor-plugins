@@ -47,7 +47,9 @@ public class AppPlugin extends Plugin {
                         bridge.getWebView().goBack();
                     }
                 } else {
-                    notifyListeners(EVENT_BACK_BUTTON, new JSObject(), true);
+                    JSObject data = new JSObject();
+                    data.put("canGoBack", bridge.getWebView().canGoBack());
+                    notifyListeners(EVENT_BACK_BUTTON, data, true);
                     bridge.triggerJSEvent("backbutton", "document");
                 }
             }
