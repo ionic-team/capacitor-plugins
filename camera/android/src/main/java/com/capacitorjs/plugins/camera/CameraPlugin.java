@@ -61,8 +61,8 @@ public class CameraPlugin extends Plugin {
 
     // Message constants
     private static final String INVALID_RESULT_TYPE_ERROR = "Invalid resultType option";
-    private static final String PERMISSION_DENIED_ERROR_CAMERA = "Unable to access camera, user denied permission request";
-    private static final String PERMISSION_DENIED_ERROR_PHOTOS = "Unable to access photos, user denied permission request";
+    private static final String PERMISSION_DENIED_ERROR_CAMERA = "User denied access to camera";
+    private static final String PERMISSION_DENIED_ERROR_PHOTOS = "User denied access to photos";
     private static final String NO_CAMERA_ERROR = "Device doesn't have a camera available";
     private static final String NO_CAMERA_ACTIVITY_ERROR = "Unable to resolve camera activity";
     private static final String IMAGE_FILE_SAVE_ERROR = "Unable to create photo on disk";
