@@ -17,7 +17,7 @@ public class GeolocationPlugin: CAPPlugin, CLLocationManagerDelegate {
     private var callQueue: [String: CallType] = [:]
 
     @objc func getCurrentPosition(_ call: CAPPluginCall) {
-        call.save()
+        bridge?.saveCall(call)
         callQueue[call.callbackId] = .singleUpdate
 
         DispatchQueue.main.async {
@@ -38,7 +38,7 @@ public class GeolocationPlugin: CAPPlugin, CLLocationManagerDelegate {
     }
 
     @objc func watchPosition(_ call: CAPPluginCall) {
-        call.save()
+        call.keepAlive = true
         callQueue[call.callbackId] = .watch
 
         DispatchQueue.main.async {
@@ -65,7 +65,7 @@ public class GeolocationPlugin: CAPPlugin, CLLocationManagerDelegate {
             return
         }
 
-        if let savedCall = bridge?.getSavedCall(callbackId) {
+        if let savedCall = bridge?.savedCall(withID: callbackId) {
             bridge?.releaseCall(savedCall)
 
             self.stopUpdating()
@@ -81,14 +81,14 @@ public class GeolocationPlugin: CAPPlugin, CLLocationManagerDelegate {
         callQueue = callQueue.filter { $0.value == .watch }
 
         for (id, _) in removalQueue {
-            if let call = bridge?.getSavedCall(id) {
+            if let call = bridge?.savedCall(withID: id) {
                 call.reject(error.localizedDescription)
                 bridge?.releaseCall(call)
             }
         }
 
         for (id, _) in callQueue {
-            if let call = bridge?.getSavedCall(id) {
+            if let call = bridge?.savedCall(withID: id) {
                 call.reject(error.localizedDescription)
             }
         }
@@ -99,14 +99,14 @@ public class GeolocationPlugin: CAPPlugin, CLLocationManagerDelegate {
         callQueue = callQueue.filter { $0.value != .singleUpdate }
 
         for (id, _) in removalQueue {
-            if let call = bridge?.getSavedCall(id) {
+            if let call = bridge?.savedCall(withID: id) {
                 reportLocation(call, locations)
                 bridge?.releaseCall(call)
             }
         }
 
         for (id, callType) in callQueue {
-            if let call = bridge?.getSavedCall(id), callType == .watch {
+            if let call = bridge?.savedCall(withID: id), callType == .watch {
                 reportLocation(call, locations)
             }
         }
@@ -117,7 +117,7 @@ public class GeolocationPlugin: CAPPlugin, CLLocationManagerDelegate {
         callQueue = callQueue.filter { $0.value != .permissions }
 
         for (id, _) in removalQueue {
-            if let call = bridge?.getSavedCall(id) {
+            if let call = bridge?.savedCall(withID: id) {
                 checkPermissions(call)
                 bridge?.releaseCall(call)
             }
@@ -179,7 +179,7 @@ public class GeolocationPlugin: CAPPlugin, CLLocationManagerDelegate {
             // If state is not yet determined, request perms.
             // Otherwise, report back the state right away
             if CLLocationManager.authorizationStatus() == .notDetermined {
-                call.save()
+                bridge?.saveCall(call)
                 callQueue[call.callbackId] = .permissions
 
                 DispatchQueue.main.async {

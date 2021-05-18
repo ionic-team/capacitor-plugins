@@ -2,48 +2,56 @@
 
 declare module '@capacitor/cli' {
   export interface PluginsConfig {
+    /**
+     * These config values are available:
+     */
     SplashScreen?: {
       /**
        * How long to show the launch splash screen when autoHide is enabled (in ms)
        *
        * @since 1.0.0
        * @default 0
+       * @example 3000
        */
       launchShowDuration?: number;
 
       /**
-       * Whether to auto hide the splash after launchShowDuration
+       * Whether to auto hide the splash after launchShowDuration.
        *
        * @since 1.0.0
        * @default true
+       * @example true
        */
       launchAutoHide?: boolean;
 
       /**
-       * Color of the background of the Splash Screen in hex format, #RRGGBB or #RRGGBBAA
+       * Color of the background of the Splash Screen in hex format, #RRGGBB or #RRGGBBAA.
        *
        * @since 1.0.0
+       * @example "#ffffffff"
        */
       backgroundColor?: string;
 
       /**
-       * Name of the resource to be used as Splash Screen
+       * Name of the resource to be used as Splash Screen.
        *
-       * Only available on Android
+       * Only available on Android.
        *
        * @since 1.0.0
        * @default splash
+       * @example "splash"
        */
       androidSplashResourceName?: string;
 
       /**
        * The [ImageView.ScaleType](https://developer.android.com/reference/android/widget/ImageView.ScaleType) used to scale
-       * the Splash Screen image
+       * the Splash Screen image.
        *
-       * Only available on Android
+       * Only available on Android.
        *
        * @since 1.0.0
        * @default FIT_XY
+       * @example "CENTER_CROP"
        */
       androidScaleType?:
         | 'CENTER'
@@ -56,17 +64,19 @@ declare module '@capacitor/cli' {
         | 'MATRIX';
 
       /**
-       * Show a loading spinner on the Splash Screen
+       * Show a loading spinner on the Splash Screen.
        *
        * @since 1.0.0
+       * @example true
        */
       showSpinner?: boolean;
 
       /**
-       * Style of the Android spinner
+       * Style of the Android spinner.
        *
        * @since 1.0.0
        * @default large
+       * @example "large"
        */
       androidSpinnerStyle?:
         | 'horizontal'
@@ -77,37 +87,41 @@ declare module '@capacitor/cli' {
         | 'largeInverse';
 
       /**
-       * Style of the iOS spinner
+       * Style of the iOS spinner.
        *
        * Only available on iOS.
        *
        * @since 1.0.0
        * @default large
+       * @example "small"
        */
       iosSpinnerStyle?: 'large' | 'small';
 
       /**
-       * Color of the spinner in hex format, #RRGGBB or #RRGGBBAA
+       * Color of the spinner in hex format, #RRGGBB or #RRGGBBAA.
        *
        * @since 1.0.0
+       * @example "#999999"
        */
       spinnerColor?: string;
 
       /**
-       * Hide the status bar on the Splash Screen
+       * Hide the status bar on the Splash Screen.
        *
-       * Only available on Android
+       * Only available on Android.
        *
        * @since 1.0.0
+       * @example true
        */
       splashFullScreen?: boolean;
 
       /**
-       * Hide the status bar and the software navigation buttons on the Splash Screen
+       * Hide the status bar and the software navigation buttons on the Splash Screen.
        *
-       * Only available on Android
+       * Only available on Android.
        *
        * @since 1.0.0
+       * @example true
        */
       splashImmersive?: boolean;
     };

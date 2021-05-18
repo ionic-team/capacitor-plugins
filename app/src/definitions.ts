@@ -159,7 +159,7 @@ export interface AppPlugin {
    *
    * @since 1.0.0
    */
-  getLaunchUrl(): Promise<AppLaunchUrl>;
+  getLaunchUrl(): Promise<AppLaunchUrl | undefined>;
 
   /**
    * Listen for changes in the App's active state (whether the app is in the foreground or background)

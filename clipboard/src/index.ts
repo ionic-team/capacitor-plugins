@@ -1,9 +1,10 @@
 import { registerPlugin } from '@capacitor/core';
 
 import type { ClipboardPlugin } from './definitions';
+import { ClipboardWeb } from './web';
 
 const Clipboard = registerPlugin<ClipboardPlugin>('Clipboard', {
-  web: () => import('./web').then(m => new m.ClipboardWeb()),
+  web: () => new ClipboardWeb(),
 });
 
 export * from './definitions';

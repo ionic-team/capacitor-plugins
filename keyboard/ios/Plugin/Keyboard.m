@@ -16,11 +16,12 @@
  */
 
 #import "Keyboard.h"
-#import "CAPBridgedPlugin.h"
 #import <Foundation/Foundation.h>
 #import <objc/runtime.h>
-#import <Capacitor/Capacitor-Swift.h>
 #import <Capacitor/Capacitor.h>
+#import <Capacitor/Capacitor-Swift.h>
+#import <Capacitor/CAPBridgedPlugin.h>
+#import <Capacitor/CAPBridgedJSTypes.h>
 
 typedef enum : NSUInteger {
   ResizeNone,
@@ -54,7 +55,7 @@ NSString* UITraitsClassString;
 
 - (void)load
 {
-  self.disableScroll = !self.bridge.config.enableScrolling;
+  self.disableScroll = !self.bridge.config.scrollingEnabled;
 
   UIClassString = [@[@"UI", @"Web", @"Browser", @"View"] componentsJoinedByString:@""];
   WKClassString = [@[@"WK", @"Content", @"View"] componentsJoinedByString:@""];
@@ -62,9 +63,7 @@ NSString* UITraitsClassString;
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(statusBarDidChangeFrame:) name:UIApplicationDidChangeStatusBarFrameNotification object: nil];
     
   NSString * style = [self getConfigValue:@"style"];
-  if ([style isEqualToString:@"dark"]) {
-    [self changeKeyboardStyle:style.uppercaseString];
-  }
+  [self changeKeyboardStyle:style.uppercaseString];
 
   self.keyboardResizes = ResizeNative;
   NSString * resizeMode = [self getConfigValue:@"resize"];
@@ -285,7 +284,7 @@ static IMP WKOriginalImp;
 
 - (void)setAccessoryBarVisible:(CAPPluginCall *)call
 {
-  BOOL value = [self getBool:call field:@"isVisible" defaultValue:FALSE];
+  BOOL value = [call getBool:@"isVisible" defaultValue:FALSE];
 
   NSLog(@"Accessory bar visible change %d", value);
   self.hideFormAccessoryBar = !value;
@@ -307,13 +306,13 @@ static IMP WKOriginalImp;
 
 - (void)setStyle:(CAPPluginCall *)call
 {
-  self.keyboardStyle = [self getString:call field:@"style" defaultValue:@"LIGHT"];
+  self.keyboardStyle = [call getString:@"style" defaultValue:@"LIGHT"];
   [call resolve];
 }
 
 - (void)setResizeMode:(CAPPluginCall *)call
 {
-  NSString * mode = [self getString:call field:@"mode" defaultValue:@"none"];
+  NSString * mode = [call getString:@"mode" defaultValue:@"none"];
   if ([mode isEqualToString:@"ionic"]) {
     self.keyboardResizes = ResizeIonic;
   } else if ([mode isEqualToString:@"body"]) {
@@ -327,17 +326,26 @@ static IMP WKOriginalImp;
 }
 
 - (void)setScroll:(CAPPluginCall *)call {
-  self.disableScroll = [self getBool:call field:@"isDisabled" defaultValue:FALSE];
+  self.disableScroll = [call getBool:@"isDisabled" defaultValue:FALSE];
   [call resolve];
 }
 
 - (void)changeKeyboardStyle:(NSString*)style
 {
-  IMP newImp = [style isEqualToString:@"DARK"] ? imp_implementationWithBlock(^(id _s) {
-    return UIKeyboardAppearanceDark;
-  }) : imp_implementationWithBlock(^(id _s) {
-    return UIKeyboardAppearanceLight;
-  });
+  IMP newImp = nil;
+  if ([style isEqualToString:@"DARK"]) {
+    newImp = imp_implementationWithBlock(^(id _s) {
+      return UIKeyboardAppearanceDark;
+    });
+  } else if ([style isEqualToString:@"LIGHT"]) {
+    newImp = imp_implementationWithBlock(^(id _s) {
+      return UIKeyboardAppearanceLight;
+    });
+  } else {
+    newImp = imp_implementationWithBlock(^(id _s) {
+      return UIKeyboardAppearanceDefault;
+    });
+  }
   for (NSString* classString in @[WKClassString, UITraitsClassString]) {
     Class c = NSClassFromString(classString);
     Method m = class_getInstanceMethod(c, @selector(keyboardAppearance));

@@ -11,11 +11,20 @@ npx cap sync
 
 ## Configuration
 
+<docgen-config>
+<!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
+
 On Android, the Local Notifications can be configured with the following options:
 
-- `smallIcon`: It allows you to set the default icon for the local notification.
-- `iconColor`: It allows you to set the default color for the local notification icon.
-- `sound`: It allows you to set the default notification sound. On Android 26+ it sets the default channel sound and can’t be changed unless the app is uninstalled.
+| Prop            | Type                | Description                                                                                                                                                                                                                                          | Since |
+| --------------- | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`smallIcon`** | <code>string</code> | Set the default status bar icon for notifications. Icons should be placed in your app's `res/drawable` folder. The value for this option should be the drawable resource ID, which is the filename without an extension. Only available for Android. | 1.0.0 |
+| **`iconColor`** | <code>string</code> | Set the default color of status bar icons for notifications. Only available for Android.                                                                                                                                                             | 1.0.0 |
+| **`sound`**     | <code>string</code> | Set the default notification sound for notifications. On Android 26+ it sets the default channel sound and can't be changed unless the app is uninstalled. Only available for Android.                                                               | 1.0.0 |
+
+### Examples
+
+In `capacitor.config.json`:
 
 ```json
 {
@@ -28,6 +37,28 @@ On Android, the Local Notifications can be configured with the following options
   }
 }
 ```
+
+In `capacitor.config.ts`:
+
+```ts
+/// <reference types="@capacitor/local-notifications" />
+
+import { CapacitorConfig } from '@capacitor/cli';
+
+const config: CapacitorConfig = {
+  plugins: {
+    LocalNotifications: {
+      smallIcon: "ic_stat_icon_config_sample",
+      iconColor: "#488AFF",
+      sound: "beep.wav",
+    },
+  },
+};
+
+export = config;
+```
+
+</docgen-config>
 
 ## Doze
 
@@ -313,10 +344,13 @@ The object that describes a local notification.
 | ---------------------- | --------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
 | **`title`**            | <code>string</code>                           | The title of the notification.                                                                                                                                                                                                                                                                                                                                                                              | 1.0.0 |
 | **`body`**             | <code>string</code>                           | The body of the notification, shown below the title.                                                                                                                                                                                                                                                                                                                                                        | 1.0.0 |
+| **`largeBody`**        | <code>string</code>                           | Sets a multiline text block for display in a big text notification style.                                                                                                                                                                                                                                                                                                                                   | 1.0.0 |
+| **`summaryText`**      | <code>string</code>                           | Used to set the summary text detail in inbox and big text notification styles. Only available for Android.                                                                                                                                                                                                                                                                                                  | 1.0.0 |
 | **`id`**               | <code>number</code>                           | The notification identifier.                                                                                                                                                                                                                                                                                                                                                                                | 1.0.0 |
 | **`schedule`**         | <code><a href="#schedule">Schedule</a></code> | <a href="#schedule">Schedule</a> this notification for a later time.                                                                                                                                                                                                                                                                                                                                        | 1.0.0 |
 | **`sound`**            | <code>string</code>                           | Name of the audio file to play when this notification is displayed. Include the file extension with the filename. On iOS, the file should be in the app bundle. On Android, the file should be in res/raw folder. Recommended format is `.wav` because is supported by both iOS and Android. Only available for iOS and Android 26+.                                                                        | 1.0.0 |
 | **`smallIcon`**        | <code>string</code>                           | Set a custom status bar icon. If set, this overrides the `smallIcon` option from Capacitor configuration. Icons should be placed in your app's `res/drawable` folder. The value for this option should be the drawable resource ID, which is the filename without an extension. Only available for Android.                                                                                                 | 1.0.0 |
+| **`largeIcon`**        | <code>string</code>                           | Set a large icon for notifications. Icons should be placed in your app's `res/drawable` folder. The value for this option should be the drawable resource ID, which is the filename without an extension. Only available for Android.                                                                                                                                                                       | 1.0.0 |
 | **`iconColor`**        | <code>string</code>                           | Set the color of the notification icon. Only available for Android.                                                                                                                                                                                                                                                                                                                                         | 1.0.0 |
 | **`attachments`**      | <code>Attachment[]</code>                     | Set attachments for this notification.                                                                                                                                                                                                                                                                                                                                                                      | 1.0.0 |
 | **`actionTypeId`**     | <code>string</code>                           | Associate an action type with this notification.                                                                                                                                                                                                                                                                                                                                                            | 1.0.0 |
@@ -328,6 +362,7 @@ The object that describes a local notification.
 | **`channelId`**        | <code>string</code>                           | Specifies the channel the notification should be delivered on. If channel with the given name does not exist then the notification will not fire. If not provided, it will use the default channel. Calls `setChannelId()` on [`NotificationCompat.Builder`](https://developer.android.com/reference/androidx/core/app/NotificationCompat.Builder) with the provided value. Only available for Android 26+. | 1.0.0 |
 | **`ongoing`**          | <code>boolean</code>                          | If true, the notification can't be swiped away. Calls `setOngoing()` on [`NotificationCompat.Builder`](https://developer.android.com/reference/androidx/core/app/NotificationCompat.Builder) with the provided value. Only available for Android.                                                                                                                                                           | 1.0.0 |
 | **`autoCancel`**       | <code>boolean</code>                          | If true, the notification is canceled when the user clicks on it. Calls `setAutoCancel()` on [`NotificationCompat.Builder`](https://developer.android.com/reference/androidx/core/app/NotificationCompat.Builder) with the provided value. Only available for Android.                                                                                                                                      | 1.0.0 |
+| **`inboxList`**        | <code>string[]</code>                         | Sets a list of strings for display in an inbox style notification. Up to 5 strings are allowed. Only available for Android.                                                                                                                                                                                                                                                                                 | 1.0.0 |
 
 
 #### Schedule

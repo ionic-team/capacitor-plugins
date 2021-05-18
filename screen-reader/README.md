@@ -35,7 +35,7 @@ const sayHello = async () => {
 
 * [`isEnabled()`](#isenabled)
 * [`speak(...)`](#speak)
-* [`addListener('screenReaderStateChange', ...)`](#addlistenerscreenreaderstatechange-)
+* [`addListener('stateChange', ...)`](#addlistenerstatechange-)
 * [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
@@ -90,20 +90,22 @@ plugin](https://github.com/capacitor-community/text-to-speech).
 --------------------
 
 
-### addListener('screenReaderStateChange', ...)
+### addListener('stateChange', ...)
 
 ```typescript
-addListener(eventName: 'screenReaderStateChange', listener: StateChangeListener) => Promise<PluginListenerHandle> & PluginListenerHandle
+addListener(eventName: 'stateChange', listener: StateChangeListener) => Promise<PluginListenerHandle> & PluginListenerHandle
 ```
 
-Add a listener
+Add a listener for when the screen reader is turned on or off.
+
+This event used to be named `'accessibilityScreenReaderStateChange'`.
 
 This method is not supported on web (it is not possible to detect Screen
 Readers).
 
 | Param           | Type                                                                |
 | --------------- | ------------------------------------------------------------------- |
-| **`eventName`** | <code>'screenReaderStateChange'</code>                              |
+| **`eventName`** | <code>'stateChange'</code>                                          |
 | **`listener`**  | <code><a href="#statechangelistener">StateChangeListener</a></code> |
 
 **Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt; & <a href="#pluginlistenerhandle">PluginListenerHandle</a></code>

@@ -139,7 +139,7 @@ Gets the current app state.
 ### getLaunchUrl()
 
 ```typescript
-getLaunchUrl() => Promise<AppLaunchUrl>
+getLaunchUrl() => Promise<AppLaunchUrl | undefined>
 ```
 
 Get the URL the app was launched with, if any.

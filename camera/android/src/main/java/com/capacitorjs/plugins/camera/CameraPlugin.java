@@ -80,11 +80,7 @@ public class CameraPlugin extends Plugin {
     @PluginMethod
     public void getPhoto(PluginCall call) {
         isEdited = false;
-
-        saveCall(call);
-
         settings = getSettings(call);
-
         doShow(call);
     }
 

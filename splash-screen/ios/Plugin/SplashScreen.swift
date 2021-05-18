@@ -24,6 +24,7 @@ import Capacitor
         var settings = SplashScreenSettings()
         settings.showDuration = config.launchShowDuration
         settings.fadeInDuration = config.launchFadeInDuration
+        settings.autoHide = config.launchAutoHide
         showSplash(settings: settings, completion: {}, isLaunchSplash: true)
     }
 
