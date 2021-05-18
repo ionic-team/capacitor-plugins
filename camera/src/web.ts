@@ -1,12 +1,13 @@
 import { WebPlugin, CapacitorException } from '@capacitor/core';
 
+import { CameraSource, CameraDirection } from './definitions';
+
 import type {
   CameraPlugin,
   ImageOptions,
   PermissionStatus,
   Photo,
 } from './definitions';
-import { CameraSource, CameraDirection } from './definitions';
 
 export class CameraWeb extends WebPlugin implements CameraPlugin {
   async getPhoto(options: ImageOptions): Promise<Photo> {
