@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.0.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/app@0.3.10...@capacitor/app@1.0.0) (2021-05-19)
+
+
+### Features
+
+* **app:** Add canGoBack to backButton event ([#265](https://github.com/ionic-team/capacitor-plugins/issues/265)) ([6d7861e](https://github.com/ionic-team/capacitor-plugins/commit/6d7861e78ff7990a21396d05270c622d42850a02))
+
+
+
+
+
 ## [0.3.10](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/app@0.3.9...@capacitor/app@0.3.10) (2021-05-11)
 
 **Note:** Version bump only for package @capacitor/app

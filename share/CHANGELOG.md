@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.0.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/share@0.5.7...@capacitor/share@1.0.0) (2021-05-19)
+
+
+### Bug Fixes
+
+* **share:** set type to */* if no mine type can be found ([#324](https://github.com/ionic-team/capacitor-plugins/issues/324)) ([40d4baa](https://github.com/ionic-team/capacitor-plugins/commit/40d4baa8b89e55b094ee568daecf8c63a53fc7cb))
+
+
+
+
+
 ## [0.5.7](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/share@0.5.6...@capacitor/share@0.5.7) (2021-05-11)
 
 **Note:** Version bump only for package @capacitor/share

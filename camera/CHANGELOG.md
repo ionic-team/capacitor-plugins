@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.0.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@0.4.7...@capacitor/camera@1.0.0) (2021-05-19)
+
+
+### Bug Fixes
+
+* **camera:** decode content uri when retrieving image from gallery ([#277](https://github.com/ionic-team/capacitor-plugins/issues/277)) ([a6cd1ad](https://github.com/ionic-team/capacitor-plugins/commit/a6cd1adc241bf21e4f7f06d24c0db4a4d7382dbc))
+* **camera:** Remove unused saveCall ([#401](https://github.com/ionic-team/capacitor-plugins/issues/401)) ([95920da](https://github.com/ionic-team/capacitor-plugins/commit/95920da4d1844ed76a162651d5492a22a4038d26))
+
+
+### Features
+
+* **camera:** use a distinguishable permission denied string for camera and photos ([#379](https://github.com/ionic-team/capacitor-plugins/issues/379)) ([c71657f](https://github.com/ionic-team/capacitor-plugins/commit/c71657f7e14eae4efd4d2c7d00d77a7b329a7920))
+* **camera:** Use same error messages for permission deny ([#404](https://github.com/ionic-team/capacitor-plugins/issues/404)) ([fffcd47](https://github.com/ionic-team/capacitor-plugins/commit/fffcd47f0237b6997bfa4ce430ef29392047ea0e))
+
+
+
+
+
 ## [0.4.7](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@0.4.6...@capacitor/camera@0.4.7) (2021-05-11)
 
 **Note:** Version bump only for package @capacitor/camera

@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.0.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/motion@0.3.8...@capacitor/motion@1.0.0) (2021-05-19)
+
+**Note:** Version bump only for package @capacitor/motion
+
+
+
+
+
 ## [0.3.8](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/motion@0.3.7...@capacitor/motion@0.3.8) (2021-05-11)
 
 **Note:** Version bump only for package @capacitor/motion
