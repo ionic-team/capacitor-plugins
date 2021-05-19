@@ -1,8 +1,9 @@
-import type { WebPluginConfig } from '@capacitor/core';
 import { test } from 'uvu';
 import * as assert from 'uvu/assert';
 
 import { DeviceWeb } from '../web';
+
+import type { WebPluginConfig } from '@capacitor/core';
 
 const config: WebPluginConfig = { name: 'DevicePlugin' };
 const web = new DeviceWeb(config);
