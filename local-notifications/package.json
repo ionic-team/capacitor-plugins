@@ -45,7 +45,7 @@
   },
   "devDependencies": {
     "@capacitor/android": "3.0.0-rc.3",
-    "@capacitor/cli": "3.0.0-rc.3",
+    "@capacitor/cli": "3.0.0",
     "@capacitor/core": "3.0.0-rc.3",
     "@capacitor/docgen": "0.0.16",
     "@capacitor/ios": "3.0.0-rc.3",
