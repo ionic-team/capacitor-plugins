@@ -14,7 +14,8 @@ import type { PermissionState } from '@capacitor/core';
 
 export class LocalNotificationsWeb
   extends WebPlugin
-  implements LocalNotificationsPlugin {
+  implements LocalNotificationsPlugin
+{
   protected pending: LocalNotificationSchema[] = [];
 
   async createChannel(): Promise<void> {

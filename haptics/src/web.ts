@@ -1,12 +1,13 @@
 import { WebPlugin } from '@capacitor/core';
 
+import { ImpactStyle, NotificationType } from './definitions';
+
 import type {
   HapticsPlugin,
   ImpactOptions,
   NotificationOptions,
   VibrateOptions,
 } from './definitions';
-import { ImpactStyle, NotificationType } from './definitions';
 
 export class HapticsWeb extends WebPlugin implements HapticsPlugin {
   selectionStarted = false;
