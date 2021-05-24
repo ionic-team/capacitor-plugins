@@ -1,7 +1,6 @@
 import { WebPlugin } from '@capacitor/core';
 
 import { ImpactStyle, NotificationType } from './definitions';
-
 import type {
   HapticsPlugin,
   ImpactOptions,

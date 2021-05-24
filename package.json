@@ -20,7 +20,7 @@
     "@types/prompts": "^2.0.8",
     "esm": "^3.2.25",
     "lerna": "^3.22.1",
-    "prettier": "^2.1.2",
+    "prettier": "~2.3.0",
     "prompts": "^2.3.2"
   },
   "prettier": "@ionic/prettier-config"
