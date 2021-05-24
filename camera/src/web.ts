@@ -1,7 +1,6 @@
 import { WebPlugin, CapacitorException } from '@capacitor/core';
 
 import { CameraSource, CameraDirection } from './definitions';
-
 import type {
   CameraPlugin,
   ImageOptions,
