@@ -11,11 +11,12 @@ execute(async () => {
     await Promise.all(
       PROJECTS.map(async project => [
         `@capacitor/${project}`,
-        `^${await getLatestVersion(`@capacitor/${project}`, 'next')}`,
+        `^${await getLatestVersion(`@capacitor/${project}`, 'latest')}`,
       ]),
     ),
   );
 
   await setLernaPackageDependencies(packages, 'devDependencies');
+  await setLernaPackageDependencies(packages, 'peerDependencies');
   await bootstrap();
 });
