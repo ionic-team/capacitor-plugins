@@ -44,6 +44,7 @@ public struct CameraSettings {
     var allowEditing = false
     var shouldResize = false
     var shouldCorrectOrientation = true
+    var preserveAspectRatio = false
     var saveToGallery = false
     var presentationStyle = UIModalPresentationStyle.fullScreen
 }

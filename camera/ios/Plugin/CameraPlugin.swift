@@ -117,6 +117,7 @@ public class CameraPlugin: CAPPlugin {
             settings.shouldResize = true
         }
         settings.shouldCorrectOrientation = call.getBool("correctOrientation") ?? true
+        settings.preserveAspectRatio = call.getBool("preserveAspectRatio") ?? false
         settings.userPromptText = CameraPromptText(title: call.getString("promptLabelHeader"),
                                                    photoAction: call.getString("promptLabelPhoto"),
                                                    cameraAction: call.getString("promptLabelPicture"),
@@ -392,7 +393,7 @@ private extension CameraPlugin {
         var result = ProcessedImage(image: image, metadata: metadata ?? [:])
         // resizing the image only makes sense if we have real values to which to constrain it
         if settings.shouldResize, settings.width > 0 || settings.height > 0 {
-            result.image = result.image.reformat(to: CGSize(width: settings.width, height: settings.height))
+            result.image = result.image.reformat(to: reformatSize(for: image))
             result.overwriteMetadataOrientation(to: 1)
         } else if settings.shouldCorrectOrientation {
             // resizing implicitly reformats the image so this is only needed if we aren't resizing
@@ -400,5 +401,20 @@ private extension CameraPlugin {
             result.overwriteMetadataOrientation(to: 1)
         }
         return result
+    }
+
+    func reformatSize(for image: UIImage) -> CGSize {
+        if settings.preserveAspectRatio {
+            let imageWidth = image.size.width
+            let imageHeight = image.size.height
+            var newWidth = min(imageWidth, settings.width)
+            var newHeight = (imageHeight * newWidth) / imageWidth
+            if newHeight > settings.height {
+                newWidth = (imageWidth * settings.height) / imageHeight
+                newHeight = settings.height
+            }
+            return CGSize(width: newWidth, height: newHeight)
+        }
+        return CGSize(width: settings.width, height: settings.height)
     }
 }
