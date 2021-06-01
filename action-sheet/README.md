@@ -18,7 +18,7 @@ This plugin will use the following project variables (defined in your app's `var
 ## Example
 
 ```typescript
-import { ActionSheet, ActionSheetOptionStyle } from '@capacitor/action-sheet';
+import { ActionSheet, ActionSheetButtonStyle } from '@capacitor/action-sheet';
 
 const showActions = async () => {
   const result = await ActionSheet.showActions({
@@ -33,7 +33,7 @@ const showActions = async () => {
       },
       {
         title: 'Remove',
-        style: ActionSheetOptionStyle.Destructive,
+        style: ActionSheetButtonStyle.Destructive,
       },
     ],
   });
