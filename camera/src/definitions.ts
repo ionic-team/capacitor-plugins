@@ -79,20 +79,6 @@ export interface ImageOptions {
    */
   height?: number;
   /**
-   * Whether to preserve the aspect ratio of the image.
-   * If this flag is true, the width and height will be used as max values
-   * and the aspect ratio will be preserved. This is only relevant when
-   * both a width and height are passed. When only width or height is provided
-   * the aspect ratio is always preserved (and this option is a no-op).
-   *
-   * A future major version will change this behavior to be default,
-   * and may also remove this option altogether.
-   * @default: false
-   *
-   * @since 1.0.0
-   */
-  preserveAspectRatio?: boolean;
-  /**
    * Whether to automatically rotate the image "up" to correct for orientation
    * in portrait mode
    * @default: true
