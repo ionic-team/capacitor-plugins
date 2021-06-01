@@ -12,21 +12,13 @@ tasks:
 
         Thanks!
         Ionitron 💙
-  - name: add-reply-label
+  - name: add-label
     on:
       issues:
         types: [labeled]
     condition: 'payload.label.name == "needs reproduction"'
     config:
       label: 'needs reply'
-  - name: add-triage-label
-    on:
-      issues:
-        types: [opened]
-    condition: |-
-      !(await getTeamMembers('capacitor')).includes(payload.sender.login)
-    config:
-      label: 'triage'
   - name: remove-label
     on:
       issue_comment:
@@ -34,6 +26,14 @@ tasks:
     config:
       label: 'needs reply'
       exclude-labeler: true
+  - name: add-label
+    on:
+      issues:
+        types: [opened]
+    condition: |-
+      !(await getTeamMembers('capacitor')).includes(payload.sender.login)
+    config:
+      label: 'triage'
   - name: add-platform-labels
     on:
       issues:
