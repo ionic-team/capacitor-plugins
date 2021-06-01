@@ -26,7 +26,7 @@ tasks:
     config:
       label: 'needs reply'
       exclude-labeler: true
-  - name: add-triage-label
+  - name: add-label
     on:
       issues:
         types: [opened]
