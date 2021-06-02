@@ -12,7 +12,8 @@ export enum Directory {
    * On Android it's the Public Documents folder, so it's accessible from other apps.
    * It's not accesible on Android 10 unless the app enables legacy External Storage
    * by adding `android:requestLegacyExternalStorage="true"` in the `application` tag
-   * in the `AndroidManifest.xml`
+   * in the `AndroidManifest.xml`.
+   * It's not accesible on Android 11 or newer.
    *
    * @since 1.0.0
    */
@@ -56,7 +57,8 @@ export enum Directory {
    * On Android it's the primary shared/external storage directory.
    * It's not accesible on Android 10 unless the app enables legacy External Storage
    * by adding `android:requestLegacyExternalStorage="true"` in the `application` tag
-   * in the `AndroidManifest.xml`
+   * in the `AndroidManifest.xml`.
+   * It's not accesible on Android 11 or newer.
    *
    * @since 1.0.0
    */
