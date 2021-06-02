@@ -14,8 +14,7 @@ on Android. Stored data is cleared if the app is uninstalled.
 
 **Note**: This API is _not_ meant to be used as a local database. If your app
 stores a lot of data, has high read/write load, or requires complex querying,
-take a look at
-[`@capacitor-community/sqlite`](https://github.com/capacitor-community/sqlite).
+we recommend taking a look at a SQLite-based solution. One such solution is [Ionic Secure Storage](https://ionic.io/docs/secure-storage), a SQLite-based engine with full encryption support. The [Capacitor Community](https://github.com/capacitor-community/) has also built a number of other storage engines.
 
 ## Install
 
