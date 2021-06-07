@@ -2,7 +2,7 @@ name: Bot
 
 on:
   issues:
-    types: [opened, edited]
+    types: [opened, edited, labeled]
   pull_request:
     types: [opened]
   issue_comment:
