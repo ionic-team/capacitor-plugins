@@ -2,7 +2,7 @@
 
 The Storage API provides a simple key/value persistent store for lightweight data.
 
-Mobile OS's may periodically clear data set in `window.localStorage`, so this
+Mobile OSs may periodically clear data set in `window.localStorage`, so this
 API should be used instead. This API will fall back to using `localStorage`
 when running as a Progressive Web App.
 
