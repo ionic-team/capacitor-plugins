@@ -62,6 +62,7 @@ export class CameraWeb extends WebPlugin implements CameraPlugin {
       input = document.createElement('input') as HTMLInputElement;
       input.id = '_capacitor-camera-input';
       input.type = 'file';
+      input.style.visibility = 'hidden';
       document.body.appendChild(input);
     }
 
