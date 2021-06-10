@@ -134,7 +134,7 @@ const config: CapacitorConfig = {
   },
 };
 
-export = config;
+export default config;
 ```
 
 </docgen-config>
