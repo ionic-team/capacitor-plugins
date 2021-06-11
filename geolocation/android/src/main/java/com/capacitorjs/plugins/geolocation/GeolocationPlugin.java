@@ -115,7 +115,7 @@ public class GeolocationPlugin extends Plugin {
         implementation.sendLocation(
             enableHighAccuracy,
             timeout,
-            false,
+            true,
             new LocationResultCallback() {
                 @Override
                 public void success(Location location) {
