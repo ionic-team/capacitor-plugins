@@ -7,10 +7,17 @@ import Capacitor
  */
 @objc(StatusBarPlugin)
 public class StatusBarPlugin: CAPPlugin {
+    private var observer: NSObjectProtocol?
 
     override public func load() {
-        NotificationCenter.default.addObserver(forName: Notification.Name.capacitorStatusBarTapped, object: .none, queue: .none) { [weak self] _ in
+        observer = NotificationCenter.default.addObserver(forName: Notification.Name.capacitorStatusBarTapped, object: .none, queue: .none) { [weak self] _ in
             self?.bridge?.triggerJSEvent(eventName: "statusTap", target: "window")
+        }
+    }
+
+    deinit {
+        if let observer = observer {
+            NotificationCenter.default.removeObserver(observer)
         }
     }
 
