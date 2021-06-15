@@ -33,6 +33,10 @@ public class PushNotificationsPlugin: CAPPlugin {
                                                object: nil)
     }
 
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+
     /**
      * Register for push notifications
      */
