@@ -8,7 +8,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
 import androidx.exifinterface.media.ExifInterface;
-import com.getcapacitor.FileUtils;
 import com.getcapacitor.Logger;
 import java.io.IOException;
 import java.io.InputStream;
