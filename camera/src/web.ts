@@ -62,7 +62,50 @@ export class CameraWeb extends WebPlugin implements CameraPlugin {
       input = document.createElement('input') as HTMLInputElement;
       input.id = '_capacitor-camera-input';
       input.type = 'file';
+      input.hidden = true;
       document.body.appendChild(input);
+      input.addEventListener('change', (_e: any) => {
+        const file = input.files![0];
+        let format = 'jpeg';
+
+        if (file.type === 'image/png') {
+          format = 'png';
+        } else if (file.type === 'image/gif') {
+          format = 'gif';
+        }
+
+        if (
+          options.resultType === 'dataUrl' ||
+          options.resultType === 'base64'
+        ) {
+          const reader = new FileReader();
+
+          reader.addEventListener('load', () => {
+            if (options.resultType === 'dataUrl') {
+              resolve({
+                dataUrl: reader.result,
+                format,
+              } as Photo);
+            } else if (options.resultType === 'base64') {
+              const b64 = (reader.result as string).split(',')[1];
+              resolve({
+                base64String: b64,
+                format,
+              } as Photo);
+            }
+
+            cleanup();
+          });
+
+          reader.readAsDataURL(file);
+        } else {
+          resolve({
+            webPath: URL.createObjectURL(file),
+            format: format,
+          });
+          cleanup();
+        }
+      });
     }
 
     input.accept = 'image/*';
@@ -78,46 +121,6 @@ export class CameraWeb extends WebPlugin implements CameraPlugin {
     } else if (options.direction === CameraDirection.Rear) {
       (input as any).capture = 'environment';
     }
-
-    input.addEventListener('change', (_e: any) => {
-      const file = input.files![0];
-      let format = 'jpeg';
-
-      if (file.type === 'image/png') {
-        format = 'png';
-      } else if (file.type === 'image/gif') {
-        format = 'gif';
-      }
-
-      if (options.resultType === 'dataUrl' || options.resultType === 'base64') {
-        const reader = new FileReader();
-
-        reader.addEventListener('load', () => {
-          if (options.resultType === 'dataUrl') {
-            resolve({
-              dataUrl: reader.result,
-              format,
-            } as Photo);
-          } else if (options.resultType === 'base64') {
-            const b64 = (reader.result as string).split(',')[1];
-            resolve({
-              base64String: b64,
-              format,
-            } as Photo);
-          }
-
-          cleanup();
-        });
-
-        reader.readAsDataURL(file);
-      } else {
-        resolve({
-          webPath: URL.createObjectURL(file),
-          format: format,
-        });
-        cleanup();
-      }
-    });
 
     input.click();
   }
