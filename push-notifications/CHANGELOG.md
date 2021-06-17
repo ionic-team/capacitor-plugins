@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/push-notifications@1.0.0...@capacitor/push-notifications@1.0.1) (2021-06-09)
+
+
+### Bug Fixes
+
+* **push-notifications:** make removeAllListeners available ([#454](https://github.com/ionic-team/capacitor-plugins/issues/454)) ([d92c925](https://github.com/ionic-team/capacitor-plugins/commit/d92c92566b15d3b339e9a4c54471b65fda49a7f0))
+
+
+
+
+
 # [1.0.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/push-notifications@0.3.10...@capacitor/push-notifications@1.0.0) (2021-05-19)
 
 **Note:** Version bump only for package @capacitor/push-notifications

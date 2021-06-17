@@ -1,6 +1,6 @@
 {
   "name": "@capacitor/geolocation",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "The Geolocation API provides simple methods for getting and tracking the current position of the device using GPS, along with altitude, heading, and speed information if available.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
@@ -46,7 +46,7 @@
   "devDependencies": {
     "@capacitor/android": "^3.0.0",
     "@capacitor/core": "^3.0.0",
-    "@capacitor/docgen": "0.0.16",
+    "@capacitor/docgen": "0.0.17",
     "@capacitor/ios": "^3.0.0",
     "@ionic/eslint-config": "^0.3.0",
     "@ionic/prettier-config": "~1.0.1",

@@ -3,25 +3,29 @@ import Capacitor
 
 @objc(AppPlugin)
 public class AppPlugin: CAPPlugin {
+    private var observers: [NSObjectProtocol] = []
 
     override public func load() {
         NotificationCenter.default.addObserver(self, selector: #selector(self.handleUrlOpened(notification:)), name: Notification.Name.capacitorOpenURL, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.handleUniversalLink(notification:)), name: Notification.Name.capacitorOpenUniversalLink, object: nil)
-        NotificationCenter.default.addObserver(forName: UIApplication.didBecomeActiveNotification, object: nil, queue: OperationQueue.main) { [weak self] (_) in
+        observers.append(NotificationCenter.default.addObserver(forName: UIApplication.didBecomeActiveNotification, object: nil, queue: OperationQueue.main) { [weak self] (_) in
             self?.notifyListeners("appStateChange", data: [
                 "isActive": true
             ])
-        }
-        NotificationCenter.default.addObserver(forName: UIApplication.willResignActiveNotification, object: nil, queue: OperationQueue.main) { [weak self] (_) in
+        })
+        observers.append(NotificationCenter.default.addObserver(forName: UIApplication.willResignActiveNotification, object: nil, queue: OperationQueue.main) { [weak self] (_) in
             self?.notifyListeners("appStateChange", data: [
                 "isActive": false
             ])
-        }
+        })
 
     }
 
     deinit {
         NotificationCenter.default.removeObserver(self)
+        for observer in observers {
+            NotificationCenter.default.removeObserver(observer)
+        }
     }
 
     @objc func handleUrlOpened(notification: NSNotification) {
