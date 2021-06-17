@@ -14,30 +14,28 @@ export class CameraWeb extends WebPlugin implements CameraPlugin {
     return new Promise<Photo>(async (resolve, reject) => {
       if (options.webUseInput || options.source === CameraSource.Photos) {
         this.fileInputExperience(options, resolve);
-      } else {
-        if (options.source === CameraSource.Prompt) {
-          let actionSheet: any = document.querySelector('pwa-action-sheet');
-          if (!actionSheet) {
-            actionSheet = document.createElement('pwa-action-sheet');
-            document.body.appendChild(actionSheet);
-          }
-          actionSheet.header = options.promptLabelHeader || 'Photo';
-          actionSheet.cancelable = false;
-          actionSheet.options = [
-            { title: options.promptLabelPhoto || 'From Photos' },
-            { title: options.promptLabelPicture || 'Take Picture' },
-          ];
-          actionSheet.addEventListener('onSelection', async (e: any) => {
-            const selection = e.detail;
-            if (selection === 0) {
-              this.fileInputExperience(options, resolve);
-            } else {
-              this.cameraExperience(options, resolve, reject);
-            }
-          });
-        } else {
-          this.cameraExperience(options, resolve, reject);
+      } else if (options.source === CameraSource.Prompt) {
+        let actionSheet: any = document.querySelector('pwa-action-sheet');
+        if (!actionSheet) {
+          actionSheet = document.createElement('pwa-action-sheet');
+          document.body.appendChild(actionSheet);
         }
+        actionSheet.header = options.promptLabelHeader || 'Photo';
+        actionSheet.cancelable = false;
+        actionSheet.options = [
+          { title: options.promptLabelPhoto || 'From Photos' },
+          { title: options.promptLabelPicture || 'Take Picture' },
+        ];
+        actionSheet.addEventListener('onSelection', async (e: any) => {
+          const selection = e.detail;
+          if (selection === 0) {
+            this.fileInputExperience(options, resolve);
+          } else {
+            this.cameraExperience(options, resolve, reject);
+          }
+        });
+      } else {
+        this.cameraExperience(options, resolve, reject);
       }
     });
   }
