@@ -12,41 +12,71 @@ export class CameraWeb extends WebPlugin implements CameraPlugin {
   async getPhoto(options: ImageOptions): Promise<Photo> {
     // eslint-disable-next-line no-async-promise-executor
     return new Promise<Photo>(async (resolve, reject) => {
-      if (options.webUseInput) {
+      if (options.webUseInput || options.source === CameraSource.Photos) {
         this.fileInputExperience(options, resolve);
       } else {
-        if (customElements.get('pwa-camera-modal')) {
-          const cameraModal: any = document.createElement('pwa-camera-modal');
-          document.body.appendChild(cameraModal);
-          try {
-            await cameraModal.componentOnReady();
-            cameraModal.addEventListener('onPhoto', async (e: any) => {
-              const photo = e.detail;
-
-              if (photo === null) {
-                reject(new CapacitorException('User cancelled photos app'));
-              } else if (photo instanceof Error) {
-                reject(photo);
-              } else {
-                resolve(await this._getCameraPhoto(photo, options));
-              }
-
-              cameraModal.dismiss();
-              document.body.removeChild(cameraModal);
-            });
-
-            cameraModal.present();
-          } catch (e) {
-            this.fileInputExperience(options, resolve);
+        if (options.source === CameraSource.Prompt) {
+          let actionSheet: any = document.querySelector('pwa-action-sheet');
+          if (!actionSheet) {
+            actionSheet = document.createElement('pwa-action-sheet');
+            document.body.appendChild(actionSheet);
           }
+          actionSheet.header = options.promptLabelHeader || 'Photo';
+          actionSheet.cancelable = false;
+          actionSheet.options = [
+            { title: options.promptLabelPhoto || 'From Photos' },
+            { title: options.promptLabelPicture || 'Take Picture' },
+          ];
+          actionSheet.addEventListener('onSelection', async (e: any) => {
+            const selection = e.detail;
+            if (selection === 0) {
+              this.fileInputExperience(options, resolve);
+            } else {
+              this.cameraExperience(options, resolve, reject);
+            }
+          });
         } else {
-          console.error(
-            `Unable to load PWA Element 'pwa-camera-modal'. See the docs: https://capacitorjs.com/docs/pwa-elements.`,
-          );
-          this.fileInputExperience(options, resolve);
+          this.cameraExperience(options, resolve, reject);
         }
       }
     });
+  }
+
+  private async cameraExperience(
+    options: ImageOptions,
+    resolve: any,
+    reject: any,
+  ) {
+    if (customElements.get('pwa-camera-modal')) {
+      const cameraModal: any = document.createElement('pwa-camera-modal');
+      document.body.appendChild(cameraModal);
+      try {
+        await cameraModal.componentOnReady();
+        cameraModal.addEventListener('onPhoto', async (e: any) => {
+          const photo = e.detail;
+
+          if (photo === null) {
+            reject(new CapacitorException('User cancelled photos app'));
+          } else if (photo instanceof Error) {
+            reject(photo);
+          } else {
+            resolve(await this._getCameraPhoto(photo, options));
+          }
+
+          cameraModal.dismiss();
+          document.body.removeChild(cameraModal);
+        });
+
+        cameraModal.present();
+      } catch (e) {
+        this.fileInputExperience(options, resolve);
+      }
+    } else {
+      console.error(
+        `Unable to load PWA Element 'pwa-camera-modal'. See the docs: https://capacitorjs.com/docs/pwa-elements.`,
+      );
+      this.fileInputExperience(options, resolve);
+    }
   }
 
   private fileInputExperience(options: ImageOptions, resolve: any) {
