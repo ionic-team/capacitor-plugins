@@ -88,9 +88,9 @@ internal extension UIImage {
         }
         // adjust to preserve aspect ratio
         var targetWidth = min(imageWidth, maxWidth)
-        var targetHeight = (imageHeight * targetWidth) / imageWidth
+        var targetHeight = (imageHeight * maxWidth) / imageWidth
         if targetHeight > maxHeight {
-            targetWidth = (imageWidth * targetHeight) / imageHeight
+            targetWidth = (imageWidth * maxHeight) / imageHeight
             targetHeight = maxHeight
         }
         // generate the new image and return
