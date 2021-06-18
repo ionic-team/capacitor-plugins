@@ -44,7 +44,7 @@ public class SharePlugin: CAPPlugin {
                 }
 
             }
-            if ((self?.bridge?.viewController?.presentedViewController) != nil) {
+            if self?.bridge?.viewController?.presentedViewController != nil {
                 call.reject("Can't share while sharing is in progress")
                 return
             }
