@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/browser@1.0.1...@capacitor/browser@1.0.2) (2021-06-23)
+
+
+### Bug Fixes
+
+* **browser:** browserFinished does not fire when closing popovers ([#483](https://github.com/ionic-team/capacitor-plugins/issues/483)) ([fb8dbb8](https://github.com/ionic-team/capacitor-plugins/commit/fb8dbb8dc69d67e2aab72ea3cd5389dc91f9bace))
+
+
+
+
+
 ## [1.0.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/browser@1.0.0...@capacitor/browser@1.0.1) (2021-06-09)
 
 **Note:** Version bump only for package @capacitor/browser

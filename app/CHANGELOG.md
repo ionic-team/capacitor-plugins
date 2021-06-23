@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/app@1.0.1...@capacitor/app@1.0.2) (2021-06-23)
+
+
+### Bug Fixes
+
+* **app:** use alternative to deprecated versionCode ([#491](https://github.com/ionic-team/capacitor-plugins/issues/491)) ([6ebabf7](https://github.com/ionic-team/capacitor-plugins/commit/6ebabf77f1b9a954b25fdad8aaf9a89638d8366b))
+
+
+
+
+
 ## [1.0.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/app@1.0.0...@capacitor/app@1.0.1) (2021-06-09)
 
 **Note:** Version bump only for package @capacitor/app
