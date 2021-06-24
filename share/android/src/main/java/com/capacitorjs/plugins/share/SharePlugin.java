@@ -21,6 +21,7 @@ public class SharePlugin extends Plugin {
 
     private BroadcastReceiver broadcastReceiver;
     private boolean stopped = false;
+    private boolean isPresenting = false;
     private ComponentName chosenComponent;
 
     @Override
@@ -46,76 +47,82 @@ public class SharePlugin extends Plugin {
             callResult.put("activityType", chosenComponent != null ? chosenComponent.getPackageName() : "");
             call.resolve(callResult);
         }
+        isPresenting = false;
     }
 
     @PluginMethod
     public void share(PluginCall call) {
-        String title = call.getString("title", "");
-        String text = call.getString("text");
-        String url = call.getString("url");
-        String dialogTitle = call.getString("dialogTitle", "Share");
+        if (!isPresenting) {
+            String title = call.getString("title", "");
+            String text = call.getString("text");
+            String url = call.getString("url");
+            String dialogTitle = call.getString("dialogTitle", "Share");
 
-        if (text == null && url == null) {
-            call.reject("Must provide a URL or Message");
-            return;
-        }
-
-        if (url != null && !isFileUrl(url) && !isHttpUrl(url)) {
-            call.reject("Unsupported url");
-            return;
-        }
-
-        Intent intent = new Intent(Intent.ACTION_SEND);
-
-        if (text != null) {
-            // If they supplied both fields, concat them
-            if (url != null && isHttpUrl(url)) text = text + " " + url;
-            intent.putExtra(Intent.EXTRA_TEXT, text);
-            intent.setTypeAndNormalize("text/plain");
-        }
-
-        if (url != null && isHttpUrl(url) && text == null) {
-            intent.putExtra(Intent.EXTRA_TEXT, url);
-            intent.setTypeAndNormalize("text/plain");
-        } else if (url != null && isFileUrl(url)) {
-            String type = getMimeType(url);
-            if (type == null) {
-                type = "*/*";
+            if (text == null && url == null) {
+                call.reject("Must provide a URL or Message");
+                return;
             }
-            intent.setType(type);
-            Uri fileUrl = FileProvider.getUriForFile(
-                getActivity(),
-                getContext().getPackageName() + ".fileprovider",
-                new File(Uri.parse(url).getPath())
-            );
-            intent.putExtra(Intent.EXTRA_STREAM, fileUrl);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                intent.setData(fileUrl);
+
+            if (url != null && !isFileUrl(url) && !isHttpUrl(url)) {
+                call.reject("Unsupported url");
+                return;
             }
-            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        }
 
-        if (title != null) {
-            intent.putExtra(Intent.EXTRA_SUBJECT, title);
-        }
+            Intent intent = new Intent(Intent.ACTION_SEND);
 
-        Intent chooser = null;
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
-            // requestCode parameter is not used. Providing 0
-            PendingIntent pi = PendingIntent.getBroadcast(
-                getContext(),
-                0,
-                new Intent(Intent.EXTRA_CHOSEN_COMPONENT),
-                PendingIntent.FLAG_UPDATE_CURRENT
-            );
-            chooser = Intent.createChooser(intent, dialogTitle, pi.getIntentSender());
-            chosenComponent = null;
+            if (text != null) {
+                // If they supplied both fields, concat them
+                if (url != null && isHttpUrl(url)) text = text + " " + url;
+                intent.putExtra(Intent.EXTRA_TEXT, text);
+                intent.setTypeAndNormalize("text/plain");
+            }
+
+            if (url != null && isHttpUrl(url) && text == null) {
+                intent.putExtra(Intent.EXTRA_TEXT, url);
+                intent.setTypeAndNormalize("text/plain");
+            } else if (url != null && isFileUrl(url)) {
+                String type = getMimeType(url);
+                if (type == null) {
+                    type = "*/*";
+                }
+                intent.setType(type);
+                Uri fileUrl = FileProvider.getUriForFile(
+                    getActivity(),
+                    getContext().getPackageName() + ".fileprovider",
+                    new File(Uri.parse(url).getPath())
+                );
+                intent.putExtra(Intent.EXTRA_STREAM, fileUrl);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    intent.setData(fileUrl);
+                }
+                intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            }
+
+            if (title != null) {
+                intent.putExtra(Intent.EXTRA_SUBJECT, title);
+            }
+
+            Intent chooser = null;
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+                // requestCode parameter is not used. Providing 0
+                PendingIntent pi = PendingIntent.getBroadcast(
+                    getContext(),
+                    0,
+                    new Intent(Intent.EXTRA_CHOSEN_COMPONENT),
+                    PendingIntent.FLAG_UPDATE_CURRENT
+                );
+                chooser = Intent.createChooser(intent, dialogTitle, pi.getIntentSender());
+                chosenComponent = null;
+            } else {
+                chooser = Intent.createChooser(intent, dialogTitle);
+            }
+            chooser.addCategory(Intent.CATEGORY_DEFAULT);
+            stopped = false;
+            isPresenting = true;
+            startActivityForResult(call, chooser, "activityResult");
         } else {
-            chooser = Intent.createChooser(intent, dialogTitle);
+            call.reject("Can't share while sharing is in progress");
         }
-        chooser.addCategory(Intent.CATEGORY_DEFAULT);
-        stopped = false;
-        startActivityForResult(call, chooser, "activityResult");
     }
 
     @Override
