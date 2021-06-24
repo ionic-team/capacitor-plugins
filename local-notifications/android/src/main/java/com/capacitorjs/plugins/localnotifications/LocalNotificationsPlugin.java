@@ -112,6 +112,28 @@ public class LocalNotificationsPlugin extends Plugin {
         notificationChannelManager.listChannels(call);
     }
 
+    @PluginMethod
+    public void checkPermissions(PluginCall call) {
+        JSObject permissionsResultJSON = new JSObject();
+        permissionsResultJSON.put("display", getNotificationPermissionText());
+        call.resolve(permissionsResultJSON);
+    }
+
+    @PluginMethod
+    public void requestPermissions(PluginCall call) {
+        JSObject permissionsResultJSON = new JSObject();
+        permissionsResultJSON.put("display", getNotificationPermissionText());
+        call.resolve(permissionsResultJSON);
+    }
+
+    private String getNotificationPermissionText() {
+        if (manager.areNotificationsEnabled()) {
+            return "granted";
+        } else {
+            return "denied";
+        }
+    }
+
     public static void fireReceived(JSObject notification) {
         LocalNotificationsPlugin localNotificationsPlugin = LocalNotificationsPlugin.getLocalNotificationsInstance();
         if (localNotificationsPlugin != null) {
