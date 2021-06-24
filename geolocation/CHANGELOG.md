@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/geolocation@1.0.1...@capacitor/geolocation@1.0.2) (2021-06-23)
+
+
+### Bug Fixes
+
+* **geolocation:** Make getCurrentPosition return only once ([#470](https://github.com/ionic-team/capacitor-plugins/issues/470)) ([c5f1ceb](https://github.com/ionic-team/capacitor-plugins/commit/c5f1ceb790910b92e3f64d0b7fa8c85d48ea9841))
+
+
+
+
+
 ## [1.0.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/geolocation@1.0.0...@capacitor/geolocation@1.0.1) (2021-06-09)
 
 **Note:** Version bump only for package @capacitor/geolocation

@@ -33,7 +33,7 @@ export interface PushNotificationsPlugin {
    * Register the app to receive push notifications.
    *
    * This method will trigger the `'registration'` event with the push token or
-   * `'registrationError'` if there was a problem. It does prompt the user for
+   * `'registrationError'` if there was a problem. It does not prompt the user for
    * notification permissions, use `requestPermissions()` first.
    *
    * @since 1.0.0

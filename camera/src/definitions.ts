@@ -131,7 +131,6 @@ export interface ImageOptions {
 
   /**
    * Text value to use when displaying the prompt.
-   * iOS and Android only: The title of the action sheet.
    * @default: 'Photo'
    *
    * @since 1.0.0
