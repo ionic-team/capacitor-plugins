@@ -93,12 +93,24 @@ export interface PushNotificationsPlugin {
   /**
    * Check permission to receive push notifications.
    *
+   * On Android the status is always granted because you can always
+   * receive push notifications. If you need to check if the user allows
+   * to display notifications, use local-notifications plugin.
+   *
    * @since 1.0.0
    */
   checkPermissions(): Promise<PermissionStatus>;
 
   /**
    * Request permission to receive push notifications.
+   *
+   * On Android it doesn't prompt for permission because you can always
+   * receive push notifications.
+   *
+   * On iOS, the first time you use the function, it will prompt the user
+   * for push notification permission and return granted or denied based
+   * on the user selection. On following calls it will currect status of
+   * the permission without prompting again.
    *
    * @since 1.0.0
    */
@@ -193,27 +205,41 @@ export interface PushNotificationSchema {
   badge?: number;
 
   /**
+   * It's not being returned.
+   *
+   * @deprecated will be removed in next major version.
    * @since 1.0.0
    */
   notification?: any;
 
   /**
+   * Any additional data that was included in the
+   * push notification payload.
+   *
    * @since 1.0.0
    */
   data: any;
 
   /**
+   * The action to be performed on the user opening the notification.
+   *
+   * Only available on Android.
+   *
    * @since 1.0.0
    */
   click_action?: string;
 
   /**
+   * Deep link from the notification.
+   *
+   * Only available on Android.
+   *
    * @since 1.0.0
    */
   link?: string;
 
   /**
-   * Set the group identifier for notification grouping
+   * Set the group identifier for notification grouping.
    *
    * Only available on Android. Works like `threadIdentifier` on iOS.
    *
@@ -233,16 +259,24 @@ export interface PushNotificationSchema {
 
 export interface ActionPerformed {
   /**
+   * The action performed on the notification.
+   *
    * @since 1.0.0
    */
   actionId: string;
 
   /**
+   * Text entered on the notification action.
+   *
+   * Only available on iOS.
+   *
    * @since 1.0.0
    */
   inputValue?: string;
 
   /**
+   * The notification in which the action was performed.
+   *
    * @since 1.0.0
    */
   notification: PushNotificationSchema;
@@ -250,6 +284,9 @@ export interface ActionPerformed {
 
 export interface Token {
   /**
+   * On iOS it contains the APNS token.
+   * On Android it contains the FCM token.
+   *
    * @since 1.0.0
    */
   value: string;
@@ -257,6 +294,9 @@ export interface Token {
 
 export interface DeliveredNotifications {
   /**
+   * List of notifications that are visible on the
+   * notifications screen.
+   *
    * @since 1.0.0
    */
   notifications: PushNotificationSchema[];
@@ -348,6 +388,8 @@ export type Visibility = -1 | 0 | 1;
 
 export interface ListChannelsResult {
   /**
+   * List of all the Channels created by your app.
+   *
    * @since 1.0.0
    */
   channels: Channel[];
@@ -355,6 +397,8 @@ export interface ListChannelsResult {
 
 export interface PermissionStatus {
   /**
+   * Permission state of receiving notifications.
+   *
    * @since 1.0.0
    */
   receive: PermissionState;

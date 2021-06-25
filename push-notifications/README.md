@@ -260,6 +260,10 @@ checkPermissions() => Promise<PermissionStatus>
 
 Check permission to receive push notifications.
 
+On Android the status is always granted because you can always
+receive push notifications. If you need to check if the user allows
+to display notifications, use local-notifications plugin.
+
 **Returns:** <code>Promise&lt;<a href="#permissionstatus">PermissionStatus</a>&gt;</code>
 
 **Since:** 1.0.0
@@ -274,6 +278,14 @@ requestPermissions() => Promise<PermissionStatus>
 ```
 
 Request permission to receive push notifications.
+
+On Android it doesn't prompt for permission because you can always
+receive push notifications.
+
+On iOS, the first time you use the function, it will prompt the user
+for push notification permission and return granted or denied based
+on the user selection. On following calls it will currect status of
+the permission without prompting again.
 
 **Returns:** <code>Promise&lt;<a href="#permissionstatus">PermissionStatus</a>&gt;</code>
 
@@ -384,26 +396,26 @@ Remove all native listeners for this plugin.
 
 #### DeliveredNotifications
 
-| Prop                | Type                                  | Since |
-| ------------------- | ------------------------------------- | ----- |
-| **`notifications`** | <code>PushNotificationSchema[]</code> | 1.0.0 |
+| Prop                | Type                                  | Description                                                         | Since |
+| ------------------- | ------------------------------------- | ------------------------------------------------------------------- | ----- |
+| **`notifications`** | <code>PushNotificationSchema[]</code> | List of notifications that are visible on the notifications screen. | 1.0.0 |
 
 
 #### PushNotificationSchema
 
-| Prop               | Type                 | Description                                                                                                         | Since |
-| ------------------ | -------------------- | ------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`title`**        | <code>string</code>  | The notification title.                                                                                             | 1.0.0 |
-| **`subtitle`**     | <code>string</code>  | The notification subtitle.                                                                                          | 1.0.0 |
-| **`body`**         | <code>string</code>  | The main text payload for the notification.                                                                         | 1.0.0 |
-| **`id`**           | <code>string</code>  | The notification identifier.                                                                                        | 1.0.0 |
-| **`badge`**        | <code>number</code>  | The number to display for the app icon badge.                                                                       | 1.0.0 |
-| **`notification`** | <code>any</code>     |                                                                                                                     | 1.0.0 |
-| **`data`**         | <code>any</code>     |                                                                                                                     | 1.0.0 |
-| **`click_action`** | <code>string</code>  |                                                                                                                     | 1.0.0 |
-| **`link`**         | <code>string</code>  |                                                                                                                     | 1.0.0 |
-| **`group`**        | <code>string</code>  | Set the group identifier for notification grouping Only available on Android. Works like `threadIdentifier` on iOS. | 1.0.0 |
-| **`groupSummary`** | <code>boolean</code> | Designate this notification as the summary for an associated `group`. Only available on Android.                    | 1.0.0 |
+| Prop               | Type                 | Description                                                                                                          | Since |
+| ------------------ | -------------------- | -------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`title`**        | <code>string</code>  | The notification title.                                                                                              | 1.0.0 |
+| **`subtitle`**     | <code>string</code>  | The notification subtitle.                                                                                           | 1.0.0 |
+| **`body`**         | <code>string</code>  | The main text payload for the notification.                                                                          | 1.0.0 |
+| **`id`**           | <code>string</code>  | The notification identifier.                                                                                         | 1.0.0 |
+| **`badge`**        | <code>number</code>  | The number to display for the app icon badge.                                                                        | 1.0.0 |
+| **`notification`** | <code>any</code>     | It's not being returned.                                                                                             | 1.0.0 |
+| **`data`**         | <code>any</code>     | Any additional data that was included in the push notification payload.                                              | 1.0.0 |
+| **`click_action`** | <code>string</code>  | The action to be performed on the user opening the notification. Only available on Android.                          | 1.0.0 |
+| **`link`**         | <code>string</code>  | Deep link from the notification. Only available on Android.                                                          | 1.0.0 |
+| **`group`**        | <code>string</code>  | Set the group identifier for notification grouping. Only available on Android. Works like `threadIdentifier` on iOS. | 1.0.0 |
+| **`groupSummary`** | <code>boolean</code> | Designate this notification as the summary for an associated `group`. Only available on Android.                     | 1.0.0 |
 
 
 #### Channel
@@ -423,16 +435,16 @@ Remove all native listeners for this plugin.
 
 #### ListChannelsResult
 
-| Prop           | Type                   | Since |
-| -------------- | ---------------------- | ----- |
-| **`channels`** | <code>Channel[]</code> | 1.0.0 |
+| Prop           | Type                   | Description                                   | Since |
+| -------------- | ---------------------- | --------------------------------------------- | ----- |
+| **`channels`** | <code>Channel[]</code> | List of all the Channels created by your app. | 1.0.0 |
 
 
 #### PermissionStatus
 
-| Prop          | Type                                                        | Since |
-| ------------- | ----------------------------------------------------------- | ----- |
-| **`receive`** | <code><a href="#permissionstate">PermissionState</a></code> | 1.0.0 |
+| Prop          | Type                                                        | Description                                  | Since |
+| ------------- | ----------------------------------------------------------- | -------------------------------------------- | ----- |
+| **`receive`** | <code><a href="#permissionstate">PermissionState</a></code> | Permission state of receiving notifications. | 1.0.0 |
 
 
 #### PluginListenerHandle
@@ -444,18 +456,18 @@ Remove all native listeners for this plugin.
 
 #### Token
 
-| Prop        | Type                | Since |
-| ----------- | ------------------- | ----- |
-| **`value`** | <code>string</code> | 1.0.0 |
+| Prop        | Type                | Description                                                              | Since |
+| ----------- | ------------------- | ------------------------------------------------------------------------ | ----- |
+| **`value`** | <code>string</code> | On iOS it contains the APNS token. On Android it contains the FCM token. | 1.0.0 |
 
 
 #### ActionPerformed
 
-| Prop               | Type                                                                      | Since |
-| ------------------ | ------------------------------------------------------------------------- | ----- |
-| **`actionId`**     | <code>string</code>                                                       | 1.0.0 |
-| **`inputValue`**   | <code>string</code>                                                       | 1.0.0 |
-| **`notification`** | <code><a href="#pushnotificationschema">PushNotificationSchema</a></code> | 1.0.0 |
+| Prop               | Type                                                                      | Description                                                     | Since |
+| ------------------ | ------------------------------------------------------------------------- | --------------------------------------------------------------- | ----- |
+| **`actionId`**     | <code>string</code>                                                       | The action performed on the notification.                       | 1.0.0 |
+| **`inputValue`**   | <code>string</code>                                                       | Text entered on the notification action. Only available on iOS. | 1.0.0 |
+| **`notification`** | <code><a href="#pushnotificationschema">PushNotificationSchema</a></code> | The notification in which the action was performed.             | 1.0.0 |
 
 
 ### Type Aliases
