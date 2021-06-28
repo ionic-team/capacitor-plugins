@@ -119,6 +119,7 @@ Get the device's current language locale code.
 | --------------------- | ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- | ----- |
 | **`name`**            | <code>string</code>                                         | The name of the device. For example, "John's iPhone". This is only supported on iOS and Android 7.1 or above. | 1.0.0 |
 | **`model`**           | <code>string</code>                                         | The device model. For example, "iPhone".                                                                      | 1.0.0 |
+| **`modelName`**       | <code>string</code>                                         | The device machine model name. For example, "iPhone13,2".                                                                      | 1.0.3 |
 | **`platform`**        | <code>'ios' \| 'android' \| 'web'</code>                    | The device platform (lowercase).                                                                              | 1.0.0 |
 | **`operatingSystem`** | <code><a href="#operatingsystem">OperatingSystem</a></code> | The operating system of the device.                                                                           | 1.0.0 |
 | **`osVersion`**       | <code>string</code>                                         | The version of the device OS.                                                                                 | 1.0.0 |
