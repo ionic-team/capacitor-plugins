@@ -34,7 +34,7 @@ export interface DeviceInfo {
    *
    * This is only supported on iOS
    *
-   * @since 1.0.1
+   * @since 1.0.3
    */
   modelName?: string;
 
