@@ -30,6 +30,15 @@ export interface DeviceInfo {
   model: string;
 
   /**
+   * The device machine model name. For example, "iPhone13,2".
+   *
+   * This is only supported on iOS
+   *
+   * @since 1.0.1
+   */
+  modelName?: string;
+
+  /**
    * The device platform (lowercase).
    *
    * @since 1.0.0

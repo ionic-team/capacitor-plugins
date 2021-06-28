@@ -38,6 +38,7 @@ export class DeviceWeb extends WebPlugin implements DevicePlugin {
 
     return {
       model: uaFields.model,
+      modelName: uaFields.modelName,
       platform: <const>'web',
       operatingSystem: uaFields.operatingSystem,
       osVersion: uaFields.osVersion,

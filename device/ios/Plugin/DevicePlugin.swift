@@ -24,12 +24,19 @@ public class DevicePlugin: CAPPlugin {
         let diskFree = implementation.getFreeDiskSize() ?? 0
         let diskTotal = implementation.getTotalDiskSize() ?? 0
 
+        var size = 0
+        sysctlbyname("hw.machine", nil, &size, nil, 0)
+        var machine = [CChar](repeating: 0, count: size)
+        sysctlbyname("hw.machine", &machine, &size, nil, 0)
+        let modelName = String(cString: machine)
+
         call.resolve([
             "memUsed": memUsed,
             "diskFree": diskFree,
             "diskTotal": diskTotal,
             "name": UIDevice.current.name,
             "model": UIDevice.current.model,
+            "modelName": modelName,
             "operatingSystem": "ios",
             "osVersion": UIDevice.current.systemVersion,
             "platform": "ios",
