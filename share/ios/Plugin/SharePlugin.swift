@@ -44,10 +44,12 @@ public class SharePlugin: CAPPlugin {
                 }
 
             }
-
+            if self?.bridge?.viewController?.presentedViewController != nil {
+                call.reject("Can't share while sharing is in progress")
+                return
+            }
             self?.setCenteredPopover(actionController)
             self?.bridge?.viewController?.present(actionController, animated: true, completion: nil)
         }
-
     }
 }

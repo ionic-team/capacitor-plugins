@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@1.0.1...@capacitor/camera@1.0.2) (2021-06-23)
+
+
+### Bug Fixes
+
+* **camera:** Append change listener only once ([#486](https://github.com/ionic-team/capacitor-plugins/issues/486)) ([5b7021e](https://github.com/ionic-team/capacitor-plugins/commit/5b7021e210649f8501a20ba6549903ecb6d42dcd))
+* **camera:** Append exif to android images ([#480](https://github.com/ionic-team/capacitor-plugins/issues/480)) ([cad8a30](https://github.com/ionic-team/capacitor-plugins/commit/cad8a30c562202fb819a4d260d5307f1b6b8fa44))
+* **camera:** correct photo resizing on iOS ([#460](https://github.com/ionic-team/capacitor-plugins/issues/460)) ([bc56e03](https://github.com/ionic-team/capacitor-plugins/commit/bc56e034c711b172a7ff503cabd2970adbc14b86))
+* **camera:** Make input file hidden ([#484](https://github.com/ionic-team/capacitor-plugins/issues/484)) ([cdc1835](https://github.com/ionic-team/capacitor-plugins/commit/cdc1835f3bbfb8db8e18fccace6103d83dd9edaa))
+* **camera:** Make web use source options ([#487](https://github.com/ionic-team/capacitor-plugins/issues/487)) ([7870e6b](https://github.com/ionic-team/capacitor-plugins/commit/7870e6b6ca196265640fc0ba3c1f52ddca075607))
+
+
+
+
+
 ## [1.0.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@1.0.0...@capacitor/camera@1.0.1) (2021-06-09)
 
 **Note:** Version bump only for package @capacitor/camera

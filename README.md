@@ -2,9 +2,9 @@
 
 This repository contains the official Capacitor plugins maintained by the Capacitor team. You can find more plugins in the [Capacitor Community](https://github.com/capacitor-community/).
 
-> ### :rotating_light: These plugins are for Capacitor 3, which is in active development :rotating_light:
+> ### :rotating_light: These plugins are for Capacitor 3 :rotating_light:
 >
-> Capacitor 2 core plugins are bundled with Capacitor itself. Follow Capacitor 3 development in [this issue](https://github.com/ionic-team/capacitor/issues/3133).
+> Capacitor 2 core plugins are bundled with Capacitor itself.
 
 ## Plugins
 
