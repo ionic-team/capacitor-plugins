@@ -15,19 +15,19 @@ export class KeyboardWeb extends WebPlugin implements KeyboardPlugin {
     return Promise.resolve();
   }
 
-  setAccessoryBarVisible(options: { isVisible: boolean }): Promise<void> {
+  setAccessoryBarVisible(_: { isVisible: boolean }): Promise<void> {
     return Promise.resolve();
   }
 
-  setScroll(options: { isDisabled: boolean }): Promise<void> {
+  setScroll(_: { isDisabled: boolean }): Promise<void> {
     return Promise.resolve();
   }
 
-  setStyle(options: KeyboardStyleOptions): Promise<void> {
+  setStyle(_: KeyboardStyleOptions): Promise<void> {
     return Promise.resolve();
   }
 
-  setResizeMode(options: KeyboardResizeOptions): Promise<void> {
+  setResizeMode(_: KeyboardResizeOptions): Promise<void> {
     return Promise.resolve();
   }
 }
