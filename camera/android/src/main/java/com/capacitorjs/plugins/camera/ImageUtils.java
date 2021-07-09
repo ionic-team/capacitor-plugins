@@ -78,7 +78,9 @@ public class ImageUtils {
             if (orientation != 0) {
                 Matrix matrix = new Matrix();
                 matrix.postRotate(orientation);
-
+                ExifInterface exif = new ExifInterface(imageUri.getPath());
+                exif.resetOrientation();
+                exif.saveAttributes();
                 return transform(bitmap, matrix);
             } else {
                 return bitmap;

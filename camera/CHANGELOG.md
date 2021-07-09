@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.3](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@1.0.2...@capacitor/camera@1.0.3) (2021-07-07)
+
+
+### Bug Fixes
+
+* **camera:** Reset exif orientation if corrected ([#510](https://github.com/ionic-team/capacitor-plugins/issues/510)) ([a65c05e](https://github.com/ionic-team/capacitor-plugins/commit/a65c05e0de8f53e7371c194047a75797d53879b5))
+* **camera:** Return the full webPath ([#502](https://github.com/ionic-team/capacitor-plugins/issues/502)) ([e849732](https://github.com/ionic-team/capacitor-plugins/commit/e849732dbcf5e85d1df09835c53ff5738fbb4ded))
+
+
+
+
+
 ## [1.0.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@1.0.1...@capacitor/camera@1.0.2) (2021-06-23)
 
 
