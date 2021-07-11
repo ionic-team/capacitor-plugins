@@ -10,6 +10,7 @@ public class CameraPlugin: CAPPlugin {
     private let defaultSource = CameraSource.prompt
     private let defaultDirection = CameraDirection.rear
 
+    private var currentLocation = CLLocation()
     private var imageCounter = 0
 
     @objc override public func checkPermissions(_ call: CAPPluginCall) {
@@ -220,6 +221,21 @@ private extension CameraPlugin {
     }
 
     func showPrompt() {
+        print("Trying to get the Location!!!")
+        Locator.shared.authorize();
+        Locator.shared.locate() { result in
+            print("Location Result: \(String(describing: result))")
+            print(result)
+            switch result {
+                case Locator.Result.Success(let locator):
+                    if let location = locator.location {
+                        self.currentLocation = location
+                    }
+                case Locator.Result.Failure(let error):
+                    print(error)
+            }
+         }
+
         // Build the action sheet
         let alert = UIAlertController(title: settings.userPromptText.title, message: nil, preferredStyle: UIAlertController.Style.actionSheet)
         alert.addAction(UIAlertAction(title: settings.userPromptText.photoAction, style: .default, handler: { [weak self] (_: UIAlertAction) in
@@ -379,6 +395,9 @@ private extension CameraPlugin {
         if let asset = info[UIImagePickerController.InfoKey.phAsset] as? PHAsset {
             metadata = asset.imageData
         }
+
+        metadata[kCGImagePropertyGPSDictionary as String] = self.currentLocation.exifMetadata()
+
         // get the result
         let result = processedImage(from: image, with: metadata)
         // conditionally save the image
