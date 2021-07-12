@@ -46,6 +46,7 @@ class Locator: NSObject, CLLocationManagerDelegate {
     func locate(callback: @escaping Callback) {
         self.requests.append(callback)
         sharedLocationManager.startUpdatingLocation()
+        sharedLocationManager.startUpdatingHeading()
         print("Trying to Locate!!")
     }
 
@@ -70,4 +71,9 @@ class Locator: NSObject, CLLocationManagerDelegate {
         self.reset()
     }
 
+    func headingManger(_ manager: CLLocationManager, didUpdateHeading: [CLHeading]) {
+        var heading = manager.heading?.magneticHeading
+        print("DID UPDATE HEADING!!")
+        print("heading = \(heading)")
+    }
 }
