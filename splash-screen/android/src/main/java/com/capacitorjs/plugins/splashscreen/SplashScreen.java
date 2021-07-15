@@ -105,7 +105,18 @@ public class SplashScreen {
                 if (splashId != 0) {
                     dialog.setContentView(splashId);
                 } else {
-                    dialog.setContentView(R.layout.capacitor_default_splash);
+                    int splashResId = context.getResources().getIdentifier(config.getResourceName(), "drawable", context.getPackageName());
+                    Drawable splash = context.getResources().getDrawable(splashResId, context.getTheme());
+                    LayoutInflater inflator = activity.getLayoutInflater();
+                    ViewGroup root = new FrameLayout(context);
+                    root.setLayoutParams(
+                        new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+                    );
+                    splashId = context.getResources().getIdentifier("capacitor_default_splash", "layout", context.getPackageName());
+
+                    splashImage = inflator.inflate(splashId, root, false);
+                    splashImage.setBackground(splash);
+                    dialog.setContentView(splashImage);
                 }
 
                 dialog.setCancelable(false);

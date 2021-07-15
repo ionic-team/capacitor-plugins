@@ -35,7 +35,6 @@ declare module '@capacitor/cli' {
 
       /**
        * Name of the resource to be used as Splash Screen.
-       * Doesn't work if `useDialog` is true.
        *
        * Only available on Android.
        *
