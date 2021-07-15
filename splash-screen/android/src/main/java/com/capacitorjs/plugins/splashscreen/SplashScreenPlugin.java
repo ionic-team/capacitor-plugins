@@ -12,9 +12,10 @@ import com.getcapacitor.util.WebColor;
 public class SplashScreenPlugin extends Plugin {
 
     private SplashScreen splashScreen;
+    private SplashScreenConfig config;
 
     public void load() {
-        SplashScreenConfig config = getSplashScreenConfig();
+        config = getSplashScreenConfig();
         splashScreen = new SplashScreen(getContext(), config);
         splashScreen.showOnLaunch(getActivity());
     }
@@ -40,7 +41,11 @@ public class SplashScreenPlugin extends Plugin {
 
     @PluginMethod
     public void hide(PluginCall call) {
-        splashScreen.hide(getSettings(call));
+        if (config.isUsingDialog()) {
+            splashScreen.hideDialog(getActivity());
+        } else {
+            splashScreen.hide(getSettings(call));
+        }
         call.resolve();
     }
 
@@ -141,6 +146,13 @@ public class SplashScreenPlugin extends Plugin {
 
         Boolean showSpinner = getConfig().getBoolean("showSpinner", config.isShowSpinner());
         config.setShowSpinner(showSpinner);
+
+        Boolean useDialog = getConfig().getBoolean("useDialog", config.isUsingDialog());
+        config.setUsingDialog(useDialog);
+
+        if (getConfig().getString("layoutName") != null) {
+            config.setLayoutName(getConfig().getString("layoutName"));
+        }
 
         return config;
     }
