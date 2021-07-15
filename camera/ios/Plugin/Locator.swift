@@ -13,23 +13,20 @@ class Locator: NSObject, CLLocationManagerDelegate {
 
     typealias Callback = (Result <Locator>) -> Void
 
-    var requests: Array <Callback> = Array <Callback>()
+    var locationRequests: Array <Callback> = Array <Callback>()
+    var headingRequests: Array <Callback> = Array <Callback>()
 
-    var location: CLLocation? { return sharedLocationManager.location  }
-
+    var location: CLLocation? { return sharedLocationManager.location }
+    var heading: CLHeading? { return sharedLocationManager.heading }
+    var headingCnt: Int = 0
+    var locationCnt: Int = 0
+        
     lazy var sharedLocationManager: CLLocationManager = {
         let newLocationmanager = CLLocationManager()
         newLocationmanager.delegate = self
         newLocationmanager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
         // ...
         print("sharedLocationManager!!")
-        
-        if CLLocationManager.authorizationStatus() == .notDetermined {
-            newLocationmanager.requestWhenInUseAuthorization()
-        } else {
-            newLocationmanager.startUpdatingLocation()
-        }
-        
         return newLocationmanager
     }()
 
@@ -43,37 +40,67 @@ class Locator: NSObject, CLLocationManagerDelegate {
 
     // MARK: - Helpers
 
-    func locate(callback: @escaping Callback) {
-        self.requests.append(callback)
-        sharedLocationManager.startUpdatingLocation()
-        sharedLocationManager.startUpdatingHeading()
-        print("Trying to Locate!!")
+    func getLocation(callback: @escaping Callback) {
+        if CLLocationManager.authorizationStatus() == .notDetermined {
+            sharedLocationManager.requestWhenInUseAuthorization()
+        } else {
+            sharedLocationManager.startUpdatingLocation()
+            self.locationRequests.append(callback)
+            sharedLocationManager.startUpdatingLocation()
+            print("Trying to get Location!!")
+        }
+    }
+    
+    func getHeading(callback: @escaping Callback) {
+        if (CLLocationManager.headingAvailable()) {
+            self.headingRequests.append(callback)
+            sharedLocationManager.headingFilter = 1
+            sharedLocationManager.startUpdatingHeading()
+            print("Trying to get Heading!!")
+        }
     }
 
-    func reset() {
-        self.requests = Array <Callback>()
+    func resetLocation() {
+        self.locationRequests = Array <Callback>()
         sharedLocationManager.stopUpdatingLocation()
+    }
+    
+    func resetHeading() {
+        self.headingRequests = Array <Callback>()
+        sharedLocationManager.stopUpdatingHeading()
     }
 
     // MARK: - Delegate
 
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: NSError) {
-        print("DID NOT UPDATE LOCATION!!")
-        print("Location Result: \(String(describing: error))")
-        for request in self.requests { request(.Failure(error)) }
-        self.reset()
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print("Location Error: \(String(describing: error))")
+        for request in self.locationRequests { request(.Failure(error)) }
+        self.resetLocation()
     }
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        print("DID UPDATE LOCATION!!")
         print("Location Result: \(String(describing: self.location))")
-        for request in self.requests { request(.Success(self)) }
-        self.reset()
-    }
+        for request in self.locationRequests { request(.Success(self))}
 
-    func headingManger(_ manager: CLLocationManager, didUpdateHeading: [CLHeading]) {
-        var heading = manager.heading?.magneticHeading
-        print("DID UPDATE HEADING!!")
-        print("heading = \(heading)")
+        if (locationCnt < 4) {
+            locationCnt += 1
+            return
+        }
+        locationCnt = 0
+        
+        self.resetLocation()
+    }
+   
+    func  locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
+        print("Heading Result: \(String(describing: heading))")
+        for request in self.headingRequests { request(.Success(self))}
+
+        if (headingCnt < 4) {
+            headingCnt += 1
+            return
+        }
+        headingCnt = 0
+        
+        self.resetHeading()
     }
 }

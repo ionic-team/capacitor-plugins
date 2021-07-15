@@ -11,6 +11,8 @@ public class CameraPlugin: CAPPlugin {
     private let defaultDirection = CameraDirection.rear
 
     private var currentLocation = CLLocation()
+    private var currentHeading = CLHeading()
+
     private var imageCounter = 0
 
     @objc override public func checkPermissions(_ call: CAPPluginCall) {
@@ -221,15 +223,25 @@ private extension CameraPlugin {
     }
 
     func showPrompt() {
-        print("Trying to get the Location!!!")
         Locator.shared.authorize();
-        Locator.shared.locate() { result in
+        Locator.shared.getLocation { result in
             print("Location Result: \(String(describing: result))")
-            print(result)
             switch result {
                 case Locator.Result.Success(let locator):
                     if let location = locator.location {
                         self.currentLocation = location
+                    }
+                case Locator.Result.Failure(let error):
+                    print(error)
+            }
+         }
+        
+        Locator.shared.getHeading { result in
+            print("Heading Result: \(String(describing: result))")
+            switch result {
+                case Locator.Result.Success(let locator):
+                    if let heading = locator.heading {
+                        self.currentHeading = heading
                     }
                 case Locator.Result.Failure(let error):
                     print(error)
@@ -396,8 +408,10 @@ private extension CameraPlugin {
             metadata = asset.imageData
         }
 
-        metadata[kCGImagePropertyGPSDictionary as String] = self.currentLocation.exifMetadata()
+        metadata[kCGImagePropertyGPSDictionary as String] = self.currentLocation.exifMetadata(heading: self.currentHeading)
 
+        print("Meta Data: \(String(describing: metadata))")
+        
         // get the result
         let result = processedImage(from: image, with: metadata)
         // conditionally save the image
