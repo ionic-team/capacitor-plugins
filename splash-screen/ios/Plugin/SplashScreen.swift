@@ -4,8 +4,7 @@ import Capacitor
 @objc public class SplashScreen: NSObject {
 
     var parentView: UIView
-    var imageView = UIImageView()
-    var image: UIImage?
+    var viewController = UIViewController()
     var spinner = UIActivityIndicatorView()
     var config: SplashScreenConfig = SplashScreenConfig()
     var hideTask: Any?
@@ -42,7 +41,7 @@ import Capacitor
                 return
             }
             if let backgroundColor = strongSelf.config.backgroundColor {
-                strongSelf.imageView.backgroundColor = backgroundColor
+                strongSelf.viewController.view.backgroundColor = backgroundColor
             }
 
             if strongSelf.config.showSpinner {
@@ -55,7 +54,7 @@ import Capacitor
                 }
             }
 
-            strongSelf.parentView.addSubview(strongSelf.imageView)
+            strongSelf.parentView.addSubview(strongSelf.viewController.view)
 
             if strongSelf.config.showSpinner {
                 strongSelf.parentView.addSubview(strongSelf.spinner)
@@ -65,8 +64,8 @@ import Capacitor
 
             strongSelf.parentView.isUserInteractionEnabled = false
 
-            UIView.transition(with: strongSelf.imageView, duration: TimeInterval(Double(settings.fadeInDuration) / 1000), options: .curveLinear, animations: {
-                strongSelf.imageView.alpha = 1
+            UIView.transition(with: strongSelf.viewController.view, duration: TimeInterval(Double(settings.fadeInDuration) / 1000), options: .curveLinear, animations: {
+                strongSelf.viewController.view.alpha = 1
 
                 if strongSelf.config.showSpinner {
                     strongSelf.spinner.alpha = 1
@@ -89,12 +88,8 @@ import Capacitor
     }
 
     private func buildViews() {
-        // Find the image asset named "Splash"
-        // TODO: Find a way to not hard code this?
-        image = UIImage(named: "Splash")
-
-        if image == nil {
-            CAPLog.print("Unable to find splash screen image. Make sure an image called Splash exists in your assets")
+        if let vc = UIStoryboard(name: "LaunchScreen", bundle: nil).instantiateInitialViewController() {
+            viewController = vc
         }
 
         // Observe for changes on frame and bounds to handle rotation resizing
@@ -111,7 +106,7 @@ import Capacitor
     private func tearDown() {
         isVisible = false
         parentView.isUserInteractionEnabled = true
-        imageView.removeFromSuperview()
+        viewController.view.removeFromSuperview()
 
         if config.showSpinner {
             spinner.removeFromSuperview()
@@ -130,9 +125,7 @@ import Capacitor
             CAPLog.print("Unable to find root window object for SplashScreen bounds. Please file an issue")
             return
         }
-        imageView.image = image
-        imageView.frame = CGRect(origin: CGPoint(x: 0, y: 0), size: window.bounds.size)
-        imageView.contentMode = .scaleAspectFill
+        viewController.view.frame = CGRect(origin: CGPoint(x: 0, y: 0), size: window.bounds.size)
     }
 
     override public func observeValue(forKeyPath keyPath: String?, of object: Any?, change _: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
@@ -147,8 +140,8 @@ import Capacitor
         }
         if !isVisible { return }
         DispatchQueue.main.async {
-            UIView.transition(with: self.imageView, duration: TimeInterval(Double(fadeOutDuration) / 1000), options: .curveLinear, animations: {
-                self.imageView.alpha = 0
+            UIView.transition(with: self.viewController.view, duration: TimeInterval(Double(fadeOutDuration) / 1000), options: .curveLinear, animations: {
+                self.viewController.view.alpha = 0
 
                 if self.config.showSpinner {
                     self.spinner.alpha = 0
