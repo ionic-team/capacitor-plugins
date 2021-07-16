@@ -141,6 +141,9 @@ public class SplashScreenPlugin extends Plugin {
 
         Boolean showSpinner = getConfig().getBoolean("showSpinner", config.isShowSpinner());
         config.setShowSpinner(showSpinner);
+        if (getConfig().getString("layoutName") != null) {
+            config.setLayoutName(getConfig().getString("layoutName"));
+        }
 
         return config;
     }

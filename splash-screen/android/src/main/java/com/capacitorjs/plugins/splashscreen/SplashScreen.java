@@ -1,6 +1,7 @@
 package com.capacitorjs.plugins.splashscreen;
 
 import android.animation.Animator;
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
@@ -9,10 +10,9 @@ import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Handler;
-import android.view.Gravity;
-import android.view.View;
-import android.view.WindowManager;
+import android.view.*;
 import android.view.animation.LinearInterpolator;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,7 +23,7 @@ import com.getcapacitor.Logger;
  */
 public class SplashScreen {
 
-    private ImageView splashImage;
+    private View splashImage;
     private ProgressBar spinnerBar;
     private WindowManager windowManager;
     private boolean isVisible = false;
@@ -83,33 +83,56 @@ public class SplashScreen {
 
     private void buildViews() {
         if (splashImage == null) {
-            int splashId = context.getResources().getIdentifier(config.getResourceName(), "drawable", context.getPackageName());
+            int splashId = 0;
 
             Drawable splash;
-            try {
-                splash = context.getResources().getDrawable(splashId, context.getTheme());
-            } catch (Resources.NotFoundException ex) {
-                Logger.warn("No splash screen found, not displaying");
-                return;
-            }
-
-            if (splash instanceof Animatable) {
-                ((Animatable) splash).start();
-            }
-
-            if (splash instanceof LayerDrawable) {
-                LayerDrawable layeredSplash = (LayerDrawable) splash;
-
-                for (int i = 0; i < layeredSplash.getNumberOfLayers(); i++) {
-                    Drawable layerDrawable = layeredSplash.getDrawable(i);
-
-                    if (layerDrawable instanceof Animatable) {
-                        ((Animatable) layerDrawable).start();
-                    }
+            if (config.getLayoutName() != null) {
+                splashId = context.getResources().getIdentifier(config.getLayoutName(), "layout", context.getPackageName());
+                if (splashId == 0) {
+                    Logger.warn("Layout not found, defaulting to ImageView");
                 }
             }
+            if (splashId != 0) {
+                Activity activity = (Activity) context;
+                LayoutInflater inflator = activity.getLayoutInflater();
+                ViewGroup root = new FrameLayout(context);
+                root.setLayoutParams(
+                    new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+                );
+                splashImage = inflator.inflate(splashId, root, false);
+            } else {
+                splashId = context.getResources().getIdentifier(config.getResourceName(), "drawable", context.getPackageName());
+                try {
+                    splash = context.getResources().getDrawable(splashId, context.getTheme());
+                } catch (Resources.NotFoundException ex) {
+                    Logger.warn("No splash screen found, not displaying");
+                    return;
+                }
 
-            splashImage = new ImageView(context);
+                if (splash instanceof Animatable) {
+                    ((Animatable) splash).start();
+                }
+
+                if (splash instanceof LayerDrawable) {
+                    LayerDrawable layeredSplash = (LayerDrawable) splash;
+
+                    for (int i = 0; i < layeredSplash.getNumberOfLayers(); i++) {
+                        Drawable layerDrawable = layeredSplash.getDrawable(i);
+
+                        if (layerDrawable instanceof Animatable) {
+                            ((Animatable) layerDrawable).start();
+                        }
+                    }
+                }
+
+                splashImage = new ImageView(context);
+                // Stops flickers dead in their tracks
+                // https://stackoverflow.com/a/21847579/32140
+                ImageView imageView = (ImageView) splashImage;
+                imageView.setDrawingCacheEnabled(true);
+                imageView.setScaleType(config.getScaleType());
+                imageView.setImageDrawable(splash);
+            }
 
             splashImage.setFitsSystemWindows(true);
 
@@ -126,16 +149,9 @@ public class SplashScreen {
                 splashImage.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
             }
 
-            // Stops flickers dead in their tracks
-            // https://stackoverflow.com/a/21847579/32140
-            splashImage.setDrawingCacheEnabled(true);
-
             if (config.getBackgroundColor() != null) {
                 splashImage.setBackgroundColor(config.getBackgroundColor());
             }
-
-            splashImage.setScaleType(config.getScaleType());
-            splashImage.setImageDrawable(splash);
         }
 
         if (spinnerBar == null) {

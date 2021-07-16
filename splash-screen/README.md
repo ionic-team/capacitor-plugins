@@ -84,6 +84,7 @@ These config values are available:
 | **`spinnerColor`**              | <code>string</code>                                                                                                           | Color of the spinner in hex format, #RRGGBB or #RRGGBBAA.                                                                                                               |                     | 1.0.0 |
 | **`splashFullScreen`**          | <code>boolean</code>                                                                                                          | Hide the status bar on the Splash Screen. Only available on Android.                                                                                                    |                     | 1.0.0 |
 | **`splashImmersive`**           | <code>boolean</code>                                                                                                          | Hide the status bar and the software navigation buttons on the Splash Screen. Only available on Android.                                                                |                     | 1.0.0 |
+| **`layoutName`**                | <code>string</code>                                                                                                           | Allows to specify a layout xml file that would be used as the splash layout instead of the default ImageView. Only available on Android.                                |                     | 1.1.0 |
 
 ### Examples
 
@@ -103,7 +104,8 @@ In `capacitor.config.json`:
       "iosSpinnerStyle": "small",
       "spinnerColor": "#999999",
       "splashFullScreen": true,
-      "splashImmersive": true
+      "splashImmersive": true,
+      "layoutName": "launch_screen"
     }
   }
 }
@@ -130,6 +132,7 @@ const config: CapacitorConfig = {
       spinnerColor: "#999999",
       splashFullScreen: true,
       splashImmersive: true,
+      layoutName: "launch_screen",
     },
   },
 };

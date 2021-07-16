@@ -15,6 +15,7 @@ public class SplashScreenConfig {
     private boolean immersive = false;
     private boolean fullScreen = false;
     private ScaleType scaleType = ScaleType.FIT_XY;
+    private String layoutName;
 
     public Integer getBackgroundColor() {
         return backgroundColor;
@@ -98,5 +99,13 @@ public class SplashScreenConfig {
 
     public void setScaleType(ScaleType scaleType) {
         this.scaleType = scaleType;
+    }
+
+    public String getLayoutName() {
+        return layoutName;
+    }
+
+    public void setLayoutName(String layoutName) {
+        this.layoutName = layoutName;
     }
 }

@@ -124,6 +124,17 @@ declare module '@capacitor/cli' {
        * @example true
        */
       splashImmersive?: boolean;
+
+      /**
+       * Allows to specify a layout xml file that would be used
+       * as the splash layout instead of the default ImageView.
+       *
+       * Only available on Android.
+       *
+       * @since 1.1.0
+       * @example "launch_screen"
+       */
+      layoutName?: string;
     };
   }
 }
