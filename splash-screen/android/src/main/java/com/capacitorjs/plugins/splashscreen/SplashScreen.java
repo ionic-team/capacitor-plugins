@@ -108,7 +108,9 @@ public class SplashScreen {
                 } else {
                     Drawable splash = getSplashDrawable();
                     LinearLayout parent = new LinearLayout(context);
-                    parent.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+                    parent.setLayoutParams(
+                        new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+                    );
                     parent.setOrientation(LinearLayout.VERTICAL);
                     if (splash != null) {
                         parent.setBackground(splash);
