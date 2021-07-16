@@ -8,5 +8,4 @@
     <style name="capacitor_immersive_style" parent="capacitor_full_screen_style">
         <item name="android:windowTranslucentNavigation">true</item>
     </style>
-
 </resources>

@@ -15,6 +15,7 @@ import android.view.*;
 import android.view.animation.LinearInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import androidx.appcompat.app.AppCompatActivity;
 import com.getcapacitor.Logger;
@@ -105,18 +106,14 @@ public class SplashScreen {
                 if (splashId != 0) {
                     dialog.setContentView(splashId);
                 } else {
-                    int splashResId = context.getResources().getIdentifier(config.getResourceName(), "drawable", context.getPackageName());
-                    Drawable splash = context.getResources().getDrawable(splashResId, context.getTheme());
-                    LayoutInflater inflator = activity.getLayoutInflater();
-                    ViewGroup root = new FrameLayout(context);
-                    root.setLayoutParams(
-                        new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-                    );
-                    splashId = context.getResources().getIdentifier("capacitor_default_splash", "layout", context.getPackageName());
-
-                    splashImage = inflator.inflate(splashId, root, false);
-                    splashImage.setBackground(splash);
-                    dialog.setContentView(splashImage);
+                    Drawable splash = getSplashDrawable();
+                    LinearLayout parent = new LinearLayout(context);
+                    parent.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+                    parent.setOrientation(LinearLayout.VERTICAL);
+                    if (splash != null) {
+                        parent.setBackground(splash);
+                    }
+                    dialog.setContentView(parent);
                 }
 
                 dialog.setCancelable(false);
@@ -194,38 +191,32 @@ public class SplashScreen {
                 );
                 splashImage = inflator.inflate(splashId, root, false);
             } else {
-                splashId = context.getResources().getIdentifier(config.getResourceName(), "drawable", context.getPackageName());
+                splash = getSplashDrawable();
+                if (splash != null) {
+                    if (splash instanceof Animatable) {
+                        ((Animatable) splash).start();
+                    }
 
-                try {
-                    splash = context.getResources().getDrawable(splashId, context.getTheme());
-                } catch (Resources.NotFoundException ex) {
-                    Logger.warn("No splash screen found, not displaying");
-                    return;
-                }
+                    if (splash instanceof LayerDrawable) {
+                        LayerDrawable layeredSplash = (LayerDrawable) splash;
 
-                if (splash instanceof Animatable) {
-                    ((Animatable) splash).start();
-                }
+                        for (int i = 0; i < layeredSplash.getNumberOfLayers(); i++) {
+                            Drawable layerDrawable = layeredSplash.getDrawable(i);
 
-                if (splash instanceof LayerDrawable) {
-                    LayerDrawable layeredSplash = (LayerDrawable) splash;
-
-                    for (int i = 0; i < layeredSplash.getNumberOfLayers(); i++) {
-                        Drawable layerDrawable = layeredSplash.getDrawable(i);
-
-                        if (layerDrawable instanceof Animatable) {
-                            ((Animatable) layerDrawable).start();
+                            if (layerDrawable instanceof Animatable) {
+                                ((Animatable) layerDrawable).start();
+                            }
                         }
                     }
-                }
 
-                splashImage = new ImageView(context);
-                // Stops flickers dead in their tracks
-                // https://stackoverflow.com/a/21847579/32140
-                ImageView imageView = (ImageView) splashImage;
-                imageView.setDrawingCacheEnabled(true);
-                imageView.setScaleType(config.getScaleType());
-                imageView.setImageDrawable(splash);
+                    splashImage = new ImageView(context);
+                    // Stops flickers dead in their tracks
+                    // https://stackoverflow.com/a/21847579/32140
+                    ImageView imageView = (ImageView) splashImage;
+                    imageView.setDrawingCacheEnabled(true);
+                    imageView.setScaleType(config.getScaleType());
+                    imageView.setImageDrawable(splash);
+                }
             }
 
             splashImage.setFitsSystemWindows(true);
@@ -269,6 +260,17 @@ public class SplashScreen {
                 ColorStateList colorStateList = new ColorStateList(states, colors);
                 spinnerBar.setIndeterminateTintList(colorStateList);
             }
+        }
+    }
+
+    private Drawable getSplashDrawable() {
+        int splashId = context.getResources().getIdentifier(config.getResourceName(), "drawable", context.getPackageName());
+        try {
+            Drawable drawable = context.getResources().getDrawable(splashId, context.getTheme());
+            return drawable;
+        } catch (Resources.NotFoundException ex) {
+            Logger.warn("No splash screen found, not displaying");
+            return null;
         }
     }
 
