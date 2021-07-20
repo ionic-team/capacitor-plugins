@@ -40,6 +40,13 @@ export interface KeyboardInfo {
    * @since 1.0.0
    */
   keyboardHeight: number;
+
+   /**
+   * Animation duration of the keyboard.
+   * 
+   * @since 1.0.0
+   */
+  keyboardAnimationDuration: number;
 }
 
 export interface KeyboardStyleOptions {
