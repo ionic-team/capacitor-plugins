@@ -33,7 +33,9 @@ The Push Notification API uses [Firebase Cloud Messaging](https://firebase.googl
 
 This plugin will use the following project variables (defined in your app's `variables.gradle` file):
 
-- `$firebaseMessagingVersion` version of `com.google.firebase:firebase-messaging` (default: `21.0.1`)
+- `$firebaseMessagingVersion` version of `com.google.firebase:firebase-messaging` (default: `22.0.0`)
+
+_Caution_: This is a breaking change for apps that use FCM and the deprecated Firebase Instance ID API to manage registration tokens.
 
 ---
 
@@ -99,7 +101,7 @@ export default config;
 This plugin does not support iOS Silent Push (Remote Notifications). We recommend using native code solutions for handling these types of notifications, see [Pushing Background Updates to Your App](https://developer.apple.com/documentation/usernotifications/setting_up_a_remote_notification_server/pushing_background_updates_to_your_app).
 
 #### Android
-This plugin does support data-only notifications, but will NOT call `pushNotificationReceived` if the app has been killed. To handle this scenario, you will need to create a service that extends `FirebaseMessagingService`, see [Handling FCM Messages](https://firebase.google.com/docs/cloud-messaging/android/receive). 
+This plugin does support data-only notifications, but will NOT call `pushNotificationReceived` if the app has been killed. To handle this scenario, you will need to create a service that extends `FirebaseMessagingService`, see [Handling FCM Messages](https://firebase.google.com/docs/cloud-messaging/android/receive).
 
 ## Common Issues
 On Android, there are various system and app states that can affect the delivery of push notifications:

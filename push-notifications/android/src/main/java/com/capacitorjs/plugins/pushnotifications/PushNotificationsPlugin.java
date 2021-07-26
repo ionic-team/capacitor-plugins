@@ -17,14 +17,11 @@ import com.getcapacitor.PluginHandle;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
 import com.getcapacitor.annotation.Permission;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.RemoteMessage;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -34,7 +31,6 @@ public class PushNotificationsPlugin extends Plugin {
     public static Bridge staticBridge = null;
     public static RemoteMessage lastMessage = null;
     public NotificationManager notificationManager;
-    public MessagingService firebaseMessagingService;
     private NotificationChannelManager notificationChannelManager;
 
     private static final String EVENT_TOKEN_CHANGE = "registration";
@@ -42,7 +38,6 @@ public class PushNotificationsPlugin extends Plugin {
 
     public void load() {
         notificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
-        firebaseMessagingService = new MessagingService();
 
         staticBridge = this.bridge;
         if (lastMessage != null) {
@@ -80,26 +75,17 @@ public class PushNotificationsPlugin extends Plugin {
     @PluginMethod
     public void register(PluginCall call) {
         FirebaseMessaging.getInstance().setAutoInitEnabled(true);
-        FirebaseInstanceId
+        FirebaseMessaging
             .getInstance()
-            .getInstanceId()
-            .addOnSuccessListener(
-                getActivity(),
-                new OnSuccessListener<InstanceIdResult>() {
-                    @Override
-                    public void onSuccess(InstanceIdResult instanceIdResult) {
-                        sendToken(instanceIdResult.getToken());
+            .getToken()
+            .addOnCompleteListener(
+                task -> {
+                    if (!task.isSuccessful()) {
+                        sendError(Objects.requireNonNull(task.getException()).getLocalizedMessage());
+                        return;
                     }
-                }
-            );
-        FirebaseInstanceId
-            .getInstance()
-            .getInstanceId()
-            .addOnFailureListener(
-                new OnFailureListener() {
-                    public void onFailure(Exception e) {
-                        sendError(e.getLocalizedMessage());
-                    }
+
+                    sendToken(task.getResult());
                 }
             );
         call.resolve();
