@@ -198,4 +198,11 @@ public class ExifWrapper {
             destExif.saveAttributes();
         } catch (Exception ex) {}
     }
+
+    public void resetOrientation() {
+        try {
+            exif.resetOrientation();
+            exif.saveAttributes();
+        } catch (Exception ex) {}
+    }
 }

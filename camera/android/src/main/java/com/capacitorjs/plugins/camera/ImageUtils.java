@@ -69,7 +69,7 @@ public class ImageUtils {
      * @param imageUri
      * @return
      */
-    public static Bitmap correctOrientation(final Context c, final Bitmap bitmap, final Uri imageUri) throws IOException {
+    public static Bitmap correctOrientation(final Context c, final Bitmap bitmap, final Uri imageUri, ExifWrapper exif) throws IOException {
         if (Build.VERSION.SDK_INT < 24) {
             return correctOrientationOlder(c, bitmap, imageUri);
         } else {
@@ -78,9 +78,7 @@ public class ImageUtils {
             if (orientation != 0) {
                 Matrix matrix = new Matrix();
                 matrix.postRotate(orientation);
-                ExifInterface exif = new ExifInterface(imageUri.getPath());
                 exif.resetOrientation();
-                exif.saveAttributes();
                 return transform(bitmap, matrix);
             } else {
                 return bitmap;
