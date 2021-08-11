@@ -200,9 +200,6 @@ public class ExifWrapper {
     }
 
     public void resetOrientation() {
-        try {
-            exif.resetOrientation();
-            exif.saveAttributes();
-        } catch (Exception ex) {}
+        exif.resetOrientation();
     }
 }

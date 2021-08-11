@@ -67,6 +67,7 @@ public class ImageUtils {
      * the appropriate amount for portrait mode
      * @param bitmap
      * @param imageUri
+     * @param exif
      * @return
      */
     public static Bitmap correctOrientation(final Context c, final Bitmap bitmap, final Uri imageUri, ExifWrapper exif) throws IOException {
