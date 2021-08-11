@@ -356,7 +356,6 @@ public class CameraPlugin extends Plugin {
             return;
         }
 
-
         // Compress the final image and prepare for output to client
         ByteArrayOutputStream bitmapOutputStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, settings.getQuality(), bitmapOutputStream);
