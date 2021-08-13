@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.1.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/splash-screen@1.0.2...@capacitor/splash-screen@1.1.0) (2021-07-21)
+
+
+### Features
+
+* **splash-screen:** add useDialog and layoutName options for Android ([#519](https://github.com/ionic-team/capacitor-plugins/issues/519)) ([f48733f](https://github.com/ionic-team/capacitor-plugins/commit/f48733fd42a49d718a70c2fd36d28355a64b7a88))
+* **splash-screen:** Use Launch Storyboard for splash ([#516](https://github.com/ionic-team/capacitor-plugins/issues/516)) ([0292dab](https://github.com/ionic-team/capacitor-plugins/commit/0292dab65ac9c0f81e632eaf711b13b051f4da92))
+
+
+
+
+
 ## [1.0.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/splash-screen@1.0.1...@capacitor/splash-screen@1.0.2) (2021-06-23)
 
 **Note:** Version bump only for package @capacitor/splash-screen

@@ -4,9 +4,9 @@ export default {
     {
       file: 'dist/plugin.js',
       format: 'iife',
-      name: 'capacitorHaptics',
+      name: 'capacitorLocalNotifications',
       globals: {
-        '@capacitor/core': 'capacitorLocalNotifications',
+        '@capacitor/core': 'capacitorExports',
       },
       sourcemap: true,
       inlineDynamicImports: true,
