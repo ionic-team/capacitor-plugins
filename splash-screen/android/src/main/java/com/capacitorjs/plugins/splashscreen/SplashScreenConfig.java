@@ -15,6 +15,8 @@ public class SplashScreenConfig {
     private boolean immersive = false;
     private boolean fullScreen = false;
     private ScaleType scaleType = ScaleType.FIT_XY;
+    private boolean usingDialog = false;
+    private String layoutName;
 
     public Integer getBackgroundColor() {
         return backgroundColor;
@@ -98,5 +100,21 @@ public class SplashScreenConfig {
 
     public void setScaleType(ScaleType scaleType) {
         this.scaleType = scaleType;
+    }
+
+    public boolean isUsingDialog() {
+        return usingDialog;
+    }
+
+    public void setUsingDialog(boolean usingDialog) {
+        this.usingDialog = usingDialog;
+    }
+
+    public String getLayoutName() {
+        return layoutName;
+    }
+
+    public void setLayoutName(String layoutName) {
+        this.layoutName = layoutName;
     }
 }
