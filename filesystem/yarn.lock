@@ -1389,13 +1389,6 @@ parse-json@^5.0.0:
     json-parse-even-better-errors "^2.3.0"
     lines-and-columns "^1.1.6"
 
-path-cross@^0.0.3:
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/path-cross/-/path-cross-0.0.3.tgz#421128e6e50393678ba7ce9830cc7de8ab6a66d0"
-  integrity sha512-HlyaFjwUoFbIUcA9sqefMuqi+7VaAv5+7rW2X9joqNxxrsaFakE73T+TlXsXbqL/TIymYBbjwD3Eo8ggFTefWA==
-  dependencies:
-    process "^0.11.10"
-
 path-exists@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/path-exists/-/path-exists-3.0.0.tgz#ce0ebeaa5f78cb18925ea7d810d7b59b010fd515"

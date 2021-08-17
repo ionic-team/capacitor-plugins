@@ -77,8 +77,5 @@
   },
   "publishConfig": {
     "access": "public"
-  },
-  "dependencies": {
-    "path-cross": "^0.0.3"
   }
 }

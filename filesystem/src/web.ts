@@ -22,10 +22,21 @@ import type {
   Directory,
 } from './definitions';
 
-import { resolve } from 'path-cross';
+function resolve(path: string): string {
+  const posix = path.split("/").filter(item => item !== ".")
+  const newPosix: string[] = []
 
+  posix.forEach(item => {
+    if (item === ".." && newPosix.length > 0 && newPosix[ newPosix.length - 1] !== "..") {
+      newPosix.pop()
+    } else {
+      newPosix.push(item)
+    }
+  })
 
-export function isPathParent(parent: string, children: string): boolean {
+  return newPosix.join("/")
+}
+function isPathParent(parent: string, children: string): boolean {
   parent = resolve(parent);
   children = resolve(children);
   const pathsA = parent.split('/');
