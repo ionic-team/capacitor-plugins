@@ -71,38 +71,15 @@ public class ImageUtils {
      * @return
      */
     public static Bitmap correctOrientation(final Context c, final Bitmap bitmap, final Uri imageUri, ExifWrapper exif) throws IOException {
-        if (Build.VERSION.SDK_INT < 24) {
-            return correctOrientationOlder(c, bitmap, imageUri);
-        } else {
-            final int orientation = getOrientation(c, imageUri);
-
-            if (orientation != 0) {
-                Matrix matrix = new Matrix();
-                matrix.postRotate(orientation);
-                exif.resetOrientation();
-                return transform(bitmap, matrix);
-            } else {
-                return bitmap;
-            }
-        }
-    }
-
-    private static Bitmap correctOrientationOlder(final Context c, final Bitmap bitmap, final Uri imageUri) {
-        // TODO: To be tested on older phone using Android API < 24
-
-        String[] orientationColumn = { MediaStore.Images.Media.DATA, MediaStore.Images.Media.ORIENTATION };
-        Cursor cur = c.getContentResolver().query(imageUri, orientationColumn, null, null, null);
-        int orientation = -1;
-        if (cur != null && cur.moveToFirst()) {
-            orientation = cur.getInt(cur.getColumnIndex(orientationColumn[0]));
-        }
-        Matrix matrix = new Matrix();
-
-        if (orientation != -1) {
+        final int orientation = getOrientation(c, imageUri);
+        if (orientation != 0) {
+            Matrix matrix = new Matrix();
             matrix.postRotate(orientation);
+            exif.resetOrientation();
+            return transform(bitmap, matrix);
+        } else {
+            return bitmap;
         }
-
-        return transform(bitmap, matrix);
     }
 
     private static int getOrientation(final Context c, final Uri imageUri) throws IOException {
