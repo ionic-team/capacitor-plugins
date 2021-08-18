@@ -17,6 +17,8 @@ export interface AppLauncherPlugin {
 
   /**
    * Open an app with the given URL.
+   * On iOS the URL should be a known URLScheme.
+   * On Android the URL can be a known URLScheme or an app package name.
    *
    * @since 1.0.0
    */
