@@ -3,6 +3,7 @@ package com.capacitorjs.plugins.camera;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -347,15 +348,13 @@ public class CameraPlugin extends Plugin {
      * @param u
      */
     private void returnResult(PluginCall call, Bitmap bitmap, Uri u) {
+        ExifWrapper exif = ImageUtils.getExifData(getContext(), bitmap, u);
         try {
-            bitmap = prepareBitmap(bitmap, u);
+            bitmap = prepareBitmap(bitmap, u, exif);
         } catch (IOException e) {
             call.reject(UNABLE_TO_PROCESS_IMAGE);
             return;
         }
-
-        ExifWrapper exif = ImageUtils.getExifData(getContext(), bitmap, u);
-
         // Compress the final image and prepare for output to client
         ByteArrayOutputStream bitmapOutputStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, settings.getQuality(), bitmapOutputStream);
@@ -430,11 +429,12 @@ public class CameraPlugin extends Plugin {
      * recycling the old one in the process
      * @param bitmap
      * @param imageUri
+     * @param exif
      * @return
      */
-    private Bitmap prepareBitmap(Bitmap bitmap, Uri imageUri) throws IOException {
+    private Bitmap prepareBitmap(Bitmap bitmap, Uri imageUri, ExifWrapper exif) throws IOException {
         if (settings.isShouldCorrectOrientation()) {
-            final Bitmap newBitmap = ImageUtils.correctOrientation(getContext(), bitmap, imageUri);
+            final Bitmap newBitmap = ImageUtils.correctOrientation(getContext(), bitmap, imageUri, exif);
             bitmap = replaceBitmap(bitmap, newBitmap);
         }
 
@@ -517,16 +517,9 @@ public class CameraPlugin extends Plugin {
     }
 
     private void editImage(PluginCall call, Bitmap bitmap, Uri uri, ByteArrayOutputStream bitmapOutputStream) {
-        Uri origPhotoUri = uri;
-        if (imageFileUri != null) {
-            origPhotoUri = imageFileUri;
-        }
         try {
-            Intent editIntent = createEditIntent(origPhotoUri, false);
-            startActivityForResult(call, editIntent, "processEditedImage");
-        } catch (SecurityException ex) {
             Uri tempImage = getTempImage(bitmap, uri, bitmapOutputStream);
-            Intent editIntent = createEditIntent(tempImage, true);
+            Intent editIntent = createEditIntent(tempImage);
             if (editIntent != null) {
                 startActivityForResult(call, editIntent, "processEditedImage");
             } else {
@@ -537,25 +530,26 @@ public class CameraPlugin extends Plugin {
         }
     }
 
-    private Intent createEditIntent(Uri origPhotoUri, boolean expose) {
-        Uri editUri = origPhotoUri;
+    private Intent createEditIntent(Uri origPhotoUri) {
         try {
-            if (expose) {
-                editUri =
-                    FileProvider.getUriForFile(
-                        getActivity(),
-                        getContext().getPackageName() + ".fileprovider",
-                        new File(origPhotoUri.getPath())
-                    );
-            }
+            Uri editUri = FileProvider.getUriForFile(
+                getActivity(),
+                getContext().getPackageName() + ".fileprovider",
+                new File(origPhotoUri.getPath())
+            );
             Intent editIntent = new Intent(Intent.ACTION_EDIT);
             editIntent.setDataAndType(editUri, "image/*");
-            File editedFile = CameraUtils.createImageFile(getActivity());
-            imageEditedFileSavePath = editedFile.getAbsolutePath();
-            Uri editedUri = Uri.fromFile(editedFile);
-            editIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            editIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-            editIntent.putExtra(MediaStore.EXTRA_OUTPUT, editedUri);
+            imageEditedFileSavePath = editUri.toString();
+            int flags = Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION;
+            editIntent.addFlags(flags);
+            editIntent.putExtra(MediaStore.EXTRA_OUTPUT, editUri);
+            List<ResolveInfo> resInfoList = getContext()
+                .getPackageManager()
+                .queryIntentActivities(editIntent, PackageManager.MATCH_DEFAULT_ONLY);
+            for (ResolveInfo resolveInfo : resInfoList) {
+                String packageName = resolveInfo.activityInfo.packageName;
+                getContext().grantUriPermission(packageName, editUri, flags);
+            }
             return editIntent;
         } catch (Exception ex) {
             return null;

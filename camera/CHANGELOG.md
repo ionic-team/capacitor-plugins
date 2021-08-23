@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.4](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@1.0.3...@capacitor/camera@1.0.4) (2021-08-18)
+
+
+### Bug Fixes
+
+* **camera:** avoid error if image has no orientation ([#554](https://github.com/ionic-team/capacitor-plugins/issues/554)) ([dc8a55a](https://github.com/ionic-team/capacitor-plugins/commit/dc8a55a71cdaaf7ad86aee8470a0c7b8284653c4))
+* **camera:** Make allowEdit work on all devices ([#552](https://github.com/ionic-team/capacitor-plugins/issues/552)) ([5224177](https://github.com/ionic-team/capacitor-plugins/commit/5224177f77bdce1c8f028e2cef41614fa687502f))
+* **camera:** Properly reset orientation exif if corrected ([#545](https://github.com/ionic-team/capacitor-plugins/issues/545)) ([ad8c325](https://github.com/ionic-team/capacitor-plugins/commit/ad8c325af0a2459f5a7788be08a8da4118717671))
+
+
+
+
+
 ## [1.0.3](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@1.0.2...@capacitor/camera@1.0.3) (2021-07-07)
 
 
