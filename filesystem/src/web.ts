@@ -23,18 +23,22 @@ import type {
 } from './definitions';
 
 function resolve(path: string): string {
-  const posix = path.split("/").filter(item => item !== ".")
-  const newPosix: string[] = []
+  const posix = path.split('/').filter(item => item !== '.');
+  const newPosix: string[] = [];
 
   posix.forEach(item => {
-    if (item === ".." && newPosix.length > 0 && newPosix[ newPosix.length - 1] !== "..") {
-      newPosix.pop()
+    if (
+      item === '..' &&
+      newPosix.length > 0 &&
+      newPosix[newPosix.length - 1] !== '..'
+    ) {
+      newPosix.pop();
     } else {
-      newPosix.push(item)
+      newPosix.push(item);
     }
-  })
+  });
 
-  return newPosix.join("/")
+  return newPosix.join('/');
 }
 function isPathParent(parent: string, children: string): boolean {
   parent = resolve(parent);
