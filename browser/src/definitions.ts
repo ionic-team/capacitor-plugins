@@ -18,7 +18,8 @@ export interface BrowserPlugin {
   close(): Promise<void>;
 
   /**
-   * Android & iOS only: Listen for the loading finished event.
+   * Android & iOS only: Listen for the browser finished event.
+   * It fires when the Browser is closed by the user.
    *
    * @since 1.0.0
    */
@@ -29,6 +30,8 @@ export interface BrowserPlugin {
 
   /**
    * Android & iOS only: Listen for the page loaded event.
+   * It's only fired when the URL passed to open method finish loading.
+   * It is not invoked for any subsequent page loads.
    *
    * @since 1.0.0
    */
