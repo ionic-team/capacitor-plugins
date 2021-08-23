@@ -1,13 +1,13 @@
 import Foundation
 
 public struct StorageConfiguration {
-    enum Group {
+    public enum Group {
         case named(String), cordovaNativeStorage
     }
 
     let group: Group
 
-    init(for group: Group = .named("CapacitorStorage")) {
+    public init(for group: Group = .named("CapacitorStorage")) {
         self.group = group
     }
 }
