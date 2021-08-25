@@ -1,6 +1,7 @@
 package com.capacitorjs.plugins.camera;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -312,7 +313,13 @@ public class CameraPlugin extends Plugin {
     @ActivityCallback
     private void processEditedImage(PluginCall call, ActivityResult result) {
         isEdited = true;
-        processPickedImage(call, result);
+
+        if (result.getResultCode() == Activity.RESULT_CANCELED) {
+            // User cancelled the edit operation, return the original image
+            processCameraImage(call, result);
+        } else {
+            processPickedImage(call, result);
+        }
     }
 
     /**
