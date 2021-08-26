@@ -30,15 +30,10 @@ publish_plugin () {
                 # Export ENV variables used by Gradle for the plugin
                 export PLUGIN_NAME
                 export PLUGIN_VERSION
-
-                # Temporarily insert the latest Capacitor Core dependency version for publishing
-                perl -i -pe"s/%%CAPACITOR_VERSION%%/$CAPACITOR_VERSION/g" $GRADLE_FILE
+                export CAPACITOR_VERSION
 
                 # Build and publish
                 "$ANDROID_PATH"/gradlew clean build publishReleasePublicationToSonatypeRepository --max-workers 1 -b "$ANDROID_PATH"/build.gradle -Pandroid.useAndroidX=true -Pandroid.enableJetifier=true > $LOG_OUTPUT 2>&1
-
-                # Replace %%CAPACITOR_VERSION%% back so we dont commit a real capacitor version to the publish branch
-                perl -i -pe"s/rootProject.ext.capacitorVersion : '$CAPACITOR_VERSION'/rootProject.ext.capacitorVersion : '%%CAPACITOR_VERSION%%'/g" $GRADLE_FILE
 
                 if grep --quiet "BUILD SUCCESSFUL" $LOG_OUTPUT; then
                     printf %"s\n\n" "Success: $PLUGIN_NAME published to MavenCentral Staging. Manually review and release from the Sonatype Repository Manager https://s01.oss.sonatype.org/"
