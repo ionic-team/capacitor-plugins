@@ -1,6 +1,7 @@
 package com.capacitorjs.plugins.camera;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -75,6 +76,7 @@ public class CameraPlugin extends Plugin {
     private String imageFileSavePath;
     private String imageEditedFileSavePath;
     private Uri imageFileUri;
+    private Uri imagePickedContentUri;
     private boolean isEdited = false;
 
     private CameraSettings settings = new CameraSettings();
@@ -282,10 +284,16 @@ public class CameraPlugin extends Plugin {
 
         Uri u = data.getData();
 
+        imagePickedContentUri = u;
+
+        processPickedImage(u, call);
+    }
+
+    private void processPickedImage(Uri imageUri, PluginCall call) {
         InputStream imageStream = null;
 
         try {
-            imageStream = getContext().getContentResolver().openInputStream(u);
+            imageStream = getContext().getContentResolver().openInputStream(imageUri);
             Bitmap bitmap = BitmapFactory.decodeStream(imageStream);
 
             if (bitmap == null) {
@@ -293,7 +301,7 @@ public class CameraPlugin extends Plugin {
                 return;
             }
 
-            returnResult(call, bitmap, u);
+            returnResult(call, bitmap, imageUri);
         } catch (OutOfMemoryError err) {
             call.reject("Out of memory");
         } catch (FileNotFoundException ex) {
@@ -312,7 +320,18 @@ public class CameraPlugin extends Plugin {
     @ActivityCallback
     private void processEditedImage(PluginCall call, ActivityResult result) {
         isEdited = true;
-        processPickedImage(call, result);
+
+        if (result.getResultCode() == Activity.RESULT_CANCELED) {
+            // User cancelled the edit operation, if this file was picked from photos,
+            // process the original picked image, otherwise process it as a camera photo
+            if (imagePickedContentUri != null) {
+                processPickedImage(imagePickedContentUri, call);
+            } else {
+                processCameraImage(call, result);
+            }
+        } else {
+            processPickedImage(call, result);
+        }
     }
 
     /**
@@ -394,6 +413,7 @@ public class CameraPlugin extends Plugin {
         }
         imageFileSavePath = null;
         imageFileUri = null;
+        imagePickedContentUri = null;
         imageEditedFileSavePath = null;
     }
 
