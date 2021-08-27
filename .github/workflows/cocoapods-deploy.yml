@@ -19,6 +19,7 @@ jobs:
       - name: Deploy to Cocoapods
         run: |
           set -eo pipefail
+          npm install
           npm run publish:cocoapod
         env:
           COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
