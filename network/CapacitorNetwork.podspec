@@ -4,7 +4,7 @@ package = JSON.parse(File.read(File.join(__dir__, 'package.json')))
 
 Pod::Spec.new do |s|
   s.name = 'CapacitorNetwork'
-  s.version = '0.0.2'
+  s.version = package['version']
   s.summary = package['description']
   s.license = package['license']
   s.homepage = 'https://capacitorjs.com'
