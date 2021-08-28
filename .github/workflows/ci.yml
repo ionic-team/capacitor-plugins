@@ -106,8 +106,6 @@ jobs:
             node_modules
             */node_modules
           key: dependency-cache-${{ hashFiles('package.json', '*/package.json') }}
-          env:
-            CAPACITOR_VERSION: 3.2.0
       - run: npm install
       - run: npm run verify:android
         working-directory: ${{ matrix.plugin }}

@@ -77,18 +77,25 @@ else
     # Capacitor version in MavenCentral is up to date, continue publishing the native Capacitor Plugins
     printf %"s\n\n" "Latest native Capacitor Android library is version $CAPACITOR_PUBLISHED_VERSION and is up to date, continuing with plugin publishing..."
 
-    # If run without args, process all plugins, else run over the plugins provided as args
-    if [ "$#" -eq  "0" ]
-    then
-        # Run publish task for all plugins
-        for f in "$DIR"/*; do
-            publish_plugin $f
-        done
-    else
-        # Run publish task for plugins provided as arguments
-        for var in "$@"; do
+    # Check if github actions passing in a custom list of plugins
+    if [[ $GITHUB_PLUGINS ]]; then
+        for var in ${GITHUB_PLUGINS[@]}; do
             PLUGIN_DIR="$DIR"/$var
             publish_plugin $PLUGIN_DIR
         done
+    else
+        # If run without .sh args, process all plugins, else run over the plugins provided as args
+        if [[ "$#" -eq  "0" ]]; then
+            # Run publish task for all plugins
+            for f in "$DIR"/*; do
+                publish_plugin $f
+            done
+        else
+            # Run publish task for plugins provided as arguments
+            for var in "$@"; do
+                PLUGIN_DIR="$DIR"/$var
+                publish_plugin $PLUGIN_DIR
+            done
+        fi
     fi
 fi
