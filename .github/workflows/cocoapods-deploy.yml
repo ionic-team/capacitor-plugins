@@ -28,6 +28,6 @@ jobs:
       - name: Deploy to Cocoapods
         run: |
           set -eo pipefail
-          npm run publish:cocoapod
+          npm run publish:cocoapod --scope @capacitor/action-sheet
         env:
           COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
