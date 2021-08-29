@@ -65,10 +65,10 @@ public class ExifWrapper {
         TAG_GPS_H_POSITIONING_ERROR,
         TAG_GPS_IMG_DIRECTION,
         TAG_GPS_IMG_DIRECTION_REF,
-        TAG_GPS_LATITUDE,
-        TAG_GPS_LATITUDE_REF,
-        TAG_GPS_LONGITUDE,
-        TAG_GPS_LONGITUDE_REF,
+        // TAG_GPS_LATITUDE,          // Added manually in toJson()
+        // TAG_GPS_LATITUDE_REF,      // Not needed: values are signed
+        // TAG_GPS_LONGITUDE,         // Added manually in toJson()
+        // TAG_GPS_LONGITUDE_REF,     // Not needed: values are signed
         TAG_GPS_MAP_DATUM,
         TAG_GPS_MEASURE_MODE,
         TAG_GPS_PROCESSING_METHOD,
@@ -176,6 +176,14 @@ public class ExifWrapper {
 
         for (int i = 0; i < attributes.length; i++) {
             p(ret, attributes[i]);
+        }
+
+        // Manually add the latitude and longitude values. Values from getLatLong() are
+        // returned as signed DD.
+        double[] latlong = exif.getLatLong();
+        if (latlong != null) {
+            ret.put(TAG_GPS_LATITUDE, String.valueOf(latlong[0]));
+            ret.put(TAG_GPS_LONGITUDE, String.valueOf(latlong[1]));
         }
 
         return ret;
