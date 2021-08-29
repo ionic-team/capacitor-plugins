@@ -4,7 +4,7 @@ export default {
     {
       file: 'dist/plugin.js',
       format: 'iife',
-      name: 'capacitorCamera',
+      name: 'WatchdutyCamera',
       globals: {
         '@capacitor/core': 'capacitorExports',
       },

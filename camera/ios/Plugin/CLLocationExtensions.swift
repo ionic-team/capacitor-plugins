@@ -7,7 +7,7 @@ import CoreLocation
 import ImageIO
 
 extension CLLocation {
-    
+
     func exifMetadata(heading: CLHeading? = nil) -> NSMutableDictionary {
 
         let GPSMetadata = NSMutableDictionary()
@@ -36,14 +36,14 @@ extension CLLocation {
 }
 
 extension Date {
-    
+
     func isoDate() -> String {
         let f = DateFormatter()
         f.timeZone = TimeZone(abbreviation: "UTC")
         f.dateFormat = "yyyy:MM:dd"
         return f.string(from: self)
     }
-    
+
     func isoTime() -> String {
         let f = DateFormatter()
         f.timeZone = TimeZone(abbreviation: "UTC")

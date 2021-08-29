@@ -13,14 +13,14 @@ class Locator: NSObject, CLLocationManagerDelegate {
 
     typealias Callback = (Result <Locator>) -> Void
 
-    var locationRequests: Array <Callback> = Array <Callback>()
-    var headingRequests: Array <Callback> = Array <Callback>()
+    var locationRequests:  [Callback] =  [Callback]()
+    var headingRequests:  [Callback] =  [Callback]()
 
     var location: CLLocation? { return sharedLocationManager.location }
     var heading: CLHeading? { return sharedLocationManager.heading }
     var headingCnt: Int = 0
     var locationCnt: Int = 0
-        
+
     lazy var sharedLocationManager: CLLocationManager = {
         let newLocationmanager = CLLocationManager()
         newLocationmanager.delegate = self
@@ -50,9 +50,9 @@ class Locator: NSObject, CLLocationManagerDelegate {
             print("Trying to get Location!!")
         }
     }
-    
+
     func getHeading(callback: @escaping Callback) {
-        if (CLLocationManager.headingAvailable()) {
+        if CLLocationManager.headingAvailable() {
             self.headingRequests.append(callback)
             sharedLocationManager.headingFilter = 1
             sharedLocationManager.startUpdatingHeading()
@@ -61,12 +61,12 @@ class Locator: NSObject, CLLocationManagerDelegate {
     }
 
     func resetLocation() {
-        self.locationRequests = Array <Callback>()
+        self.locationRequests =  [Callback]()
         sharedLocationManager.stopUpdatingLocation()
     }
-    
+
     func resetHeading() {
-        self.headingRequests = Array <Callback>()
+        self.headingRequests =  [Callback]()
         sharedLocationManager.stopUpdatingHeading()
     }
 
@@ -82,25 +82,25 @@ class Locator: NSObject, CLLocationManagerDelegate {
         print("Location Result: \(String(describing: self.location))")
         for request in self.locationRequests { request(.Success(self))}
 
-        if (locationCnt < 4) {
+        if locationCnt < 4 {
             locationCnt += 1
             return
         }
         locationCnt = 0
-        
+
         self.resetLocation()
     }
-   
+
     func  locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
         print("Heading Result: \(String(describing: heading))")
         for request in self.headingRequests { request(.Success(self))}
 
-        if (headingCnt < 4) {
+        if headingCnt < 4 {
             headingCnt += 1
             return
         }
         headingCnt = 0
-        
+
         self.resetHeading()
     }
 }

@@ -1,6 +1,6 @@
 {
-  "name": "@capacitor/camera",
-  "version": "1.0.3",
+  "name": "@watchduty/camera",
+  "version": "1.0.3-wd3",
   "description": "The Camera API provides the ability to take a photo with the camera or choose an existing one from the photo album.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
@@ -11,7 +11,7 @@
     "android/build.gradle",
     "dist/",
     "ios/Plugin/",
-    "CapacitorCamera.podspec"
+    "WatchdutyCamera.podspec"
   ],
   "author": "Ionic <hi@ionicframework.com>",
   "license": "MIT",
