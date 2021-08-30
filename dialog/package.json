@@ -42,6 +42,7 @@
     "clean": "rimraf ./dist",
     "watch": "tsc --watch",
     "prepublishOnly": "npm run build",
+    "postpublish": "npm run publish:cocoapod",
     "publish:cocoapod": "pod trunk push ./CapacitorDialog.podspec --allow-warnings"
   },
   "devDependencies": {
