@@ -168,11 +168,11 @@ Request location permissions
 
 #### PositionOptions
 
-| Prop                     | Type                 | Description                                                                                | Default            | Since |
-| ------------------------ | -------------------- | ------------------------------------------------------------------------------------------ | ------------------ | ----- |
-| **`enableHighAccuracy`** | <code>boolean</code> | High accuracy mode (such as GPS, if available)                                             | <code>false</code> | 1.0.0 |
-| **`timeout`**            | <code>number</code>  | The maximum wait time in milliseconds for location updates                                 | <code>10000</code> | 1.0.0 |
-| **`maximumAge`**         | <code>number</code>  | The maximum age in milliseconds of a possible cached position that is acceptable to return | <code>0</code>     | 1.0.0 |
+| Prop                     | Type                 | Description                                                                                                                                             | Default            | Since |
+| ------------------------ | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
+| **`enableHighAccuracy`** | <code>boolean</code> | High accuracy mode (such as GPS, if available)                                                                                                          | <code>false</code> | 1.0.0 |
+| **`timeout`**            | <code>number</code>  | The maximum wait time in milliseconds for location updates. In Android, since version 2.0.0 of the plugin, timeout gets ignored for getCurrentPosition. | <code>10000</code> | 1.0.0 |
+| **`maximumAge`**         | <code>number</code>  | The maximum age in milliseconds of a possible cached position that is acceptable to return                                                              | <code>0</code>     | 1.0.0 |
 
 
 #### ClearWatchOptions

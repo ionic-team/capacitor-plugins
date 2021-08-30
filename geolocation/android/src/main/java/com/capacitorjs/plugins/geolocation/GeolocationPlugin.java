@@ -54,12 +54,8 @@ public class GeolocationPlugin extends Plugin {
     private void completeCurrentPosition(PluginCall call) {
         if (getPermissionState("location") == PermissionState.GRANTED) {
             boolean enableHighAccuracy = call.getBoolean("enableHighAccuracy", false);
-            int timeout = call.getInt("timeout", 10000);
-
             implementation.sendLocation(
                 enableHighAccuracy,
-                timeout,
-                true,
                 new LocationResultCallback() {
                     @Override
                     public void success(Location location) {
@@ -110,12 +106,8 @@ public class GeolocationPlugin extends Plugin {
     @SuppressWarnings("MissingPermission")
     private void getPosition(PluginCall call) {
         boolean enableHighAccuracy = call.getBoolean("enableHighAccuracy", false);
-        int timeout = call.getInt("timeout", 10000);
-
         implementation.sendLocation(
             enableHighAccuracy,
-            timeout,
-            true,
             new LocationResultCallback() {
                 @Override
                 public void success(Location location) {
@@ -138,7 +130,6 @@ public class GeolocationPlugin extends Plugin {
         implementation.requestLocationUpdates(
             enableHighAccuracy,
             timeout,
-            false,
             new LocationResultCallback() {
                 @Override
                 public void success(Location location) {

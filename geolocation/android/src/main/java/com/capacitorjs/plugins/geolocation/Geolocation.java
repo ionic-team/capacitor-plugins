@@ -1,5 +1,6 @@
 package com.capacitorjs.plugins.geolocation;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationManager;
@@ -9,6 +10,8 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 
 public class Geolocation {
 
@@ -21,22 +24,31 @@ public class Geolocation {
         this.context = context;
     }
 
-    public void sendLocation(
-        boolean enableHighAccuracy,
-        int timeout,
-        final boolean getCurrentPosition,
-        final LocationResultCallback resultCallback
-    ) {
-        requestLocationUpdates(enableHighAccuracy, timeout, getCurrentPosition, resultCallback);
+    @SuppressLint("MissingPermission")
+    public void sendLocation(boolean enableHighAccuracy, final LocationResultCallback resultCallback) {
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
+        LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        boolean networkEnabled = false;
+        try {
+            networkEnabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+        } catch (Exception ex) {}
+        int lowPriority = networkEnabled ? LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY : LocationRequest.PRIORITY_LOW_POWER;
+        int priority = enableHighAccuracy ? LocationRequest.PRIORITY_HIGH_ACCURACY : lowPriority;
+        fusedLocationClient
+            .getCurrentLocation(priority, null)
+            .addOnCompleteListener(
+                locationTask -> {
+                    if (locationTask.getResult() != null) {
+                        resultCallback.success(locationTask.getResult());
+                    } else {
+                        resultCallback.error("location unavailable");
+                    }
+                }
+            );
     }
 
     @SuppressWarnings("MissingPermission")
-    public void requestLocationUpdates(
-        boolean enableHighAccuracy,
-        int timeout,
-        final boolean getCurrentPosition,
-        final LocationResultCallback resultCallback
-    ) {
+    public void requestLocationUpdates(boolean enableHighAccuracy, int timeout, final LocationResultCallback resultCallback) {
         clearLocationUpdates();
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
 
@@ -59,9 +71,6 @@ public class Geolocation {
             new LocationCallback() {
                 @Override
                 public void onLocationResult(LocationResult locationResult) {
-                    if (getCurrentPosition) {
-                        clearLocationUpdates();
-                    }
                     Location lastLocation = locationResult.getLastLocation();
                     if (lastLocation == null) {
                         resultCallback.error("location unavailable");
