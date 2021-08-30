@@ -42,7 +42,7 @@
     "clean": "rimraf ./dist",
     "watch": "tsc --watch",
     "prepublishOnly": "npm run build",
-    "publish:cocoapod": "pod trunk push ./CapacitorActionSheet.podspec --allow-warnings --verbose > log.txt",
+    "publish:cocoapod": "pod trunk push ./CapacitorActionSheet.podspec --allow-warnings --verbose",
     "prepublish2:cocoapod": "pod lib lint CapacitorActionSheet.podspec --verbose"
   },
   "devDependencies": {
