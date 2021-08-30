@@ -17,7 +17,6 @@ jobs:
       - name: Install Cocoapods
         run: | 
           gem install cocoapods
-          pod install
       - name: Restore Dependency Cache
         id: cache-modules
         uses: actions/cache@v2
@@ -31,5 +30,6 @@ jobs:
         run: |
           set -eo pipefail
           npm run publish:cocoapod2 --scope @capacitor/action-sheet
+        working-directory: ./
         env:
           COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
