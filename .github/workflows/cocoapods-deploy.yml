@@ -15,7 +15,9 @@ jobs:
         with:
           fetch-depth: 0
       - name: Install Cocoapods
-        run: gem install cocoapods
+        run: | 
+          gem install cocoapods
+          pod install
       - name: Restore Dependency Cache
         id: cache-modules
         uses: actions/cache@v2
