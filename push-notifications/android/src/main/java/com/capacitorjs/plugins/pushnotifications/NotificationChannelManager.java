@@ -38,11 +38,26 @@ public class NotificationChannelManager {
     public void createChannel(PluginCall call) {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             JSObject channel = new JSObject();
-            channel.put(CHANNEL_ID, call.getString(CHANNEL_ID));
-            channel.put(CHANNEL_NAME, call.getString(CHANNEL_NAME));
+            if (call.getString(CHANNEL_ID) != null) {
+                channel.put(CHANNEL_ID, call.getString(CHANNEL_ID));
+            } else {
+                call.reject("Channel missing identifier");
+                return;
+            }
+            if (call.getString(CHANNEL_NAME) != null) {
+                channel.put(CHANNEL_NAME, call.getString(CHANNEL_NAME));
+            } else {
+                call.reject("Channel missing name");
+                return;
+            }
+            if (call.getInt(CHANNEL_IMPORTANCE) != null) {
+                channel.put(CHANNEL_IMPORTANCE, call.getInt(CHANNEL_IMPORTANCE));
+            } else {
+                call.reject("Channel missing importance");
+                return;
+            }
             channel.put(CHANNEL_DESCRIPTION, call.getString(CHANNEL_DESCRIPTION, ""));
             channel.put(CHANNEL_VISIBILITY, call.getInt(CHANNEL_VISIBILITY, NotificationCompat.VISIBILITY_PUBLIC));
-            channel.put(CHANNEL_IMPORTANCE, call.getInt(CHANNEL_IMPORTANCE));
             channel.put(CHANNEL_SOUND, call.getString(CHANNEL_SOUND, null));
             channel.put(CHANNEL_VIBRATE, call.getBoolean(CHANNEL_VIBRATE, false));
             channel.put(CHANNEL_USE_LIGHTS, call.getBoolean(CHANNEL_USE_LIGHTS, false));
