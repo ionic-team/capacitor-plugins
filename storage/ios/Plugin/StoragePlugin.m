@@ -11,4 +11,5 @@ CAP_PLUGIN(StoragePlugin, "Storage",
            CAP_PLUGIN_METHOD(keys, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(clear, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(migrate, CAPPluginReturnPromise);
+           CAP_PLUGIN_METHOD(removeOld, CAPPluginReturnPromise);
 )
