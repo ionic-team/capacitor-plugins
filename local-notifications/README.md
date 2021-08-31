@@ -579,15 +579,19 @@ An action that can be taken when a notification is displayed.
 | **`inputValue`**   | <code>string</code>                                                         | The value entered by the user on the notification. Only available on iOS for notifications with `input` set to `true`. | 1.0.0 |
 | **`notification`** | <code><a href="#localnotificationschema">LocalNotificationSchema</a></code> | The original notification schema.                                                                                      | 1.0.0 |
 
+
 ### Type Aliases
+
 
 #### ScheduleEvery
 
 <code>'year' | 'month' | 'two-weeks' | 'week' | 'day' | 'hour' | 'minute' | 'second'</code>
 
+
 #### NotificationChannel
 
 <code><a href="#channel">Channel</a></code>
+
 
 #### Importance
 
@@ -595,11 +599,13 @@ The importance level. For more details, see the [Android Developer Docs](https:/
 
 <code>1 | 2 | 3 | 4 | 5</code>
 
+
 #### Visibility
 
 The notification visibility. For more details, see the [Android Developer Docs](https://developer.android.com/reference/androidx/core/app/NotificationCompat#VISIBILITY_PRIVATE)
 
 <code>-1 | 0 | 1</code>
+
 
 #### PermissionState
 
