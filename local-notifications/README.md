@@ -595,10 +595,14 @@ An action that can be taken when a notification is displayed.
 
 #### Importance
 
+The importance level. For more details, see the [Android Developer Docs](https://developer.android.com/reference/android/app/NotificationManager#IMPORTANCE_DEFAULT)
+
 <code>1 | 2 | 3 | 4 | 5</code>
 
 
 #### Visibility
+
+The notification visibility. For more details, see the [Android Developer Docs](https://developer.android.com/reference/androidx/core/app/NotificationCompat#VISIBILITY_PRIVATE)
 
 <code>-1 | 0 | 1</code>
 
