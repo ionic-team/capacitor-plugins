@@ -57,26 +57,25 @@ public class Geolocation {
             locationRequest.setPriority(priority);
 
             locationCallback =
-                    new LocationCallback() {
-                        @Override
-                        public void onLocationResult(LocationResult locationResult) {
-                            if (getCurrentPosition) {
-                                clearLocationUpdates();
-                            }
-                            Location lastLocation = locationResult.getLastLocation();
-                            if (lastLocation == null) {
-                                resultCallback.error("location unavailable");
-                            } else {
-                                resultCallback.success(lastLocation);
-                            }
+                new LocationCallback() {
+                    @Override
+                    public void onLocationResult(LocationResult locationResult) {
+                        if (getCurrentPosition) {
+                            clearLocationUpdates();
                         }
-                    };
+                        Location lastLocation = locationResult.getLastLocation();
+                        if (lastLocation == null) {
+                            resultCallback.error("location unavailable");
+                        } else {
+                            resultCallback.success(lastLocation);
+                        }
+                    }
+                };
 
             fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null);
         } else {
             resultCallback.error("location disabled");
         }
-
     }
 
     public void clearLocationUpdates() {
