@@ -1,6 +1,6 @@
 {
   "name": "@capacitor/haptics",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "The Haptics API provides physical feedback to the user through touch or vibration.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
@@ -41,7 +41,9 @@
     "build": "npm run clean && npm run docgen && tsc && rollup -c rollup.config.js",
     "clean": "rimraf ./dist",
     "watch": "tsc --watch",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "postpublish": "npm run publish:cocoapod",
+    "publish:cocoapod": "pod trunk push ./CapacitorHaptics.podspec --allow-warnings"
   },
   "devDependencies": {
     "@capacitor/android": "^3.0.0",

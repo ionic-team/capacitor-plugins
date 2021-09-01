@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.3](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/browser@1.0.2...@capacitor/browser@1.0.3) (2021-09-01)
+
+
+### Bug Fixes
+
+* Correct missing source_files path ([#590](https://github.com/ionic-team/capacitor-plugins/issues/590)) ([24e0fc2](https://github.com/ionic-team/capacitor-plugins/commit/24e0fc27cc314049012ab9915fa5e7bfb03313e1))
+
+
+
+
+
 ## [1.0.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/browser@1.0.1...@capacitor/browser@1.0.2) (2021-06-23)
 
 

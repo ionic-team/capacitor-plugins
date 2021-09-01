@@ -1,6 +1,7 @@
 package com.capacitorjs.plugins.camera;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -75,6 +76,7 @@ public class CameraPlugin extends Plugin {
     private String imageFileSavePath;
     private String imageEditedFileSavePath;
     private Uri imageFileUri;
+    private Uri imagePickedContentUri;
     private boolean isEdited = false;
 
     private CameraSettings settings = new CameraSettings();
@@ -282,10 +284,16 @@ public class CameraPlugin extends Plugin {
 
         Uri u = data.getData();
 
+        imagePickedContentUri = u;
+
+        processPickedImage(u, call);
+    }
+
+    private void processPickedImage(Uri imageUri, PluginCall call) {
         InputStream imageStream = null;
 
         try {
-            imageStream = getContext().getContentResolver().openInputStream(u);
+            imageStream = getContext().getContentResolver().openInputStream(imageUri);
             Bitmap bitmap = BitmapFactory.decodeStream(imageStream);
 
             if (bitmap == null) {
@@ -293,7 +301,7 @@ public class CameraPlugin extends Plugin {
                 return;
             }
 
-            returnResult(call, bitmap, u);
+            returnResult(call, bitmap, imageUri);
         } catch (OutOfMemoryError err) {
             call.reject("Out of memory");
         } catch (FileNotFoundException ex) {
@@ -312,25 +320,40 @@ public class CameraPlugin extends Plugin {
     @ActivityCallback
     private void processEditedImage(PluginCall call, ActivityResult result) {
         isEdited = true;
-        processPickedImage(call, result);
+
+        if (result.getResultCode() == Activity.RESULT_CANCELED) {
+            // User cancelled the edit operation, if this file was picked from photos,
+            // process the original picked image, otherwise process it as a camera photo
+            if (imagePickedContentUri != null) {
+                processPickedImage(imagePickedContentUri, call);
+            } else {
+                processCameraImage(call, result);
+            }
+        } else {
+            processPickedImage(call, result);
+        }
     }
 
     /**
-     * Save the modified image we've created to a temporary location, so we can
-     * return a URI to it later
-     * @param bitmap
-     * @param contentUri
+     * Save the modified image on the same path,
+     * or on a temporary location if it's a content url
+     * @param uri
      * @param is
      * @return
      * @throws IOException
      */
-    private Uri saveTemporaryImage(Bitmap bitmap, Uri contentUri, InputStream is) throws IOException {
-        String filename = Uri.parse(Uri.decode(contentUri.toString())).getLastPathSegment();
-        if (!filename.contains(".jpg") && !filename.contains(".jpeg")) {
-            filename += "." + (new java.util.Date()).getTime() + ".jpeg";
+    private Uri saveImage(Uri uri, InputStream is) throws IOException {
+        File outFile = null;
+        if (uri.getScheme().equals("content")) {
+            String filename = Uri.parse(Uri.decode(uri.toString())).getLastPathSegment();
+            if (!filename.contains(".jpg") && !filename.contains(".jpeg")) {
+                filename += "." + (new java.util.Date()).getTime() + ".jpeg";
+            }
+            File cacheDir = getContext().getCacheDir();
+            outFile = new File(cacheDir, filename);
+        } else {
+            outFile = new File(uri.getPath());
         }
-        File cacheDir = getContext().getCacheDir();
-        File outFile = new File(cacheDir, filename);
         FileOutputStream fos = new FileOutputStream(outFile);
         byte[] buffer = new byte[1024];
         int len;
@@ -360,7 +383,7 @@ public class CameraPlugin extends Plugin {
         bitmap.compress(Bitmap.CompressFormat.JPEG, settings.getQuality(), bitmapOutputStream);
 
         if (settings.isAllowEditing() && !isEdited) {
-            editImage(call, bitmap, u, bitmapOutputStream);
+            editImage(call, u, bitmapOutputStream);
             return;
         }
 
@@ -384,15 +407,27 @@ public class CameraPlugin extends Plugin {
         } else {
             call.reject(INVALID_RESULT_TYPE_ERROR);
         }
-
-        // Result returned, clear stored paths
+        // Result returned, clear stored paths and images
+        if (settings.getResultType() != CameraResultType.URI) {
+            deleteImageFile();
+        }
         imageFileSavePath = null;
         imageFileUri = null;
+        imagePickedContentUri = null;
         imageEditedFileSavePath = null;
     }
 
+    private void deleteImageFile() {
+        if (imageFileSavePath != null && !settings.isSaveToGallery()) {
+            File photoFile = new File(imageFileSavePath);
+            if (photoFile.exists()) {
+                photoFile.delete();
+            }
+        }
+    }
+
     private void returnFileURI(PluginCall call, ExifWrapper exif, Bitmap bitmap, Uri u, ByteArrayOutputStream bitmapOutputStream) {
-        Uri newUri = getTempImage(bitmap, u, bitmapOutputStream);
+        Uri newUri = getTempImage(u, bitmapOutputStream);
         exif.copyExif(newUri.getPath());
         if (newUri != null) {
             JSObject ret = new JSObject();
@@ -406,12 +441,12 @@ public class CameraPlugin extends Plugin {
         }
     }
 
-    private Uri getTempImage(Bitmap bitmap, Uri u, ByteArrayOutputStream bitmapOutputStream) {
+    private Uri getTempImage(Uri u, ByteArrayOutputStream bitmapOutputStream) {
         ByteArrayInputStream bis = null;
         Uri newUri = null;
         try {
             bis = new ByteArrayInputStream(bitmapOutputStream.toByteArray());
-            newUri = saveTemporaryImage(bitmap, u, bis);
+            newUri = saveImage(u, bis);
         } catch (IOException ex) {} finally {
             if (bis != null) {
                 try {
@@ -516,9 +551,9 @@ public class CameraPlugin extends Plugin {
         return permissionStates;
     }
 
-    private void editImage(PluginCall call, Bitmap bitmap, Uri uri, ByteArrayOutputStream bitmapOutputStream) {
+    private void editImage(PluginCall call, Uri uri, ByteArrayOutputStream bitmapOutputStream) {
         try {
-            Uri tempImage = getTempImage(bitmap, uri, bitmapOutputStream);
+            Uri tempImage = getTempImage(uri, bitmapOutputStream);
             Intent editIntent = createEditIntent(tempImage);
             if (editIntent != null) {
                 startActivityForResult(call, editIntent, "processEditedImage");
