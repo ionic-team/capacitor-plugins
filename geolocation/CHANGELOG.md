@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.1.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/geolocation@1.0.2...@capacitor/geolocation@1.1.0) (2021-09-01)
+
+
+### Features
+
+* **geolocation:** Throw error if location is disabled ([#589](https://github.com/ionic-team/capacitor-plugins/issues/589)) ([14724c5](https://github.com/ionic-team/capacitor-plugins/commit/14724c5ec5b23bf94f6f3511bbe204482768d10f))
+
+
+
+
+
 ## [1.0.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/geolocation@1.0.1...@capacitor/geolocation@1.0.2) (2021-06-23)
 
 

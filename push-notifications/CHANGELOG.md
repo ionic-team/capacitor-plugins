@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.4](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/push-notifications@1.0.3...@capacitor/push-notifications@1.0.4) (2021-09-01)
+
+
+### Bug Fixes
+
+* **push-notifications:** Throw errors if missing mandatory channel fields ([#576](https://github.com/ionic-team/capacitor-plugins/issues/576)) ([50f4e70](https://github.com/ionic-team/capacitor-plugins/commit/50f4e7026e5cae5f0871d4863bfab36989208064))
+
+
+
+
+
 ## [1.0.3](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/push-notifications@1.0.2...@capacitor/push-notifications@1.0.3) (2021-07-07)
 
 **Note:** Version bump only for package @capacitor/push-notifications

@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.5](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@1.0.4...@capacitor/camera@1.0.5) (2021-09-01)
+
+
+### Bug Fixes
+
+* Correct missing source_files path ([#590](https://github.com/ionic-team/capacitor-plugins/issues/590)) ([24e0fc2](https://github.com/ionic-team/capacitor-plugins/commit/24e0fc27cc314049012ab9915fa5e7bfb03313e1))
+* **camera:** cleanup camera images if not needed ([#563](https://github.com/ionic-team/capacitor-plugins/issues/563)) ([a2e4f43](https://github.com/ionic-team/capacitor-plugins/commit/a2e4f4339119698e8dd066a5f2f8f065ab2e4727))
+* **camera:** Resize not respecting aspect ratio on iOS ([#568](https://github.com/ionic-team/capacitor-plugins/issues/568)) ([ea2b801](https://github.com/ionic-team/capacitor-plugins/commit/ea2b8012aab7e5ea34cfa34735f7f55ba76a3882))
+* **camera:** return original image if editing is cancelled ([#566](https://github.com/ionic-team/capacitor-plugins/issues/566)) ([4786841](https://github.com/ionic-team/capacitor-plugins/commit/4786841099403a4d3d59aaf9103e8fa02aa8e4e2))
+
+
+
+
+
 ## [1.0.4](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@1.0.3...@capacitor/camera@1.0.4) (2021-08-18)
 
 
