@@ -65,6 +65,7 @@ public class CameraPlugin extends Plugin {
     private static final String INVALID_RESULT_TYPE_ERROR = "Invalid resultType option";
     private static final String PERMISSION_DENIED_ERROR_CAMERA = "User denied access to camera";
     private static final String PERMISSION_DENIED_ERROR_PHOTOS = "User denied access to photos";
+    private static final String PERMISSION_DENIED_ERROR_PHOTOS_FROM_CAMERA = "User denied access to photos to be accessed from camera";
     private static final String NO_CAMERA_ERROR = "Device doesn't have a camera available";
     private static final String NO_CAMERA_ACTIVITY_ERROR = "Unable to resolve camera activity";
     private static final String IMAGE_FILE_SAVE_ERROR = "Unable to create photo on disk";
@@ -182,6 +183,12 @@ public class CameraPlugin extends Plugin {
         if (settings.getSource() == CameraSource.CAMERA && getPermissionState(CAMERA) != PermissionState.GRANTED) {
             Logger.debug(getLogTag(), "User denied camera permission: " + getPermissionState(CAMERA).toString());
             call.reject(PERMISSION_DENIED_ERROR_CAMERA);
+            return;
+        }
+        // If save to the gallery option is true, we additionally need to check for photos permission
+        else if (settings.isSaveToGallery() && settings.getSource() == CameraSource.CAMERA && getPermissionState(PHOTOS) != PermissionState.GRANTED) {
+            Logger.debug(getLogTag(), "User denied photos permission to be accessed from camera: " + getPermissionState(PHOTOS).toString());
+            call.reject(PERMISSION_DENIED_ERROR_PHOTOS_FROM_CAMERA);
             return;
         } else if (settings.getSource() == CameraSource.PHOTOS && getPermissionState(PHOTOS) != PermissionState.GRANTED) {
             Logger.debug(getLogTag(), "User denied photos permission: " + getPermissionState(PHOTOS).toString());
