@@ -1,0 +1,38 @@
+name: Publish Native iOS Libraries
+
+on:
+  workflow_dispatch:
+    inputs:
+      plugins:
+        description: 'Specify an optional subset of plugins to publish (space delimited)'
+        required: false
+        default: ''
+jobs:
+  publish-ios:
+    runs-on: macos-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+      - uses: actions/checkout@v2
+        with:
+          ref: native-publish
+      - name: Install Cocoapods
+        run: | 
+          gem install cocoapods
+      - name: Restore Dependency Cache
+        id: cache-modules
+        uses: actions/cache@v2
+        with:
+          path: |
+            node_modules
+            */node_modules
+          key: dependency-cache-${{ hashFiles('package.json', '*/package.json') }}
+      - run: npm install
+      - name: Deploy to Cocoapods
+        run: |
+          set -eo pipefail
+          npm run publish:cocoapod
+        env:
+          COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
