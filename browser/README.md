@@ -83,7 +83,8 @@ No-op on other platforms.
 addListener(eventName: 'browserFinished', listenerFunc: () => void) => Promise<PluginListenerHandle> & PluginListenerHandle
 ```
 
-Android & iOS only: Listen for the loading finished event.
+Android & iOS only: Listen for the browser finished event.
+It fires when the Browser is closed by the user.
 
 | Param              | Type                           |
 | ------------------ | ------------------------------ |
@@ -104,6 +105,8 @@ addListener(eventName: 'browserPageLoaded', listenerFunc: () => void) => Promise
 ```
 
 Android & iOS only: Listen for the page loaded event.
+It's only fired when the URL passed to open method finish loading.
+It is not invoked for any subsequent page loads.
 
 | Param              | Type                             |
 | ------------------ | -------------------------------- |

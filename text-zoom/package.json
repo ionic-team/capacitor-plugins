@@ -1,6 +1,6 @@
 {
   "name": "@capacitor/text-zoom",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "The Text Zoom API provides the ability to change Web View text size for visual accessibility.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
@@ -41,7 +41,9 @@
     "build": "npm run clean && npm run docgen && tsc && rollup -c rollup.config.js",
     "clean": "rimraf ./dist",
     "watch": "tsc --watch",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "postpublish": "npm run publish:cocoapod",
+    "publish:cocoapod": "pod trunk push ./CapacitorTextZoom.podspec --allow-warnings"
   },
   "devDependencies": {
     "@capacitor/android": "^3.0.0",

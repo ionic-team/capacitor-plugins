@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.5](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/local-notifications@1.0.4...@capacitor/local-notifications@1.0.5) (2021-09-01)
+
+
+### Bug Fixes
+
+* **local-notifications:** Throw errors if missing mandatory channel fields ([#577](https://github.com/ionic-team/capacitor-plugins/issues/577)) ([6bf3a4f](https://github.com/ionic-team/capacitor-plugins/commit/6bf3a4f0de8880588200ae60e73427fa6959ea20))
+
+
+
+
+
+## [1.0.4](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/local-notifications@1.0.3...@capacitor/local-notifications@1.0.4) (2021-08-18)
+
+
+### Bug Fixes
+
+* **local-notifications:** use proper rollup config ([#528](https://github.com/ionic-team/capacitor-plugins/issues/528)) ([cd17daa](https://github.com/ionic-team/capacitor-plugins/commit/cd17daa02241f50299232212ad72722d8a35ee16))
+
+
+
+
+
 ## [1.0.3](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/local-notifications@1.0.2...@capacitor/local-notifications@1.0.3) (2021-07-07)
 
 

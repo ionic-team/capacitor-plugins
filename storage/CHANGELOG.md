@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.1.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/storage@1.0.3...@capacitor/storage@1.1.0) (2021-09-01)
+
+
+### Features
+
+* **storage:** make StorageConfiguration init public ([#532](https://github.com/ionic-team/capacitor-plugins/issues/532)) ([4271b5d](https://github.com/ionic-team/capacitor-plugins/commit/4271b5d18a98201582bd95f41d5b5104c83e5b29))
+
+
+
+
+
 ## [1.0.3](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/storage@1.0.2...@capacitor/storage@1.0.3) (2021-07-07)
 
 **Note:** Version bump only for package @capacitor/storage

@@ -22,6 +22,36 @@ import type {
   Directory,
 } from './definitions';
 
+function resolve(path: string): string {
+  const posix = path.split('/').filter(item => item !== '.');
+  const newPosix: string[] = [];
+
+  posix.forEach(item => {
+    if (
+      item === '..' &&
+      newPosix.length > 0 &&
+      newPosix[newPosix.length - 1] !== '..'
+    ) {
+      newPosix.pop();
+    } else {
+      newPosix.push(item);
+    }
+  });
+
+  return newPosix.join('/');
+}
+function isPathParent(parent: string, children: string): boolean {
+  parent = resolve(parent);
+  children = resolve(children);
+  const pathsA = parent.split('/');
+  const pathsB = children.split('/');
+
+  return (
+    parent !== children &&
+    pathsA.every((value, index) => value === pathsB[index])
+  );
+}
+
 export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
   DB_VERSION = 1;
   DB_NAME = 'Disc';
@@ -431,7 +461,7 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
       return;
     }
 
-    if (toPath.startsWith(fromPath)) {
+    if (isPathParent(fromPath, toPath)) {
       throw Error('To path cannot contain the from path');
     }
 
