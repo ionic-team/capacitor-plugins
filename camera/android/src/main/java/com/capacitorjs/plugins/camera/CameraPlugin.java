@@ -263,6 +263,7 @@ public class CameraPlugin extends Plugin {
 
     @ActivityCallback
     public void processCameraImage(PluginCall call, ActivityResult result) {
+        settings = getSettings(call);
         if (imageFileSavePath == null) {
             call.reject(IMAGE_PROCESS_NO_FILE_ERROR);
             return;
@@ -283,6 +284,7 @@ public class CameraPlugin extends Plugin {
 
     @ActivityCallback
     public void processPickedImage(PluginCall call, ActivityResult result) {
+        settings = getSettings(call);
         Intent data = result.getData();
         if (data == null) {
             call.reject("No image picked");
@@ -327,7 +329,7 @@ public class CameraPlugin extends Plugin {
     @ActivityCallback
     private void processEditedImage(PluginCall call, ActivityResult result) {
         isEdited = true;
-
+        settings = getSettings(call);
         if (result.getResultCode() == Activity.RESULT_CANCELED) {
             // User cancelled the edit operation, if this file was picked from photos,
             // process the original picked image, otherwise process it as a camera photo
