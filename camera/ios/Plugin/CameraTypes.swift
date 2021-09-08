@@ -94,6 +94,7 @@ internal struct PhotoFlags: OptionSet {
 internal struct ProcessedImage {
     var image: UIImage
     var metadata: [String: Any]
+    var flags: PhotoFlags = []
 
     var exifData: [String: Any] {
         var exifData = metadata["{Exif}"] as? [String: Any]
