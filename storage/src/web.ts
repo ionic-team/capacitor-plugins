@@ -68,6 +68,14 @@ export class StorageWeb extends WebPlugin implements StoragePlugin {
     return { migrated, existing };
   }
 
+  public async removeOld(): Promise<void> {
+    const oldprefix = '_cap_';
+    const keys = Object.keys(this.impl).filter(k => k.indexOf(oldprefix) === 0);
+    for (const oldkey of keys) {
+      this.impl.removeItem(oldkey);
+    }
+  }
+
   private get impl(): Storage {
     return window.localStorage;
   }

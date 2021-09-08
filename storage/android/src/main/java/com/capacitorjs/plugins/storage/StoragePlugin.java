@@ -121,4 +121,9 @@ public class StoragePlugin extends Plugin {
         ret.put("existing", new JSArray(existing));
         call.resolve(ret);
     }
+
+    @PluginMethod
+    public void removeOld(PluginCall call) {
+        call.resolve();
+    }
 }
