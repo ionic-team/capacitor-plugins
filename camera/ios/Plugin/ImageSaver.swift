@@ -1,3 +1,5 @@
+import UIKit
+
 class ImageSaver: NSObject {
 
     var onResult: ((Error?)->Void) = {_ in }
