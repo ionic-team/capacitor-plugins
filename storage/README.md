@@ -63,6 +63,7 @@ This method can also be used to store non-string values, such as numbers and boo
 * [`clear()`](#clear)
 * [`keys()`](#keys)
 * [`migrate()`](#migrate)
+* [`removeOld()`](#removeold)
 * [Interfaces](#interfaces)
 
 </docgen-index>
@@ -180,10 +181,24 @@ Migrate data from the Capacitor 2 Storage plugin.
 
 This action is non-destructive. It will not remove old data and will only
 write new data if they key was not already set.
+To remove the old data after being migrated, call removeOld().
 
 **Returns:** <code>Promise&lt;<a href="#migrateresult">MigrateResult</a>&gt;</code>
 
 **Since:** 1.0.0
+
+--------------------
+
+
+### removeOld()
+
+```typescript
+removeOld() => Promise<void>
+```
+
+Removes old data with `_cap_` prefix from the Capacitor 2 Storage plugin.
+
+**Since:** 1.1.0
 
 --------------------
 

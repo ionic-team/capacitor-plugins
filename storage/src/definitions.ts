@@ -136,8 +136,16 @@ export interface StoragePlugin {
    *
    * This action is non-destructive. It will not remove old data and will only
    * write new data if they key was not already set.
+   * To remove the old data after being migrated, call removeOld().
    *
    * @since 1.0.0
    */
   migrate(): Promise<MigrateResult>;
+
+  /**
+   * Removes old data with `_cap_` prefix from the Capacitor 2 Storage plugin.
+   *
+   * @since 1.1.0
+   */
+  removeOld(): Promise<void>;
 }
