@@ -583,14 +583,15 @@ public class CameraPlugin extends Plugin {
 
     private Intent createEditIntent(Uri origPhotoUri) {
         try {
+            File editFile = new File(origPhotoUri.getPath());
             Uri editUri = FileProvider.getUriForFile(
                 getActivity(),
                 getContext().getPackageName() + ".fileprovider",
-                new File(origPhotoUri.getPath())
+                editFile
             );
             Intent editIntent = new Intent(Intent.ACTION_EDIT);
             editIntent.setDataAndType(editUri, "image/*");
-            imageEditedFileSavePath = editUri.toString();
+            imageEditedFileSavePath = editFile.getAbsolutePath();
             int flags = Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION;
             editIntent.addFlags(flags);
             editIntent.putExtra(MediaStore.EXTRA_OUTPUT, editUri);
