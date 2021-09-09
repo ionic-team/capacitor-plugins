@@ -78,6 +78,8 @@ public class CameraPlugin extends Plugin {
     private Uri imageFileUri;
     private Uri imagePickedContentUri;
     private boolean isEdited = false;
+    private boolean isFirstRequest = true;
+    private boolean isSaved = false;
 
     private CameraSettings settings = new CameraSettings();
 
@@ -145,7 +147,8 @@ public class CameraPlugin extends Plugin {
         boolean hasPhotoPerms = getPermissionState(PHOTOS) == PermissionState.GRANTED;
 
         // If we want to save to the gallery, we need two permissions
-        if (settings.isSaveToGallery() && !(hasCameraPerms && hasPhotoPerms)) {
+        if (settings.isSaveToGallery() && !(hasCameraPerms && hasPhotoPerms) && isFirstRequest) {
+            isFirstRequest = false;
             String[] aliases;
             if (needCameraPerms) {
                 aliases = new String[] { CAMERA, PHOTOS };
@@ -391,11 +394,21 @@ public class CameraPlugin extends Plugin {
 
         boolean saveToGallery = call.getBoolean("saveToGallery", CameraSettings.DEFAULT_SAVE_IMAGE_TO_GALLERY);
         if (saveToGallery && (imageEditedFileSavePath != null || imageFileSavePath != null)) {
+            isSaved = true;
             try {
                 String fileToSavePath = imageEditedFileSavePath != null ? imageEditedFileSavePath : imageFileSavePath;
                 File fileToSave = new File(fileToSavePath);
-                MediaStore.Images.Media.insertImage(getContext().getContentResolver(), fileToSavePath, fileToSave.getName(), "");
+                String inserted = MediaStore.Images.Media.insertImage(
+                    getContext().getContentResolver(),
+                    fileToSavePath,
+                    fileToSave.getName(),
+                    ""
+                );
+                if (inserted == null) {
+                    isSaved = false;
+                }
             } catch (FileNotFoundException e) {
+                isSaved = false;
                 Logger.error(getLogTag(), IMAGE_GALLERY_SAVE_ERROR, e);
             }
         }
@@ -437,6 +450,7 @@ public class CameraPlugin extends Plugin {
             ret.put("exif", exif.toJson());
             ret.put("path", newUri.toString());
             ret.put("webPath", FileUtils.getPortablePath(getContext(), bridge.getLocalUrl(), newUri));
+            ret.put("saved", isSaved);
             call.resolve(ret);
         } else {
             call.reject(UNABLE_TO_PROCESS_IMAGE);
