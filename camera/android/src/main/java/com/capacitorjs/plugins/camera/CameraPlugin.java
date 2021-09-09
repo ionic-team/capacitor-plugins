@@ -584,11 +584,7 @@ public class CameraPlugin extends Plugin {
     private Intent createEditIntent(Uri origPhotoUri) {
         try {
             File editFile = new File(origPhotoUri.getPath());
-            Uri editUri = FileProvider.getUriForFile(
-                getActivity(),
-                getContext().getPackageName() + ".fileprovider",
-                editFile
-            );
+            Uri editUri = FileProvider.getUriForFile(getActivity(), getContext().getPackageName() + ".fileprovider", editFile);
             Intent editIntent = new Intent(Intent.ACTION_EDIT);
             editIntent.setDataAndType(editUri, "image/*");
             imageEditedFileSavePath = editFile.getAbsolutePath();
