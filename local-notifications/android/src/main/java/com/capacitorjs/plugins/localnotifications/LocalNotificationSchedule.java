@@ -62,7 +62,7 @@ public class LocalNotificationSchedule {
             on.setYear(onJson.getInteger("year"));
             on.setMonth(onJson.getInteger("month"));
             on.setDay(onJson.getInteger("day"));
-            on.setWeekday(onJson.getInteger("weekday"));
+            on.setWeekday(onJson.getInteger("weekday") != null ? onJson.getInteger("weekday") + 1 : null);
             on.setHour(onJson.getInteger("hour"));
             on.setMinute(onJson.getInteger("minute"));
             on.setSecond(onJson.getInteger("second"));
