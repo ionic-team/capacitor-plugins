@@ -773,10 +773,16 @@ export interface Schedule {
   count?: number;
 }
 
+ /**
+   * Added `weekday` to ios and android
+   * Day of the week (0 -  6) (Sunday to Saturday)
+   *
+   */
 export interface ScheduleOn {
   year?: number;
   month?: number;
   day?: number;
+  weekday?: number;
   hour?: number;
   minute?: number;
   second?: number;
