@@ -221,8 +221,17 @@ export interface Photo {
 }
 
 export enum CameraSource {
+  /**
+   * Prompts the user to select either the photo album or take a photo.
+   */
   Prompt = 'PROMPT',
+  /**
+   * Take a new photo using the camera.
+   */
   Camera = 'CAMERA',
+  /**
+   * Pick an existing photo fron the gallery or photo album.
+   */
   Photos = 'PHOTOS',
 }
 
