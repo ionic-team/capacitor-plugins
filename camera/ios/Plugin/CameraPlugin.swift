@@ -186,23 +186,25 @@ extension CameraPlugin: PHPickerViewControllerDelegate {
 }
 
 private extension CameraPlugin {
-    func returnProcessedImage(_ processedImage: ProcessedImage) {
+    func returnImage(_ processedImage: ProcessedImage, isSaved: Bool) {
         guard let jpeg = processedImage.generateJPEG(with: settings.jpegQuality) else {
             self.call?.reject("Unable to convert image to jpeg")
             return
         }
 
         if settings.resultType == CameraResultType.base64 {
-            call?.resolve([
+            self.call?.resolve([
                 "base64String": jpeg.base64EncodedString(),
                 "exif": processedImage.exifData,
-                "format": "jpeg"
+                "format": "jpeg",
+                "saved": isSaved
             ])
         } else if settings.resultType == CameraResultType.dataURL {
             call?.resolve([
                 "dataUrl": "data:image/jpeg;base64," + jpeg.base64EncodedString(),
                 "exif": processedImage.exifData,
-                "format": "jpeg"
+                "format": "jpeg",
+                "saved": isSaved
             ])
         } else if settings.resultType == CameraResultType.uri {
             guard let fileURL = try? saveTemporaryImage(jpeg),
@@ -214,8 +216,24 @@ private extension CameraPlugin {
                 "path": fileURL.absoluteString,
                 "exif": processedImage.exifData,
                 "webPath": webURL.absoluteString,
-                "format": "jpeg"
+                "format": "jpeg",
+                "saved": isSaved
             ])
+        }
+    }
+
+    func returnProcessedImage(_ processedImage: ProcessedImage) {
+        // conditionally save the image
+        if settings.saveToGallery && (processedImage.flags.contains(.edited) == true || processedImage.flags.contains(.gallery) == false) {
+            _ = ImageSaver(image: processedImage.image) { error in
+                var isSaved = false
+                if error == nil {
+                    isSaved = true
+                }
+                self.returnImage(processedImage, isSaved: isSaved)
+            }
+        } else {
+            self.returnImage(processedImage, isSaved: false)
         }
     }
 
@@ -380,11 +398,8 @@ private extension CameraPlugin {
             metadata = asset.imageData
         }
         // get the result
-        let result = processedImage(from: image, with: metadata)
-        // conditionally save the image
-        if settings.saveToGallery && (flags.contains(.edited) == true || flags.contains(.gallery) == false) {
-            UIImageWriteToSavedPhotosAlbum(result.image, nil, nil, nil)
-        }
+        var result = processedImage(from: image, with: metadata)
+        result.flags = flags
         return result
     }
 

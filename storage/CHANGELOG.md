@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/storage@1.1.0...@capacitor/storage@1.2.0) (2021-09-15)
+
+
+### Features
+
+* **storage:** Add removeOld function ([#585](https://github.com/ionic-team/capacitor-plugins/issues/585)) ([698350e](https://github.com/ionic-team/capacitor-plugins/commit/698350e38a756abc90fb38212b8adfa890c77ce5))
+
+
+
+
+
 # [1.1.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/storage@1.0.3...@capacitor/storage@1.1.0) (2021-09-01)
 
 

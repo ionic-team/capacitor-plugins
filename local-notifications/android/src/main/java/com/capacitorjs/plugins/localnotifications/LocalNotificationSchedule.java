@@ -20,7 +20,10 @@ public class LocalNotificationSchedule {
 
     private Boolean whileIdle;
 
+    private JSObject scheduleObj;
+
     public LocalNotificationSchedule(JSObject schedule) throws ParseException {
+        this.scheduleObj = schedule;
         // Every specific unit of time (always constant)
         buildEveryElement(schedule);
         // Count of units of time from every to repeat on
@@ -70,6 +73,10 @@ public class LocalNotificationSchedule {
 
     public DateMatch getOn() {
         return on;
+    }
+
+    public JSObject getOnObj() {
+        return this.scheduleObj.getJSObject("on");
     }
 
     public void setOn(DateMatch on) {

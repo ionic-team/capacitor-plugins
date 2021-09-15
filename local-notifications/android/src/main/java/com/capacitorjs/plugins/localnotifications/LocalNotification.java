@@ -312,7 +312,7 @@ public class LocalNotification {
                 jsSchedule.put("at", schedule.getAt());
                 jsSchedule.put("every", schedule.getEvery());
                 jsSchedule.put("count", schedule.getCount());
-                jsSchedule.put("on", schedule.getOn());
+                jsSchedule.put("on", schedule.getOnObj());
                 jsSchedule.put("repeats", schedule.isRepeating());
                 jsNotification.put("schedule", jsSchedule);
             }

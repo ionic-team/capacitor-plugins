@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.1.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@1.0.5...@capacitor/camera@1.1.0) (2021-09-15)
+
+
+### Bug Fixes
+
+* **camera:** saveToGallery for edited images ([#602](https://github.com/ionic-team/capacitor-plugins/issues/602)) ([b5ac27d](https://github.com/ionic-team/capacitor-plugins/commit/b5ac27d59181ec3acc2909b2569d8ab45a829b1c))
+* **camera:** set settings again on callbacks ([#595](https://github.com/ionic-team/capacitor-plugins/issues/595)) ([908bd68](https://github.com/ionic-team/capacitor-plugins/commit/908bd688767e374cf8e96b3def08bd33dcdfd2aa))
+
+
+### Features
+
+* **camera:** Return if image was saved to gallery ([#599](https://github.com/ionic-team/capacitor-plugins/issues/599)) ([594af3b](https://github.com/ionic-team/capacitor-plugins/commit/594af3be0982371e6c61e4bdb830c6bbb3963913))
+
+
+
+
+
 ## [1.0.5](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@1.0.4...@capacitor/camera@1.0.5) (2021-09-01)
 
 

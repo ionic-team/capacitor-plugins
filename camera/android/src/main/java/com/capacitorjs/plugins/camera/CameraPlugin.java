@@ -78,6 +78,8 @@ public class CameraPlugin extends Plugin {
     private Uri imageFileUri;
     private Uri imagePickedContentUri;
     private boolean isEdited = false;
+    private boolean isFirstRequest = true;
+    private boolean isSaved = false;
 
     private CameraSettings settings = new CameraSettings();
 
@@ -145,7 +147,8 @@ public class CameraPlugin extends Plugin {
         boolean hasPhotoPerms = getPermissionState(PHOTOS) == PermissionState.GRANTED;
 
         // If we want to save to the gallery, we need two permissions
-        if (settings.isSaveToGallery() && !(hasCameraPerms && hasPhotoPerms)) {
+        if (settings.isSaveToGallery() && !(hasCameraPerms && hasPhotoPerms) && isFirstRequest) {
+            isFirstRequest = false;
             String[] aliases;
             if (needCameraPerms) {
                 aliases = new String[] { CAMERA, PHOTOS };
@@ -256,6 +259,7 @@ public class CameraPlugin extends Plugin {
 
     @ActivityCallback
     public void processCameraImage(PluginCall call, ActivityResult result) {
+        settings = getSettings(call);
         if (imageFileSavePath == null) {
             call.reject(IMAGE_PROCESS_NO_FILE_ERROR);
             return;
@@ -276,6 +280,7 @@ public class CameraPlugin extends Plugin {
 
     @ActivityCallback
     public void processPickedImage(PluginCall call, ActivityResult result) {
+        settings = getSettings(call);
         Intent data = result.getData();
         if (data == null) {
             call.reject("No image picked");
@@ -320,7 +325,7 @@ public class CameraPlugin extends Plugin {
     @ActivityCallback
     private void processEditedImage(PluginCall call, ActivityResult result) {
         isEdited = true;
-
+        settings = getSettings(call);
         if (result.getResultCode() == Activity.RESULT_CANCELED) {
             // User cancelled the edit operation, if this file was picked from photos,
             // process the original picked image, otherwise process it as a camera photo
@@ -389,11 +394,21 @@ public class CameraPlugin extends Plugin {
 
         boolean saveToGallery = call.getBoolean("saveToGallery", CameraSettings.DEFAULT_SAVE_IMAGE_TO_GALLERY);
         if (saveToGallery && (imageEditedFileSavePath != null || imageFileSavePath != null)) {
+            isSaved = true;
             try {
                 String fileToSavePath = imageEditedFileSavePath != null ? imageEditedFileSavePath : imageFileSavePath;
                 File fileToSave = new File(fileToSavePath);
-                MediaStore.Images.Media.insertImage(getContext().getContentResolver(), fileToSavePath, fileToSave.getName(), "");
+                String inserted = MediaStore.Images.Media.insertImage(
+                    getContext().getContentResolver(),
+                    fileToSavePath,
+                    fileToSave.getName(),
+                    ""
+                );
+                if (inserted == null) {
+                    isSaved = false;
+                }
             } catch (FileNotFoundException e) {
+                isSaved = false;
                 Logger.error(getLogTag(), IMAGE_GALLERY_SAVE_ERROR, e);
             }
         }
@@ -435,6 +450,7 @@ public class CameraPlugin extends Plugin {
             ret.put("exif", exif.toJson());
             ret.put("path", newUri.toString());
             ret.put("webPath", FileUtils.getPortablePath(getContext(), bridge.getLocalUrl(), newUri));
+            ret.put("saved", isSaved);
             call.resolve(ret);
         } else {
             call.reject(UNABLE_TO_PROCESS_IMAGE);
@@ -567,14 +583,11 @@ public class CameraPlugin extends Plugin {
 
     private Intent createEditIntent(Uri origPhotoUri) {
         try {
-            Uri editUri = FileProvider.getUriForFile(
-                getActivity(),
-                getContext().getPackageName() + ".fileprovider",
-                new File(origPhotoUri.getPath())
-            );
+            File editFile = new File(origPhotoUri.getPath());
+            Uri editUri = FileProvider.getUriForFile(getActivity(), getContext().getPackageName() + ".fileprovider", editFile);
             Intent editIntent = new Intent(Intent.ACTION_EDIT);
             editIntent.setDataAndType(editUri, "image/*");
-            imageEditedFileSavePath = editUri.toString();
+            imageEditedFileSavePath = editFile.getAbsolutePath();
             int flags = Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION;
             editIntent.addFlags(flags);
             editIntent.putExtra(MediaStore.EXTRA_OUTPUT, editUri);

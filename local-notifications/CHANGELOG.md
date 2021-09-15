@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.6](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/local-notifications@1.0.5...@capacitor/local-notifications@1.0.6) (2021-09-15)
+
+
+### Bug Fixes
+
+* **local-notifications:** return schedule on as object ([#603](https://github.com/ionic-team/capacitor-plugins/issues/603)) ([ca34b01](https://github.com/ionic-team/capacitor-plugins/commit/ca34b01c73f14bb0ad14e8a501210e42a0e65b04))
+
+
+
+
+
 ## [1.0.5](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/local-notifications@1.0.4...@capacitor/local-notifications@1.0.5) (2021-09-01)
 
 

@@ -208,11 +208,30 @@ export interface Photo {
    * @since 1.0.0
    */
   format: string;
+  /**
+   * Whether if the image was saved to the gallery or not.
+   *
+   * On Android and iOS, saving to the gallery can fail if the user didn't
+   * grant the required permissions.
+   * On Web there is no gallery, so always returns false.
+   *
+   * @since 1.1.0
+   */
+  saved: boolean;
 }
 
 export enum CameraSource {
+  /**
+   * Prompts the user to select either the photo album or take a photo.
+   */
   Prompt = 'PROMPT',
+  /**
+   * Take a new photo using the camera.
+   */
   Camera = 'CAMERA',
+  /**
+   * Pick an existing photo fron the gallery or photo album.
+   */
   Photos = 'PHOTOS',
 }
 
