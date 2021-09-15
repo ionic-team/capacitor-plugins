@@ -230,7 +230,7 @@ export enum CameraSource {
    */
   Camera = 'CAMERA',
   /**
-   * Pick an existing photo fron the gallery of photo album.
+   * Pick an existing photo fron the gallery or photo album.
    */
   Photos = 'PHOTOS',
 }
