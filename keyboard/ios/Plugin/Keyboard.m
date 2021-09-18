@@ -200,9 +200,10 @@ NSString* UITraitsClassString;
     _paddingBottom = _paddingBottom + 20;
   }
   CGRect f, wf = CGRectZero;
-  id<UIApplicationDelegate> delegate = [[UIApplication sharedApplication] delegate];
-  if (delegate != nil && [delegate respondsToSelector:@selector(window)]) {
-    f = [[delegate window] bounds];
+  
+  UIWindow* window = [self getParentWindow];
+  if (window != nil) {
+    f = [window bounds];
   }
   if (self.webView != nil) {
     wf = self.webView.frame;
@@ -228,6 +229,36 @@ NSString* UITraitsClassString;
   }
   [self resetScrollView];
 }
+
+- (nullable UIViewController *)getParentViewController
+{
+  UIResponder *parentResponder = [self webView];
+
+  while (parentResponder) {
+    parentResponder = parentResponder.nextResponder;
+    if ([parentResponder isKindOfClass:[UIViewController class]]) {
+      return (UIViewController *)parentResponder;
+    }
+  }
+
+  return nil;
+}
+
+- (nullable UIWindow *)getParentWindow
+{
+    UIViewController* viewController = [self getParentViewController];
+    
+    while (viewController) {
+        UIWindow* window = [[viewController view] window];
+        if (window != nil) {
+            return window;
+        }
+        viewController = [viewController parentViewController];
+    }
+    
+    return nil;
+}
+
 
 
 #pragma mark HideFormAccessoryBar
