@@ -9,6 +9,7 @@ import Capacitor
     var config: SplashScreenConfig = SplashScreenConfig()
     var hideTask: Any?
     var isVisible: Bool = false
+    var wasAddedToViewHeirarchy: Bool = false
 
     init(parentView: UIView, config: SplashScreenConfig) {
         self.parentView = parentView
@@ -56,6 +57,9 @@ import Capacitor
 
             strongSelf.parentView.addSubview(strongSelf.viewController.view)
 
+            strongSelf.updateSplashImageBounds()
+            strongSelf.wasAddedToViewHeirarchy = true
+
             if strongSelf.config.showSpinner {
                 strongSelf.parentView.addSubview(strongSelf.spinner)
                 strongSelf.spinner.centerXAnchor.constraint(equalTo: strongSelf.parentView.centerXAnchor).isActive = true
@@ -97,7 +101,6 @@ import Capacitor
         parentView.addObserver(self, forKeyPath: "frame", options: .new, context: nil)
         parentView.addObserver(self, forKeyPath: "bounds", options: .new, context: nil)
 
-        updateSplashImageBounds()
         if config.showSpinner {
             spinner.translatesAutoresizingMaskIntoConstraints = false
             spinner.startAnimating()
@@ -117,20 +120,28 @@ import Capacitor
     // Update the bounds for the splash image. This will also be called when
     // the parent view observers fire
     private func updateSplashImageBounds() {
-        guard let delegate = UIApplication.shared.delegate else {
-            CAPLog.print("Unable to find root window object for SplashScreen bounds. Please file an issue")
-            return
-        }
-
-        guard let window = delegate.window as? UIWindow else {
+        guard let window = getParentWindow() else {
             CAPLog.print("Unable to find root window object for SplashScreen bounds. Please file an issue")
             return
         }
         viewController.view.frame = CGRect(origin: CGPoint(x: 0, y: 0), size: window.bounds.size)
     }
 
+    private func getParentWindow() -> UIWindow? {
+        var viewController: UIViewController? = viewController
+        while viewController != nil {
+            if (viewController?.view.window != nil) {
+                return viewController?.view.window
+        }
+            viewController = viewController?.parent
+        }
+        return nil;
+    }
+
     override public func observeValue(forKeyPath keyPath: String?, of object: Any?, change _: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
-        updateSplashImageBounds()
+        if (wasAddedToViewHeirarchy) {
+            updateSplashImageBounds()
+        }
     }
 
     private func hideSplash(fadeOutDuration: Int, isLaunchSplash: Bool) {
