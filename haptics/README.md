@@ -2,7 +2,7 @@
 
 The Haptics API provides physical feedback to the user through touch or vibration.
 
-**Note:** iOS devices without the 2nd Gen Taptic Engine only support `vibrate(…)` as haptic feedback.
+**Note:** `impact(...)` and `notification(...)` require an iPhone with 2nd Gen Taptic Engine (iPhone 7 and newer).
 
 ## Install
 
