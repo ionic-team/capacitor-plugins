@@ -2,6 +2,8 @@
 
 The Haptics API provides physical feedback to the user through touch or vibration.
 
+**Note:** On iOS, devices older than iPhone 7 only support `vibrate(…)` as haptic feedback.
+
 ## Install
 
 ```bash
