@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.1.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/keyboard@1.0.3...@capacitor/keyboard@1.1.0) (2021-09-27)
+
+
+### Features
+
+* **Keyboard:** Add resizeOnFullScreen plugin configuration ([#627](https://github.com/ionic-team/capacitor-plugins/issues/627)) ([8e87836](https://github.com/ionic-team/capacitor-plugins/commit/8e8783622d6e77c38c4aa741a622455302f30486))
+
+
+
+
+
 ## [1.0.3](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/keyboard@1.0.2...@capacitor/keyboard@1.0.3) (2021-09-01)
 
 **Note:** Version bump only for package @capacitor/keyboard

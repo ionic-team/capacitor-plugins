@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.1.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/haptics@1.0.3...@capacitor/haptics@1.1.0) (2021-09-27)
+
+
+### Features
+
+* **haptics:** Implement duration for vibration ([#618](https://github.com/ionic-team/capacitor-plugins/issues/618)) ([78e6b68](https://github.com/ionic-team/capacitor-plugins/commit/78e6b6886fa50318b1bfbe229e7318e521e3c245))
+
+
+
+
+
 ## [1.0.3](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/haptics@1.0.2...@capacitor/haptics@1.0.3) (2021-09-01)
 
 **Note:** Version bump only for package @capacitor/haptics
