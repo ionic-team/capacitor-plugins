@@ -99,7 +99,7 @@ public class Geolocation {
                     locationAge <= maximumAgeNanoSec &&
                     (lastLoc == null || lastLoc.getElapsedRealtimeNanos() > tmpLoc.getElapsedRealtimeNanos())
                 ) {
-                    lastLoc = lm.getLastKnownLocation(provider);
+                    lastLoc = tmpLoc;
                 }
             }
         }
