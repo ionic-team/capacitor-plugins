@@ -10,7 +10,6 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
-import java.util.List;
 
 public class Geolocation {
 
@@ -91,8 +90,7 @@ public class Geolocation {
     public Location getLastLocation(int maximumAge) {
         Location lastLoc = null;
         LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-        List<String> providers = lm.getAllProviders();
-        for (String provider : providers) {
+        for (String provider : lm.getAllProviders()) {
             Location tmpLoc = lm.getLastKnownLocation(provider);
             if (tmpLoc != null) {
                 long locationAge = SystemClock.elapsedRealtimeNanos() - tmpLoc.getElapsedRealtimeNanos();
