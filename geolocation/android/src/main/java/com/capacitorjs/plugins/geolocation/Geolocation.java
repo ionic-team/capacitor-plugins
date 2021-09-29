@@ -3,12 +3,14 @@ package com.capacitorjs.plugins.geolocation;
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.SystemClock;
 import androidx.core.location.LocationManagerCompat;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import java.util.List;
 
 public class Geolocation {
 
@@ -83,5 +85,26 @@ public class Geolocation {
             fusedLocationClient.removeLocationUpdates(locationCallback);
             locationCallback = null;
         }
+    }
+
+    @SuppressWarnings("MissingPermission")
+    public Location getLastLocation(int maximumAge) {
+        Location lastLoc = null;
+        LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        List<String> providers = lm.getAllProviders();
+        for (String provider : providers) {
+            Location tmpLoc = lm.getLastKnownLocation(provider);
+            if (tmpLoc != null) {
+                long locationAge = SystemClock.elapsedRealtimeNanos() - tmpLoc.getElapsedRealtimeNanos();
+                long maximumAgeNanoSec = maximumAge * 1000000L;
+                if (
+                    locationAge <= maximumAgeNanoSec &&
+                    (lastLoc == null || lastLoc.getElapsedRealtimeNanos() > tmpLoc.getElapsedRealtimeNanos())
+                ) {
+                    lastLoc = lm.getLastKnownLocation(provider);
+                }
+            }
+        }
+        return lastLoc;
     }
 }
