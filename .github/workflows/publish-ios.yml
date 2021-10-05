@@ -8,9 +8,39 @@ on:
         required: false
         default: ''
 jobs:
+  setup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    outputs:
+      plugins: ${{ steps.packages.outputs.paths }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Restore Dependency Cache
+        id: cache-modules
+        uses: actions/cache@v2
+        with:
+          path: |
+            node_modules
+            */node_modules
+          key: dependency-cache-${{ hashFiles('package.json', '*/package.json') }}
+      - run: npm install
+      - id: files
+        uses: imhoffd/get-changed-files@v2
+        with:
+          format: 'json'
+      - id: packages
+        uses: ./.github/actions/changed-packages
+        with:
+          files: ${{ steps.files.outputs.all }}
   publish-ios:
     runs-on: macos-11
+    if: needs.setup.outputs.plugins != '[]'
     timeout-minutes: 30
+    needs:
+      - setup
+    strategy:
+      matrix:
+        plugin: ${{ fromJson(needs.setup.outputs.plugins) }}
     steps:
       - run: sudo xcode-select --switch /Applications/Xcode_12.5.app
       - uses: actions/setup-node@v1
@@ -37,3 +67,4 @@ jobs:
           npm run publish:cocoapod
         env:
           COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
+        working-directory: ${{ matrix.plugin }}
