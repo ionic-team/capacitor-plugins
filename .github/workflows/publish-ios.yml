@@ -7,30 +7,10 @@ on:
         description: 'Specify a set of plugins to publish (as a JSON array, ex: [\"camera\", \"browser\"])'
         required: true
 jobs:
-  setup:
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
-    outputs:
-      plugins: ${{ steps.packages.outputs.paths }}
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          ref: native-publish
-      - name: Restore Dependency Cache
-        id: cache-modules
-        uses: actions/cache@v2
-        with:
-          path: |
-            node_modules
-            */node_modules
-          key: dependency-cache-${{ hashFiles('package.json', '*/package.json') }}
-      - run: npm install
   publish-ios:
     runs-on: macos-11
     if: github.event.inputs.plugins != '[]'
     timeout-minutes: 30
-    needs:
-      - setup
     strategy:
       matrix:
         plugin: ${{ fromJson(github.event.inputs.plugins) }}
