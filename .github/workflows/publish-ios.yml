@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       plugins:
-        description: 'Specify an optional subset of plugins to publish (space delimited)'
+        description: 'Specify a set of plugins to publish (as a JSON array, ex: [\"camera\", \"browser\"])'
         required: true
 jobs:
   setup:
