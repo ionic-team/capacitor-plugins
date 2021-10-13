@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/geolocation@1.1.0...@capacitor/geolocation@1.1.1) (2021-10-13)
+
+
+### Bug Fixes
+
+* correct addListeners links ([#655](https://github.com/ionic-team/capacitor-plugins/issues/655)) ([f9871e7](https://github.com/ionic-team/capacitor-plugins/commit/f9871e7bd53478addb21155e148829f550c0e457))
+* **geolocation:** return cached location if newer than maximumAge ([#639](https://github.com/ionic-team/capacitor-plugins/issues/639)) ([7b08eea](https://github.com/ionic-team/capacitor-plugins/commit/7b08eea9729bbf2b2b6b881cc81389cf108b3a2c))
+
+
+
+
+
 # [1.1.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/geolocation@1.0.2...@capacitor/geolocation@1.1.0) (2021-09-01)
 
 
