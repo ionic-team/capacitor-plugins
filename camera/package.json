@@ -1,6 +1,6 @@
 {
   "name": "@capacitor/camera",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "The Camera API provides the ability to take a photo with the camera or choose an existing one from the photo album.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
@@ -48,7 +48,7 @@
   "devDependencies": {
     "@capacitor/android": "^3.0.0",
     "@capacitor/core": "^3.0.0",
-    "@capacitor/docgen": "0.0.17",
+    "@capacitor/docgen": "0.0.18",
     "@capacitor/ios": "^3.0.0",
     "@ionic/eslint-config": "^0.3.0",
     "@ionic/prettier-config": "~1.0.1",
