@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/storage@1.2.1...@capacitor/storage@1.2.2) (2021-10-14)
+
+
+### Bug Fixes
+
+* remove postpublish scripts ([#656](https://github.com/ionic-team/capacitor-plugins/issues/656)) ([ed6ac49](https://github.com/ionic-team/capacitor-plugins/commit/ed6ac499ebf4a47525071ccbfc36c27503e11f60))
+
+
+
+
+
 ## [1.2.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/storage@1.2.0...@capacitor/storage@1.2.1) (2021-10-13)
 
 

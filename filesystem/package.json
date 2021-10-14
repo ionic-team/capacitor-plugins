@@ -1,6 +1,6 @@
 {
   "name": "@capacitor/filesystem",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "The Filesystem API provides a NodeJS-like API for working with files on the device.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
@@ -42,7 +42,6 @@
     "clean": "rimraf ./dist",
     "watch": "tsc --watch",
     "prepublishOnly": "npm run build",
-    "postpublish": "npm run publish:cocoapod",
     "publish:cocoapod": "pod trunk push ./CapacitorFilesystem.podspec --allow-warnings"
   },
   "devDependencies": {

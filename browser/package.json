@@ -1,6 +1,6 @@
 {
   "name": "@capacitor/browser",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "The Browser API provides the ability to open an in-app browser and subscribe to browser events.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
@@ -42,7 +42,6 @@
     "clean": "rimraf ./dist",
     "watch": "tsc --watch",
     "prepublishOnly": "npm run build",
-    "postpublish": "npm run publish:cocoapod",
     "publish:cocoapod": "pod trunk push ./CapacitorBrowser.podspec --allow-warnings"
   },
   "devDependencies": {

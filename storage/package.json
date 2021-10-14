@@ -1,6 +1,6 @@
 {
   "name": "@capacitor/storage",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "The Storage API provides a simple key/value persistent store for lightweight data.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
@@ -42,7 +42,6 @@
     "clean": "rimraf ./dist",
     "watch": "tsc --watch",
     "prepublishOnly": "npm run build",
-    "postpublish": "npm run publish:cocoapod",
     "publish:cocoapod": "pod trunk push ./CapacitorStorage.podspec --allow-warnings"
   },
   "devDependencies": {

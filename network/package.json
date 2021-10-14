@@ -1,6 +1,6 @@
 {
   "name": "@capacitor/network",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "The Network API provides network and connectivity information.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
@@ -42,7 +42,6 @@
     "clean": "rimraf ./dist",
     "watch": "tsc --watch",
     "prepublishOnly": "npm run build",
-    "postpublish": "npm run publish:cocoapod",
     "publish:cocoapod": "pod trunk push ./CapacitorNetwork.podspec --allow-warnings"
   },
   "devDependencies": {

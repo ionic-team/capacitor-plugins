@@ -1,6 +1,6 @@
 {
   "name": "@capacitor/clipboard",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "The Clipboard API enables copy and pasting to/from the system clipboard.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
@@ -42,7 +42,6 @@
     "clean": "rimraf ./dist",
     "watch": "tsc --watch",
     "prepublishOnly": "npm run build",
-    "postpublish": "npm run publish:cocoapod",
     "publish:cocoapod": "pod trunk push ./CapacitorClipboard.podspec --allow-warnings"
   },
   "devDependencies": {
