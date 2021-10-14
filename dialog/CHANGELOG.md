@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.5](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/dialog@1.0.4...@capacitor/dialog@1.0.5) (2021-10-14)
+
+
+### Bug Fixes
+
+* remove postpublish scripts ([#656](https://github.com/ionic-team/capacitor-plugins/issues/656)) ([ed6ac49](https://github.com/ionic-team/capacitor-plugins/commit/ed6ac499ebf4a47525071ccbfc36c27503e11f60))
+
+
+
+
+
 ## [1.0.4](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/dialog@1.0.3...@capacitor/dialog@1.0.4) (2021-10-13)
 
 

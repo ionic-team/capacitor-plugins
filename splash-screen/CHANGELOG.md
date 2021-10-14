@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.5](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/splash-screen@1.1.4...@capacitor/splash-screen@1.1.5) (2021-10-14)
+
+
+### Bug Fixes
+
+* remove postpublish scripts ([#656](https://github.com/ionic-team/capacitor-plugins/issues/656)) ([ed6ac49](https://github.com/ionic-team/capacitor-plugins/commit/ed6ac499ebf4a47525071ccbfc36c27503e11f60))
+
+
+
+
+
 ## [1.1.4](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/splash-screen@1.1.3...@capacitor/splash-screen@1.1.4) (2021-10-13)
 
 
