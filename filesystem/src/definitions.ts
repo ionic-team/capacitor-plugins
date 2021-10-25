@@ -35,7 +35,7 @@ export enum Directory {
    * On Android it's the directory holding application files.
    * Files will be deleted when the application is uninstalled.
    *
-   * @since 1.0.5
+   * @since 1.1.0
    */
   Library = 'LIBRARY',
 
