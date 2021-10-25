@@ -21,13 +21,23 @@ export enum Directory {
 
   /**
    * The Data directory
-   * On iOS it will use the Documents directory
+   * On iOS it will use the Documents directory.
    * On Android it's the directory holding application files.
    * Files will be deleted when the application is uninstalled.
    *
    * @since 1.0.0
    */
   Data = 'DATA',
+
+  /**
+   * The Library directory
+   * On iOS it will use the Library directory.
+   * On Android it's the directory holding application files.
+   * Files will be deleted when the application is uninstalled.
+   *
+   * @since 1.0.5
+   */
+  Library = 'LIBRARY',
 
   /**
    * The Cache directory
