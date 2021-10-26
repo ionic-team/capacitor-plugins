@@ -25,7 +25,7 @@ export interface CameraPlugin {
   /**
    * Allows the user to pick multiple pictures from the photo gallery.
    * On iOS 13 and older it only allows to pick one picture.
-   * 
+   *
    * @since 1.2.0
    */
   pickImages(options: GalleryImageOptions): Promise<GalleryPhotos>;
@@ -231,7 +231,7 @@ export interface Photo {
 export interface GalleryPhotos {
   /**
    * Array of all the picked photos.
-   * 
+   *
    * @since 1.2.0
    */
   photos: GalleryPhoto[];
@@ -306,7 +306,7 @@ export interface GalleryImageOptions {
   /**
    * iOS only: Maximum number of pictures the user will be able to choose.
    * @default 0 (unlimited)
-   * 
+   *
    * @since 1.2.0
    */
   limit: number;

@@ -43,7 +43,8 @@ export class CameraWeb extends WebPlugin implements CameraPlugin {
   }
 
   async pickImages(_options: GalleryImageOptions): Promise<GalleryPhotos> {
-    return new Promise<GalleryPhotos>(async (resolve) => {
+    // eslint-disable-next-line no-async-promise-executor
+    return new Promise<GalleryPhotos>(async resolve => {
       this.multipleFileInputExperience(resolve);
     });
   }
@@ -179,7 +180,8 @@ export class CameraWeb extends WebPlugin implements CameraPlugin {
       document.body.appendChild(input);
       input.addEventListener('change', (_e: any) => {
         const photos = [];
-        for (var i = 0; i < input.files!.length; i++) {
+        // eslint-disable-next-line @typescript-eslint/prefer-for-of
+        for (let i = 0; i < input.files!.length; i++) {
           const file = input.files![i];
           let format = 'jpeg';
 
@@ -191,8 +193,7 @@ export class CameraWeb extends WebPlugin implements CameraPlugin {
           photos.push({
             webPath: URL.createObjectURL(file),
             format: format,
-          }) 
-
+          });
         }
         resolve(photos);
         cleanup();

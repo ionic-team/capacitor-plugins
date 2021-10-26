@@ -322,7 +322,7 @@ public class CameraPlugin extends Plugin {
             JSObject ret = new JSObject();
             JSArray photos = new JSArray();
             int count = data.getClipData().getItemCount();
-            for(int i = 0; i < count; i++) {
+            for (int i = 0; i < count; i++) {
                 Uri imageUri = data.getClipData().getItemAt(i).getUri();
                 JSObject processResult = processPickedImages(imageUri);
                 if (processResult.getString("error") != null && !processResult.getString("error").isEmpty()) {
