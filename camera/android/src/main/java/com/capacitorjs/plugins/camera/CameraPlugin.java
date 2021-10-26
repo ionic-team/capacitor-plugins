@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.content.ActivityNotFoundException;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -254,9 +255,9 @@ public class CameraPlugin extends Plugin {
         if (checkPhotosPermissions(call)) {
             Intent intent = new Intent(Intent.ACTION_PICK);
             intent.setType("image/*");
-            if (intent.resolveActivity(getContext().getPackageManager()) != null) {
+            try {
                 startActivityForResult(call, intent, "processPickedImage");
-            } else {
+            } catch (ActivityNotFoundException ex) {
                 call.reject(NO_PHOTO_ACTIVITY_ERROR);
             }
         }
