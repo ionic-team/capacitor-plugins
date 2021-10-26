@@ -68,6 +68,7 @@ public class CameraPlugin extends Plugin {
     private static final String PERMISSION_DENIED_ERROR_PHOTOS = "User denied access to photos";
     private static final String NO_CAMERA_ERROR = "Device doesn't have a camera available";
     private static final String NO_CAMERA_ACTIVITY_ERROR = "Unable to resolve camera activity";
+    private static final String NO_PHOTO_ACTIVITY_ERROR = "Unable to resolve photo activity";
     private static final String IMAGE_FILE_SAVE_ERROR = "Unable to create photo on disk";
     private static final String IMAGE_PROCESS_NO_FILE_ERROR = "Unable to process image, file not found on disk";
     private static final String UNABLE_TO_PROCESS_IMAGE = "Unable to process image";
@@ -272,10 +273,8 @@ public class CameraPlugin extends Plugin {
                     startActivityForResult(call, intent, "processPickedImage");
                 }
             } catch (ActivityNotFoundException ex) {
-                call.reject("NO_PHOTO_ACTIVITY_ERROR");
+                call.reject(NO_PHOTO_ACTIVITY_ERROR);
             }
-
-
         }
     }
 
