@@ -9,6 +9,7 @@ public class CameraPlugin: CAPPlugin {
     private var settings = CameraSettings()
     private let defaultSource = CameraSource.prompt
     private let defaultDirection = CameraDirection.rear
+    private var multiple = false
 
     private var imageCounter = 0
 
@@ -66,6 +67,7 @@ public class CameraPlugin: CAPPlugin {
     }
 
     @objc func getPhoto(_ call: CAPPluginCall) {
+        self.multiple = false
         self.call = call
         self.settings = cameraSettings(from: call)
 
@@ -87,6 +89,13 @@ public class CameraPlugin: CAPPlugin {
                 self.showPhotos()
             }
         }
+    }
+
+    @objc func pickImages(_ call: CAPPluginCall) {
+        self.multiple = true
+        self.call = call
+        self.settings = cameraSettings(from: call)
+        self.showPhotos()
     }
 
     private func checkUsageDescriptions() -> String? {
@@ -164,24 +173,53 @@ extension CameraPlugin: PHPickerViewControllerDelegate {
             self.call?.reject("User cancelled photos app")
             return
         }
-        guard result.itemProvider.canLoadObject(ofClass: UIImage.self) else {
-            self.call?.reject("Error loading image")
-            return
-        }
-        // extract the image
-        result.itemProvider.loadObject(ofClass: UIImage.self) { [weak self] (reading, _) in
-            if let image = reading as? UIImage {
-                var asset: PHAsset?
-                if let assetId = result.assetIdentifier {
-                    asset = PHAsset.fetchAssets(withLocalIdentifiers: [assetId], options: nil).firstObject
-                }
-                if let processedImage = self?.processedImage(from: image, with: asset?.imageData) {
-                    self?.returnProcessedImage(processedImage)
+        if multiple {
+            var images: [ProcessedImage] = []
+            for img in results {
+                guard img.itemProvider.canLoadObject(ofClass: UIImage.self) else {
+                    self.call?.reject("Error loading image")
                     return
                 }
+                // extract the image
+                img.itemProvider.loadObject(ofClass: UIImage.self) { [weak self] (reading, _) in
+                    if let image = reading as? UIImage {
+                        var asset: PHAsset?
+                        if let assetId = result.assetIdentifier {
+                            asset = PHAsset.fetchAssets(withLocalIdentifiers: [assetId], options: nil).firstObject
+                        }
+                        if let processedImage = self?.processedImage(from: image, with: asset?.imageData) {
+                            images.append(processedImage)
+                        }
+                        if img == results.last {
+                            self?.returnImages(images)
+                        }
+                    } else {
+                        self?.call?.reject("Error loading image")
+                    }
+                }
             }
-            self?.call?.reject("Error loading image")
+
+        } else {
+            guard result.itemProvider.canLoadObject(ofClass: UIImage.self) else {
+                self.call?.reject("Error loading image")
+                return
+            }
+            // extract the image
+            result.itemProvider.loadObject(ofClass: UIImage.self) { [weak self] (reading, _) in
+                if let image = reading as? UIImage {
+                    var asset: PHAsset?
+                    if let assetId = result.assetIdentifier {
+                        asset = PHAsset.fetchAssets(withLocalIdentifiers: [assetId], options: nil).firstObject
+                    }
+                    if let processedImage = self?.processedImage(from: image, with: asset?.imageData) {
+                        self?.returnProcessedImage(processedImage)
+                        return
+                    }
+                }
+                self?.call?.reject("Error loading image")
+            }
         }
+
     }
 }
 
@@ -212,6 +250,17 @@ private extension CameraPlugin {
                 call?.reject("Unable to get portable path to file")
                 return
             }
+            if self.multiple {
+                call?.resolve([
+                    "photos": [[
+                        "path": fileURL.absoluteString,
+                        "exif": processedImage.exifData,
+                        "webPath": webURL.absoluteString,
+                        "format": "jpeg"
+                    ]]
+                ])
+                return
+            }
             call?.resolve([
                 "path": fileURL.absoluteString,
                 "exif": processedImage.exifData,
@@ -220,6 +269,32 @@ private extension CameraPlugin {
                 "saved": isSaved
             ])
         }
+    }
+
+    func returnImages(_ processedImages: [ProcessedImage]) {
+        var photos: [PluginCallResultData] = []
+        for processedImage in processedImages {
+            guard let jpeg = processedImage.generateJPEG(with: settings.jpegQuality) else {
+                self.call?.reject("Unable to convert image to jpeg")
+                return
+            }
+
+            guard let fileURL = try? saveTemporaryImage(jpeg),
+                  let webURL = bridge?.portablePath(fromLocalURL: fileURL) else {
+                call?.reject("Unable to get portable path to file")
+                return
+            }
+
+            photos.append([
+                "path": fileURL.absoluteString,
+                "exif": processedImage.exifData,
+                "webPath": webURL.absoluteString,
+                "format": "jpeg"
+            ])
+        }
+        call?.resolve([
+            "photos": photos
+        ])
     }
 
     func returnProcessedImage(_ processedImage: ProcessedImage) {
@@ -350,7 +425,7 @@ private extension CameraPlugin {
     @available(iOS 14, *)
     func presentPhotoPicker() {
         var configuration = PHPickerConfiguration(photoLibrary: PHPhotoLibrary.shared())
-        configuration.selectionLimit = 1
+        configuration.selectionLimit = self.multiple ? (self.call?.getInt("limit") ?? 0) : 1
         configuration.filter = .images
         let picker = PHPickerViewController(configuration: configuration)
         picker.delegate = self
