@@ -262,7 +262,7 @@ public class CameraPlugin extends Plugin {
     }
 
     private void openPhotos(final PluginCall call, boolean multiple) {
-        if (checkPhotosPermissions(call)) {
+        if (multiple || checkPhotosPermissions(call)) {
             Intent intent = new Intent(Intent.ACTION_PICK);
             intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, multiple);
             intent.setType("image/*");
