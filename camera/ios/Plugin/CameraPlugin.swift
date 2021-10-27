@@ -95,7 +95,9 @@ public class CameraPlugin: CAPPlugin {
         self.multiple = true
         self.call = call
         self.settings = cameraSettings(from: call)
-        self.showPhotos()
+        DispatchQueue.main.async {
+            self.showPhotos()
+        }
     }
 
     private func checkUsageDescriptions() -> String? {
@@ -230,21 +232,7 @@ private extension CameraPlugin {
             return
         }
 
-        if settings.resultType == CameraResultType.base64 {
-            self.call?.resolve([
-                "base64String": jpeg.base64EncodedString(),
-                "exif": processedImage.exifData,
-                "format": "jpeg",
-                "saved": isSaved
-            ])
-        } else if settings.resultType == CameraResultType.dataURL {
-            call?.resolve([
-                "dataUrl": "data:image/jpeg;base64," + jpeg.base64EncodedString(),
-                "exif": processedImage.exifData,
-                "format": "jpeg",
-                "saved": isSaved
-            ])
-        } else if settings.resultType == CameraResultType.uri {
+        if settings.resultType == CameraResultType.uri || multiple {
             guard let fileURL = try? saveTemporaryImage(jpeg),
                   let webURL = bridge?.portablePath(fromLocalURL: fileURL) else {
                 call?.reject("Unable to get portable path to file")
@@ -265,6 +253,20 @@ private extension CameraPlugin {
                 "path": fileURL.absoluteString,
                 "exif": processedImage.exifData,
                 "webPath": webURL.absoluteString,
+                "format": "jpeg",
+                "saved": isSaved
+            ])
+        } else if settings.resultType == CameraResultType.base64 {
+            self.call?.resolve([
+                "base64String": jpeg.base64EncodedString(),
+                "exif": processedImage.exifData,
+                "format": "jpeg",
+                "saved": isSaved
+            ])
+        } else if settings.resultType == CameraResultType.dataURL {
+            call?.resolve([
+                "dataUrl": "data:image/jpeg;base64," + jpeg.base64EncodedString(),
+                "exif": processedImage.exifData,
                 "format": "jpeg",
                 "saved": isSaved
             ])
