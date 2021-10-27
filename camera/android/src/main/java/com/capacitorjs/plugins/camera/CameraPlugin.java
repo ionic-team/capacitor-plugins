@@ -318,7 +318,7 @@ public class CameraPlugin extends Plugin {
     @ActivityCallback
     public void processPickedImages(PluginCall call, ActivityResult result) {
         Intent data = result.getData();
-        if (data.getClipData() != null) {
+        if (data != null && data.getClipData() != null) {
             JSObject ret = new JSObject();
             JSArray photos = new JSArray();
             int count = data.getClipData().getItemCount();
@@ -336,7 +336,6 @@ public class CameraPlugin extends Plugin {
             call.resolve(ret);
         } else {
             call.reject("No images picked");
-            return;
         }
     }
 
