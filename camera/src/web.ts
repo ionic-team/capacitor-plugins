@@ -195,7 +195,7 @@ export class CameraWeb extends WebPlugin implements CameraPlugin {
             format: format,
           });
         }
-        resolve(photos);
+        resolve({ photos });
         cleanup();
       });
     }

@@ -309,7 +309,7 @@ export interface GalleryImageOptions {
    *
    * @since 1.2.0
    */
-  limit: number;
+  limit?: number;
 }
 
 export enum CameraSource {
