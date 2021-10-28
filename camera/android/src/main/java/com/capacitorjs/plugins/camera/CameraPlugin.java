@@ -38,7 +38,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-
 import org.json.JSONException;
 
 /**
@@ -323,23 +322,25 @@ public class CameraPlugin extends Plugin {
         Intent data = result.getData();
         if (data != null && data.getClipData() != null) {
             Executor executor = Executors.newSingleThreadExecutor();
-            executor.execute(() -> {
-                JSObject ret = new JSObject();
-                JSArray photos = new JSArray();
-                int count = data.getClipData().getItemCount();
-                for (int i = 0; i < count; i++) {
-                    Uri imageUri = data.getClipData().getItemAt(i).getUri();
-                    JSObject processResult = processPickedImages(imageUri);
-                    if (processResult.getString("error") != null && !processResult.getString("error").isEmpty()) {
-                        call.reject(processResult.getString("error"));
-                        return;
-                    } else {
-                        photos.put(processPickedImages(imageUri));
+            executor.execute(
+                () -> {
+                    JSObject ret = new JSObject();
+                    JSArray photos = new JSArray();
+                    int count = data.getClipData().getItemCount();
+                    for (int i = 0; i < count; i++) {
+                        Uri imageUri = data.getClipData().getItemAt(i).getUri();
+                        JSObject processResult = processPickedImages(imageUri);
+                        if (processResult.getString("error") != null && !processResult.getString("error").isEmpty()) {
+                            call.reject(processResult.getString("error"));
+                            return;
+                        } else {
+                            photos.put(processPickedImages(imageUri));
+                        }
                     }
+                    ret.put("photos", photos);
+                    call.resolve(ret);
                 }
-                ret.put("photos", photos);
-                call.resolve(ret);
-            });
+            );
         } else {
             call.reject("No images picked");
         }
