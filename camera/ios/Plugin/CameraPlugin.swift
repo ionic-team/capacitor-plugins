@@ -177,6 +177,7 @@ extension CameraPlugin: PHPickerViewControllerDelegate {
         }
         if multiple {
             var images: [ProcessedImage] = []
+            var processedCount = 0
             for img in results {
                 guard img.itemProvider.canLoadObject(ofClass: UIImage.self) else {
                     self.call?.reject("Error loading image")
@@ -192,7 +193,8 @@ extension CameraPlugin: PHPickerViewControllerDelegate {
                         if let processedImage = self?.processedImage(from: image, with: asset?.imageData) {
                             images.append(processedImage)
                         }
-                        if img == results.last {
+                        processedCount += 1
+                        if processedCount == results.count {
                             self?.returnImages(images)
                         }
                     } else {
