@@ -2,6 +2,8 @@
 
 The Haptics API provides physical feedback to the user through touch or vibration.
 
+On devices that don't have Taptic Engine or Vibrator, the API calls will resolve without performing any action.
+
 ## Install
 
 ```bash

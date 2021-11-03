@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@1.1.2...@capacitor/camera@1.2.0) (2021-11-03)
+
+
+### Features
+
+* **camera:** Add new method for multiple image picking from gallery ([#671](https://github.com/ionic-team/capacitor-plugins/issues/671)) ([a49c590](https://github.com/ionic-team/capacitor-plugins/commit/a49c5901683da12438fbafbd1bf6ae91133d18ed))
+
+
+
+
+
 ## [1.1.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@1.1.1...@capacitor/camera@1.1.2) (2021-10-14)
 
 

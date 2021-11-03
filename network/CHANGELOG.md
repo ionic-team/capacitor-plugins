@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.6](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/network@1.0.5...@capacitor/network@1.0.6) (2021-11-03)
+
+
+### Bug Fixes
+
+* **network:** Don't add window event listeners if there is no window ([#678](https://github.com/ionic-team/capacitor-plugins/issues/678)) ([0c65780](https://github.com/ionic-team/capacitor-plugins/commit/0c657808083a7f4245027a2248816b3921b813bf))
+
+
+
+
+
 ## [1.0.5](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/network@1.0.4...@capacitor/network@1.0.5) (2021-10-14)
 
 
