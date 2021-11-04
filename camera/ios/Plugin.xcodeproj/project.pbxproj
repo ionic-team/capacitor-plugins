@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		03FC29A292ACC40490383A1F /* Pods_Plugin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B2A61DA5A1F2DD4F959604D /* Pods_Plugin.framework */; };
 		20C0B05DCFC8E3958A738AF2 /* Pods_PluginTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F6753A823D3815DB436415E3 /* Pods_PluginTests.framework */; };
+		2FA5008E26E9143C00127B0B /* ImageSaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA5008D26E9143C00127B0B /* ImageSaver.swift */; };
 		50ADFF92201F53D600D50D53 /* Plugin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50ADFF88201F53D600D50D53 /* Plugin.framework */; };
 		50ADFF97201F53D600D50D53 /* CameraPluginTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50ADFF96201F53D600D50D53 /* CameraPluginTests.swift */; };
 		50ADFF99201F53D600D50D53 /* CameraPlugin.h in Headers */ = {isa = PBXBuildFile; fileRef = 50ADFF8B201F53D600D50D53 /* CameraPlugin.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -30,6 +31,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2FA5008D26E9143C00127B0B /* ImageSaver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageSaver.swift; sourceTree = "<group>"; };
 		3B2A61DA5A1F2DD4F959604D /* Pods_Plugin.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Plugin.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		50ADFF88201F53D600D50D53 /* Plugin.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Plugin.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		50ADFF8B201F53D600D50D53 /* CameraPlugin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CameraPlugin.h; sourceTree = "<group>"; };
@@ -94,6 +96,7 @@
 		50ADFF8A201F53D600D50D53 /* Plugin */ = {
 			isa = PBXGroup;
 			children = (
+				2FA5008D26E9143C00127B0B /* ImageSaver.swift */,
 				50ADFF8B201F53D600D50D53 /* CameraPlugin.h */,
 				50ADFFA72020EE4F00D50D53 /* CameraPlugin.m */,
 				50E1A94720377CB70090CE1A /* CameraPlugin.swift */,
@@ -311,6 +314,7 @@
 			files = (
 				50E1A94820377CB70090CE1A /* CameraPlugin.swift in Sources */,
 				50ADFFA82020EE4F00D50D53 /* CameraPlugin.m in Sources */,
+				2FA5008E26E9143C00127B0B /* ImageSaver.swift in Sources */,
 				6276AAD7255B3E1400097815 /* CameraTypes.swift in Sources */,
 				6276AAD3255B3E0E00097815 /* CameraExtensions.swift in Sources */,
 			);

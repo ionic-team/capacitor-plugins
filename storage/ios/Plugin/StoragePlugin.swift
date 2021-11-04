@@ -94,4 +94,13 @@ public class StoragePlugin: CAPPlugin {
             "existing": existing
         ])
     }
+
+    @objc func removeOld(_ call: CAPPluginCall) {
+        let oldPrefix = "_cap_"
+        let oldKeys = UserDefaults.standard.dictionaryRepresentation().keys.filter { $0.hasPrefix(oldPrefix) }
+        for oldKey in oldKeys {
+            UserDefaults.standard.removeObject(forKey: oldKey)
+        }
+        call.resolve()
+    }
 }

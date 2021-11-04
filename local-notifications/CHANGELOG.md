@@ -3,6 +3,47 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.9](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/local-notifications@1.0.8...@capacitor/local-notifications@1.0.9) (2021-11-03)
+
+**Note:** Version bump only for package @capacitor/local-notifications
+
+
+
+
+
+## [1.0.8](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/local-notifications@1.0.7...@capacitor/local-notifications@1.0.8) (2021-10-14)
+
+
+### Bug Fixes
+
+* remove postpublish scripts ([#656](https://github.com/ionic-team/capacitor-plugins/issues/656)) ([ed6ac49](https://github.com/ionic-team/capacitor-plugins/commit/ed6ac499ebf4a47525071ccbfc36c27503e11f60))
+
+
+
+
+
+## [1.0.7](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/local-notifications@1.0.6...@capacitor/local-notifications@1.0.7) (2021-10-13)
+
+
+### Bug Fixes
+
+* correct addListeners links ([#655](https://github.com/ionic-team/capacitor-plugins/issues/655)) ([f9871e7](https://github.com/ionic-team/capacitor-plugins/commit/f9871e7bd53478addb21155e148829f550c0e457))
+
+
+
+
+
+## [1.0.6](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/local-notifications@1.0.5...@capacitor/local-notifications@1.0.6) (2021-09-15)
+
+
+### Bug Fixes
+
+* **local-notifications:** return schedule on as object ([#603](https://github.com/ionic-team/capacitor-plugins/issues/603)) ([ca34b01](https://github.com/ionic-team/capacitor-plugins/commit/ca34b01c73f14bb0ad14e8a501210e42a0e65b04))
+
+
+
+
+
 ## [1.0.5](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/local-notifications@1.0.4...@capacitor/local-notifications@1.0.5) (2021-09-01)
 
 

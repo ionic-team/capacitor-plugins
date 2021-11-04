@@ -111,23 +111,28 @@ public class GeolocationPlugin extends Plugin {
     private void getPosition(PluginCall call) {
         boolean enableHighAccuracy = call.getBoolean("enableHighAccuracy", false);
         int timeout = call.getInt("timeout", 10000);
+        int maximumAge = call.getInt("maximumAge", 0);
+        Location location = implementation.getLastLocation(maximumAge);
+        if (location != null) {
+            call.resolve(getJSObjectForLocation(location));
+        } else {
+            implementation.sendLocation(
+                enableHighAccuracy,
+                timeout,
+                true,
+                new LocationResultCallback() {
+                    @Override
+                    public void success(Location location) {
+                        call.resolve(getJSObjectForLocation(location));
+                    }
 
-        implementation.sendLocation(
-            enableHighAccuracy,
-            timeout,
-            true,
-            new LocationResultCallback() {
-                @Override
-                public void success(Location location) {
-                    call.resolve(getJSObjectForLocation(location));
+                    @Override
+                    public void error(String message) {
+                        call.reject(message);
+                    }
                 }
-
-                @Override
-                public void error(String message) {
-                    call.reject(message);
-                }
-            }
-        );
+            );
+        }
     }
 
     @SuppressWarnings("MissingPermission")

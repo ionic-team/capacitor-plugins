@@ -3,6 +3,56 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@1.1.2...@capacitor/camera@1.2.0) (2021-11-03)
+
+
+### Features
+
+* **camera:** Add new method for multiple image picking from gallery ([#671](https://github.com/ionic-team/capacitor-plugins/issues/671)) ([a49c590](https://github.com/ionic-team/capacitor-plugins/commit/a49c5901683da12438fbafbd1bf6ae91133d18ed))
+
+
+
+
+
+## [1.1.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@1.1.1...@capacitor/camera@1.1.2) (2021-10-14)
+
+
+### Bug Fixes
+
+* remove postpublish scripts ([#656](https://github.com/ionic-team/capacitor-plugins/issues/656)) ([ed6ac49](https://github.com/ionic-team/capacitor-plugins/commit/ed6ac499ebf4a47525071ccbfc36c27503e11f60))
+
+
+
+
+
+## [1.1.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@1.1.0...@capacitor/camera@1.1.1) (2021-10-13)
+
+
+### Bug Fixes
+
+* correct addListeners links ([#655](https://github.com/ionic-team/capacitor-plugins/issues/655)) ([f9871e7](https://github.com/ionic-team/capacitor-plugins/commit/f9871e7bd53478addb21155e148829f550c0e457))
+
+
+
+
+
+# [1.1.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@1.0.5...@capacitor/camera@1.1.0) (2021-09-15)
+
+
+### Bug Fixes
+
+* **camera:** saveToGallery for edited images ([#602](https://github.com/ionic-team/capacitor-plugins/issues/602)) ([b5ac27d](https://github.com/ionic-team/capacitor-plugins/commit/b5ac27d59181ec3acc2909b2569d8ab45a829b1c))
+* **camera:** set settings again on callbacks ([#595](https://github.com/ionic-team/capacitor-plugins/issues/595)) ([908bd68](https://github.com/ionic-team/capacitor-plugins/commit/908bd688767e374cf8e96b3def08bd33dcdfd2aa))
+
+
+### Features
+
+* **camera:** Return if image was saved to gallery ([#599](https://github.com/ionic-team/capacitor-plugins/issues/599)) ([594af3b](https://github.com/ionic-team/capacitor-plugins/commit/594af3be0982371e6c61e4bdb830c6bbb3963913))
+
+
+
+
+
 ## [1.0.5](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@1.0.4...@capacitor/camera@1.0.5) (2021-09-01)
 
 

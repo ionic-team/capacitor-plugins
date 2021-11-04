@@ -2,6 +2,8 @@
 
 The Haptics API provides physical feedback to the user through touch or vibration.
 
+On devices that don't have Taptic Engine or Vibrator, the API calls will resolve without performing any action.
+
 ## Install
 
 ```bash
@@ -169,9 +171,9 @@ For example, call this when a user has lifted their finger from a control
 
 #### VibrateOptions
 
-| Prop           | Type                | Description                                                      | Default          | Since |
-| -------------- | ------------------- | ---------------------------------------------------------------- | ---------------- | ----- |
-| **`duration`** | <code>number</code> | Duration of the vibration in milliseconds. Not supported in iOS. | <code>300</code> | 1.0.0 |
+| Prop           | Type                | Description                                                                   | Default          | Since |
+| -------------- | ------------------- | ----------------------------------------------------------------------------- | ---------------- | ----- |
+| **`duration`** | <code>number</code> | Duration of the vibration in milliseconds. Not supported in iOS 12 and older. | <code>300</code> | 1.0.0 |
 
 
 ### Enums

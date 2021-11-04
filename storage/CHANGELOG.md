@@ -3,6 +3,47 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.3](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/storage@1.2.2...@capacitor/storage@1.2.3) (2021-11-03)
+
+**Note:** Version bump only for package @capacitor/storage
+
+
+
+
+
+## [1.2.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/storage@1.2.1...@capacitor/storage@1.2.2) (2021-10-14)
+
+
+### Bug Fixes
+
+* remove postpublish scripts ([#656](https://github.com/ionic-team/capacitor-plugins/issues/656)) ([ed6ac49](https://github.com/ionic-team/capacitor-plugins/commit/ed6ac499ebf4a47525071ccbfc36c27503e11f60))
+
+
+
+
+
+## [1.2.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/storage@1.2.0...@capacitor/storage@1.2.1) (2021-10-13)
+
+
+### Bug Fixes
+
+* correct addListeners links ([#655](https://github.com/ionic-team/capacitor-plugins/issues/655)) ([f9871e7](https://github.com/ionic-team/capacitor-plugins/commit/f9871e7bd53478addb21155e148829f550c0e457))
+
+
+
+
+
+# [1.2.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/storage@1.1.0...@capacitor/storage@1.2.0) (2021-09-15)
+
+
+### Features
+
+* **storage:** Add removeOld function ([#585](https://github.com/ionic-team/capacitor-plugins/issues/585)) ([698350e](https://github.com/ionic-team/capacitor-plugins/commit/698350e38a756abc90fb38212b8adfa890c77ce5))
+
+
+
+
+
 # [1.1.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/storage@1.0.3...@capacitor/storage@1.1.0) (2021-09-01)
 
 

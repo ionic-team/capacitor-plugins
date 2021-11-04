@@ -15,15 +15,15 @@ npx cap sync
 import { SplashScreen } from '@capacitor/splash-screen';
 
 // Hide the splash (you should do this on app launch)
-SplashScreen.hide();
+await SplashScreen.hide();
 
 // Show the splash for an indefinite amount of time:
-SplashScreen.show({
+await SplashScreen.show({
   autoHide: false
 });
 
 // Show the splash for two seconds and then automatically hide it:
-SplashScreen.show({
+await SplashScreen.show({
   showDuration: 2000,
   autoHide: true
 });
@@ -73,7 +73,7 @@ These config values are available:
 
 | Prop                            | Type                                                                                                                          | Description                                                                                                                                                                                                  | Default             | Since |
 | ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------- | ----- |
-| **`launchShowDuration`**        | <code>number</code>                                                                                                           | How long to show the launch splash screen when autoHide is enabled (in ms)                                                                                                                                   | <code>0</code>      | 1.0.0 |
+| **`launchShowDuration`**        | <code>number</code>                                                                                                           | How long to show the launch splash screen when autoHide is enabled (in ms)                                                                                                                                   | <code>500</code>    | 1.0.0 |
 | **`launchAutoHide`**            | <code>boolean</code>                                                                                                          | Whether to auto hide the splash after launchShowDuration.                                                                                                                                                    | <code>true</code>   | 1.0.0 |
 | **`backgroundColor`**           | <code>string</code>                                                                                                           | Color of the background of the Splash Screen in hex format, #RRGGBB or #RRGGBBAA. Doesn't work if `useDialog` is true.                                                                                       |                     | 1.0.0 |
 | **`androidSplashResourceName`** | <code>string</code>                                                                                                           | Name of the resource to be used as Splash Screen. Only available on Android.                                                                                                                                 | <code>splash</code> | 1.0.0 |
