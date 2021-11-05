@@ -2,6 +2,7 @@ package com.capacitorjs.plugins.camera;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -35,6 +36,8 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import org.json.JSONException;
 
 /**
@@ -67,6 +70,7 @@ public class CameraPlugin extends Plugin {
     private static final String PERMISSION_DENIED_ERROR_PHOTOS = "User denied access to photos";
     private static final String NO_CAMERA_ERROR = "Device doesn't have a camera available";
     private static final String NO_CAMERA_ACTIVITY_ERROR = "Unable to resolve camera activity";
+    private static final String NO_PHOTO_ACTIVITY_ERROR = "Unable to resolve photo activity";
     private static final String IMAGE_FILE_SAVE_ERROR = "Unable to create photo on disk";
     private static final String IMAGE_PROCESS_NO_FILE_ERROR = "Unable to process image, file not found on disk";
     private static final String UNABLE_TO_PROCESS_IMAGE = "Unable to process image";
@@ -88,6 +92,12 @@ public class CameraPlugin extends Plugin {
         isEdited = false;
         settings = getSettings(call);
         doShow(call);
+    }
+
+    @PluginMethod
+    public void pickImages(PluginCall call) {
+        settings = getSettings(call);
+        openPhotos(call, true);
     }
 
     private void doShow(PluginCall call) {
@@ -250,10 +260,23 @@ public class CameraPlugin extends Plugin {
     }
 
     public void openPhotos(final PluginCall call) {
-        if (checkPhotosPermissions(call)) {
+        openPhotos(call, false);
+    }
+
+    private void openPhotos(final PluginCall call, boolean multiple) {
+        if (multiple || checkPhotosPermissions(call)) {
             Intent intent = new Intent(Intent.ACTION_PICK);
+            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, multiple);
             intent.setType("image/*");
-            startActivityForResult(call, intent, "processPickedImage");
+            try {
+                if (multiple) {
+                    startActivityForResult(call, intent, "processPickedImages");
+                } else {
+                    startActivityForResult(call, intent, "processPickedImage");
+                }
+            } catch (ActivityNotFoundException ex) {
+                call.reject(NO_PHOTO_ACTIVITY_ERROR);
+            }
         }
     }
 
@@ -294,6 +317,35 @@ public class CameraPlugin extends Plugin {
         processPickedImage(u, call);
     }
 
+    @ActivityCallback
+    public void processPickedImages(PluginCall call, ActivityResult result) {
+        Intent data = result.getData();
+        if (data != null && data.getClipData() != null) {
+            Executor executor = Executors.newSingleThreadExecutor();
+            executor.execute(
+                () -> {
+                    JSObject ret = new JSObject();
+                    JSArray photos = new JSArray();
+                    int count = data.getClipData().getItemCount();
+                    for (int i = 0; i < count; i++) {
+                        Uri imageUri = data.getClipData().getItemAt(i).getUri();
+                        JSObject processResult = processPickedImages(imageUri);
+                        if (processResult.getString("error") != null && !processResult.getString("error").isEmpty()) {
+                            call.reject(processResult.getString("error"));
+                            return;
+                        } else {
+                            photos.put(processPickedImages(imageUri));
+                        }
+                    }
+                    ret.put("photos", photos);
+                    call.resolve(ret);
+                }
+            );
+        } else {
+            call.reject("No images picked");
+        }
+    }
+
     private void processPickedImage(Uri imageUri, PluginCall call) {
         InputStream imageStream = null;
 
@@ -320,6 +372,57 @@ public class CameraPlugin extends Plugin {
                 }
             }
         }
+    }
+
+    private JSObject processPickedImages(Uri imageUri) {
+        InputStream imageStream = null;
+        JSObject ret = new JSObject();
+        try {
+            imageStream = getContext().getContentResolver().openInputStream(imageUri);
+            Bitmap bitmap = BitmapFactory.decodeStream(imageStream);
+
+            if (bitmap == null) {
+                ret.put("error", "Unable to process bitmap");
+                return ret;
+            }
+
+            ExifWrapper exif = ImageUtils.getExifData(getContext(), bitmap, imageUri);
+            try {
+                bitmap = prepareBitmap(bitmap, imageUri, exif);
+            } catch (IOException e) {
+                ret.put("error", UNABLE_TO_PROCESS_IMAGE);
+                return ret;
+            }
+            // Compress the final image and prepare for output to client
+            ByteArrayOutputStream bitmapOutputStream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, settings.getQuality(), bitmapOutputStream);
+
+            Uri newUri = getTempImage(imageUri, bitmapOutputStream);
+            exif.copyExif(newUri.getPath());
+            if (newUri != null) {
+                ret.put("format", "jpeg");
+                ret.put("exif", exif.toJson());
+                ret.put("path", newUri.toString());
+                ret.put("webPath", FileUtils.getPortablePath(getContext(), bridge.getLocalUrl(), newUri));
+            } else {
+                ret.put("error", UNABLE_TO_PROCESS_IMAGE);
+            }
+            return ret;
+        } catch (OutOfMemoryError err) {
+            ret.put("error", "Out of memory");
+        } catch (FileNotFoundException ex) {
+            ret.put("error", "No such image found");
+            Logger.error(getLogTag(), "No such image found", ex);
+        } finally {
+            if (imageStream != null) {
+                try {
+                    imageStream.close();
+                } catch (IOException e) {
+                    Logger.error(getLogTag(), UNABLE_TO_PROCESS_IMAGE, e);
+                }
+            }
+        }
+        return ret;
     }
 
     @ActivityCallback

@@ -539,7 +539,8 @@ export interface LocalNotificationSchema {
    *
    * Recommended format is `.wav` because is supported by both iOS and Android.
    *
-   * Only available for iOS and Android 26+.
+   * Only available for iOS and Android < 26.
+   * For Android 26+ use channelId of a channel configured with the desired sound.
    *
    * @since 1.0.0
    */
