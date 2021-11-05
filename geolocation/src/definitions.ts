@@ -3,7 +3,38 @@ import type { PermissionState } from '@capacitor/core';
 export type CallbackID = string;
 
 export interface PermissionStatus {
+  /**
+   * Permission state for location alias.
+   *
+   * On Android it requests/checks both ACCESS_COARSE_LOCATION and
+   * ACCESS_FINE_LOCATION permissions.
+   *
+   * On iOS and web it requests/checks location permission.
+   *
+   * @since 1.0.0
+   */
   location: PermissionState;
+
+  /**
+   * Permission state for coarseLocation alias.
+   *
+   * On Android it requests/checks ACCESS_COARSE_LOCATION.
+   *
+   * On Android 12+, users can choose between Approximate location (ACCESS_COARSE_LOCATION) or
+   * Precise location (ACCESS_FINE_LOCATION), so this alias can be used if the app doesn't
+   * need high accuracy.
+   *
+   * On iOS and web it will have the same value as location alias.
+   *
+   * @since 1.2.0
+   */
+  coarseLocation: PermissionState;
+}
+
+export type GeolocationPermissionType = 'location' | 'coarseLocation';
+
+export interface GeolocationPluginPermissions {
+  permissions: GeolocationPermissionType[];
 }
 
 export interface GeolocationPlugin {
@@ -44,7 +75,9 @@ export interface GeolocationPlugin {
    *
    * @since 1.0.0
    */
-  requestPermissions(): Promise<PermissionStatus>;
+  requestPermissions(
+    permissions?: GeolocationPluginPermissions,
+  ): Promise<PermissionStatus>;
 }
 
 export interface ClearWatchOptions {
@@ -121,6 +154,9 @@ export interface Position {
 export interface PositionOptions {
   /**
    * High accuracy mode (such as GPS, if available)
+   *
+   * On Android 12+ devices it will be ignored if users didn't grant
+   * ACCESS_FINE_LOCATION permissions (can be checked with location alias).
    *
    * @default false
    * @since 1.0.0
