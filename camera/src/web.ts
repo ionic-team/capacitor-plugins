@@ -201,7 +201,6 @@ export class CameraWeb extends WebPlugin implements CameraPlugin {
     }
 
     input.accept = 'image/*';
-    (input as any).capture = true;
 
     input.click();
   }
