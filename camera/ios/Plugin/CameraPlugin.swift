@@ -215,7 +215,8 @@ extension CameraPlugin: PHPickerViewControllerDelegate {
                     if let assetId = result.assetIdentifier {
                         asset = PHAsset.fetchAssets(withLocalIdentifiers: [assetId], options: nil).firstObject
                     }
-                    if let processedImage = self?.processedImage(from: image, with: asset?.imageData) {
+                    if var processedImage = self?.processedImage(from: image, with: asset?.imageData) {
+                        processedImage.flags = .gallery
                         self?.returnProcessedImage(processedImage)
                         return
                     }
