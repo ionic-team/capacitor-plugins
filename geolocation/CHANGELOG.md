@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/geolocation@1.1.3...@capacitor/geolocation@1.2.0) (2021-11-17)
+
+
+### Features
+
+* **geolocation:** Add new alias for coarse location ([#684](https://github.com/ionic-team/capacitor-plugins/issues/684)) ([7563040](https://github.com/ionic-team/capacitor-plugins/commit/7563040983ad397e28616246e7ed5ffce69727c2))
+
+
+
+
+
 ## [1.1.3](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/geolocation@1.1.2...@capacitor/geolocation@1.1.3) (2021-11-03)
 
 **Note:** Version bump only for package @capacitor/geolocation

@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@1.2.0...@capacitor/camera@1.2.1) (2021-11-17)
+
+
+### Bug Fixes
+
+* **camera:** Don't save gallery images on iOS 14+ ([#696](https://github.com/ionic-team/capacitor-plugins/issues/696)) ([7b2cc88](https://github.com/ionic-team/capacitor-plugins/commit/7b2cc88f6e83265c991ae9f81cfc3f6bed346250))
+* **camera:** Remove capture attribute from multiple photo picker ([#687](https://github.com/ionic-team/capacitor-plugins/issues/687)) ([e551ef7](https://github.com/ionic-team/capacitor-plugins/commit/e551ef77eebe331cc7bf13c9c0eab5a0bd2da0d1))
+
+
+
+
+
 # [1.2.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@1.1.2...@capacitor/camera@1.2.0) (2021-11-03)
 
 
