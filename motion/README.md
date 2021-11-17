@@ -45,7 +45,7 @@ const stopAcceleration = () => {
 
 // Remove all listeners
 const removeListeners = () => {
-  Motion.removeAllListeners()
+  Motion.removeAllListeners();
 };
 ```
 
