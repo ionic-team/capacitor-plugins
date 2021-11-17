@@ -34,6 +34,17 @@ import Foundation
     }
 
     /**
+     * Get real free disk space
+     */
+    public func getRealFreeDiskSize() -> Int64? {
+        do {
+            return try URL(fileURLWithPath: NSHomeDirectory() as String).resourceValues(forKeys: [URLResourceKey.volumeAvailableCapacityForImportantUsageKey]).volumeAvailableCapacityForImportantUsage!
+        } catch {
+            return nil
+        }
+    }
+
+    /**
      * Get total disk size
      */
     public func getTotalDiskSize() -> Int64? {
