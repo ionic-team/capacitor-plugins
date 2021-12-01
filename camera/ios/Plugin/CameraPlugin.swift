@@ -187,7 +187,7 @@ extension CameraPlugin: PHPickerViewControllerDelegate {
                 img.itemProvider.loadObject(ofClass: UIImage.self) { [weak self] (reading, _) in
                     if let image = reading as? UIImage {
                         var asset: PHAsset?
-                        if let assetId = result.assetIdentifier {
+                        if let assetId = img.assetIdentifier {
                             asset = PHAsset.fetchAssets(withLocalIdentifiers: [assetId], options: nil).firstObject
                         }
                         if let processedImage = self?.processedImage(from: image, with: asset?.imageData) {

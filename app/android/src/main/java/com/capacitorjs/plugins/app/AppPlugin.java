@@ -58,13 +58,6 @@ public class AppPlugin extends Plugin {
         getActivity().getOnBackPressedDispatcher().addCallback(getActivity(), callback);
     }
 
-    @Override
-    @PluginMethod(returnType = PluginMethod.RETURN_NONE)
-    public void removeAllListeners(PluginCall call) {
-        super.removeAllListeners(call);
-        unsetAppListeners();
-    }
-
     @PluginMethod
     public void exitApp(PluginCall call) {
         unsetAppListeners();
