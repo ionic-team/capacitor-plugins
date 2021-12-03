@@ -47,8 +47,11 @@ public class BrowserPlugin extends Plugin {
             Logger.error(getLogTag(), "Invalid color provided for toolbarColor. Using default", null);
         }
 
+        // get the deeplink prevention, if provided
+        Boolean preventDeeplink = call.getBoolean("preventDeeplink", null);
+
         // open the browser and finish
-        implementation.open(url, toolbarColor);
+        implementation.open(url, toolbarColor, preventDeeplink);
         call.resolve();
     }
 

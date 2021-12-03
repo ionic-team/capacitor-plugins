@@ -3,6 +3,8 @@ package com.capacitorjs.plugins.browser;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
@@ -88,15 +90,16 @@ public class Browser {
      * @param url
      */
     public void open(Uri url) {
-        open(url, null);
+        open(url, null, null);
     }
 
     /**
      * Open the browser to the specified URL with the specified toolbar color.
      * @param url
      * @param toolbarColor
+     * @param preventDeeplink
      */
-    public void open(Uri url, @Nullable Integer toolbarColor) {
+    public void open(Uri url, @Nullable Integer toolbarColor, @Nullable Boolean preventDeeplink) {
         CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder(getCustomTabsSession());
 
         builder.addDefaultShareMenuItem();
@@ -107,6 +110,20 @@ public class Browser {
 
         CustomTabsIntent tabsIntent = builder.build();
         tabsIntent.intent.putExtra(Intent.EXTRA_REFERRER, Uri.parse(Intent.URI_ANDROID_APP_SCHEME + "//" + context.getPackageName()));
+
+        if (preventDeeplink != null) {
+          String browserPackageName = "";
+          Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://"));
+          ResolveInfo resolveInfo = context.getPackageManager().resolveActivity(browserIntent, PackageManager.MATCH_DEFAULT_ONLY);
+
+          if (resolveInfo != null) {
+            browserPackageName = resolveInfo.activityInfo.packageName;
+
+            if (!browserPackageName.isEmpty()) {
+              tabsIntent.intent.setPackage(browserPackageName);
+            }
+          }
+        }
 
         isInitialLoad = true;
         group.reset();
