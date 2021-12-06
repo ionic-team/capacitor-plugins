@@ -56,8 +56,9 @@ public class HapticsPlugin: CAPPlugin {
     }
 
     @objc public func vibrate(_ call: CAPPluginCall) {
+        let duration = call.getDouble("duration", 300)/1000
         DispatchQueue.main.async {
-            self.implementation.vibrate()
+            self.implementation.vibrate(duration)
         }
         call.resolve()
     }

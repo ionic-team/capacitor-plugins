@@ -36,6 +36,16 @@ public class Device {
         return statFs.getBlockCountLong() * statFs.getBlockSizeLong();
     }
 
+    public long getRealDiskFree() {
+        StatFs statFs = new StatFs(Environment.getDataDirectory().getAbsolutePath());
+        return statFs.getAvailableBlocksLong() * statFs.getBlockSizeLong();
+    }
+
+    public long getRealDiskTotal() {
+        StatFs statFs = new StatFs(Environment.getDataDirectory().getAbsolutePath());
+        return statFs.getBlockCountLong() * statFs.getBlockSizeLong();
+    }
+
     public String getPlatform() {
         return "android";
     }
