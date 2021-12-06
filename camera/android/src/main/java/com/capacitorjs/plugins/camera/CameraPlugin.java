@@ -267,7 +267,7 @@ public class CameraPlugin extends Plugin {
         if (multiple || checkPhotosPermissions(call)) {
             Intent intent = new Intent(Intent.ACTION_PICK);
             intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, multiple);
-            intent.putExtra(Intent.EXTRA_MIME_TYPES, new String[]{"image/*"});
+            intent.putExtra(Intent.EXTRA_MIME_TYPES, new String[] { "image/*" });
             intent.putExtra("multi-pick", multiple);
             intent.setType("image/*");
             try {
@@ -346,21 +346,21 @@ public class CameraPlugin extends Plugin {
         } else if (data.getData() != null) {
             Executor executor = Executors.newSingleThreadExecutor();
             executor.execute(
-                    () -> {
-                        JSObject ret = new JSObject();
-                        JSArray photos = new JSArray();
-                        Uri imageUri = data.getData();
-                        JSObject processResult = processPickedImages(imageUri);
-                        if (processResult.getString("error") != null && !processResult.getString("error").isEmpty()) {
-                            call.reject(processResult.getString("error"));
-                            return;
-                        } else {
-                            photos.put(processPickedImages(imageUri));
-                        }
-
-                        ret.put("photos", photos);
-                        call.resolve(ret);
+                () -> {
+                    JSObject ret = new JSObject();
+                    JSArray photos = new JSArray();
+                    Uri imageUri = data.getData();
+                    JSObject processResult = processPickedImages(imageUri);
+                    if (processResult.getString("error") != null && !processResult.getString("error").isEmpty()) {
+                        call.reject(processResult.getString("error"));
+                        return;
+                    } else {
+                        photos.put(processPickedImages(imageUri));
                     }
+
+                    ret.put("photos", photos);
+                    call.resolve(ret);
+                }
             );
         } else if (data.getExtras() != null) {
             Bundle bundle = data.getExtras();
@@ -369,30 +369,29 @@ public class CameraPlugin extends Plugin {
                 ArrayList<Parcelable> fileUris = bundle.getParcelableArrayList("selectedItems");
 
                 if (fileUris != null) {
-
                     Executor executor = Executors.newSingleThreadExecutor();
                     executor.execute(
-                            () -> {
-                                JSObject ret = new JSObject();
-                                JSArray photos = new JSArray();
+                        () -> {
+                            JSObject ret = new JSObject();
+                            JSArray photos = new JSArray();
 
-                                for(Parcelable fileUri : fileUris) {
-                                    if (fileUri instanceof Uri) {
-                                        Uri imageUri = (Uri) fileUri;
-                                        JSObject processResult = processPickedImages(imageUri);
+                            for (Parcelable fileUri : fileUris) {
+                                if (fileUri instanceof Uri) {
+                                    Uri imageUri = (Uri) fileUri;
+                                    JSObject processResult = processPickedImages(imageUri);
 
-                                        if (processResult.getString("error") != null && !processResult.getString("error").isEmpty()) {
-                                            call.reject(processResult.getString("error"));
-                                            return;
-                                        } else {
-                                            photos.put(processPickedImages(imageUri));
-                                        }
+                                    if (processResult.getString("error") != null && !processResult.getString("error").isEmpty()) {
+                                        call.reject(processResult.getString("error"));
+                                        return;
+                                    } else {
+                                        photos.put(processPickedImages(imageUri));
                                     }
                                 }
-
-                                ret.put("photos", photos);
-                                call.resolve(ret);
                             }
+
+                            ret.put("photos", photos);
+                            call.resolve(ret);
+                        }
                     );
                 }
             }
