@@ -120,11 +120,11 @@ import Capacitor
         var window: UIWindow? = UIApplication.shared.delegate?.window as? UIWindow
 
         if #available(iOS 13, *), window == nil {
-            window = (UIApplication.shared.connectedScenes.first as? UIWindowScene)?.windows.first
+            window = (UIApplication.shared.connectedScenes.first as? UIWindowScene)?.windows.filter({$0.isKeyWindow}).first
         }
 
-        if let _ = window {
-            viewController.view.frame = CGRect(origin: CGPoint(x: 0, y: 0), size: window!.bounds.size)
+        if let unwrappedWindow = window {
+            viewController.view.frame = CGRect(origin: CGPoint(x: 0, y: 0), size: unwrappedWindow.bounds.size)
         } else {
             CAPLog.print("Unable to find root window object for SplashScreen bounds. Please file an issue")
         }
