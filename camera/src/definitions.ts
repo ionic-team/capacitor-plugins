@@ -55,7 +55,8 @@ export interface ImageOptions {
    */
   quality?: number;
   /**
-   * Whether to allow the user to crop or make small edits (platform specific)
+   * Whether to allow the user to crop or make small edits (platform specific).
+   * On iOS 14+ it's only supported for CameraSource.Camera, but not for CameraSource.Photos.
    *
    * @since 1.0.0
    */
