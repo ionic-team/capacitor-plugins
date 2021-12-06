@@ -1,6 +1,6 @@
 {
   "name": "@capacitor/local-notifications",
-  "version": "1.0.6",
+  "version": "1.0.9",
   "description": "The Local Notifications API provides a way to schedule device notifications locally (i.e. without a server sending push notifications).",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
@@ -33,7 +33,7 @@
     "verify:android": "cd android && ./gradlew clean build test && cd ..",
     "verify:web": "npm run build",
     "lint": "npm run eslint && npm run prettier -- --check && npm run swiftlint -- lint",
-    "fmt": "npm run eslint -- --fix && npm run prettier -- --write && npm run swiftlint -- autocorrect --format",
+    "fmt": "npm run eslint -- --fix && npm run prettier -- --write && npm run swiftlint -- --fix --format",
     "eslint": "eslint . --ext ts",
     "prettier": "prettier \"**/*.{css,html,ts,js,java}\"",
     "swiftlint": "node-swiftlint",
@@ -42,14 +42,13 @@
     "clean": "rimraf ./dist",
     "watch": "tsc --watch",
     "prepublishOnly": "npm run build",
-    "postpublish": "npm run publish:cocoapod",
     "publish:cocoapod": "pod trunk push ./CapacitorLocalNotifications.podspec --allow-warnings"
   },
   "devDependencies": {
     "@capacitor/android": "^3.0.0",
     "@capacitor/cli": "^3.0.0",
     "@capacitor/core": "^3.0.0",
-    "@capacitor/docgen": "0.0.17",
+    "@capacitor/docgen": "0.0.18",
     "@capacitor/ios": "^3.0.0",
     "@ionic/eslint-config": "^0.3.0",
     "@ionic/prettier-config": "~1.0.1",

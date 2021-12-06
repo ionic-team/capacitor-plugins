@@ -4,14 +4,18 @@ on:
   workflow_dispatch:
     inputs:
       plugins:
-        description: 'Specify an optional subset of plugins to publish (space delimited)'
-        required: false
-        default: ''
+        description: 'Specify a set of plugins to publish (as a JSON array, ex: [\"camera\", \"browser\"])'
+        required: true
 jobs:
   publish-ios:
-    runs-on: macos-latest
+    runs-on: macos-11
+    if: github.event.inputs.plugins != '[]'
     timeout-minutes: 30
+    strategy:
+      matrix:
+        plugin: ${{ fromJson(github.event.inputs.plugins) }}
     steps:
+      - run: sudo xcode-select --switch /Applications/Xcode_12.5.app
       - uses: actions/setup-node@v1
         with:
           node-version: 14.x
