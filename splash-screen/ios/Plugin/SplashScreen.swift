@@ -120,7 +120,7 @@ import Capacitor
         var window: UIWindow? = UIApplication.shared.delegate?.window as? UIWindow
 
         if #available(iOS 13, *), window == nil {
-            let scene: UIWindowScene? = (UIApplication.shared.connectedScenes.first as? UIWindowScene)
+            let scene: UIWindowScene? = UIApplication.shared.connectedScenes.first as? UIWindowScene
             window = scene?.windows.filter({$0.isKeyWindow}).first
             if window == nil {
                 window = scene?.windows.first
