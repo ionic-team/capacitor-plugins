@@ -44,8 +44,8 @@ export class CameraWeb extends WebPlugin implements CameraPlugin {
 
   async pickImages(_options: GalleryImageOptions): Promise<GalleryPhotos> {
     // eslint-disable-next-line no-async-promise-executor
-    return new Promise<GalleryPhotos>(async resolve => {
-      this.multipleFileInputExperience(resolve);
+    return new Promise<GalleryPhotos>(async (resolve, reject) => {
+      this.multipleFileInputExperience(resolve, reject);
     });
   }
 
@@ -162,7 +162,7 @@ export class CameraWeb extends WebPlugin implements CameraPlugin {
     input.click();
   }
 
-  private multipleFileInputExperience(resolve: any) {
+  private multipleFileInputExperience(resolve: any, reject: any) {
     let input = document.querySelector(
       '#_capacitor-camera-input-multiple',
     ) as HTMLInputElement;
@@ -198,6 +198,12 @@ export class CameraWeb extends WebPlugin implements CameraPlugin {
         resolve({ photos });
         cleanup();
       });
+      window.addEventListener('focus', () => {
+        setTimeout(() => {
+          reject(new Error('onblur'));
+          cleanup();
+        }, 300);
+      }, { once: true });
     }
 
     input.accept = 'image/*';
