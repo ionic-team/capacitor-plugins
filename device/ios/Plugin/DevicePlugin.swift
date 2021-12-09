@@ -16,7 +16,7 @@ public class DevicePlugin: CAPPlugin {
     }
     @objc func getInfo(_ call: CAPPluginCall) {
         var isSimulator = false
-        #if arch(i386) || arch(x86_64)
+        #if targetEnvironment(simulator)
         isSimulator = true
         #endif
 
