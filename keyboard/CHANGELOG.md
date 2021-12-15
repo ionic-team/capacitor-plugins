@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/keyboard@1.1.3...@capacitor/keyboard@1.2.0) (2021-12-08)
+
+
+### Features
+
+* **keyboard:** Make resize work in apps that use scenes ([#729](https://github.com/ionic-team/capacitor-plugins/issues/729)) ([6dde082](https://github.com/ionic-team/capacitor-plugins/commit/6dde082d1683daa923e6f42678785bc679f63b02))
+
+
+
+
+
+## [1.1.3](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/keyboard@1.1.2...@capacitor/keyboard@1.1.3) (2021-11-03)
+
+**Note:** Version bump only for package @capacitor/keyboard
+
+
+
+
+
 ## [1.1.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/keyboard@1.1.1...@capacitor/keyboard@1.1.2) (2021-10-14)
 
 

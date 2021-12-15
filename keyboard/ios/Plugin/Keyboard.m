@@ -200,9 +200,15 @@ NSString* UITraitsClassString;
     _paddingBottom = _paddingBottom + 20;
   }
   CGRect f, wf = CGRectZero;
-  id<UIApplicationDelegate> delegate = [[UIApplication sharedApplication] delegate];
-  if (delegate != nil && [delegate respondsToSelector:@selector(window)]) {
-    f = [[delegate window] bounds];
+  UIWindow * window = [[[UIApplication sharedApplication] delegate] window];
+  if (!window) {
+    if (@available(iOS 13.0, *)) {
+      UIScene *scene = [UIApplication sharedApplication].connectedScenes.allObjects.firstObject;
+      window = [[(UIWindowScene*)scene windows] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"isKeyWindow == YES"]].firstObject;
+    }
+  }
+  if (window) {
+    f = [window bounds];
   }
   if (self.webView != nil) {
     wf = self.webView.frame;

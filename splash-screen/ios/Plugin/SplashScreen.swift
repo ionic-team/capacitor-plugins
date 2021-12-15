@@ -117,16 +117,21 @@ import Capacitor
     // Update the bounds for the splash image. This will also be called when
     // the parent view observers fire
     private func updateSplashImageBounds() {
-        guard let delegate = UIApplication.shared.delegate else {
-            CAPLog.print("Unable to find root window object for SplashScreen bounds. Please file an issue")
-            return
+        var window: UIWindow? = UIApplication.shared.delegate?.window as? UIWindow
+
+        if #available(iOS 13, *), window == nil {
+            let scene: UIWindowScene? = UIApplication.shared.connectedScenes.first as? UIWindowScene
+            window = scene?.windows.filter({$0.isKeyWindow}).first
+            if window == nil {
+                window = scene?.windows.first
+            }
         }
 
-        guard let window = delegate.window as? UIWindow else {
+        if let unwrappedWindow = window {
+            viewController.view.frame = CGRect(origin: CGPoint(x: 0, y: 0), size: unwrappedWindow.bounds.size)
+        } else {
             CAPLog.print("Unable to find root window object for SplashScreen bounds. Please file an issue")
-            return
         }
-        viewController.view.frame = CGRect(origin: CGPoint(x: 0, y: 0), size: window.bounds.size)
     }
 
     override public func observeValue(forKeyPath keyPath: String?, of object: Any?, change _: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {

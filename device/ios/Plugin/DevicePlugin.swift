@@ -16,18 +16,21 @@ public class DevicePlugin: CAPPlugin {
     }
     @objc func getInfo(_ call: CAPPluginCall) {
         var isSimulator = false
-        #if arch(i386) || arch(x86_64)
+        #if targetEnvironment(simulator)
         isSimulator = true
         #endif
 
         let memUsed = implementation.getMemoryUsage()
         let diskFree = implementation.getFreeDiskSize() ?? 0
+        let realDiskFree = implementation.getRealFreeDiskSize() ?? 0
         let diskTotal = implementation.getTotalDiskSize() ?? 0
 
         call.resolve([
             "memUsed": memUsed,
             "diskFree": diskFree,
             "diskTotal": diskTotal,
+            "realDiskFree": realDiskFree,
+            "realDiskTotal": diskTotal,
             "name": UIDevice.current.name,
             "model": UIDevice.current.model,
             "operatingSystem": "ios",

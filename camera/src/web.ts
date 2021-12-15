@@ -3,6 +3,8 @@ import { WebPlugin, CapacitorException } from '@capacitor/core';
 import { CameraSource, CameraDirection } from './definitions';
 import type {
   CameraPlugin,
+  GalleryImageOptions,
+  GalleryPhotos,
   ImageOptions,
   PermissionStatus,
   Photo,
@@ -37,6 +39,13 @@ export class CameraWeb extends WebPlugin implements CameraPlugin {
       } else {
         this.cameraExperience(options, resolve, reject);
       }
+    });
+  }
+
+  async pickImages(_options: GalleryImageOptions): Promise<GalleryPhotos> {
+    // eslint-disable-next-line no-async-promise-executor
+    return new Promise<GalleryPhotos>(async resolve => {
+      this.multipleFileInputExperience(resolve);
     });
   }
 
@@ -150,6 +159,49 @@ export class CameraWeb extends WebPlugin implements CameraPlugin {
     } else if (options.direction === CameraDirection.Rear) {
       (input as any).capture = 'environment';
     }
+
+    input.click();
+  }
+
+  private multipleFileInputExperience(resolve: any) {
+    let input = document.querySelector(
+      '#_capacitor-camera-input-multiple',
+    ) as HTMLInputElement;
+
+    const cleanup = () => {
+      input.parentNode?.removeChild(input);
+    };
+
+    if (!input) {
+      input = document.createElement('input') as HTMLInputElement;
+      input.id = '_capacitor-camera-input-multiple';
+      input.type = 'file';
+      input.hidden = true;
+      input.multiple = true;
+      document.body.appendChild(input);
+      input.addEventListener('change', (_e: any) => {
+        const photos = [];
+        // eslint-disable-next-line @typescript-eslint/prefer-for-of
+        for (let i = 0; i < input.files!.length; i++) {
+          const file = input.files![i];
+          let format = 'jpeg';
+
+          if (file.type === 'image/png') {
+            format = 'png';
+          } else if (file.type === 'image/gif') {
+            format = 'gif';
+          }
+          photos.push({
+            webPath: URL.createObjectURL(file),
+            format: format,
+          });
+        }
+        resolve({ photos });
+        cleanup();
+      });
+    }
+
+    input.accept = 'image/*';
 
     input.click();
   }
