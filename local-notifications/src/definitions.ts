@@ -38,8 +38,8 @@ declare module '@capacitor/cli' {
        * On Android 26+ it sets the default channel sound and can't be
        * changed unless the app is uninstalled.
        *
-       * If the audio file is not found, it will result on the default system
-       * sound being played on Android 21-25 and not sound on Android 26+.
+       * If the audio file is not found, it will result in the default system
+       * sound being played on Android 21-25 and no sound on Android 26+.
        *
        * Only available for Android.
        *
