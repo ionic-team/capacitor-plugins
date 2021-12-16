@@ -56,7 +56,8 @@ export class CameraWeb extends WebPlugin implements CameraPlugin {
   ) {
     if (customElements.get('pwa-camera-modal')) {
       const cameraModal: any = document.createElement('pwa-camera-modal');
-      cameraModal.facingMode = options.direction === CameraDirection.Front ? 'user' : 'environment';
+      cameraModal.facingMode =
+        options.direction === CameraDirection.Front ? 'user' : 'environment';
       document.body.appendChild(cameraModal);
       try {
         await cameraModal.componentOnReady();
