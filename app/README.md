@@ -80,6 +80,7 @@ const checkAppLaunchUrl = async () => {
 * [`addListener('appRestoredResult', ...)`](#addlistenerapprestoredresult)
 * [`addListener('backButton', ...)`](#addlistenerbackbutton)
 * [`removeAllListeners()`](#removealllisteners)
+* [`minimizeApp()`](#minimizeapp)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
 
@@ -263,6 +264,17 @@ removeAllListeners() => Promise<void>
 Remove all native listeners for this plugin
 
 **Since:** 1.0.0
+
+--------------------
+
+
+### minimizeApp()
+
+```typescript
+minimizeApp() => Promise<void>
+```
+
+Minimizes application
 
 --------------------
 

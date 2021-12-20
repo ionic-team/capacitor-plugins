@@ -231,6 +231,11 @@ export interface AppPlugin {
    * @since 1.0.0
    */
   removeAllListeners(): Promise<void>;
+
+  /**
+   * Minimizes application
+   */
+  minimizeApp(): Promise<void>;
 }
 
 /**
