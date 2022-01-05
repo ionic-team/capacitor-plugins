@@ -8,7 +8,7 @@ android {
     buildToolsVersion "30.0.3"
 
     defaultConfig {
-        applicationId "io.ionic.identityvaulttest"
+        applicationId "io.ionic.googlemapstest"
         minSdkVersion 22
         targetSdkVersion 31
         versionCode 1
@@ -54,8 +54,5 @@ dependencies {
     implementation 'com.google.android.material:material:1.4.0'
     implementation 'junit:junit:4.13.2'
     testImplementation 'org.robolectric:robolectric:4.7.1'
-    api 'com.bottlerocketstudios:vault:1.4.2'
-    implementation 'androidx.lifecycle:lifecycle-process:2.4.0'
-    implementation 'androidx.biometric:biometric:1.1.0'
-    implementation 'org.apache.cordova:framework:10.1.1'
+    implementation project(':capacitor-android')
 }
