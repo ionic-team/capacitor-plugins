@@ -4,6 +4,12 @@ import Capacitor
 @objc(SharePlugin)
 public class SharePlugin: CAPPlugin {
 
+    @objc func canShare(_ call: CAPPluginCall) {
+        call.resolve([
+            "value": true
+        ])
+    }
+
     @objc func share(_ call: CAPPluginCall) {
         var items = [Any]()
 
