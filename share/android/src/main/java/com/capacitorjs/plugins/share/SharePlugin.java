@@ -51,6 +51,13 @@ public class SharePlugin extends Plugin {
     }
 
     @PluginMethod
+    public void canShare(PluginCall call) {
+        JSObject callResult = new JSObject();
+        callResult.put("value", true);
+        call.resolve(callResult);
+    }
+
+    @PluginMethod
     public void share(PluginCall call) {
         if (!isPresenting) {
             String title = call.getString("title", "");
