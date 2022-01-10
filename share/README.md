@@ -31,6 +31,7 @@ Each platform uses a different set of fields, but you should supply them all.
 
 <docgen-index>
 
+* [`canShare()`](#canshare)
 * [`share(...)`](#share)
 * [Interfaces](#interfaces)
 
@@ -38,6 +39,21 @@ Each platform uses a different set of fields, but you should supply them all.
 
 <docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
+
+### canShare()
+
+```typescript
+canShare() => Promise<CanShareResult>
+```
+
+Check if sharing is supported.
+
+**Returns:** <code>Promise&lt;<a href="#canshareresult">CanShareResult</a>&gt;</code>
+
+**Since:** 1.1.0
+
+--------------------
+
 
 ### share(...)
 
@@ -59,6 +75,13 @@ Show a Share modal for sharing content with other apps
 
 
 ### Interfaces
+
+
+#### CanShareResult
+
+| Prop        | Type                 | Description                          | Since |
+| ----------- | -------------------- | ------------------------------------ | ----- |
+| **`value`** | <code>boolean</code> | Whether sharing is supported or not. | 1.1.0 |
 
 
 #### ShareResult
