@@ -183,7 +183,7 @@ For example, call this when a user has lifted their finger from a control
 
 | Members      | Value                 | Description                                                  | Since |
 | ------------ | --------------------- | ------------------------------------------------------------ | ----- |
-| **`Heavy`**  | <code>'HEAVY'</code>  | A collision between small, light user interface elements     | 1.0.0 |
+| **`Heavy`**  | <code>'HEAVY'</code>  | A collision between large-sized user interface elements      | 1.0.0 |
 | **`Medium`** | <code>'MEDIUM'</code> | A collision between moderately sized user interface elements | 1.0.0 |
 | **`Light`**  | <code>'LIGHT'</code>  | A collision between small, light user interface elements     | 1.0.0 |
 
