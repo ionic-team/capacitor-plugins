@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.3.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/geolocation@1.2.0...@capacitor/geolocation@1.3.0) (2021-12-08)
+
+
+### Features
+
+* **geolocation:** Error if Google Play Services are not available ([#709](https://github.com/ionic-team/capacitor-plugins/issues/709)) ([fc79c43](https://github.com/ionic-team/capacitor-plugins/commit/fc79c4319c54cbcd5dbbb7221dfdd03d0515805b))
+
+
+
+
+
 # [1.2.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/geolocation@1.1.3...@capacitor/geolocation@1.2.0) (2021-11-17)
 
 

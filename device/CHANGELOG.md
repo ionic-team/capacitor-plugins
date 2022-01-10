@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/device@1.1.0...@capacitor/device@1.1.1) (2021-12-08)
+
+
+### Bug Fixes
+
+* **device:** isVirtual is false on M1 simulators ([#726](https://github.com/ionic-team/capacitor-plugins/issues/726)) ([5377586](https://github.com/ionic-team/capacitor-plugins/commit/53775863df624531e8ffa4b18852b408e1bd2cbd))
+
+
+
+
+
 # [1.1.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/device@1.0.6...@capacitor/device@1.1.0) (2021-11-17)
 
 

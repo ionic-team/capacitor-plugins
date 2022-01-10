@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.7](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/app@1.0.6...@capacitor/app@1.0.7) (2021-12-08)
+
+
+### Bug Fixes
+
+* **app:** Don't unset App Listeners on removeAllListeners ([#716](https://github.com/ionic-team/capacitor-plugins/issues/716)) ([17f2ee8](https://github.com/ionic-team/capacitor-plugins/commit/17f2ee8743e1366dd74771bdad9829cc5f3891e8))
+
+
+
+
+
 ## [1.0.6](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/app@1.0.5...@capacitor/app@1.0.6) (2021-11-03)
 
 **Note:** Version bump only for package @capacitor/app
