@@ -175,7 +175,7 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
 
     const occupiedEntry = (await this.dbRequest('get', [path])) as EntryObj;
     if (occupiedEntry && occupiedEntry.type === 'directory')
-      throw 'The supplied path is a directory.';
+      throw Error('The supplied path is a directory.');
 
     const encoding = options.encoding;
     const parentPath = path.substr(0, path.lastIndexOf('/'));
@@ -224,7 +224,7 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
 
     const occupiedEntry = (await this.dbRequest('get', [path])) as EntryObj;
     if (occupiedEntry && occupiedEntry.type === 'directory')
-      throw 'The supplied path is a directory.';
+      throw Error('The supplied path is a directory.');
 
     const parentEntry = (await this.dbRequest('get', [parentPath])) as EntryObj;
     if (parentEntry === undefined) {
