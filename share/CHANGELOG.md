@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.1.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/share@1.0.7...@capacitor/share@1.1.0) (2022-01-10)
+
+
+### Features
+
+* **share:** Add canShare method to check availability ([#748](https://github.com/ionic-team/capacitor-plugins/issues/748)) ([3883d82](https://github.com/ionic-team/capacitor-plugins/commit/3883d82952a4453797b86c562af27f9b05e82a18))
+
+
+
+
+
 ## [1.0.7](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/share@1.0.6...@capacitor/share@1.0.7) (2021-11-03)
 
 **Note:** Version bump only for package @capacitor/share
