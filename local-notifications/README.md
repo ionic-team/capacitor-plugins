@@ -434,14 +434,15 @@ Enables basic storage and retrieval of dates and times.
 
 #### ScheduleOn
 
-| Prop         | Type                |
-| ------------ | ------------------- |
-| **`year`**   | <code>number</code> |
-| **`month`**  | <code>number</code> |
-| **`day`**    | <code>number</code> |
-| **`hour`**   | <code>number</code> |
-| **`minute`** | <code>number</code> |
-| **`second`** | <code>number</code> |
+| Prop          | Type                |
+| ------------- | ------------------- |
+| **`year`**    | <code>number</code> |
+| **`month`**   | <code>number</code> |
+| **`day`**     | <code>number</code> |
+| **`weekday`** | <code>number</code> |
+| **`hour`**    | <code>number</code> |
+| **`minute`**  | <code>number</code> |
+| **`second`**  | <code>number</code> |
 
 
 #### Attachment
