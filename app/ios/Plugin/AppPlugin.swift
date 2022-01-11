@@ -1,19 +1,6 @@
 import Foundation
 import Capacitor
 
-enum AppPluginError: Error {
-    case notImplemented
-
-    var errorDescription: String? {
-        switch self {
-        switch .notImplemented:
-            return "Not implemented in iOS"    
-        default:
-            return ""
-        }
-    }
-}
-
 @objc(AppPlugin)
 public class AppPlugin: CAPPlugin {
     private var observers: [NSObjectProtocol] = []
@@ -107,6 +94,6 @@ public class AppPlugin: CAPPlugin {
     }
 
     @objc func minimizeApp(_ call: CAPPluginCall) {
-        throw AppPluginError.notImplemented
+        call.unimplemented()
     }
 }
