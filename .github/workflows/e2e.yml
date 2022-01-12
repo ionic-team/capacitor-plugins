@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     outputs:
-      plugins: ${{ steps.packages.outputs.paths }}
+      plugins: ${{ steps.e2e-packages.outputs.e2e-paths }}
     steps:
       - name: Cancel Previous Runs
         uses: styfle/cancel-workflow-action@ce177499ccf9fd2aded3b0426c97e5434c2e8a73
@@ -34,6 +34,10 @@ jobs:
         uses: ./.github/actions/changed-packages
         with:
           files: ${{ steps.files.outputs.all }}
+      - id: e2e-packages
+        uses: ./.github/actions/filter-out-non-e2e-enabled
+        with: 
+          paths: ${{ steps.packages.outputs.paths }}
 
   e2e-ios:
     runs-on: macos-11
