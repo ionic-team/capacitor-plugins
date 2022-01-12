@@ -92,4 +92,8 @@ public class AppPlugin: CAPPlugin {
             ])
         }
     }
+
+    @objc func minimizeApp(_ call: CAPPluginCall) {
+        call.unimplemented()
+    }
 }
