@@ -141,6 +141,8 @@ import Foundation
             switch directory {
             case "CACHE":
                 return .cachesDirectory
+            case "LIBRARY":
+                return .libraryDirectory
             default:
                 return .documentDirectory
             }
