@@ -163,6 +163,14 @@ export interface AppPlugin {
   getLaunchUrl(): Promise<AppLaunchUrl | undefined>;
 
   /**
+   * Minimizes application.
+   * Feature is only available for Android.
+   *
+   * @since 1.1.0
+   */
+  minimizeApp(): Promise<void>;
+
+  /**
    * Listen for changes in the App's active state (whether the app is in the foreground or background)
    *
    * @since 1.0.0
@@ -231,11 +239,6 @@ export interface AppPlugin {
    * @since 1.0.0
    */
   removeAllListeners(): Promise<void>;
-
-  /**
-   * Minimizes application
-   */
-  minimizeApp(): Promise<void>;
 }
 
 /**
