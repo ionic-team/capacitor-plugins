@@ -158,8 +158,9 @@ Get the URL the app was launched with, if any.
 minimizeApp() => Promise<void>
 ```
 
-Minimizes application.
-Feature is only available for Android.
+Minimizes the application.
+
+Only available for Android.
 
 **Since:** 1.1.0
 

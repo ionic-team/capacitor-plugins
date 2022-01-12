@@ -163,8 +163,9 @@ export interface AppPlugin {
   getLaunchUrl(): Promise<AppLaunchUrl | undefined>;
 
   /**
-   * Minimizes application.
-   * Feature is only available for Android.
+   * Minimizes the application.
+   *
+   * Only available for Android.
    *
    * @since 1.1.0
    */
