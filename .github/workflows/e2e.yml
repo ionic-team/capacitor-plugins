@@ -69,3 +69,68 @@ jobs:
 
       - name: Run E2E Test on iOS
         run: npm run e2e:ios
+
+  e2e-android:
+    runs-on: macos-10.15
+    timeout-minutes: 35
+    if: needs.setup.outputs.plugins != '[]'
+    needs:
+      - setup
+    strategy:
+      matrix:
+        plugin: ${{ fromJson(needs.setup.outputs.plugins) }}
+    defaults:
+      run:
+        working-directory: ${{ matrix.plugin }}/e2e-tests
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup NodeJS & NPM
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14.x
+
+      - name: Prepare Local Package
+        run: npm install && npm run build && npm run pack-local
+        working-directory: ${{ matrix.plugin }}
+        env: 
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - run: npm install
+
+      - name: AVD cache
+        uses: actions/cache@v2
+        id: avd-cache
+        with:
+          path: |
+            ~/.android/avd/*
+            ~/.android/adb*
+          key: avd-adb-p3a-30-cache
+
+      - name: Create AVD and generate snapshot for caching
+        if: steps.avd-cache.outputs.cache-hit != 'true'
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          avd-name: e2eDevice
+          api-level: 30
+          target: google_apis
+          arch: x86
+          profile: pixel_3a
+          emulator-build: 7759208
+          force-avd-creation: true
+          emulator-options: -no-window -no-audio -no-boot-anim -accel on
+          script: echo "Generated AVD snapshot for caching."
+
+      - name: Run E2E Test on Android
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          avd-name: e2eDevice
+          api-level: 30
+          target: google_apis
+          arch: x86
+          profile: pixel_3a
+          working-directory: ${{ matrix.plugin }}/e2e-tests
+          emulator-build: 7759208
+          emulator-options: -no-window -no-audio -no-boot-anim -accel on -no-snapshot-save
+          disable-animations: false
+          script: npm run e2e:android
