@@ -234,8 +234,6 @@ export interface AppPlugin {
 
   /**
    * Minimizes application
-   *
-   * @since 1.1.0
    */
   minimizeApp(): Promise<void>;
 }
