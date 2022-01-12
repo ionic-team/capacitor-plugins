@@ -55,13 +55,13 @@ jobs:
         with:
           node-version: 14.x
 
-      - run: npm install
-
       - name: Prepare Local Package
         run: npm install && npm run build && npm run pack-local
         working-directory: ${{ matrix.plugin }}
         env: 
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - run: npm install
 
       - name: Run E2E Test on iOS
         run: npm run e2e:ios
