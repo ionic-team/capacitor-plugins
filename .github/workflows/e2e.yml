@@ -1,0 +1,69 @@
+name: E2E Tests
+
+on: 
+  pull_request:
+    branches:
+        - '**'
+  
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    outputs:
+      plugins: ${{ steps.packages.outputs.paths }}
+    steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@ce177499ccf9fd2aded3b0426c97e5434c2e8a73
+        with:
+          access_token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/checkout@v2
+      - name: Restore Dependency Cache
+        id: cache-modules
+        uses: actions/cache@v2
+        with:
+          path: |
+            node_modules
+            */node_modules
+          key: dependency-cache-${{ hashFiles('package.json', '*/package.json') }}
+      - run: npm install
+      - id: files
+        uses: imhoffd/get-changed-files@v2
+        with:
+          format: 'json'
+      - id: packages
+        uses: ./.github/actions/changed-packages
+        with:
+          files: ${{ steps.files.outputs.all }}
+
+  e2e-ios:
+    runs-on: macos-11
+    timeout-minutes: 35
+    if: needs.setup.outputs.plugins != '[]'
+    needs:
+      - setup
+    strategy:
+      matrix:
+        plugin: ${{ fromJson(needs.setup.outputs.plugins) }}
+    defaults:
+      run:
+        working-directory: ${{ matrix.plugin }}/e2e-tests
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup NodeJS & NPM
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14.x
+          cache: 'npm'
+          cache-dependency-path: ${{ matrix.plugin }}/e2e-tests/package-lock.json
+
+      - run: npm install
+
+      - name: Prepare Local Package
+        run: npm install && npm run build && npm run pack-local
+        working-directory: ${{ matrix.plugin }}
+        env: 
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Run E2E Test on iOS
+        run: npm run e2e:ios

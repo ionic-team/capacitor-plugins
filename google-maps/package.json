@@ -4,7 +4,14 @@
   "description": "Google maps on Capacitor",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
-  "types": "dist/esm/index.d.ts",
+  "typings": "dist/typings/index.d.ts",
+  "typesVersions": {
+    "<4.1": {
+      "dist/typings/index.d.ts": [
+        "dist/typings/ts_old/index.d.ts"
+      ]
+    }
+  },
   "unpkg": "dist/plugin.js",
   "files": [
     "android/src/main/",
@@ -28,7 +35,6 @@
     "native"
   ],
   "scripts": {
-    "postinstall": "cd ./example-app && npm install",
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",
     "verify:ios": "cd ios && pod install && xcodebuild -workspace Plugin.xcworkspace -scheme Plugin && cd ..",
     "verify:android": "cd android && ./gradlew clean build test && cd ..",
@@ -39,11 +45,13 @@
     "prettier": "prettier \"**/*.{css,html,ts,js,java}\"",
     "swiftlint": "node-swiftlint",
     "docgen": "docgen --api CapacitorGoogleMapsPlugin --output-readme README.md --output-json dist/docs.json",
-    "build": "npm run clean && npm run docgen && tsc && rollup -c rollup.config.js",
+    "build": "npm run clean && npm run docgen && tsc && rollup -c rollup.config.js && npm run downlevel-dts",
     "clean": "rimraf ./dist",
     "watch": "tsc --watch",
     "prepublishOnly": "npm run build",
     "publish:cocoapod": "pod trunk push ./CapacitorGoogleMaps.podspec --allow-warnings",
+    "downlevel-dts": "npx downlevel-dts dist/typings dist/typings/ts_old --to=3.5",
+    "pack-local": "npm run build && npm pack && find . -name 'capacitor-google-maps-*tgz' -exec bash -c 'mv $0 capacitor-google-maps.tgz' {} \\; ",
     "unittest:ios": "xcodebuild test -project ./unit-tests/ios/GoogleMapsPlugin/GoogleMapsPlugin.xcodeproj -scheme TestApp -destination 'platform=iOS Simulator,name=iPhone 12,OS=15.2' | xcpretty && exit ${PIPESTATUS[0]}",
     "unittest:android": "cd ./unit-tests/android && ./gradlew testDebugUnitTest"
   },
@@ -55,6 +63,7 @@
     "@ionic/eslint-config": "^0.3.0",
     "@ionic/prettier-config": "^1.0.1",
     "@ionic/swiftlint-config": "^1.1.2",
+    "downlevel-dts": "^0.7.0",
     "eslint": "^7.11.0",
     "prettier": "~2.3.0",
     "prettier-plugin-java": "~1.0.2",
