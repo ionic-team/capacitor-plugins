@@ -75,12 +75,12 @@ const checkAppLaunchUrl = async () => {
 * [`getInfo()`](#getinfo)
 * [`getState()`](#getstate)
 * [`getLaunchUrl()`](#getlaunchurl)
+* [`minimizeApp()`](#minimizeapp)
 * [`addListener('appStateChange', ...)`](#addlistenerappstatechange)
 * [`addListener('appUrlOpen', ...)`](#addlistenerappurlopen)
 * [`addListener('appRestoredResult', ...)`](#addlistenerapprestoredresult)
 * [`addListener('backButton', ...)`](#addlistenerbackbutton)
 * [`removeAllListeners()`](#removealllisteners)
-* [`minimizeApp()`](#minimizeapp)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
 
@@ -148,6 +148,20 @@ Get the URL the app was launched with, if any.
 **Returns:** <code>Promise&lt;<a href="#applaunchurl">AppLaunchUrl</a>&gt;</code>
 
 **Since:** 1.0.0
+
+--------------------
+
+
+### minimizeApp()
+
+```typescript
+minimizeApp() => Promise<void>
+```
+
+Minimizes application.
+Feature is only available for Android.
+
+**Since:** 1.1.0
 
 --------------------
 
@@ -264,17 +278,6 @@ removeAllListeners() => Promise<void>
 Remove all native listeners for this plugin
 
 **Since:** 1.0.0
-
---------------------
-
-
-### minimizeApp()
-
-```typescript
-minimizeApp() => Promise<void>
-```
-
-Minimizes application
 
 --------------------
 
