@@ -83,6 +83,7 @@ If the device has entered [Doze](https://developer.android.com/training/monitori
 * [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
+* [Enums](#enums)
 
 </docgen-index>
 
@@ -434,15 +435,15 @@ Enables basic storage and retrieval of dates and times.
 
 #### ScheduleOn
 
-| Prop          | Type                |
-| ------------- | ------------------- |
-| **`year`**    | <code>number</code> |
-| **`month`**   | <code>number</code> |
-| **`day`**     | <code>number</code> |
-| **`weekday`** | <code>number</code> |
-| **`hour`**    | <code>number</code> |
-| **`minute`**  | <code>number</code> |
-| **`second`**  | <code>number</code> |
+| Prop          | Type                                        |
+| ------------- | ------------------------------------------- |
+| **`year`**    | <code>number</code>                         |
+| **`month`**   | <code>number</code>                         |
+| **`day`**     | <code>number</code>                         |
+| **`weekday`** | <code><a href="#weekday">Weekday</a></code> |
+| **`hour`**    | <code>number</code>                         |
+| **`minute`**  | <code>number</code>                         |
+| **`second`**  | <code>number</code>                         |
 
 
 #### Attachment
@@ -611,5 +612,21 @@ The notification visibility. For more details, see the [Android Developer Docs](
 #### PermissionState
 
 <code>'prompt' | 'prompt-with-rationale' | 'granted' | 'denied'</code>
+
+
+### Enums
+
+
+#### Weekday
+
+| Members         | Value          |
+| --------------- | -------------- |
+| **`Sunday`**    | <code>1</code> |
+| **`Monday`**    |                |
+| **`Tuesday`**   |                |
+| **`Wednesday`** |                |
+| **`Thursday`**  |                |
+| **`Friday`**    |                |
+| **`Saturday`**  |                |
 
 </docgen-api>

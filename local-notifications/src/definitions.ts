@@ -785,7 +785,7 @@ export interface ScheduleOn {
   year?: number;
   month?: number;
   day?: number;
-  weekday?: number;
+  weekday?: Weekday;
   hour?: number;
   minute?: number;
   second?: number;
@@ -940,6 +940,19 @@ export interface Channel {
 }
 
 /**
+ * Day of the week. Used for scheduling notifications on a particular weekday.
+ */
+export enum Weekday {
+  Sunday = 1,
+  Monday,
+  Tuesday,
+  Wednesday,
+  Thursday,
+  Friday,
+  Saturday
+}
+
+/**
  * The importance level. For more details, see the [Android Developer Docs](https://developer.android.com/reference/android/app/NotificationManager#IMPORTANCE_DEFAULT)
  * @since 1.0.0
  */
@@ -1028,3 +1041,4 @@ export type LocalNotificationSchedule = Schedule;
  * @since 1.0.0
  */
 export type LocalNotificationActionPerformed = ActionPerformed;
+
