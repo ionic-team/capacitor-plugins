@@ -222,13 +222,21 @@ public class DateMatch {
      */
     public String toMatchString() {
         String matchString =
-            year + separator +
-            month + separator +
-            day + separator +
-            weekday + separator +
-            hour + separator +
-            minute + separator +
-            second + separator + unit;
+            year +
+            separator +
+            month +
+            separator +
+            day +
+            separator +
+            weekday +
+            separator +
+            hour +
+            separator +
+            minute +
+            separator +
+            second +
+            separator +
+            unit;
         return matchString.replace("null", "*");
     }
 
