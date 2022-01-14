@@ -949,7 +949,7 @@ export enum Weekday {
   Wednesday = 4,
   Thursday = 5,
   Friday = 6,
-  Saturday = 7
+  Saturday = 7,
 }
 
 /**
@@ -1041,4 +1041,3 @@ export type LocalNotificationSchedule = Schedule;
  * @since 1.0.0
  */
 export type LocalNotificationActionPerformed = ActionPerformed;
-
