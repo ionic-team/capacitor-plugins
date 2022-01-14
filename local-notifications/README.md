@@ -622,11 +622,11 @@ The notification visibility. For more details, see the [Android Developer Docs](
 | Members         | Value          |
 | --------------- | -------------- |
 | **`Sunday`**    | <code>1</code> |
-| **`Monday`**    |                |
-| **`Tuesday`**   |                |
-| **`Wednesday`** |                |
-| **`Thursday`**  |                |
-| **`Friday`**    |                |
-| **`Saturday`**  |                |
+| **`Monday`**    | <code>2</code> |
+| **`Tuesday`**   | <code>3</code> |
+| **`Wednesday`** | <code>4</code> |
+| **`Thursday`**  | <code>5</code> |
+| **`Friday`**    | <code>6</code> |
+| **`Saturday`**  | <code>7</code> |
 
 </docgen-api>
