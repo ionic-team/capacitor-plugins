@@ -785,6 +785,7 @@ export interface ScheduleOn {
   year?: number;
   month?: number;
   day?: number;
+  weekday?: Weekday;
   hour?: number;
   minute?: number;
   second?: number;
@@ -936,6 +937,19 @@ export interface Channel {
    * @since 1.0.0
    */
   vibration?: boolean;
+}
+
+/**
+ * Day of the week. Used for scheduling notifications on a particular weekday.
+ */
+export enum Weekday {
+  Sunday = 1,
+  Monday = 2,
+  Tuesday = 3,
+  Wednesday = 4,
+  Thursday = 5,
+  Friday = 6,
+  Saturday = 7,
 }
 
 /**
