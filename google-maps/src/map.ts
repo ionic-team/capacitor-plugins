@@ -15,7 +15,9 @@ export class Map {
 
   constructor(id: string, options: MapOptions) {
     this.id = id;
-    CapacitorGoogleMaps.create(this.id, options);
+    CapacitorGoogleMaps.create(this.id, options).catch(err => {
+      throw err;
+    });
   }
 
   async destroy(): Promise<void> {
