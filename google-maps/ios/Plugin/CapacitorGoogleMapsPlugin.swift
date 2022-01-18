@@ -1,18 +1,34 @@
 import Foundation
 import Capacitor
 
-/**
- * Please read the Capacitor iOS Plugin Development Guide
- * here: https://capacitorjs.com/docs/plugins/ios
- */
 @objc(CapacitorGoogleMapsPlugin)
 public class CapacitorGoogleMapsPlugin: CAPPlugin {
-    private let implementation = CapacitorGoogleMaps()
-
-    @objc func echo(_ call: CAPPluginCall) {
-        let value = call.getString("value") ?? ""
-        call.resolve([
-            "value": implementation.echo(value)
-        ])
+    private var maps = Dictionary<String, Map>()
+    
+    @objc func create(_ call: CAPPluginCall) {
+        guard let id = call.getString("id") else {
+            call.reject("map id cannot be empty")
+            return
+        }
+        
+        let newMap = Map()
+        self.maps[id] = newMap
+        
+        call.resolve()
+    }
+    
+    @objc func destroy(_ call: CAPPluginCall) {
+        guard let id = call.getString("id") else {
+            call.reject("map id cannot be empty")
+            return
+        }
+        
+        let removedMap = self.maps.removeValue(forKey: id)
+        if removedMap == nil {
+            call.reject("map for key not found")
+            return
+        }
+        
+        call.resolve()
     }
 }
