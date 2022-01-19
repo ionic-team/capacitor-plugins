@@ -59,7 +59,7 @@ export interface ImpactOptions {
 
 export enum ImpactStyle {
   /**
-   * A collision between small, light user interface elements
+   * A collision between large, heavy user interface elements
    *
    * @since 1.0.0
    */
