@@ -1,15 +1,18 @@
 package com.capacitorjs.plugins.device;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
 import android.provider.Settings;
+import android.util.DisplayMetrics;
 import android.webkit.WebView;
 
 public class Device {
@@ -113,5 +116,21 @@ public class Device {
         }
 
         return android.os.Build.VERSION.RELEASE;
+    }
+
+    public String getHardwareType() {
+        int layout = this.context.getResources().getConfiguration().screenLayout;
+        boolean largeDevice
+        = ((layout & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_LARGE);
+
+        if (largeDevice) {
+            DisplayMetrics metrics = new DisplayMetrics();
+            Activity activity = (Activity) this.context;
+            activity.getWindowManager().getDefaultDisplay().getMetrics(metrics);
+            if (metrics.densityDpi >= DisplayMetrics.DENSITY_DEFAULT) {
+                return "tablet";
+            }
+        }
+        return "smartphone";
     }
 }

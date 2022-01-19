@@ -5,6 +5,7 @@ import type {
   DeviceId,
   DeviceInfo,
   DevicePlugin,
+  HardwareType,
   GetLanguageCodeResult,
 } from './definitions';
 
@@ -40,6 +41,7 @@ export class DeviceWeb extends WebPlugin implements DevicePlugin {
       model: uaFields.model,
       platform: <const>'web',
       operatingSystem: uaFields.operatingSystem,
+      hardwareType: 'desktop' as HardwareType,
       osVersion: uaFields.osVersion,
       manufacturer: navigator.vendor,
       isVirtual: false,
