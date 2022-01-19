@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.1.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/local-notifications@1.0.10...@capacitor/local-notifications@1.1.0) (2022-01-19)
+
+
+### Bug Fixes
+
+* inline source code in esm map files ([#760](https://github.com/ionic-team/capacitor-plugins/issues/760)) ([a960489](https://github.com/ionic-team/capacitor-plugins/commit/a960489a19db0182b90d187a50deff9dfbe51038))
+
+
+### Features
+
+* **local-notifications:** Add weekday scheduling support for Android and iOS ([#756](https://github.com/ionic-team/capacitor-plugins/issues/756)) ([430b485](https://github.com/ionic-team/capacitor-plugins/commit/430b48592ce59ccc967dd9a081873d7dc3937e93))
+
+
+
+
+
 ## [1.0.10](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/local-notifications@1.0.9...@capacitor/local-notifications@1.0.10) (2022-01-10)
 
 **Note:** Version bump only for package @capacitor/local-notifications

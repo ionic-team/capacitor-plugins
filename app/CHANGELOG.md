@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.1.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/app@1.0.7...@capacitor/app@1.1.0) (2022-01-19)
+
+
+### Bug Fixes
+
+* inline source code in esm map files ([#760](https://github.com/ionic-team/capacitor-plugins/issues/760)) ([a960489](https://github.com/ionic-team/capacitor-plugins/commit/a960489a19db0182b90d187a50deff9dfbe51038))
+
+
+### Features
+
+* **android:** support for minimizeApp ([#743](https://github.com/ionic-team/capacitor-plugins/issues/743)) ([3ec2008](https://github.com/ionic-team/capacitor-plugins/commit/3ec2008bc0311c837346ecbdd0afd105149b427a))
+
+
+
+
+
 ## [1.0.7](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/app@1.0.6...@capacitor/app@1.0.7) (2021-12-08)
 
 
