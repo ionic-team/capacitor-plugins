@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/keyboard@1.2.0...@capacitor/keyboard@1.2.1) (2022-01-19)
+
+
+### Bug Fixes
+
+* inline source code in esm map files ([#760](https://github.com/ionic-team/capacitor-plugins/issues/760)) ([a960489](https://github.com/ionic-team/capacitor-plugins/commit/a960489a19db0182b90d187a50deff9dfbe51038))
+
+
+
+
+
 # [1.2.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/keyboard@1.1.3...@capacitor/keyboard@1.2.0) (2021-12-08)
 
 

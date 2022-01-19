@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.9](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/push-notifications@1.0.8...@capacitor/push-notifications@1.0.9) (2022-01-19)
+
+
+### Bug Fixes
+
+* inline source code in esm map files ([#760](https://github.com/ionic-team/capacitor-plugins/issues/760)) ([a960489](https://github.com/ionic-team/capacitor-plugins/commit/a960489a19db0182b90d187a50deff9dfbe51038))
+
+
+
+
+
 ## [1.0.8](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/push-notifications@1.0.7...@capacitor/push-notifications@1.0.8) (2022-01-10)
 
 **Note:** Version bump only for package @capacitor/push-notifications
