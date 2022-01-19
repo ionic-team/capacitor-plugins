@@ -43,8 +43,8 @@ android {
 
 repositories {
     google()
-    jcenter()
     mavenCentral()
+    jcenter()
 }
 
 
