@@ -7,7 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		02F42A762797795800D403B5 /* Map.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02F42A752797795800D403B5 /* Map.swift */; };
+		02404C8D279F408800CEF8C8 /* GoogleMapErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02404C8C279F408800CEF8C8 /* GoogleMapErrors.swift */; };
+		02404C8F279F43E900CEF8C8 /* GoogleMapConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02404C8E279F43E900CEF8C8 /* GoogleMapConfig.swift */; };
+		02C6EDF22798803E00D51BF6 /* Map.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02C6EDF12798803E00D51BF6 /* Map.swift */; };
 		03FC29A292ACC40490383A1F /* Pods_Plugin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B2A61DA5A1F2DD4F959604D /* Pods_Plugin.framework */; };
 		20C0B05DCFC8E3958A738AF2 /* Pods_PluginTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F6753A823D3815DB436415E3 /* Pods_PluginTests.framework */; };
 		50ADFF92201F53D600D50D53 /* Plugin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50ADFF88201F53D600D50D53 /* Plugin.framework */; };
@@ -29,7 +31,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		02F42A752797795800D403B5 /* Map.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Map.swift; path = ../../../../../Documents/Map.swift; sourceTree = "<group>"; };
+		02404C8C279F408800CEF8C8 /* GoogleMapErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleMapErrors.swift; sourceTree = "<group>"; };
+		02404C8E279F43E900CEF8C8 /* GoogleMapConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleMapConfig.swift; sourceTree = "<group>"; };
+		02C6EDF12798803E00D51BF6 /* Map.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Map.swift; sourceTree = "<group>"; };
 		3B2A61DA5A1F2DD4F959604D /* Pods_Plugin.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Plugin.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		50ADFF88201F53D600D50D53 /* Plugin.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Plugin.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		50ADFF8B201F53D600D50D53 /* CapacitorGoogleMapsPlugin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CapacitorGoogleMapsPlugin.h; sourceTree = "<group>"; };
@@ -93,10 +97,12 @@
 			isa = PBXGroup;
 			children = (
 				50E1A94720377CB70090CE1A /* CapacitorGoogleMapsPlugin.swift */,
+				02C6EDF12798803E00D51BF6 /* Map.swift */,
 				50ADFF8B201F53D600D50D53 /* CapacitorGoogleMapsPlugin.h */,
 				50ADFFA72020EE4F00D50D53 /* CapacitorGoogleMapsPlugin.m */,
 				50ADFF8C201F53D600D50D53 /* Info.plist */,
-				02F42A752797795800D403B5 /* Map.swift */,
+				02404C8C279F408800CEF8C8 /* GoogleMapErrors.swift */,
+				02404C8E279F43E900CEF8C8 /* GoogleMapConfig.swift */,
 			);
 			path = Plugin;
 			sourceTree = "<group>";
@@ -306,8 +312,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				02404C8D279F408800CEF8C8 /* GoogleMapErrors.swift in Sources */,
 				50E1A94820377CB70090CE1A /* CapacitorGoogleMapsPlugin.swift in Sources */,
-				02F42A762797795800D403B5 /* Map.swift in Sources */,
+				02404C8F279F43E900CEF8C8 /* GoogleMapConfig.swift in Sources */,
+				02C6EDF22798803E00D51BF6 /* Map.swift in Sources */,
 				50ADFFA82020EE4F00D50D53 /* CapacitorGoogleMapsPlugin.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
