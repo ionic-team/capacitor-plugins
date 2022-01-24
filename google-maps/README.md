@@ -13,25 +13,72 @@ npx cap sync
 
 <docgen-index>
 
-* [`echo(...)`](#echo)
+* [`create(...)`](#create)
+* [`destroy(...)`](#destroy)
+* [Interfaces](#interfaces)
 
 </docgen-index>
 
 <docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
 
-### echo(...)
+### create(...)
 
 ```typescript
-echo(options: { value: string; }) => Promise<{ value: string; }>
+create(args: CreateMapArgs) => Promise<void>
 ```
 
-| Param         | Type                            |
-| ------------- | ------------------------------- |
-| **`options`** | <code>{ value: string; }</code> |
-
-**Returns:** <code>Promise&lt;{ value: string; }&gt;</code>
+| Param      | Type                                                    |
+| ---------- | ------------------------------------------------------- |
+| **`args`** | <code><a href="#createmapargs">CreateMapArgs</a></code> |
 
 --------------------
+
+
+### destroy(...)
+
+```typescript
+destroy(args: DestroyMapArgs) => Promise<void>
+```
+
+| Param      | Type                                                      |
+| ---------- | --------------------------------------------------------- |
+| **`args`** | <code><a href="#destroymapargs">DestroyMapArgs</a></code> |
+
+--------------------
+
+
+### Interfaces
+
+
+#### CreateMapArgs
+
+| Prop         | Type                                                        |
+| ------------ | ----------------------------------------------------------- |
+| **`config`** | <code><a href="#googlemapconfig">GoogleMapConfig</a></code> |
+
+
+#### GoogleMapConfig
+
+| Prop                  | Type                                      |
+| --------------------- | ----------------------------------------- |
+| **`width`**           | <code>number</code>                       |
+| **`height`**          | <code>number</code>                       |
+| **`x`**               | <code>number</code>                       |
+| **`y`**               | <code>number</code>                       |
+| **`center`**          | <code><a href="#latlng">LatLng</a></code> |
+| **`zoom`**            | <code>number</code>                       |
+| **`androidLiteMode`** | <code>boolean</code>                      |
+
+
+#### LatLng
+
+| Prop      | Type                |
+| --------- | ------------------- |
+| **`lat`** | <code>number</code> |
+| **`lng`** | <code>number</code> |
+
+
+#### DestroyMapArgs
 
 </docgen-api>

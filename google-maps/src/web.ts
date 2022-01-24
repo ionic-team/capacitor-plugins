@@ -1,15 +1,15 @@
 import { WebPlugin } from '@capacitor/core';
-import { CapacitorGoogleMapsPlugin } from './implementation';
-import { MapOptions } from './map';
+import { CapacitorGoogleMapsPlugin, CreateMapArgs, DestroyMapArgs } from './implementation';
 
 export class CapacitorGoogleMapsWeb
   extends WebPlugin
   implements CapacitorGoogleMapsPlugin
 {
-  create(id: string, options: MapOptions): Promise<void> {
+  create(_args: CreateMapArgs): Promise<void> {
     throw new Error('Method not implemented.');
   }
-  destroy(id: string): Promise<void> {
+  
+  destroy(_args: DestroyMapArgs): Promise<void> {
     throw new Error('Method not implemented.');
   }
 }

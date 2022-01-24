@@ -1,26 +1,42 @@
 import { CapacitorGoogleMaps } from './implementation';
 
-export interface MapOptions {
+export interface LatLng {
+  lat: number;
+  lng: number;
+}
+
+export interface GoogleMapConfig {
   width: number;
   height: number;
   x: number;
   y: number;
-  lat: number;
-  lng: number;
+  center: LatLng;
+  zoom: number;
   androidLiteMode: boolean;
 }
 
-export class Map {
-  public id: string;
+export class GoogleMap {
+  private id: string;
 
-  constructor(id: string, options: MapOptions) {
+  private constructor(id: string) {
     this.id = id;
-    CapacitorGoogleMaps.create(this.id, options).catch(err => {
-      throw err;
+  }
+
+  public static async create(id: string, config: GoogleMapConfig, forceCreate?: boolean): Promise<GoogleMap> {
+    const newMap = new GoogleMap(id);
+
+    await CapacitorGoogleMaps.create({
+      id,
+      config,
+      forceCreate
     });
+
+    return newMap;
   }
 
   async destroy(): Promise<void> {
-    CapacitorGoogleMaps.destroy(this.id);
+    return CapacitorGoogleMaps.destroy({
+      id: this.id,
+    });  
   }
 }
