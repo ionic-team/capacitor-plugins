@@ -68,7 +68,7 @@ jobs:
       - name: Install Packages
         run: npm install
         env: 
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_TOKEN: ${{ secrets.E2E_NPM_TOKEN }}
 
       - name: Run E2E Test on iOS
         run: npm run e2e:ios
@@ -102,7 +102,7 @@ jobs:
       - name: Install Packages
         run: npm install
         env: 
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_TOKEN: ${{ secrets.E2E_NPM_TOKEN }}
 
       - name: AVD cache
         uses: actions/cache@v2
