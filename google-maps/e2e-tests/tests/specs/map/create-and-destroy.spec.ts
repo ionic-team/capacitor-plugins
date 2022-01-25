@@ -8,7 +8,7 @@ describe('Google Maps - Create and Destroy Map', function () {
   before(async function () {
     await waitForLoad();
     await switchToWeb();
-    await url('/basic-echo/run-basic-echo');
+    await url('/maps/create-and-destroy');
     await pause(500);
   });
 
@@ -24,7 +24,7 @@ describe('Google Maps - Create and Destroy Map', function () {
     await pause(500);
   });
 
-  it('should create and destroy a map', async () => {
+  it('should create and destroy a map', async function() {
     const createMapButton = await CreateAndDestroyMapPage.createMapButton;
     const destroyMapButton = await CreateAndDestroyMapPage.destroyMapButton;
 
@@ -37,7 +37,7 @@ describe('Google Maps - Create and Destroy Map', function () {
     await expect(commandOutput).toHaveValue('Map destroyed');
   });
 
-  it('should throw when attempting to destroy a non-existent map', async () => {
+  it('should throw when attempting to destroy a non-existent map', async function() {
     const destroyMapButton = await CreateAndDestroyMapPage.destroyMapButton;
     const commandOutput = await $((await CreateAndDestroyMapPage.commandOutputTextarea).selector).$('textarea');
 

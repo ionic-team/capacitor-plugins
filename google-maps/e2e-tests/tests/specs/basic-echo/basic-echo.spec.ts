@@ -3,7 +3,7 @@ import { waitForLoad, pause, setDevice, switchToWeb, url } from '@ionic/e2e';
 
 import SetAndGetValuePage from '../../pageobjects/basic-echo/basic-echo.page';
 
-describe('Google Maps - Basic Echo', function () {
+describe.skip('Google Maps - Basic Echo', function () {
   before(async function () {
     await waitForLoad();
     await switchToWeb();

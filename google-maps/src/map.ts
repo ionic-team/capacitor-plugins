@@ -1,19 +1,5 @@
+import type { GoogleMapConfig } from './definitions';
 import { CapacitorGoogleMaps } from './implementation';
-
-export interface LatLng {
-  lat: number;
-  lng: number;
-}
-
-export interface GoogleMapConfig {
-  width: number;
-  height: number;
-  x: number;
-  y: number;
-  center: LatLng;
-  zoom: number;
-  androidLiteMode: boolean;
-}
 
 export class GoogleMap {
   private id: string;
