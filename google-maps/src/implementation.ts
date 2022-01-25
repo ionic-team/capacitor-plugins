@@ -10,7 +10,7 @@ export interface CreateMapArgs {
 
 export interface DestroyMapArgs {
   id: string;
-};
+}
 
 export interface CapacitorGoogleMapsPlugin {
   create(args: CreateMapArgs): Promise<void>;
