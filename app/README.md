@@ -100,8 +100,6 @@ exit the app when navigation is complete.
 
 Ionic handles this itself so you shouldn't need to call this if using Ionic.
 
-**Returns:** <code>Promise<void></code>
-
 **Since:** 1.0.0
 
 --------------------
