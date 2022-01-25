@@ -1,5 +1,6 @@
 import { registerPlugin } from '@capacitor/core';
-import { GoogleMapConfig } from './map';
+
+import type { GoogleMapConfig } from './map';
 
 interface BaseMapArgs {
   id: string;
@@ -9,7 +10,7 @@ export interface CreateMapArgs extends BaseMapArgs {
   forceCreate?: boolean;
 }
 
-export interface DestroyMapArgs extends BaseMapArgs {}
+export type DestroyMapArgs = BaseMapArgs;
 
 export interface CapacitorGoogleMapsPlugin {
   create(args: CreateMapArgs): Promise<void>;

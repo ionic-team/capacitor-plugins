@@ -22,13 +22,17 @@ export class GoogleMap {
     this.id = id;
   }
 
-  public static async create(id: string, config: GoogleMapConfig, forceCreate?: boolean): Promise<GoogleMap> {
+  public static async create(
+    id: string,
+    config: GoogleMapConfig,
+    forceCreate?: boolean,
+  ): Promise<GoogleMap> {
     const newMap = new GoogleMap(id);
 
     await CapacitorGoogleMaps.create({
       id,
       config,
-      forceCreate
+      forceCreate,
     });
 
     return newMap;
@@ -37,6 +41,6 @@ export class GoogleMap {
   async destroy(): Promise<void> {
     return CapacitorGoogleMaps.destroy({
       id: this.id,
-    });  
+    });
   }
 }
