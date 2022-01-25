@@ -3,6 +3,33 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.1.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/app@1.0.7...@capacitor/app@1.1.0) (2022-01-19)
+
+
+### Bug Fixes
+
+* inline source code in esm map files ([#760](https://github.com/ionic-team/capacitor-plugins/issues/760)) ([a960489](https://github.com/ionic-team/capacitor-plugins/commit/a960489a19db0182b90d187a50deff9dfbe51038))
+
+
+### Features
+
+* **android:** support for minimizeApp ([#743](https://github.com/ionic-team/capacitor-plugins/issues/743)) ([3ec2008](https://github.com/ionic-team/capacitor-plugins/commit/3ec2008bc0311c837346ecbdd0afd105149b427a))
+
+
+
+
+
+## [1.0.7](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/app@1.0.6...@capacitor/app@1.0.7) (2021-12-08)
+
+
+### Bug Fixes
+
+* **app:** Don't unset App Listeners on removeAllListeners ([#716](https://github.com/ionic-team/capacitor-plugins/issues/716)) ([17f2ee8](https://github.com/ionic-team/capacitor-plugins/commit/17f2ee8743e1366dd74771bdad9829cc5f3891e8))
+
+
+
+
+
 ## [1.0.6](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/app@1.0.5...@capacitor/app@1.0.6) (2021-11-03)
 
 **Note:** Version bump only for package @capacitor/app

@@ -105,6 +105,15 @@ public class AppPlugin extends Plugin {
         call.resolve(data);
     }
 
+    @PluginMethod
+    public void minimizeApp(PluginCall call) {
+        Intent startMain = new Intent(Intent.ACTION_MAIN);
+        startMain.addCategory(Intent.CATEGORY_HOME);
+        startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        getActivity().startActivity(startMain);
+        call.resolve();
+    }
+
     /**
      * Handle ACTION_VIEW intents to store a URL that was used to open the app
      * @param intent

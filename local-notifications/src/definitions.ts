@@ -38,6 +38,9 @@ declare module '@capacitor/cli' {
        * On Android 26+ it sets the default channel sound and can't be
        * changed unless the app is uninstalled.
        *
+       * If the audio file is not found, it will result in the default system
+       * sound being played on Android 21-25 and no sound on Android 26+.
+       *
        * Only available for Android.
        *
        * @since 1.0.0
@@ -542,6 +545,10 @@ export interface LocalNotificationSchema {
    * Only available for iOS and Android < 26.
    * For Android 26+ use channelId of a channel configured with the desired sound.
    *
+   * If the sound file is not found, (i.e. empty string or wrong name)
+   * the default system notification sound will be used.
+   * If not provided, it will produce the default sound on Android and no sound on iOS.
+   *
    * @since 1.0.0
    */
   sound?: string;
@@ -778,6 +785,7 @@ export interface ScheduleOn {
   year?: number;
   month?: number;
   day?: number;
+  weekday?: Weekday;
   hour?: number;
   minute?: number;
   second?: number;
@@ -879,6 +887,8 @@ export interface Channel {
    * The file name of a sound file should be specified relative to the android
    * app `res/raw` directory.
    *
+   * If the sound is not provided, or the sound file is not found no sound will be used.
+   *
    * @since 1.0.0
    * @example "jingle.wav"
    */
@@ -927,6 +937,19 @@ export interface Channel {
    * @since 1.0.0
    */
   vibration?: boolean;
+}
+
+/**
+ * Day of the week. Used for scheduling notifications on a particular weekday.
+ */
+export enum Weekday {
+  Sunday = 1,
+  Monday = 2,
+  Tuesday = 3,
+  Wednesday = 4,
+  Thursday = 5,
+  Friday = 6,
+  Saturday = 7,
 }
 
 /**

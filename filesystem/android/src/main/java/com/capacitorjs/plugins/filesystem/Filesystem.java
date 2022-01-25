@@ -186,6 +186,7 @@ public class Filesystem {
             case "DOCUMENTS":
                 return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
             case "DATA":
+            case "LIBRARY":
                 return c.getFilesDir();
             case "CACHE":
                 return c.getCacheDir();

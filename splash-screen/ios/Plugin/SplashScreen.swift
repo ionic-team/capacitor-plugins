@@ -117,10 +117,14 @@ import Capacitor
     // Update the bounds for the splash image. This will also be called when
     // the parent view observers fire
     private func updateSplashImageBounds() {
-        var window: UIWindow? = UIApplication.shared.delegate?.window as? UIWindow
+        var window: UIWindow? = UIApplication.shared.delegate?.window ?? nil
 
         if #available(iOS 13, *), window == nil {
-            window = (UIApplication.shared.connectedScenes.first as? UIWindowScene)?.windows.filter({$0.isKeyWindow}).first
+            let scene: UIWindowScene? = UIApplication.shared.connectedScenes.first as? UIWindowScene
+            window = scene?.windows.filter({$0.isKeyWindow}).first
+            if window == nil {
+                window = scene?.windows.first
+            }
         }
 
         if let unwrappedWindow = window {

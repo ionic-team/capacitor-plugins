@@ -3,6 +3,33 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/splash-screen@1.2.0...@capacitor/splash-screen@1.2.1) (2022-01-19)
+
+
+### Bug Fixes
+
+* inline source code in esm map files ([#760](https://github.com/ionic-team/capacitor-plugins/issues/760)) ([a960489](https://github.com/ionic-team/capacitor-plugins/commit/a960489a19db0182b90d187a50deff9dfbe51038))
+
+
+
+
+
+# [1.2.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/splash-screen@1.1.6...@capacitor/splash-screen@1.2.0) (2021-12-08)
+
+
+### Bug Fixes
+
+* **splash-screen:** pick first window when there is no key window ([#730](https://github.com/ionic-team/capacitor-plugins/issues/730)) ([0e335ad](https://github.com/ionic-team/capacitor-plugins/commit/0e335ad386da8ceadfdfaa3be982840547fc41b6))
+
+
+### Features
+
+* **splash-screen:** Make splash work in apps that use scenes ([#631](https://github.com/ionic-team/capacitor-plugins/issues/631)) ([cf0d214](https://github.com/ionic-team/capacitor-plugins/commit/cf0d2143c225336984a6bc8fa7ef814a18b02bd1))
+
+
+
+
+
 ## [1.1.6](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/splash-screen@1.1.5...@capacitor/splash-screen@1.1.6) (2021-11-03)
 
 **Note:** Version bump only for package @capacitor/splash-screen
