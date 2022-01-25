@@ -65,6 +65,9 @@ jobs:
         env: 
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
+      - name: Setup NPMRC
+        run: echo "//registry.npmjs.org/:_authToken=${{secrets.E2E_NPM_TOKEN}}" > .npmrc
+
       - name: Install Packages
         run: npm install
         env: 
@@ -98,6 +101,9 @@ jobs:
         working-directory: ${{ matrix.plugin }}
         env: 
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Setup NPMRC
+        run: echo "//registry.npmjs.org/:_authToken=${{secrets.E2E_NPM_TOKEN}}" > .npmrc
 
       - name: Install Packages
         run: npm install
