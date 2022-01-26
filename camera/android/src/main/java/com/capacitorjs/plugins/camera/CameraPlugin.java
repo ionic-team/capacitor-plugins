@@ -350,63 +350,30 @@ public class CameraPlugin extends Plugin {
                         } else {
                             photos.put(processResult);
                         }
-                    }
-                    ret.put("photos", photos);
-                    call.resolve(ret);
-                }
-            );
-        } else if (data.getData() != null) {
-            Executor executor = Executors.newSingleThreadExecutor();
-            executor.execute(
-                () -> {
-                    JSObject ret = new JSObject();
-                    JSArray photos = new JSArray();
-                    Uri imageUri = data.getData();
-                    JSObject processResult = processPickedImages(imageUri);
-                    if (processResult.getString("error") != null && !processResult.getString("error").isEmpty()) {
-                        call.reject(processResult.getString("error"));
-                        return;
-                    } else {
-                        photos.put(processPickedImages(imageUri));
-                    }
-
-                    ret.put("photos", photos);
-                    call.resolve(ret);
-                }
-            );
-        } else if (data.getExtras() != null) {
-            Bundle bundle = data.getExtras();
-
-            if (bundle.keySet().contains("selectedItems")) {
-                ArrayList<Parcelable> fileUris = bundle.getParcelableArrayList("selectedItems");
-
-                if (fileUris != null) {
-                    Executor executor = Executors.newSingleThreadExecutor();
-                    executor.execute(
-                        () -> {
-                            JSObject ret = new JSObject();
-                            JSArray photos = new JSArray();
-
-                            for (Parcelable fileUri : fileUris) {
-                                if (fileUri instanceof Uri) {
-                                    Uri imageUri = (Uri) fileUri;
-                                    JSObject processResult = processPickedImages(imageUri);
-
-                                    if (processResult.getString("error") != null && !processResult.getString("error").isEmpty()) {
-                                        call.reject(processResult.getString("error"));
-                                        return;
-                                    } else {
-                                        photos.put(processPickedImages(imageUri));
+                    } else if (data.getExtras() != null) {
+                        Bundle bundle = data.getExtras();
+                        if (bundle.keySet().contains("selectedItems")) {
+                            ArrayList<Parcelable> fileUris = bundle.getParcelableArrayList("selectedItems");
+                            if (fileUris != null) {
+                                for (Parcelable fileUri : fileUris) {
+                                    if (fileUri instanceof Uri) {
+                                        Uri imageUri = (Uri) fileUri;
+                                        JSObject processResult = processPickedImages(imageUri);
+                                        if (processResult.getString("error") != null && !processResult.getString("error").isEmpty()) {
+                                            call.reject(processResult.getString("error"));
+                                            return;
+                                        } else {
+                                            photos.put(processResult);
+                                        }
                                     }
                                 }
                             }
-
-                            ret.put("photos", photos);
-                            call.resolve(ret);
                         }
-                    );
+                    }
+                    ret.put("photos", photos);
+                    call.resolve(ret);
                 }
-            }
+            );
         } else {
             call.reject("No images picked");
         }
