@@ -358,12 +358,16 @@ public class CameraPlugin extends Plugin {
                                 for (Parcelable fileUri : fileUris) {
                                     if (fileUri instanceof Uri) {
                                         Uri imageUri = (Uri) fileUri;
-                                        JSObject processResult = processPickedImages(imageUri);
-                                        if (processResult.getString("error") != null && !processResult.getString("error").isEmpty()) {
-                                            call.reject(processResult.getString("error"));
-                                            return;
-                                        } else {
-                                            photos.put(processResult);
+                                        try {
+                                            JSObject processResult = processPickedImages(imageUri);
+                                            if (processResult.getString("error") != null && !processResult.getString("error").isEmpty()) {
+                                                call.reject(processResult.getString("error"));
+                                                return;
+                                            } else {
+                                                photos.put(processResult);
+                                            }
+                                        } catch (SecurityException ex) {
+                                            call.reject("SecurityException");
                                         }
                                     }
                                 }
