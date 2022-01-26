@@ -1,5 +1,6 @@
 import Foundation
 import Capacitor
+import GoogleMaps
 
 /**
  * Please read the Capacitor iOS Plugin Development Guide
