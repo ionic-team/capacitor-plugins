@@ -334,7 +334,7 @@ public class CameraPlugin extends Plugin {
                             call.reject(processResult.getString("error"));
                             return;
                         } else {
-                            photos.put(processPickedImages(imageUri));
+                            photos.put(processResult);
                         }
                     }
                     ret.put("photos", photos);
