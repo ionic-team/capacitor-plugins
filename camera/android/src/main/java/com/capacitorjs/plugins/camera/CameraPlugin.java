@@ -320,15 +320,26 @@ public class CameraPlugin extends Plugin {
     @ActivityCallback
     public void processPickedImages(PluginCall call, ActivityResult result) {
         Intent data = result.getData();
-        if (data != null && data.getClipData() != null) {
+        if (data != null) {
             Executor executor = Executors.newSingleThreadExecutor();
             executor.execute(
                 () -> {
                     JSObject ret = new JSObject();
                     JSArray photos = new JSArray();
-                    int count = data.getClipData().getItemCount();
-                    for (int i = 0; i < count; i++) {
-                        Uri imageUri = data.getClipData().getItemAt(i).getUri();
+                    if (data.getClipData() != null) {
+                        int count = data.getClipData().getItemCount();
+                        for (int i = 0; i < count; i++) {
+                            Uri imageUri = data.getClipData().getItemAt(i).getUri();
+                            JSObject processResult = processPickedImages(imageUri);
+                            if (processResult.getString("error") != null && !processResult.getString("error").isEmpty()) {
+                                call.reject(processResult.getString("error"));
+                                return;
+                            } else {
+                                photos.put(processResult);
+                            }
+                        }
+                    } else if (data.getData() != null) {
+                        Uri imageUri = data.getData();
                         JSObject processResult = processPickedImages(imageUri);
                         if (processResult.getString("error") != null && !processResult.getString("error").isEmpty()) {
                             call.reject(processResult.getString("error"));
