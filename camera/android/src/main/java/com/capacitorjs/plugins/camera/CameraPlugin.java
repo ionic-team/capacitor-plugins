@@ -98,7 +98,7 @@ public class CameraPlugin extends Plugin {
     @PluginMethod
     public void pickImages(PluginCall call) {
         settings = getSettings(call);
-        openPhotos(call, true);
+        openPhotos(call, true, false);
     }
 
     private void doShow(PluginCall call) {
@@ -193,17 +193,20 @@ public class CameraPlugin extends Plugin {
      */
     @PermissionCallback
     private void cameraPermissionsCallback(PluginCall call) {
-        if (settings.getSource() == CameraSource.CAMERA && getPermissionState(CAMERA) != PermissionState.GRANTED) {
-            Logger.debug(getLogTag(), "User denied camera permission: " + getPermissionState(CAMERA).toString());
-            call.reject(PERMISSION_DENIED_ERROR_CAMERA);
-            return;
-        } else if (settings.getSource() == CameraSource.PHOTOS && getPermissionState(PHOTOS) != PermissionState.GRANTED) {
-            Logger.debug(getLogTag(), "User denied photos permission: " + getPermissionState(PHOTOS).toString());
-            call.reject(PERMISSION_DENIED_ERROR_PHOTOS);
-            return;
+        if (call.getMethodName().equals("pickImages")) {
+            openPhotos(call, true, true);
+        } else {
+            if (settings.getSource() == CameraSource.CAMERA && getPermissionState(CAMERA) != PermissionState.GRANTED) {
+                Logger.debug(getLogTag(), "User denied camera permission: " + getPermissionState(CAMERA).toString());
+                call.reject(PERMISSION_DENIED_ERROR_CAMERA);
+                return;
+            } else if (settings.getSource() == CameraSource.PHOTOS && getPermissionState(PHOTOS) != PermissionState.GRANTED) {
+                Logger.debug(getLogTag(), "User denied photos permission: " + getPermissionState(PHOTOS).toString());
+                call.reject(PERMISSION_DENIED_ERROR_PHOTOS);
+                return;
+            }
+            doShow(call);
         }
-
-        doShow(call);
     }
 
     private CameraSettings getSettings(PluginCall call) {
@@ -261,18 +264,18 @@ public class CameraPlugin extends Plugin {
     }
 
     public void openPhotos(final PluginCall call) {
-        openPhotos(call, false);
+        openPhotos(call, false, false);
     }
 
-    private void openPhotos(final PluginCall call, boolean multiple) {
-        if (multiple || checkPhotosPermissions(call)) {
+    private void openPhotos(final PluginCall call, boolean multiple, boolean skipPermission) {
+        if (skipPermission || checkPhotosPermissions(call)) {
             Intent intent = new Intent(Intent.ACTION_PICK);
             intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, multiple);
-            intent.putExtra(Intent.EXTRA_MIME_TYPES, new String[] { "image/*" });
-            intent.putExtra("multi-pick", multiple);
             intent.setType("image/*");
             try {
                 if (multiple) {
+                    intent.putExtra("multi-pick", multiple);
+                    intent.putExtra(Intent.EXTRA_MIME_TYPES, new String[] { "image/*" });
                     startActivityForResult(call, intent, "processPickedImages");
                 } else {
                     startActivityForResult(call, intent, "processPickedImage");
