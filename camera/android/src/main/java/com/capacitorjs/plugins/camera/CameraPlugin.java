@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.util.Base64;
 import androidx.activity.result.ActivityResult;
@@ -97,7 +98,7 @@ public class CameraPlugin extends Plugin {
     @PluginMethod
     public void pickImages(PluginCall call) {
         settings = getSettings(call);
-        openPhotos(call, true);
+        openPhotos(call, true, false);
     }
 
     private void doShow(PluginCall call) {
@@ -192,17 +193,20 @@ public class CameraPlugin extends Plugin {
      */
     @PermissionCallback
     private void cameraPermissionsCallback(PluginCall call) {
-        if (settings.getSource() == CameraSource.CAMERA && getPermissionState(CAMERA) != PermissionState.GRANTED) {
-            Logger.debug(getLogTag(), "User denied camera permission: " + getPermissionState(CAMERA).toString());
-            call.reject(PERMISSION_DENIED_ERROR_CAMERA);
-            return;
-        } else if (settings.getSource() == CameraSource.PHOTOS && getPermissionState(PHOTOS) != PermissionState.GRANTED) {
-            Logger.debug(getLogTag(), "User denied photos permission: " + getPermissionState(PHOTOS).toString());
-            call.reject(PERMISSION_DENIED_ERROR_PHOTOS);
-            return;
+        if (call.getMethodName().equals("pickImages")) {
+            openPhotos(call, true, true);
+        } else {
+            if (settings.getSource() == CameraSource.CAMERA && getPermissionState(CAMERA) != PermissionState.GRANTED) {
+                Logger.debug(getLogTag(), "User denied camera permission: " + getPermissionState(CAMERA).toString());
+                call.reject(PERMISSION_DENIED_ERROR_CAMERA);
+                return;
+            } else if (settings.getSource() == CameraSource.PHOTOS && getPermissionState(PHOTOS) != PermissionState.GRANTED) {
+                Logger.debug(getLogTag(), "User denied photos permission: " + getPermissionState(PHOTOS).toString());
+                call.reject(PERMISSION_DENIED_ERROR_PHOTOS);
+                return;
+            }
+            doShow(call);
         }
-
-        doShow(call);
     }
 
     private CameraSettings getSettings(PluginCall call) {
@@ -260,16 +264,18 @@ public class CameraPlugin extends Plugin {
     }
 
     public void openPhotos(final PluginCall call) {
-        openPhotos(call, false);
+        openPhotos(call, false, false);
     }
 
-    private void openPhotos(final PluginCall call, boolean multiple) {
-        if (multiple || checkPhotosPermissions(call)) {
+    private void openPhotos(final PluginCall call, boolean multiple, boolean skipPermission) {
+        if (skipPermission || checkPhotosPermissions(call)) {
             Intent intent = new Intent(Intent.ACTION_PICK);
             intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, multiple);
             intent.setType("image/*");
             try {
                 if (multiple) {
+                    intent.putExtra("multi-pick", multiple);
+                    intent.putExtra(Intent.EXTRA_MIME_TYPES, new String[] { "image/*" });
                     startActivityForResult(call, intent, "processPickedImages");
                 } else {
                     startActivityForResult(call, intent, "processPickedImage");
@@ -346,6 +352,29 @@ public class CameraPlugin extends Plugin {
                             return;
                         } else {
                             photos.put(processResult);
+                        }
+                    } else if (data.getExtras() != null) {
+                        Bundle bundle = data.getExtras();
+                        if (bundle.keySet().contains("selectedItems")) {
+                            ArrayList<Parcelable> fileUris = bundle.getParcelableArrayList("selectedItems");
+                            if (fileUris != null) {
+                                for (Parcelable fileUri : fileUris) {
+                                    if (fileUri instanceof Uri) {
+                                        Uri imageUri = (Uri) fileUri;
+                                        try {
+                                            JSObject processResult = processPickedImages(imageUri);
+                                            if (processResult.getString("error") != null && !processResult.getString("error").isEmpty()) {
+                                                call.reject(processResult.getString("error"));
+                                                return;
+                                            } else {
+                                                photos.put(processResult);
+                                            }
+                                        } catch (SecurityException ex) {
+                                            call.reject("SecurityException");
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                     ret.put("photos", photos);
