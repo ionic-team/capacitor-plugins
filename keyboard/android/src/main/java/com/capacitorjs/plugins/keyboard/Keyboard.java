@@ -14,6 +14,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import com.getcapacitor.Logger;
 
 public class Keyboard {
 
@@ -108,6 +109,8 @@ public class Keyboard {
                             keyboardEventListener.onKeyboardEvent(EVENT_KB_WILL_HIDE, 0);
                             keyboardEventListener.onKeyboardEvent(EVENT_KB_DID_HIDE, 0);
                         }
+                    } else {
+                        Logger.warn("Native Keyboard Event Listener not found");
                     }
                     previousHeightDiff = pixelHeightDiff;
                 }
