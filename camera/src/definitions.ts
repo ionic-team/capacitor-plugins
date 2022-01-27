@@ -25,9 +25,6 @@ export interface CameraPlugin {
   /**
    * Allows the user to pick multiple pictures from the photo gallery.
    * On iOS 13 and older it only allows to pick one picture.
-   * On some Android versions, some gallery apps might require photos permission.
-   * The photos permission is not requested automatically. If the image can't be read,
-   * a SecurityException error will be returned. Use requestPermissions to request it.
    *
    * @since 1.2.0
    */
