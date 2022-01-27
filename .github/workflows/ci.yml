@@ -42,7 +42,12 @@ jobs:
     timeout-minutes: 30
     needs:
       - setup
+    strategy:
+      matrix:
+        xcode:
+          - /Applications/Xcode_12.4.app
     steps:
+      - run: sudo xcode-select --switch ${{ matrix.xcode }}
       - uses: actions/setup-node@v1
         with:
           node-version: 14.x
