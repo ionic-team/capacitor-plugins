@@ -9,8 +9,10 @@ end
 
 target 'Plugin' do
   capacitor_pods
+  pod 'GoogleMaps'
 end
 
 target 'PluginTests' do
   capacitor_pods
+  pod 'GoogleMaps'
 end
