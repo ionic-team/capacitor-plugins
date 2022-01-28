@@ -389,7 +389,7 @@ export interface StatResult {
    *
    * @since 1.0.0
    */
-  type: string;
+  type: 'directory' | 'file';
 
   /**
    * Size of the file
