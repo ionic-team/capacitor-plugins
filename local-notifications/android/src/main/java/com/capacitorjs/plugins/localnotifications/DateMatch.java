@@ -14,6 +14,7 @@ public class DateMatch {
     private Integer year;
     private Integer month;
     private Integer day;
+    private Integer weekday;
     private Integer hour;
     private Integer minute;
     private Integer second;
@@ -46,6 +47,14 @@ public class DateMatch {
 
     public void setDay(Integer day) {
         this.day = day;
+    }
+
+    public Integer getWeekday() {
+        return weekday;
+    }
+
+    public void setWeekday(Integer weekday) {
+        this.weekday = weekday;
     }
 
     public Integer getHour() {
@@ -106,6 +115,8 @@ public class DateMatch {
                 incrementUnit = Calendar.YEAR;
             } else if (unit == Calendar.DAY_OF_MONTH) {
                 incrementUnit = Calendar.MONTH;
+            } else if (unit == Calendar.DAY_OF_WEEK) {
+                incrementUnit = Calendar.WEEK_OF_MONTH;
             } else if (unit == Calendar.HOUR_OF_DAY) {
                 incrementUnit = Calendar.DAY_OF_MONTH;
             } else if (unit == Calendar.MINUTE) {
@@ -135,6 +146,10 @@ public class DateMatch {
             next.set(Calendar.DAY_OF_MONTH, day);
             if (unit == -1) unit = Calendar.DAY_OF_MONTH;
         }
+        if (weekday != null) {
+            next.set(Calendar.DAY_OF_WEEK, weekday);
+            if (unit == -1) unit = Calendar.DAY_OF_WEEK;
+        }
         if (hour != null) {
             next.set(Calendar.HOUR_OF_DAY, hour);
             if (unit == -1) unit = Calendar.HOUR_OF_DAY;
@@ -160,6 +175,8 @@ public class DateMatch {
             month +
             ", day=" +
             day +
+            ", weekday=" +
+            weekday +
             ", hour=" +
             hour +
             ", minute=" +
@@ -180,6 +197,7 @@ public class DateMatch {
         if (year != null ? !year.equals(dateMatch.year) : dateMatch.year != null) return false;
         if (month != null ? !month.equals(dateMatch.month) : dateMatch.month != null) return false;
         if (day != null ? !day.equals(dateMatch.day) : dateMatch.day != null) return false;
+        if (weekday != null ? !weekday.equals(dateMatch.weekday) : dateMatch.weekday != null) return false;
         if (hour != null ? !hour.equals(dateMatch.hour) : dateMatch.hour != null) return false;
         if (minute != null ? !minute.equals(dateMatch.minute) : dateMatch.minute != null) return false;
         return second != null ? second.equals(dateMatch.second) : dateMatch.second == null;
@@ -190,6 +208,7 @@ public class DateMatch {
         int result = year != null ? year.hashCode() : 0;
         result = 31 * result + (month != null ? month.hashCode() : 0);
         result = 31 * result + (day != null ? day.hashCode() : 0);
+        result = 31 * result + (weekday != null ? weekday.hashCode() : 0);
         result = 31 * result + (hour != null ? hour.hashCode() : 0);
         result = 31 * result + (minute != null ? minute.hashCode() : 0);
         result = 31 + result + (second != null ? second.hashCode() : 0);
@@ -203,7 +222,21 @@ public class DateMatch {
      */
     public String toMatchString() {
         String matchString =
-            year + separator + month + separator + day + separator + hour + separator + minute + separator + second + separator + unit;
+            year +
+            separator +
+            month +
+            separator +
+            day +
+            separator +
+            weekday +
+            separator +
+            hour +
+            separator +
+            minute +
+            separator +
+            second +
+            separator +
+            unit;
         return matchString.replace("null", "*");
     }
 
@@ -216,23 +249,25 @@ public class DateMatch {
     public static DateMatch fromMatchString(String matchString) {
         DateMatch date = new DateMatch();
         String[] split = matchString.split(separator);
-        if (split != null && split.length == 6) {
-            date.setYear(getValueFromCronElement(split[0]));
-            date.setMonth(getValueFromCronElement(split[1]));
-            date.setDay(getValueFromCronElement(split[2]));
-            date.setHour(getValueFromCronElement(split[3]));
-            date.setMinute(getValueFromCronElement(split[4]));
-            date.setUnit(getValueFromCronElement(split[5]));
-        }
-
         if (split != null && split.length == 7) {
             date.setYear(getValueFromCronElement(split[0]));
             date.setMonth(getValueFromCronElement(split[1]));
             date.setDay(getValueFromCronElement(split[2]));
-            date.setHour(getValueFromCronElement(split[3]));
-            date.setMinute(getValueFromCronElement(split[4]));
-            date.setSecond(getValueFromCronElement(split[5]));
+            date.setWeekday(getValueFromCronElement(split[3]));
+            date.setHour(getValueFromCronElement(split[4]));
+            date.setMinute(getValueFromCronElement(split[5]));
             date.setUnit(getValueFromCronElement(split[6]));
+        }
+
+        if (split != null && split.length == 8) {
+            date.setYear(getValueFromCronElement(split[0]));
+            date.setMonth(getValueFromCronElement(split[1]));
+            date.setDay(getValueFromCronElement(split[2]));
+            date.setWeekday(getValueFromCronElement(split[3]));
+            date.setHour(getValueFromCronElement(split[4]));
+            date.setMinute(getValueFromCronElement(split[5]));
+            date.setSecond(getValueFromCronElement(split[6]));
+            date.setUnit(getValueFromCronElement(split[7]));
         }
 
         return date;

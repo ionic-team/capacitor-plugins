@@ -3,6 +3,55 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.7](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/status-bar@1.0.6...@capacitor/status-bar@1.0.7) (2022-01-19)
+
+
+### Bug Fixes
+
+* inline source code in esm map files ([#760](https://github.com/ionic-team/capacitor-plugins/issues/760)) ([a960489](https://github.com/ionic-team/capacitor-plugins/commit/a960489a19db0182b90d187a50deff9dfbe51038))
+
+
+
+
+
+## [1.0.6](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/status-bar@1.0.5...@capacitor/status-bar@1.0.6) (2021-11-03)
+
+**Note:** Version bump only for package @capacitor/status-bar
+
+
+
+
+
+## [1.0.5](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/status-bar@1.0.4...@capacitor/status-bar@1.0.5) (2021-10-14)
+
+
+### Bug Fixes
+
+* remove postpublish scripts ([#656](https://github.com/ionic-team/capacitor-plugins/issues/656)) ([ed6ac49](https://github.com/ionic-team/capacitor-plugins/commit/ed6ac499ebf4a47525071ccbfc36c27503e11f60))
+
+
+
+
+
+## [1.0.4](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/status-bar@1.0.3...@capacitor/status-bar@1.0.4) (2021-10-13)
+
+
+### Bug Fixes
+
+* correct addListeners links ([#655](https://github.com/ionic-team/capacitor-plugins/issues/655)) ([f9871e7](https://github.com/ionic-team/capacitor-plugins/commit/f9871e7bd53478addb21155e148829f550c0e457))
+
+
+
+
+
+## [1.0.3](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/status-bar@1.0.2...@capacitor/status-bar@1.0.3) (2021-09-01)
+
+**Note:** Version bump only for package @capacitor/status-bar
+
+
+
+
+
 ## [1.0.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/status-bar@1.0.1...@capacitor/status-bar@1.0.2) (2021-06-23)
 
 **Note:** Version bump only for package @capacitor/status-bar

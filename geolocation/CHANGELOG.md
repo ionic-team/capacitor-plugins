@@ -3,6 +3,81 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/geolocation@1.3.0...@capacitor/geolocation@1.3.1) (2022-01-19)
+
+
+### Bug Fixes
+
+* inline source code in esm map files ([#760](https://github.com/ionic-team/capacitor-plugins/issues/760)) ([a960489](https://github.com/ionic-team/capacitor-plugins/commit/a960489a19db0182b90d187a50deff9dfbe51038))
+
+
+
+
+
+# [1.3.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/geolocation@1.2.0...@capacitor/geolocation@1.3.0) (2021-12-08)
+
+
+### Features
+
+* **geolocation:** Error if Google Play Services are not available ([#709](https://github.com/ionic-team/capacitor-plugins/issues/709)) ([fc79c43](https://github.com/ionic-team/capacitor-plugins/commit/fc79c4319c54cbcd5dbbb7221dfdd03d0515805b))
+
+
+
+
+
+# [1.2.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/geolocation@1.1.3...@capacitor/geolocation@1.2.0) (2021-11-17)
+
+
+### Features
+
+* **geolocation:** Add new alias for coarse location ([#684](https://github.com/ionic-team/capacitor-plugins/issues/684)) ([7563040](https://github.com/ionic-team/capacitor-plugins/commit/7563040983ad397e28616246e7ed5ffce69727c2))
+
+
+
+
+
+## [1.1.3](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/geolocation@1.1.2...@capacitor/geolocation@1.1.3) (2021-11-03)
+
+**Note:** Version bump only for package @capacitor/geolocation
+
+
+
+
+
+## [1.1.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/geolocation@1.1.1...@capacitor/geolocation@1.1.2) (2021-10-14)
+
+
+### Bug Fixes
+
+* remove postpublish scripts ([#656](https://github.com/ionic-team/capacitor-plugins/issues/656)) ([ed6ac49](https://github.com/ionic-team/capacitor-plugins/commit/ed6ac499ebf4a47525071ccbfc36c27503e11f60))
+
+
+
+
+
+## [1.1.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/geolocation@1.1.0...@capacitor/geolocation@1.1.1) (2021-10-13)
+
+
+### Bug Fixes
+
+* correct addListeners links ([#655](https://github.com/ionic-team/capacitor-plugins/issues/655)) ([f9871e7](https://github.com/ionic-team/capacitor-plugins/commit/f9871e7bd53478addb21155e148829f550c0e457))
+* **geolocation:** return cached location if newer than maximumAge ([#639](https://github.com/ionic-team/capacitor-plugins/issues/639)) ([7b08eea](https://github.com/ionic-team/capacitor-plugins/commit/7b08eea9729bbf2b2b6b881cc81389cf108b3a2c))
+
+
+
+
+
+# [1.1.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/geolocation@1.0.2...@capacitor/geolocation@1.1.0) (2021-09-01)
+
+
+### Features
+
+* **geolocation:** Throw error if location is disabled ([#589](https://github.com/ionic-team/capacitor-plugins/issues/589)) ([14724c5](https://github.com/ionic-team/capacitor-plugins/commit/14724c5ec5b23bf94f6f3511bbe204482768d10f))
+
+
+
+
+
 ## [1.0.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/geolocation@1.0.1...@capacitor/geolocation@1.0.2) (2021-06-23)
 
 

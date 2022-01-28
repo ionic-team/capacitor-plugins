@@ -59,8 +59,10 @@ function translatedConnection(): ConnectionType {
 export class NetworkWeb extends WebPlugin implements NetworkPlugin {
   constructor() {
     super();
-    window.addEventListener('online', this.handleOnline);
-    window.addEventListener('offline', this.handleOffline);
+    if (typeof window !== 'undefined') {
+      window.addEventListener('online', this.handleOnline);
+      window.addEventListener('offline', this.handleOffline);
+    }
   }
 
   async getStatus(): Promise<ConnectionStatus> {

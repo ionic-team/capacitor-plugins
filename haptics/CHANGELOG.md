@@ -3,6 +3,66 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.4](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/haptics@1.1.3...@capacitor/haptics@1.1.4) (2022-01-19)
+
+
+### Bug Fixes
+
+* inline source code in esm map files ([#760](https://github.com/ionic-team/capacitor-plugins/issues/760)) ([a960489](https://github.com/ionic-team/capacitor-plugins/commit/a960489a19db0182b90d187a50deff9dfbe51038))
+
+
+
+
+
+## [1.1.3](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/haptics@1.1.2...@capacitor/haptics@1.1.3) (2021-11-03)
+
+**Note:** Version bump only for package @capacitor/haptics
+
+
+
+
+
+## [1.1.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/haptics@1.1.1...@capacitor/haptics@1.1.2) (2021-10-14)
+
+
+### Bug Fixes
+
+* remove postpublish scripts ([#656](https://github.com/ionic-team/capacitor-plugins/issues/656)) ([ed6ac49](https://github.com/ionic-team/capacitor-plugins/commit/ed6ac499ebf4a47525071ccbfc36c27503e11f60))
+
+
+
+
+
+## [1.1.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/haptics@1.1.0...@capacitor/haptics@1.1.1) (2021-10-13)
+
+
+### Bug Fixes
+
+* correct addListeners links ([#655](https://github.com/ionic-team/capacitor-plugins/issues/655)) ([f9871e7](https://github.com/ionic-team/capacitor-plugins/commit/f9871e7bd53478addb21155e148829f550c0e457))
+
+
+
+
+
+# [1.1.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/haptics@1.0.3...@capacitor/haptics@1.1.0) (2021-09-27)
+
+
+### Features
+
+* **haptics:** Implement duration for vibration ([#618](https://github.com/ionic-team/capacitor-plugins/issues/618)) ([78e6b68](https://github.com/ionic-team/capacitor-plugins/commit/78e6b6886fa50318b1bfbe229e7318e521e3c245))
+
+
+
+
+
+## [1.0.3](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/haptics@1.0.2...@capacitor/haptics@1.0.3) (2021-09-01)
+
+**Note:** Version bump only for package @capacitor/haptics
+
+
+
+
+
 ## [1.0.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/haptics@1.0.1...@capacitor/haptics@1.0.2) (2021-06-23)
 
 **Note:** Version bump only for package @capacitor/haptics

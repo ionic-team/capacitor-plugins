@@ -3,6 +3,82 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.1.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/local-notifications@1.0.10...@capacitor/local-notifications@1.1.0) (2022-01-19)
+
+
+### Bug Fixes
+
+* inline source code in esm map files ([#760](https://github.com/ionic-team/capacitor-plugins/issues/760)) ([a960489](https://github.com/ionic-team/capacitor-plugins/commit/a960489a19db0182b90d187a50deff9dfbe51038))
+
+
+### Features
+
+* **local-notifications:** Add weekday scheduling support for Android and iOS ([#756](https://github.com/ionic-team/capacitor-plugins/issues/756)) ([430b485](https://github.com/ionic-team/capacitor-plugins/commit/430b48592ce59ccc967dd9a081873d7dc3937e93))
+
+
+
+
+
+## [1.0.10](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/local-notifications@1.0.9...@capacitor/local-notifications@1.0.10) (2022-01-10)
+
+**Note:** Version bump only for package @capacitor/local-notifications
+
+
+
+
+
+## [1.0.9](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/local-notifications@1.0.8...@capacitor/local-notifications@1.0.9) (2021-11-03)
+
+**Note:** Version bump only for package @capacitor/local-notifications
+
+
+
+
+
+## [1.0.8](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/local-notifications@1.0.7...@capacitor/local-notifications@1.0.8) (2021-10-14)
+
+
+### Bug Fixes
+
+* remove postpublish scripts ([#656](https://github.com/ionic-team/capacitor-plugins/issues/656)) ([ed6ac49](https://github.com/ionic-team/capacitor-plugins/commit/ed6ac499ebf4a47525071ccbfc36c27503e11f60))
+
+
+
+
+
+## [1.0.7](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/local-notifications@1.0.6...@capacitor/local-notifications@1.0.7) (2021-10-13)
+
+
+### Bug Fixes
+
+* correct addListeners links ([#655](https://github.com/ionic-team/capacitor-plugins/issues/655)) ([f9871e7](https://github.com/ionic-team/capacitor-plugins/commit/f9871e7bd53478addb21155e148829f550c0e457))
+
+
+
+
+
+## [1.0.6](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/local-notifications@1.0.5...@capacitor/local-notifications@1.0.6) (2021-09-15)
+
+
+### Bug Fixes
+
+* **local-notifications:** return schedule on as object ([#603](https://github.com/ionic-team/capacitor-plugins/issues/603)) ([ca34b01](https://github.com/ionic-team/capacitor-plugins/commit/ca34b01c73f14bb0ad14e8a501210e42a0e65b04))
+
+
+
+
+
+## [1.0.5](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/local-notifications@1.0.4...@capacitor/local-notifications@1.0.5) (2021-09-01)
+
+
+### Bug Fixes
+
+* **local-notifications:** Throw errors if missing mandatory channel fields ([#577](https://github.com/ionic-team/capacitor-plugins/issues/577)) ([6bf3a4f](https://github.com/ionic-team/capacitor-plugins/commit/6bf3a4f0de8880588200ae60e73427fa6959ea20))
+
+
+
+
+
 ## [1.0.4](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/local-notifications@1.0.3...@capacitor/local-notifications@1.0.4) (2021-08-18)
 
 

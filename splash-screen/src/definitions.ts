@@ -10,7 +10,7 @@ declare module '@capacitor/cli' {
        * How long to show the launch splash screen when autoHide is enabled (in ms)
        *
        * @since 1.0.0
-       * @default 0
+       * @default 500
        * @example 3000
        */
       launchShowDuration?: number;

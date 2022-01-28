@@ -59,7 +59,7 @@ const printCurrentPosition = async () => {
 * [`watchPosition(...)`](#watchposition)
 * [`clearWatch(...)`](#clearwatch)
 * [`checkPermissions()`](#checkpermissions)
-* [`requestPermissions()`](#requestpermissions)
+* [`requestPermissions(...)`](#requestpermissions)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
 
@@ -140,13 +140,17 @@ Check location permissions
 --------------------
 
 
-### requestPermissions()
+### requestPermissions(...)
 
 ```typescript
-requestPermissions() => Promise<PermissionStatus>
+requestPermissions(permissions?: GeolocationPluginPermissions | undefined) => Promise<PermissionStatus>
 ```
 
 Request location permissions
+
+| Param             | Type                                                                                  |
+| ----------------- | ------------------------------------------------------------------------------------- |
+| **`permissions`** | <code><a href="#geolocationpluginpermissions">GeolocationPluginPermissions</a></code> |
 
 **Returns:** <code>Promise&lt;<a href="#permissionstatus">PermissionStatus</a>&gt;</code>
 
@@ -168,11 +172,11 @@ Request location permissions
 
 #### PositionOptions
 
-| Prop                     | Type                 | Description                                                                                | Default            | Since |
-| ------------------------ | -------------------- | ------------------------------------------------------------------------------------------ | ------------------ | ----- |
-| **`enableHighAccuracy`** | <code>boolean</code> | High accuracy mode (such as GPS, if available)                                             | <code>false</code> | 1.0.0 |
-| **`timeout`**            | <code>number</code>  | The maximum wait time in milliseconds for location updates                                 | <code>10000</code> | 1.0.0 |
-| **`maximumAge`**         | <code>number</code>  | The maximum age in milliseconds of a possible cached position that is acceptable to return | <code>0</code>     | 1.0.0 |
+| Prop                     | Type                 | Description                                                                                                                                                                           | Default            | Since |
+| ------------------------ | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
+| **`enableHighAccuracy`** | <code>boolean</code> | High accuracy mode (such as GPS, if available) On Android 12+ devices it will be ignored if users didn't grant ACCESS_FINE_LOCATION permissions (can be checked with location alias). | <code>false</code> | 1.0.0 |
+| **`timeout`**            | <code>number</code>  | The maximum wait time in milliseconds for location updates                                                                                                                            | <code>10000</code> | 1.0.0 |
+| **`maximumAge`**         | <code>number</code>  | The maximum age in milliseconds of a possible cached position that is acceptable to return                                                                                            | <code>0</code>     | 1.0.0 |
 
 
 #### ClearWatchOptions
@@ -184,9 +188,17 @@ Request location permissions
 
 #### PermissionStatus
 
-| Prop           | Type                                                        |
-| -------------- | ----------------------------------------------------------- |
-| **`location`** | <code><a href="#permissionstate">PermissionState</a></code> |
+| Prop                 | Type                                                        | Description                                                                                                                                                                                                                                                                                                                                                        | Since |
+| -------------------- | ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
+| **`location`**       | <code><a href="#permissionstate">PermissionState</a></code> | Permission state for location alias. On Android it requests/checks both ACCESS_COARSE_LOCATION and ACCESS_FINE_LOCATION permissions. On iOS and web it requests/checks location permission.                                                                                                                                                                        | 1.0.0 |
+| **`coarseLocation`** | <code><a href="#permissionstate">PermissionState</a></code> | Permission state for coarseLocation alias. On Android it requests/checks ACCESS_COARSE_LOCATION. On Android 12+, users can choose between Approximate location (ACCESS_COARSE_LOCATION) or Precise location (ACCESS_FINE_LOCATION), so this alias can be used if the app doesn't need high accuracy. On iOS and web it will have the same value as location alias. | 1.2.0 |
+
+
+#### GeolocationPluginPermissions
+
+| Prop              | Type                                     |
+| ----------------- | ---------------------------------------- |
+| **`permissions`** | <code>GeolocationPermissionType[]</code> |
 
 
 ### Type Aliases
@@ -205,5 +217,10 @@ Request location permissions
 #### PermissionState
 
 <code>'prompt' | 'prompt-with-rationale' | 'granted' | 'denied'</code>
+
+
+#### GeolocationPermissionType
+
+<code>'location' | 'coarseLocation'</code>
 
 </docgen-api>

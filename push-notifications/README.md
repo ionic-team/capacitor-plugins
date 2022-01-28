@@ -109,6 +109,49 @@ On Android, there are various system and app states that can affect the delivery
 
 ---
 
+## Example
+
+```typescript
+import { PushNotifications } from '@capacitor/push-notifications';
+
+const addListeners = async () => {
+  await PushNotifications.addListener('registration', token => {
+    console.info('Registration token: ', token.value);
+  });
+
+  await PushNotifications.addListener('registrationError', err => {
+    console.error('Registration error: ', err.error);
+  });
+
+  await PushNotifications.addListener('pushNotificationReceived', notification => {
+    console.log('Push notification received: ', notification);
+  });
+
+  await PushNotifications.addListener('pushNotificationActionPerformed', notification => {
+    console.log('Push notification action performed', notification.actionId, notification.inputValue);
+  });
+}
+
+const registerNotifications = async () => {
+  let permStatus = await PushNotifications.checkPermissions();
+
+  if (permStatus.receive === 'prompt') {
+    permStatus = await PushNotifications.requestPermissions();
+  }
+
+  if (permStatus.receive !== 'granted') {
+    throw new Error('User denied permissions!');
+  }
+
+  await PushNotifications.register();
+}
+
+const getDeliveredNotifications = async () => {
+  const notificationList = await PushNotifications.getDeliveredNotifications();
+  console.log('delivered notifications', notificationList);
+}
+```
+
 ## API
 
 <docgen-index>
@@ -122,10 +165,10 @@ On Android, there are various system and app states that can affect the delivery
 * [`listChannels()`](#listchannels)
 * [`checkPermissions()`](#checkpermissions)
 * [`requestPermissions()`](#requestpermissions)
-* [`addListener('registration', ...)`](#addlistenerregistration-)
-* [`addListener('registrationError', ...)`](#addlistenerregistrationerror-)
-* [`addListener('pushNotificationReceived', ...)`](#addlistenerpushnotificationreceived-)
-* [`addListener('pushNotificationActionPerformed', ...)`](#addlistenerpushnotificationactionperformed-)
+* [`addListener('registration', ...)`](#addlistenerregistration)
+* [`addListener('registrationError', ...)`](#addlistenerregistrationerror)
+* [`addListener('pushNotificationReceived', ...)`](#addlistenerpushnotificationreceived)
+* [`addListener('pushNotificationActionPerformed', ...)`](#addlistenerpushnotificationactionperformed)
 * [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
@@ -475,10 +518,14 @@ Remove all native listeners for this plugin.
 
 #### Importance
 
+The importance level. For more details, see the [Android Developer Docs](https://developer.android.com/reference/android/app/NotificationManager#IMPORTANCE_DEFAULT)
+
 <code>1 | 2 | 3 | 4 | 5</code>
 
 
 #### Visibility
+
+The notification visibility. For more details, see the [Android Developer Docs](https://developer.android.com/reference/androidx/core/app/NotificationCompat#VISIBILITY_PRIVATE)
 
 <code>-1 | 0 | 1</code>
 

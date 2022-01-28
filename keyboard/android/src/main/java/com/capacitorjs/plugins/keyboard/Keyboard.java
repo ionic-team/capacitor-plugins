@@ -8,8 +8,10 @@ import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.Window;
 import android.view.WindowInsets;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.FrameLayout;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -22,6 +24,9 @@ public class Keyboard {
     private AppCompatActivity activity;
     private ViewTreeObserver.OnGlobalLayoutListener list;
     private View rootView;
+    private View mChildOfContent;
+    private int usableHeightPrevious;
+    private FrameLayout.LayoutParams frameLayoutParams;
 
     @Nullable
     public KeyboardEventListener getKeyboardEventListener() {
@@ -40,7 +45,16 @@ public class Keyboard {
     static final String EVENT_KB_WILL_HIDE = "keyboardWillHide";
     static final String EVENT_KB_DID_HIDE = "keyboardDidHide";
 
+    /**
+     * @deprecated
+     * Use {@link #Keyboard(AppCompatActivity activity, boolean resizeFullScreen)}
+     * @param activity
+     */
     public Keyboard(AppCompatActivity activity) {
+        this(activity, false);
+    }
+
+    public Keyboard(AppCompatActivity activity, boolean resizeOnFullScreen) {
         this.activity = activity;
         //calculate density-independent pixels (dp)
         //http://developer.android.com/guide/practices/screens_support.html
@@ -49,13 +63,17 @@ public class Keyboard {
         final float density = dm.density;
 
         //http://stackoverflow.com/a/4737265/1091751 detect if keyboard is showing
-        rootView = activity.getWindow().getDecorView().findViewById(android.R.id.content).getRootView();
+        FrameLayout content = activity.getWindow().getDecorView().findViewById(android.R.id.content);
+        rootView = content.getRootView();
         list =
             new ViewTreeObserver.OnGlobalLayoutListener() {
                 int previousHeightDiff = 0;
 
                 @Override
                 public void onGlobalLayout() {
+                    if (resizeOnFullScreen) {
+                        possiblyResizeChildOfContent();
+                    }
                     Rect r = new Rect();
                     //r will be populated with the coordinates of your view that area still visible.
                     rootView.getWindowVisibleDisplayFrame(r);
@@ -91,8 +109,33 @@ public class Keyboard {
                     }
                     previousHeightDiff = pixelHeightDiff;
                 }
+
+                private void possiblyResizeChildOfContent() {
+                    int usableHeightNow = computeUsableHeight();
+                    if (usableHeightPrevious != usableHeightNow) {
+                        frameLayoutParams.height = usableHeightNow;
+                        mChildOfContent.requestLayout();
+                        usableHeightPrevious = usableHeightNow;
+                    }
+                }
+
+                private int computeUsableHeight() {
+                    Rect r = new Rect();
+                    mChildOfContent.getWindowVisibleDisplayFrame(r);
+                    return isOverlays() ? r.bottom : r.height();
+                }
+
+                private boolean isOverlays() {
+                    final Window window = activity.getWindow();
+                    return (
+                        (window.getDecorView().getSystemUiVisibility() & View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN) ==
+                        View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    );
+                }
             };
+        mChildOfContent = content.getChildAt(0);
         rootView.getViewTreeObserver().addOnGlobalLayoutListener(list);
+        frameLayoutParams = (FrameLayout.LayoutParams) mChildOfContent.getLayoutParams();
     }
 
     public void show() {

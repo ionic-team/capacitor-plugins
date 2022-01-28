@@ -58,13 +58,6 @@ public class AppPlugin extends Plugin {
         getActivity().getOnBackPressedDispatcher().addCallback(getActivity(), callback);
     }
 
-    @Override
-    @PluginMethod(returnType = PluginMethod.RETURN_NONE)
-    public void removeAllListeners(PluginCall call) {
-        super.removeAllListeners(call);
-        unsetAppListeners();
-    }
-
     @PluginMethod
     public void exitApp(PluginCall call) {
         unsetAppListeners();
@@ -110,6 +103,15 @@ public class AppPlugin extends Plugin {
         JSObject data = new JSObject();
         data.put("isActive", this.bridge.getApp().isActive());
         call.resolve(data);
+    }
+
+    @PluginMethod
+    public void minimizeApp(PluginCall call) {
+        Intent startMain = new Intent(Intent.ACTION_MAIN);
+        startMain.addCategory(Intent.CATEGORY_HOME);
+        startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        getActivity().startActivity(startMain);
+        call.resolve();
     }
 
     /**

@@ -3,6 +3,115 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.4](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@1.2.3...@capacitor/camera@1.2.4) (2022-01-19)
+
+
+### Bug Fixes
+
+* inline source code in esm map files ([#760](https://github.com/ionic-team/capacitor-plugins/issues/760)) ([a960489](https://github.com/ionic-team/capacitor-plugins/commit/a960489a19db0182b90d187a50deff9dfbe51038))
+
+
+
+
+
+## [1.2.3](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@1.2.2...@capacitor/camera@1.2.3) (2022-01-10)
+
+
+### Bug Fixes
+
+* **camera:** set camera direction for web ([#665](https://github.com/ionic-team/capacitor-plugins/issues/665)) ([4afedb9](https://github.com/ionic-team/capacitor-plugins/commit/4afedb96f3b745a86d9cacd33ca71c42ae3fb8d4))
+
+
+
+
+
+## [1.2.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@1.2.1...@capacitor/camera@1.2.2) (2021-12-08)
+
+
+### Bug Fixes
+
+* **camera:** Return proper exif when picking multiple images ([#712](https://github.com/ionic-team/capacitor-plugins/issues/712)) ([8451237](https://github.com/ionic-team/capacitor-plugins/commit/8451237e46f24c59e74e350eaa9b31e6d99a68a0))
+
+
+
+
+
+## [1.2.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@1.2.0...@capacitor/camera@1.2.1) (2021-11-17)
+
+
+### Bug Fixes
+
+* **camera:** Don't save gallery images on iOS 14+ ([#696](https://github.com/ionic-team/capacitor-plugins/issues/696)) ([7b2cc88](https://github.com/ionic-team/capacitor-plugins/commit/7b2cc88f6e83265c991ae9f81cfc3f6bed346250))
+* **camera:** Remove capture attribute from multiple photo picker ([#687](https://github.com/ionic-team/capacitor-plugins/issues/687)) ([e551ef7](https://github.com/ionic-team/capacitor-plugins/commit/e551ef77eebe331cc7bf13c9c0eab5a0bd2da0d1))
+
+
+
+
+
+# [1.2.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@1.1.2...@capacitor/camera@1.2.0) (2021-11-03)
+
+
+### Features
+
+* **camera:** Add new method for multiple image picking from gallery ([#671](https://github.com/ionic-team/capacitor-plugins/issues/671)) ([a49c590](https://github.com/ionic-team/capacitor-plugins/commit/a49c5901683da12438fbafbd1bf6ae91133d18ed))
+
+
+
+
+
+## [1.1.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@1.1.1...@capacitor/camera@1.1.2) (2021-10-14)
+
+
+### Bug Fixes
+
+* remove postpublish scripts ([#656](https://github.com/ionic-team/capacitor-plugins/issues/656)) ([ed6ac49](https://github.com/ionic-team/capacitor-plugins/commit/ed6ac499ebf4a47525071ccbfc36c27503e11f60))
+
+
+
+
+
+## [1.1.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@1.1.0...@capacitor/camera@1.1.1) (2021-10-13)
+
+
+### Bug Fixes
+
+* correct addListeners links ([#655](https://github.com/ionic-team/capacitor-plugins/issues/655)) ([f9871e7](https://github.com/ionic-team/capacitor-plugins/commit/f9871e7bd53478addb21155e148829f550c0e457))
+
+
+
+
+
+# [1.1.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@1.0.5...@capacitor/camera@1.1.0) (2021-09-15)
+
+
+### Bug Fixes
+
+* **camera:** saveToGallery for edited images ([#602](https://github.com/ionic-team/capacitor-plugins/issues/602)) ([b5ac27d](https://github.com/ionic-team/capacitor-plugins/commit/b5ac27d59181ec3acc2909b2569d8ab45a829b1c))
+* **camera:** set settings again on callbacks ([#595](https://github.com/ionic-team/capacitor-plugins/issues/595)) ([908bd68](https://github.com/ionic-team/capacitor-plugins/commit/908bd688767e374cf8e96b3def08bd33dcdfd2aa))
+
+
+### Features
+
+* **camera:** Return if image was saved to gallery ([#599](https://github.com/ionic-team/capacitor-plugins/issues/599)) ([594af3b](https://github.com/ionic-team/capacitor-plugins/commit/594af3be0982371e6c61e4bdb830c6bbb3963913))
+
+
+
+
+
+## [1.0.5](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@1.0.4...@capacitor/camera@1.0.5) (2021-09-01)
+
+
+### Bug Fixes
+
+* Correct missing source_files path ([#590](https://github.com/ionic-team/capacitor-plugins/issues/590)) ([24e0fc2](https://github.com/ionic-team/capacitor-plugins/commit/24e0fc27cc314049012ab9915fa5e7bfb03313e1))
+* **camera:** cleanup camera images if not needed ([#563](https://github.com/ionic-team/capacitor-plugins/issues/563)) ([a2e4f43](https://github.com/ionic-team/capacitor-plugins/commit/a2e4f4339119698e8dd066a5f2f8f065ab2e4727))
+* **camera:** Resize not respecting aspect ratio on iOS ([#568](https://github.com/ionic-team/capacitor-plugins/issues/568)) ([ea2b801](https://github.com/ionic-team/capacitor-plugins/commit/ea2b8012aab7e5ea34cfa34735f7f55ba76a3882))
+* **camera:** return original image if editing is cancelled ([#566](https://github.com/ionic-team/capacitor-plugins/issues/566)) ([4786841](https://github.com/ionic-team/capacitor-plugins/commit/4786841099403a4d3d59aaf9103e8fa02aa8e4e2))
+
+
+
+
+
 ## [1.0.4](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@1.0.3...@capacitor/camera@1.0.4) (2021-08-18)
 
 

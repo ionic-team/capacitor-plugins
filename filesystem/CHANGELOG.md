@@ -3,6 +3,74 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.1.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@1.0.7...@capacitor/filesystem@1.1.0) (2022-01-19)
+
+
+### Bug Fixes
+
+* inline source code in esm map files ([#760](https://github.com/ionic-team/capacitor-plugins/issues/760)) ([a960489](https://github.com/ionic-team/capacitor-plugins/commit/a960489a19db0182b90d187a50deff9dfbe51038))
+
+
+### Features
+
+* **filesystem:** support Library directory ([#666](https://github.com/ionic-team/capacitor-plugins/issues/666)) ([ce7ee95](https://github.com/ionic-team/capacitor-plugins/commit/ce7ee958b141f1dd4f86493923455f8264d0b6db))
+
+
+
+
+
+## [1.0.7](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@1.0.6...@capacitor/filesystem@1.0.7) (2022-01-10)
+
+
+### Bug Fixes
+
+* **filesystem:** Throw errors instead of strings ([#746](https://github.com/ionic-team/capacitor-plugins/issues/746)) ([af4b875](https://github.com/ionic-team/capacitor-plugins/commit/af4b8750be512b869af07bcf96c1602eedc6758e))
+
+
+
+
+
+## [1.0.6](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@1.0.5...@capacitor/filesystem@1.0.6) (2021-11-03)
+
+**Note:** Version bump only for package @capacitor/filesystem
+
+
+
+
+
+## [1.0.5](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@1.0.4...@capacitor/filesystem@1.0.5) (2021-10-14)
+
+
+### Bug Fixes
+
+* remove postpublish scripts ([#656](https://github.com/ionic-team/capacitor-plugins/issues/656)) ([ed6ac49](https://github.com/ionic-team/capacitor-plugins/commit/ed6ac499ebf4a47525071ccbfc36c27503e11f60))
+
+
+
+
+
+## [1.0.4](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@1.0.3...@capacitor/filesystem@1.0.4) (2021-10-13)
+
+
+### Bug Fixes
+
+* correct addListeners links ([#655](https://github.com/ionic-team/capacitor-plugins/issues/655)) ([f9871e7](https://github.com/ionic-team/capacitor-plugins/commit/f9871e7bd53478addb21155e148829f550c0e457))
+
+
+
+
+
+## [1.0.3](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@1.0.2...@capacitor/filesystem@1.0.3) (2021-09-01)
+
+
+### Bug Fixes
+
+* **filesystem:** allow copy if from is not parent of to ([#546](https://github.com/ionic-team/capacitor-plugins/issues/546)) ([a70414e](https://github.com/ionic-team/capacitor-plugins/commit/a70414e79189579ff1a0b5c2a90d12491f5c23cf))
+
+
+
+
+
 ## [1.0.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@1.0.1...@capacitor/filesystem@1.0.2) (2021-06-23)
 
 **Note:** Version bump only for package @capacitor/filesystem
