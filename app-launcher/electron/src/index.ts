@@ -13,8 +13,8 @@ export class AppLauncher implements AppLauncherPlugin {
   private _protocols: string[] | false;
 
   constructor(config: Record<string, any>) {
-    const protocols =
-      config?.plugins?.['app-launcher']?.electron?.protocols ?? [];
+    const protocols = config?.plugins?.['app-launcher']?.electron
+      ?.protocols ?? ['http', 'https'];
 
     this._protocols = Array.isArray(protocols)
       ? protocols.map(s => s.replace(':', ''))
@@ -58,9 +58,7 @@ export class AppLauncher implements AppLauncherPlugin {
 
       if (this._protocols.length < 1) {
         return Promise.reject(
-          new Error(
-            'No allowed protocols found in the Capacitor config file. See: <link to docs>',
-          ),
+          new Error('No allowed protocols found in the Capacitor config file'),
         );
       }
 
