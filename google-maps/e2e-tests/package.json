@@ -6,7 +6,7 @@
     "@capacitor/android": "^3.4.0",
     "@capacitor/app": "1.0.7",
     "@capacitor/core": "3.4.0",
-    "@capacitor/google-maps": "file:../capacitor-google-maps.tgz",
+    "@capacitor/google-maps": "file:../capacitor-google-maps-0.0.1.tgz",
     "@capacitor/haptics": "1.1.3",
     "@capacitor/ios": "^3.4.0",
     "@capacitor/keyboard": "1.2.0",

@@ -16,10 +16,9 @@ class CapacitorGoogleMapsPlugin : Plugin() {
         try {
             val id = call.getString("id")
 
-            if (null == id || id.length <= 0) {
+            if (null == id || id.isEmpty()) {
                 val error: GoogleMapErrorObject = getErrorObject(GoogleMapErrors.INVALID_MAP_ID)
-                Log.w(TAG, error.toString())
-                call.reject(error.toString())
+                handleError(call, error)
                 return
             }
 
@@ -28,8 +27,7 @@ class CapacitorGoogleMapsPlugin : Plugin() {
             if(null == configObject) {
                 val error: GoogleMapErrorObject = getErrorObject(GoogleMapErrors.INVALID_ARGUMENTS,
                     "GoogleMapConfig is missing")
-                Log.w(TAG, error.toString())
-                call.reject(error.toString())
+                handleError(call, error)
                 return
             }
 
@@ -37,8 +35,7 @@ class CapacitorGoogleMapsPlugin : Plugin() {
             val config = GoogleMapConfig(configObject)
 
             if(null != config.error) {
-                Log.w(TAG, config.error.toString())
-                call.reject(config.error.toString())
+                handleError(call, config.error!!)
                 return
             }
 
@@ -52,13 +49,12 @@ class CapacitorGoogleMapsPlugin : Plugin() {
             }
 
             val newMap = GoogleMap(config)
-            maps.put(id!!, newMap)
+            maps[id] = newMap
 
             call.resolve()
         }
         catch(e: Exception) {
-            Log.w(TAG, e)
-            call.reject(e.message)
+            handleError(call, e)
         }
     }
 
@@ -69,25 +65,33 @@ class CapacitorGoogleMapsPlugin : Plugin() {
 
             if (null == id || id.isEmpty()) {
                 val error: GoogleMapErrorObject = getErrorObject(GoogleMapErrors.INVALID_MAP_ID)
-                Log.w(TAG, error.toString())
-                call.reject(error.toString())
+                handleError(call, error)
                 return
             }
 
             val removedMap = maps.remove(id)
 
-            if(null ==removedMap) {
+            if(null == removedMap) {
                 val error: GoogleMapErrorObject = getErrorObject(GoogleMapErrors.MAP_NOT_FOUND)
-                Log.w(TAG, error.toString())
-                call.reject(error.toString())
+                handleError(call, error)
                 return
             }
 
             call.resolve()
         }
         catch(e: Exception) {
-            Log.w(TAG, e)
-            call.reject(e.message)
+            handleError(call, e)
         }
+    }
+
+    fun handleError(call: PluginCall, e: Exception) {
+        val error: GoogleMapErrorObject = getErrorObject(GoogleMapErrors.UNHANDLED_ERROR, e.message)
+        Log.w(TAG, error.toString())
+        call.reject(e.message, error.toString(), e)
+    }
+
+    fun handleError(call: PluginCall, error: GoogleMapErrorObject) {
+        Log.w(TAG, error.toString())
+        call.reject(error.toString())
     }
 }
