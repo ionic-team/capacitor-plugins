@@ -14,6 +14,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import com.getcapacitor.Logger;
 
 public class Keyboard {
 
@@ -100,12 +101,16 @@ public class Keyboard {
                     int heightDiff = screenHeight - resultBottom;
 
                     int pixelHeightDiff = (int) (heightDiff / density);
-                    if (pixelHeightDiff > 100 && pixelHeightDiff != previousHeightDiff) { // if more than 100 pixels, its probably a keyboard...
-                        keyboardEventListener.onKeyboardEvent(EVENT_KB_WILL_SHOW, pixelHeightDiff);
-                        keyboardEventListener.onKeyboardEvent(EVENT_KB_DID_SHOW, pixelHeightDiff);
-                    } else if (pixelHeightDiff != previousHeightDiff && (previousHeightDiff - pixelHeightDiff) > 100) {
-                        keyboardEventListener.onKeyboardEvent(EVENT_KB_WILL_HIDE, 0);
-                        keyboardEventListener.onKeyboardEvent(EVENT_KB_DID_HIDE, 0);
+                    if (keyboardEventListener != null) {
+                        if (pixelHeightDiff > 100 && pixelHeightDiff != previousHeightDiff) { // if more than 100 pixels, its probably a keyboard...
+                            keyboardEventListener.onKeyboardEvent(EVENT_KB_WILL_SHOW, pixelHeightDiff);
+                            keyboardEventListener.onKeyboardEvent(EVENT_KB_DID_SHOW, pixelHeightDiff);
+                        } else if (pixelHeightDiff != previousHeightDiff && (previousHeightDiff - pixelHeightDiff) > 100) {
+                            keyboardEventListener.onKeyboardEvent(EVENT_KB_WILL_HIDE, 0);
+                            keyboardEventListener.onKeyboardEvent(EVENT_KB_DID_HIDE, 0);
+                        }
+                    } else {
+                        Logger.warn("Native Keyboard Event Listener not found");
                     }
                     previousHeightDiff = pixelHeightDiff;
                 }
