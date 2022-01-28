@@ -17,26 +17,28 @@ class CapacitorGoogleMapsPlugin : Plugin() {
             val id = call.getString("id")
 
             if (null == id || id.isEmpty()) {
-                val error: GoogleMapErrorObject = getErrorObject(GoogleMapErrors.INVALID_MAP_ID)
-                handleError(call, error)
+                handleError(call, GoogleMapErrors.INVALID_MAP_ID)
                 return
             }
 
             val configObject = call.getObject("config")
 
             if(null == configObject) {
-                val error: GoogleMapErrorObject = getErrorObject(GoogleMapErrors.INVALID_ARGUMENTS,
+                handleError(call, GoogleMapErrors.INVALID_ARGUMENTS,
                     "GoogleMapConfig is missing")
-                handleError(call, error)
                 return
             }
 
             val forceCreate = call.getBoolean("forceCreate", false)!!
-            val config = GoogleMapConfig(configObject)
 
-            if(null != config.error) {
-                handleError(call, config.error!!)
-                return
+            val config: GoogleMapConfig
+
+            try {
+                config = GoogleMapConfig(configObject)
+            }
+            catch (e: Exception) {
+                handleError(call, GoogleMapErrors.INVALID_ARGUMENTS, e.message)
+                return;
             }
 
             if(maps.contains(id)) {
@@ -64,16 +66,14 @@ class CapacitorGoogleMapsPlugin : Plugin() {
             val id = call.getString("id")
 
             if (null == id || id.isEmpty()) {
-                val error: GoogleMapErrorObject = getErrorObject(GoogleMapErrors.INVALID_MAP_ID)
-                handleError(call, error)
+                handleError(call, GoogleMapErrors.INVALID_MAP_ID)
                 return
             }
 
             val removedMap = maps.remove(id)
 
             if(null == removedMap) {
-                val error: GoogleMapErrorObject = getErrorObject(GoogleMapErrors.MAP_NOT_FOUND)
-                handleError(call, error)
+                handleError(call, GoogleMapErrors.MAP_NOT_FOUND)
                 return
             }
 
@@ -84,13 +84,18 @@ class CapacitorGoogleMapsPlugin : Plugin() {
         }
     }
 
-    fun handleError(call: PluginCall, e: Exception) {
+    private fun handleError(call: PluginCall, e: Exception) {
         val error: GoogleMapErrorObject = getErrorObject(GoogleMapErrors.UNHANDLED_ERROR, e.message)
         Log.w(TAG, error.toString())
         call.reject(e.message, error.toString(), e)
     }
 
-    fun handleError(call: PluginCall, error: GoogleMapErrorObject) {
+    private fun handleError(call: PluginCall, errorEnum: GoogleMapErrors, message: String? = "") {
+        val error: GoogleMapErrorObject = getErrorObject(errorEnum, message)
+        handleError(call, error)
+    }
+
+    private fun handleError(call: PluginCall, error: GoogleMapErrorObject) {
         Log.w(TAG, error.toString())
         call.reject(error.message, error.toString())
     }
