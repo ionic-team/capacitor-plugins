@@ -494,7 +494,6 @@ public class CameraPlugin extends Plugin {
         File outFile = null;
         if (uri.getScheme().equals("content")) {
             outFile = getTempFile(uri);
-            writePhoto(outFile, is);
         } else {
             outFile = new File(uri.getPath());
         }
