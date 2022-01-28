@@ -92,6 +92,6 @@ class CapacitorGoogleMapsPlugin : Plugin() {
 
     fun handleError(call: PluginCall, error: GoogleMapErrorObject) {
         Log.w(TAG, error.toString())
-        call.reject(error.toString())
+        call.reject(error.message, error.toString())
     }
 }
