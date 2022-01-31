@@ -2,12 +2,17 @@
 
 The Toast API provides a notification pop up for displaying important information to a user. Just like real toast!
 
+
+
 ## Install
 
 ```bash
 npm install @capacitor/toast
 npx cap sync
 ```
+
+## PWA Notes
+[PWA Elements](https://capacitorjs.com/docs/web/pwa-elements) are required for the Toast plugin to work.
 
 ## Example
 
