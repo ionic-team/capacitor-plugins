@@ -1,5 +1,6 @@
 import Foundation
 import Capacitor
+import GoogleMaps
 
 @objc(CapacitorGoogleMapsPlugin)
 public class CapacitorGoogleMapsPlugin: CAPPlugin {
