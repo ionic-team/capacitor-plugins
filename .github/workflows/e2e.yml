@@ -68,6 +68,11 @@ jobs:
       - name: Setup NPMRC
         run: echo "//registry.npmjs.org/:_authToken=${{secrets.E2E_NPM_TOKEN}}" > .npmrc
 
+      - name: Prepare Local Package
+        run: npm run e2e:prepare
+        env: 
+          NPM_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+
       - name: Install Packages
         run: npm install
         env: 
@@ -95,6 +100,11 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 14.x
+
+      - name: Prepare Local Package
+        run: npm run e2e:prepare
+        env: 
+          NPM_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
 
       - name: Prepare Local Package
         run: npm install && npm run build && npm run pack-local

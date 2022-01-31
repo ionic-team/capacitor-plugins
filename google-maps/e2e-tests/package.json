@@ -55,7 +55,8 @@
     "e2e:ios": "E2E_MODE=simulator && npm run sync && npm run e2e:ios:build && npm run e2e:ios:run",
     "e2e:android:build": "npm run ionic-e2e build android:emulator",
     "e2e:android:run": "npm run ionic-e2e run android:emulator",
-    "e2e:android": "./scripts/run_Android_E2E.sh"
+    "e2e:android": "./scripts/run_Android_E2E.sh",
+    "e2e:prepare": "./scripts/build_local_package.sh"
   },
   "eslintConfig": {
     "extends": [
