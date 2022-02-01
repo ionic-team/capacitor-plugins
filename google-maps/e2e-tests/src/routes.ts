@@ -1,8 +1,8 @@
 import { triangleOutline, triangleSharp } from 'ionicons/icons';
 import React from 'react';
-import BasicEchoRunBasicEchoPage from './pages/BasicEcho/RunBasicEcho';
+import CreateAndDestroyMapPage from './pages/Map/CreateAndDestroyMap';
 
-export type RouteDiscription = {
+export type RouteDescription = {
   title: string;
   url: string;
   iosIcon: string;
@@ -12,26 +12,26 @@ export type RouteDiscription = {
 
 export type RouteGroup = {
   groupName: string;
-  pages: RouteDiscription[];
+  pages: RouteDescription[];
 };
 
 const routesList: RouteGroup[] = [
   {
-    groupName: 'Basic Echo',
+    groupName: 'Maps',
     pages: [
       {
-        title: 'Run Basic Echo',
-        url: '/basic-echo/run-basic-echo',
+        title: 'Create and Destroy Maps',
+        url: '/maps/create-and-destroy',
         iosIcon: triangleOutline,
         mdIcon: triangleSharp,
-        component: BasicEchoRunBasicEchoPage,
+        component: CreateAndDestroyMapPage,
       },
     ],
   },
 ];
 
-export function getRouterSetup(): RouteDiscription[] {
-  let allPages: RouteDiscription[] = [];
+export function getRouterSetup(): RouteDescription[] {
+  let allPages: RouteDescription[] = [];
   for (const routeGroup of routesList) {
     allPages = [...allPages, ...routeGroup.pages];
   }

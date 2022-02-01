@@ -65,7 +65,18 @@ jobs:
         env: 
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - run: npm install
+      - name: Setup NPMRC
+        run: echo "//registry.npmjs.org/:_authToken=${{secrets.E2E_NPM_TOKEN}}" > .npmrc
+
+      - name: Prepare Local Package
+        run: npm run e2e:prepare
+        env: 
+          NPM_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+
+      - name: Install Packages
+        run: npm install
+        env: 
+          NPM_TOKEN: ${{ secrets.E2E_NPM_TOKEN }}
 
       - name: Run E2E Test on iOS
         run: npm run e2e:ios
@@ -91,12 +102,23 @@ jobs:
           node-version: 14.x
 
       - name: Prepare Local Package
+        run: npm run e2e:prepare
+        env: 
+          NPM_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+
+      - name: Prepare Local Package
         run: npm install && npm run build && npm run pack-local
         working-directory: ${{ matrix.plugin }}
         env: 
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - run: npm install
+      - name: Setup NPMRC
+        run: echo "//registry.npmjs.org/:_authToken=${{secrets.E2E_NPM_TOKEN}}" > .npmrc
+
+      - name: Install Packages
+        run: npm install
+        env: 
+          NPM_TOKEN: ${{ secrets.E2E_NPM_TOKEN }}
 
       - name: AVD cache
         uses: actions/cache@v2
