@@ -10,6 +10,7 @@ npx cap sync
 ```
 
 ## PWA Notes
+
 [PWA Elements](https://capacitorjs.com/docs/web/pwa-elements) are required for the Toast plugin to work.
 
 ## Example
