@@ -10,6 +10,7 @@ const CreateAndDestroyMapPage: React.FC = () => {
 
 
     async function createMap() {
+        setCommandOutput("");
         try {
             const newMap = await GoogleMap.create("test-map", apiKey!, {
                 center: {
@@ -27,7 +28,7 @@ const CreateAndDestroyMapPage: React.FC = () => {
             setMap(newMap);
             setCommandOutput('Map created');
         } catch(err: any) {
-            //setCommandOutput(err.message);
+            setCommandOutput(err.message);
         }        
     }
 

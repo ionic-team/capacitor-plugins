@@ -5,11 +5,14 @@ plugins {
 apply plugin: 'com.android.application'
 
 def getApiKey() {
-    Properties properties = new Properties()
-    properties.load(project.rootProject.file('local.properties').newDataInputStream())
-    String localApiKey = properties['REACT_APP_GOOGLE_MAPS_API_KEY']
-
-    return (null == localApiKey) ? System.getenv('REACT_APP_GOOGLE_MAPS_API_KEY') : localApiKey
+    try {
+        Properties properties = new Properties()
+        properties.load(project.rootProject.file('local.properties').newDataInputStream())
+        return properties['REACT_APP_GOOGLE_MAPS_API_KEY']
+    }
+    catch(Exception ignored) {
+        System.getenv('REACT_APP_GOOGLE_MAPS_API_KEY')
+    }
 }
 
 android {
