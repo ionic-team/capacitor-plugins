@@ -15,6 +15,10 @@ This plugin will use the following project variables (defined in your app's `var
 
 - `$androidxMaterialVersion`: version of `com.google.android.material:material` (default: `1.3.0`)
 
+## PWA Notes
+
+[PWA Elements](https://capacitorjs.com/docs/web/pwa-elements) are required for Action Sheet plugin to work.
+
 ## Example
 
 ```typescript
