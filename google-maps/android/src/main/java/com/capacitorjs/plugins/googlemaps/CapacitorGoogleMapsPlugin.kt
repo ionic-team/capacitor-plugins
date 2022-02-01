@@ -111,7 +111,7 @@ class CapacitorGoogleMapsPlugin : Plugin() {
                 val googleMap: GoogleMap? = maps.get(id)
 
                 if (null == googleMap) {
-                    handleError(call, GoogleMapErrors.INVALID_MAP_ID)
+                    handleError(call, GoogleMapErrors.MAP_NOT_FOUND)
                     return
                 }
 

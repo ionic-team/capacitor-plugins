@@ -13,9 +13,9 @@ class GoogleMapConfig(fromJSONObject: JSONObject) {
     var x: Int = 0
     var y: Int = 0
     var center: LatLng = LatLng(0.0, 0.0)
-    var cameraPosition: CameraPosition? = null
     var googleMapOptions: GoogleMapOptions? = null
     var zoom: Int = 0
+    var liteMode: Boolean = false
     var mapView: MapView? = null
     var mapViewId: Int? = null
 
@@ -50,6 +50,9 @@ class GoogleMapConfig(fromJSONObject: JSONObject) {
             throw Exception("LatLng object is missing the required 'lat' and/or 'lng' property")
         }
 
+        liteMode = fromJSONObject.has("androidLiteMode")
+                && fromJSONObject.getBoolean("androidLiteMode")
+
         width = fromJSONObject.getInt("width")
         height = fromJSONObject.getInt("height")
         x = fromJSONObject.getInt("x")
@@ -58,10 +61,9 @@ class GoogleMapConfig(fromJSONObject: JSONObject) {
 
         val lat = centerJSONObject.getDouble("lat")
         val lng = centerJSONObject.getDouble("lng")
-
         center = LatLng(lat, lng)
-        cameraPosition = CameraPosition(center, zoom.toFloat(), 0.0F, 0.0F)
-        googleMapOptions = GoogleMapOptions().camera(cameraPosition)
 
+        val cameraPosition = CameraPosition(center, zoom.toFloat(), 0.0F, 0.0F)
+        googleMapOptions = GoogleMapOptions().camera(cameraPosition).liteMode(liteMode)
     }
 }
