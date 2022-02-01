@@ -16,7 +16,7 @@ export interface DestroyMapArgs {
 
 export interface RemoveMarkerArgs {
   id: string;
-  markerId: string;
+  markerId: number;
 }
 
 export interface AddMarkerArgs {
@@ -26,7 +26,7 @@ export interface AddMarkerArgs {
 
 export interface CapacitorGoogleMapsPlugin {
   create(args: CreateMapArgs): Promise<void>;
-  addMarker(args: AddMarkerArgs): Promise<string>;
+  addMarker(args: AddMarkerArgs): Promise<number>;
   removeMarker(args: RemoveMarkerArgs): Promise<void>;
   destroy(args: DestroyMapArgs): Promise<void>;
 }

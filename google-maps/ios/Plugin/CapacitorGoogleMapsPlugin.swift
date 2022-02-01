@@ -61,6 +61,54 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
             handleError(call, error: error)
         }
     }
+    
+    @objc func addMarker(_ call: CAPPluginCall) {
+        do {
+            guard let id = call.getString("id") else {
+                throw GoogleMapErrors.invalidMapId
+            }
+            
+            guard let markerObj = call.getObject("marker") else {
+                throw GoogleMapErrors.invalidArguments("Marker is missing")
+            }
+            
+            let marker = try Marker(fromJSObject: markerObj)
+            
+            guard let map = self.maps[id] else {
+                throw GoogleMapErrors.mapNotFound
+            }
+            
+            let markerId = map.addMarker(marker: marker)
+            
+            call.resolve(["id": markerId])
+            
+        } catch {
+            handleError(call, error: error)
+        }
+    }
+    
+    @objc func removeMarker(_ call: CAPPluginCall) {
+        do {
+            guard let id = call.getString("id") else {
+                throw GoogleMapErrors.invalidMapId
+            }
+            
+            guard let markerId = call.getInt("markerId") else {
+                throw GoogleMapErrors.invalidArguments("Marker is hash id is missing")
+            }
+            
+            guard let map = self.maps[id] else {
+                throw GoogleMapErrors.mapNotFound
+            }
+            
+            map.removeMarker(id: markerId)
+            
+            call.resolve()            
+            
+        } catch {
+            handleError(call, error: error)
+        }
+    }
 
     private func handleError(_ call: CAPPluginCall, error: Error) {
         let errObject = getErrorObject(error)

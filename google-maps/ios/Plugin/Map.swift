@@ -24,6 +24,7 @@ class GMViewController: UIViewController {
 public class Map {
     var config: GoogleMapConfig
     var mapViewController: GMViewController
+    var markers = [Int: GMSMarker]()
 
     init(config: GoogleMapConfig) {
         self.config = config
@@ -43,5 +44,31 @@ public class Map {
             "longitude": self.config.center.lng,
             "zoom": self.config.zoom
         ]
+    }
+    
+    func addMarker(marker: Marker) -> Int {
+        let newMarker = GMSMarker()
+        newMarker.position = CLLocationCoordinate2D(latitude: marker.coordinate.lat, longitude: marker.coordinate.lng)
+        newMarker.title = marker.title
+        newMarker.snippet = marker.snippet
+        newMarker.isFlat = marker.isFlat ?? false
+        newMarker.opacity = marker.opacity ?? 1
+        newMarker.isDraggable = marker.draggable ?? false
+        
+        DispatchQueue.main.async {
+            newMarker.map = self.mapViewController.GMapView
+            self.markers[newMarker.hash.hashValue] = newMarker
+        }
+        
+        return newMarker.hash.hashValue
+    }
+    
+    func removeMarker(id: Int) {
+        DispatchQueue.main.async {
+            if let marker = self.markers[id] {
+                marker.map = nil
+                self.markers.removeValue(forKey: id)
+            }
+        }
     }
 }
