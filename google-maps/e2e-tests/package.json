@@ -52,7 +52,7 @@
     "ionic-e2e": "ionic-e2e",
     "e2e:ios:build": "npm run ionic-e2e build ios:simulator",
     "e2e:ios:run": "npm run ionic-e2e run ios:simulator",
-    "e2e:ios": "E2E_MODE=simulator && REACT_APP_GOOGLE_MAPS_API_KEY=${{ secrets.REACT_APP_GOOGLE_MAPS_API_KEY }} && npm run sync && npm run e2e:ios:build && npm run e2e:ios:run",
+    "e2e:ios": "E2E_MODE=simulator && npm run sync && npm run e2e:ios:build && npm run e2e:ios:run",
     "e2e:android:build": "npm run ionic-e2e build android:emulator",
     "e2e:android:run": "npm run ionic-e2e run android:emulator",
     "e2e:android": "./scripts/run_Android_E2E.sh",

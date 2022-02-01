@@ -57,7 +57,6 @@ if [[ -z $GITHUB_ACTION ]]; then
 fi
 
 E2E_MODE=simulator
-REACT_APP_GOOGLE_MAPS_API_KEY=${{ secrets.REACT_APP_GOOGLE_MAPS_API_KEY }}
 
 npm run sync 
 npm run e2e:android:build
