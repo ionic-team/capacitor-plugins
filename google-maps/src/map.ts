@@ -8,6 +8,12 @@ export class GoogleMap {
     this.id = id;
   }
 
+  public static async initialize(key: string): Promise<void> {
+    return CapacitorGoogleMaps.initialize({
+      key: key,
+    });
+  }
+
   public static async create(
     id: string,
     config: GoogleMapConfig,

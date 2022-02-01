@@ -7,9 +7,19 @@ const CreateAndDestroyMapPage: React.FC = () => {
     const [map, setMap] = useState<GoogleMap | null>(null);
     const [commandOutput, setCommandOutput] = useState('');
 
+    async function initializeMaps() {
+        setCommandOutput("");
+        try {
+            await GoogleMap.initialize('AIzaSyDmw2qPFsciAv44tfbDDcDt9cU9PYnCmjw');
+            setCommandOutput('Google Maps SDK Initialized');
+        } catch (err: any) {
+            setCommandOutput(err.message);
+        }
+    }
+
     async function createMap() {
         setCommandOutput("");
-        try {            
+        try {
             const newMap = await GoogleMap.create("test-map", {
                 center: {
                     lat: 0,
@@ -45,6 +55,9 @@ const CreateAndDestroyMapPage: React.FC = () => {
     return (
         <BaseTestingPage pageTitle="Create and Destroy Map">
             <div>
+                <IonButton expand="block" id="initializeButton" onClick={initializeMaps}>
+                    Initialize
+                </IonButton>
                 <IonButton expand="block" id="createMapButton" onClick={createMap}>
                     Create Map
                 </IonButton>

@@ -16,6 +16,11 @@ class CapacitorGoogleMapsPlugin : Plugin() {
     val TAG: String = "CAP-GOOGLE-MAPS"
 
     @PluginMethod
+    fun initialize(call: PluginCall) {
+        call.resolve()
+    }
+
+    @PluginMethod
     fun create(call: PluginCall) {
         try {
             val id = call.getString("id")
