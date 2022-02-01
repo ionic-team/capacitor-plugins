@@ -66,6 +66,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
                 throw GoogleMapErrors.mapNotFound
             }
 
+            self.destroyMapInView(removedMap!)
             call.resolve()
         } catch {
             handleError(call, error: error)
@@ -82,6 +83,12 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
             map.setupView()
             self.bridge?.viewController?.view.addSubview(map.mapViewController.view)
             map.mapViewController.GMapView.delegate = self
+        }
+    }
+    
+    private func destroyMapInView(_ map: Map) {
+        DispatchQueue.main.async {
+            map.mapViewController.view = nil
         }
     }
 }
