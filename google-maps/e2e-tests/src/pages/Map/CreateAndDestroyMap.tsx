@@ -6,7 +6,7 @@ import BaseTestingPage from '../../components/BaseTestingPage';
 const CreateAndDestroyMapPage: React.FC = () => {
     const [map, setMap] = useState<GoogleMap | null>(null);
     const [commandOutput, setCommandOutput] = useState('');
-    const apiKey = process.env.REACT_APP_API_KEY;
+    const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
 
 
     async function createMap() {
