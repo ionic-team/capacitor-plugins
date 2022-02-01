@@ -33,7 +33,9 @@ const CreateAndDestroyMapPage: React.FC = () => {
                 y: 0,
             });
 
-            const testMap = await GoogleMap.create("test-map-2", {
+
+            // Test multiple maps
+            await GoogleMap.create("test-map-2", {
                 center: {
                     lat: 33.6,
                     lng: -117.9,
