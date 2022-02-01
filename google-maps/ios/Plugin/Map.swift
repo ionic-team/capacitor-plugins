@@ -1,4 +1,5 @@
 import Foundation
+import GoogleMaps
 
 public struct LatLng: Codable {
     let lat: Float
@@ -6,5 +7,5 @@ public struct LatLng: Codable {
 }
 
 public class Map {
-    init(config: GoogleMapConfig) {}
+    init(config: GoogleMapConfig, mapViewController: GMViewController) {}
 }

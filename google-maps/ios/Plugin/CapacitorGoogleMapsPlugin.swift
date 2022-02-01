@@ -59,4 +59,33 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin {
         let errObject = getErrorObject(error)
         call.reject(errObject.message, "\(errObject.code)", error, [:])
     }
+    
+    private func renderMap(_ map: Map) {
+        DispatchQueue.main.async {
+            if nil != map.mapViewController {
+            
+            }
+        /*
+         if self.mapViewController != nil {
+                         self.mapViewController.view = nil
+                     }
+
+                     self.mapViewController = GMViewController();
+                     self.mapViewController.mapViewBounds = [
+                         "width": call.getDouble("width") ?? 500,
+                         "height": call.getDouble("height") ?? 500,
+                         "x": call.getDouble("x") ?? 0,
+                         "y": call.getDouble("y") ?? 0,
+                     ]
+                     self.mapViewController.cameraPosition = [
+                         "latitude": call.getDouble("latitude") ?? 0.0,
+                         "longitude": call.getDouble("longitude") ?? 0.0,
+                         "zoom": call.getDouble("zoom") ?? (self.DEFAULT_ZOOM)
+                     ]
+                     self.bridge?.viewController?.view.addSubview(self.mapViewController.view)
+                     self.mapViewController.GMapView.delegate = self
+                     self.notifyListeners("onMapReady", data: nil)
+         */
+        }
+    }
 }

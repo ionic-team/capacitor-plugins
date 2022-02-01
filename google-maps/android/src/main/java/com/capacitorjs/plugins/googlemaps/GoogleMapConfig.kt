@@ -16,8 +16,6 @@ class GoogleMapConfig(fromJSONObject: JSONObject) {
     var googleMapOptions: GoogleMapOptions? = null
     var zoom: Int = 0
     var liteMode: Boolean = false
-    var mapView: MapView? = null
-    var mapViewId: Int? = null
 
     init {
         if(!fromJSONObject.has("width")) {

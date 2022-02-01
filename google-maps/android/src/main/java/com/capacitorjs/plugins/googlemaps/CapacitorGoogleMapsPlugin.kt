@@ -57,7 +57,7 @@ class CapacitorGoogleMapsPlugin : Plugin() {
             val newMap = GoogleMap(config)
             maps[id] = newMap
 
-            renderMap(call, id)
+            renderMap(newMap)
 
             call.resolve()
         }
@@ -83,12 +83,10 @@ class CapacitorGoogleMapsPlugin : Plugin() {
                 return
             }
 
-            bridge.activity.runOnUiThread(object: Runnable {
-                override fun run() {
-                    destroyMapInView(removedMap.config.mapViewId!!)
-                    removedMap.config.mapView!!.onDestroy()
-                }
-            })
+            bridge.activity.runOnUiThread {
+                destroyMapInView(removedMap.mapViewId!!)
+                removedMap.mapView!!.onDestroy()
+            }
 
             call.resolve()
         }
@@ -105,46 +103,37 @@ class CapacitorGoogleMapsPlugin : Plugin() {
         }
     }
 
-    private fun renderMap(call: PluginCall, id: String) {
-        bridge.activity.runOnUiThread(object: Runnable {
-            override fun run() {
-                val googleMap: GoogleMap? = maps.get(id)
+    private fun renderMap(googleMap: GoogleMap) {
+        bridge.activity.runOnUiThread {
+            var mapViewId: Int? = googleMap.mapViewId
 
-                if (null == googleMap) {
-                    handleError(call, GoogleMapErrors.MAP_NOT_FOUND)
-                    return
-                }
-
-                var mapViewId: Int? = googleMap.config.mapViewId
-
-                if(null != mapViewId) {
-                    destroyMapInView(mapViewId)
-                }
-
-                val mapViewParent = FrameLayout(bridge.context)
-                val layoutParams = FrameLayout.LayoutParams(
-                    getScaledPixels(googleMap.config.width),
-                    getScaledPixels(googleMap.config.height),
-                )
-                layoutParams.leftMargin = getScaledPixels(googleMap.config.x)
-                layoutParams.topMargin = getScaledPixels(googleMap.config.y)
-
-                val mapView = MapView(bridge.context, googleMap.config.googleMapOptions)
-
-                mapViewId = View.generateViewId()
-                mapViewParent.id = mapViewId
-                mapView.layoutParams = layoutParams
-                mapViewParent.addView(mapView)
-
-                ((bridge.webView.parent) as ViewGroup).addView(mapViewParent)
-
-                googleMap.config.mapViewId = mapViewId
-                googleMap.config.mapView = mapView
-
-                mapView.onCreate(null)
-                mapView.onStart()
+            if (null != mapViewId) {
+                destroyMapInView(mapViewId)
             }
-        })
+
+            val mapViewParent = FrameLayout(bridge.context)
+            val layoutParams = FrameLayout.LayoutParams(
+                getScaledPixels(googleMap.config.width),
+                getScaledPixels(googleMap.config.height),
+            )
+            layoutParams.leftMargin = getScaledPixels(googleMap.config.x)
+            layoutParams.topMargin = getScaledPixels(googleMap.config.y)
+
+            val mapView = MapView(bridge.context, googleMap.config.googleMapOptions)
+
+            mapViewId = View.generateViewId()
+            mapViewParent.id = mapViewId
+            mapView.layoutParams = layoutParams
+            mapViewParent.addView(mapView)
+
+            ((bridge.webView.parent) as ViewGroup).addView(mapViewParent)
+
+            googleMap.mapViewId = mapViewId
+            googleMap.mapView = mapView
+
+            mapView.onCreate(null)
+            mapView.onStart()
+        }
     }
 
     private fun handleError(call: PluginCall, e: Exception) {
