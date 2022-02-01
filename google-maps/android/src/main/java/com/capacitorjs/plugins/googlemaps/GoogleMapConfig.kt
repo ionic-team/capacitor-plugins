@@ -1,5 +1,9 @@
 package com.capacitorjs.plugins.googlemaps
 
+import com.google.android.libraries.maps.GoogleMapOptions
+import com.google.android.libraries.maps.MapView
+import com.google.android.libraries.maps.model.CameraPosition
+import com.google.android.libraries.maps.model.LatLng
 import org.json.JSONObject
 import kotlin.Exception
 
@@ -9,7 +13,11 @@ class GoogleMapConfig(fromJSONObject: JSONObject) {
     var x: Int = 0
     var y: Int = 0
     var center: LatLng = LatLng(0.0, 0.0)
+    var cameraPosition: CameraPosition? = null
+    var googleMapOptions: GoogleMapOptions? = null
     var zoom: Int = 0
+    var mapView: MapView? = null
+    var mapViewId: Int? = null
 
     init {
         if(!fromJSONObject.has("width")) {
@@ -52,5 +60,8 @@ class GoogleMapConfig(fromJSONObject: JSONObject) {
         val lng = centerJSONObject.getDouble("lng")
 
         center = LatLng(lat, lng)
+        cameraPosition = CameraPosition(center, zoom.toFloat(), 0.0F, 0.0F)
+        googleMapOptions = GoogleMapOptions().camera(cameraPosition)
+
     }
 }

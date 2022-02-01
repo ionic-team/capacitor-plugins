@@ -1,10 +1,14 @@
 package com.capacitorjs.plugins.googlemaps
 
 import android.util.Log
+import android.view.View
+import android.view.ViewGroup
+import android.widget.FrameLayout
 import com.getcapacitor.Plugin
-import com.getcapacitor.annotation.CapacitorPlugin
-import com.getcapacitor.PluginMethod
 import com.getcapacitor.PluginCall
+import com.getcapacitor.PluginMethod
+import com.getcapacitor.annotation.CapacitorPlugin
+import com.google.android.libraries.maps.MapView
 
 @CapacitorPlugin(name = "CapacitorGoogleMaps")
 class CapacitorGoogleMapsPlugin : Plugin() {
@@ -53,6 +57,8 @@ class CapacitorGoogleMapsPlugin : Plugin() {
             val newMap = GoogleMap(config)
             maps[id] = newMap
 
+            renderMap(call, id)
+
             call.resolve()
         }
         catch(e: Exception) {
@@ -77,11 +83,68 @@ class CapacitorGoogleMapsPlugin : Plugin() {
                 return
             }
 
+            bridge.activity.runOnUiThread(object: Runnable {
+                override fun run() {
+                    destroyMapInView(removedMap.config.mapViewId!!)
+                    removedMap.config.mapView!!.onDestroy()
+                }
+            })
+
             call.resolve()
         }
         catch(e: Exception) {
             handleError(call, e)
         }
+    }
+
+    private fun destroyMapInView(mapViewId: Int) {
+        val viewToRemove: View? = ((bridge.webView.parent) as ViewGroup)
+            .findViewById(mapViewId)
+        if(null != viewToRemove) {
+            ((bridge.webView.parent) as ViewGroup).removeViewInLayout(viewToRemove)
+        }
+    }
+
+    private fun renderMap(call: PluginCall, id: String) {
+        bridge.activity.runOnUiThread(object: Runnable {
+            override fun run() {
+                val googleMap: GoogleMap? = maps.get(id)
+
+                if (null == googleMap) {
+                    handleError(call, GoogleMapErrors.INVALID_MAP_ID)
+                    return
+                }
+
+                var mapViewId: Int? = googleMap.config.mapViewId
+
+                if(null != mapViewId) {
+                    destroyMapInView(mapViewId)
+                }
+
+                val mapViewParent = FrameLayout(bridge.context)
+                val layoutParams = FrameLayout.LayoutParams(
+                    getScaledPixels(googleMap.config.width),
+                    getScaledPixels(googleMap.config.height),
+                )
+                layoutParams.leftMargin = getScaledPixels(googleMap.config.x)
+                layoutParams.topMargin = getScaledPixels(googleMap.config.y)
+
+                val mapView = MapView(bridge.context, googleMap.config.googleMapOptions)
+
+                mapViewId = View.generateViewId()
+                mapViewParent.id = mapViewId
+                mapView.layoutParams = layoutParams
+                mapViewParent.addView(mapView)
+
+                ((bridge.webView.parent) as ViewGroup).addView(mapViewParent)
+
+                googleMap.config.mapViewId = mapViewId
+                googleMap.config.mapView = mapView
+
+                mapView.onCreate(null)
+                mapView.onStart()
+            }
+        })
     }
 
     private fun handleError(call: PluginCall, e: Exception) {
@@ -98,5 +161,12 @@ class CapacitorGoogleMapsPlugin : Plugin() {
     private fun handleError(call: PluginCall, error: GoogleMapErrorObject) {
         Log.w(TAG, error.toString())
         call.reject(error.message, error.toString())
+    }
+
+    private fun getScaledPixels(pixels: Int): Int {
+        // Get the screen's density scale
+        val scale = bridge.activity.resources.displayMetrics.density
+        // Convert the dps to pixels, based on density scale
+        return (pixels * scale + 0.5f).toInt()
     }
 }
