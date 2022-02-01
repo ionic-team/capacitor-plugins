@@ -11,7 +11,7 @@ const CreateAndDestroyMapPage: React.FC = () => {
         setCommandOutput("");
         try {
             await GoogleMap.initialize('AIzaSyDmw2qPFsciAv44tfbDDcDt9cU9PYnCmjw');
-            setCommandOutput('Google Maps SDK Initialized');
+            setCommandOutput('Map initialized');
         } catch (err: any) {
             setCommandOutput(err.message);
         }
@@ -31,6 +31,19 @@ const CreateAndDestroyMapPage: React.FC = () => {
                 width: 300,
                 x: 0,
                 y: 0,
+            });
+
+            const testMap = await GoogleMap.create("test-map-2", {
+                center: {
+                    lat: 33.6,
+                    lng: -117.9,
+                },
+                zoom: 1,
+                androidLiteMode: false,
+                height: 300,
+                width: 300,
+                x: 301,
+                y: 301,
             });
     
             setMap(newMap);

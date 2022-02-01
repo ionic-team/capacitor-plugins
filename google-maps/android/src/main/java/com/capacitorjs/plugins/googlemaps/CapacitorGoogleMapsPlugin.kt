@@ -32,9 +32,8 @@ class CapacitorGoogleMapsPlugin : Plugin() {
 
             val configObject = call.getObject("config")
 
-            if(null == configObject) {
-                handleError(call, GoogleMapErrors.INVALID_ARGUMENTS,
-                    "GoogleMapConfig is missing")
+            if (null == configObject) {
+                handleError(call, GoogleMapErrors.INVALID_ARGUMENTS, "GoogleMapConfig is missing")
                 return
             }
 
@@ -44,14 +43,13 @@ class CapacitorGoogleMapsPlugin : Plugin() {
 
             try {
                 config = GoogleMapConfig(configObject)
-            }
-            catch (e: Exception) {
+            } catch (e: Exception) {
                 handleError(call, GoogleMapErrors.INVALID_ARGUMENTS, e.message)
-                return;
+                return
             }
 
-            if(maps.contains(id)) {
-                if(!forceCreate) {
+            if (maps.contains(id)) {
+                if (!forceCreate) {
                     call.resolve()
                     return
                 }
@@ -62,11 +60,10 @@ class CapacitorGoogleMapsPlugin : Plugin() {
             val newMap = GoogleMap(config)
             maps[id] = newMap
 
-            renderMap(newMap)
+            renderMap(newMap, id)
 
             call.resolve()
-        }
-        catch(e: Exception) {
+        } catch (e: Exception) {
             handleError(call, e)
         }
     }
@@ -83,57 +80,51 @@ class CapacitorGoogleMapsPlugin : Plugin() {
 
             val removedMap = maps.remove(id)
 
-            if(null == removedMap) {
+            if (null == removedMap) {
                 handleError(call, GoogleMapErrors.MAP_NOT_FOUND)
                 return
             }
 
             bridge.activity.runOnUiThread {
-                destroyMapInView(removedMap.mapViewId!!)
+                destroyMapInView(id)
                 removedMap.mapView!!.onDestroy()
+                call.resolve()
             }
-
-            call.resolve()
-        }
-        catch(e: Exception) {
+        } catch (e: Exception) {
             handleError(call, e)
         }
     }
 
-    private fun destroyMapInView(mapViewId: Int) {
-        val viewToRemove: View? = ((bridge.webView.parent) as ViewGroup)
-            .findViewById(mapViewId)
-        if(null != viewToRemove) {
-            ((bridge.webView.parent) as ViewGroup).removeViewInLayout(viewToRemove)
+    private fun destroyMapInView(tag: String) {
+        val viewToRemove: View? = ((bridge.webView.parent) as ViewGroup).findViewWithTag(tag)
+        if (null != viewToRemove) {
+            ((bridge.webView.parent) as ViewGroup).removeView(viewToRemove)
         }
     }
 
-    private fun renderMap(googleMap: GoogleMap) {
+    private fun renderMap(googleMap: GoogleMap, tag: String) {
         bridge.activity.runOnUiThread {
-            var mapViewId: Int? = googleMap.mapViewId
-
-            if (null != mapViewId) {
-                destroyMapInView(mapViewId)
+            if (null != googleMap.mapView) {
+                destroyMapInView(tag)
             }
 
             val mapViewParent = FrameLayout(bridge.context)
-            val layoutParams = FrameLayout.LayoutParams(
-                getScaledPixels(googleMap.config.width),
-                getScaledPixels(googleMap.config.height),
-            )
+            val layoutParams =
+                    FrameLayout.LayoutParams(
+                            getScaledPixels(googleMap.config.width),
+                            getScaledPixels(googleMap.config.height),
+                    )
             layoutParams.leftMargin = getScaledPixels(googleMap.config.x)
             layoutParams.topMargin = getScaledPixels(googleMap.config.y)
 
             val mapView = MapView(bridge.context, googleMap.config.googleMapOptions)
 
-            mapViewId = View.generateViewId()
-            mapViewParent.id = mapViewId
+            mapViewParent.tag = tag
             mapView.layoutParams = layoutParams
             mapViewParent.addView(mapView)
 
             ((bridge.webView.parent) as ViewGroup).addView(mapViewParent)
 
-            googleMap.mapViewId = mapViewId
             googleMap.mapView = mapView
 
             mapView.onCreate(null)

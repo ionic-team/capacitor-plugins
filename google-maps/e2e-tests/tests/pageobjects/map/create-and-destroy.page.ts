@@ -3,10 +3,12 @@ import { IonicButton, IonicInput } from '@ionic/e2e-components-ionic';
 import Page from '../page';
 
 class CreateAndDestroyMapPage extends Page {
+    get initializeButton() {
+        return new IonicButton("#initializeButton");
+    }
     get createMapButton() {
         return new IonicButton("#createMapButton");
     }
-
     get destroyMapButton() {
         return new IonicButton("#destroyMapButton");
     }

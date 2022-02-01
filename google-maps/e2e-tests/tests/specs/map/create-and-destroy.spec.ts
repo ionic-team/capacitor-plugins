@@ -25,10 +25,14 @@ describe('Google Maps - Create and Destroy Map', function () {
   });
 
   it('should create and destroy a map', async function() {
+    const initializeButton = await CreateAndDestroyMapPage.initializeButton;
     const createMapButton = await CreateAndDestroyMapPage.createMapButton;
     const destroyMapButton = await CreateAndDestroyMapPage.destroyMapButton;
 
     const commandOutput = await $((await CreateAndDestroyMapPage.commandOutputTextarea).selector).$('textarea');
+
+    await initializeButton.tap();
+    await expect(commandOutput).toHaveValue('Map initialized');
 
     await createMapButton.tap();
     await expect(commandOutput).toHaveValue('Map created');
