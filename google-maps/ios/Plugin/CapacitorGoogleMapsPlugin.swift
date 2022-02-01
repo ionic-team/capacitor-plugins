@@ -5,7 +5,7 @@ import GoogleMaps
 @objc(CapacitorGoogleMapsPlugin)
 public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
     private var maps = [String: Map]()
-    
+
     @objc func initialize(_ call: CAPPluginCall) {
         do {
             let key = call.getString("key", "")
@@ -13,11 +13,10 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
             if key.isEmpty {
                 throw GoogleMapErrors.invalidAPIKey
             }
-            
+
             GMSServices.provideAPIKey(key)
             call.resolve()
-        }
-        catch {
+        } catch {
             handleError(call, error: error)
         }
     }
@@ -77,7 +76,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
         let errObject = getErrorObject(error)
         call.reject(errObject.message, "\(errObject.code)", error, [:])
     }
-    
+
     private func renderMap(_ map: Map) {
         DispatchQueue.main.async {
             map.setupView()
@@ -85,7 +84,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
             map.mapViewController.GMapView.delegate = self
         }
     }
-    
+
     private func destroyMapInView(_ map: Map) {
         DispatchQueue.main.async {
             map.mapViewController.view = nil
