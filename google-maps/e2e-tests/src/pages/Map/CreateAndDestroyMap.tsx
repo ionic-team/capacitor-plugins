@@ -6,24 +6,15 @@ import BaseTestingPage from '../../components/BaseTestingPage';
 const CreateAndDestroyMapPage: React.FC = () => {
     const [map, setMap] = useState<GoogleMap | null>(null);
     const [commandOutput, setCommandOutput] = useState('');
+    const apiKey = process.env.REACT_APP_API_KEY;
 
-    async function initializeMaps() {
-        setCommandOutput("");
-        try {
-            await GoogleMap.initialize('AIzaSyDmw2qPFsciAv44tfbDDcDt9cU9PYnCmjw');
-            setCommandOutput('Map initialized');
-        } catch (err: any) {
-            setCommandOutput(err.message);
-        }
-    }
 
     async function createMap() {
-        setCommandOutput("");
         try {
-            const newMap = await GoogleMap.create("test-map", {
+            const newMap = await GoogleMap.create("test-map", apiKey!, {
                 center: {
-                    lat: 0,
-                    lng: 0,
+                    lat: 33.6,
+                    lng: -117.9,
                 },
                 zoom: 8,
                 androidLiteMode: false,
@@ -32,26 +23,11 @@ const CreateAndDestroyMapPage: React.FC = () => {
                 x: 0,
                 y: 0,
             });
-
-
-            // Test multiple maps
-            await GoogleMap.create("test-map-2", {
-                center: {
-                    lat: 33.6,
-                    lng: -117.9,
-                },
-                zoom: 1,
-                androidLiteMode: false,
-                height: 300,
-                width: 300,
-                x: 301,
-                y: 301,
-            });
     
             setMap(newMap);
             setCommandOutput('Map created');
         } catch(err: any) {
-            setCommandOutput(err.message);
+            //setCommandOutput(err.message);
         }        
     }
 
@@ -70,9 +46,6 @@ const CreateAndDestroyMapPage: React.FC = () => {
     return (
         <BaseTestingPage pageTitle="Create and Destroy Map">
             <div>
-                <IonButton expand="block" id="initializeButton" onClick={initializeMaps}>
-                    Initialize
-                </IonButton>
                 <IonButton expand="block" id="createMapButton" onClick={createMap}>
                     Create Map
                 </IonButton>

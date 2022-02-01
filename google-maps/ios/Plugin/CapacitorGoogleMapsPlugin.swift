@@ -6,25 +6,14 @@ import GoogleMaps
 public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
     private var maps = [String: Map]()
 
-    @objc func initialize(_ call: CAPPluginCall) {
-        do {
-            let key = call.getString("key", "")
-
-            if key.isEmpty {
-                throw GoogleMapErrors.invalidAPIKey
-            }
-
-            GMSServices.provideAPIKey(key)
-            call.resolve()
-        } catch {
-            handleError(call, error: error)
-        }
-    }
-
     @objc func create(_ call: CAPPluginCall) {
         do {
             guard let id = call.getString("id") else {
                 throw GoogleMapErrors.invalidMapId
+            }
+
+            guard let apiKey = call.getString("apiKey") else {
+                throw GoogleMapErrors.invalidAPIKey
             }
 
             guard let configObj = call.getObject("config") else {
@@ -33,6 +22,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
 
             let forceCreate = call.getBool("forceCreate", false)
 
+            GMSServices.provideAPIKey(apiKey)
             let config = try GoogleMapConfig(fromJSObject: configObj)
 
             if self.maps[id] != nil {

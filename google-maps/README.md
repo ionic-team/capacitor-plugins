@@ -13,7 +13,6 @@ npx cap sync
 
 <docgen-index>
 
-* [`initialize(...)`](#initialize)
 * [`create(...)`](#create)
 * [`destroy(...)`](#destroy)
 * [Interfaces](#interfaces)
@@ -22,19 +21,6 @@ npx cap sync
 
 <docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
-
-### initialize(...)
-
-```typescript
-initialize(args: InitializeMapArgs) => Promise<void>
-```
-
-| Param      | Type                                                            |
-| ---------- | --------------------------------------------------------------- |
-| **`args`** | <code><a href="#initializemapargs">InitializeMapArgs</a></code> |
-
---------------------
-
 
 ### create(...)
 
@@ -65,18 +51,12 @@ destroy(args: DestroyMapArgs) => Promise<void>
 ### Interfaces
 
 
-#### InitializeMapArgs
-
-| Prop      | Type                |
-| --------- | ------------------- |
-| **`key`** | <code>string</code> |
-
-
 #### CreateMapArgs
 
 | Prop              | Type                                                        |
 | ----------------- | ----------------------------------------------------------- |
 | **`id`**          | <code>string</code>                                         |
+| **`apiKey`**      | <code>string</code>                                         |
 | **`config`**      | <code><a href="#googlemapconfig">GoogleMapConfig</a></code> |
 | **`forceCreate`** | <code>boolean</code>                                        |
 

@@ -4,6 +4,7 @@ import type { GoogleMapConfig } from './definitions';
 
 export interface CreateMapArgs {
   id: string;
+  apiKey: string;
   config: GoogleMapConfig;
   forceCreate?: boolean;
 }
@@ -12,12 +13,7 @@ export interface DestroyMapArgs {
   id: string;
 }
 
-export interface InitializeMapArgs {
-  key: string;
-}
-
 export interface CapacitorGoogleMapsPlugin {
-  initialize(args: InitializeMapArgs): Promise<void>;
   create(args: CreateMapArgs): Promise<void>;
   destroy(args: DestroyMapArgs): Promise<void>;
 }
