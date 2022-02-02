@@ -49,6 +49,7 @@ class CapacitorGoogleMapsPlugin : Plugin() {
                     return
                 }
 
+                destroyMapInView(id)
                 maps.remove(id)
             }
 
@@ -99,10 +100,6 @@ class CapacitorGoogleMapsPlugin : Plugin() {
 
     private fun renderMap(googleMap: GoogleMap, tag: String) {
         bridge.activity.runOnUiThread {
-            if (null != googleMap.mapView) {
-                destroyMapInView(tag)
-            }
-
             val mapViewParent = FrameLayout(bridge.context)
             val layoutParams =
                     FrameLayout.LayoutParams(
