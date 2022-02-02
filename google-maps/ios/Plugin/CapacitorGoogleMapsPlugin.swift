@@ -31,7 +31,8 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
                     return
                 }
 
-                self.maps.removeValue(forKey: id)
+                let removedMap = self.maps.removeValue(forKey: id)
+                destroyMapInView(removedMap!)
             }
 
             let newMap = Map(config: config)
@@ -69,15 +70,28 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
 
     private func renderMap(_ map: Map) {
         DispatchQueue.main.async {
-            map.setupView()
-            self.bridge?.viewController?.view.addSubview(map.mapViewController.view)
-            map.mapViewController.GMapView.delegate = self
+            map.mapViewController = GMViewController()
+            map.mapViewController!.mapViewBounds = [
+                "width": map.config.width,
+                "height": map.config.height,
+                "x": map.config.x,
+                "y": map.config.y
+            ]
+            map.mapViewController!.cameraPosition = [
+                "latitude": map.config.center.lat,
+                "longitude": map.config.center.lng,
+                "zoom": map.config.zoom
+            ]
+            self.bridge?.viewController?.view.addSubview(map.mapViewController!.view)
+            map.mapViewController!.GMapView.delegate = self
         }
     }
 
     private func destroyMapInView(_ map: Map) {
         DispatchQueue.main.async {
-            map.mapViewController.view = nil
+            if nil != map.mapViewController {
+                map.mapViewController!.view = nil
+            }
         }
     }
 }

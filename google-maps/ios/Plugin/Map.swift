@@ -7,7 +7,6 @@ public struct LatLng: Codable {
 }
 
 class GMViewController: UIViewController {
-
     var mapViewBounds: [String: Double]!
     var GMapView: GMSMapView!
     var cameraPosition: [String: Double]!
@@ -23,25 +22,9 @@ class GMViewController: UIViewController {
 
 public class Map {
     var config: GoogleMapConfig
-    var mapViewController: GMViewController
+    var mapViewController: GMViewController?
 
     init(config: GoogleMapConfig) {
         self.config = config
-        self.mapViewController = GMViewController()
-    }
-
-    func setupView() {
-        self.mapViewController = GMViewController()
-        self.mapViewController.mapViewBounds = [
-            "width": self.config.width,
-            "height": self.config.height,
-            "x": self.config.x,
-            "y": self.config.y
-        ]
-        self.mapViewController.cameraPosition = [
-            "latitude": self.config.center.lat,
-            "longitude": self.config.center.lng,
-            "zoom": self.config.zoom
-        ]
     }
 }
