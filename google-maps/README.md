@@ -14,6 +14,8 @@ npx cap sync
 <docgen-index>
 
 * [`create(...)`](#create)
+* [`addMarker(...)`](#addmarker)
+* [`removeMarker(...)`](#removemarker)
 * [`destroy(...)`](#destroy)
 * [Interfaces](#interfaces)
 
@@ -31,6 +33,34 @@ create(args: CreateMapArgs) => Promise<void>
 | Param      | Type                                                    |
 | ---------- | ------------------------------------------------------- |
 | **`args`** | <code><a href="#createmapargs">CreateMapArgs</a></code> |
+
+--------------------
+
+
+### addMarker(...)
+
+```typescript
+addMarker(args: AddMarkerArgs) => Promise<{ id: string; }>
+```
+
+| Param      | Type                                                    |
+| ---------- | ------------------------------------------------------- |
+| **`args`** | <code><a href="#addmarkerargs">AddMarkerArgs</a></code> |
+
+**Returns:** <code>Promise&lt;{ id: string; }&gt;</code>
+
+--------------------
+
+
+### removeMarker(...)
+
+```typescript
+removeMarker(args: RemoveMarkerArgs) => Promise<void>
+```
+
+| Param      | Type                                                          |
+| ---------- | ------------------------------------------------------------- |
+| **`args`** | <code><a href="#removemarkerargs">RemoveMarkerArgs</a></code> |
 
 --------------------
 
@@ -80,6 +110,35 @@ destroy(args: DestroyMapArgs) => Promise<void>
 | --------- | ------------------- |
 | **`lat`** | <code>number</code> |
 | **`lng`** | <code>number</code> |
+
+
+#### AddMarkerArgs
+
+| Prop         | Type                                      |
+| ------------ | ----------------------------------------- |
+| **`id`**     | <code>string</code>                       |
+| **`marker`** | <code><a href="#marker">Marker</a></code> |
+
+
+#### Marker
+
+| Prop             | Type                                      |
+| ---------------- | ----------------------------------------- |
+| **`coordinate`** | <code><a href="#latlng">LatLng</a></code> |
+| **`opacity`**    | <code>number</code>                       |
+| **`title`**      | <code>string</code>                       |
+| **`snippet`**    | <code>string</code>                       |
+| **`isFlat`**     | <code>boolean</code>                      |
+| **`iconUrl`**    | <code>string</code>                       |
+| **`draggable`**  | <code>boolean</code>                      |
+
+
+#### RemoveMarkerArgs
+
+| Prop           | Type                |
+| -------------- | ------------------- |
+| **`id`**       | <code>string</code> |
+| **`markerId`** | <code>string</code> |
 
 
 #### DestroyMapArgs

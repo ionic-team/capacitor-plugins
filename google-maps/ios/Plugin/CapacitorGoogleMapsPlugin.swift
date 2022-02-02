@@ -80,7 +80,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
             
             let markerId = map.addMarker(marker: marker)
             
-            call.resolve(["id": markerId])
+            call.resolve(["id": String(markerId)])
             
         } catch {
             handleError(call, error: error)
@@ -93,8 +93,12 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
                 throw GoogleMapErrors.invalidMapId
             }
             
-            guard let markerId = call.getInt("markerId") else {
-                throw GoogleMapErrors.invalidArguments("Marker is hash id is missing")
+            guard let markerIdString = call.getString("markerId") else {
+                throw GoogleMapErrors.invalidArguments("Marker hash id is invalid or missing")
+            }
+            
+            guard let markerId = Int(markerIdString) else {
+                throw GoogleMapErrors.invalidArguments("Marker hash id is invalid or missing")
             }
             
             guard let map = self.maps[id] else {

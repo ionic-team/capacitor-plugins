@@ -35,14 +35,16 @@ export class GoogleMap {
     return newMap;
   }
 
-  async addMarker(marker: Marker): Promise<number>{
-    return CapacitorGoogleMaps.addMarker({
+  async addMarker(marker: Marker): Promise<string>{
+    const res = await CapacitorGoogleMaps.addMarker({
       id: this.id,
       marker,
     });
+
+    return res.id;
   }
 
-  async removeMarker(id: number): Promise<void> {
+  async removeMarker(id: string): Promise<void> {
     return CapacitorGoogleMaps.removeMarker({
       id: this.id,
       markerId: id

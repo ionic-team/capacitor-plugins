@@ -47,20 +47,24 @@ public class Map {
     }
     
     func addMarker(marker: Marker) -> Int {
-        let newMarker = GMSMarker()
-        newMarker.position = CLLocationCoordinate2D(latitude: marker.coordinate.lat, longitude: marker.coordinate.lng)
-        newMarker.title = marker.title
-        newMarker.snippet = marker.snippet
-        newMarker.isFlat = marker.isFlat ?? false
-        newMarker.opacity = marker.opacity ?? 1
-        newMarker.isDraggable = marker.draggable ?? false
+        var markerHash = 0
         
-        DispatchQueue.main.async {
+        DispatchQueue.main.sync {
+            let newMarker = GMSMarker()
+            newMarker.position = CLLocationCoordinate2D(latitude: marker.coordinate.lat, longitude: marker.coordinate.lng)
+            newMarker.title = marker.title
+            newMarker.snippet = marker.snippet
+            newMarker.isFlat = marker.isFlat ?? false
+            newMarker.opacity = marker.opacity ?? 1
+            newMarker.isDraggable = marker.draggable ?? false
+        
             newMarker.map = self.mapViewController.GMapView
             self.markers[newMarker.hash.hashValue] = newMarker
+            
+            markerHash = newMarker.hash.hashValue
         }
         
-        return newMarker.hash.hashValue
+        return markerHash
     }
     
     func removeMarker(id: Int) {

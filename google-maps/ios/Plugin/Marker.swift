@@ -11,7 +11,7 @@ public struct Marker {
     let draggable: Bool?
     
     init(fromJSObject: JSObject) throws {
-        guard let latLngObj = fromJSObject["center"] as? JSObject else {
+        guard let latLngObj = fromJSObject["coordinate"] as? JSObject else {
             throw GoogleMapErrors.invalidArguments("GoogleMapConfig object is missing the required 'coordinate' property")
         }
 
