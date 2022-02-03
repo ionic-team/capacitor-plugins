@@ -4,6 +4,7 @@ import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import com.getcapacitor.JSObject
 import com.getcapacitor.Plugin
 import com.getcapacitor.PluginCall
 import com.getcapacitor.PluginMethod
@@ -90,6 +91,51 @@ class CapacitorGoogleMapsPlugin : Plugin() {
         }
     }
 
+    @PluginMethod
+    fun addMarker(call: PluginCall) {
+        try {
+            val id = call.getString("id")
+            id ?: throw Exception("invalid map id")
+
+            val markerObj = call.getObject("marker", null)
+            markerObj ?: throw InvalidArgumentsError("Marker object is missing")
+
+            val map = maps[id]
+            map ?: throw Exception("Map not found")
+
+            val marker = Marker(markerObj)
+            val markerId = map.addMarker(marker)
+
+            val res = JSObject()
+            res.put("id", markerId)
+            call.resolve(res)
+        } catch (e: GoogleMapsError) {
+            handleError(call, e)
+        } catch(e: Exception) {
+            handleError(call, e)
+        }
+    }
+
+    @PluginMethod
+    fun removeMarker(call: PluginCall) {
+        try {
+            val id = call.getString("id")
+            id ?: throw Exception("invalid map id")
+
+            val markerId = call.getString("markerId")
+            markerId ?: throw InvalidArgumentsError("marker id is invalid or missing")
+
+            val map = maps[id]
+            map ?: throw Exception("Map not found")
+
+            map.removeMarker(markerId)
+
+            call.resolve()
+        } catch(e: Exception) {
+            handleError(call, e)
+        }
+    }
+
     private fun destroyMapInView(tag: String) {
         val viewToRemove: View? = ((bridge.webView.parent) as ViewGroup).findViewWithTag(tag)
         if (null != viewToRemove) {
@@ -128,7 +174,13 @@ class CapacitorGoogleMapsPlugin : Plugin() {
     }
 
     private fun handleError(call: PluginCall, e: Exception) {
-        val error: GoogleMapErrorObject = getErrorObject(GoogleMapErrors.UNHANDLED_ERROR, e.message)
+        val error: GoogleMapErrorObject = getErrorObject(e)
+        Log.w(TAG, error.toString())
+        call.reject(e.message, error.toString(), e)
+    }
+
+    private fun handleError(call: PluginCall, e: GoogleMapsError) {
+        val error: GoogleMapErrorObject = getErrorObject(e)
         Log.w(TAG, error.toString())
         call.reject(e.message, error.toString(), e)
     }
