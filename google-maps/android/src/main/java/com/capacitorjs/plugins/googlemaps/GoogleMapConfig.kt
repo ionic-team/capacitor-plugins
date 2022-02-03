@@ -1,12 +1,9 @@
 package com.capacitorjs.plugins.googlemaps
 
-<<<<<<< HEAD
 import com.google.android.libraries.maps.GoogleMapOptions
 import com.google.android.libraries.maps.MapView
 import com.google.android.libraries.maps.model.CameraPosition
 import com.google.android.libraries.maps.model.LatLng
-=======
->>>>>>> plugin/google-maps
 import org.json.JSONObject
 import kotlin.Exception
 
@@ -16,13 +13,9 @@ class GoogleMapConfig(fromJSONObject: JSONObject) {
     var x: Int = 0
     var y: Int = 0
     var center: LatLng = LatLng(0.0, 0.0)
-<<<<<<< HEAD
     var googleMapOptions: GoogleMapOptions? = null
     var zoom: Int = 0
     var liteMode: Boolean = false
-=======
-    var zoom: Int = 0
->>>>>>> plugin/google-maps
 
     init {
         if(!fromJSONObject.has("width")) {
@@ -55,12 +48,9 @@ class GoogleMapConfig(fromJSONObject: JSONObject) {
             throw Exception("LatLng object is missing the required 'lat' and/or 'lng' property")
         }
 
-<<<<<<< HEAD
         liteMode = fromJSONObject.has("androidLiteMode")
                 && fromJSONObject.getBoolean("androidLiteMode")
 
-=======
->>>>>>> plugin/google-maps
         width = fromJSONObject.getInt("width")
         height = fromJSONObject.getInt("height")
         x = fromJSONObject.getInt("x")
@@ -69,14 +59,9 @@ class GoogleMapConfig(fromJSONObject: JSONObject) {
 
         val lat = centerJSONObject.getDouble("lat")
         val lng = centerJSONObject.getDouble("lng")
-<<<<<<< HEAD
         center = LatLng(lat, lng)
 
         val cameraPosition = CameraPosition(center, zoom.toFloat(), 0.0F, 0.0F)
         googleMapOptions = GoogleMapOptions().camera(cameraPosition).liteMode(liteMode)
-=======
-
-        center = LatLng(lat, lng)
->>>>>>> plugin/google-maps
     }
 }
