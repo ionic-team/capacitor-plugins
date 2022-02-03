@@ -81,20 +81,21 @@ class CapacitorGoogleMapsPlugin : Plugin() {
                 return
             }
 
-            bridge.activity.runOnUiThread {
-                destroyMapInView(id)
-                removedMap.mapView!!.onDestroy()
-                call.resolve()
-            }
+            destroyMapInView(id)
+            removedMap.mapView!!.onDestroy()
+
+            call.resolve()
         } catch (e: Exception) {
             handleError(call, e)
         }
     }
 
     private fun destroyMapInView(tag: String) {
-        val viewToRemove: View? = ((bridge.webView.parent) as ViewGroup).findViewWithTag(tag)
-        if (null != viewToRemove) {
-            ((bridge.webView.parent) as ViewGroup).removeView(viewToRemove)
+        bridge.activity.runOnUiThread {
+            val viewToRemove: View? = ((bridge.webView.parent) as ViewGroup).findViewWithTag(tag)
+            if (null != viewToRemove) {
+                ((bridge.webView.parent) as ViewGroup).removeView(viewToRemove)
+            }
         }
     }
 
