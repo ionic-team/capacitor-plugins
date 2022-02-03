@@ -70,12 +70,12 @@ jobs:
 
       - name: Prepare Local Package
         run: npm run e2e:prepare
-        env:
+        env: 
           NPM_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
 
       - name: Install Packages
         run: npm install
-        env:
+        env: 
           NPM_TOKEN: ${{ secrets.E2E_NPM_TOKEN }}
 
       - name: Run E2E Test on iOS
@@ -105,7 +105,11 @@ jobs:
 
       - name: Prepare Local Package
         run: npm run e2e:prepare
+<<<<<<< HEAD
         env:
+=======
+        env: 
+>>>>>>> plugin/google-maps
           NPM_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
 
       - name: Prepare Local Package
@@ -119,7 +123,7 @@ jobs:
 
       - name: Install Packages
         run: npm install
-        env:
+        env: 
           NPM_TOKEN: ${{ secrets.E2E_NPM_TOKEN }}
 
       - name: AVD cache
