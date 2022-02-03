@@ -69,7 +69,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
             }
             
             guard let markerObj = call.getObject("marker") else {
-                throw GoogleMapErrors.invalidArguments("Marker is missing")
+                throw GoogleMapErrors.invalidArguments("Marker object is missing")
             }
             
             let marker = try Marker(fromJSObject: markerObj)

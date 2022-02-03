@@ -12,7 +12,7 @@ public struct Marker {
     
     init(fromJSObject: JSObject) throws {
         guard let latLngObj = fromJSObject["coordinate"] as? JSObject else {
-            throw GoogleMapErrors.invalidArguments("GoogleMapConfig object is missing the required 'coordinate' property")
+            throw GoogleMapErrors.invalidArguments("Marker object is missing the required 'coordinate' property")
         }
 
         guard let lat = latLngObj["lat"] as? Double, let lng = latLngObj["lng"] as? Double else {
