@@ -13,9 +13,9 @@ npx cap sync
 
 <docgen-index>
 
-- [`create(...)`](#create)
-- [`destroy(...)`](#destroy)
-- [Interfaces](#interfaces)
+* [`create(...)`](#create)
+* [`destroy(...)`](#destroy)
+* [Interfaces](#interfaces)
 
 </docgen-index>
 
@@ -32,7 +32,8 @@ create(args: CreateMapArgs) => Promise<void>
 | ---------- | ------------------------------------------------------- |
 | **`args`** | <code><a href="#createmapargs">CreateMapArgs</a></code> |
 
----
+--------------------
+
 
 ### destroy(...)
 
@@ -44,9 +45,11 @@ destroy(args: DestroyMapArgs) => Promise<void>
 | ---------- | --------------------------------------------------------- |
 | **`args`** | <code><a href="#destroymapargs">DestroyMapArgs</a></code> |
 
----
+--------------------
+
 
 ### Interfaces
+
 
 #### CreateMapArgs
 
@@ -56,6 +59,7 @@ destroy(args: DestroyMapArgs) => Promise<void>
 | **`apiKey`**      | <code>string</code>                                         |
 | **`config`**      | <code><a href="#googlemapconfig">GoogleMapConfig</a></code> |
 | **`forceCreate`** | <code>boolean</code>                                        |
+
 
 #### GoogleMapConfig
 
@@ -69,12 +73,14 @@ destroy(args: DestroyMapArgs) => Promise<void>
 | **`zoom`**            | <code>number</code>                       |
 | **`androidLiteMode`** | <code>boolean</code>                      |
 
+
 #### LatLng
 
 | Prop      | Type                |
 | --------- | ------------------- |
 | **`lat`** | <code>number</code> |
 | **`lng`** | <code>number</code> |
+
 
 #### DestroyMapArgs
 
