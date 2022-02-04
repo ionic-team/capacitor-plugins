@@ -6,7 +6,8 @@ import android.widget.FrameLayout
 import com.getcapacitor.Bridge
 import com.google.android.libraries.maps.MapView
 
-class CapacitorGoogleMap(val id: String, val config: GoogleMapConfig, private val bridge: Bridge) {
+class CapacitorGoogleMap(val id: String, val config: GoogleMapConfig,
+                         val delegate: CapacitorGoogleMapsPlugin) {
     var mapView: MapView? = null
 
     init {
@@ -14,6 +15,7 @@ class CapacitorGoogleMap(val id: String, val config: GoogleMapConfig, private va
     }
 
     private fun render() {
+        val bridge = delegate.bridge
         bridge.activity.runOnUiThread {
             val mapViewParent = FrameLayout(bridge.context)
             val layoutParams =
@@ -40,6 +42,7 @@ class CapacitorGoogleMap(val id: String, val config: GoogleMapConfig, private va
     }
 
     fun destroy() {
+        val bridge = delegate.bridge
         bridge.activity.runOnUiThread {
             val viewToRemove: View? = ((bridge.webView.parent) as ViewGroup).findViewWithTag(this.id)
             if (null != viewToRemove) {

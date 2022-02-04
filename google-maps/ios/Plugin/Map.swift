@@ -24,14 +24,12 @@ class GMViewController: UIViewController {
 public class Map {
     var id: String
     var config: GoogleMapConfig
-    private var bridge: CAPBridgeProtocol
-    private var delegate: GMSMapViewDelegate
+    private var delegate: CapacitorGoogleMapsPlugin
     var mapViewController: GMViewController?
 
-    init(id: String, config: GoogleMapConfig, bridge: CAPBridgeProtocol, delegate: GMSMapViewDelegate) {
+    init(id: String, config: GoogleMapConfig, delegate: CapacitorGoogleMapsPlugin) {
         self.id = id
         self.config = config
-        self.bridge = bridge
         self.delegate = delegate
         
         self.render()
@@ -51,7 +49,7 @@ public class Map {
                 "longitude": self.config.center.lng,
                 "zoom": self.config.zoom
             ]
-            self.bridge.viewController!.view.addSubview(self.mapViewController!.view)
+            self.delegate.bridge!.viewController!.view.addSubview(self.mapViewController!.view)
             self.mapViewController!.GMapView.delegate = self.delegate
         }
     }

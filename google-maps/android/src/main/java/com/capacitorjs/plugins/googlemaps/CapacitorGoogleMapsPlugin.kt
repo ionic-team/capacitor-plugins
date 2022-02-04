@@ -1,6 +1,7 @@
 package com.capacitorjs.plugins.googlemaps
 
 import android.util.Log
+import com.getcapacitor.Bridge
 import com.getcapacitor.Plugin
 import com.getcapacitor.PluginCall
 import com.getcapacitor.PluginMethod
@@ -37,7 +38,7 @@ class CapacitorGoogleMapsPlugin : Plugin() {
                 oldMap?.destroy()
             }
 
-            val newMap = CapacitorGoogleMap(id, config, bridge)
+            val newMap = CapacitorGoogleMap(id, config, this)
             maps[id] = newMap
             call.resolve()
         }

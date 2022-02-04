@@ -6,6 +6,10 @@ import GoogleMaps
 public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
     private var maps = [String: Map]()
     private var isInitialized = false
+    
+    func getCurrentBridge() -> CAPBridgeProtocol {
+        return self.bridge!
+    }
 
     @objc func create(_ call: CAPPluginCall) {
         do {
@@ -40,7 +44,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
                 removedMap?.destroy()
             }
 
-            let newMap = Map(id: id, config: config, bridge: self.bridge!, delegate: self)
+            let newMap = Map(id: id, config: config, delegate: self)
             self.maps[id] = newMap
             
             call.resolve()
