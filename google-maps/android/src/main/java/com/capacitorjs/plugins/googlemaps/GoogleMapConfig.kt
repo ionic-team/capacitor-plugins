@@ -1,11 +1,9 @@
 package com.capacitorjs.plugins.googlemaps
 
 import com.google.android.libraries.maps.GoogleMapOptions
-import com.google.android.libraries.maps.MapView
 import com.google.android.libraries.maps.model.CameraPosition
 import com.google.android.libraries.maps.model.LatLng
 import org.json.JSONObject
-import kotlin.Exception
 
 class GoogleMapConfig(fromJSONObject: JSONObject) {
     var width: Int = 0
@@ -19,33 +17,33 @@ class GoogleMapConfig(fromJSONObject: JSONObject) {
 
     init {
         if(!fromJSONObject.has("width")) {
-            throw Exception("GoogleMapConfig object is missing the required 'width' property")
+            throw InvalidArgumentsError("GoogleMapConfig object is missing the required 'width' property")
         }
 
         if(!fromJSONObject.has("height")) {
-            throw Exception("GoogleMapConfig object is missing the required 'height' property")
+            throw InvalidArgumentsError("GoogleMapConfig object is missing the required 'height' property")
         }
 
         if(!fromJSONObject.has("x")) {
-            throw Exception("GoogleMapConfig object is missing the required 'x' property")
+            throw InvalidArgumentsError("GoogleMapConfig object is missing the required 'x' property")
         }
 
         if(!fromJSONObject.has("y")) {
-            throw Exception("GoogleMapConfig object is missing the required 'y' property")
+            throw InvalidArgumentsError("GoogleMapConfig object is missing the required 'y' property")
         }
 
         if(!fromJSONObject.has("zoom")) {
-            throw Exception("GoogleMapConfig object is missing the required 'zoom' property")
+            throw InvalidArgumentsError("GoogleMapConfig object is missing the required 'zoom' property")
         }
 
         if(!fromJSONObject.has("center")) {
-            throw Exception("GoogleMapConfig object is missing the required 'center' property")
+            throw InvalidArgumentsError("GoogleMapConfig object is missing the required 'center' property")
         }
 
         val centerJSONObject = fromJSONObject.getJSONObject("center")
 
         if(!centerJSONObject.has("lat") || !centerJSONObject.has("lng")) {
-            throw Exception("LatLng object is missing the required 'lat' and/or 'lng' property")
+            throw InvalidArgumentsError("LatLng object is missing the required 'lat' and/or 'lng' property")
         }
 
         liteMode = fromJSONObject.has("androidLiteMode")

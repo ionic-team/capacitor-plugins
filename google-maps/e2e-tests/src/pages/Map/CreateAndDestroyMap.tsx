@@ -23,7 +23,7 @@ const CreateAndDestroyMapPage: React.FC = () => {
                 height: 300,
                 width: 300,
                 x: 0,
-                y: 0,
+                y: 200,
             });
 
             const newMap2 = await GoogleMap.create("test-map2", apiKey!, {
@@ -31,15 +31,15 @@ const CreateAndDestroyMapPage: React.FC = () => {
                     lat: -33.6,
                     lng: 117.9,
                 },
-                zoom: 12,
+                zoom: 6,
                 androidLiteMode: false,
-                height: 50,
-                width: 50,
-                x: 300,
-                y: 300,
+                height: 200,
+                width: 200,
+                x: 100,
+                y: 550,
             });
     
-            setMaps([...maps, newMap1, newMap2]);
+            setMaps([newMap1, newMap2]);
             setCommandOutput('Maps created');
         } catch(err: any) {
             setCommandOutput(err.message);
