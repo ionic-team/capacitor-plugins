@@ -62,8 +62,10 @@ public class Map {
     
     func destroy() {
         DispatchQueue.main.async {
-            self.mapViewController?.view = nil
-            self.mapViewController = nil
+            if let mapViewController = self.mapViewController {
+                mapViewController.view = nil
+                self.mapViewController = nil
+            }
         }
     }
 }
