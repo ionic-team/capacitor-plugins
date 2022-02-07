@@ -3,11 +3,21 @@ import Capacitor
 import GoogleMaps
 
 @objc(CapacitorGoogleMapsPlugin)
-public class CapacitorGoogleMapsPlugin: CAPPlugin {
+public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
     private var maps = [String: Map]()
+    private var isInitialized = false
 
     @objc func create(_ call: CAPPluginCall) {
         do {
+            if !isInitialized {
+                guard let apiKey = call.getString("apiKey") else {
+                    throw GoogleMapErrors.invalidAPIKey
+                }
+                
+                GMSServices.provideAPIKey(apiKey)
+                isInitialized = true
+            }
+            
             guard let id = call.getString("id") else {
                 throw GoogleMapErrors.invalidMapId
             }
@@ -26,12 +36,13 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin {
                     return
                 }
 
-                self.maps.removeValue(forKey: id)
+                let removedMap = self.maps.removeValue(forKey: id)
+                removedMap?.destroy()
             }
 
-            let newMap = Map(config: config)
+            let newMap = Map(id: id, config: config, delegate: self)
             self.maps[id] = newMap
-
+            
             call.resolve()
         } catch {
             handleError(call, error: error)
@@ -44,11 +55,11 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin {
                 throw GoogleMapErrors.invalidMapId
             }
 
-            let removedMap = self.maps.removeValue(forKey: id)
-            if removedMap == nil {
+            guard let removedMap = self.maps.removeValue(forKey: id) else {
                 throw GoogleMapErrors.mapNotFound
             }
 
+            removedMap.destroy()
             call.resolve()
         } catch {
             handleError(call, error: error)
@@ -59,4 +70,5 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin {
         let errObject = getErrorObject(error)
         call.reject(errObject.message, "\(errObject.code)", error, [:])
     }
+
 }

@@ -7,9 +7,9 @@ export class GoogleMap {
   private constructor(id: string) {
     this.id = id;
   }
-
   public static async create(
     id: string,
+    apiKey: string,
     config: GoogleMapConfig,
     forceCreate?: boolean,
   ): Promise<GoogleMap> {
@@ -17,6 +17,7 @@ export class GoogleMap {
 
     await CapacitorGoogleMaps.create({
       id,
+      apiKey,
       config,
       forceCreate,
     });

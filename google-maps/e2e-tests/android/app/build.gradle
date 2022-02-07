@@ -1,4 +1,19 @@
+plugins {
+    id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
+}
+
 apply plugin: 'com.android.application'
+
+def getApiKey() {
+    try {
+        Properties properties = new Properties()
+        properties.load(project.rootProject.file('local.properties').newDataInputStream())
+        return properties['REACT_APP_GOOGLE_MAPS_API_KEY']
+    }
+    catch(Exception ignored) {
+        return System.getenv('REACT_APP_GOOGLE_MAPS_API_KEY')
+    }
+}
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -14,6 +29,7 @@ android {
              // Default: https://android.googlesource.com/platform/frameworks/base/+/282e181b58cf72b6ca770dc7ca5f91f135444502/tools/aapt/AaptAssets.cpp#61
             ignoreAssetsPattern '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
+        manifestPlaceholders = [MAPS_API_KEY:getApiKey()]
     }
     buildTypes {
         release {

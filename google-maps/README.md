@@ -56,6 +56,7 @@ destroy(args: DestroyMapArgs) => Promise<void>
 | Prop              | Type                                                        |
 | ----------------- | ----------------------------------------------------------- |
 | **`id`**          | <code>string</code>                                         |
+| **`apiKey`**      | <code>string</code>                                         |
 | **`config`**      | <code><a href="#googlemapconfig">GoogleMapConfig</a></code> |
 | **`forceCreate`** | <code>boolean</code>                                        |
 

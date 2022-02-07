@@ -1,10 +1,10 @@
 name: E2E Tests
 
-on: 
+on:
   pull_request:
     branches:
-        - '**'
-  
+      - '**'
+
 jobs:
   setup:
     runs-on: ubuntu-latest
@@ -36,7 +36,7 @@ jobs:
           files: ${{ steps.files.outputs.all }}
       - id: e2e-packages
         uses: ./.github/actions/filter-out-non-e2e-enabled
-        with: 
+        with:
           paths: ${{ steps.packages.outputs.paths }}
 
   e2e-ios:
@@ -62,7 +62,7 @@ jobs:
       - name: Prepare Local Package
         run: npm install && npm run build && npm run pack-local
         working-directory: ${{ matrix.plugin }}
-        env: 
+        env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Setup NPMRC
@@ -70,16 +70,18 @@ jobs:
 
       - name: Prepare Local Package
         run: npm run e2e:prepare
-        env: 
+        env:
           NPM_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
 
       - name: Install Packages
         run: npm install
-        env: 
+        env:
           NPM_TOKEN: ${{ secrets.E2E_NPM_TOKEN }}
 
       - name: Run E2E Test on iOS
         run: npm run e2e:ios
+        env:
+          REACT_APP_GOOGLE_MAPS_API_KEY: ${{ secrets.REACT_APP_GOOGLE_MAPS_API_KEY }}
 
   e2e-android:
     runs-on: macos-10.15
@@ -103,13 +105,13 @@ jobs:
 
       - name: Prepare Local Package
         run: npm run e2e:prepare
-        env: 
+        env:
           NPM_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
 
       - name: Prepare Local Package
         run: npm install && npm run build && npm run pack-local
         working-directory: ${{ matrix.plugin }}
-        env: 
+        env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Setup NPMRC
@@ -117,7 +119,7 @@ jobs:
 
       - name: Install Packages
         run: npm install
-        env: 
+        env:
           NPM_TOKEN: ${{ secrets.E2E_NPM_TOKEN }}
 
       - name: AVD cache
@@ -156,3 +158,5 @@ jobs:
           emulator-options: -no-window -no-audio -no-boot-anim -accel on -no-snapshot-save
           disable-animations: false
           script: npm run e2e:android
+        env:
+          REACT_APP_GOOGLE_MAPS_API_KEY: ${{ secrets.REACT_APP_GOOGLE_MAPS_API_KEY }}

@@ -4,6 +4,7 @@ import type { GoogleMapConfig } from './definitions';
 
 export interface CreateMapArgs {
   id: string;
+  apiKey: string;
   config: GoogleMapConfig;
   forceCreate?: boolean;
 }

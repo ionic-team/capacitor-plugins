@@ -1,13 +1,14 @@
 package com.capacitorjs.plugins.googlemaps
 
 import org.json.JSONObject
+import kotlin.Exception
 
 enum class GoogleMapErrors {
     UNHANDLED_ERROR, INVALID_MAP_ID, MAP_NOT_FOUND, INVALID_ARGUMENTS
 }
 
 class GoogleMapErrorObject(val code: Int, val message: String, val extra: HashMap<String,Any> = HashMap()) {
-    fun asJSONObject(): JSONObject {
+    private fun asJSONObject(): JSONObject {
         val returnJSONObject = JSONObject()
 
         returnJSONObject.put("code", code)
@@ -22,19 +23,48 @@ class GoogleMapErrorObject(val code: Int, val message: String, val extra: HashMa
     }
 }
 
-fun getErrorObject(errorCode: GoogleMapErrors, description: String? = null): GoogleMapErrorObject {
-    when(errorCode) {
-        GoogleMapErrors.INVALID_MAP_ID -> {
-            return GoogleMapErrorObject(1, "Missing or invalid map id.")
+fun getErrorObject(err: GoogleMapsError): GoogleMapErrorObject {
+    return when(err) {
+        is InvalidArgumentsError -> {
+            GoogleMapErrorObject(err.getErrorCode(), "Invalid Arguments Provided: ${err.message}.")
         }
-        GoogleMapErrors.MAP_NOT_FOUND -> {
-            return GoogleMapErrorObject(2, "Map not found for provided id.")
+        is InvalidMapIdError -> {
+            GoogleMapErrorObject(err.getErrorCode(), "Missing or invalid map id.")
         }
-        GoogleMapErrors.INVALID_ARGUMENTS -> {
-            return GoogleMapErrorObject(3, "Invalid Arguments Provided: $description.")
+        is MapNotFoundError -> {
+            GoogleMapErrorObject(err.getErrorCode(), "Map not found for provided id.")
         }
         else -> {
-            return GoogleMapErrorObject(GoogleMapErrors.UNHANDLED_ERROR.ordinal, "Unhandled Error: $description.")
+            GoogleMapErrorObject(err.getErrorCode(), "Unhandled Error: ${err.message}.")
         }
     }
 }
+
+fun getErrorObject(err: Exception): GoogleMapErrorObject {
+    return GoogleMapErrorObject(0, "Unhandled Error: ${err.message}.")
+}
+
+open class GoogleMapsError(message: String? = ""): Throwable(message) {
+    open fun getErrorCode(): Int {
+        return GoogleMapErrors.UNHANDLED_ERROR.ordinal
+    }
+}
+
+class InvalidMapIdError(message: String? = ""): GoogleMapsError(message) {
+    override fun getErrorCode(): Int {
+        return GoogleMapErrors.INVALID_MAP_ID.ordinal
+    }
+}
+
+class MapNotFoundError(message: String? = ""): GoogleMapsError(message) {
+    override fun getErrorCode(): Int {
+        return GoogleMapErrors.MAP_NOT_FOUND.ordinal
+    }
+}
+
+class InvalidArgumentsError(message: String? = ""): GoogleMapsError(message) {
+    override fun getErrorCode(): Int {
+        return GoogleMapErrors.INVALID_ARGUMENTS.ordinal
+    }
+}
+
