@@ -11,7 +11,7 @@ def getApiKey() {
         return properties['REACT_APP_GOOGLE_MAPS_API_KEY']
     }
     catch(Exception ignored) {
-        System.getenv('REACT_APP_GOOGLE_MAPS_API_KEY')
+        return System.getenv('REACT_APP_GOOGLE_MAPS_API_KEY')
     }
 }
 

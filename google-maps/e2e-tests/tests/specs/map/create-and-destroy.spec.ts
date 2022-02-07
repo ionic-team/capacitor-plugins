@@ -31,10 +31,10 @@ describe('Google Maps - Create and Destroy Map', function () {
     const commandOutput = await $((await CreateAndDestroyMapPage.commandOutputTextarea).selector).$('textarea');
 
     await createMapButton.tap();
-    await expect(commandOutput).toHaveValue('Map created');
+    await expect(commandOutput).toHaveValue('Maps created');
 
     await destroyMapButton.tap();
-    await expect(commandOutput).toHaveValue('Map destroyed');
+    await expect(commandOutput).toHaveValue('Maps destroyed');
   });
 
   it('should throw when attempting to destroy a non-existent map', async function() {
