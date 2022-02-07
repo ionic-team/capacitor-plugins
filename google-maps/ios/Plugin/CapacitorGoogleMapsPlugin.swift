@@ -6,10 +6,6 @@ import GoogleMaps
 public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
     private var maps = [String: Map]()
     private var isInitialized = false
-    
-    func getCurrentBridge() -> CAPBridgeProtocol {
-        return self.bridge!
-    }
 
     @objc func create(_ call: CAPPluginCall) {
         do {
