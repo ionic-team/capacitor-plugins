@@ -75,13 +75,13 @@ class CapacitorGoogleMapsPlugin : Plugin() {
     fun addMarker(call: PluginCall) {
         try {
             val id = call.getString("id")
-            id ?: throw Exception("invalid map id")
+            id ?: throw InvalidMapIdError()
 
             val markerObj = call.getObject("marker", null)
             markerObj ?: throw InvalidArgumentsError("Marker object is missing")
 
             val map = maps[id]
-            map ?: throw Exception("Map not found")
+            map ?: throw MapNotFoundError()
 
             val marker = CapacitorGoogleMapMarker(markerObj)
             val markerId = map.addMarker(marker)
@@ -100,13 +100,13 @@ class CapacitorGoogleMapsPlugin : Plugin() {
     fun removeMarker(call: PluginCall) {
         try {
             val id = call.getString("id")
-            id ?: throw Exception("invalid map id")
+            id ?: throw InvalidMapIdError()
 
             val markerId = call.getString("markerId")
             markerId ?: throw InvalidArgumentsError("marker id is invalid or missing")
 
             val map = maps[id]
-            map ?: throw Exception("Map not found")
+            map ?: throw MapNotFoundError()
 
             map.removeMarker(markerId)
 
