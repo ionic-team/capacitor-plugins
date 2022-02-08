@@ -71,7 +71,11 @@ public class Map {
         }
     }
     
-    func addMarker(marker: Marker) -> Int {
+    func addMarker(marker: Marker) throws -> Int {
+        guard let mapViewController = mapViewController else {
+            throw GoogleMapErrors.unhandledError("map view controller not available")
+        }
+
         var markerHash = 0
         
         DispatchQueue.main.sync {
@@ -83,7 +87,7 @@ public class Map {
             newMarker.opacity = marker.opacity ?? 1
             newMarker.isDraggable = marker.draggable ?? false
         
-            newMarker.map = self.mapViewController.GMapView
+            newMarker.map = mapViewController.GMapView
             self.markers[newMarker.hash.hashValue] = newMarker
             
             markerHash = newMarker.hash.hashValue
