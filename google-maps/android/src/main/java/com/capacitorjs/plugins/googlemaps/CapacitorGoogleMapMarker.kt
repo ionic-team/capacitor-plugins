@@ -3,7 +3,7 @@ package com.capacitorjs.plugins.googlemaps
 import com.google.android.libraries.maps.model.LatLng
 import org.json.JSONObject
 
-class Marker(fromJSONObject: JSONObject) {
+class CapacitorGoogleMapMarker(fromJSONObject: JSONObject) {
     var coordinate: LatLng = LatLng(0.0, 0.0)
     var opacity: Float = 1.0f
     var title: String? = null

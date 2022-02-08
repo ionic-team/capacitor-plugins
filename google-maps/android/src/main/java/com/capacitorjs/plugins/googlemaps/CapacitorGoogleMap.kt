@@ -4,11 +4,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import com.getcapacitor.Bridge
+import kotlinx.coroutines.*
 import com.google.android.libraries.maps.MapView
+import com.google.android.libraries.maps.GoogleMap
+import com.google.android.libraries.maps.OnMapReadyCallback
+import com.google.android.libraries.maps.model.Marker
+import com.google.android.libraries.maps.model.MarkerOptions
 
 class CapacitorGoogleMap(val id: String, val config: GoogleMapConfig,
-                         val delegate: CapacitorGoogleMapsPlugin) {
+                         val delegate: CapacitorGoogleMapsPlugin) : OnMapReadyCallback {
     var mapView: MapView? = null
+    private var googleMap: GoogleMap? = null
+    private val markers = HashMap<String, Marker>()
 
     init {
         render()
@@ -38,6 +45,7 @@ class CapacitorGoogleMap(val id: String, val config: GoogleMapConfig,
 
             mapView.onCreate(null)
             mapView.onStart()
+            mapView.getMapAsync(this)
         }
     }
 
@@ -53,10 +61,65 @@ class CapacitorGoogleMap(val id: String, val config: GoogleMapConfig,
         }
     }
 
+    fun addMarker(marker: CapacitorGoogleMapMarker): String {
+        googleMap ?: throw GoogleMapsError("google map is not available")
+
+        var markerId = ""
+
+        runBlocking {
+            markerId = uiAddMarker(marker)
+        }
+        
+        return markerId
+    }
+
+    private suspend fun uiAddMarker(markerConfig: CapacitorGoogleMapMarker): String {
+        var newMarkerId = ""
+
+        withContext(Dispatchers.Main) {
+            val markerOptions = MarkerOptions()
+            markerOptions.position(markerConfig.coordinate)
+            markerOptions.title(markerConfig.title)
+            markerOptions.snippet(markerConfig.snippet)
+            markerOptions.alpha(markerConfig.opacity)
+            markerOptions.flat(markerConfig.isFlat)
+            markerOptions.draggable(markerConfig.draggable)
+
+            val newMarker = googleMap!!.addMarker(markerOptions)
+            markers[newMarker.id] = newMarker
+
+            newMarkerId = newMarker.id
+        }
+
+        return newMarkerId
+    }
+
+    fun removeMarker(id: String) {
+        googleMap ?: throw GoogleMapsError("google map is not available")
+
+        val marker = markers[id]
+        marker?.let {
+            runBlocking {
+                uiRemoveMarker(marker)
+            }
+        }
+    }
+
+    private suspend fun uiRemoveMarker(marker: Marker) {
+       withContext(Dispatchers.Main) {
+           marker.remove()
+           markers.remove(marker.id)
+       }
+    }
+
     private fun getScaledPixels(bridge: Bridge, pixels: Int): Int {
         // Get the screen's density scale
         val scale = bridge.activity.resources.displayMetrics.density
         // Convert the dps to pixels, based on density scale
         return (pixels * scale + 0.5f).toInt()
+    }
+
+    override fun onMapReady(map: GoogleMap?) {
+        googleMap = map
     }
 }

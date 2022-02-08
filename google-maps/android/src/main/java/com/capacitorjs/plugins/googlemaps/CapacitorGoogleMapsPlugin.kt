@@ -1,11 +1,7 @@
 package com.capacitorjs.plugins.googlemaps
 
 import android.util.Log
-import android.view.View
-import android.view.ViewGroup
-import android.widget.FrameLayout
 import com.getcapacitor.JSObject
-import com.getcapacitor.Bridge
 import com.getcapacitor.Plugin
 import com.getcapacitor.PluginCall
 import com.getcapacitor.PluginMethod
@@ -87,7 +83,7 @@ class CapacitorGoogleMapsPlugin : Plugin() {
             val map = maps[id]
             map ?: throw Exception("Map not found")
 
-            val marker = Marker(markerObj)
+            val marker = CapacitorGoogleMapMarker(markerObj)
             val markerId = map.addMarker(marker)
 
             val res = JSObject()
