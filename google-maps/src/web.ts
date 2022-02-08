@@ -12,7 +12,7 @@ export class CapacitorGoogleMapsWeb
   extends WebPlugin
   implements CapacitorGoogleMapsPlugin
 {
-  addMarker(_args: AddMarkerArgs): Promise<{ id: string; }> {
+  addMarker(_args: AddMarkerArgs): Promise<{ id: string }> {
     throw new Error('Method not implemented.');
   }
   removeMarker(_args: RemoveMarkerArgs): Promise<void> {

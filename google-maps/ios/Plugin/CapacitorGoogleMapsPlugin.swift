@@ -13,11 +13,11 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
                 guard let apiKey = call.getString("apiKey") else {
                     throw GoogleMapErrors.invalidAPIKey
                 }
-                
+
                 GMSServices.provideAPIKey(apiKey)
                 isInitialized = true
             }
-            
+
             guard let id = call.getString("id") else {
                 throw GoogleMapErrors.invalidMapId
             }
@@ -42,7 +42,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
 
             let newMap = Map(id: id, config: config, delegate: self)
             self.maps[id] = newMap
-            
+
             call.resolve()
         } catch {
             handleError(call, error: error)
@@ -65,54 +65,54 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
             handleError(call, error: error)
         }
     }
-    
+
     @objc func addMarker(_ call: CAPPluginCall) {
         do {
             guard let id = call.getString("id") else {
                 throw GoogleMapErrors.invalidMapId
             }
-            
+
             guard let markerObj = call.getObject("marker") else {
                 throw GoogleMapErrors.invalidArguments("Marker object is missing")
             }
-            
+
             let marker = try Marker(fromJSObject: markerObj)
-            
+
             guard let map = self.maps[id] else {
                 throw GoogleMapErrors.mapNotFound
             }
-            
+
             let markerId = try map.addMarker(marker: marker)
-            
+
             call.resolve(["id": String(markerId)])
-            
+
         } catch {
             handleError(call, error: error)
         }
     }
-    
+
     @objc func removeMarker(_ call: CAPPluginCall) {
         do {
             guard let id = call.getString("id") else {
                 throw GoogleMapErrors.invalidMapId
             }
-            
+
             guard let markerIdString = call.getString("markerId") else {
                 throw GoogleMapErrors.invalidArguments("Marker hash id is invalid or missing")
             }
-            
+
             guard let markerId = Int(markerIdString) else {
                 throw GoogleMapErrors.invalidArguments("Marker hash id is invalid or missing")
             }
-            
+
             guard let map = self.maps[id] else {
                 throw GoogleMapErrors.mapNotFound
             }
-            
+
             map.removeMarker(id: markerId)
-            
-            call.resolve()            
-            
+
+            call.resolve()
+
         } catch {
             handleError(call, error: error)
         }

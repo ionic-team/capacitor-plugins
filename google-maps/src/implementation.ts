@@ -1,7 +1,7 @@
 import { registerPlugin } from '@capacitor/core';
-import { Marker } from './map';
 
 import type { GoogleMapConfig } from './definitions';
+import type { Marker } from './map';
 
 export interface CreateMapArgs {
   id: string;
@@ -21,12 +21,12 @@ export interface RemoveMarkerArgs {
 
 export interface AddMarkerArgs {
   id: string;
-  marker: Marker
+  marker: Marker;
 }
 
 export interface CapacitorGoogleMapsPlugin {
   create(args: CreateMapArgs): Promise<void>;
-  addMarker(args: AddMarkerArgs): Promise<{id: string}>;
+  addMarker(args: AddMarkerArgs): Promise<{ id: string }>;
   removeMarker(args: RemoveMarkerArgs): Promise<void>;
   destroy(args: DestroyMapArgs): Promise<void>;
 }

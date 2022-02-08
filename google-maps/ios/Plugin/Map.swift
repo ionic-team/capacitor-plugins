@@ -27,20 +27,19 @@ public class Map {
     var mapViewController: GMViewController?
     var markers = [Int: GMSMarker]()
     private var delegate: CapacitorGoogleMapsPlugin
-    
 
     init(id: String, config: GoogleMapConfig, delegate: CapacitorGoogleMapsPlugin) {
         self.id = id
         self.config = config
         self.delegate = delegate
-        
+
         self.render()
     }
-    
+
     func render() {
         DispatchQueue.main.async {
             self.mapViewController = GMViewController()
-            
+
             if let mapViewController = self.mapViewController {
                 mapViewController.mapViewBounds = [
                     "width": self.config.width,
@@ -53,7 +52,7 @@ public class Map {
                     "longitude": self.config.center.lng,
                     "zoom": self.config.zoom
                 ]
-                
+
                 if let bridge = self.delegate.bridge {
                     bridge.viewController!.view.addSubview(mapViewController.view)
                     mapViewController.GMapView.delegate = self.delegate
@@ -61,7 +60,7 @@ public class Map {
             }
         }
     }
-    
+
     func destroy() {
         DispatchQueue.main.async {
             if let mapViewController = self.mapViewController {
@@ -70,14 +69,14 @@ public class Map {
             }
         }
     }
-    
+
     func addMarker(marker: Marker) throws -> Int {
         guard let mapViewController = mapViewController else {
             throw GoogleMapErrors.unhandledError("map view controller not available")
         }
 
         var markerHash = 0
-        
+
         DispatchQueue.main.sync {
             let newMarker = GMSMarker()
             newMarker.position = CLLocationCoordinate2D(latitude: marker.coordinate.lat, longitude: marker.coordinate.lng)
@@ -86,16 +85,16 @@ public class Map {
             newMarker.isFlat = marker.isFlat ?? false
             newMarker.opacity = marker.opacity ?? 1
             newMarker.isDraggable = marker.draggable ?? false
-        
+
             newMarker.map = mapViewController.GMapView
             self.markers[newMarker.hash.hashValue] = newMarker
-            
+
             markerHash = newMarker.hash.hashValue
         }
-        
+
         return markerHash
     }
-    
+
     func removeMarker(id: Int) {
         DispatchQueue.main.async {
             if let marker = self.markers[id] {
