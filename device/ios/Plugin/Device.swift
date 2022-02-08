@@ -61,6 +61,17 @@ import Foundation
         }
         return nil
     }
+    
+    /**
+     * Get model name
+     */
+    public func getModelName() -> String {
+        var size = 0
+        sysctlbyname("hw.machine", nil, &size, nil, 0)
+        var machine = [CChar](repeating: 0, count: size)
+        sysctlbyname("hw.machine", &machine, &size, nil, 0)
+        return String(cString: machine)
+    }
 
     public func getLanguageCode() -> String {
         return String(Locale.preferredLanguages[0].prefix(2))

@@ -36,6 +36,7 @@ public class DevicePlugin extends Plugin {
         r.put("realDiskFree", implementation.getRealDiskFree());
         r.put("realDiskTotal", implementation.getRealDiskTotal());
         r.put("model", android.os.Build.MODEL);
+        r.put("modelName", android.os.Build.MODEL);
         r.put("operatingSystem", "android");
         r.put("osVersion", android.os.Build.VERSION.RELEASE);
         r.put("platform", implementation.getPlatform());

@@ -30,6 +30,14 @@ export interface DeviceInfo {
   model: string;
 
   /**
+   * The device model name. For example, "iPhone13,1".
+   * This value is the same as `model` on Android and Web.
+   *
+   * @since 1.2.0
+   */
+  modelName: string;
+
+  /**
    * The device platform (lowercase).
    *
    * @since 1.0.0
