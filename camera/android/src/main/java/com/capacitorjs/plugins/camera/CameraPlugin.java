@@ -36,6 +36,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -232,7 +233,7 @@ public class CameraPlugin extends Plugin {
             return null;
         }
         try {
-            return CameraResultType.valueOf(resultType.toUpperCase());
+            return CameraResultType.valueOf(resultType.toUpperCase(Locale.ROOT));
         } catch (IllegalArgumentException ex) {
             Logger.debug(getLogTag(), "Invalid result type \"" + resultType + "\", defaulting to base64");
             return CameraResultType.BASE64;
