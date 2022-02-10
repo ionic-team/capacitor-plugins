@@ -1,6 +1,6 @@
 {
   "name": "@capacitor/toast",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "The Toast API provides a notification pop up for displaying important information to a user. Just like real toast!",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
