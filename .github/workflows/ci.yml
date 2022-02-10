@@ -66,8 +66,11 @@ jobs:
       - lint
     strategy:
       matrix:
+        xcode:
+          - /Applications/Xcode_12.4.app
         plugin: ${{ fromJson(needs.setup.outputs.plugins) }}
     steps:
+      - run: sudo xcode-select --switch ${{ matrix.xcode }}
       - uses: actions/setup-node@v1
         with:
           node-version: 14.x
