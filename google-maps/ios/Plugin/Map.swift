@@ -95,12 +95,14 @@ public class Map {
         return markerHash
     }
 
-    func removeMarker(id: Int) {
-        DispatchQueue.main.async {
-            if let marker = self.markers[id] {
+    func removeMarker(id: Int) throws {
+        if let marker = self.markers[id] {
+            DispatchQueue.main.async {            
                 marker.map = nil
-                self.markers.removeValue(forKey: id)
+                self.markers.removeValue(forKey: id)            
             }
+        } else {
+            throw GoogleMapErrors.markerNotFound
         }
     }
 }

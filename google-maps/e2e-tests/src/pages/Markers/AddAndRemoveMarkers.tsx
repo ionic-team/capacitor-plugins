@@ -9,7 +9,7 @@ const AddAndRemoveMarkers: React.FC = () => {
     const [commandOutput, setCommandOutput] = useState('');
     const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
 
-    async function addMarker() {
+    async function createMap() {
         try {
             const newMap = await GoogleMap.create("test-map", apiKey!, {
                 center: {
@@ -25,7 +25,21 @@ const AddAndRemoveMarkers: React.FC = () => {
             });
             setMap(newMap);
 
-            const id = await newMap.addMarker({
+            setCommandOutput("Map created")
+        } catch (err: any) {
+            setCommandOutput(err.message);
+        }
+    }
+    
+    
+
+    async function addMarker() {
+        try {
+            if (!map) {
+                throw new Error("map not created");
+            }
+
+            const id = await map.addMarker({
                 coordinate: {
                     lat: 33.6,
                     lng: -117.9,
@@ -33,7 +47,8 @@ const AddAndRemoveMarkers: React.FC = () => {
             });
 
             setMarkerId(id);    
-            setCommandOutput(`Marker ${id} added`)
+            setCommandOutput(`Marker added: ${id}`)
+            
         } catch (err: any) {
             setCommandOutput(err.message);
         }
@@ -50,7 +65,7 @@ const AddAndRemoveMarkers: React.FC = () => {
             }
 
             await map.removeMarker(markerId);
-            setCommandOutput(`Marker ${markerId} removed`)
+            setCommandOutput(`Marker removed: ${markerId}`)
         } catch (err: any) {
             setCommandOutput(err.message);
         }
@@ -59,8 +74,11 @@ const AddAndRemoveMarkers: React.FC = () => {
     return (
         <BaseTestingPage pageTitle="Add and Remove Markers">
             <div>
+                <IonButton expand="block" id="createMapButton" onClick={createMap}>
+                    Create Map
+                </IonButton>
                 <IonButton expand="block" id="addMarkerButton" onClick={addMarker}>
-                    Create Map and Add 1 Marker
+                    Add 1 Marker
                 </IonButton>    
                 <IonButton expand="block" id="removeMarkerButton" onClick={removeMarker}>
                     Remove Marker

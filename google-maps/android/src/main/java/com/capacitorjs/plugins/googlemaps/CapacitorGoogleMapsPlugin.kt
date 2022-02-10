@@ -111,6 +111,8 @@ class CapacitorGoogleMapsPlugin : Plugin() {
             map.removeMarker(markerId)
 
             call.resolve()
+        } catch (e: GoogleMapsError) {
+            handleError(call, e)
         } catch(e: Exception) {
             handleError(call, e)
         }

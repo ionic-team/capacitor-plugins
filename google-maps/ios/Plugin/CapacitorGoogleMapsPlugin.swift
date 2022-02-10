@@ -109,7 +109,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
                 throw GoogleMapErrors.mapNotFound
             }
 
-            map.removeMarker(id: markerId)
+            try map.removeMarker(id: markerId)
 
             call.resolve()
 

@@ -113,12 +113,12 @@ class CapacitorGoogleMap(val id: String, val config: GoogleMapConfig,
         googleMap ?: throw GoogleMapsError("google map is not available")
 
         val marker = markers[id]
-        marker?.let {
-            runBlocking {
-                withContext(Dispatchers.Main) {
-                    marker.remove()
-                    markers.remove(marker.id)
-                }
+        marker ?: throw MarkerNotFoundError()
+
+        runBlocking {
+            withContext(Dispatchers.Main) {
+                marker.remove()
+                markers.remove(marker.id)
             }
         }
     }
