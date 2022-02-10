@@ -52,7 +52,6 @@ public class Map {
                     "longitude": self.config.center.lng,
                     "zoom": self.config.zoom
                 ]
-
                 if let bridge = self.delegate.bridge {
                     bridge.viewController!.view.addSubview(mapViewController.view)
                     mapViewController.GMapView.delegate = self.delegate
@@ -60,7 +59,6 @@ public class Map {
             }
         }
     }
-
     func destroy() {
         DispatchQueue.main.async {
             if let mapViewController = self.mapViewController {

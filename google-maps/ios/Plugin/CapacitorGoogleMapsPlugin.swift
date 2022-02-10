@@ -42,7 +42,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
 
             let newMap = Map(id: id, config: config, delegate: self)
             self.maps[id] = newMap
-
+            
             call.resolve()
         } catch {
             handleError(call, error: error)

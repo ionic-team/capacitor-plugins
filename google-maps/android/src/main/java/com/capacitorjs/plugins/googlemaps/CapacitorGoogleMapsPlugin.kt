@@ -2,6 +2,7 @@ package com.capacitorjs.plugins.googlemaps
 
 import android.util.Log
 import com.getcapacitor.JSObject
+import com.getcapacitor.Bridge
 import com.getcapacitor.Plugin
 import com.getcapacitor.PluginCall
 import com.getcapacitor.PluginMethod
