@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/keyboard@1.2.1...@capacitor/keyboard@1.2.2) (2022-02-10)
+
+
+### Bug Fixes
+
+* **keyboard:** Prevent null pointer if native listener not set ([#789](https://github.com/ionic-team/capacitor-plugins/issues/789)) ([8b6f119](https://github.com/ionic-team/capacitor-plugins/commit/8b6f119ad5143d380aa9ebd7c73b701ad5a1f10a))
+
+
+
+
+
 ## [1.2.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/keyboard@1.2.0...@capacitor/keyboard@1.2.1) (2022-01-19)
 
 
