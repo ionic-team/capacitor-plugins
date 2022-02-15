@@ -35,6 +35,18 @@ export class GoogleMap {
     return newMap;
   }
 
+  async enableClustering(): Promise<void> {
+    return CapacitorGoogleMaps.enableClustering({
+      id: this.id,
+    });
+  }
+
+  async disableClustering(): Promise<void> {
+    return CapacitorGoogleMaps.disableClustering({
+      id: this.id,
+    });
+  }
+
   async addMarker(marker: Marker): Promise<string> {
     const res = await CapacitorGoogleMaps.addMarker({
       id: this.id,

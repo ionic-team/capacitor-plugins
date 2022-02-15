@@ -16,6 +16,8 @@ npx cap sync
 * [`create(...)`](#create)
 * [`addMarker(...)`](#addmarker)
 * [`removeMarker(...)`](#removemarker)
+* [`enableClustering(...)`](#enableclustering)
+* [`disableClustering(...)`](#disableclustering)
 * [`destroy(...)`](#destroy)
 * [Interfaces](#interfaces)
 
@@ -61,6 +63,32 @@ removeMarker(args: RemoveMarkerArgs) => Promise<void>
 | Param      | Type                                                          |
 | ---------- | ------------------------------------------------------------- |
 | **`args`** | <code><a href="#removemarkerargs">RemoveMarkerArgs</a></code> |
+
+--------------------
+
+
+### enableClustering(...)
+
+```typescript
+enableClustering(args: { id: string; }) => Promise<void>
+```
+
+| Param      | Type                         |
+| ---------- | ---------------------------- |
+| **`args`** | <code>{ id: string; }</code> |
+
+--------------------
+
+
+### disableClustering(...)
+
+```typescript
+disableClustering(args: { id: string; }) => Promise<void>
+```
+
+| Param      | Type                         |
+| ---------- | ---------------------------- |
+| **`args`** | <code>{ id: string; }</code> |
 
 --------------------
 

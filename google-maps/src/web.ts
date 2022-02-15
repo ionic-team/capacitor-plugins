@@ -12,6 +12,12 @@ export class CapacitorGoogleMapsWeb
   extends WebPlugin
   implements CapacitorGoogleMapsPlugin
 {
+  enableClustering(_args: { id: string; }): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
+  disableClustering(_args: { id: string; }): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
   addMarker(_args: AddMarkerArgs): Promise<{ id: string }> {
     throw new Error('Method not implemented.');
   }

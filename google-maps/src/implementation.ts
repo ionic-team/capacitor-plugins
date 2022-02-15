@@ -28,6 +28,8 @@ export interface CapacitorGoogleMapsPlugin {
   create(args: CreateMapArgs): Promise<void>;
   addMarker(args: AddMarkerArgs): Promise<{ id: string }>;
   removeMarker(args: RemoveMarkerArgs): Promise<void>;
+  enableClustering(args: {id: string}): Promise<void>;
+  disableClustering(args: {id: string}): Promise<void>;
   destroy(args: DestroyMapArgs): Promise<void>;
 }
 

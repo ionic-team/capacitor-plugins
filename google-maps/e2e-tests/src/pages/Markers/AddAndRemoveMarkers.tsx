@@ -43,7 +43,8 @@ const AddAndRemoveMarkers: React.FC = () => {
                 coordinate: {
                     lat: 33.6,
                     lng: -117.9,
-                }
+                },
+                title: "Hello world",
             });
 
             setMarkerId(id);    
@@ -71,18 +72,85 @@ const AddAndRemoveMarkers: React.FC = () => {
         }
     }
 
+    async function addMultipleMarkers() {
+        try {
+            if (map) {
+                map.addMarker({
+                    coordinate: {
+                        lat: 47.60,
+                        lng: -122.33,
+                    }
+                })
+    
+                map.addMarker({
+                    coordinate: {
+                        lat: 47.60,
+                        lng: -122.46,
+                    }
+                })
+    
+                map.addMarker({
+                    coordinate: {
+                        lat: 47.30,
+                        lng: -122.46,
+                    }
+                })
+    
+                map.addMarker({
+                    coordinate: {
+                        lat: 47.20,
+                        lng: -122.23,
+                    }
+                })
+
+                setCommandOutput(`4 markers added`)
+            }
+        } catch (err: any) {
+            setCommandOutput(err.message);
+        }
+    }
+
+    async function enableClustering() {
+        try {
+            if (map) {
+                await map.enableClustering();
+            }
+        } catch (err: any) {
+            setCommandOutput(err.message);
+        }
+    }
+
+    async function disableClustering() {
+        try {
+            if (map) {
+                await map.disableClustering();
+            }
+        } catch (err: any) {
+            setCommandOutput(err.message);
+        }
+    }
+
     return (
         <BaseTestingPage pageTitle="Add and Remove Markers">
             <div>
-                <IonButton expand="block" id="createMapButton" onClick={createMap}>
+                <IonButton  id="createMapButton" onClick={createMap}>
                     Create Map
                 </IonButton>
-                <IonButton expand="block" id="addMarkerButton" onClick={addMarker}>
+                <IonButton  id="addMarkerButton" onClick={addMarker}>
                     Add 1 Marker
                 </IonButton>    
-                <IonButton expand="block" id="removeMarkerButton" onClick={removeMarker}>
+                <IonButton id="removeMarkerButton" onClick={removeMarker}>
                     Remove Marker
-                </IonButton>               
+                </IonButton>   
+                <IonButton  id="addMarkersButton" onClick={addMultipleMarkers}>
+                    Add Multiple Markers
+                </IonButton>  
+                <IonButton  id="enableClusteringButton" onClick={enableClustering}>
+                    Enable Clustering
+                </IonButton>   
+                <IonButton id="disableClusteringButton" onClick={disableClustering}>
+                    Disable Clustering
+                </IonButton>  
             </div>
             <div>
                 <IonTextarea id="commandOutput" value={commandOutput}></IonTextarea>
