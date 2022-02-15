@@ -4,19 +4,22 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import com.getcapacitor.Bridge
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.MapView
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.coroutines.*
-import com.google.android.libraries.maps.MapView
-import com.google.android.libraries.maps.GoogleMap
-import com.google.android.libraries.maps.OnMapReadyCallback
-import com.google.android.libraries.maps.model.Marker
-import com.google.android.libraries.maps.model.MarkerOptions
+
+import com.google.maps.android.clustering.ClusterManager
 import kotlinx.coroutines.channels.Channel
 
 class CapacitorGoogleMap(val id: String, val config: GoogleMapConfig,
                          val delegate: CapacitorGoogleMapsPlugin) : OnMapReadyCallback {
     private var mapView: MapView? = null
     private var googleMap: GoogleMap? = null
-    private val markers = HashMap<String, Marker>()
+    private val markers = HashMap<String, CapacitorGoogleMapMarker>()
+    private var clusterManager: ClusterManager<CapacitorGoogleMapMarker>? = null
 
     private val isReadyChannel = Channel<Boolean>()
 
@@ -80,6 +83,7 @@ class CapacitorGoogleMap(val id: String, val config: GoogleMapConfig,
                 this@CapacitorGoogleMap.mapView?.onDestroy()
                 this@CapacitorGoogleMap.mapView = null
                 this@CapacitorGoogleMap.googleMap = null
+                this@CapacitorGoogleMap.clusterManager = null
             }
         }
     }
@@ -91,22 +95,72 @@ class CapacitorGoogleMap(val id: String, val config: GoogleMapConfig,
 
         runBlocking {
             withContext(Dispatchers.Main) {
-                val markerOptions = MarkerOptions()
-                markerOptions.position(marker.coordinate)
-                markerOptions.title(marker.title)
-                markerOptions.snippet(marker.snippet)
-                markerOptions.alpha(marker.opacity)
-                markerOptions.flat(marker.isFlat)
-                markerOptions.draggable(marker.draggable)
+                val googleMapMarker = googleMap!!.addMarker(marker.getMarkerOptions())
 
-                val newMarker = googleMap!!.addMarker(markerOptions)
-                markers[newMarker.id] = newMarker
+                if (this@CapacitorGoogleMap.clusterManager != null) {
+                    marker.googleMapMarker?.remove()
+                    marker.googleMapMarker = null
+                    this@CapacitorGoogleMap.clusterManager?.addItem(marker)
+                } else {
+                    marker.googleMapMarker = googleMapMarker
+                }
 
-                markerId = newMarker.id
+                markers[googleMapMarker!!.id] = marker
+
+                markerId = googleMapMarker.id
             }
         }
 
         return markerId
+    }
+
+    fun enableClustering() {
+        googleMap ?: throw GoogleMapsError("google map is not available")
+
+        if (clusterManager != null) {
+            return
+        }
+
+        runBlocking {
+            withContext(Dispatchers.Main) {
+                val bridge = delegate.bridge
+                clusterManager = ClusterManager(bridge.context, googleMap)
+
+                googleMap?.setOnCameraIdleListener(clusterManager)
+                googleMap?.setOnMarkerClickListener(clusterManager)
+
+                // add existing markers to the cluster
+                if (markers.isNotEmpty()) {
+                    for ((id, marker) in this@CapacitorGoogleMap.markers) {
+                        marker.googleMapMarker?.remove()
+                        marker.googleMapMarker = null
+                    }
+                    clusterManager?.addItems(this@CapacitorGoogleMap.markers.values)
+                    clusterManager?.cluster()
+                }
+            }
+        }
+    }
+
+    fun disableClustering() {
+        googleMap ?: throw GoogleMapsError("google map is not available")
+
+        runBlocking {
+            withContext(Dispatchers.Main) {
+                clusterManager?.clearItems()
+                clusterManager = null
+
+                // add existing markers back to the map
+                if (markers.isNotEmpty()) {
+                    for ((id, marker) in this@CapacitorGoogleMap.markers) {
+                        val googleMapMarker = googleMap?.addMarker(marker.getMarkerOptions())
+                        marker.googleMapMarker = googleMapMarker
+                    }
+                }
+            }
+        }
+
+
     }
 
     fun removeMarker(id: String) {
@@ -117,8 +171,12 @@ class CapacitorGoogleMap(val id: String, val config: GoogleMapConfig,
 
         runBlocking {
             withContext(Dispatchers.Main) {
-                marker.remove()
-                markers.remove(marker.id)
+                if(this@CapacitorGoogleMap.clusterManager != null) {
+                    this@CapacitorGoogleMap.clusterManager?.removeItem(marker)
+                }
+
+                marker.googleMapMarker?.remove()
+                markers.remove(id)
             }
         }
     }
@@ -130,16 +188,12 @@ class CapacitorGoogleMap(val id: String, val config: GoogleMapConfig,
         return (pixels * scale + 0.5f).toInt()
     }
 
-    override fun onMapReady(map: GoogleMap?) {
+
+    override fun onMapReady(map: GoogleMap) {
         runBlocking {
-            if(map != null) {
-                googleMap = map
-                this@CapacitorGoogleMap.isReadyChannel.send(true);
-                this@CapacitorGoogleMap.isReadyChannel.close()
-            } else {
-                this@CapacitorGoogleMap.isReadyChannel.send(false);
-                this@CapacitorGoogleMap.isReadyChannel.close()
-            }
+            googleMap = map
+            this@CapacitorGoogleMap.isReadyChannel.send(true);
+            this@CapacitorGoogleMap.isReadyChannel.close()
         }
     }
 }

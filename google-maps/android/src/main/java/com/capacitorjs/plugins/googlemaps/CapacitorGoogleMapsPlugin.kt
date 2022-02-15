@@ -98,6 +98,44 @@ class CapacitorGoogleMapsPlugin : Plugin() {
     }
 
     @PluginMethod
+    fun enableClustering(call: PluginCall) {
+        try {
+            val id = call.getString("id")
+            id ?: throw InvalidMapIdError()
+
+            val map = maps[id]
+            map ?: throw MapNotFoundError()
+
+            map.enableClustering()
+
+            call.resolve()
+        } catch (e: GoogleMapsError) {
+            handleError(call, e)
+        } catch(e: Exception) {
+            handleError(call, e)
+        }
+    }
+
+    @PluginMethod
+    fun disableClustering(call: PluginCall) {
+        try {
+            val id = call.getString("id")
+            id ?: throw InvalidMapIdError()
+
+            val map = maps[id]
+            map ?: throw MapNotFoundError()
+
+            map.disableClustering()
+
+            call.resolve()
+        } catch (e: GoogleMapsError) {
+            handleError(call, e)
+        } catch(e: Exception) {
+            handleError(call, e)
+        }
+    }
+
+    @PluginMethod
     fun removeMarker(call: PluginCall) {
         try {
             val id = call.getString("id")
