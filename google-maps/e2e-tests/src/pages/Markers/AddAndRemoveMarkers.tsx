@@ -30,8 +30,6 @@ const AddAndRemoveMarkers: React.FC = () => {
             setCommandOutput(err.message);
         }
     }
-    
-    
 
     async function addMarker() {
         try {
@@ -72,63 +70,6 @@ const AddAndRemoveMarkers: React.FC = () => {
         }
     }
 
-    async function addMultipleMarkers() {
-        try {
-            if (map) {
-                map.addMarker({
-                    coordinate: {
-                        lat: 47.60,
-                        lng: -122.33,
-                    }
-                })
-    
-                map.addMarker({
-                    coordinate: {
-                        lat: 47.60,
-                        lng: -122.46,
-                    }
-                })
-    
-                map.addMarker({
-                    coordinate: {
-                        lat: 47.30,
-                        lng: -122.46,
-                    }
-                })
-    
-                map.addMarker({
-                    coordinate: {
-                        lat: 47.20,
-                        lng: -122.23,
-                    }
-                })
-
-                setCommandOutput(`4 markers added`)
-            }
-        } catch (err: any) {
-            setCommandOutput(err.message);
-        }
-    }
-
-    async function enableClustering() {
-        try {
-            if (map) {
-                await map.enableClustering();
-            }
-        } catch (err: any) {
-            setCommandOutput(err.message);
-        }
-    }
-
-    async function disableClustering() {
-        try {
-            if (map) {
-                await map.disableClustering();
-            }
-        } catch (err: any) {
-            setCommandOutput(err.message);
-        }
-    }
 
     return (
         <BaseTestingPage pageTitle="Add and Remove Markers">
@@ -141,16 +82,7 @@ const AddAndRemoveMarkers: React.FC = () => {
                 </IonButton>    
                 <IonButton id="removeMarkerButton" onClick={removeMarker}>
                     Remove Marker
-                </IonButton>   
-                <IonButton  id="addMarkersButton" onClick={addMultipleMarkers}>
-                    Add Multiple Markers
-                </IonButton>  
-                <IonButton  id="enableClusteringButton" onClick={enableClustering}>
-                    Enable Clustering
-                </IonButton>   
-                <IonButton id="disableClusteringButton" onClick={disableClustering}>
-                    Disable Clustering
-                </IonButton>  
+                </IonButton>                
             </div>
             <div>
                 <IonTextarea id="commandOutput" value={commandOutput}></IonTextarea>
