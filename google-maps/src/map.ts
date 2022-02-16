@@ -56,10 +56,26 @@ export class GoogleMap {
     return res.id;
   }
 
+  async addMarkers(markers: Marker[]): Promise<string[]> {
+    const res = await CapacitorGoogleMaps.addMarkers({
+      id: this.id,
+      markers,
+    })
+
+    return res.ids;
+  }
+
   async removeMarker(id: string): Promise<void> {
     return CapacitorGoogleMaps.removeMarker({
       id: this.id,
       markerId: id,
+    });
+  }
+
+  async removeMarkers(ids: string[]): Promise<void> {
+    return CapacitorGoogleMaps.removeMarkers({
+      id: this.id,
+      markerIds: ids
     });
   }
 

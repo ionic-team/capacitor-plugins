@@ -28,8 +28,6 @@ class GMViewController: UIViewController {
         self.view = GMapView
     }
     
-    
-    
     func initClusterManager() {
         let iconGenerator = GMUDefaultClusterIconGenerator()
         let algorithm = GMUNonHierarchicalDistanceBasedAlgorithm()
@@ -135,6 +133,44 @@ public class Map {
         return markerHash
     }
     
+    func addMarkers(markers: [Marker]) throws -> [Int] {
+        guard let mapViewController = mapViewController else {
+            throw GoogleMapErrors.unhandledError("map view controller not available")
+        }
+        
+        var markerHashes: [Int] = []
+        
+        DispatchQueue.main.sync {
+            var googleMapsMarkers: [GMSMarker] = []
+            
+            markers.forEach { marker in
+                let newMarker = GMSMarker()
+                newMarker.position = CLLocationCoordinate2D(latitude: marker.coordinate.lat, longitude: marker.coordinate.lng)
+                newMarker.title = marker.title
+                newMarker.snippet = marker.snippet
+                newMarker.isFlat = marker.isFlat ?? false
+                newMarker.opacity = marker.opacity ?? 1
+                newMarker.isDraggable = marker.draggable ?? false
+                
+                if mapViewController.clusteringEnabled {
+                    googleMapsMarkers.append(newMarker)
+                } else {
+                    newMarker.map = mapViewController.GMapView
+                }
+                
+                self.markers[newMarker.hash.hashValue] = newMarker
+                
+                markerHashes.append(newMarker.hash.hashValue)
+            }
+            
+            if mapViewController.clusteringEnabled {
+                mapViewController.addMarkersToCluster(markers: googleMapsMarkers)
+            }            
+        }
+        
+        return markerHashes
+    }
+    
     func enableClustering() {
         if let mapViewController = mapViewController {
             if !mapViewController.clusteringEnabled {
@@ -187,6 +223,29 @@ public class Map {
             }
         } else {
             throw GoogleMapErrors.markerNotFound
+        }
+    }
+    
+    func removeMarkers(ids: [Int]) throws {
+        if ids.count == 0 {
+            return
+        }
+        
+        DispatchQueue.main.sync {
+            var markers: [GMSMarker] = []
+            ids.forEach { id in
+                if let marker = self.markers[id] {
+                    marker.map = nil
+                    self.markers.removeValue(forKey: id)
+                    markers.append(marker)
+                }
+            }
+            
+            if let mapViewController = self.mapViewController {
+                if mapViewController.clusteringEnabled {
+                    mapViewController.removeMarkersFromCluster(markers: markers)
+                }
+            }
         }
     }
 }
