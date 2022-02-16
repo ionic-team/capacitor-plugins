@@ -7,6 +7,7 @@ import com.getcapacitor.Plugin
 import com.getcapacitor.PluginCall
 import com.getcapacitor.PluginMethod
 import com.getcapacitor.annotation.CapacitorPlugin
+import org.json.JSONArray
 
 @CapacitorPlugin(name = "CapacitorGoogleMaps")
 class CapacitorGoogleMapsPlugin : Plugin() {
@@ -98,6 +99,48 @@ class CapacitorGoogleMapsPlugin : Plugin() {
     }
 
     @PluginMethod
+    fun addMarkers(call: PluginCall) {
+        try {
+            val id = call.getString("id")
+            id ?: throw InvalidMapIdError()
+
+            val markerObjectArray = call.getArray("markers", null)
+            markerObjectArray ?: throw InvalidArgumentsError("Markers array is missing")
+
+            if (markerObjectArray.length() == 0) {
+                throw InvalidArgumentsError("Markers array requires at least one marker")
+            }
+
+            val map = maps[id]
+            map ?: throw MapNotFoundError()
+
+            val markers: MutableList<CapacitorGoogleMapMarker> = mutableListOf()
+
+            for (i in 0 until markerObjectArray.length()) {
+                val markerObj = markerObjectArray.getJSONObject(i)
+                val marker = CapacitorGoogleMapMarker(markerObj)
+
+                markers.add(marker)
+            }
+
+            val ids = map.addMarkers(markers)
+
+            val jsonIDs = JSONArray()
+            ids.forEach {
+                jsonIDs.put(it)
+            }
+
+            val res = JSObject()
+            res.put("ids", jsonIDs)
+            call.resolve(res)
+        } catch (e: GoogleMapsError) {
+            handleError(call, e)
+        } catch(e: Exception) {
+            handleError(call, e)
+        }
+    }
+
+    @PluginMethod
     fun enableClustering(call: PluginCall) {
         try {
             val id = call.getString("id")
@@ -148,6 +191,39 @@ class CapacitorGoogleMapsPlugin : Plugin() {
             map ?: throw MapNotFoundError()
 
             map.removeMarker(markerId)
+
+            call.resolve()
+        } catch (e: GoogleMapsError) {
+            handleError(call, e)
+        } catch(e: Exception) {
+            handleError(call, e)
+        }
+    }
+
+    @PluginMethod
+    fun removeMarkers(call: PluginCall) {
+        try {
+            val id = call.getString("id")
+            id ?: throw InvalidMapIdError()
+
+            val markerIdsArray = call.getArray("markerIds")
+            markerIdsArray ?: throw InvalidArgumentsError("marker ids are invalid or missing")
+
+            if (markerIdsArray.length() == 0) {
+                throw InvalidArgumentsError("markerIds requires at least one marker id")
+            }
+
+            val map = maps[id]
+            map ?: throw MapNotFoundError()
+
+            val markerIds: MutableList<String> = mutableListOf()
+
+            for (i in 0 until markerIdsArray.length()) {
+                val markerId = markerIdsArray.getString(i)
+                markerIds.add(markerId)
+            }
+
+            map.removeMarkers(markerIds)
 
             call.resolve()
         } catch (e: GoogleMapsError) {
