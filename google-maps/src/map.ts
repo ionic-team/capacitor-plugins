@@ -75,7 +75,7 @@ export class GoogleMap {
   async removeMarkers(ids: string[]): Promise<void> {
     return CapacitorGoogleMaps.removeMarkers({
       id: this.id,
-      markerIds: ids
+      markerIds: ids,
     });
   }
 

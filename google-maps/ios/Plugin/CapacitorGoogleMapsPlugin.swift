@@ -101,6 +101,10 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
                 throw GoogleMapErrors.invalidArguments("Markers array is missing")
             }
             
+            if markerObjs.isEmpty {
+                throw GoogleMapErrors.invalidArguments("Markers requires at least one marker")
+            }
+            
             guard let map = self.maps[id] else {
                 throw GoogleMapErrors.mapNotFound
             }
@@ -131,12 +135,16 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
             }
             
             guard let markerIdStrings = call.getArray("markerIds") as? [String] else {
-                throw GoogleMapErrors.invalidArguments("Marker hash ids are invalid or missing")
+                throw GoogleMapErrors.invalidArguments("markerIds are invalid or missing")
+            }
+            
+            if markerIdStrings.isEmpty {
+                throw GoogleMapErrors.invalidArguments("markerIds requires at least one marker id")
             }
             
             let ids: [Int] = try markerIdStrings.map { idString in
                 guard let markerId = Int(idString) else {
-                    throw GoogleMapErrors.invalidArguments("Marker hash ids are invalid or missing")
+                    throw GoogleMapErrors.invalidArguments("markerIds are invalid or missing")
                 }
                 
                 return markerId

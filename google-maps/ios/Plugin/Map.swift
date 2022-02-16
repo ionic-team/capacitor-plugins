@@ -226,11 +226,7 @@ public class Map {
         }
     }
     
-    func removeMarkers(ids: [Int]) throws {
-        if ids.count == 0 {
-            return
-        }
-        
+    func removeMarkers(ids: [Int]) throws {        
         DispatchQueue.main.sync {
             var markers: [GMSMarker] = []
             ids.forEach { id in
