@@ -16,6 +16,15 @@ public class CameraSettings {
     private int height = 0;
     private CameraSource source = CameraSource.PROMPT;
 
+    // FarmQA begin
+    private boolean saveToDataDirectory = false;
+    private String resultFilename;
+    private boolean createThumbnail = false;
+    private String thumbnailFilename;
+    private int thumbnailWidth = 70;
+    private int thumbnailHeight = 70;
+    // FarmQA end
+
     public CameraResultType getResultType() {
         return resultType;
     }
@@ -87,4 +96,50 @@ public class CameraSettings {
     public void setSource(CameraSource source) {
         this.source = source;
     }
+
+    // FarmQA begin
+    public boolean getSaveToDataDirectory() {
+        return getResultType() == CameraResultType.URI && this.saveToDataDirectory;
+    }
+
+    public void setSaveToDataDirectory(boolean saveToDataDirectory) { this.saveToDataDirectory = saveToDataDirectory; }
+
+    public String getResultFilename() {
+        return this.resultFilename;
+    }
+
+    public void setResultFilename(String filename) {
+        this.resultFilename = filename;
+    }
+
+    public boolean getCreateThumbnail() {
+        return this.createThumbnail && (this.thumbnailHeight > 0 || this.thumbnailWidth > 0);
+    }
+
+    public void setCreateThumbnail(boolean createThumbnail) { this.createThumbnail = createThumbnail; }
+
+    public String getThumbnailFilename() {
+        return this.thumbnailFilename;
+    }
+
+    public void setThumbnailFilename(String filename) {
+        this.thumbnailFilename = filename;
+    }
+
+    public int getThumbnailWidth() {
+        return this.thumbnailWidth;
+    }
+
+    public void setThumbnailWidth(int width) {
+        this.thumbnailWidth = width;
+    }
+
+    public int getThumbnailHeight() {
+        return this.thumbnailHeight;
+    }
+
+    public void setThumbnailHeight(int height) {
+        this.thumbnailHeight = height;
+    }
+    // FarmQA end
 }

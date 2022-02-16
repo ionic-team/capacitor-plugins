@@ -9,6 +9,7 @@ public class CameraPlugin: CAPPlugin {
     private var settings = CameraSettings()
     private let defaultSource = CameraSource.prompt
     private let defaultDirection = CameraDirection.rear
+    private let defaultDirectory = FileSystemDirectory.cache
     private var multiple = false
 
     private var imageCounter = 0
@@ -110,6 +111,7 @@ public class CameraPlugin: CAPPlugin {
     }
 
     private func cameraSettings(from call: CAPPluginCall) -> CameraSettings {
+        let defaultFileUUID = UUID().uuidString.lowercased()
         var settings = CameraSettings()
         settings.jpegQuality = min(abs(CGFloat(call.getFloat("quality") ?? 100.0)) / 100.0, 1.0)
         settings.allowEditing = call.getBool("allowEditing") ?? false
@@ -138,6 +140,15 @@ public class CameraPlugin: CAPPlugin {
             settings.presentationStyle = .fullScreen
         }
 
+        // FarmQA
+        settings.createThumbnail = call.getBool("createThumbnail") ?? false
+        settings.thumbnailHeight = CGFloat(call.getInt("thumbnailHeight") ?? 70)
+        settings.thumbnailWidth = CGFloat(call.getInt("thumbnailWidth") ?? 70)
+        settings.saveToDataDirectory = call.getBool("saveToDataDirectory") ?? false
+        settings.resultFilename = call.getString("resultFilename") ?? "JPEG_\(defaultFileUUID).jpg"
+        settings.thumbnailFilename = call.getString("thumbnailFilename") ?? "JPEG_\(defaultFileUUID)_tn.jpg"
+        // FarmQA
+        
         return settings
     }
 }
@@ -235,7 +246,7 @@ private extension CameraPlugin {
             return
         }
 
-        if settings.resultType == CameraResultType.uri || multiple {
+        if (!settings.saveToDataDirectory && settings.resultType == CameraResultType.uri) || multiple {
             guard let fileURL = try? saveTemporaryImage(jpeg),
                   let webURL = bridge?.portablePath(fromLocalURL: fileURL) else {
                 call?.reject("Unable to get portable path to file")
@@ -259,6 +270,34 @@ private extension CameraPlugin {
                 "format": "jpeg",
                 "saved": isSaved
             ])
+        } else if settings.saveToDataDirectory {
+            do {
+                let documentDirectory = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
+                let imageFilename = documentDirectory.appendingPathComponent(settings.resultFilename)
+                let webURL = bridge?.portablePath(fromLocalURL: imageFilename)
+                let thumbnailFilename = documentDirectory.appendingPathComponent(settings.thumbnailFilename)
+                let thumbnailWebURL = bridge?.portablePath(fromLocalURL: thumbnailFilename)
+                
+                try saveImage(jpeg, atPath: imageFilename)
+                
+                if settings.createThumbnail {
+                    if let jpegThumbnail = processedImage.generateThumbnail(with: settings.jpegQuality, CGSize(width: settings.thumbnailWidth, height: settings.thumbnailHeight)) {
+                        let _ = try saveImage(jpegThumbnail, atPath: thumbnailFilename)
+                    }
+                }
+                call?.resolve([
+                    "path": imageFilename.absoluteString,
+                    "exif": processedImage.exifData,
+                    "webPath": webURL?.absoluteString ?? "",
+                    "thumbnailPath": thumbnailFilename.absoluteString,
+                    "thumbnailWebPath": thumbnailWebURL?.absoluteString ?? "",
+                    "format": "jpeg",
+                    "saved": isSaved
+                ])
+            } catch {
+                call?.reject("Trouble saving image to DATA directory")
+                return
+            }
         } else if settings.resultType == CameraResultType.base64 {
             self.call?.resolve([
                 "base64String": jpeg.base64EncodedString(),
@@ -454,6 +493,12 @@ private extension CameraPlugin {
         return url
     }
 
+    // Begin FarmQA
+    func saveImage(_ data: Data, atPath path: URL) throws {
+        try data.write(to: path, options: .atomic)
+    }
+    // End FarmQA
+    
     func processImage(from info: [UIImagePickerController.InfoKey: Any]) -> ProcessedImage? {
         var selectedImage: UIImage?
         var flags: PhotoFlags = []

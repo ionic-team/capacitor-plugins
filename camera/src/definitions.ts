@@ -173,6 +173,30 @@ export interface ImageOptions {
    * @since 1.0.0
    */
   promptLabelPicture?: string;
+  /**
+   * iOS and Android only: Whether to save the result images to the Data directory when the resultType is CameraResultType.Uri.
+   */
+   saveToDataDirectory?: boolean;
+  /**
+   * iOS and Android only: The image filename when saving to the Data directory.
+   */
+   resultFilename?: string;
+  /**
+   * iOS and Android only: Whether to create a thumbnail image in the Data directory.
+   */
+   createThumbnail?: boolean;
+   /**
+    * iOS and Android only: The thumbnail filename when saving to the Data directory.
+    */
+   thumbnailFilename?: string;
+   /**
+    * iOS and Android only: The width of the thumbnail image.
+    */
+   thumbnailWidth?: number;
+   /**
+    * iOS and Android only: The height of the thumbnail image.
+    */
+   thumbnailHeight?: number;
 }
 
 export interface Photo {
@@ -227,6 +251,16 @@ export interface Photo {
    * @since 1.1.0
    */
   saved: boolean;
+  /**
+   * If using the CameraREsultType.Uri, the path will contain a full,
+   * platform-specific file URL that can be read later usijng the Filesystem API.
+   */
+  thumbnailPath?: string;
+  /**
+   * webThumbnailPath returns a path that can be used to set the src attribute of an image for efficient
+   * loading and rendering
+   */
+  webThumbnailPath?: string;
 }
 
 export interface GalleryPhotos {

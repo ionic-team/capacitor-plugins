@@ -40,6 +40,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+import java.util.UUID;
 import org.json.JSONException;
 
 /**
@@ -159,7 +160,7 @@ public class CameraPlugin extends Plugin {
         boolean hasPhotoPerms = getPermissionState(PHOTOS) == PermissionState.GRANTED;
 
         // If we want to save to the gallery, we need two permissions
-        if (settings.isSaveToGallery() && !(hasCameraPerms && hasPhotoPerms) && isFirstRequest) {
+        if ((settings.isSaveToGallery() || settings.getSaveToDataDirectory()) && !(hasCameraPerms && hasPhotoPerms) && isFirstRequest) {
             isFirstRequest = false;
             String[] aliases;
             if (needCameraPerms) {
@@ -211,6 +212,7 @@ public class CameraPlugin extends Plugin {
     }
 
     private CameraSettings getSettings(PluginCall call) {
+        String defaultFileUUID = UUID.randomUUID().toString();
         CameraSettings settings = new CameraSettings();
         settings.setResultType(getResultType(call.getString("resultType")));
         settings.setSaveToGallery(call.getBoolean("saveToGallery", CameraSettings.DEFAULT_SAVE_IMAGE_TO_GALLERY));
@@ -225,6 +227,16 @@ public class CameraPlugin extends Plugin {
         } catch (IllegalArgumentException ex) {
             settings.setSource(CameraSource.PROMPT);
         }
+
+        // FarmQA
+        settings.setSaveToDataDirectory(call.getBoolean("saveToDataDirectory", false));
+        settings.setResultFilename(call.getString("resultFilename", String.format("JPEG_%s.jpg", defaultFileUUID)));
+        settings.setCreateThumbnail(call.getBoolean("createThumbnail", false));
+        settings.setThumbnailFilename(call.getString("thumbnailFilename", String.format("JPEG_%s_tn.jpg", defaultFileUUID)));
+        settings.setThumbnailHeight(call.getInt("thumbnailHeight", 70));
+        settings.setThumbnailWidth(call.getInt("thumbnailWidth", 70));
+        // FarmQA
+
         return settings;
     }
 
@@ -268,6 +280,8 @@ public class CameraPlugin extends Plugin {
         openPhotos(call, false, false);
     }
 
+    // FarmQA: Multiple photo selection is disabled.
+    // FarmQA: If/when enabled, the filename settings won't work.
     private void openPhotos(final PluginCall call, boolean multiple, boolean skipPermission) {
         if (skipPermission || checkPhotosPermissions(call)) {
             Intent intent = new Intent(Intent.ACTION_PICK);
@@ -600,7 +614,9 @@ public class CameraPlugin extends Plugin {
     }
 
     private void returnFileURI(PluginCall call, ExifWrapper exif, Bitmap bitmap, Uri u, ByteArrayOutputStream bitmapOutputStream) {
-        Uri newUri = getTempImage(u, bitmapOutputStream);
+        Uri newUri = settings.getSaveToDataDirectory()
+            ? saveResultImage(bitmapOutputStream)
+            : getTempImage(u, bitmapOutputStream);
         exif.copyExif(newUri.getPath());
         if (newUri != null) {
             JSObject ret = new JSObject();
@@ -609,6 +625,11 @@ public class CameraPlugin extends Plugin {
             ret.put("path", newUri.toString());
             ret.put("webPath", FileUtils.getPortablePath(getContext(), bridge.getLocalUrl(), newUri));
             ret.put("saved", isSaved);
+            if (settings.getSaveToDataDirectory() && settings.getCreateThumbnail()) {
+                Uri thumbnailUri = saveThumbnailImage(bitmap);
+                ret.put("thumbnailPath", thumbnailUri.toString());
+                ret.put("thumbnailWebPath", FileUtils.getPortablePath(getContext(), bridge.getLocalUrl(), thumbnailUri));
+            }
             call.resolve(ret);
         } else {
             call.reject(UNABLE_TO_PROCESS_IMAGE);
@@ -778,4 +799,56 @@ public class CameraPlugin extends Plugin {
             imageFileSavePath = storedImageFileSavePath;
         }
     }
+
+    // FarmQA begin
+
+    /**
+     * Saves the result imaage to the Data directory.
+     * @param bitmapOutputStream
+     * @return the uri to the result image
+     */
+    private Uri saveResultImage(ByteArrayOutputStream bitmapOutputStream) {
+        try {
+            File directory = getContext().getFilesDir();
+            if (directory.exists() || directory.mkdirs()) {
+                File outputFile = new File(directory, settings.getResultFilename());
+                FileOutputStream outputStream = new FileOutputStream(outputFile);
+                outputStream.write(bitmapOutputStream.toByteArray());
+                outputStream.close();
+                return Uri.fromFile(outputFile);
+            } else {
+                Logger.error(getLogTag(),"Unable to create directory.", null);
+            }
+        } catch (Exception ex) {
+            Logger.error(getLogTag(), IMAGE_FILE_SAVE_ERROR, ex);
+        }
+        return null;
+    }
+
+    /**
+     * Creates and saves a thumbnail image to the data directory.
+     * @param bitmap
+     * @return the uri to the thumbnail image
+     */
+    private Uri saveThumbnailImage(Bitmap bitmap) {
+        try {
+            File directory = getContext().getFilesDir();
+            if (directory.exists() || directory.mkdirs()) {
+                File outputFile = new File(directory, settings.getThumbnailFilename());
+                FileOutputStream outputStream = new FileOutputStream(outputFile);
+                Bitmap thumbnail = ImageUtils.resize(bitmap, settings.getThumbnailWidth(), settings.getThumbnailHeight());
+                thumbnail.compress(Bitmap.CompressFormat.JPEG, settings.getQuality(), outputStream);
+                outputStream.close();
+                return Uri.fromFile(outputFile);
+            } else {
+                Logger.error(getLogTag(),"Unable to create directory.", null);
+            }
+        }
+        catch (Exception ex) {
+            Logger.error(getLogTag(), IMAGE_FILE_SAVE_ERROR, ex);
+        }
+        return null;
+    }
+
+    // FarmQA end
 }
