@@ -24,7 +24,6 @@ export interface RemoveMarkersArgs {
   markerIds: string[];
 }
 
-
 export interface AddMarkerArgs {
   id: string;
   marker: Marker;
@@ -38,11 +37,11 @@ export interface AddMarkersArgs {
 export interface CapacitorGoogleMapsPlugin {
   create(args: CreateMapArgs): Promise<void>;
   addMarker(args: AddMarkerArgs): Promise<{ id: string }>;
-  addMarkers(args: AddMarkersArgs): Promise<{ ids: string[] }>;  
+  addMarkers(args: AddMarkersArgs): Promise<{ ids: string[] }>;
   removeMarker(args: RemoveMarkerArgs): Promise<void>;
   removeMarkers(args: RemoveMarkersArgs): Promise<void>;
-  enableClustering(args: {id: string}): Promise<void>;
-  disableClustering(args: {id: string}): Promise<void>;
+  enableClustering(args: { id: string }): Promise<void>;
+  disableClustering(args: { id: string }): Promise<void>;
   destroy(args: DestroyMapArgs): Promise<void>;
 }
 

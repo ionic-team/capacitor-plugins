@@ -60,7 +60,7 @@ export class GoogleMap {
     const res = await CapacitorGoogleMaps.addMarkers({
       id: this.id,
       markers,
-    })
+    });
 
     return res.ids;
   }

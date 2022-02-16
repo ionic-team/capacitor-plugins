@@ -42,7 +42,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
 
             let newMap = Map(id: id, config: config, delegate: self)
             self.maps[id] = newMap
-            
+
             call.resolve()
         } catch {
             handleError(call, error: error)
@@ -90,72 +90,71 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
             handleError(call, error: error)
         }
     }
-    
+
     @objc func addMarkers(_ call: CAPPluginCall) {
         do {
             guard let id = call.getString("id") else {
                 throw GoogleMapErrors.invalidMapId
             }
-            
+
             guard let markerObjs = call.getArray("markers") as? [JSObject] else {
                 throw GoogleMapErrors.invalidArguments("Markers array is missing")
             }
-            
+
             if markerObjs.isEmpty {
                 throw GoogleMapErrors.invalidArguments("Markers requires at least one marker")
             }
-            
+
             guard let map = self.maps[id] else {
                 throw GoogleMapErrors.mapNotFound
             }
-            
+
             var markers: [Marker] = []
-            
+
             try markerObjs.forEach { marker in
                 let marker = try Marker(fromJSObject: marker)
                 markers.append(marker)
             }
-            
+
             let ids = try map.addMarkers(markers: markers)
-            
+
             call.resolve(["ids": ids.map({ id in
                 return String(id)
             })])
-            
-            
+
         } catch {
             handleError(call, error: error)
         }
     }
-    
+
     @objc func removeMarkers(_ call: CAPPluginCall) {
         do {
             guard let id = call.getString("id") else {
                 throw GoogleMapErrors.invalidMapId
             }
-            
+
             guard let markerIdStrings = call.getArray("markerIds") as? [String] else {
                 throw GoogleMapErrors.invalidArguments("markerIds are invalid or missing")
             }
-            
+
             if markerIdStrings.isEmpty {
                 throw GoogleMapErrors.invalidArguments("markerIds requires at least one marker id")
             }
-            
+
             let ids: [Int] = try markerIdStrings.map { idString in
                 guard let markerId = Int(idString) else {
                     throw GoogleMapErrors.invalidArguments("markerIds are invalid or missing")
                 }
-                
+
                 return markerId
             }
-            
+
             guard let map = self.maps[id] else {
                 throw GoogleMapErrors.mapNotFound
             }
-            
+
             try map.removeMarkers(ids: ids)
-            
+
             call.resolve()
         } catch {
             handleError(call, error: error)
@@ -188,35 +187,35 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
             handleError(call, error: error)
         }
     }
-    
+
     @objc func enableClustering(_ call: CAPPluginCall) {
         do {
             guard let id = call.getString("id") else {
                 throw GoogleMapErrors.invalidMapId
             }
-            
+
             guard let map = self.maps[id] else {
                 throw GoogleMapErrors.mapNotFound
             }
-            
+
             map.enableClustering()
             call.resolve()
-            
+
         } catch {
             handleError(call, error: error)
         }
     }
-    
+
     @objc func disableClustering(_ call: CAPPluginCall) {
         do {
             guard let id = call.getString("id") else {
                 throw GoogleMapErrors.invalidMapId
             }
-            
+
             guard let map = self.maps[id] else {
                 throw GoogleMapErrors.mapNotFound
             }
-            
+
             map.disableClustering()
             call.resolve()
         } catch {
