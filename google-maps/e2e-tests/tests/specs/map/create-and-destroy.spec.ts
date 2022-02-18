@@ -27,22 +27,28 @@ describe('Google Maps - Create and Destroy Map', function () {
   it('should create and destroy a map', async function() {
     const createMapButton = await CreateAndDestroyMapPage.createMapButton;
     const destroyMapButton = await CreateAndDestroyMapPage.destroyMapButton;
-
-    const commandOutput = await $((await CreateAndDestroyMapPage.commandOutputTextarea).selector).$('textarea');
+    const getCommandOutputText = async function() {
+      return (await CreateAndDestroyMapPage.commandOutputTextarea).getValue();
+    }
 
     await createMapButton.tap();
-    await expect(commandOutput).toHaveValue('Maps created');
+    await pause(500);
+    await expect(await getCommandOutputText()).toBe('Maps created');
 
     await destroyMapButton.tap();
-    await expect(commandOutput).toHaveValue('Maps destroyed');
+    await pause(500);
+    await expect(await getCommandOutputText()).toBe('Maps destroyed');
   });
 
   it('should throw when attempting to destroy a non-existent map', async function() {
     const destroyMapButton = await CreateAndDestroyMapPage.destroyMapButton;
-    const commandOutput = await $((await CreateAndDestroyMapPage.commandOutputTextarea).selector).$('textarea');
+    const getCommandOutputText = async function() {
+      return (await CreateAndDestroyMapPage.commandOutputTextarea).getValue();
+    }
 
     await destroyMapButton.tap();
-    await expect(commandOutput).toHaveValue('Map not found for provided id.');
+    await pause(100);
+    await expect(await getCommandOutputText()).toBe('Map not found for provided id.');
   });
 
 
