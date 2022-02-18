@@ -36,7 +36,7 @@ class GMViewController: UIViewController {
         self.clusterManager = GMUClusterManager(map: self.GMapView, algorithm: algorithm, renderer: renderer)
     }
 
-    func destroyClusterManager() {
+    func destroyClusterManager() {        
         self.clusterManager = nil
     }
 
@@ -52,6 +52,7 @@ class GMViewController: UIViewController {
             markers.forEach { marker in
                 clusterManager.remove(marker)
             }
+            clusterManager.cluster()
         }
     }
 }
