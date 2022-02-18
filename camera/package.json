@@ -11,7 +11,7 @@
     "android/build.gradle",
     "dist/",
     "ios/Plugin/",
-    "CapacitorCamera.podspec"
+    "FarmqaCapacitorCamera.podspec"
   ],
   "author": "Ionic <hi@ionicframework.com>",
   "license": "MIT",
