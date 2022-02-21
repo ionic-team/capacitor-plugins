@@ -129,7 +129,7 @@ jobs:
           path: |
             ~/.android/avd/*
             ~/.android/adb*
-          key: avd-adb-p3a-30-cache
+          key: avd-adb-p3a-30-cache-2
 
       - name: Create AVD and generate snapshot for caching
         if: steps.avd-cache.outputs.cache-hit != 'true'
