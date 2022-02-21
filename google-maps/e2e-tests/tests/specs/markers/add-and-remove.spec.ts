@@ -38,6 +38,7 @@ describe('Google Maps - Add and Remove Marker', function () {
     await expect(await getCommandOutputText()).toBe('Map created');
 
     await addMarkerButton.tap();
+    await pause(500);
     await expect(await getCommandOutputText()).toContain('Marker added: ');
 
     const markerId = (await getCommandOutputText()).replace("Marker added: ", "");  
@@ -51,6 +52,7 @@ describe('Google Maps - Add and Remove Marker', function () {
     const commandOutput = await $((await AddAndRemoveMarkers.commandOutputTextarea).selector).$('textarea');
 
     await removeMarkerButton.tap();
+    await pause(500);
     await expect(commandOutput).toHaveValueContaining(`Marker removed: ${createdMarkerId}`);
   });
 
@@ -59,6 +61,7 @@ describe('Google Maps - Add and Remove Marker', function () {
     const commandOutput = await $((await AddAndRemoveMarkers.commandOutputTextarea).selector).$('textarea');
 
     await removeMarkerButton.tap();
+    await pause(500);
     await expect(commandOutput).toHaveValueContaining(`Marker not found for provided id.`);
   });
 });
