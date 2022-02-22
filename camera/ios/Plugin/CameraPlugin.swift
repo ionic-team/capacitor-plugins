@@ -9,7 +9,6 @@ public class CameraPlugin: CAPPlugin {
     private var settings = CameraSettings()
     private let defaultSource = CameraSource.prompt
     private let defaultDirection = CameraDirection.rear
-    private let defaultDirectory = FileSystemDirectory.cache
     private var multiple = false
 
     private var imageCounter = 0
