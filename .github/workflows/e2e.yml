@@ -117,6 +117,9 @@ jobs:
       - name: Setup NPMRC
         run: echo "//registry.npmjs.org/:_authToken=${{secrets.E2E_NPM_TOKEN}}" > .npmrc
 
+      - name: Setup local.properties
+        run: echo "REACT_APP_GOOGLE_MAPS_API_KEY=${{secrets.REACT_APP_GOOGLE_MAPS_API_KEY}}" > android/local.properties
+
       - name: Install Packages
         run: npm install
         env:
