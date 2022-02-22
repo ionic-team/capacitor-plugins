@@ -36,6 +36,10 @@ public class SharePlugin: CAPPlugin {
             }
 
             actionController.completionWithItemsHandler = { (activityType, completed, _ returnedItems, activityError) in
+
+                self?.bridge?.webView?.frame.size.height = UIScreen.main.bounds.size.height;
+                self?.bridge?.webView?.frame.origin.y = 0;
+                
                 if activityError != nil {
                     call.reject("Error sharing item", nil, activityError)
                     return
