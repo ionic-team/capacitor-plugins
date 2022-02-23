@@ -8,7 +8,8 @@ def getApiKey() {
     Properties properties = new Properties()
     if (project.rootProject.file('local.properties').canRead()) {
         properties.load(project.rootProject.file('local.properties').newDataInputStream())
-        if(properties.contains('REACT_APP_GOOGLE_MAPS_API_KEY')) {
+
+        if(properties.containsKey("REACT_APP_GOOGLE_MAPS_API_KEY")) {
             return properties['REACT_APP_GOOGLE_MAPS_API_KEY']
         } 
     }
