@@ -13,6 +13,7 @@ const CreateAndDestroyMapPage: React.FC = () => {
         setCommandOutput("");
         setMaps([]);
         try {
+            const viewportWidth = window.outerWidth;
             const newMap1 = await GoogleMap.create("test-map", apiKey!, {
                 center: {
                     lat: 33.6,
@@ -20,10 +21,10 @@ const CreateAndDestroyMapPage: React.FC = () => {
                 },
                 zoom: 8,
                 androidLiteMode: false,
-                height: 300,
-                width: 300,
+                height: viewportWidth / 2,
+                width: viewportWidth / 2,
                 x: 0,
-                y: 200,
+                y: window.innerHeight - (viewportWidth / 2),
             });
 
             const newMap2 = await GoogleMap.create("test-map2", apiKey!, {
@@ -33,10 +34,10 @@ const CreateAndDestroyMapPage: React.FC = () => {
                 },
                 zoom: 6,
                 androidLiteMode: false,
-                height: 200,
-                width: 200,
-                x: 100,
-                y: 550,
+                height: viewportWidth / 2,
+                width: viewportWidth / 2,
+                x: viewportWidth / 2,
+                y: window.innerHeight - (viewportWidth / 2),
             });
     
             setMaps([newMap1, newMap2]);
