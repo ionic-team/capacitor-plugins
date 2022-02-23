@@ -36,6 +36,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -232,7 +233,7 @@ public class CameraPlugin extends Plugin {
             return null;
         }
         try {
-            return CameraResultType.valueOf(resultType.toUpperCase());
+            return CameraResultType.valueOf(resultType.toUpperCase(Locale.ROOT));
         } catch (IllegalArgumentException ex) {
             Logger.debug(getLogTag(), "Invalid result type \"" + resultType + "\", defaulting to base64");
             return CameraResultType.BASE64;
@@ -493,15 +494,21 @@ public class CameraPlugin extends Plugin {
     private Uri saveImage(Uri uri, InputStream is) throws IOException {
         File outFile = null;
         if (uri.getScheme().equals("content")) {
-            String filename = Uri.parse(Uri.decode(uri.toString())).getLastPathSegment();
-            if (!filename.contains(".jpg") && !filename.contains(".jpeg")) {
-                filename += "." + (new java.util.Date()).getTime() + ".jpeg";
-            }
-            File cacheDir = getContext().getCacheDir();
-            outFile = new File(cacheDir, filename);
+            outFile = getTempFile(uri);
         } else {
             outFile = new File(uri.getPath());
         }
+        try {
+            writePhoto(outFile, is);
+        } catch (FileNotFoundException ex) {
+            // Some gallery apps return read only file url, create a temporary file for modifications
+            outFile = getTempFile(uri);
+            writePhoto(outFile, is);
+        }
+        return Uri.fromFile(outFile);
+    }
+
+    private void writePhoto(File outFile, InputStream is) throws IOException {
         FileOutputStream fos = new FileOutputStream(outFile);
         byte[] buffer = new byte[1024];
         int len;
@@ -509,7 +516,15 @@ public class CameraPlugin extends Plugin {
             fos.write(buffer, 0, len);
         }
         fos.close();
-        return Uri.fromFile(outFile);
+    }
+
+    private File getTempFile(Uri uri) {
+        String filename = Uri.parse(Uri.decode(uri.toString())).getLastPathSegment();
+        if (!filename.contains(".jpg") && !filename.contains(".jpeg")) {
+            filename += "." + (new java.util.Date()).getTime() + ".jpeg";
+        }
+        File cacheDir = getContext().getCacheDir();
+        return new File(cacheDir, filename);
     }
 
     /**
