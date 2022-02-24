@@ -1,4 +1,4 @@
-import { IonicButton, IonicInput } from '@ionic/e2e-components-ionic';
+import { IonicButton, IonicTextarea } from '@ionic/e2e-components-ionic';
 
 import Page from '../page';
 
@@ -10,7 +10,7 @@ class CreateAndDestroyMapPage extends Page {
         return new IonicButton("#destroyMapButton");
     }
     get commandOutputTextarea() {
-        return new IonicInput('#commandOutput');
+        return new IonicTextarea('#commandOutput');
       }
 }
 

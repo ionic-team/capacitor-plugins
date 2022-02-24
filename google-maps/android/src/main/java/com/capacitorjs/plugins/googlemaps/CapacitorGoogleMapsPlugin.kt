@@ -1,6 +1,7 @@
 package com.capacitorjs.plugins.googlemaps
 
 import android.util.Log
+import com.getcapacitor.JSObject
 import com.getcapacitor.Bridge
 import com.getcapacitor.Plugin
 import com.getcapacitor.PluginCall
@@ -67,6 +68,53 @@ class CapacitorGoogleMapsPlugin : Plugin() {
             handleError(call, e)
         }
         catch (e: Exception) {
+            handleError(call, e)
+        }
+    }
+
+    @PluginMethod
+    fun addMarker(call: PluginCall) {
+        try {
+            val id = call.getString("id")
+            id ?: throw InvalidMapIdError()
+
+            val markerObj = call.getObject("marker", null)
+            markerObj ?: throw InvalidArgumentsError("Marker object is missing")
+
+            val map = maps[id]
+            map ?: throw MapNotFoundError()
+
+            val marker = CapacitorGoogleMapMarker(markerObj)
+            val markerId = map.addMarker(marker)
+
+            val res = JSObject()
+            res.put("id", markerId)
+            call.resolve(res)
+        } catch (e: GoogleMapsError) {
+            handleError(call, e)
+        } catch(e: Exception) {
+            handleError(call, e)
+        }
+    }
+
+    @PluginMethod
+    fun removeMarker(call: PluginCall) {
+        try {
+            val id = call.getString("id")
+            id ?: throw InvalidMapIdError()
+
+            val markerId = call.getString("markerId")
+            markerId ?: throw InvalidArgumentsError("marker id is invalid or missing")
+
+            val map = maps[id]
+            map ?: throw MapNotFoundError()
+
+            map.removeMarker(markerId)
+
+            call.resolve()
+        } catch (e: GoogleMapsError) {
+            handleError(call, e)
+        } catch(e: Exception) {
             handleError(call, e)
         }
     }

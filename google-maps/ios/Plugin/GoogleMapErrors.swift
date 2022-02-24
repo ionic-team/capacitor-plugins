@@ -3,6 +3,7 @@ import Foundation
 public enum GoogleMapErrors: Error {
     case invalidMapId
     case mapNotFound
+    case markerNotFound
     case invalidArguments(_ description: String)
     case invalidAPIKey
     case unhandledError(_ description: String)
@@ -29,10 +30,12 @@ public func getErrorObject(_ error: Error) -> GoogleMapErrorObject {
         return GoogleMapErrorObject(1, "Missing or invalid map id.")
     case GoogleMapErrors.mapNotFound:
         return GoogleMapErrorObject(2, "Map not found for provided id.")
+    case GoogleMapErrors.markerNotFound:
+        return GoogleMapErrorObject(3, "Marker not found for provided id.")
     case GoogleMapErrors.invalidArguments(let msg):
-        return GoogleMapErrorObject(3, "Invalid Arguments Provided: \(msg)")
+        return GoogleMapErrorObject(4, "Invalid Arguments Provided: \(msg)")
     case GoogleMapErrors.invalidAPIKey:
-        return GoogleMapErrorObject(4, "Missing or invalid Google Maps SDK API key.")
+        return GoogleMapErrorObject(5, "Missing or invalid Google Maps SDK API key.")
     case GoogleMapErrors.unhandledError(let msg):
         return GoogleMapErrorObject(0, "Unhandled Error: \(msg)")
     default:
