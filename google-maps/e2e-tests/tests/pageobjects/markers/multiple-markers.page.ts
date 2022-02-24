@@ -1,4 +1,4 @@
-import { IonicButton, IonicInput } from '@ionic/e2e-components-ionic';
+import { IonicButton, IonicTextarea } from '@ionic/e2e-components-ionic';
 
 import Page from "../page";
 
@@ -19,7 +19,7 @@ class MultipleMarkers extends Page {
         return new IonicButton("#removeMarkersButton")
     }
     get commandOutputTextarea() {
-        return new IonicInput('#commandOutput');
+        return new IonicTextarea('#commandOutput');
     }
 }
 

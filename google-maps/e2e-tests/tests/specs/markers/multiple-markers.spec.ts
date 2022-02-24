@@ -29,9 +29,11 @@ describe('Google Maps - Multiple Markers', function () {
         const commandOutput = await $((await MultipleMarkers.commandOutputTextarea).selector).$('textarea');
 
         await createMapButton.tap();
+        await pause(500);
         await expect(commandOutput).toHaveValue('Map created');
 
         await addMarkersButton.tap();
+        await pause(500);
         await expect(commandOutput).toHaveValueContaining('4 markers added');
       })
 
@@ -41,9 +43,11 @@ describe('Google Maps - Multiple Markers', function () {
           const commandOutput = await $((await MultipleMarkers.commandOutputTextarea).selector).$('textarea');
 
           await enableClusteringButton.tap();
+          await pause(500);
           await expect(commandOutput).toHaveValue('marker clustering enabled');
 
           await disableClusteringButton.tap();
+          await pause(500);
           await expect(commandOutput).toHaveValue('marker clustering disabled');
     })
 
@@ -52,6 +56,7 @@ describe('Google Maps - Multiple Markers', function () {
         const commandOutput = await $((await MultipleMarkers.commandOutputTextarea).selector).$('textarea');
 
         await removeMarkersButton.tap()
+        await pause(500);
         await expect(commandOutput).toHaveValue('4 markers removed');
     })
 
@@ -60,6 +65,7 @@ describe('Google Maps - Multiple Markers', function () {
         const commandOutput = await $((await MultipleMarkers.commandOutputTextarea).selector).$('textarea');
 
         await removeMarkersButton.tap()
+        await pause(500);
         await expect(commandOutput).toHaveValue('Invalid Arguments Provided: markerIds requires at least one marker id.');
     })
 })
