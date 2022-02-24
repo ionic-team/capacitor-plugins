@@ -70,7 +70,6 @@ const AddAndRemoveMarkers: React.FC = () => {
         }
     }
 
-
     return (
         <BaseTestingPage pageTitle="Add and Remove Markers">
             <div>

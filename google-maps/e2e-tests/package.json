@@ -78,8 +78,8 @@
   },
   "devDependencies": {
     "@capacitor/cli": "3.3.4",
-    "@ionic/e2e": "0.2.0-next.4",
-    "@ionic/e2e-components-ionic": "0.2.0-next.4",
+    "@ionic/e2e": "0.2.0-next.6",
+    "@ionic/e2e-components-ionic": "0.2.0-next.6",
     "appium": "^1.22.1"
   },
   "description": "An Ionic project"

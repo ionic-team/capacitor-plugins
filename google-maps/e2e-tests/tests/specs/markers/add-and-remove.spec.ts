@@ -29,15 +29,19 @@ describe('Google Maps - Add and Remove Marker', function () {
   it("should create a map and add a marker", async function() {
     const createMapButton = await AddAndRemoveMarkers.createMapButton;
     const addMarkerButton = await AddAndRemoveMarkers.addMarkerButton;
-    const commandOutput = await $((await AddAndRemoveMarkers.commandOutputTextarea).selector).$('textarea');
+    const getCommandOutputText = async function() {
+      return (await AddAndRemoveMarkers.commandOutputTextarea).getValue();
+    }
 
     await createMapButton.tap();
-    await expect(commandOutput).toHaveValue('Map created');
+    await pause(500);
+    await expect(await getCommandOutputText()).toBe('Map created');
 
     await addMarkerButton.tap();
-    await expect(commandOutput).toHaveValueContaining('Marker added: ');
+    await pause(500);
+    await expect(await getCommandOutputText()).toContain('Marker added: ');
 
-    const markerId = (await commandOutput.getValue()).replace("Marker added: ", "");    
+    const markerId = (await getCommandOutputText()).replace("Marker added: ", "");  
     await expect(markerId).not.toBeFalsy();
 
     createdMarkerId = markerId;
@@ -48,6 +52,7 @@ describe('Google Maps - Add and Remove Marker', function () {
     const commandOutput = await $((await AddAndRemoveMarkers.commandOutputTextarea).selector).$('textarea');
 
     await removeMarkerButton.tap();
+    await pause(500);
     await expect(commandOutput).toHaveValueContaining(`Marker removed: ${createdMarkerId}`);
   });
 
@@ -56,6 +61,7 @@ describe('Google Maps - Add and Remove Marker', function () {
     const commandOutput = await $((await AddAndRemoveMarkers.commandOutputTextarea).selector).$('textarea');
 
     await removeMarkerButton.tap();
+    await pause(500);
     await expect(commandOutput).toHaveValueContaining(`Marker not found for provided id.`);
   });
 });
