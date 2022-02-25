@@ -225,92 +225,92 @@ public class Map {
             throw GoogleMapErrors.markerNotFound
         }
     }
-    
+
     func setCamera(config: GoogleMapCameraConfig) throws {
         guard let mapViewController = mapViewController else {
             throw GoogleMapErrors.unhandledError("map view controller not available")
         }
 
-        let currentCamera = mapViewController.GMapView.camera        
-        
+        let currentCamera = mapViewController.GMapView.camera
+
         let lat = config.coordinate?.lat ?? currentCamera.target.latitude
         let lng = config.coordinate?.lng ?? currentCamera.target.longitude
-        
+
         let zoom = config.zoom ?? currentCamera.zoom
         let bearing = config.bearing ?? Double(currentCamera.bearing)
         let angle = config.angle ?? currentCamera.viewingAngle
-        
+
         let animate = config.animate ?? false
-        
+
         DispatchQueue.main.sync {
             let newCamera = GMSCameraPosition(latitude: lat, longitude: lng, zoom: zoom, bearing: bearing, viewingAngle: angle)
-            
+
             if animate {
                 mapViewController.GMapView.animate(to: newCamera)
             } else {
                 mapViewController.GMapView.camera = newCamera
             }
         }
-        
+
     }
-    
+
     func setMapType(mapType: GMSMapViewType) throws {
         guard let mapViewController = mapViewController else {
             throw GoogleMapErrors.unhandledError("map view controller not available")
         }
-        
+
         DispatchQueue.main.sync {
             mapViewController.GMapView.mapType = mapType
         }
     }
-    
+
     func enableIndoorMaps(enabled: Bool) throws {
         guard let mapViewController = mapViewController else {
             throw GoogleMapErrors.unhandledError("map view controller not available")
         }
-        
+
         DispatchQueue.main.sync {
             mapViewController.GMapView.isIndoorEnabled = enabled
         }
     }
-    
+
     func enableTrafficLayer(enabled: Bool) throws {
         guard let mapViewController = mapViewController else {
             throw GoogleMapErrors.unhandledError("map view controller not available")
         }
-        
+
         DispatchQueue.main.sync {
             mapViewController.GMapView.isTrafficEnabled = enabled
         }
     }
-    
+
     func enableAccessibilityElements(enabled: Bool) throws {
         guard let mapViewController = mapViewController else {
             throw GoogleMapErrors.unhandledError("map view controller not available")
         }
-        
+
         DispatchQueue.main.sync {
             mapViewController.GMapView.accessibilityElementsHidden = enabled
         }
     }
-    
+
     func enableCurrentLocation(enabled: Bool) throws {
         guard let mapViewController = mapViewController else {
             throw GoogleMapErrors.unhandledError("map view controller not available")
         }
-        
+
         DispatchQueue.main.sync {
             mapViewController.GMapView.isMyLocationEnabled = enabled
         }
     }
-    
+
     func setPadding(padding: GoogleMapPadding) throws {
         guard let mapViewController = mapViewController else {
             throw GoogleMapErrors.unhandledError("map view controller not available")
         }
-        
+
         DispatchQueue.main.sync {
-            let mapInsets = UIEdgeInsets(top: CGFloat(padding.top), left:  CGFloat(padding.left), bottom:  CGFloat(padding.bottom), right:  CGFloat(padding.right))
+            let mapInsets = UIEdgeInsets(top: CGFloat(padding.top), left: CGFloat(padding.left), bottom: CGFloat(padding.bottom), right: CGFloat(padding.right))
             mapViewController.GMapView.padding = mapInsets
         }
     }

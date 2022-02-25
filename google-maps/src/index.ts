@@ -1,2 +1,2 @@
 export * from './map';
-export { MapType } from "./definitions";
+export { MapType } from './definitions';

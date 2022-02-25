@@ -1,6 +1,11 @@
 import { registerPlugin } from '@capacitor/core';
 
-import type { CameraConfig, GoogleMapConfig, MapPadding, MapType } from './definitions';
+import type {
+  CameraConfig,
+  GoogleMapConfig,
+  MapPadding,
+  MapType,
+} from './definitions';
 import type { Marker } from './map';
 
 export interface CreateMapArgs {
@@ -29,7 +34,7 @@ export interface AddMarkerArgs {
   marker: Marker;
 }
 
-export interface CameraArgs{
+export interface CameraArgs {
   id: string;
   config: CameraConfig;
 }
@@ -49,7 +54,7 @@ export interface TrafficLayerArgs {
   enabled: boolean;
 }
 
-export interface AccElementsArgs{
+export interface AccElementsArgs {
   id: string;
   enabled: boolean;
 }

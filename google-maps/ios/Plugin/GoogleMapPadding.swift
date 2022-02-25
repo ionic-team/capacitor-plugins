@@ -6,7 +6,7 @@ public struct GoogleMapPadding {
     let bottom: Float
     let left: Float
     let right: Float
-    
+
     init(fromJSObject: JSObject) throws {
         top = fromJSObject["top"] as? Float ?? 0
         bottom = fromJSObject["bottom"] as? Float ?? 0
