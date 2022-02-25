@@ -30,8 +30,6 @@ const AddAndRemoveMarkers: React.FC = () => {
             setCommandOutput(err.message);
         }
     }
-    
-    
 
     async function addMarker() {
         try {
@@ -43,7 +41,8 @@ const AddAndRemoveMarkers: React.FC = () => {
                 coordinate: {
                     lat: 33.6,
                     lng: -117.9,
-                }
+                },
+                title: "Hello world",
             });
 
             setMarkerId(id);    
@@ -74,15 +73,15 @@ const AddAndRemoveMarkers: React.FC = () => {
     return (
         <BaseTestingPage pageTitle="Add and Remove Markers">
             <div>
-                <IonButton expand="block" id="createMapButton" onClick={createMap}>
+                <IonButton  id="createMapButton" onClick={createMap}>
                     Create Map
                 </IonButton>
-                <IonButton expand="block" id="addMarkerButton" onClick={addMarker}>
+                <IonButton  id="addMarkerButton" onClick={addMarker}>
                     Add 1 Marker
                 </IonButton>    
-                <IonButton expand="block" id="removeMarkerButton" onClick={removeMarker}>
+                <IonButton id="removeMarkerButton" onClick={removeMarker}>
                     Remove Marker
-                </IonButton>               
+                </IonButton>                
             </div>
             <div>
                 <IonTextarea id="commandOutput" value={commandOutput}></IonTextarea>

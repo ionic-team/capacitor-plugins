@@ -4,6 +4,7 @@ import type {
   AccElementsArgs,
   AddMarkerArgs,
   CameraArgs,
+  AddMarkersArgs,
   CapacitorGoogleMapsPlugin,
   CreateMapArgs,
   CurrentLocArgs,
@@ -13,6 +14,7 @@ import type {
   PaddingArgs,
   RemoveMarkerArgs,
   TrafficLayerArgs,
+  RemoveMarkersArgs,
 } from './implementation';
 
 export class CapacitorGoogleMapsWeb
@@ -38,6 +40,18 @@ export class CapacitorGoogleMapsWeb
     throw new Error('Method not implemented.');
   }
   setPadding(_args: PaddingArgs): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
+  addMarkers(_args: AddMarkersArgs): Promise<{ ids: string[] }> {
+    throw new Error('Method not implemented.');
+  }
+  removeMarkers(_args: RemoveMarkersArgs): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
+  enableClustering(_args: { id: string }): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
+  disableClustering(_args: { id: string }): Promise<void> {
     throw new Error('Method not implemented.');
   }
   addMarker(_args: AddMarkerArgs): Promise<{ id: string }> {

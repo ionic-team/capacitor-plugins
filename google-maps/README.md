@@ -15,7 +15,11 @@ npx cap sync
 
 * [`create(...)`](#create)
 * [`addMarker(...)`](#addmarker)
+* [`addMarkers(...)`](#addmarkers)
 * [`removeMarker(...)`](#removemarker)
+* [`removeMarkers(...)`](#removemarkers)
+* [`enableClustering(...)`](#enableclustering)
+* [`disableClustering(...)`](#disableclustering)
 * [`destroy(...)`](#destroy)
 * [`setCamera(...)`](#setcamera)
 * [`setMapType(...)`](#setmaptype)
@@ -60,6 +64,21 @@ addMarker(args: AddMarkerArgs) => Promise<{ id: string; }>
 --------------------
 
 
+### addMarkers(...)
+
+```typescript
+addMarkers(args: AddMarkersArgs) => Promise<{ ids: string[]; }>
+```
+
+| Param      | Type                                                      |
+| ---------- | --------------------------------------------------------- |
+| **`args`** | <code><a href="#addmarkersargs">AddMarkersArgs</a></code> |
+
+**Returns:** <code>Promise&lt;{ ids: string[]; }&gt;</code>
+
+--------------------
+
+
 ### removeMarker(...)
 
 ```typescript
@@ -69,6 +88,45 @@ removeMarker(args: RemoveMarkerArgs) => Promise<void>
 | Param      | Type                                                          |
 | ---------- | ------------------------------------------------------------- |
 | **`args`** | <code><a href="#removemarkerargs">RemoveMarkerArgs</a></code> |
+
+--------------------
+
+
+### removeMarkers(...)
+
+```typescript
+removeMarkers(args: RemoveMarkersArgs) => Promise<void>
+```
+
+| Param      | Type                                                            |
+| ---------- | --------------------------------------------------------------- |
+| **`args`** | <code><a href="#removemarkersargs">RemoveMarkersArgs</a></code> |
+
+--------------------
+
+
+### enableClustering(...)
+
+```typescript
+enableClustering(args: { id: string; }) => Promise<void>
+```
+
+| Param      | Type                         |
+| ---------- | ---------------------------- |
+| **`args`** | <code>{ id: string; }</code> |
+
+--------------------
+
+
+### disableClustering(...)
+
+```typescript
+disableClustering(args: { id: string; }) => Promise<void>
+```
+
+| Param      | Type                         |
+| ---------- | ---------------------------- |
+| **`args`** | <code>{ id: string; }</code> |
 
 --------------------
 
@@ -232,12 +290,28 @@ setPadding(args: PaddingArgs) => Promise<void>
 | **`draggable`**  | <code>boolean</code>                      |
 
 
+#### AddMarkersArgs
+
+| Prop          | Type                  |
+| ------------- | --------------------- |
+| **`id`**      | <code>string</code>   |
+| **`markers`** | <code>Marker[]</code> |
+
+
 #### RemoveMarkerArgs
 
 | Prop           | Type                |
 | -------------- | ------------------- |
 | **`id`**       | <code>string</code> |
 | **`markerId`** | <code>string</code> |
+
+
+#### RemoveMarkersArgs
+
+| Prop            | Type                  |
+| --------------- | --------------------- |
+| **`id`**        | <code>string</code>   |
+| **`markerIds`** | <code>string[]</code> |
 
 
 #### DestroyMapArgs

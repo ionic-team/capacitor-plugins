@@ -19,6 +19,11 @@ export interface RemoveMarkerArgs {
   markerId: string;
 }
 
+export interface RemoveMarkersArgs {
+  id: string;
+  markerIds: string[];
+}
+
 export interface AddMarkerArgs {
   id: string;
   marker: Marker;
@@ -58,11 +63,19 @@ export interface CurrentLocArgs {
   id: string;
   enabled: boolean;
 }
+export interface AddMarkersArgs {
+  id: string;
+  markers: Marker[];
+}
 
 export interface CapacitorGoogleMapsPlugin {
   create(args: CreateMapArgs): Promise<void>;
   addMarker(args: AddMarkerArgs): Promise<{ id: string }>;
+  addMarkers(args: AddMarkersArgs): Promise<{ ids: string[] }>;
   removeMarker(args: RemoveMarkerArgs): Promise<void>;
+  removeMarkers(args: RemoveMarkersArgs): Promise<void>;
+  enableClustering(args: { id: string }): Promise<void>;
+  disableClustering(args: { id: string }): Promise<void>;
   destroy(args: DestroyMapArgs): Promise<void>;
   setCamera(args: CameraArgs): Promise<void>;
   setMapType(args: MapTypeArgs): Promise<void>;

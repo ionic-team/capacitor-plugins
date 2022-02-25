@@ -4,19 +4,22 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import com.getcapacitor.Bridge
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.MapView
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.coroutines.*
-import com.google.android.libraries.maps.MapView
-import com.google.android.libraries.maps.GoogleMap
-import com.google.android.libraries.maps.OnMapReadyCallback
-import com.google.android.libraries.maps.model.Marker
-import com.google.android.libraries.maps.model.MarkerOptions
+
+import com.google.maps.android.clustering.ClusterManager
 import kotlinx.coroutines.channels.Channel
 
 class CapacitorGoogleMap(val id: String, val config: GoogleMapConfig,
                          val delegate: CapacitorGoogleMapsPlugin) : OnMapReadyCallback {
     private var mapView: MapView? = null
     private var googleMap: GoogleMap? = null
-    private val markers = HashMap<String, Marker>()
+    private val markers = HashMap<String, CapacitorGoogleMapMarker>()
+    private var clusterManager: ClusterManager<CapacitorGoogleMapMarker>? = null
 
     private val isReadyChannel = Channel<Boolean>()
 
@@ -29,7 +32,7 @@ class CapacitorGoogleMap(val id: String, val config: GoogleMapConfig,
             withContext(Dispatchers.Main) {
                 val bridge = delegate.bridge
 
-                val mapView = MapView(bridge.context, this@CapacitorGoogleMap.config.googleMapOptions)
+                val mapView = MapView(bridge.context, config.googleMapOptions)
                 mapView.onCreate(null)
                 mapView.onStart()
                 mapView.getMapAsync(this@CapacitorGoogleMap)
@@ -53,14 +56,14 @@ class CapacitorGoogleMap(val id: String, val config: GoogleMapConfig,
                 val mapViewParent = FrameLayout(bridge.context)
                 val layoutParams =
                         FrameLayout.LayoutParams(
-                                getScaledPixels(bridge, this@CapacitorGoogleMap.config.width),
-                                getScaledPixels(bridge, this@CapacitorGoogleMap.config.height),
+                                getScaledPixels(bridge, config.width),
+                                getScaledPixels(bridge, config.height),
                         )
-                layoutParams.leftMargin = getScaledPixels(bridge, this@CapacitorGoogleMap.config.x)
-                layoutParams.topMargin = getScaledPixels(bridge, this@CapacitorGoogleMap.config.y)
+                layoutParams.leftMargin = getScaledPixels(bridge, config.x)
+                layoutParams.topMargin = getScaledPixels(bridge, config.y)
 
-                mapViewParent.tag = this@CapacitorGoogleMap.id
-                this@CapacitorGoogleMap.mapView!!.layoutParams = layoutParams
+                mapViewParent.tag = id
+                mapView!!.layoutParams = layoutParams
                 mapViewParent.addView(mapView)
 
                 ((bridge.webView.parent) as ViewGroup).addView(mapViewParent)
@@ -73,15 +76,47 @@ class CapacitorGoogleMap(val id: String, val config: GoogleMapConfig,
             withContext(Dispatchers.Main) {
                 val bridge = delegate.bridge
 
-                val viewToRemove: View? = ((bridge.webView.parent) as ViewGroup).findViewWithTag(this@CapacitorGoogleMap.id)
+                val viewToRemove: View? = ((bridge.webView.parent) as ViewGroup).findViewWithTag(id)
                 if (null != viewToRemove) {
                     ((bridge.webView.parent) as ViewGroup).removeView(viewToRemove)
                 }
-                this@CapacitorGoogleMap.mapView?.onDestroy()
-                this@CapacitorGoogleMap.mapView = null
-                this@CapacitorGoogleMap.googleMap = null
+                mapView?.onDestroy()
+                mapView = null
+                googleMap = null
+                clusterManager = null
             }
         }
+    }
+
+    fun addMarkers(newMarkers: List<CapacitorGoogleMapMarker>): List<String> {
+        googleMap ?: throw GoogleMapsError("google map is not available")
+
+        val markerIds: MutableList<String> = mutableListOf()
+
+        runBlocking {
+            withContext(Dispatchers.Main) {
+                newMarkers.forEach {
+                    val googleMapMarker = googleMap?.addMarker(it.getMarkerOptions())
+
+                    if (clusterManager == null) {
+                        it.googleMapMarker = googleMapMarker
+                    } else {
+                        googleMapMarker?.remove()
+                    }
+
+                    markers[googleMapMarker!!.id] = it
+                    markerIds.add(googleMapMarker!!.id)
+                }
+
+                if (clusterManager != null) {
+                    clusterManager?.addItems(newMarkers)
+                    clusterManager?.cluster()
+                }
+            }
+        }
+
+
+        return markerIds
     }
 
     fun addMarker(marker: CapacitorGoogleMapMarker): String {
@@ -91,22 +126,71 @@ class CapacitorGoogleMap(val id: String, val config: GoogleMapConfig,
 
         runBlocking {
             withContext(Dispatchers.Main) {
-                val markerOptions = MarkerOptions()
-                markerOptions.position(marker.coordinate)
-                markerOptions.title(marker.title)
-                markerOptions.snippet(marker.snippet)
-                markerOptions.alpha(marker.opacity)
-                markerOptions.flat(marker.isFlat)
-                markerOptions.draggable(marker.draggable)
+                val googleMapMarker = googleMap?.addMarker(marker.getMarkerOptions())
 
-                val newMarker = googleMap!!.addMarker(markerOptions)
-                markers[newMarker.id] = newMarker
+                if (clusterManager == null) {
+                    marker.googleMapMarker = googleMapMarker
+                } else {
+                    googleMapMarker?.remove()
+                    clusterManager?.addItem(marker)
+                    clusterManager?.cluster()
+                }
 
-                markerId = newMarker.id
+                markers[googleMapMarker!!.id] = marker
+
+                markerId = googleMapMarker.id
             }
         }
 
         return markerId
+    }
+
+    fun enableClustering() {
+        googleMap ?: throw GoogleMapsError("google map is not available")
+
+        if (clusterManager != null) {
+            return
+        }
+
+        runBlocking {
+            withContext(Dispatchers.Main) {
+                val bridge = delegate.bridge
+                clusterManager = ClusterManager(bridge.context, googleMap)
+
+                googleMap?.setOnCameraIdleListener(clusterManager)
+                googleMap?.setOnMarkerClickListener(clusterManager)
+
+                // add existing markers to the cluster
+                if (markers.isNotEmpty()) {
+                    for ((id, marker) in markers) {
+                        marker.googleMapMarker?.remove()
+                        marker.googleMapMarker = null
+                    }
+                    clusterManager?.addItems(markers.values)
+                    clusterManager?.cluster()
+                }
+            }
+        }
+    }
+
+    fun disableClustering() {
+        googleMap ?: throw GoogleMapsError("google map is not available")
+
+        runBlocking {
+            withContext(Dispatchers.Main) {
+                clusterManager?.clearItems()
+                clusterManager?.cluster()
+                clusterManager = null
+
+                // add existing markers back to the map
+                if (markers.isNotEmpty()) {
+                    for ((id, marker) in markers) {
+                        val googleMapMarker = googleMap?.addMarker(marker.getMarkerOptions())
+                        marker.googleMapMarker = googleMapMarker
+                    }
+                }
+            }
+        }
     }
 
     fun removeMarker(id: String) {
@@ -117,8 +201,38 @@ class CapacitorGoogleMap(val id: String, val config: GoogleMapConfig,
 
         runBlocking {
             withContext(Dispatchers.Main) {
-                marker.remove()
-                markers.remove(marker.id)
+                if(clusterManager != null) {
+                    clusterManager?.removeItem(marker)
+                    clusterManager?.cluster()
+                }
+
+                marker.googleMapMarker?.remove()
+                markers.remove(id)
+            }
+        }
+    }
+
+    fun removeMarkers(ids: List<String>) {
+        googleMap ?: throw GoogleMapsError("google map is not available")
+
+        runBlocking {
+            withContext(Dispatchers.Main) {
+                val deletedMarkers: MutableList<CapacitorGoogleMapMarker> = mutableListOf()
+                
+                ids.forEach {
+                    val marker = markers[it]
+                    if (marker != null) {
+                        marker.googleMapMarker?.remove()
+                        markers.remove(it)
+
+                        deletedMarkers.add(marker)
+                    }
+                }
+
+                if (clusterManager != null) {
+                    clusterManager?.removeItems(deletedMarkers)
+                    clusterManager?.cluster()
+                }
             }
         }
     }
@@ -130,16 +244,12 @@ class CapacitorGoogleMap(val id: String, val config: GoogleMapConfig,
         return (pixels * scale + 0.5f).toInt()
     }
 
-    override fun onMapReady(map: GoogleMap?) {
+
+    override fun onMapReady(map: GoogleMap) {
         runBlocking {
-            if(map != null) {
-                googleMap = map
-                this@CapacitorGoogleMap.isReadyChannel.send(true);
-                this@CapacitorGoogleMap.isReadyChannel.close()
-            } else {
-                this@CapacitorGoogleMap.isReadyChannel.send(false);
-                this@CapacitorGoogleMap.isReadyChannel.close()
-            }
+            googleMap = map
+            isReadyChannel.send(true);
+            isReadyChannel.close()
         }
     }
 }

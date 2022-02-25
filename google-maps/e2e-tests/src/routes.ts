@@ -2,6 +2,7 @@ import { triangleOutline, triangleSharp } from 'ionicons/icons';
 import React from 'react';
 import CreateAndDestroyMapPage from './pages/Map/CreateAndDestroyMap';
 import AddAndRemoveMarkers from './pages/Markers/AddAndRemoveMarkers';
+import MultipleMarkers from './pages/Markers/MultipleMarkers';
 
 export type RouteDescription = {
   title: string;
@@ -38,6 +39,13 @@ const routesList: RouteGroup[] = [
         iosIcon: triangleOutline,
         mdIcon: triangleSharp,
         component: AddAndRemoveMarkers
+      },
+      {
+        title: "Multiple Markers",
+        url: "/markers/multiple-markers",
+        iosIcon: triangleOutline,
+        mdIcon: triangleSharp,
+        component: MultipleMarkers
       }
     ]
   }
