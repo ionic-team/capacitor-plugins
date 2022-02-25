@@ -345,6 +345,28 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
             handleError(call, error: error)
         }
     }
+    
+    @objc func enableCurrentLocation(_ call: CAPPluginCall) {
+        do {
+            guard let id = call.getString("id") else {
+                throw GoogleMapErrors.invalidMapId
+            }
+            
+            guard let map = self.maps[id] else {
+                throw GoogleMapErrors.mapNotFound
+            }
+            
+            guard let enabled = call.getBool("enabled") else {
+                throw GoogleMapErrors.invalidArguments("enabled is missing")
+            }
+            
+            try map.enableCurrentLocation(enabled: enabled)
+            
+            call.resolve()
+        } catch {
+            handleError(call, error: error)
+        }
+    }
 
     @objc func enableClustering(_ call: CAPPluginCall) {
         do {
