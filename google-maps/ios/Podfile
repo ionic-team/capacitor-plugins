@@ -10,9 +10,11 @@ end
 target 'Plugin' do
   capacitor_pods
   pod 'GoogleMaps'
+  pod 'Google-Maps-iOS-Utils'
 end
 
 target 'PluginTests' do
   capacitor_pods
   pod 'GoogleMaps'
+  pod 'Google-Maps-iOS-Utils'
 end
