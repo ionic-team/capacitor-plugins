@@ -404,12 +404,12 @@ setPadding(args: PaddingArgs) => Promise<void>
 
 #### MapType
 
-| Members         |
-| --------------- |
-| **`Normal`**    |
-| **`Hybrid`**    |
-| **`Satellite`** |
-| **`Terrain`**   |
-| **`None`**      |
+| Members         | Value                    |
+| --------------- | ------------------------ |
+| **`Normal`**    | <code>"Normal"</code>    |
+| **`Hybrid`**    | <code>"Hybrid"</code>    |
+| **`Satellite`** | <code>"Satellite"</code> |
+| **`Terrain`**   | <code>"Terrain"</code>   |
+| **`None`**      | <code>"None"</code>      |
 
 </docgen-api>

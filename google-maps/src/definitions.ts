@@ -23,11 +23,11 @@ export interface CameraConfig {
 }
 
 export enum MapType {
-  Normal,
-  Hybrid,
-  Satellite,
-  Terrain,
-  None
+  Normal = "Normal",
+  Hybrid = "Hybrid",
+  Satellite = "Satellite",
+  Terrain = "Terrain",
+  None = "None"
 }
 
 export interface MapPadding {

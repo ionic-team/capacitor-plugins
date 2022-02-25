@@ -92,7 +92,7 @@ export class GoogleMap {
     })
   }
 
-  async setMapType(mapType: MapType ): Promise<void> {
+  async setMapType(mapType: MapType): Promise<void> {
     return CapacitorGoogleMaps.setMapType({
       id: this.id,
       mapType,
