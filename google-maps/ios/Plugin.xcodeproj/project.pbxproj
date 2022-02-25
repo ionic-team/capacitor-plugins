@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0238AED727C931A40012930B /* GoogleMapCameraConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0238AED627C931A40012930B /* GoogleMapCameraConfig.swift */; };
+		0238AED927C945840012930B /* GoogleMapPadding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0238AED827C945840012930B /* GoogleMapPadding.swift */; };
 		02404C8D279F408800CEF8C8 /* GoogleMapErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02404C8C279F408800CEF8C8 /* GoogleMapErrors.swift */; };
 		02404C8F279F43E900CEF8C8 /* GoogleMapConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02404C8E279F43E900CEF8C8 /* GoogleMapConfig.swift */; };
 		02C012C327A9D20200FAAE78 /* Marker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02C012C227A9D20200FAAE78 /* Marker.swift */; };
@@ -32,6 +34,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0238AED627C931A40012930B /* GoogleMapCameraConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleMapCameraConfig.swift; sourceTree = "<group>"; };
+		0238AED827C945840012930B /* GoogleMapPadding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleMapPadding.swift; sourceTree = "<group>"; };
 		02404C8C279F408800CEF8C8 /* GoogleMapErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleMapErrors.swift; sourceTree = "<group>"; };
 		02404C8E279F43E900CEF8C8 /* GoogleMapConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleMapConfig.swift; sourceTree = "<group>"; };
 		02C012C227A9D20200FAAE78 /* Marker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Marker.swift; sourceTree = "<group>"; };
@@ -106,6 +110,8 @@
 				02404C8C279F408800CEF8C8 /* GoogleMapErrors.swift */,
 				02404C8E279F43E900CEF8C8 /* GoogleMapConfig.swift */,
 				02C012C227A9D20200FAAE78 /* Marker.swift */,
+				0238AED627C931A40012930B /* GoogleMapCameraConfig.swift */,
+				0238AED827C945840012930B /* GoogleMapPadding.swift */,
 			);
 			path = Plugin;
 			sourceTree = "<group>";
@@ -355,6 +361,8 @@
 			files = (
 				02404C8D279F408800CEF8C8 /* GoogleMapErrors.swift in Sources */,
 				50E1A94820377CB70090CE1A /* CapacitorGoogleMapsPlugin.swift in Sources */,
+				0238AED727C931A40012930B /* GoogleMapCameraConfig.swift in Sources */,
+				0238AED927C945840012930B /* GoogleMapPadding.swift in Sources */,
 				02404C8F279F43E900CEF8C8 /* GoogleMapConfig.swift in Sources */,
 				02C6EDF22798803E00D51BF6 /* Map.swift in Sources */,
 				50ADFFA82020EE4F00D50D53 /* CapacitorGoogleMapsPlugin.m in Sources */,

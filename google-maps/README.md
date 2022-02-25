@@ -17,7 +17,15 @@ npx cap sync
 * [`addMarker(...)`](#addmarker)
 * [`removeMarker(...)`](#removemarker)
 * [`destroy(...)`](#destroy)
+* [`setCamera(...)`](#setcamera)
+* [`setMapType(...)`](#setmaptype)
+* [`enableIndoorMaps(...)`](#enableindoormaps)
+* [`enableTrafficLayer(...)`](#enabletrafficlayer)
+* [`enableAccessibilityElements(...)`](#enableaccessibilityelements)
+* [`enableCurrentLocation(...)`](#enablecurrentlocation)
+* [`setPadding(...)`](#setpadding)
 * [Interfaces](#interfaces)
+* [Enums](#enums)
 
 </docgen-index>
 
@@ -74,6 +82,97 @@ destroy(args: DestroyMapArgs) => Promise<void>
 | Param      | Type                                                      |
 | ---------- | --------------------------------------------------------- |
 | **`args`** | <code><a href="#destroymapargs">DestroyMapArgs</a></code> |
+
+--------------------
+
+
+### setCamera(...)
+
+```typescript
+setCamera(args: CameraArgs) => Promise<void>
+```
+
+| Param      | Type                                              |
+| ---------- | ------------------------------------------------- |
+| **`args`** | <code><a href="#cameraargs">CameraArgs</a></code> |
+
+--------------------
+
+
+### setMapType(...)
+
+```typescript
+setMapType(args: MapTypeArgs) => Promise<void>
+```
+
+| Param      | Type                                                |
+| ---------- | --------------------------------------------------- |
+| **`args`** | <code><a href="#maptypeargs">MapTypeArgs</a></code> |
+
+--------------------
+
+
+### enableIndoorMaps(...)
+
+```typescript
+enableIndoorMaps(args: IndoorMapArgs) => Promise<void>
+```
+
+| Param      | Type                                                    |
+| ---------- | ------------------------------------------------------- |
+| **`args`** | <code><a href="#indoormapargs">IndoorMapArgs</a></code> |
+
+--------------------
+
+
+### enableTrafficLayer(...)
+
+```typescript
+enableTrafficLayer(args: TrafficLayerArgs) => Promise<void>
+```
+
+| Param      | Type                                                          |
+| ---------- | ------------------------------------------------------------- |
+| **`args`** | <code><a href="#trafficlayerargs">TrafficLayerArgs</a></code> |
+
+--------------------
+
+
+### enableAccessibilityElements(...)
+
+```typescript
+enableAccessibilityElements(args: AccElementsArgs) => Promise<void>
+```
+
+| Param      | Type                                                        |
+| ---------- | ----------------------------------------------------------- |
+| **`args`** | <code><a href="#accelementsargs">AccElementsArgs</a></code> |
+
+--------------------
+
+
+### enableCurrentLocation(...)
+
+```typescript
+enableCurrentLocation(args: CurrentLocArgs) => Promise<void>
+```
+
+| Param      | Type                                                      |
+| ---------- | --------------------------------------------------------- |
+| **`args`** | <code><a href="#currentlocargs">CurrentLocArgs</a></code> |
+
+--------------------
+
+
+### setPadding(...)
+
+```typescript
+setPadding(args: PaddingArgs) => Promise<void>
+```
+
+| Param      | Type                                                |
+| ---------- | --------------------------------------------------- |
+| **`args`** | <code><a href="#paddingargs">PaddingArgs</a></code> |
 
 --------------------
 
@@ -146,5 +245,97 @@ destroy(args: DestroyMapArgs) => Promise<void>
 | Prop     | Type                |
 | -------- | ------------------- |
 | **`id`** | <code>string</code> |
+
+
+#### CameraArgs
+
+| Prop         | Type                                                  |
+| ------------ | ----------------------------------------------------- |
+| **`id`**     | <code>string</code>                                   |
+| **`config`** | <code><a href="#cameraconfig">CameraConfig</a></code> |
+
+
+#### CameraConfig
+
+| Prop                    | Type                                      |
+| ----------------------- | ----------------------------------------- |
+| **`coordinate`**        | <code><a href="#latlng">LatLng</a></code> |
+| **`zoom`**              | <code>number</code>                       |
+| **`bearing`**           | <code>number</code>                       |
+| **`angle`**             | <code>number</code>                       |
+| **`animate`**           | <code>boolean</code>                      |
+| **`animationDuration`** | <code>number</code>                       |
+
+
+#### MapTypeArgs
+
+| Prop          | Type                                        |
+| ------------- | ------------------------------------------- |
+| **`id`**      | <code>string</code>                         |
+| **`mapType`** | <code><a href="#maptype">MapType</a></code> |
+
+
+#### IndoorMapArgs
+
+| Prop          | Type                 |
+| ------------- | -------------------- |
+| **`id`**      | <code>string</code>  |
+| **`enabled`** | <code>boolean</code> |
+
+
+#### TrafficLayerArgs
+
+| Prop          | Type                 |
+| ------------- | -------------------- |
+| **`id`**      | <code>string</code>  |
+| **`enabled`** | <code>boolean</code> |
+
+
+#### AccElementsArgs
+
+| Prop          | Type                 |
+| ------------- | -------------------- |
+| **`id`**      | <code>string</code>  |
+| **`enabled`** | <code>boolean</code> |
+
+
+#### CurrentLocArgs
+
+| Prop          | Type                 |
+| ------------- | -------------------- |
+| **`id`**      | <code>string</code>  |
+| **`enabled`** | <code>boolean</code> |
+
+
+#### PaddingArgs
+
+| Prop          | Type                                              |
+| ------------- | ------------------------------------------------- |
+| **`id`**      | <code>string</code>                               |
+| **`padding`** | <code><a href="#mappadding">MapPadding</a></code> |
+
+
+#### MapPadding
+
+| Prop         | Type                |
+| ------------ | ------------------- |
+| **`top`**    | <code>number</code> |
+| **`left`**   | <code>number</code> |
+| **`right`**  | <code>number</code> |
+| **`bottom`** | <code>number</code> |
+
+
+### Enums
+
+
+#### MapType
+
+| Members         |
+| --------------- |
+| **`Normal`**    |
+| **`Hybrid`**    |
+| **`Satellite`** |
+| **`Terrain`**   |
+| **`None`**      |
 
 </docgen-api>
