@@ -1,4 +1,4 @@
-import type { GoogleMapConfig, LatLng } from './definitions';
+import type { CameraConfig, GoogleMapConfig, LatLng, MapPadding, MapType } from './definitions';
 import { CapacitorGoogleMaps } from './implementation';
 
 export interface Marker {
@@ -55,5 +55,54 @@ export class GoogleMap {
     return CapacitorGoogleMaps.destroy({
       id: this.id,
     });
+  }
+
+  async setCamera(config: CameraConfig): Promise<void> {
+    return CapacitorGoogleMaps.setCamera({
+      id: this.id,
+      config,
+    })
+  }
+
+  async setMapType(mapType: MapType ): Promise<void> {
+    return CapacitorGoogleMaps.setMapType({
+      id: this.id,
+      mapType,
+    })
+  }
+
+  async enableIndoorMaps(enabled: boolean): Promise<void> {
+    return CapacitorGoogleMaps.enableIndoorMaps({
+      id: this.id,
+      enabled
+    })
+  }
+
+  async enableTrafficLayer(enabled: boolean): Promise<void> {
+    return CapacitorGoogleMaps.enableTrafficLayer({
+      id: this.id,
+      enabled
+    })
+  }
+  
+  async enableAccessibilityElements(enabled: boolean): Promise<void> {
+    return CapacitorGoogleMaps.enableAccessibilityElements({
+      id: this.id,
+      enabled
+    })
+  }
+
+  async enableCurrentLocation(enabled: boolean): Promise<void> {
+    return CapacitorGoogleMaps.enableCurrentLocation({
+      id: this.id,
+      enabled
+    })
+  }
+
+  async setPadding(padding: MapPadding): Promise<void> {
+    return CapacitorGoogleMaps.setPadding({
+      id:this.id,
+      padding
+    })
   }
 }
