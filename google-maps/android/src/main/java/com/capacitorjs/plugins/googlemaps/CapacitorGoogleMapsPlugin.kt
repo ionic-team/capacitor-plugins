@@ -1,5 +1,6 @@
 package com.capacitorjs.plugins.googlemaps
 
+import android.Manifest
 import android.util.Log
 import com.getcapacitor.JSObject
 import com.getcapacitor.Bridge
@@ -7,9 +8,12 @@ import com.getcapacitor.Plugin
 import com.getcapacitor.PluginCall
 import com.getcapacitor.PluginMethod
 import com.getcapacitor.annotation.CapacitorPlugin
+import com.getcapacitor.annotation.Permission
 import org.json.JSONArray
 
-@CapacitorPlugin(name = "CapacitorGoogleMaps")
+@CapacitorPlugin(
+    name = "CapacitorGoogleMaps"
+)
 class CapacitorGoogleMapsPlugin : Plugin() {
     private var maps: HashMap<String, CapacitorGoogleMap> = HashMap()
     private val tag: String = "CAP-GOOGLE-MAPS"
@@ -231,6 +235,147 @@ class CapacitorGoogleMapsPlugin : Plugin() {
         } catch(e: Exception) {
             handleError(call, e)
         }
+    }
+
+    @PluginMethod
+    fun setCamera(call: PluginCall) {
+        try {
+            val id = call.getString("id")
+            id ?: throw InvalidMapIdError()
+
+            val map = maps[id]
+            map ?: throw MapNotFoundError()
+
+            val cameraConfigObject = call.getObject("config")
+                ?: throw InvalidArgumentsError("GoogleMapCameraConfig is missing")
+
+            val config = GoogleMapCameraConfig(cameraConfigObject)
+
+            map.setCamera(config)
+
+            call.resolve()
+        } catch (e: GoogleMapsError) {
+            handleError(call, e)
+        } catch(e: Exception) {
+            handleError(call, e)
+        }
+    }
+
+    @PluginMethod
+    fun setMapType(call: PluginCall) {
+        try {
+            val id = call.getString("id")
+            id ?: throw InvalidMapIdError()
+
+            val map = maps[id]
+            map ?: throw MapNotFoundError()
+
+            val mapType = call.getString("mapType")
+                ?: throw InvalidArgumentsError("mapType is missing")
+
+            map.setMapType(mapType)
+
+            call.resolve()
+        } catch (e: GoogleMapsError) {
+            handleError(call, e)
+        } catch(e: Exception) {
+            handleError(call, e)
+        }
+    }
+
+    @PluginMethod
+    fun enableIndoorMaps(call: PluginCall) {
+        try {
+            val id = call.getString("id")
+            id ?: throw InvalidMapIdError()
+
+            val map = maps[id]
+            map ?: throw MapNotFoundError()
+
+            val enabled = call.getBoolean("enabled")
+                ?: throw InvalidArgumentsError("enabled is missing")
+
+            map.enableIndoorMaps(enabled)
+
+            call.resolve()
+        } catch (e: GoogleMapsError) {
+            handleError(call, e)
+        } catch(e: Exception) {
+            handleError(call, e)
+        }
+    }
+
+    @PluginMethod
+    fun enableTrafficLayer(call: PluginCall) {
+        try {
+            val id = call.getString("id")
+            id ?: throw InvalidMapIdError()
+
+            val map = maps[id]
+            map ?: throw MapNotFoundError()
+
+            val enabled = call.getBoolean("enabled")
+                ?: throw InvalidArgumentsError("enabled is missing")
+
+            map.enableTrafficLayer(enabled)
+
+            call.resolve()
+        } catch (e: GoogleMapsError) {
+            handleError(call, e)
+        } catch(e: Exception) {
+            handleError(call, e)
+        }
+    }
+
+    @PluginMethod
+    fun enableCurrentLocation(call: PluginCall) {
+        try {
+            val id = call.getString("id")
+            id ?: throw InvalidMapIdError()
+
+            val map = maps[id]
+            map ?: throw MapNotFoundError()
+
+            val enabled = call.getBoolean("enabled")
+                ?: throw InvalidArgumentsError("enabled is missing")
+
+            map.enableCurrentLocation(enabled)
+
+            call.resolve()
+        } catch (e: GoogleMapsError) {
+            handleError(call, e)
+        } catch(e: Exception) {
+            handleError(call, e)
+        }
+    }
+
+    @PluginMethod
+    fun setPadding(call: PluginCall) {
+        try {
+            val id = call.getString("id")
+            id ?: throw InvalidMapIdError()
+
+            val map = maps[id]
+            map ?: throw MapNotFoundError()
+
+            val paddingObj = call.getObject("padding")
+                ?: throw InvalidArgumentsError("padding is missing")
+
+            val padding = GoogleMapPadding(paddingObj)
+
+            map.setPadding(padding)
+
+            call.resolve()
+        } catch (e: GoogleMapsError) {
+            handleError(call, e)
+        } catch(e: Exception) {
+            handleError(call, e)
+        }
+    }
+
+    @PluginMethod
+    fun enableAccessibilityElements(call: PluginCall) {
+        call.unavailable("this call is not available on android")
     }
 
     private fun handleError(call: PluginCall, e: Exception) {

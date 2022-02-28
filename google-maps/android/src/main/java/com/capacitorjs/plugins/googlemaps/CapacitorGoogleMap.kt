@@ -4,11 +4,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import com.getcapacitor.Bridge
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.model.Marker
-import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.CameraPosition
 import kotlinx.coroutines.*
 
 import com.google.maps.android.clustering.ClusterManager
@@ -236,6 +236,117 @@ class CapacitorGoogleMap(val id: String, val config: GoogleMapConfig,
             }
         }
     }
+
+    fun setCamera(config: GoogleMapCameraConfig) {
+        googleMap ?: throw GoogleMapsError("google map is not available")
+
+        runBlocking {
+            withContext(Dispatchers.Main) {
+                val currentPosition = googleMap!!.cameraPosition
+
+                var updatedTarget = config.coordinate
+                if (updatedTarget == null) {
+                    updatedTarget = currentPosition.target
+                }
+
+                var zoom = config.zoom
+                if (zoom == null) {
+                    zoom = currentPosition.zoom.toDouble()
+                }
+
+                var bearing = config.bearing
+                if (bearing == null) {
+                    bearing = currentPosition.bearing.toDouble()
+                }
+
+                var angle = config.angle
+                if (angle == null) {
+                    angle = currentPosition.tilt.toDouble()
+                }
+
+                var animate = config.animate
+                if (animate == null) {
+                    animate = false
+                }
+
+                val updatedPosition = CameraPosition.Builder()
+                    .target(updatedTarget)
+                    .zoom(zoom.toFloat())
+                    .bearing(bearing.toFloat())
+                    .tilt(angle.toFloat())
+                    .build()
+
+                if (animate) {
+                    googleMap!!.animateCamera(CameraUpdateFactory.newCameraPosition(updatedPosition))
+                } else {
+                    googleMap!!.moveCamera(CameraUpdateFactory.newCameraPosition(updatedPosition))
+                }
+            }
+        }
+    }
+
+
+    fun setMapType(mapType: String) {
+        googleMap ?: throw GoogleMapsError("google map is not available")
+
+        runBlocking {
+            withContext(Dispatchers.Main) {
+                val mapTypeInt: Int = when(mapType) {
+                    "Normal" -> GoogleMap.MAP_TYPE_NORMAL
+                    "Hybrid" -> GoogleMap.MAP_TYPE_HYBRID
+                    "Satellite" -> GoogleMap.MAP_TYPE_SATELLITE
+                    "Terrain" -> GoogleMap.MAP_TYPE_TERRAIN
+                    "None" -> GoogleMap.MAP_TYPE_NONE
+                    else -> {
+                        print("CapacitorGoogleMaps Warning: unknown mapView type '$mapType'  Defaulting to normal.")
+                        GoogleMap.MAP_TYPE_NORMAL
+                    }
+                }
+
+                googleMap!!.mapType = mapTypeInt
+            }
+        }
+    }
+
+    fun enableIndoorMaps(enabled: Boolean) {
+        googleMap ?: throw GoogleMapsError("google map is not available")
+
+        runBlocking {
+            withContext(Dispatchers.Main) {
+                googleMap!!.setIndoorEnabled(enabled)
+            }
+        }
+    }
+
+    fun enableTrafficLayer(enabled: Boolean) {
+        googleMap ?: throw GoogleMapsError("google map is not available")
+
+        runBlocking {
+            withContext(Dispatchers.Main) {
+                googleMap!!.isTrafficEnabled = enabled
+            }
+        }
+    }
+
+    fun enableCurrentLocation(enabled: Boolean) {
+        googleMap ?: throw GoogleMapsError("google map is not available")
+        runBlocking {
+            withContext(Dispatchers.Main) {
+                googleMap!!.isMyLocationEnabled = enabled
+            }
+        }
+    }
+
+    fun setPadding(padding: GoogleMapPadding) {
+        googleMap ?: throw GoogleMapsError("google map is not available")
+        runBlocking {
+            withContext(Dispatchers.Main) {
+                googleMap!!.setPadding(padding.left, padding.top, padding.right, padding.bottom)
+            }
+        }
+    }
+
+
 
     private fun getScaledPixels(bridge: Bridge, pixels: Int): Int {
         // Get the screen's density scale
