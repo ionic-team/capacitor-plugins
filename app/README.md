@@ -63,7 +63,7 @@ App.addListener('appRestoredResult', data => {
 const checkAppLaunchUrl = async () => {
   const { url } = await App.getLaunchUrl();
 
-  alert('App opened with URL: ' + url);
+  console.log('App opened with URL: ' + url);
 };
 ```
 
