@@ -88,14 +88,6 @@ export interface ImageOptions {
    */
   height?: number;
   /**
-   * This setting has no effect.
-   * Picture resizing always preserve aspect ratio.
-   *
-   * @deprecated will be removed in next major version.
-   * @since 1.0.0
-   */
-  preserveAspectRatio?: boolean;
-  /**
    * Whether to automatically rotate the image "up" to correct for orientation
    * in portrait mode
    * @default: true

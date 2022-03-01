@@ -137,7 +137,7 @@ export interface PushNotificationsPlugin {
    */
   addListener(
     eventName: 'registrationError',
-    listenerFunc: (error: any) => void,
+    listenerFunc: (error: RegistrationError) => void,
   ): Promise<PluginListenerHandle> & PluginListenerHandle;
 
   /**
@@ -290,6 +290,15 @@ export interface Token {
    * @since 1.0.0
    */
   value: string;
+}
+
+export interface RegistrationError {
+  /**
+   * Error message describing the registration failure.
+   *
+   * @since 2.0.0
+   */
+  error: string;
 }
 
 export interface DeliveredNotifications {
