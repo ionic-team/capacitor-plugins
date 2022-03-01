@@ -33,7 +33,8 @@ The Push Notification API uses [Firebase Cloud Messaging](https://firebase.googl
 
 This plugin will use the following project variables (defined in your app's `variables.gradle` file):
 
-- `$firebaseMessagingVersion` version of `com.google.firebase:firebase-messaging` (default: `21.0.1`)
+- `$firebaseMessagingVersion` version of `com.google.firebase:firebase-messaging` (default: `23.0.0`)
+- `$firebaseIidVersion` version of `com.google.firebase:firebase-iid` (default: `21.1.0`)
 
 ---
 
