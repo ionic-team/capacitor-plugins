@@ -61,6 +61,7 @@ public class AppPlugin extends Plugin {
     @PluginMethod
     public void exitApp(PluginCall call) {
         unsetAppListeners();
+        call.resolve();
         getBridge().getActivity().finish();
     }
 
