@@ -4,7 +4,7 @@ export interface ShowActionsOptions {
    *
    * @since 1.0.0
    */
-  title: string;
+  title?: string;
 
   /**
    * A message to show under the title.
