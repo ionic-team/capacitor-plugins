@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.8](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/status-bar@1.0.7...@capacitor/status-bar@1.0.8) (2022-02-10)
+
+
+### Bug Fixes
+
+* **status-bar:** Use Locale.ROOT on toUpperCase ([#814](https://github.com/ionic-team/capacitor-plugins/issues/814)) ([bf804ce](https://github.com/ionic-team/capacitor-plugins/commit/bf804ceaa5b7ee94ddeff052511db7c6ee49b4e6))
+
+
+
+
+
 ## [1.0.7](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/status-bar@1.0.6...@capacitor/status-bar@1.0.7) (2022-01-19)
 
 

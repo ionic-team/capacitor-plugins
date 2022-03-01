@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/splash-screen@1.2.1...@capacitor/splash-screen@1.2.2) (2022-02-10)
+
+
+### Bug Fixes
+
+* **splash-screen:** avoid conditional downcast warning ([#776](https://github.com/ionic-team/capacitor-plugins/issues/776)) ([87ed912](https://github.com/ionic-team/capacitor-plugins/commit/87ed9128f43f0be498601f0ba89cadeba7a339b4))
+* **splash-screen:** Use Locale.ROOT on toLowerCase ([#813](https://github.com/ionic-team/capacitor-plugins/issues/813)) ([ecc55e1](https://github.com/ionic-team/capacitor-plugins/commit/ecc55e172acfe066977a4aac5018a55beef64f53))
+
+
+
+
+
 ## [1.2.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/splash-screen@1.2.0...@capacitor/splash-screen@1.2.1) (2022-01-19)
 
 
