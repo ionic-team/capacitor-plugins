@@ -1,5 +1,7 @@
 package com.capacitorjs.plugins.googlemaps
 
+import android.annotation.SuppressLint
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
@@ -328,16 +330,13 @@ class CapacitorGoogleMap(val id: String, val config: GoogleMapConfig,
         }
     }
 
-    fun enableCurrentLocation(enabled: Boolean) {
+    @SuppressLint("MissingPermission")
+    fun enableCurrentLocation(enabled: Boolean, callback: () -> Unit) {
         googleMap ?: throw GoogleMapsError("google map is not available")
-        runBlocking {
-            withContext(Dispatchers.Main) {
-                try {
-                    googleMap!!.isMyLocationEnabled = enabled
-                } catch(e: SecurityException) {
-                    throw PermissionDeniedLocation(e.message)
-                }
-            }
+
+        CoroutineScope(Dispatchers.Main).launch {
+            googleMap!!.isMyLocationEnabled = enabled
+            callback()
         }
     }
 

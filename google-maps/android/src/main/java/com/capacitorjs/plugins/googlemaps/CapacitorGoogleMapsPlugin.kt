@@ -12,13 +12,9 @@ import org.json.JSONArray
     name = "CapacitorGoogleMaps",
     permissions = [
         Permission(
-            strings = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION],
+            strings = [Manifest.permission.ACCESS_FINE_LOCATION],
             alias = CapacitorGoogleMapsPlugin.LOCATION
         ),
-        Permission(
-            strings = [Manifest.permission.ACCESS_COARSE_LOCATION],
-            alias = CapacitorGoogleMapsPlugin.COARSE_LOCATION
-        )
     ],
 )
 class CapacitorGoogleMapsPlugin : Plugin() {
@@ -27,7 +23,6 @@ class CapacitorGoogleMapsPlugin : Plugin() {
 
     companion object {
         const val LOCATION = "location"
-        const val COARSE_LOCATION = "coarse_location"
     }
 
     @PluginMethod
@@ -397,9 +392,9 @@ class CapacitorGoogleMapsPlugin : Plugin() {
             val enabled = call.getBoolean("enabled")
                 ?: throw InvalidArgumentsError("enabled is missing")
 
-            map.enableCurrentLocation(enabled)
-
-            call.resolve()
+            map.enableCurrentLocation(enabled) {
+                call.resolve()
+            }
         } catch (e: GoogleMapsError) {
             handleError(call, e)
         } catch(e: Exception) {
