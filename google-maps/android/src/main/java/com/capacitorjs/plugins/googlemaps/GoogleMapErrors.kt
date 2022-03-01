@@ -4,7 +4,7 @@ import org.json.JSONObject
 import kotlin.Exception
 
 enum class GoogleMapErrors {
-    UNHANDLED_ERROR, INVALID_MAP_ID, MAP_NOT_FOUND, MARKER_NOT_FOUND, INVALID_ARGUMENTS
+    UNHANDLED_ERROR, INVALID_MAP_ID, MAP_NOT_FOUND, MARKER_NOT_FOUND, INVALID_ARGUMENTS, PERMISSIONS_DENIED_LOCATION
 }
 
 class GoogleMapErrorObject(val code: Int, val message: String, val extra: HashMap<String,Any> = HashMap()) {
@@ -36,6 +36,9 @@ fun getErrorObject(err: GoogleMapsError): GoogleMapErrorObject {
         }
         is MarkerNotFoundError -> {
             GoogleMapErrorObject(err.getErrorCode(), "Marker not found for provided id.")
+        }
+        is PermissionDeniedLocation -> {
+            GoogleMapErrorObject(err.getErrorCode(), "Permissions denied for accessing system location.")
         }
         else -> {
             GoogleMapErrorObject(err.getErrorCode(), "Unhandled Error: ${err.message}.")
@@ -74,6 +77,12 @@ class MarkerNotFoundError(message: String? = ""): GoogleMapsError(message) {
 class InvalidArgumentsError(message: String? = ""): GoogleMapsError(message) {
     override fun getErrorCode(): Int {
         return GoogleMapErrors.INVALID_ARGUMENTS.ordinal
+    }
+}
+
+class PermissionDeniedLocation(message: String? = ""): GoogleMapsError(message) {
+    override fun getErrorCode(): Int {
+        return GoogleMapErrors.PERMISSIONS_DENIED_LOCATION.ordinal
     }
 }
 

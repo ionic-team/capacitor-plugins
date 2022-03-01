@@ -2,21 +2,33 @@ package com.capacitorjs.plugins.googlemaps
 
 import android.Manifest
 import android.util.Log
-import com.getcapacitor.JSObject
-import com.getcapacitor.Bridge
-import com.getcapacitor.Plugin
-import com.getcapacitor.PluginCall
-import com.getcapacitor.PluginMethod
+import com.getcapacitor.*
 import com.getcapacitor.annotation.CapacitorPlugin
 import com.getcapacitor.annotation.Permission
+import com.getcapacitor.annotation.PermissionCallback
 import org.json.JSONArray
 
 @CapacitorPlugin(
-    name = "CapacitorGoogleMaps"
+    name = "CapacitorGoogleMaps",
+    permissions = [
+        Permission(
+            strings = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION],
+            alias = CapacitorGoogleMapsPlugin.LOCATION
+        ),
+        Permission(
+            strings = [Manifest.permission.ACCESS_COARSE_LOCATION],
+            alias = CapacitorGoogleMapsPlugin.COARSE_LOCATION
+        )
+    ],
 )
 class CapacitorGoogleMapsPlugin : Plugin() {
     private var maps: HashMap<String, CapacitorGoogleMap> = HashMap()
     private val tag: String = "CAP-GOOGLE-MAPS"
+
+    companion object {
+        const val LOCATION = "location"
+        const val COARSE_LOCATION = "coarse_location"
+    }
 
     @PluginMethod
     fun create(call: PluginCall) {
@@ -329,23 +341,19 @@ class CapacitorGoogleMapsPlugin : Plugin() {
 
     @PluginMethod
     fun enableCurrentLocation(call: PluginCall) {
-        try {
-            val id = call.getString("id")
-            id ?: throw InvalidMapIdError()
+        if (getPermissionState(CapacitorGoogleMapsPlugin.LOCATION) != PermissionState.GRANTED) {
+            requestAllPermissions(call, "enableCurrentLocationCallback")
+        } else {
+            internalEnableCurrentLocation(call)
+        }
+    }
 
-            val map = maps[id]
-            map ?: throw MapNotFoundError()
-
-            val enabled = call.getBoolean("enabled")
-                ?: throw InvalidArgumentsError("enabled is missing")
-
-            map.enableCurrentLocation(enabled)
-
-            call.resolve()
-        } catch (e: GoogleMapsError) {
-            handleError(call, e)
-        } catch(e: Exception) {
-            handleError(call, e)
+    @PermissionCallback
+    fun enableCurrentLocationCallback(call: PluginCall) {
+        if (getPermissionState(CapacitorGoogleMapsPlugin.LOCATION) == PermissionState.GRANTED) {
+            internalEnableCurrentLocation(call)
+        } else {
+            call.reject("location permission was denied")
         }
     }
 
@@ -376,6 +384,27 @@ class CapacitorGoogleMapsPlugin : Plugin() {
     @PluginMethod
     fun enableAccessibilityElements(call: PluginCall) {
         call.unavailable("this call is not available on android")
+    }
+
+    private fun internalEnableCurrentLocation(call: PluginCall) {
+        try {
+            val id = call.getString("id")
+            id ?: throw InvalidMapIdError()
+
+            val map = maps[id]
+            map ?: throw MapNotFoundError()
+
+            val enabled = call.getBoolean("enabled")
+                ?: throw InvalidArgumentsError("enabled is missing")
+
+            map.enableCurrentLocation(enabled)
+
+            call.resolve()
+        } catch (e: GoogleMapsError) {
+            handleError(call, e)
+        } catch(e: Exception) {
+            handleError(call, e)
+        }
     }
 
     private fun handleError(call: PluginCall, e: Exception) {

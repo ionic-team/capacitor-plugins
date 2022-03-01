@@ -332,7 +332,11 @@ class CapacitorGoogleMap(val id: String, val config: GoogleMapConfig,
         googleMap ?: throw GoogleMapsError("google map is not available")
         runBlocking {
             withContext(Dispatchers.Main) {
-                googleMap!!.isMyLocationEnabled = enabled
+                try {
+                    googleMap!!.isMyLocationEnabled = enabled
+                } catch(e: SecurityException) {
+                    throw PermissionDeniedLocation(e.message)
+                }
             }
         }
     }
