@@ -10,11 +10,8 @@ public class ActionSheetPlugin: CAPPlugin {
     private let implementation = ActionSheet()
 
     @objc func showActions(_ call: CAPPluginCall) {
-        guard let title = call.options["title"] as? String else {
-            call.reject("title must be provided")
-            return
-        }
-        let message = call.options["message"] as? String ?? ""
+        let title = call.options["title"] as? String
+        let message = call.options["message"] as? String
 
         let options = call.getArray("options", JSObject.self) ?? []
         var alertActions = [UIAlertAction]()
