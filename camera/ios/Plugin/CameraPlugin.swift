@@ -158,11 +158,12 @@ extension CameraPlugin: UIImagePickerControllerDelegate, UINavigationControllerD
     }
 
     public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
-        picker.dismiss(animated: true, completion: nil)
-        if let processedImage = processImage(from: info) {
-            returnProcessedImage(processedImage)
-        } else {
-            self.call?.reject("Error processing image")
+        picker.dismiss(animated: true) {
+            if let processedImage = self.processImage(from: info) {
+                self.returnProcessedImage(processedImage)
+            } else {
+                self.call?.reject("Error processing image")
+            }
         }
     }
 }
