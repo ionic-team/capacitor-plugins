@@ -11,21 +11,20 @@ const AddAndRemoveMarkers: React.FC = () => {
 
     async function createMap() {
         try {
-            const newMap = await GoogleMap.create("test-map", apiKey!, {
-                center: {
-                    lat: 33.6,
-                    lng: -117.9,
-                },
-                zoom: 8,
-                androidLiteMode: false,
-                height: 300,
-                width: window.innerWidth,
-                x: 0,
-                y: window.innerHeight - 300
-            });
-            setMap(newMap);
+            const element = document.getElementById('mapBox');
+            if (element !== null) {
+                const newMap = await GoogleMap.create(element, "test-map", apiKey!, {
+                    center: {
+                        lat: 33.6,
+                        lng: -117.9,
+                    },
+                    zoom: 8,
+                    androidLiteMode: false,
+                });
+                setMap(newMap);
 
-            setCommandOutput("Map created")
+                setCommandOutput("Map created");
+            }
         } catch (err: any) {
             setCommandOutput(err.message);
         }
@@ -85,6 +84,9 @@ const AddAndRemoveMarkers: React.FC = () => {
             </div>
             <div>
                 <IonTextarea id="commandOutput" value={commandOutput}></IonTextarea>
+            </div>
+            <div>
+                <div id="mapBox" style={{width: 400, height: 400}}></div>
             </div>
         </BaseTestingPage>
     )

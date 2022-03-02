@@ -63,6 +63,7 @@
     "@ionic/eslint-config": "^0.3.0",
     "@ionic/prettier-config": "^1.0.1",
     "@ionic/swiftlint-config": "^1.1.2",
+    "@types/google.maps": "^3.48.1",
     "downlevel-dts": "^0.7.0",
     "eslint": "^7.11.0",
     "eslint-plugin-import": "^2.25.4",
@@ -90,5 +91,8 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "dependencies": {
+    "@googlemaps/js-api-loader": "^1.13.7"
   }
 }

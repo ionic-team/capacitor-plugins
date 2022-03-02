@@ -4,10 +4,10 @@ export interface LatLng {
 }
 
 export interface GoogleMapConfig {
-  width: number;
-  height: number;
-  x: number;
-  y: number;
+  width?: number;
+  height?: number;
+  x?: number;
+  y?: number;
   center: LatLng;
   zoom: number;
   androidLiteMode: boolean;

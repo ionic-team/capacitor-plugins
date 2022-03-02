@@ -14,6 +14,23 @@ export class CapacitorGoogleMapsWeb
   extends WebPlugin
   implements CapacitorGoogleMapsPlugin
 {
+  private gMapsRef: typeof google.maps | undefined = undefined;
+  private maps: {[id: string]: {element: HTMLElement; map: google.maps.Map}} = {};
+
+  private async importGoogleLib(apiKey: string) {
+    if (this.gMapsRef === undefined) {
+      const lib = await import('@googlemaps/js-api-loader');
+      const loader = new lib.Loader({
+        apiKey: apiKey ?? '',
+        version: 'weekly',
+        libraries: ["places"]
+      });
+      const google = await loader.load();
+      this.gMapsRef = google.maps;
+      console.log('Loaded google maps API');
+    }
+  }
+
   addMarkers(_args: AddMarkersArgs): Promise<{ ids: string[] }> {
     throw new Error('Method not implemented.');
   }
@@ -32,10 +49,19 @@ export class CapacitorGoogleMapsWeb
   removeMarker(_args: RemoveMarkerArgs): Promise<void> {
     throw new Error('Method not implemented.');
   }
-  create(_args: CreateMapArgs): Promise<void> {
-    throw new Error('Method not implemented.');
+  async create(_args: CreateMapArgs): Promise<void> {
+    console.log(`Create map: ${_args.id}`);
+    await this.importGoogleLib(_args.apiKey);
+    this.maps[_args.id] = {
+      map: new window.google.maps.Map(_args.element, { ..._args.config }),
+      element: _args.element
+    };
   }
-  destroy(_args: DestroyMapArgs): Promise<void> {
-    throw new Error('Method not implemented.');
+  async destroy(_args: DestroyMapArgs): Promise<void> {
+    console.log(`Destroy map: ${_args.id}`);
+    const mapItem = this.maps[_args.id];
+    mapItem.element.innerHTML = '';
+    mapItem.map.unbindAll();
+    delete this.maps[_args.id];
   }
 }
