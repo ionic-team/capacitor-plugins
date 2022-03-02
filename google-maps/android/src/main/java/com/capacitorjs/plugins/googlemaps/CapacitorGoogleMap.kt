@@ -31,7 +31,7 @@ class CapacitorGoogleMap(val id: String, val config: GoogleMapConfig,
 
     private fun initMap() {
         runBlocking {
-            withContext(Dispatchers.Main) {
+            CoroutineScope(Dispatchers.Main).launch {
                 val bridge = delegate.bridge
 
                 val mapView = MapView(bridge.context, config.googleMapOptions)
@@ -42,25 +42,25 @@ class CapacitorGoogleMap(val id: String, val config: GoogleMapConfig,
                 isReadyChannel.receive()
 
                 this@CapacitorGoogleMap.mapView = mapView
+
+                render()
             }
         }
-
-        render()
     }
 
     private fun render() {
         this.mapView ?: throw GoogleMapsError("map view is not available")
 
         runBlocking {
-            withContext(Dispatchers.Main) {
+            CoroutineScope(Dispatchers.Main).launch {
                 val bridge = delegate.bridge
 
                 val mapViewParent = FrameLayout(bridge.context)
                 val layoutParams =
-                        FrameLayout.LayoutParams(
-                                getScaledPixels(bridge, config.width),
-                                getScaledPixels(bridge, config.height),
-                        )
+                    FrameLayout.LayoutParams(
+                        getScaledPixels(bridge, config.width),
+                        getScaledPixels(bridge, config.height),
+                    )
                 layoutParams.leftMargin = getScaledPixels(bridge, config.x)
                 layoutParams.topMargin = getScaledPixels(bridge, config.y)
 
@@ -75,7 +75,7 @@ class CapacitorGoogleMap(val id: String, val config: GoogleMapConfig,
 
     fun destroy() {
         runBlocking {
-            withContext(Dispatchers.Main) {
+            CoroutineScope(Dispatchers.Main).launch {
                 val bridge = delegate.bridge
 
                 val viewToRemove: View? = ((bridge.webView.parent) as ViewGroup).findViewWithTag(id)
@@ -90,13 +90,12 @@ class CapacitorGoogleMap(val id: String, val config: GoogleMapConfig,
         }
     }
 
-    fun addMarkers(newMarkers: List<CapacitorGoogleMapMarker>): List<String> {
-        googleMap ?: throw GoogleMapsError("google map is not available")
+    fun addMarkers(newMarkers: List<CapacitorGoogleMapMarker>, callback: (ids: Result<List<String>>) -> Unit) {
+        try {
+            googleMap ?: throw GoogleMapsError("google map is not available")
+            val markerIds: MutableList<String> = mutableListOf()
 
-        val markerIds: MutableList<String> = mutableListOf()
-
-        runBlocking {
-            withContext(Dispatchers.Main) {
+            CoroutineScope(Dispatchers.Main).launch {
                 newMarkers.forEach {
                     val googleMapMarker = googleMap?.addMarker(it.getMarkerOptions())
 
@@ -114,20 +113,21 @@ class CapacitorGoogleMap(val id: String, val config: GoogleMapConfig,
                     clusterManager?.addItems(newMarkers)
                     clusterManager?.cluster()
                 }
+
+                callback(Result.success(markerIds))
             }
+        } catch(e: GoogleMapsError) {
+            callback(Result.failure(e))
         }
-
-
-        return markerIds
     }
 
-    fun addMarker(marker: CapacitorGoogleMapMarker): String {
-        googleMap ?: throw GoogleMapsError("google map is not available")
+    fun addMarker(marker: CapacitorGoogleMapMarker, callback: (result: Result<String>) -> Unit) {
+        try {
+            googleMap ?: throw GoogleMapsError("google map is not available")
 
-        var markerId = ""
+            var markerId = ""
 
-        runBlocking {
-            withContext(Dispatchers.Main) {
+            CoroutineScope(Dispatchers.Main).launch {
                 val googleMapMarker = googleMap?.addMarker(marker.getMarkerOptions())
 
                 if (clusterManager == null) {
@@ -141,21 +141,24 @@ class CapacitorGoogleMap(val id: String, val config: GoogleMapConfig,
                 markers[googleMapMarker!!.id] = marker
 
                 markerId = googleMapMarker.id
-            }
-        }
 
-        return markerId
+                callback(Result.success(markerId))
+            }
+        } catch(e: GoogleMapsError) {
+            callback(Result.failure(e))
+        }
     }
 
-    fun enableClustering() {
-        googleMap ?: throw GoogleMapsError("google map is not available")
+    fun enableClustering(callback: (error: GoogleMapsError?) -> Unit) {
+        try {
+            googleMap ?: throw GoogleMapsError("google map is not available")
 
-        if (clusterManager != null) {
-            return
-        }
+            if (clusterManager != null) {
+                callback(null)
+                return
+            }
 
-        runBlocking {
-            withContext(Dispatchers.Main) {
+            CoroutineScope(Dispatchers.Main).launch {
                 val bridge = delegate.bridge
                 clusterManager = ClusterManager(bridge.context, googleMap)
 
@@ -171,15 +174,19 @@ class CapacitorGoogleMap(val id: String, val config: GoogleMapConfig,
                     clusterManager?.addItems(markers.values)
                     clusterManager?.cluster()
                 }
+
+                callback(null)
             }
+        } catch(e: GoogleMapsError) {
+            callback(e)
         }
     }
 
-    fun disableClustering() {
-        googleMap ?: throw GoogleMapsError("google map is not available")
+    fun disableClustering(callback: (error: GoogleMapsError?) -> Unit) {
+        try {
+            googleMap ?: throw GoogleMapsError("google map is not available")
 
-        runBlocking {
-            withContext(Dispatchers.Main) {
+            CoroutineScope(Dispatchers.Main).launch {
                 clusterManager?.clearItems()
                 clusterManager?.cluster()
                 clusterManager = null
@@ -191,18 +198,22 @@ class CapacitorGoogleMap(val id: String, val config: GoogleMapConfig,
                         marker.googleMapMarker = googleMapMarker
                     }
                 }
+
+                callback(null)
             }
+        } catch (e: GoogleMapsError) {
+            callback(e)
         }
     }
 
-    fun removeMarker(id: String) {
-        googleMap ?: throw GoogleMapsError("google map is not available")
+    fun removeMarker(id: String, callback: (error: GoogleMapsError?) -> Unit) {
+        try {
+            googleMap ?: throw GoogleMapsError("google map is not available")
 
-        val marker = markers[id]
-        marker ?: throw MarkerNotFoundError()
+            val marker = markers[id]
+            marker ?: throw MarkerNotFoundError()
 
-        runBlocking {
-            withContext(Dispatchers.Main) {
+            CoroutineScope(Dispatchers.Main).launch {
                 if(clusterManager != null) {
                     clusterManager?.removeItem(marker)
                     clusterManager?.cluster()
@@ -210,17 +221,21 @@ class CapacitorGoogleMap(val id: String, val config: GoogleMapConfig,
 
                 marker.googleMapMarker?.remove()
                 markers.remove(id)
+
+                callback(null)
             }
+        } catch (e: GoogleMapsError) {
+            callback(e)
         }
     }
 
-    fun removeMarkers(ids: List<String>) {
-        googleMap ?: throw GoogleMapsError("google map is not available")
+    fun removeMarkers(ids: List<String>, callback: (error: GoogleMapsError?) -> Unit) {
+        try {
+            googleMap ?: throw GoogleMapsError("google map is not available")
 
-        runBlocking {
-            withContext(Dispatchers.Main) {
+            CoroutineScope(Dispatchers.Main).launch {
                 val deletedMarkers: MutableList<CapacitorGoogleMapMarker> = mutableListOf()
-                
+
                 ids.forEach {
                     val marker = markers[it]
                     if (marker != null) {
@@ -235,15 +250,18 @@ class CapacitorGoogleMap(val id: String, val config: GoogleMapConfig,
                     clusterManager?.removeItems(deletedMarkers)
                     clusterManager?.cluster()
                 }
+
+                callback(null)
             }
+        } catch(e: GoogleMapsError) {
+            callback(e)
         }
     }
 
-    fun setCamera(config: GoogleMapCameraConfig) {
-        googleMap ?: throw GoogleMapsError("google map is not available")
-
-        runBlocking {
-            withContext(Dispatchers.Main) {
+    fun setCamera(config: GoogleMapCameraConfig, callback: (error: GoogleMapsError?) -> Unit) {
+        try {
+            googleMap ?: throw GoogleMapsError("google map is not available")
+            CoroutineScope(Dispatchers.Main).launch {
                 val currentPosition = googleMap!!.cameraPosition
 
                 var updatedTarget = config.coordinate
@@ -283,16 +301,18 @@ class CapacitorGoogleMap(val id: String, val config: GoogleMapConfig,
                 } else {
                     googleMap!!.moveCamera(CameraUpdateFactory.newCameraPosition(updatedPosition))
                 }
+                callback(null)
             }
+        } catch(e: GoogleMapsError) {
+            callback(e)
         }
     }
 
 
-    fun setMapType(mapType: String) {
-        googleMap ?: throw GoogleMapsError("google map is not available")
-
-        runBlocking {
-            withContext(Dispatchers.Main) {
+    fun setMapType(mapType: String, callback: (error: GoogleMapsError?) -> Unit) {
+        try {
+            googleMap ?: throw GoogleMapsError("google map is not available")
+            CoroutineScope(Dispatchers.Main).launch {
                 val mapTypeInt: Int = when(mapType) {
                     "Normal" -> GoogleMap.MAP_TYPE_NORMAL
                     "Hybrid" -> GoogleMap.MAP_TYPE_HYBRID
@@ -300,56 +320,67 @@ class CapacitorGoogleMap(val id: String, val config: GoogleMapConfig,
                     "Terrain" -> GoogleMap.MAP_TYPE_TERRAIN
                     "None" -> GoogleMap.MAP_TYPE_NONE
                     else -> {
-                        print("CapacitorGoogleMaps Warning: unknown mapView type '$mapType'  Defaulting to normal.")
+                        Log.w("CapacitorGoogleMaps", "unknown mapView type '$mapType'  Defaulting to normal.")
                         GoogleMap.MAP_TYPE_NORMAL
                     }
                 }
 
                 googleMap!!.mapType = mapTypeInt
+                callback(null)
             }
+        } catch (e: GoogleMapsError) {
+            callback(e)
         }
     }
 
-    fun enableIndoorMaps(enabled: Boolean) {
-        googleMap ?: throw GoogleMapsError("google map is not available")
-
-        runBlocking {
-            withContext(Dispatchers.Main) {
-                googleMap!!.setIndoorEnabled(enabled)
+    fun enableIndoorMaps(enabled: Boolean, callback: (error: GoogleMapsError?) -> Unit) {
+        try {
+            googleMap ?: throw GoogleMapsError("google map is not available")
+            CoroutineScope(Dispatchers.Main).launch {
+                googleMap!!.isIndoorEnabled = enabled
+                callback(null)
             }
+        } catch (e: GoogleMapsError) {
+            callback(e)
         }
     }
 
-    fun enableTrafficLayer(enabled: Boolean) {
-        googleMap ?: throw GoogleMapsError("google map is not available")
-
-        runBlocking {
-            withContext(Dispatchers.Main) {
+    fun enableTrafficLayer(enabled: Boolean, callback: (error: GoogleMapsError?) -> Unit) {
+        try {
+            googleMap ?: throw GoogleMapsError("google map is not available")
+            CoroutineScope(Dispatchers.Main).launch {
                 googleMap!!.isTrafficEnabled = enabled
+                callback(null)
             }
+        } catch (e: GoogleMapsError) {
+            callback(e)
         }
     }
 
     @SuppressLint("MissingPermission")
-    fun enableCurrentLocation(enabled: Boolean, callback: () -> Unit) {
-        googleMap ?: throw GoogleMapsError("google map is not available")
-
-        CoroutineScope(Dispatchers.Main).launch {
-            googleMap!!.isMyLocationEnabled = enabled
-            callback()
-        }
-    }
-
-    fun setPadding(padding: GoogleMapPadding) {
-        googleMap ?: throw GoogleMapsError("google map is not available")
-        runBlocking {
-            withContext(Dispatchers.Main) {
-                googleMap!!.setPadding(padding.left, padding.top, padding.right, padding.bottom)
+    fun enableCurrentLocation(enabled: Boolean, callback: (error: GoogleMapsError?) -> Unit) {
+        try {
+            googleMap ?: throw GoogleMapsError("google map is not available")
+            CoroutineScope(Dispatchers.Main).launch {
+                googleMap!!.isMyLocationEnabled = enabled
+                callback(null)
             }
+        } catch(e: GoogleMapsError) {
+           callback(e)
         }
     }
 
-
+    fun setPadding(padding: GoogleMapPadding, callback: (error: GoogleMapsError?) -> Unit) {
+        try {
+            googleMap ?: throw GoogleMapsError("google map is not available")
+            CoroutineScope(Dispatchers.Main).launch {
+                googleMap!!.setPadding(padding.left, padding.top, padding.right, padding.bottom)
+                callback(null)
+            }
+        } catch(e: GoogleMapsError) {
+            callback(e)
+        }
+    }
 
     private fun getScaledPixels(bridge: Bridge, pixels: Int): Int {
         // Get the screen's density scale

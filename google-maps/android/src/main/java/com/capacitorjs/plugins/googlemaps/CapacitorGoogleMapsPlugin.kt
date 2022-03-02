@@ -74,6 +74,7 @@ class CapacitorGoogleMapsPlugin : Plugin() {
 
             val removedMap = maps.remove(id) ?: throw MapNotFoundError()
             removedMap.destroy()
+
             call.resolve()
         }
         catch(e: GoogleMapsError) {
@@ -97,11 +98,14 @@ class CapacitorGoogleMapsPlugin : Plugin() {
             map ?: throw MapNotFoundError()
 
             val marker = CapacitorGoogleMapMarker(markerObj)
-            val markerId = map.addMarker(marker)
+            map.addMarker(marker) { result ->
+                val id = result.getOrThrow()
 
-            val res = JSObject()
-            res.put("id", markerId)
-            call.resolve(res)
+                val res = JSObject()
+                res.put("id", id)
+                call.resolve(res)
+
+            }
         } catch (e: GoogleMapsError) {
             handleError(call, e)
         } catch(e: Exception) {
@@ -134,16 +138,18 @@ class CapacitorGoogleMapsPlugin : Plugin() {
                 markers.add(marker)
             }
 
-            val ids = map.addMarkers(markers)
+            map.addMarkers(markers) { result ->
+                val ids = result.getOrThrow()
 
-            val jsonIDs = JSONArray()
-            ids.forEach {
-                jsonIDs.put(it)
+                val jsonIDs = JSONArray()
+                ids.forEach {
+                    jsonIDs.put(it)
+                }
+
+                val res = JSObject()
+                res.put("ids", jsonIDs)
+                call.resolve(res)
             }
-
-            val res = JSObject()
-            res.put("ids", jsonIDs)
-            call.resolve(res)
         } catch (e: GoogleMapsError) {
             handleError(call, e)
         } catch(e: Exception) {
@@ -160,9 +166,13 @@ class CapacitorGoogleMapsPlugin : Plugin() {
             val map = maps[id]
             map ?: throw MapNotFoundError()
 
-            map.enableClustering()
+            map.enableClustering() { err ->
+                if (err != null) {
+                    throw err
+                }
 
-            call.resolve()
+                call.resolve()
+            }
         } catch (e: GoogleMapsError) {
             handleError(call, e)
         } catch(e: Exception) {
@@ -179,9 +189,13 @@ class CapacitorGoogleMapsPlugin : Plugin() {
             val map = maps[id]
             map ?: throw MapNotFoundError()
 
-            map.disableClustering()
+            map.disableClustering() { err ->
+                if (err != null) {
+                    throw err
+                }
 
-            call.resolve()
+                call.resolve()
+            }
         } catch (e: GoogleMapsError) {
             handleError(call, e)
         } catch(e: Exception) {
@@ -201,9 +215,13 @@ class CapacitorGoogleMapsPlugin : Plugin() {
             val map = maps[id]
             map ?: throw MapNotFoundError()
 
-            map.removeMarker(markerId)
+            map.removeMarker(markerId) { err ->
+                if (err != null) {
+                    throw err
+                }
 
-            call.resolve()
+                call.resolve()
+            }
         } catch (e: GoogleMapsError) {
             handleError(call, e)
         } catch(e: Exception) {
@@ -234,9 +252,13 @@ class CapacitorGoogleMapsPlugin : Plugin() {
                 markerIds.add(markerId)
             }
 
-            map.removeMarkers(markerIds)
+            map.removeMarkers(markerIds) { err ->
+                if (err != null) {
+                    throw err
+                }
 
-            call.resolve()
+                call.resolve()
+            }
         } catch (e: GoogleMapsError) {
             handleError(call, e)
         } catch(e: Exception) {
@@ -258,9 +280,13 @@ class CapacitorGoogleMapsPlugin : Plugin() {
 
             val config = GoogleMapCameraConfig(cameraConfigObject)
 
-            map.setCamera(config)
+            map.setCamera(config) { err ->
+                if (err != null) {
+                    throw err
+                }
 
-            call.resolve()
+                call.resolve()
+            }
         } catch (e: GoogleMapsError) {
             handleError(call, e)
         } catch(e: Exception) {
@@ -280,9 +306,13 @@ class CapacitorGoogleMapsPlugin : Plugin() {
             val mapType = call.getString("mapType")
                 ?: throw InvalidArgumentsError("mapType is missing")
 
-            map.setMapType(mapType)
+            map.setMapType(mapType) { err ->
+                if (err != null) {
+                    throw err
+                }
 
-            call.resolve()
+                call.resolve()
+            }
         } catch (e: GoogleMapsError) {
             handleError(call, e)
         } catch(e: Exception) {
@@ -302,9 +332,13 @@ class CapacitorGoogleMapsPlugin : Plugin() {
             val enabled = call.getBoolean("enabled")
                 ?: throw InvalidArgumentsError("enabled is missing")
 
-            map.enableIndoorMaps(enabled)
+            map.enableIndoorMaps(enabled) { err ->
+                if (err != null) {
+                    throw err
+                }
 
-            call.resolve()
+                call.resolve()
+            }
         } catch (e: GoogleMapsError) {
             handleError(call, e)
         } catch(e: Exception) {
@@ -324,9 +358,13 @@ class CapacitorGoogleMapsPlugin : Plugin() {
             val enabled = call.getBoolean("enabled")
                 ?: throw InvalidArgumentsError("enabled is missing")
 
-            map.enableTrafficLayer(enabled)
+            map.enableTrafficLayer(enabled) { err ->
+                if (err != null) {
+                    throw err
+                }
 
-            call.resolve()
+                call.resolve()
+            }
         } catch (e: GoogleMapsError) {
             handleError(call, e)
         } catch(e: Exception) {
@@ -366,9 +404,13 @@ class CapacitorGoogleMapsPlugin : Plugin() {
 
             val padding = GoogleMapPadding(paddingObj)
 
-            map.setPadding(padding)
+            map.setPadding(padding) { err ->
+                if (err != null) {
+                    throw err
+                }
 
-            call.resolve()
+                call.resolve()
+            }
         } catch (e: GoogleMapsError) {
             handleError(call, e)
         } catch(e: Exception) {
@@ -392,7 +434,11 @@ class CapacitorGoogleMapsPlugin : Plugin() {
             val enabled = call.getBoolean("enabled")
                 ?: throw InvalidArgumentsError("enabled is missing")
 
-            map.enableCurrentLocation(enabled) {
+            map.enableCurrentLocation(enabled) { err ->
+                if (err != null) {
+                    throw err
+                }
+
                 call.resolve()
             }
         } catch (e: GoogleMapsError) {
