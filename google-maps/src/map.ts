@@ -31,14 +31,14 @@ export class GoogleMap {
       x: elementBounds.x,
       y: elementBounds.y,
       width: elementBounds.width,
-      height: elementBounds.height
-    }
+      height: elementBounds.height,
+    };
 
     await CapacitorGoogleMaps.create({
       element,
       id,
       apiKey,
-      config: {...config, ...coordsAndSize},
+      config: { ...config, ...coordsAndSize },
       forceCreate,
     });
 

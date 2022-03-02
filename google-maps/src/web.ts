@@ -15,7 +15,9 @@ export class CapacitorGoogleMapsWeb
   implements CapacitorGoogleMapsPlugin
 {
   private gMapsRef: typeof google.maps | undefined = undefined;
-  private maps: {[id: string]: {element: HTMLElement; map: google.maps.Map}} = {};
+  private maps: {
+    [id: string]: { element: HTMLElement; map: google.maps.Map };
+  } = {};
 
   private async importGoogleLib(apiKey: string) {
     if (this.gMapsRef === undefined) {
@@ -23,7 +25,7 @@ export class CapacitorGoogleMapsWeb
       const loader = new lib.Loader({
         apiKey: apiKey ?? '',
         version: 'weekly',
-        libraries: ["places"]
+        libraries: ['places'],
       });
       const google = await loader.load();
       this.gMapsRef = google.maps;
@@ -54,7 +56,7 @@ export class CapacitorGoogleMapsWeb
     await this.importGoogleLib(_args.apiKey);
     this.maps[_args.id] = {
       map: new window.google.maps.Map(_args.element, { ..._args.config }),
-      element: _args.element
+      element: _args.element,
     };
   }
   async destroy(_args: DestroyMapArgs): Promise<void> {
