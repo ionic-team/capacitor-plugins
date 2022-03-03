@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@1.3.0...@capacitor/camera@1.3.1) (2022-03-03)
+
+
+### Bug Fixes
+
+* **camera:** Return the image on dismiss completion ([#849](https://github.com/ionic-team/capacitor-plugins/issues/849)) ([f083841](https://github.com/ionic-team/capacitor-plugins/commit/f0838416c6cf731aaae83fcb4986568357878b41))
+
+
+
+
+
 # [1.3.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@1.2.4...@capacitor/camera@1.3.0) (2022-02-10)
 
 
