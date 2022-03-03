@@ -38,7 +38,7 @@ const setName = async () => {
 const checkName = async () => {
   const { value } = await Storage.get({ key: 'name' });
 
-  alert(`Hello ${value}!`);
+  console.log(`Hello ${value}!`);
 };
 
 const removeName = async () => {
