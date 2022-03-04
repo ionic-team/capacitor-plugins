@@ -23,7 +23,7 @@ const writeToClipboard = async () => {
 const checkClipboard = async () => {
   const { type, value } = await Clipboard.read();
 
-  alert(`Got ${type} from clipboard: ${value}`);
+  console.log(`Got ${type} from clipboard: ${value}`);
 };
 ```
 

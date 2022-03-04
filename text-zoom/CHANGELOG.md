@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.8](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/text-zoom@1.0.7...@capacitor/text-zoom@1.0.8) (2022-01-19)
+
+
+### Bug Fixes
+
+* inline source code in esm map files ([#760](https://github.com/ionic-team/capacitor-plugins/issues/760)) ([a960489](https://github.com/ionic-team/capacitor-plugins/commit/a960489a19db0182b90d187a50deff9dfbe51038))
+
+
+
+
+
+## [1.0.7](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/text-zoom@1.0.6...@capacitor/text-zoom@1.0.7) (2022-01-10)
+
+
+### Bug Fixes
+
+* **text-zoom:** Lazy load iOS implementation ([#735](https://github.com/ionic-team/capacitor-plugins/issues/735)) ([5039a74](https://github.com/ionic-team/capacitor-plugins/commit/5039a747efa2bc36674c70bdd9dae4439165ab4d))
+
+
+
+
+
 ## [1.0.6](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/text-zoom@1.0.5...@capacitor/text-zoom@1.0.6) (2021-11-03)
 
 **Note:** Version bump only for package @capacitor/text-zoom

@@ -42,7 +42,23 @@ export interface ShareResult {
   activityType?: string;
 }
 
+export interface CanShareResult {
+  /**
+   * Whether sharing is supported or not.
+   *
+   * @since 1.1.0
+   */
+  value: boolean;
+}
+
 export interface SharePlugin {
+  /**
+   * Check if sharing is supported.
+   *
+   * @since 1.1.0
+   */
+  canShare(): Promise<CanShareResult>;
+
   /**
    * Show a Share modal for sharing content with other apps
    *
