@@ -73,6 +73,22 @@ export interface AddMarkersArgs {
   markers: Marker[];
 }
 
+export interface OnScrollArgs {
+  frame: {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+  },
+  mapBounds: [{
+    id: string;
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+  }]
+}
+
 export interface CapacitorGoogleMapsPlugin {
   create(args: CreateMapArgs): Promise<void>;
   addMarker(args: AddMarkerArgs): Promise<{ id: string }>;
@@ -89,6 +105,7 @@ export interface CapacitorGoogleMapsPlugin {
   enableAccessibilityElements(args: AccElementsArgs): Promise<void>;
   enableCurrentLocation(args: CurrentLocArgs): Promise<void>;
   setPadding(args: PaddingArgs): Promise<void>;
+  onScroll(args: OnScrollArgs): Promise<void>;
 }
 
 export const CapacitorGoogleMaps = registerPlugin<CapacitorGoogleMapsPlugin>(

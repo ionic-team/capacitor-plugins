@@ -19,11 +19,14 @@ export interface Marker {
 
 export class GoogleMap {
   private id: string;
+  private element: HTMLElement | null = null;
+  private frameElement: HTMLElement | null = null;
 
   private constructor(id: string) {
     this.id = id;
   }
   public static async create(
+    element: HTMLElement,
     id: string,
     apiKey: string,
     config: GoogleMapConfig,
@@ -37,6 +40,16 @@ export class GoogleMap {
       config,
       forceCreate,
     });
+
+    newMap.element = element;
+
+    if (element.parentElement) {
+      newMap.frameElement = element.parentElement;
+      newMap.frameElement.addEventListener(
+        'scroll',
+        newMap.onFrameElementScroll,
+      );
+    }
 
     return newMap;
   }
@@ -138,5 +151,30 @@ export class GoogleMap {
       id: this.id,
       padding,
     });
+  }
+
+  private onFrameElementScroll(_e: Event) {
+    if (this.element && this.frameElement) {
+      const mapRect = this.element.getBoundingClientRect();
+      const frameRect = this.frameElement.getBoundingClientRect();
+
+      CapacitorGoogleMaps.onScroll({
+        frame: {
+          x: frameRect.x,
+          y: frameRect.y,
+          width: frameRect.width,
+          height: frameRect.height,
+        },
+        mapBounds: [
+          {
+            id: this.id,
+            x: mapRect.x,
+            y: mapRect.y,
+            width: mapRect.width,
+            height: mapRect.height,
+          },
+        ],
+      });
+    }
   }
 }
