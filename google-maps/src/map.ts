@@ -24,6 +24,7 @@ export class GoogleMap {
     this.id = id;
   }
   public static async create(
+    element: HTMLElement,
     id: string,
     apiKey: string,
     config: GoogleMapConfig,
@@ -31,10 +32,19 @@ export class GoogleMap {
   ): Promise<GoogleMap> {
     const newMap = new GoogleMap(id);
 
+    const elementBounds = element.getBoundingClientRect();
+    const coordsAndSize = {
+      x: elementBounds.x,
+      y: elementBounds.y,
+      width: elementBounds.width,
+      height: elementBounds.height,
+    };
+
     await CapacitorGoogleMaps.create({
+      element,
       id,
       apiKey,
-      config,
+      config: { ...config, ...coordsAndSize },
       forceCreate,
     });
 

@@ -12,21 +12,20 @@ const MultipleMarkers: React.FC = () => {
 
     async function createMap() {
         try {
-            const newMap = await GoogleMap.create("test-map", apiKey!, {
-                center: {
-                    lat: 47.60,
-                    lng: -122.33,
-                },
-                zoom: 5,
-                androidLiteMode: false,
-                height: 150,
-                width: window.innerWidth,
-                x: 0,
-                y: window.innerHeight - 150
-            });
-            setMap(newMap);
+            const element = document.getElementById('mapBox');
+            if (element !== null) {
+                const newMap = await GoogleMap.create(element, "test-map", apiKey!, {
+                    center: {
+                        lat: 47.60,
+                        lng: -122.33,
+                    },
+                    zoom: 5,
+                    androidLiteMode: false
+                });
+                setMap(newMap);
 
-            setCommandOutput("Map created")
+                setCommandOutput("Map created")
+            }
         } catch (err: any) {
             setCommandOutput(err.message);
         }
@@ -122,6 +121,9 @@ const MultipleMarkers: React.FC = () => {
             </div>
             <div>
                 <IonTextarea id="commandOutput" value={commandOutput}></IonTextarea>
+            </div>
+            <div>
+                <div id="mapBox" style={{width: 400, height: 400}}></div>
             </div>
         </BaseTestingPage>
     )

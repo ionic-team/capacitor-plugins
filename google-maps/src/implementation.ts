@@ -9,6 +9,7 @@ import type {
 import type { Marker } from './map';
 
 export interface CreateMapArgs {
+  element: HTMLElement;
   id: string;
   apiKey: string;
   config: GoogleMapConfig;

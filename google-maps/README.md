@@ -242,6 +242,7 @@ setPadding(args: PaddingArgs) => Promise<void>
 
 | Prop              | Type                                                        |
 | ----------------- | ----------------------------------------------------------- |
+| **`element`**     | <code>HTMLElement</code>                                    |
 | **`id`**          | <code>string</code>                                         |
 | **`apiKey`**      | <code>string</code>                                         |
 | **`config`**      | <code><a href="#googlemapconfig">GoogleMapConfig</a></code> |
