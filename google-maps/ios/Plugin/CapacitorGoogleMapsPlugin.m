@@ -12,4 +12,11 @@ CAP_PLUGIN(CapacitorGoogleMapsPlugin, "CapacitorGoogleMaps",
    CAP_PLUGIN_METHOD(enableClustering, CAPPluginReturnPromise);
    CAP_PLUGIN_METHOD(disableClustering, CAPPluginReturnPromise);
    CAP_PLUGIN_METHOD(destroy, CAPPluginReturnPromise);
+   CAP_PLUGIN_METHOD(setCamera, CAPPluginReturnPromise);
+   CAP_PLUGIN_METHOD(setMapType, CAPPluginReturnPromise);
+   CAP_PLUGIN_METHOD(enableIndoorMaps, CAPPluginReturnPromise);
+   CAP_PLUGIN_METHOD(enableTrafficLayer, CAPPluginReturnPromise);
+   CAP_PLUGIN_METHOD(enableAccessibilityElements, CAPPluginReturnPromise);
+   CAP_PLUGIN_METHOD(enableCurrentLocation, CAPPluginReturnPromise);
+   CAP_PLUGIN_METHOD(setPadding, CAPPluginReturnPromise);           
 )

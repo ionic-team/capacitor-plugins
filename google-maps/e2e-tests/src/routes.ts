@@ -1,5 +1,6 @@
 import { triangleOutline, triangleSharp } from 'ionicons/icons';
 import React from 'react';
+import ConfigMapPage from './pages/Map/ConfigMap';
 import CreateAndDestroyMapPage from './pages/Map/CreateAndDestroyMap';
 import AddAndRemoveMarkers from './pages/Markers/AddAndRemoveMarkers';
 import MultipleMarkers from './pages/Markers/MultipleMarkers';
@@ -28,6 +29,13 @@ const routesList: RouteGroup[] = [
         mdIcon: triangleSharp,
         component: CreateAndDestroyMapPage,
       },      
+      {
+        title: 'Config Maps',
+        url: '/maps/config',
+        iosIcon: triangleOutline,
+        mdIcon: triangleSharp,
+        component: ConfigMapPage,
+      },  
     ],
   },
   {

@@ -1,12 +1,19 @@
 import { WebPlugin } from '@capacitor/core';
 
 import type {
+  AccElementsArgs,
   AddMarkerArgs,
+  CameraArgs,
   AddMarkersArgs,
   CapacitorGoogleMapsPlugin,
   CreateMapArgs,
+  CurrentLocArgs,
   DestroyMapArgs,
+  IndoorMapArgs,
+  MapTypeArgs,
+  PaddingArgs,
   RemoveMarkerArgs,
+  TrafficLayerArgs,
   RemoveMarkersArgs,
 } from './implementation';
 
@@ -33,6 +40,27 @@ export class CapacitorGoogleMapsWeb
     }
   }
 
+  setCamera(_args: CameraArgs): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
+  setMapType(_args: MapTypeArgs): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
+  enableIndoorMaps(_args: IndoorMapArgs): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
+  enableTrafficLayer(_args: TrafficLayerArgs): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
+  enableAccessibilityElements(_args: AccElementsArgs): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
+  enableCurrentLocation(_args: CurrentLocArgs): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
+  setPadding(_args: PaddingArgs): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
   addMarkers(_args: AddMarkersArgs): Promise<{ ids: string[] }> {
     throw new Error('Method not implemented.');
   }

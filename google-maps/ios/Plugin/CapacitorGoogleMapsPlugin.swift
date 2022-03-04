@@ -2,6 +2,26 @@ import Foundation
 import Capacitor
 import GoogleMaps
 
+extension GMSMapViewType {
+    static func fromString(mapType: String) -> GMSMapViewType {
+        switch mapType {
+        case "Normal":
+            return .normal
+        case "Hybrid":
+            return .hybrid
+        case "Satellite":
+            return .satellite
+        case "Terrain":
+            return .terrain
+        case "None":
+            return .none
+        default:
+            print("CapacitorGoogleMaps Warning: unknown mapView type '\(mapType)'.  Defaulting to normal.")
+            return .normal
+        }
+    }
+}
+
 @objc(CapacitorGoogleMapsPlugin)
 public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
     private var maps = [String: Map]()
@@ -183,6 +203,166 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
 
             call.resolve()
 
+        } catch {
+            handleError(call, error: error)
+        }
+    }
+
+    @objc func setCamera(_ call: CAPPluginCall) {
+        do {
+            guard let id = call.getString("id") else {
+                throw GoogleMapErrors.invalidMapId
+            }
+
+            guard let map = self.maps[id] else {
+                throw GoogleMapErrors.mapNotFound
+            }
+
+            guard let configObj = call.getObject("config") else {
+                throw GoogleMapErrors.invalidArguments("CameraConfig is missing")
+            }
+
+            let config = try GoogleMapCameraConfig(fromJSObject: configObj)
+
+            try map.setCamera(config: config)
+
+            call.resolve()
+        } catch {
+            handleError(call, error: error)
+        }
+    }
+
+    @objc func setMapType(_ call: CAPPluginCall) {
+        do {
+            guard let id = call.getString("id") else {
+                throw GoogleMapErrors.invalidMapId
+            }
+
+            guard let map = self.maps[id] else {
+                throw GoogleMapErrors.mapNotFound
+            }
+
+            guard let mapTypeString = call.getString("mapType") else {
+                throw GoogleMapErrors.invalidArguments("mapType is missing")
+            }
+
+            let mapType = GMSMapViewType.fromString(mapType: mapTypeString)
+
+            try map.setMapType(mapType: mapType)
+
+            call.resolve()
+        } catch {
+            handleError(call, error: error)
+        }
+    }
+
+    @objc func enableIndoorMaps(_ call: CAPPluginCall) {
+        do {
+            guard let id = call.getString("id") else {
+                throw GoogleMapErrors.invalidMapId
+            }
+
+            guard let map = self.maps[id] else {
+                throw GoogleMapErrors.mapNotFound
+            }
+
+            guard let enabled = call.getBool("enabled") else {
+                throw GoogleMapErrors.invalidArguments("enabled is missing")
+            }
+
+            try map.enableIndoorMaps(enabled: enabled)
+
+            call.resolve()
+        } catch {
+            handleError(call, error: error)
+        }
+    }
+
+    @objc func enableTrafficLayer(_ call: CAPPluginCall) {
+        do {
+            guard let id = call.getString("id") else {
+                throw GoogleMapErrors.invalidMapId
+            }
+
+            guard let map = self.maps[id] else {
+                throw GoogleMapErrors.mapNotFound
+            }
+
+            guard let enabled = call.getBool("enabled") else {
+                throw GoogleMapErrors.invalidArguments("enabled is missing")
+            }
+
+            try map.enableTrafficLayer(enabled: enabled)
+
+            call.resolve()
+        } catch {
+            handleError(call, error: error)
+        }
+    }
+
+    @objc func enableAccessibilityElements(_ call: CAPPluginCall) {
+        do {
+            guard let id = call.getString("id") else {
+                throw GoogleMapErrors.invalidMapId
+            }
+
+            guard let map = self.maps[id] else {
+                throw GoogleMapErrors.mapNotFound
+            }
+
+            guard let enabled = call.getBool("enabled") else {
+                throw GoogleMapErrors.invalidArguments("enabled is missing")
+            }
+
+            try map.enableAccessibilityElements(enabled: enabled)
+
+            call.resolve()
+        } catch {
+            handleError(call, error: error)
+        }
+    }
+
+    @objc func setPadding(_ call: CAPPluginCall) {
+        do {
+            guard let id = call.getString("id") else {
+                throw GoogleMapErrors.invalidMapId
+            }
+
+            guard let map = self.maps[id] else {
+                throw GoogleMapErrors.mapNotFound
+            }
+
+            guard let configObj = call.getObject("padding") else {
+                throw GoogleMapErrors.invalidArguments("padding is missing")
+            }
+
+            let padding = try GoogleMapPadding.init(fromJSObject: configObj)
+
+            try map.setPadding(padding: padding)
+
+            call.resolve()
+        } catch {
+            handleError(call, error: error)
+        }
+    }
+
+    @objc func enableCurrentLocation(_ call: CAPPluginCall) {
+        do {
+            guard let id = call.getString("id") else {
+                throw GoogleMapErrors.invalidMapId
+            }
+
+            guard let map = self.maps[id] else {
+                throw GoogleMapErrors.mapNotFound
+            }
+
+            guard let enabled = call.getBool("enabled") else {
+                throw GoogleMapErrors.invalidArguments("enabled is missing")
+            }
+
+            try map.enableCurrentLocation(enabled: enabled)
+
+            call.resolve()
         } catch {
             handleError(call, error: error)
         }
