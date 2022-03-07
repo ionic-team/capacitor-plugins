@@ -12,7 +12,8 @@ const MultipleMarkers: React.FC = () => {
 
     async function createMap() {
         try {
-            const newMap = await GoogleMap.create("test-map", apiKey!, {
+            const mapRef1 = document.getElementById("map1")!
+            const newMap = await GoogleMap.create(mapRef1, "test-map", apiKey!, {
                 center: {
                     lat: 47.60,
                     lng: -122.33,
@@ -123,6 +124,13 @@ const MultipleMarkers: React.FC = () => {
             <div>
                 <IonTextarea id="commandOutput" value={commandOutput}></IonTextarea>
             </div>
+            <div id="map1" style={{
+                position: "absolute",
+                top: window.innerHeight - 150,
+                left: 0,
+                width: window.innerWidth,
+                height: 150,
+            }}></div>
         </BaseTestingPage>
     )
 }
