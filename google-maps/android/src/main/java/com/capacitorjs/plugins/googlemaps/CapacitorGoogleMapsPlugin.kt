@@ -423,6 +423,32 @@ class CapacitorGoogleMapsPlugin : Plugin() {
         call.unavailable("this call is not available on android")
     }
 
+    @PluginMethod
+    fun onScroll(call: PluginCall) {
+        try {
+            val id = call.getString("id")
+            id ?: throw InvalidMapIdError()
+
+            val map = maps[id]
+            map ?: throw MapNotFoundError()
+
+            val frameObj = call.getObject("frame") ?: throw InvalidArgumentsError("frame object is missing")
+            val boundsObj = call.getObject("mapBounds") ?: throw InvalidArgumentsError("mapBounds object is missing")
+
+            val frame = CapacitorGoogleMapsBounds(frameObj)
+            val bounds = CapacitorGoogleMapsBounds(boundsObj)
+
+            map.updateRender(bounds)
+
+            call.resolve()
+
+        } catch (e: GoogleMapsError) {
+            handleError(call, e)
+        } catch(e: Exception) {
+            handleError(call, e)
+        }
+    }
+
     private fun internalEnableCurrentLocation(call: PluginCall) {
         try {
             val id = call.getString("id")
