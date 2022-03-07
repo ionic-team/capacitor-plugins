@@ -34,6 +34,18 @@ export class GoogleMap {
   ): Promise<GoogleMap> {
     const newMap = new GoogleMap(id);
 
+    if (element) {
+      newMap.element = element;
+
+      const elementBounds = element.getBoundingClientRect();
+      config.width = elementBounds.width;
+      config.height = elementBounds.height;
+      config.x = elementBounds.x;
+      config.y = elementBounds.y;
+
+      newMap.frameElement = newMap.findMapContainerElement();
+    }
+
     await CapacitorGoogleMaps.create({
       id,
       apiKey,
@@ -41,15 +53,7 @@ export class GoogleMap {
       forceCreate,
     });
 
-    newMap.element = element;
-
-    if (element.parentElement) {
-      newMap.frameElement = element.parentElement;
-      newMap.frameElement.addEventListener(
-        'scroll',
-        newMap.onFrameElementScroll,
-      );
-    }
+    await newMap.initScrolling();
 
     return newMap;
   }
@@ -99,6 +103,7 @@ export class GoogleMap {
   }
 
   async destroy(): Promise<void> {
+    await this.disableScrolling();
     return CapacitorGoogleMaps.destroy({
       id: this.id,
     });
@@ -153,28 +158,74 @@ export class GoogleMap {
     });
   }
 
-  private onFrameElementScroll(_e: Event) {
+  async initScrolling(): Promise<void> {
+    if (this.frameElement) {
+      console.log(this.frameElement.tagName.toLowerCase());
+
+      if (this.frameElement.tagName.toLowerCase() == 'ion-content') {
+        //@ts-ignore
+        this.frameElement.scrollEvents = true;
+        this.frameElement.addEventListener('ionScroll', () => {
+          console.log('element is scrolling');
+          this.updateMapBounds();
+        });
+        console.log('ionScroll Event Listener Setup');
+      } else {
+        this.frameElement.addEventListener('scroll', () => {
+          console.log('element is scrolling');
+          this.updateMapBounds();
+        });
+      }
+    } else {
+      console.warn('An appropriate map container element has not been found');
+    }
+  }
+
+  async disableScrolling(): Promise<void> {
+    if (this.frameElement) {
+      this.frameElement.removeEventListener("ionScroll", () => {})
+      this.frameElement.removeEventListener("scroll", () => {})
+    }
+  }
+
+  private updateMapBounds() {
     if (this.element && this.frameElement) {
       const mapRect = this.element.getBoundingClientRect();
       const frameRect = this.frameElement.getBoundingClientRect();
 
       CapacitorGoogleMaps.onScroll({
+        id: this.id,
         frame: {
           x: frameRect.x,
           y: frameRect.y,
           width: frameRect.width,
           height: frameRect.height,
         },
-        mapBounds: [
-          {
-            id: this.id,
-            x: mapRect.x,
-            y: mapRect.y,
-            width: mapRect.width,
-            height: mapRect.height,
-          },
-        ],
+        mapBounds: {
+          x: mapRect.x,
+          y: mapRect.y,
+          width: mapRect.width,
+          height: mapRect.height,
+        },
       });
     }
+  }
+
+  private findMapContainerElement(): HTMLElement | null {
+    if (!this.element) {
+      return null;
+    }
+
+    let parentElement = this.element.parentElement;
+    while (parentElement !== null) {
+      if (parentElement.classList.contains('mapContainer')) {
+        console.log('Parent Element Found');
+        return parentElement;
+      }
+
+      parentElement = parentElement.parentElement;
+    }
+
+    return null;
   }
 }

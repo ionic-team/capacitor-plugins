@@ -74,19 +74,19 @@ export interface AddMarkersArgs {
 }
 
 export interface OnScrollArgs {
+  id: string;
   frame: {
     x: number;
     y: number;
     width: number;
     height: number;
   },
-  mapBounds: [{
-    id: string;
+  mapBounds: {    
     x: number;
     y: number;
     width: number;
     height: number;
-  }]
+  }
 }
 
 export interface CapacitorGoogleMapsPlugin {

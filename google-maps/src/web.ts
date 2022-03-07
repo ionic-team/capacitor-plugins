@@ -15,12 +15,16 @@ import type {
   RemoveMarkerArgs,
   TrafficLayerArgs,
   RemoveMarkersArgs,
+  OnScrollArgs,
 } from './implementation';
 
 export class CapacitorGoogleMapsWeb
   extends WebPlugin
   implements CapacitorGoogleMapsPlugin
 {
+  onScroll(_args: OnScrollArgs): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
   setCamera(_args: CameraArgs): Promise<void> {
     throw new Error('Method not implemented.');
   }

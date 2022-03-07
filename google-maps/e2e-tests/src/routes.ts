@@ -4,6 +4,7 @@ import ConfigMapPage from './pages/Map/ConfigMap';
 import CreateAndDestroyMapPage from './pages/Map/CreateAndDestroyMap';
 import AddAndRemoveMarkers from './pages/Markers/AddAndRemoveMarkers';
 import MultipleMarkers from './pages/Markers/MultipleMarkers';
+import SimpleScrollingPage from './pages/Scrolling/SimpleScrolling';
 
 export type RouteDescription = {
   title: string;
@@ -35,7 +36,13 @@ const routesList: RouteGroup[] = [
         iosIcon: triangleOutline,
         mdIcon: triangleSharp,
         component: ConfigMapPage,
-      },  
+      },{
+        title: 'Simple Scrolling',
+        url: '/maps/scrolling',
+        iosIcon: triangleOutline,
+        mdIcon: triangleSharp,
+        component: SimpleScrollingPage,
+      }
     ],
   },
   {

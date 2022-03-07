@@ -28,6 +28,7 @@ npx cap sync
 * [`enableAccessibilityElements(...)`](#enableaccessibilityelements)
 * [`enableCurrentLocation(...)`](#enablecurrentlocation)
 * [`setPadding(...)`](#setpadding)
+* [`onScroll(...)`](#onscroll)
 * [Interfaces](#interfaces)
 * [Enums](#enums)
 
@@ -235,6 +236,19 @@ setPadding(args: PaddingArgs) => Promise<void>
 --------------------
 
 
+### onScroll(...)
+
+```typescript
+onScroll(args: OnScrollArgs) => Promise<void>
+```
+
+| Param      | Type                                                  |
+| ---------- | ----------------------------------------------------- |
+| **`args`** | <code><a href="#onscrollargs">OnScrollArgs</a></code> |
+
+--------------------
+
+
 ### Interfaces
 
 
@@ -397,6 +411,15 @@ setPadding(args: PaddingArgs) => Promise<void>
 | **`left`**   | <code>number</code> |
 | **`right`**  | <code>number</code> |
 | **`bottom`** | <code>number</code> |
+
+
+#### OnScrollArgs
+
+| Prop            | Type                                                                  |
+| --------------- | --------------------------------------------------------------------- |
+| **`id`**        | <code>string</code>                                                   |
+| **`frame`**     | <code>{ x: number; y: number; width: number; height: number; }</code> |
+| **`mapBounds`** | <code>{ x: number; y: number; width: number; height: number; }</code> |
 
 
 ### Enums
