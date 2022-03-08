@@ -1,6 +1,7 @@
 package com.capacitorjs.plugins.googlemaps
 import android.content.Context
 import android.graphics.*
+import android.os.Build
 import com.google.android.gms.maps.GoogleMapOptions
 import com.google.android.gms.maps.MapView
 
@@ -25,7 +26,6 @@ class CapacitorGoogleMapView(context: Context, options: GoogleMapOptions?, displ
 
         if (clipRects.isNotEmpty()) {
             clipPath = Path()
-            clipPath.fillType = Path.FillType.INVERSE_EVEN_ODD
 
             clipRects.forEach {
                 clipPath.addRect(it, Path.Direction.CW)
@@ -56,7 +56,12 @@ class CapacitorGoogleMapView(context: Context, options: GoogleMapOptions?, displ
     }
 
     override fun onDraw(canvas: Canvas?) {
-        canvas?.clipPath(clipPath)
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            canvas?.clipOutPath(clipPath)
+        } else {
+            canvas?.clipPath(clipPath, Region.Op.DIFFERENCE)
+        }
+
         super.onDraw(canvas)
     }
 

@@ -45,7 +45,6 @@ class CapacitorGoogleMap(val id: String, val config: GoogleMapConfig,
 
                 this@CapacitorGoogleMap.mapView = mapView
 
-
                 render()
             }
         }
