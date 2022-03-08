@@ -2,7 +2,6 @@ package com.capacitorjs.plugins.googlemaps
 
 import android.util.Log
 import com.getcapacitor.JSObject
-import com.getcapacitor.Bridge
 import com.getcapacitor.Plugin
 import com.getcapacitor.PluginCall
 import com.getcapacitor.PluginMethod
@@ -13,6 +12,41 @@ import org.json.JSONArray
 class CapacitorGoogleMapsPlugin : Plugin() {
     private var maps: HashMap<String, CapacitorGoogleMap> = HashMap()
     private val tag: String = "CAP-GOOGLE-MAPS"
+
+    override fun handleOnStart() {
+        super.handleOnStart()
+        maps.forEach {
+            it.value.onStart()
+        }
+    }
+
+    override fun handleOnResume() {
+        super.handleOnResume()
+        maps.forEach {
+            it.value.onResume()
+        }
+    }
+
+    override fun handleOnPause() {
+        super.handleOnPause()
+        maps.forEach {
+            it.value.onPause()
+        }
+    }
+
+    override fun handleOnStop() {
+        super.handleOnStop()
+        maps.forEach {
+            it.value.onStop()
+        }
+    }
+
+    override fun handleOnDestroy() {
+        super.handleOnDestroy()
+        maps.forEach {
+            it.value.onDestroy()
+        }
+    }
 
     @PluginMethod
     fun create(call: PluginCall) {
@@ -231,6 +265,10 @@ class CapacitorGoogleMapsPlugin : Plugin() {
         } catch(e: Exception) {
             handleError(call, e)
         }
+    }
+
+    fun notify(event: String, data: JSObject) {
+        notifyListeners(event, data)
     }
 
     private fun handleError(call: PluginCall, e: Exception) {

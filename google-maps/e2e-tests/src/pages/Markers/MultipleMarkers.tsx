@@ -10,6 +10,10 @@ const MultipleMarkers: React.FC = () => {
     const [commandOutput, setCommandOutput] = useState('');
     const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
 
+    const onMarkerClick = (data: any) => {
+        setCommandOutput(`MARKER (${data.markerId}) WAS CLICKED ON MAP (${data.mapId})`);
+    }
+
     async function createMap() {
         try {
             const newMap = await GoogleMap.create("test-map", apiKey!, {
@@ -101,14 +105,33 @@ const MultipleMarkers: React.FC = () => {
         }
     }
 
+    async function setOnMarkerClickListener() {
+        map?.setOnMarkerClickListener(onMarkerClick);
+        setCommandOutput('Set On Marker Click Listener!');
+    }
+
+    async function removeOnMarkerClickListener() {
+        map?.setOnMarkerClickListener();
+        setCommandOutput('Removed On Marker Click Listener!');
+    }
+
     return (
         <BaseTestingPage pageTitle="Multiple Markers">
+            <div>
+                <IonTextarea id="commandOutput" value={commandOutput}></IonTextarea>
+            </div>
             <div>
                 <IonButton id="createMapButton" onClick={createMap}>
                     Create Map
                 </IonButton>
                 <IonButton id="addMarkersButton" onClick={addMultipleMarkers}>
                     Add Multiple Markers
+                </IonButton>
+                <IonButton  id="setOnMarkerClickButton" onClick={setOnMarkerClickListener}>
+                    Set On Marker Click Listener
+                </IonButton>
+                <IonButton  id="removeOnMarkerClickButton" onClick={removeOnMarkerClickListener}>
+                    Remove On Marker Click Listener
                 </IonButton>
                 <IonButton id="enableClusteringButton" onClick={enableClustering}>
                     Enable Clustering
@@ -119,9 +142,6 @@ const MultipleMarkers: React.FC = () => {
                 <IonButton id="removeMarkersButton" onClick={removeAllMarkers}>
                     Remove Markers
                 </IonButton>
-            </div>
-            <div>
-                <IonTextarea id="commandOutput" value={commandOutput}></IonTextarea>
             </div>
         </BaseTestingPage>
     )

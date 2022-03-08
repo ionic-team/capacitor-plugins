@@ -36,8 +36,8 @@ class CapacitorGoogleMapMarker(fromJSONObject: JSONObject): ClusterItem {
         draggable = fromJSONObject.optBoolean("draggable", false)
     }
 
-    override fun getPosition(): com.google.android.gms.maps.model.LatLng {
-        return com.google.android.gms.maps.model.LatLng(coordinate.latitude, coordinate.longitude)
+    override fun getPosition(): LatLng {
+        return LatLng(coordinate.latitude, coordinate.longitude)
     }
 
     override fun getTitle(): String {

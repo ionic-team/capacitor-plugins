@@ -6,6 +6,8 @@ import type {
   CapacitorGoogleMapsPlugin,
   CreateMapArgs,
   DestroyMapArgs,
+  OnMapClickArgs,
+  OnMarkerClickArgs,
   RemoveMarkerArgs,
   RemoveMarkersArgs,
 } from './implementation';
@@ -36,6 +38,12 @@ export class CapacitorGoogleMapsWeb
     throw new Error('Method not implemented.');
   }
   destroy(_args: DestroyMapArgs): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
+  setOnMapClickListener(_args: OnMapClickArgs): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
+  setOnMarkerClickListener(_args: OnMarkerClickArgs): Promise<void> {
     throw new Error('Method not implemented.');
   }
 }

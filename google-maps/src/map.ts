@@ -1,4 +1,7 @@
+import type { PluginListenerHandle } from '@capacitor/core';
+
 import type { GoogleMapConfig, LatLng } from './definitions';
+import type { MapListenerCallback } from './implementation';
 import { CapacitorGoogleMaps } from './implementation';
 
 export interface Marker {
@@ -13,6 +16,8 @@ export interface Marker {
 
 export class GoogleMap {
   private id: string;
+  private onMapClickListener?: PluginListenerHandle;
+  private onMarkerClickListener?: PluginListenerHandle;
 
   private constructor(id: string) {
     this.id = id;
@@ -22,6 +27,7 @@ export class GoogleMap {
     apiKey: string,
     config: GoogleMapConfig,
     forceCreate?: boolean,
+    callback?: MapListenerCallback,
   ): Promise<GoogleMap> {
     const newMap = new GoogleMap(id);
 
@@ -31,6 +37,10 @@ export class GoogleMap {
       config,
       forceCreate,
     });
+
+    if (callback) {
+      CapacitorGoogleMaps.addListener('onMapReady', callback);
+    }
 
     return newMap;
   }
@@ -80,8 +90,48 @@ export class GoogleMap {
   }
 
   async destroy(): Promise<void> {
+    if (this.onMapClickListener) {
+      this.onMapClickListener.remove();
+    }
+
+    if (this.onMarkerClickListener) {
+      this.onMarkerClickListener.remove();
+    }
+
     return CapacitorGoogleMaps.destroy({
       id: this.id,
     });
+  }
+
+  async setOnMapClickListener(callback?: MapListenerCallback): Promise<void> {
+    if (this.onMapClickListener) {
+      this.onMapClickListener.remove();
+    }
+
+    if (callback) {
+      this.onMapClickListener = CapacitorGoogleMaps.addListener(
+        'onMapClick',
+        callback,
+      );
+    } else {
+      this.onMapClickListener = undefined;
+    }
+  }
+
+  async setOnMarkerClickListener(
+    callback?: MapListenerCallback,
+  ): Promise<void> {
+    if (this.onMarkerClickListener) {
+      this.onMarkerClickListener.remove();
+    }
+
+    if (callback) {
+      this.onMarkerClickListener = CapacitorGoogleMaps.addListener(
+        'onMarkerClick',
+        callback,
+      );
+    } else {
+      this.onMarkerClickListener = undefined;
+    }
   }
 }
