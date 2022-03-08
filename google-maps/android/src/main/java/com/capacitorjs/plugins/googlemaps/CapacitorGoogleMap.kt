@@ -1,6 +1,7 @@
 package com.capacitorjs.plugins.googlemaps
 
 import android.annotation.SuppressLint
+import android.graphics.RectF
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
@@ -9,7 +10,6 @@ import android.widget.FrameLayout
 import com.getcapacitor.Bridge
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.CameraPosition
 import kotlinx.coroutines.*
@@ -19,7 +19,7 @@ import kotlinx.coroutines.channels.Channel
 
 class CapacitorGoogleMap(val id: String, val config: GoogleMapConfig,
                          val delegate: CapacitorGoogleMapsPlugin) : OnMapReadyCallback {
-    private var mapView: MapView? = null
+    private var mapView: CapacitorGoogleMapView? = null
     private var googleMap: GoogleMap? = null
     private val markers = HashMap<String, CapacitorGoogleMapMarker>()
     private var clusterManager: ClusterManager<CapacitorGoogleMapMarker>? = null
@@ -35,14 +35,16 @@ class CapacitorGoogleMap(val id: String, val config: GoogleMapConfig,
             CoroutineScope(Dispatchers.Main).launch {
                 val bridge = delegate.bridge
 
-                val mapView = MapView(bridge.context, config.googleMapOptions)
+                val mapView = CapacitorGoogleMapView(bridge.context, config.googleMapOptions, bridge.activity.resources.displayMetrics.density)
                 mapView.onCreate(null)
                 mapView.onStart()
                 mapView.getMapAsync(this@CapacitorGoogleMap)
+                mapView.setWillNotDraw(false)
 
                 isReadyChannel.receive()
 
                 this@CapacitorGoogleMap.mapView = mapView
+
 
                 render()
             }
@@ -75,21 +77,17 @@ class CapacitorGoogleMap(val id: String, val config: GoogleMapConfig,
         }
     }
 
-    fun updateRender(updatedBounds: CapacitorGoogleMapsBounds) {
+    fun updateRender(updatedBounds: RectF, frame: RectF) {
         this.mapView ?: throw GoogleMapsError("map view is not available")
 
-
-        this.config.x = updatedBounds.x
-        this.config.y = updatedBounds.y
-        this.config.width = updatedBounds.width
-        this.config.height = updatedBounds.height
+        this.config.x = updatedBounds.left.toInt()
+        this.config.y = updatedBounds.top.toInt()
+        this.config.width = updatedBounds.width().toInt()
+        this.config.height = updatedBounds.height().toInt()
 
         runBlocking {
             CoroutineScope(Dispatchers.Main).launch {
-                val bridge = delegate.bridge
-
-                mapView!!.x = getScaledPixels(bridge, updatedBounds.x).toFloat()
-                mapView!!.y = getScaledPixels(bridge, updatedBounds.y).toFloat()
+                mapView!!.updateBounds(updatedBounds, frame)
             }
         }
     }
@@ -409,7 +407,6 @@ class CapacitorGoogleMap(val id: String, val config: GoogleMapConfig,
         // Convert the dps to pixels, based on density scale
         return (pixels * scale + 0.5f).toInt()
     }
-
 
     override fun onMapReady(map: GoogleMap) {
         runBlocking {
