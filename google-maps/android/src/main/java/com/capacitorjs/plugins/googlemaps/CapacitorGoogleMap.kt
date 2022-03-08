@@ -1,12 +1,11 @@
 package com.capacitorjs.plugins.googlemaps
 
 import android.annotation.SuppressLint
-import android.util.AttributeSet
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import androidx.core.view.updateLayoutParams
+
 import com.getcapacitor.Bridge
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -79,6 +78,7 @@ class CapacitorGoogleMap(val id: String, val config: GoogleMapConfig,
     fun updateRender(updatedBounds: CapacitorGoogleMapsBounds) {
         this.mapView ?: throw GoogleMapsError("map view is not available")
 
+
         this.config.x = updatedBounds.x
         this.config.y = updatedBounds.y
         this.config.width = updatedBounds.width
@@ -88,22 +88,8 @@ class CapacitorGoogleMap(val id: String, val config: GoogleMapConfig,
             CoroutineScope(Dispatchers.Main).launch {
                 val bridge = delegate.bridge
 
-                val viewToUpdate: View? = ((bridge.webView.parent) as FrameLayout).findViewWithTag(id)
-                if (null != viewToUpdate) {
-                    val layoutParams =
-                        FrameLayout.LayoutParams(
-                            getScaledPixels(bridge, config.width),
-                            getScaledPixels(bridge, config.height),
-                        )
-                    layoutParams.leftMargin = getScaledPixels(bridge, config.x)
-                    layoutParams.topMargin = getScaledPixels(bridge, config.y)
-                    try {
-                        viewToUpdate.layoutParams = layoutParams
-                    } catch(e: Exception) {
-                        Log.d("GOOGLE_MAPS", e.localizedMessage)
-                    }
-                }
-
+                mapView!!.x = getScaledPixels(bridge, updatedBounds.x).toFloat()
+                mapView!!.y = getScaledPixels(bridge, updatedBounds.y).toFloat()
             }
         }
     }
