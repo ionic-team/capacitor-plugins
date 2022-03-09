@@ -83,7 +83,7 @@ class CapacitorGoogleMapsPlugin : Plugin() {
             val newMap = CapacitorGoogleMap(id, config, this)
             maps[id] = newMap
 
-            val frameObj = call.getObject("frame")
+            val frameObj = call.getObject("frame", null)
             if (frameObj != null) {
                 val boundsObj = JSONObject()
                 boundsObj.put("width", config.width)
