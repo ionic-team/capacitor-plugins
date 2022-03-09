@@ -3,6 +3,33 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.1.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@1.0.7...@capacitor/filesystem@1.1.0) (2022-01-19)
+
+
+### Bug Fixes
+
+* inline source code in esm map files ([#760](https://github.com/ionic-team/capacitor-plugins/issues/760)) ([a960489](https://github.com/ionic-team/capacitor-plugins/commit/a960489a19db0182b90d187a50deff9dfbe51038))
+
+
+### Features
+
+* **filesystem:** support Library directory ([#666](https://github.com/ionic-team/capacitor-plugins/issues/666)) ([ce7ee95](https://github.com/ionic-team/capacitor-plugins/commit/ce7ee958b141f1dd4f86493923455f8264d0b6db))
+
+
+
+
+
+## [1.0.7](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@1.0.6...@capacitor/filesystem@1.0.7) (2022-01-10)
+
+
+### Bug Fixes
+
+* **filesystem:** Throw errors instead of strings ([#746](https://github.com/ionic-team/capacitor-plugins/issues/746)) ([af4b875](https://github.com/ionic-team/capacitor-plugins/commit/af4b8750be512b869af07bcf96c1602eedc6758e))
+
+
+
+
+
 ## [1.0.6](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@1.0.5...@capacitor/filesystem@1.0.6) (2021-11-03)
 
 **Note:** Version bump only for package @capacitor/filesystem

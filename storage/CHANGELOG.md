@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.5](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/storage@1.2.4...@capacitor/storage@1.2.5) (2022-03-03)
+
+**Note:** Version bump only for package @capacitor/storage
+
+
+
+
+
+## [1.2.4](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/storage@1.2.3...@capacitor/storage@1.2.4) (2022-01-19)
+
+
+### Bug Fixes
+
+* inline source code in esm map files ([#760](https://github.com/ionic-team/capacitor-plugins/issues/760)) ([a960489](https://github.com/ionic-team/capacitor-plugins/commit/a960489a19db0182b90d187a50deff9dfbe51038))
+
+
+
+
+
 ## [1.2.3](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/storage@1.2.2...@capacitor/storage@1.2.3) (2021-11-03)
 
 **Note:** Version bump only for package @capacitor/storage

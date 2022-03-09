@@ -318,6 +318,9 @@ public class LocalNotificationsPlugin: CAPPlugin {
         if let second = at["second"] as? Int {
             dateInfo.second = second
         }
+        if let weekday = at["weekday"] as? Int {
+            dateInfo.weekday = weekday
+        }
         return dateInfo
     }
 

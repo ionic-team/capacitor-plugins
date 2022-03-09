@@ -24,7 +24,7 @@ export interface ShowOptions {
   duration?: 'short' | 'long';
 
   /**
-   * Postion of the Toast
+   * Position of the Toast
    *
    * @default 'bottom'
    * @since 1.0.0

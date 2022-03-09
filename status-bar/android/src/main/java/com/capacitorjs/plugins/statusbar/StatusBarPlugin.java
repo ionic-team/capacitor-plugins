@@ -6,6 +6,7 @@ import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
 import com.getcapacitor.util.WebColor;
+import java.util.Locale;
 
 @CapacitorPlugin(name = "StatusBar")
 public class StatusBarPlugin extends Plugin {
@@ -46,7 +47,7 @@ public class StatusBarPlugin extends Plugin {
             .executeOnMainThread(
                 () -> {
                     try {
-                        final int parsedColor = WebColor.parseColor(color.toUpperCase());
+                        final int parsedColor = WebColor.parseColor(color.toUpperCase(Locale.ROOT));
                         implementation.setBackgroundColor(parsedColor);
                         call.resolve();
                     } catch (IllegalArgumentException ex) {

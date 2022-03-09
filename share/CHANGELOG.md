@@ -3,6 +3,39 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/share@1.1.1...@capacitor/share@1.1.2) (2022-03-03)
+
+
+### Bug Fixes
+
+* **share:** correct whatsapp file sharing ([#816](https://github.com/ionic-team/capacitor-plugins/issues/816)) ([18b10c4](https://github.com/ionic-team/capacitor-plugins/commit/18b10c493e26a6b62031c3bfb57e1ffbbf926c41))
+
+
+
+
+
+## [1.1.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/share@1.1.0...@capacitor/share@1.1.1) (2022-01-19)
+
+
+### Bug Fixes
+
+* inline source code in esm map files ([#760](https://github.com/ionic-team/capacitor-plugins/issues/760)) ([a960489](https://github.com/ionic-team/capacitor-plugins/commit/a960489a19db0182b90d187a50deff9dfbe51038))
+
+
+
+
+
+# [1.1.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/share@1.0.7...@capacitor/share@1.1.0) (2022-01-10)
+
+
+### Features
+
+* **share:** Add canShare method to check availability ([#748](https://github.com/ionic-team/capacitor-plugins/issues/748)) ([3883d82](https://github.com/ionic-team/capacitor-plugins/commit/3883d82952a4453797b86c562af27f9b05e82a18))
+
+
+
+
+
 ## [1.0.7](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/share@1.0.6...@capacitor/share@1.0.7) (2021-11-03)
 
 **Note:** Version bump only for package @capacitor/share

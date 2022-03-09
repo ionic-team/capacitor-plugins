@@ -63,7 +63,7 @@ App.addListener('appRestoredResult', data => {
 const checkAppLaunchUrl = async () => {
   const { url } = await App.getLaunchUrl();
 
-  alert('App opened with URL: ' + url);
+  console.log('App opened with URL: ' + url);
 };
 ```
 
@@ -75,6 +75,7 @@ const checkAppLaunchUrl = async () => {
 * [`getInfo()`](#getinfo)
 * [`getState()`](#getstate)
 * [`getLaunchUrl()`](#getlaunchurl)
+* [`minimizeApp()`](#minimizeapp)
 * [`addListener('appStateChange', ...)`](#addlistenerappstatechange)
 * [`addListener('appUrlOpen', ...)`](#addlistenerappurlopen)
 * [`addListener('appRestoredResult', ...)`](#addlistenerapprestoredresult)
@@ -147,6 +148,21 @@ Get the URL the app was launched with, if any.
 **Returns:** <code>Promise&lt;<a href="#applaunchurl">AppLaunchUrl</a>&gt;</code>
 
 **Since:** 1.0.0
+
+--------------------
+
+
+### minimizeApp()
+
+```typescript
+minimizeApp() => Promise<void>
+```
+
+Minimizes the application.
+
+Only available for Android.
+
+**Since:** 1.1.0
 
 --------------------
 

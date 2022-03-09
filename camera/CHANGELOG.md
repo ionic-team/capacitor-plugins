@@ -3,6 +3,58 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@1.3.0...@capacitor/camera@1.3.1) (2022-03-03)
+
+
+### Bug Fixes
+
+* **camera:** Return the image on dismiss completion ([#849](https://github.com/ionic-team/capacitor-plugins/issues/849)) ([f083841](https://github.com/ionic-team/capacitor-plugins/commit/f0838416c6cf731aaae83fcb4986568357878b41))
+
+
+
+
+
+# [1.3.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@1.2.4...@capacitor/camera@1.3.0) (2022-02-10)
+
+
+### Bug Fixes
+
+* **camera:** process picked image only once ([#782](https://github.com/ionic-team/capacitor-plugins/issues/782)) ([897dcaf](https://github.com/ionic-team/capacitor-plugins/commit/897dcaf839a6cb83256485c32df2ca0e7b439124))
+* **camera:** return single picture on pickImages ([#783](https://github.com/ionic-team/capacitor-plugins/issues/783)) ([9d65db1](https://github.com/ionic-team/capacitor-plugins/commit/9d65db1e74117fd1c1e7cd9bbba7efaeb4c13e0c))
+* **camera:** Use Locale.ROOT on toUpperCase ([#812](https://github.com/ionic-team/capacitor-plugins/issues/812)) ([6d689ac](https://github.com/ionic-team/capacitor-plugins/commit/6d689acc48e3746ddd35bd5e1e8d7f239cb7f8df))
+
+
+### Features
+
+* **camera:** Support for 1 Gallery app ([#791](https://github.com/ionic-team/capacitor-plugins/issues/791)) ([77e8c97](https://github.com/ionic-team/capacitor-plugins/commit/77e8c979394d5fb1804fc097ecaeee46a973e640))
+* **camera:** Support for Samsung Gallery app on pickImages ([#706](https://github.com/ionic-team/capacitor-plugins/issues/706)) ([fd059fc](https://github.com/ionic-team/capacitor-plugins/commit/fd059fcd2e53661e95e230f684a6d32408db6787))
+
+
+
+
+
+## [1.2.4](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@1.2.3...@capacitor/camera@1.2.4) (2022-01-19)
+
+
+### Bug Fixes
+
+* inline source code in esm map files ([#760](https://github.com/ionic-team/capacitor-plugins/issues/760)) ([a960489](https://github.com/ionic-team/capacitor-plugins/commit/a960489a19db0182b90d187a50deff9dfbe51038))
+
+
+
+
+
+## [1.2.3](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@1.2.2...@capacitor/camera@1.2.3) (2022-01-10)
+
+
+### Bug Fixes
+
+* **camera:** set camera direction for web ([#665](https://github.com/ionic-team/capacitor-plugins/issues/665)) ([4afedb9](https://github.com/ionic-team/capacitor-plugins/commit/4afedb96f3b745a86d9cacd33ca71c42ae3fb8d4))
+
+
+
+
+
 ## [1.2.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@1.2.1...@capacitor/camera@1.2.2) (2021-12-08)
 
 
