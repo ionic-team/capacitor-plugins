@@ -76,7 +76,7 @@ public class AppPlugin extends Plugin {
             String appName = stringId == 0 ? applicationInfo.nonLocalizedLabel.toString() : getContext().getString(stringId);
             data.put("name", appName);
             data.put("id", pinfo.packageName);
-            data.put("build", Integer.toString((int)PackageInfoCompat.getLongVersionCode(pinfo)));
+            data.put("build", Integer.toString((int) PackageInfoCompat.getLongVersionCode(pinfo)));
             data.put("version", pinfo.versionName);
             call.resolve(data);
         } catch (Exception ex) {
