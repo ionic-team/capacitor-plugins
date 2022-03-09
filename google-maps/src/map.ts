@@ -182,19 +182,18 @@ export class GoogleMap {
         scrollEvent = 'ionScroll';
       }
 
-      window.addEventListener(scrollEvent, () => {        
-        this.updateMapBounds();
-      });
-
-      window.addEventListener('resize', () => {        
-        this.updateMapBounds();
-      });
-
-      screen.orientation.addEventListener('change', () => {
-        setTimeout(() => {
-          this.updateMapBounds();
-        }, 500);
-      });
+      window.addEventListener(scrollEvent, this.handleScrollEvent);
+      window.addEventListener('resize', this.handleScrollEvent);
+      if (screen.orientation) {
+        screen.orientation.addEventListener('change', () => {
+          setTimeout(this.updateMapBounds, 500);
+        });
+      } else {
+        window.addEventListener("orientationchange", () => {
+          setTimeout(this.updateMapBounds, 500);
+        })
+      }
+      
     } else {
       console.warn('An appropriate map container element has not been found');
     }
@@ -202,12 +201,22 @@ export class GoogleMap {
 
   disableScrolling() {
     if (this.frameElement) {
-      window.removeEventListener('ionScroll', () => {});
-      window.removeEventListener('scroll', () => {});
-      window.removeEventListener('resize', () => {});
-      screen.orientation.removeEventListener('change', () => {});
+      window.removeEventListener('ionScroll', this.handleScrollEvent);
+      window.removeEventListener('scroll', this.handleScrollEvent);
+      window.removeEventListener('resize', this.handleScrollEvent);
+      if (screen.orientation) {
+        screen.orientation.removeEventListener('change', () => {
+          setTimeout(this.updateMapBounds, 1000);
+        });
+      } else {
+        window.removeEventListener("orientationchange", () => {
+          setTimeout(this.updateMapBounds, 1000);
+        })
+      }
     }
   }
+
+  handleScrollEvent = () => this.updateMapBounds();
 
   private updateMapBounds() {
     if (this.element && this.frameElement) {
