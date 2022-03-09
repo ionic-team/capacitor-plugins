@@ -32,7 +32,7 @@ class CapacitorGoogleMap(val id: String, val config: GoogleMapConfig,
 
     private fun initMap() {
         runBlocking {
-            CoroutineScope(Dispatchers.Main).launch {
+            val job = CoroutineScope(Dispatchers.Main).launch {
                 val bridge = delegate.bridge
 
                 val mapView = CapacitorGoogleMapView(bridge.context, config.googleMapOptions, bridge.activity.resources.displayMetrics.density)
@@ -47,6 +47,8 @@ class CapacitorGoogleMap(val id: String, val config: GoogleMapConfig,
 
                 render()
             }
+
+            job.join()
         }
     }
 
@@ -84,6 +86,7 @@ class CapacitorGoogleMap(val id: String, val config: GoogleMapConfig,
         this.config.width = updatedBounds.width().toInt()
         this.config.height = updatedBounds.height().toInt()
 
+
         runBlocking {
             CoroutineScope(Dispatchers.Main).launch {
                 mapView!!.updateBounds(updatedBounds, frame)
@@ -93,7 +96,7 @@ class CapacitorGoogleMap(val id: String, val config: GoogleMapConfig,
 
     fun destroy() {
         runBlocking {
-            CoroutineScope(Dispatchers.Main).launch {
+            val job = CoroutineScope(Dispatchers.Main).launch {
                 val bridge = delegate.bridge
 
                 val viewToRemove: View? = ((bridge.webView.parent) as ViewGroup).findViewWithTag(id)
@@ -105,6 +108,8 @@ class CapacitorGoogleMap(val id: String, val config: GoogleMapConfig,
                 googleMap = null
                 clusterManager = null
             }
+
+            job.join()
         }
     }
 
@@ -124,7 +129,7 @@ class CapacitorGoogleMap(val id: String, val config: GoogleMapConfig,
                     }
 
                     markers[googleMapMarker!!.id] = it
-                    markerIds.add(googleMapMarker!!.id)
+                    markerIds.add(googleMapMarker.id)
                 }
 
                 if (clusterManager != null) {

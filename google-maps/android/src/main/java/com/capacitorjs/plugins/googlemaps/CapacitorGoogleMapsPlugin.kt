@@ -117,10 +117,10 @@ class CapacitorGoogleMapsPlugin : Plugin() {
 
             val marker = CapacitorGoogleMapMarker(markerObj)
             map.addMarker(marker) { result ->
-                val id = result.getOrThrow()
+                val markerId = result.getOrThrow()
 
                 val res = JSObject()
-                res.put("id", id)
+                res.put("id", markerId)
                 call.resolve(res)
 
             }

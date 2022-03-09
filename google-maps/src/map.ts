@@ -5,7 +5,8 @@ import type {
   MapPadding,
   MapType,
 } from './definitions';
-import { CapacitorGoogleMaps, CreateMapArgs } from './implementation';
+import type { CreateMapArgs } from './implementation';
+import { CapacitorGoogleMaps } from './implementation';
 
 export interface Marker {
   coordinate: LatLng;
@@ -172,13 +173,12 @@ export class GoogleMap {
     });
   }
 
-  initScrolling() {
+  initScrolling(): void {
     if (this.frameElement) {
-      var scrollEvent = 'scroll';
+      let scrollEvent = 'scroll';
 
       if (this.frameElement.tagName.toLowerCase() == 'ion-content') {
-        //@ts-ignore
-        this.frameElement.scrollEvents = true;
+        (this.frameElement as any).scrollEvents = true;
         scrollEvent = 'ionScroll';
       }
 
@@ -199,7 +199,7 @@ export class GoogleMap {
     }
   }
 
-  disableScrolling() {
+  disableScrolling(): void {
     if (this.frameElement) {
       window.removeEventListener('ionScroll', this.handleScrollEvent);
       window.removeEventListener('scroll', this.handleScrollEvent);
@@ -218,7 +218,7 @@ export class GoogleMap {
 
   handleScrollEvent = () => this.updateMapBounds();
 
-  private updateMapBounds() {
+  private updateMapBounds(): void {
     if (this.element && this.frameElement) {
       const mapRect = this.element.getBoundingClientRect();
       const frameRect = this.frameElement.getBoundingClientRect();
