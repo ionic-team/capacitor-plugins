@@ -25,8 +25,9 @@ const SimpleScrollingPage: React.FC = () => {
     
             setMap(newMap1);
             setCommandOutput('Maps created');
+            console.log("Maps created");
         } catch(err: any) {
-            setCommandOutput(err.message);
+          console.log(err.message); 
         }        
     }
 
@@ -35,10 +36,10 @@ const SimpleScrollingPage: React.FC = () => {
         try {
           if (map) {
             await map.destroy();
-            setCommandOutput('Maps destroyed');
+            console.log("map destroyed");            
           }            
         } catch (err: any) {
-            setCommandOutput(err.message);
+            console.log(err.message);            
         }
     }
 
