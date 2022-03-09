@@ -1,4 +1,5 @@
 import { Capacitor } from '@capacitor/core';
+
 import type {
   CameraConfig,
   GoogleMapConfig,

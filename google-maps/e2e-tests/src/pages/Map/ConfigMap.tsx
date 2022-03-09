@@ -14,8 +14,8 @@ const ConfigMapPage: React.FC = () => {
         setCommandOutput("");
         setMaps([]);
         try {            
-            const mapRef1 = document.getElementById("map1")!
-            const mapRef2 = document.getElementById("map2")!
+            const mapRef1 = document.getElementById("config_map1")!
+            const mapRef2 = document.getElementById("config_map2")!
             
             const newMap1 = await GoogleMap.create(mapRef1, "test-map", apiKey!, {
                 center: {
@@ -217,7 +217,7 @@ const ConfigMapPage: React.FC = () => {
     }
 
     return (
-        <BaseTestingPage pageTitle="Create and Destroy Map">
+        <BaseTestingPage pageTitle="Map Configuration">
             <div>
                 <IonButton expand="block" id="createMapButton" onClick={createMaps}>
                     Create Maps
@@ -238,14 +238,14 @@ const ConfigMapPage: React.FC = () => {
             <div>
                 <IonTextarea id="commandOutput" value={commandOutput}></IonTextarea>
             </div>
-            <div id="map1" style={{
+            <div id="config_map1" style={{
                 position: "absolute",
                 top: window.innerHeight - (window.outerWidth / 2),
                 left: 0,
                 width: (window.outerWidth / 2),
                 height: (window.outerWidth / 2),
             }}></div>
-            <div id="map2" style={{
+            <div id="config_map2" style={{
                 position: "absolute",
                 top: window.innerHeight - (window.outerWidth / 2),
                 left: window.outerWidth / 2,

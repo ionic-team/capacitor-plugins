@@ -8,7 +8,7 @@ import type {
 } from './definitions';
 import type { Marker } from './map';
 
-export interface CreateMapArgs {  
+export interface CreateMapArgs {
   id: string;
   apiKey: string;
   config: GoogleMapConfig;

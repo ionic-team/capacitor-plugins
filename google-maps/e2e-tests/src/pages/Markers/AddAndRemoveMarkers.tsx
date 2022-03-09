@@ -11,7 +11,7 @@ const AddAndRemoveMarkers: React.FC = () => {
 
     async function createMap() {
         try {
-            const mapRef1 = document.getElementById("map1")!
+            const mapRef1 = document.getElementById("markers_map1")!
             const newMap = await GoogleMap.create(mapRef1, "test-map", apiKey!, {
                 center: {
                     lat: 33.6,
@@ -68,6 +68,18 @@ const AddAndRemoveMarkers: React.FC = () => {
         }
     }
 
+    async function destroyMap() {
+        setCommandOutput("");
+        try {
+            if (map) {
+                await map.destroy();
+                setCommandOutput('Map destroyed');
+            }
+        } catch (err: any) {
+            setCommandOutput(err.message);
+        }
+    }
+
     return (
         <BaseTestingPage pageTitle="Add and Remove Markers">
             <div>
@@ -79,12 +91,15 @@ const AddAndRemoveMarkers: React.FC = () => {
                 </IonButton>    
                 <IonButton id="removeMarkerButton" onClick={removeMarker}>
                     Remove Marker
-                </IonButton>                
+                </IonButton>   
+                <IonButton id="destroyMapButton" onClick={destroyMap}>
+                    Destroy Map
+                </IonButton>               
             </div>
             <div>
                 <IonTextarea id="commandOutput" value={commandOutput}></IonTextarea>
             </div>
-            <div id="map1" style={{
+            <div id="markers_map1" style={{
                 position: "absolute",
                 top: window.innerHeight - 300,
                 left: 0,
