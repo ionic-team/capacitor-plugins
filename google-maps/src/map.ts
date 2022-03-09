@@ -248,7 +248,7 @@ export class GoogleMap {
 
     let parentElement = this.element.parentElement;
     while (parentElement !== null) {
-      if (parentElement.classList.contains('mapContainer')) {        
+      if (parentElement.classList.contains('capacitorGoogleMapContainer')) {        
         return parentElement;
       }
 

@@ -53,7 +53,7 @@ const SimpleScrollingPage: React.FC = () => {
                   Destroy Maps
               </IonButton>
           </div>
-          <IonContent className="mapContainer">  
+          <IonContent className="capacitorGoogleMapContainer">  
           <p>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
           vulputate eget ipsum vel venenatis. Ut dui enim, elementum vel
