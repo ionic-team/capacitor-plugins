@@ -1,3 +1,4 @@
+import { Capacitor } from '@capacitor/core';
 import type {
   CameraConfig,
   GoogleMapConfig,
@@ -47,11 +48,6 @@ export class GoogleMap {
     config.x = elementBounds.x;
     config.y = elementBounds.y;
 
-    newMap.frameElement = newMap.findMapContainerElement();
-    newMap.initScrolling();
-
-    const frameRect = newMap.frameElement?.getBoundingClientRect();
-
     const args: CreateMapArgs = {
       element,
       id,
@@ -60,13 +56,21 @@ export class GoogleMap {
       forceCreate,
     };
 
-    if (frameRect) {
-      args.frame = {
-        height: frameRect.height,
-        width: frameRect.width,
-        x: frameRect.x,
-        y: frameRect.y,
-      };
+    if (Capacitor.isNativePlatform()) {
+      (args.element as any) = {};
+      newMap.frameElement = newMap.findMapContainerElement();
+      newMap.initScrolling();
+
+      const frameRect = newMap.frameElement?.getBoundingClientRect();
+
+      if (frameRect) {
+        args.frame = {
+          height: frameRect.height,
+          width: frameRect.width,
+          x: frameRect.x,
+          y: frameRect.y,
+        };
+      }
     }
 
     await CapacitorGoogleMaps.create(args);
@@ -119,7 +123,9 @@ export class GoogleMap {
   }
 
   async destroy(): Promise<void> {
-    this.disableScrolling();
+    if (Capacitor.isNativePlatform()) {
+      this.disableScrolling();
+    }
     return CapacitorGoogleMaps.destroy({
       id: this.id,
     });

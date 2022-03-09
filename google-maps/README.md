@@ -256,10 +256,10 @@ onScroll(args: OnScrollArgs) => Promise<void>
 
 | Prop              | Type                                                                  |
 | ----------------- | --------------------------------------------------------------------- |
-| **`element`**     | <code>HTMLElement</code>                                              |
 | **`id`**          | <code>string</code>                                                   |
 | **`apiKey`**      | <code>string</code>                                                   |
 | **`config`**      | <code><a href="#googlemapconfig">GoogleMapConfig</a></code>           |
+| **`element`**     | <code>HTMLElement</code>                                              |
 | **`frame`**       | <code>{ x: number; y: number; width: number; height: number; }</code> |
 | **`forceCreate`** | <code>boolean</code>                                                  |
 

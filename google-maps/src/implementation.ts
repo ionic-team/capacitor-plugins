@@ -8,11 +8,11 @@ import type {
 } from './definitions';
 import type { Marker } from './map';
 
-export interface CreateMapArgs {
-  element: HTMLElement;
+export interface CreateMapArgs {  
   id: string;
   apiKey: string;
   config: GoogleMapConfig;
+  element: HTMLElement;
   frame?: {
     x: number;
     y: number;
