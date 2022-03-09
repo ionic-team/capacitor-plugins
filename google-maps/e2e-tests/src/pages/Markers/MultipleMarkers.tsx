@@ -10,6 +10,10 @@ const MultipleMarkers: React.FC = () => {
     const [commandOutput, setCommandOutput] = useState('');
     const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
 
+    const onMarkerClick = (data: any) => {
+        setCommandOutput(`MARKER (${data.markerId}) WAS CLICKED ON MAP (${data.mapId})`);
+    }
+
     async function createMap() {
         try {
             const element = document.getElementById('multipleMarkers_map1');
@@ -29,6 +33,16 @@ const MultipleMarkers: React.FC = () => {
         } catch (err: any) {
             setCommandOutput(err.message);
         }
+    }
+
+    async function setOnMarkerClickListener() {
+        map?.setOnMarkerClickListener(onMarkerClick);
+        setCommandOutput('Set On Marker Click Listener!');
+    }
+
+    async function removeOnMarkerClickListener() {
+        map?.setOnMarkerClickListener();
+        setCommandOutput('Removed On Marker Click Listener!');
     }
 
     async function enableClustering() {
@@ -118,6 +132,12 @@ const MultipleMarkers: React.FC = () => {
                 <IonButton id="createMapButton" onClick={createMap}>
                     Create Map
                 </IonButton>
+                <IonButton  id="setOnMarkerClickButton" onClick={setOnMarkerClickListener}>
+                    Set On Marker Click Listener
+                </IonButton>
+                <IonButton  id="removeOnMarkerClickButton" onClick={removeOnMarkerClickListener}>
+                    Remove On Marker Click Listener
+                </IonButton>
                 <IonButton id="addMarkersButton" onClick={addMultipleMarkers}>
                     Add Multiple Markers
                 </IonButton>
@@ -132,7 +152,7 @@ const MultipleMarkers: React.FC = () => {
                 </IonButton>
                 <IonButton id="destroyMapButton" onClick={destroyMap}>
                     Destroy Map
-                </IonButton>   
+                </IonButton> 
             </div>
             <div>
                 <IonTextarea id="commandOutput" value={commandOutput}></IonTextarea>

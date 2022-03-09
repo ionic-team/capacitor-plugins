@@ -9,6 +9,10 @@ const AddAndRemoveMarkers: React.FC = () => {
     const [commandOutput, setCommandOutput] = useState('');
     const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
 
+    const onMarkerClick = (data: any) => {
+        setCommandOutput(`MARKER (${data.markerId}) WAS CLICKED ON MAP (${data.mapId})`);
+    }
+
     async function createMap() {
         try {
             const mapRef1 = document.getElementById("markers_map1")!
@@ -27,6 +31,16 @@ const AddAndRemoveMarkers: React.FC = () => {
         } catch (err: any) {
             setCommandOutput(err.message);
         }
+    }
+
+    async function setOnMarkerClickListener() {
+        map?.setOnMarkerClickListener(onMarkerClick);
+        setCommandOutput('Set On Marker Click Listener!');
+    }
+
+    async function removeOnMarkerClickListener() {
+        map?.setOnMarkerClickListener();
+        setCommandOutput('Removed On Marker Click Listener!');
     }
 
     async function addMarker() {
@@ -85,6 +99,12 @@ const AddAndRemoveMarkers: React.FC = () => {
             <div>
                 <IonButton  id="createMapButton" onClick={createMap}>
                     Create Map
+                </IonButton>
+                <IonButton  id="setOnMarkerClickButton" onClick={setOnMarkerClickListener}>
+                    Set On Marker Click Listener
+                </IonButton>
+                <IonButton  id="removeOnMarkerClickButton" onClick={removeOnMarkerClickListener}>
+                    Remove On Marker Click Listener
                 </IonButton>
                 <IonButton  id="addMarkerButton" onClick={addMarker}>
                     Add 1 Marker

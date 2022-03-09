@@ -29,7 +29,13 @@ npx cap sync
 * [`enableCurrentLocation(...)`](#enablecurrentlocation)
 * [`setPadding(...)`](#setpadding)
 * [`onScroll(...)`](#onscroll)
+* [`setOnMapClickListener(...)`](#setonmapclicklistener)
+* [`setOnMarkerClickListener(...)`](#setonmarkerclicklistener)
+* [`addListener('onMapReady', ...)`](#addlisteneronmapready)
+* [`addListener('onMapClick', ...)`](#addlisteneronmapclick)
+* [`addListener('onMarkerClick', ...)`](#addlisteneronmarkerclick)
 * [Interfaces](#interfaces)
+* [Type Aliases](#type-aliases)
 * [Enums](#enums)
 
 </docgen-index>
@@ -249,6 +255,80 @@ onScroll(args: OnScrollArgs) => Promise<void>
 --------------------
 
 
+### setOnMapClickListener(...)
+
+```typescript
+setOnMapClickListener(args: OnMapClickArgs) => Promise<void>
+```
+
+| Param      | Type                                                      |
+| ---------- | --------------------------------------------------------- |
+| **`args`** | <code><a href="#onmapclickargs">OnMapClickArgs</a></code> |
+
+--------------------
+
+
+### setOnMarkerClickListener(...)
+
+```typescript
+setOnMarkerClickListener(args: OnMarkerClickArgs) => Promise<void>
+```
+
+| Param      | Type                                                            |
+| ---------- | --------------------------------------------------------------- |
+| **`args`** | <code><a href="#onmarkerclickargs">OnMarkerClickArgs</a></code> |
+
+--------------------
+
+
+### addListener('onMapReady', ...)
+
+```typescript
+addListener(eventName: 'onMapReady', listenerFunc: MapListenerCallback) => PluginListenerHandle
+```
+
+| Param              | Type                                                                |
+| ------------------ | ------------------------------------------------------------------- |
+| **`eventName`**    | <code>'onMapReady'</code>                                           |
+| **`listenerFunc`** | <code><a href="#maplistenercallback">MapListenerCallback</a></code> |
+
+**Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
+
+--------------------
+
+
+### addListener('onMapClick', ...)
+
+```typescript
+addListener(eventName: 'onMapClick', listenerFunc: MapListenerCallback) => PluginListenerHandle
+```
+
+| Param              | Type                                                                |
+| ------------------ | ------------------------------------------------------------------- |
+| **`eventName`**    | <code>'onMapClick'</code>                                           |
+| **`listenerFunc`** | <code><a href="#maplistenercallback">MapListenerCallback</a></code> |
+
+**Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
+
+--------------------
+
+
+### addListener('onMarkerClick', ...)
+
+```typescript
+addListener(eventName: 'onMarkerClick', listenerFunc: MapListenerCallback) => PluginListenerHandle
+```
+
+| Param              | Type                                                                |
+| ------------------ | ------------------------------------------------------------------- |
+| **`eventName`**    | <code>'onMarkerClick'</code>                                        |
+| **`listenerFunc`** | <code><a href="#maplistenercallback">MapListenerCallback</a></code> |
+
+**Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
+
+--------------------
+
+
 ### Interfaces
 
 
@@ -422,6 +502,35 @@ onScroll(args: OnScrollArgs) => Promise<void>
 | **`id`**        | <code>string</code>                                                   |
 | **`frame`**     | <code>{ x: number; y: number; width: number; height: number; }</code> |
 | **`mapBounds`** | <code>{ x: number; y: number; width: number; height: number; }</code> |
+
+
+#### OnMapClickArgs
+
+| Prop           | Type                                                                |
+| -------------- | ------------------------------------------------------------------- |
+| **`callback`** | <code><a href="#maplistenercallback">MapListenerCallback</a></code> |
+
+
+#### OnMarkerClickArgs
+
+| Prop           | Type                                                                |
+| -------------- | ------------------------------------------------------------------- |
+| **`callback`** | <code><a href="#maplistenercallback">MapListenerCallback</a></code> |
+
+
+#### PluginListenerHandle
+
+| Prop         | Type                                      |
+| ------------ | ----------------------------------------- |
+| **`remove`** | <code>() =&gt; Promise&lt;void&gt;</code> |
+
+
+### Type Aliases
+
+
+#### MapListenerCallback
+
+<code>(data: any): void</code>
 
 
 ### Enums
