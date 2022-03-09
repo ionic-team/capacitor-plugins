@@ -1,8 +1,4 @@
-import { MapType } from "./definitions";
+import { MapType } from './definitions';
 import { GoogleMap, Marker } from './map';
 
-export {
-    GoogleMap,
-    MapType,
-    Marker
-}
+export { GoogleMap, MapType, Marker };

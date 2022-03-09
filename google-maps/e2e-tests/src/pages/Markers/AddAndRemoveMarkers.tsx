@@ -22,7 +22,8 @@ const AddAndRemoveMarkers: React.FC = () => {
             });
             setMap(newMap);
 
-            setCommandOutput("Map created")
+                setCommandOutput("Map created");
+            
         } catch (err: any) {
             setCommandOutput(err.message);
         }

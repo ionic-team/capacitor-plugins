@@ -36,7 +36,7 @@ export class GoogleMap {
     const newMap = new GoogleMap(id);
 
     if (!element) {
-      throw new Error("container element is required")
+      throw new Error('container element is required');
     }
 
     newMap.element = element;
@@ -53,24 +53,25 @@ export class GoogleMap {
     const frameRect = newMap.frameElement?.getBoundingClientRect();
 
     const args: CreateMapArgs = {
+      element,
       id,
       apiKey,
-      config,       
+      config,
       forceCreate,
-    }
+    };
 
     if (frameRect) {
       args.frame = {
         height: frameRect.height,
         width: frameRect.width,
         x: frameRect.x,
-        y: frameRect.y          
-      }
+        y: frameRect.y,
+      };
     }
-    
-    await CapacitorGoogleMaps.create(args);  
 
-    return newMap;    
+    await CapacitorGoogleMaps.create(args);
+
+    return newMap;
   }
 
   async enableClustering(): Promise<void> {
@@ -189,11 +190,10 @@ export class GoogleMap {
           setTimeout(this.updateMapBounds, 500);
         });
       } else {
-        window.addEventListener("orientationchange", () => {
+        window.addEventListener('orientationchange', () => {
           setTimeout(this.updateMapBounds, 500);
-        })
+        });
       }
-      
     } else {
       console.warn('An appropriate map container element has not been found');
     }
@@ -209,14 +209,14 @@ export class GoogleMap {
           setTimeout(this.updateMapBounds, 1000);
         });
       } else {
-        window.removeEventListener("orientationchange", () => {
+        window.removeEventListener('orientationchange', () => {
           setTimeout(this.updateMapBounds, 1000);
-        })
+        });
       }
     }
   }
 
-  handleScrollEvent = () => this.updateMapBounds();
+  handleScrollEvent = (): void => this.updateMapBounds();
 
   private updateMapBounds(): void {
     if (this.element && this.frameElement) {
@@ -248,7 +248,7 @@ export class GoogleMap {
 
     let parentElement = this.element.parentElement;
     while (parentElement !== null) {
-      if (parentElement.classList.contains('capacitorGoogleMapContainer')) {        
+      if (parentElement.classList.contains('capacitorGoogleMapContainer')) {
         return parentElement;
       }
 

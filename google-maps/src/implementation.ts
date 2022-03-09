@@ -9,6 +9,7 @@ import type {
 import type { Marker } from './map';
 
 export interface CreateMapArgs {
+  element: HTMLElement;
   id: string;
   apiKey: string;
   config: GoogleMapConfig;
@@ -17,7 +18,7 @@ export interface CreateMapArgs {
     y: number;
     width: number;
     height: number;
-  },
+  };
   forceCreate?: boolean;
 }
 
@@ -86,13 +87,13 @@ export interface OnScrollArgs {
     y: number;
     width: number;
     height: number;
-  },
-  mapBounds: {    
+  };
+  mapBounds: {
     x: number;
     y: number;
     width: number;
     height: number;
-  }
+  };
 }
 
 export interface CapacitorGoogleMapsPlugin {

@@ -39,7 +39,7 @@ extension CGRect {
         guard let y = jsObject["y"] as? Double else {
             throw GoogleMapErrors.invalidArguments("bounds object is missing the required 'y' property")
         }
-        
+
         return CGRect(x: x, y: y, width: width, height: height)
     }
 }
@@ -424,7 +424,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
             handleError(call, error: error)
         }
     }
-    
+
     @objc func onScroll(_ call: CAPPluginCall) {
         do {
             guard let id = call.getString("id") else {
@@ -434,15 +434,15 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
             guard let map = self.maps[id] else {
                 throw GoogleMapErrors.mapNotFound
             }
-            
+
             guard let frame = call.getObject("frame") else {
                 throw GoogleMapErrors.invalidArguments("frame is missing")
             }
-            
+
             guard let bounds = call.getObject("mapBounds") else {
                 throw GoogleMapErrors.invalidArguments("mapBounds is missing")
             }
-            
+
             let frameRect = try CGRect.fromJSObject(frame)
             let boundsRect = try CGRect.fromJSObject(bounds)
 

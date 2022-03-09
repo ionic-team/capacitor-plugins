@@ -12,22 +12,20 @@ const MultipleMarkers: React.FC = () => {
 
     async function createMap() {
         try {
-            const mapRef1 = document.getElementById("map1")!
-            const newMap = await GoogleMap.create(mapRef1, "test-map", apiKey!, {
-                center: {
-                    lat: 47.60,
-                    lng: -122.33,
-                },
-                zoom: 5,
-                androidLiteMode: false,
-                height: 150,
-                width: window.innerWidth,
-                x: 0,
-                y: window.innerHeight - 150
-            });
-            setMap(newMap);
+            const element = document.getElementById('map1');
+            if (element !== null) {
+                const newMap = await GoogleMap.create(element, "test-map", apiKey!, {
+                    center: {
+                        lat: 47.60,
+                        lng: -122.33,
+                    },
+                    zoom: 5,
+                    androidLiteMode: false
+                });
+                setMap(newMap);
 
-            setCommandOutput("Map created")
+                setCommandOutput("Map created")
+            }
         } catch (err: any) {
             setCommandOutput(err.message);
         }
