@@ -1,7 +1,6 @@
 package com.capacitorjs.plugins.googlemaps
 
 import android.Manifest
-import android.graphics.Rect
 import android.graphics.RectF
 import android.util.Log
 import com.getcapacitor.*
@@ -12,13 +11,14 @@ import org.json.JSONArray
 import org.json.JSONObject
 
 @CapacitorPlugin(
-    name = "CapacitorGoogleMaps",
-    permissions = [
-        Permission(
-            strings = [Manifest.permission.ACCESS_FINE_LOCATION],
-            alias = CapacitorGoogleMapsPlugin.LOCATION
-        ),
-    ],
+        name = "CapacitorGoogleMaps",
+        permissions =
+                [
+                        Permission(
+                                strings = [Manifest.permission.ACCESS_FINE_LOCATION],
+                                alias = CapacitorGoogleMapsPlugin.LOCATION
+                        ),
+                ],
 )
 class CapacitorGoogleMapsPlugin : Plugin() {
     private var maps: HashMap<String, CapacitorGoogleMap> = HashMap()
@@ -26,6 +26,31 @@ class CapacitorGoogleMapsPlugin : Plugin() {
 
     companion object {
         const val LOCATION = "location"
+    }
+
+    override fun handleOnStart() {
+        super.handleOnStart()
+        maps.forEach { it.value.onStart() }
+    }
+
+    override fun handleOnResume() {
+        super.handleOnResume()
+        maps.forEach { it.value.onResume() }
+    }
+
+    override fun handleOnPause() {
+        super.handleOnPause()
+        maps.forEach { it.value.onPause() }
+    }
+
+    override fun handleOnStop() {
+        super.handleOnStop()
+        maps.forEach { it.value.onStop() }
+    }
+
+    override fun handleOnDestroy() {
+        super.handleOnDestroy()
+        maps.forEach { it.value.onDestroy() }
     }
 
     @PluginMethod
@@ -37,10 +62,11 @@ class CapacitorGoogleMapsPlugin : Plugin() {
                 throw InvalidMapIdError()
             }
 
-            val configObject = call.getObject("config")
-                ?: throw InvalidArgumentsError("GoogleMapConfig is missing")
+            val configObject =
+                    call.getObject("config")
+                            ?: throw InvalidArgumentsError("GoogleMapConfig is missing")
 
-            val forceCreate = call.getBoolean("forceCreate", false)!!            
+            val forceCreate = call.getBoolean("forceCreate", false)!!
 
             val config = GoogleMapConfig(configObject)
 
@@ -72,11 +98,9 @@ class CapacitorGoogleMapsPlugin : Plugin() {
             }
 
             call.resolve()
-        }
-        catch(e: GoogleMapsError) {
+        } catch (e: GoogleMapsError) {
             handleError(call, e)
-        }
-        catch (e: Exception) {
+        } catch (e: Exception) {
             handleError(call, e)
         }
     }
@@ -94,11 +118,9 @@ class CapacitorGoogleMapsPlugin : Plugin() {
             removedMap.destroy()
 
             call.resolve()
-        }
-        catch(e: GoogleMapsError) {
+        } catch (e: GoogleMapsError) {
             handleError(call, e)
-        }
-        catch (e: Exception) {
+        } catch (e: Exception) {
             handleError(call, e)
         }
     }
@@ -122,11 +144,10 @@ class CapacitorGoogleMapsPlugin : Plugin() {
                 val res = JSObject()
                 res.put("id", markerId)
                 call.resolve(res)
-
             }
         } catch (e: GoogleMapsError) {
             handleError(call, e)
-        } catch(e: Exception) {
+        } catch (e: Exception) {
             handleError(call, e)
         }
     }
@@ -160,9 +181,7 @@ class CapacitorGoogleMapsPlugin : Plugin() {
                 val ids = result.getOrThrow()
 
                 val jsonIDs = JSONArray()
-                ids.forEach {
-                    jsonIDs.put(it)
-                }
+                ids.forEach { jsonIDs.put(it) }
 
                 val res = JSObject()
                 res.put("ids", jsonIDs)
@@ -170,7 +189,7 @@ class CapacitorGoogleMapsPlugin : Plugin() {
             }
         } catch (e: GoogleMapsError) {
             handleError(call, e)
-        } catch(e: Exception) {
+        } catch (e: Exception) {
             handleError(call, e)
         }
     }
@@ -193,7 +212,7 @@ class CapacitorGoogleMapsPlugin : Plugin() {
             }
         } catch (e: GoogleMapsError) {
             handleError(call, e)
-        } catch(e: Exception) {
+        } catch (e: Exception) {
             handleError(call, e)
         }
     }
@@ -216,7 +235,7 @@ class CapacitorGoogleMapsPlugin : Plugin() {
             }
         } catch (e: GoogleMapsError) {
             handleError(call, e)
-        } catch(e: Exception) {
+        } catch (e: Exception) {
             handleError(call, e)
         }
     }
@@ -242,7 +261,7 @@ class CapacitorGoogleMapsPlugin : Plugin() {
             }
         } catch (e: GoogleMapsError) {
             handleError(call, e)
-        } catch(e: Exception) {
+        } catch (e: Exception) {
             handleError(call, e)
         }
     }
@@ -279,7 +298,7 @@ class CapacitorGoogleMapsPlugin : Plugin() {
             }
         } catch (e: GoogleMapsError) {
             handleError(call, e)
-        } catch(e: Exception) {
+        } catch (e: Exception) {
             handleError(call, e)
         }
     }
@@ -293,8 +312,9 @@ class CapacitorGoogleMapsPlugin : Plugin() {
             val map = maps[id]
             map ?: throw MapNotFoundError()
 
-            val cameraConfigObject = call.getObject("config")
-                ?: throw InvalidArgumentsError("GoogleMapCameraConfig is missing")
+            val cameraConfigObject =
+                    call.getObject("config")
+                            ?: throw InvalidArgumentsError("GoogleMapCameraConfig is missing")
 
             val config = GoogleMapCameraConfig(cameraConfigObject)
 
@@ -307,7 +327,7 @@ class CapacitorGoogleMapsPlugin : Plugin() {
             }
         } catch (e: GoogleMapsError) {
             handleError(call, e)
-        } catch(e: Exception) {
+        } catch (e: Exception) {
             handleError(call, e)
         }
     }
@@ -321,8 +341,8 @@ class CapacitorGoogleMapsPlugin : Plugin() {
             val map = maps[id]
             map ?: throw MapNotFoundError()
 
-            val mapType = call.getString("mapType")
-                ?: throw InvalidArgumentsError("mapType is missing")
+            val mapType =
+                    call.getString("mapType") ?: throw InvalidArgumentsError("mapType is missing")
 
             map.setMapType(mapType) { err ->
                 if (err != null) {
@@ -333,7 +353,7 @@ class CapacitorGoogleMapsPlugin : Plugin() {
             }
         } catch (e: GoogleMapsError) {
             handleError(call, e)
-        } catch(e: Exception) {
+        } catch (e: Exception) {
             handleError(call, e)
         }
     }
@@ -347,8 +367,8 @@ class CapacitorGoogleMapsPlugin : Plugin() {
             val map = maps[id]
             map ?: throw MapNotFoundError()
 
-            val enabled = call.getBoolean("enabled")
-                ?: throw InvalidArgumentsError("enabled is missing")
+            val enabled =
+                    call.getBoolean("enabled") ?: throw InvalidArgumentsError("enabled is missing")
 
             map.enableIndoorMaps(enabled) { err ->
                 if (err != null) {
@@ -359,7 +379,7 @@ class CapacitorGoogleMapsPlugin : Plugin() {
             }
         } catch (e: GoogleMapsError) {
             handleError(call, e)
-        } catch(e: Exception) {
+        } catch (e: Exception) {
             handleError(call, e)
         }
     }
@@ -373,8 +393,8 @@ class CapacitorGoogleMapsPlugin : Plugin() {
             val map = maps[id]
             map ?: throw MapNotFoundError()
 
-            val enabled = call.getBoolean("enabled")
-                ?: throw InvalidArgumentsError("enabled is missing")
+            val enabled =
+                    call.getBoolean("enabled") ?: throw InvalidArgumentsError("enabled is missing")
 
             map.enableTrafficLayer(enabled) { err ->
                 if (err != null) {
@@ -385,7 +405,7 @@ class CapacitorGoogleMapsPlugin : Plugin() {
             }
         } catch (e: GoogleMapsError) {
             handleError(call, e)
-        } catch(e: Exception) {
+        } catch (e: Exception) {
             handleError(call, e)
         }
     }
@@ -417,8 +437,8 @@ class CapacitorGoogleMapsPlugin : Plugin() {
             val map = maps[id]
             map ?: throw MapNotFoundError()
 
-            val paddingObj = call.getObject("padding")
-                ?: throw InvalidArgumentsError("padding is missing")
+            val paddingObj =
+                    call.getObject("padding") ?: throw InvalidArgumentsError("padding is missing")
 
             val padding = GoogleMapPadding(paddingObj)
 
@@ -431,7 +451,7 @@ class CapacitorGoogleMapsPlugin : Plugin() {
             }
         } catch (e: GoogleMapsError) {
             handleError(call, e)
-        } catch(e: Exception) {
+        } catch (e: Exception) {
             handleError(call, e)
         }
     }
@@ -450,8 +470,12 @@ class CapacitorGoogleMapsPlugin : Plugin() {
             val map = maps[id]
             map ?: throw MapNotFoundError()
 
-            val frameObj = call.getObject("frame") ?: throw InvalidArgumentsError("frame object is missing")
-            val boundsObj = call.getObject("mapBounds") ?: throw InvalidArgumentsError("mapBounds object is missing")
+            val frameObj =
+                    call.getObject("frame")
+                            ?: throw InvalidArgumentsError("frame object is missing")
+            val boundsObj =
+                    call.getObject("mapBounds")
+                            ?: throw InvalidArgumentsError("mapBounds object is missing")
 
             val frame = boundsObjectToRect(frameObj)
             val bounds = boundsObjectToRect(boundsObj)
@@ -459,10 +483,9 @@ class CapacitorGoogleMapsPlugin : Plugin() {
             map.updateRender(bounds, frame)
 
             call.resolve()
-
         } catch (e: GoogleMapsError) {
             handleError(call, e)
-        } catch(e: Exception) {
+        } catch (e: Exception) {
             handleError(call, e)
         }
     }
@@ -475,8 +498,8 @@ class CapacitorGoogleMapsPlugin : Plugin() {
             val map = maps[id]
             map ?: throw MapNotFoundError()
 
-            val enabled = call.getBoolean("enabled")
-                ?: throw InvalidArgumentsError("enabled is missing")
+            val enabled =
+                    call.getBoolean("enabled") ?: throw InvalidArgumentsError("enabled is missing")
 
             map.enableCurrentLocation(enabled) { err ->
                 if (err != null) {
@@ -487,9 +510,13 @@ class CapacitorGoogleMapsPlugin : Plugin() {
             }
         } catch (e: GoogleMapsError) {
             handleError(call, e)
-        } catch(e: Exception) {
+        } catch (e: Exception) {
             handleError(call, e)
         }
+    }
+
+    fun notify(event: String, data: JSObject) {
+        notifyListeners(event, data)
     }
 
     private fun handleError(call: PluginCall, e: Exception) {
@@ -505,20 +532,28 @@ class CapacitorGoogleMapsPlugin : Plugin() {
     }
 
     private fun boundsObjectToRect(jsonObject: JSONObject): RectF {
-        if(!jsonObject.has("width")) {
-            throw InvalidArgumentsError("GoogleMapConfig object is missing the required 'width' property")
+        if (!jsonObject.has("width")) {
+            throw InvalidArgumentsError(
+                    "GoogleMapConfig object is missing the required 'width' property"
+            )
         }
 
-        if(!jsonObject.has("height")) {
-            throw InvalidArgumentsError("GoogleMapConfig object is missing the required 'height' property")
+        if (!jsonObject.has("height")) {
+            throw InvalidArgumentsError(
+                    "GoogleMapConfig object is missing the required 'height' property"
+            )
         }
 
-        if(!jsonObject.has("x")) {
-            throw InvalidArgumentsError("GoogleMapConfig object is missing the required 'x' property")
+        if (!jsonObject.has("x")) {
+            throw InvalidArgumentsError(
+                    "GoogleMapConfig object is missing the required 'x' property"
+            )
         }
 
-        if(!jsonObject.has("y")) {
-            throw InvalidArgumentsError("GoogleMapConfig object is missing the required 'y' property")
+        if (!jsonObject.has("y")) {
+            throw InvalidArgumentsError(
+                    "GoogleMapConfig object is missing the required 'y' property"
+            )
         }
 
         val width = jsonObject.getDouble("width")

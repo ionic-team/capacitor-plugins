@@ -8,17 +8,23 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 
 import com.getcapacitor.Bridge
+import com.getcapacitor.JSObject
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.GoogleMap.OnMapClickListener
+import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import kotlinx.coroutines.*
 
 import com.google.maps.android.clustering.ClusterManager
 import kotlinx.coroutines.channels.Channel
 
 class CapacitorGoogleMap(val id: String, val config: GoogleMapConfig,
-                         val delegate: CapacitorGoogleMapsPlugin) : OnMapReadyCallback {
+                        val delegate: CapacitorGoogleMapsPlugin)
+    : OnMapReadyCallback, OnMapClickListener, OnMarkerClickListener {
     private var mapView: CapacitorGoogleMapView? = null
     private var googleMap: GoogleMap? = null
     private val markers = HashMap<String, CapacitorGoogleMapMarker>()
@@ -28,6 +34,7 @@ class CapacitorGoogleMap(val id: String, val config: GoogleMapConfig,
 
     init {
         initMap()
+        setListeners()
     }
 
     private fun initMap() {
@@ -121,10 +128,9 @@ class CapacitorGoogleMap(val id: String, val config: GoogleMapConfig,
             CoroutineScope(Dispatchers.Main).launch {
                 newMarkers.forEach {
                     val googleMapMarker = googleMap?.addMarker(it.getMarkerOptions())
+                    it.googleMapMarker = googleMapMarker
 
-                    if (clusterManager == null) {
-                        it.googleMapMarker = googleMapMarker
-                    } else {
+                    if (clusterManager != null) {
                         googleMapMarker?.remove()
                     }
 
@@ -148,7 +154,7 @@ class CapacitorGoogleMap(val id: String, val config: GoogleMapConfig,
         try {
             googleMap ?: throw GoogleMapsError("google map is not available")
 
-            var markerId = ""
+            var markerId: String
 
             CoroutineScope(Dispatchers.Main).launch {
                 val googleMapMarker = googleMap?.addMarker(marker.getMarkerOptions())
@@ -172,6 +178,7 @@ class CapacitorGoogleMap(val id: String, val config: GoogleMapConfig,
         }
     }
 
+    @SuppressLint("PotentialBehaviorOverride")
     fun enableClustering(callback: (error: GoogleMapsError?) -> Unit) {
         try {
             googleMap ?: throw GoogleMapsError("google map is not available")
@@ -186,13 +193,19 @@ class CapacitorGoogleMap(val id: String, val config: GoogleMapConfig,
                 clusterManager = ClusterManager(bridge.context, googleMap)
 
                 googleMap?.setOnCameraIdleListener(clusterManager)
+
+                clusterManager?.setOnClusterItemClickListener {
+                    if (null == it.googleMapMarker) false
+                    else this@CapacitorGoogleMap.onMarkerClick(it.googleMapMarker!!)
+                }
+
                 googleMap?.setOnMarkerClickListener(clusterManager)
 
                 // add existing markers to the cluster
                 if (markers.isNotEmpty()) {
-                    for ((id, marker) in markers) {
+                    for ((_, marker) in markers) {
                         marker.googleMapMarker?.remove()
-                        marker.googleMapMarker = null
+                        // marker.googleMapMarker = null
                     }
                     clusterManager?.addItems(markers.values)
                     clusterManager?.cluster()
@@ -205,6 +218,7 @@ class CapacitorGoogleMap(val id: String, val config: GoogleMapConfig,
         }
     }
 
+    @SuppressLint("PotentialBehaviorOverride")
     fun disableClustering(callback: (error: GoogleMapsError?) -> Unit) {
         try {
             googleMap ?: throw GoogleMapsError("google map is not available")
@@ -214,9 +228,11 @@ class CapacitorGoogleMap(val id: String, val config: GoogleMapConfig,
                 clusterManager?.cluster()
                 clusterManager = null
 
+                googleMap?.setOnMarkerClickListener(this@CapacitorGoogleMap)
+
                 // add existing markers back to the map
                 if (markers.isNotEmpty()) {
-                    for ((id, marker) in markers) {
+                    for ((_, marker) in markers) {
                         val googleMapMarker = googleMap?.addMarker(marker.getMarkerOptions())
                         marker.googleMapMarker = googleMapMarker
                     }
@@ -412,11 +428,66 @@ class CapacitorGoogleMap(val id: String, val config: GoogleMapConfig,
         return (pixels * scale + 0.5f).toInt()
     }
 
+    fun onStart() {
+        mapView?.onStart()
+    }
+
+    fun onResume() {
+        mapView?.onResume()
+    }
+
+    fun onStop() {
+        mapView?.onStop()
+    }
+
+    fun onPause() {
+        mapView?.onPause()
+    }
+
+    fun onDestroy() {
+        mapView?.onDestroy()
+    }
+
     override fun onMapReady(map: GoogleMap) {
         runBlocking {
             googleMap = map
-            isReadyChannel.send(true);
+
+            val data = JSObject()
+            data.put("id", this@CapacitorGoogleMap.id)
+            delegate.notify("onMapReady", data)
+
+            isReadyChannel.send(true)
             isReadyChannel.close()
         }
+    }
+
+    @SuppressLint("PotentialBehaviorOverride")
+    fun setListeners() {
+        runBlocking {
+            withContext(Dispatchers.Main) {
+                this@CapacitorGoogleMap.googleMap?.setOnMarkerClickListener(this@CapacitorGoogleMap)
+                this@CapacitorGoogleMap.googleMap?.setOnMapClickListener(this@CapacitorGoogleMap)
+            }
+        }
+    }
+
+    override fun onMapClick(point: LatLng) {
+        val data = JSObject()
+        data.put("id", this@CapacitorGoogleMap.id)
+        data.put("latitude", point.latitude)
+        data.put("longitude", point.longitude)
+        delegate.notify("onMapClick", data)
+    }
+
+    override fun onMarkerClick(marker: Marker): Boolean {
+        val data = JSObject()
+        data.put("mapId", this@CapacitorGoogleMap.id)
+        data.put("markerId", marker.id)
+        data.put("latitude", marker.position.latitude)
+        data.put("longitude", marker.position.longitude)
+        data.put("title", marker.title)
+        data.put("snippet", marker.snippet)
+        delegate.notify("onMarkerClick", data)
+        return false
     }
 }
