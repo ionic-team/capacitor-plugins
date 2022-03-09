@@ -62,7 +62,7 @@ public class Map {
     var config: GoogleMapConfig
     var mapViewController: GMViewController?
     var markers = [Int: GMSMarker]()
-    private var delegate: CapacitorGoogleMapsPlugin
+    private weak var delegate: CapacitorGoogleMapsPlugin
 
     init(id: String, config: GoogleMapConfig, delegate: CapacitorGoogleMapsPlugin) {
         self.id = id
@@ -91,6 +91,10 @@ public class Map {
                 if let bridge = self.delegate.bridge {
                     bridge.viewController!.view.addSubview(mapViewController.view)
                     mapViewController.GMapView.delegate = self.delegate
+
+                    self.delegate.notifyListeners("onMapReady", data: [
+                        "id": self.id
+                    ])
                 }
             }
         }

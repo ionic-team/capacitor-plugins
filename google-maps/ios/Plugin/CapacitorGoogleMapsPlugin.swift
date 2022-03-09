@@ -459,4 +459,35 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
         call.reject(errObject.message, "\(errObject.code)", error, [:])
     }
 
+    private func findMapIdByMapView(_ mapView: GMSMapView) -> String {
+        for (mapId, map) in self.maps {
+            if map.mapViewController?.GMapView === mapView {
+                return mapId
+            }
+        }
+        return ""
+    }
+
+    // EVENT LISTENERS
+    // onMapClick
+    public func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
+        self.notifyListeners("onMapClick", data: [
+            "id": self.findMapIdByMapView(mapView),
+            "latitude": coordinate.latitude,
+            "longitude": coordinate.longitude
+        ])
+    }
+
+    // onMarkerClick
+    public func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
+        self.notifyListeners("onMarkerClick", data: [
+            "mapId": self.findMapIdByMapView(mapView),
+            "markerId": marker.hash.hashValue,
+            "latitude": marker.position.latitude,
+            "longitude": marker.position.longitude,
+            "title": marker.title ?? "",
+            "snippet": marker.snippet ?? ""
+        ])
+        return false
+    }
 }
