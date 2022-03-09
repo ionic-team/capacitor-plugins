@@ -1,3 +1,4 @@
+import type { PluginListenerHandle } from '@capacitor/core';
 import { registerPlugin } from '@capacitor/core';
 
 import type {
@@ -96,6 +97,16 @@ export interface OnScrollArgs {
   };
 }
 
+export type MapListenerCallback = (data: any) => void;
+
+export interface OnMapClickArgs {
+  callback?: MapListenerCallback;
+}
+
+export interface OnMarkerClickArgs {
+  callback?: MapListenerCallback;
+}
+
 export interface CapacitorGoogleMapsPlugin {
   create(args: CreateMapArgs): Promise<void>;
   addMarker(args: AddMarkerArgs): Promise<{ id: string }>;
@@ -113,6 +124,23 @@ export interface CapacitorGoogleMapsPlugin {
   enableCurrentLocation(args: CurrentLocArgs): Promise<void>;
   setPadding(args: PaddingArgs): Promise<void>;
   onScroll(args: OnScrollArgs): Promise<void>;
+  setOnMapClickListener(args: OnMapClickArgs): Promise<void>;
+  setOnMarkerClickListener(args: OnMarkerClickArgs): Promise<void>;
+
+  addListener(
+    eventName: 'onMapReady',
+    listenerFunc: MapListenerCallback,
+  ): PluginListenerHandle;
+
+  addListener(
+    eventName: 'onMapClick',
+    listenerFunc: MapListenerCallback,
+  ): PluginListenerHandle;
+
+  addListener(
+    eventName: 'onMarkerClick',
+    listenerFunc: MapListenerCallback,
+  ): PluginListenerHandle;
 }
 
 export const CapacitorGoogleMaps = registerPlugin<CapacitorGoogleMapsPlugin>(

@@ -16,6 +16,8 @@ import type {
   TrafficLayerArgs,
   RemoveMarkersArgs,
   OnScrollArgs,
+  OnMapClickArgs,
+  OnMarkerClickArgs,
 } from './implementation';
 
 export class CapacitorGoogleMapsWeb
@@ -81,6 +83,12 @@ export class CapacitorGoogleMapsWeb
     throw new Error('Method not implemented.');
   }
   removeMarker(_args: RemoveMarkerArgs): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
+  setOnMapClickListener(_args: OnMapClickArgs): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
+  setOnMarkerClickListener(_args: OnMarkerClickArgs): Promise<void> {
     throw new Error('Method not implemented.');
   }
   async create(args: CreateMapArgs): Promise<void> {

@@ -1,4 +1,5 @@
 import { Capacitor } from '@capacitor/core';
+import type { PluginListenerHandle } from '@capacitor/core';
 
 import type {
   CameraConfig,
@@ -7,7 +8,7 @@ import type {
   MapPadding,
   MapType,
 } from './definitions';
-import type { CreateMapArgs } from './implementation';
+import type { CreateMapArgs, MapListenerCallback } from './implementation';
 import { CapacitorGoogleMaps } from './implementation';
 
 export interface Marker {
@@ -24,6 +25,8 @@ export class GoogleMap {
   private id: string;
   private element: HTMLElement | null = null;
   private frameElement: HTMLElement | null = null;
+  private onMapClickListener?: PluginListenerHandle;
+  private onMarkerClickListener?: PluginListenerHandle;
 
   private constructor(id: string) {
     this.id = id;
@@ -34,6 +37,7 @@ export class GoogleMap {
     apiKey: string,
     config: GoogleMapConfig,
     forceCreate?: boolean,
+    callback?: MapListenerCallback,
   ): Promise<GoogleMap> {
     const newMap = new GoogleMap(id);
 
@@ -75,6 +79,10 @@ export class GoogleMap {
     }
 
     await CapacitorGoogleMaps.create(args);
+
+    if (callback) {
+      CapacitorGoogleMaps.addListener('onMapReady', callback);
+    }
 
     return newMap;
   }
@@ -127,6 +135,15 @@ export class GoogleMap {
     if (Capacitor.isNativePlatform()) {
       this.disableScrolling();
     }
+
+    if (this.onMapClickListener) {
+      this.onMapClickListener.remove();
+    }
+
+    if (this.onMarkerClickListener) {
+      this.onMarkerClickListener.remove();
+    }
+
     return CapacitorGoogleMaps.destroy({
       id: this.id,
     });
@@ -263,5 +280,37 @@ export class GoogleMap {
     }
 
     return null;
+  }
+
+  async setOnMapClickListener(callback?: MapListenerCallback): Promise<void> {
+    if (this.onMapClickListener) {
+      this.onMapClickListener.remove();
+    }
+
+    if (callback) {
+      this.onMapClickListener = CapacitorGoogleMaps.addListener(
+        'onMapClick',
+        callback,
+      );
+    } else {
+      this.onMapClickListener = undefined;
+    }
+  }
+
+  async setOnMarkerClickListener(
+    callback?: MapListenerCallback,
+  ): Promise<void> {
+    if (this.onMarkerClickListener) {
+      this.onMarkerClickListener.remove();
+    }
+
+    if (callback) {
+      this.onMarkerClickListener = CapacitorGoogleMaps.addListener(
+        'onMarkerClick',
+        callback,
+      );
+    } else {
+      this.onMarkerClickListener = undefined;
+    }
   }
 }
