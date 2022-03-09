@@ -5,7 +5,7 @@ import type {
   MapPadding,
   MapType,
 } from './definitions';
-import { CapacitorGoogleMaps } from './implementation';
+import { CapacitorGoogleMaps, CreateMapArgs } from './implementation';
 
 export interface Marker {
   coordinate: LatLng;
@@ -34,28 +34,42 @@ export class GoogleMap {
   ): Promise<GoogleMap> {
     const newMap = new GoogleMap(id);
 
-    if (element) {
-      newMap.element = element;
-
-      const elementBounds = element.getBoundingClientRect();
-      config.width = elementBounds.width;
-      config.height = elementBounds.height;
-      config.x = elementBounds.x;
-      config.y = elementBounds.y;
-
-      newMap.frameElement = newMap.findMapContainerElement();
+    if (!element) {
+      throw new Error("container element is required")
     }
 
-    await CapacitorGoogleMaps.create({
+    newMap.element = element;
+
+    const elementBounds = element.getBoundingClientRect();
+    config.width = elementBounds.width;
+    config.height = elementBounds.height;
+    config.x = elementBounds.x;
+    config.y = elementBounds.y;
+
+    newMap.frameElement = newMap.findMapContainerElement();
+    newMap.initScrolling();
+
+    const frameRect = newMap.frameElement?.getBoundingClientRect();
+
+    const args: CreateMapArgs = {
       id,
       apiKey,
-      config,
+      config,       
       forceCreate,
-    });
+    }
 
-    await newMap.initScrolling();
+    if (frameRect) {
+      args.frame = {
+        height: frameRect.height,
+        width: frameRect.width,
+        x: frameRect.x,
+        y: frameRect.y          
+      }
+    }
+    
+    await CapacitorGoogleMaps.create(args);  
 
-    return newMap;
+    return newMap;    
   }
 
   async enableClustering(): Promise<void> {
@@ -103,7 +117,7 @@ export class GoogleMap {
   }
 
   async destroy(): Promise<void> {
-    await this.disableScrolling();
+    this.disableScrolling();
     return CapacitorGoogleMaps.destroy({
       id: this.id,
     });
@@ -158,33 +172,40 @@ export class GoogleMap {
     });
   }
 
-  async initScrolling(): Promise<void> {
+  initScrolling() {
     if (this.frameElement) {
-      console.log(this.frameElement.tagName.toLowerCase());
+      var scrollEvent = 'scroll';
 
       if (this.frameElement.tagName.toLowerCase() == 'ion-content') {
         //@ts-ignore
         this.frameElement.scrollEvents = true;
-        this.frameElement.addEventListener('ionScroll', () => {
-          console.log('element is scrolling');
-          this.updateMapBounds();
-        });
-        console.log('ionScroll Event Listener Setup');
-      } else {
-        this.frameElement.addEventListener('scroll', () => {
-          console.log('element is scrolling');
-          this.updateMapBounds();
-        });
+        scrollEvent = 'ionScroll';
       }
+
+      window.addEventListener(scrollEvent, () => {        
+        this.updateMapBounds();
+      });
+
+      window.addEventListener('resize', () => {        
+        this.updateMapBounds();
+      });
+
+      screen.orientation.addEventListener('change', () => {
+        setTimeout(() => {
+          this.updateMapBounds();
+        }, 500);
+      });
     } else {
       console.warn('An appropriate map container element has not been found');
     }
   }
 
-  async disableScrolling(): Promise<void> {
+  disableScrolling() {
     if (this.frameElement) {
-      this.frameElement.removeEventListener("ionScroll", () => {})
-      this.frameElement.removeEventListener("scroll", () => {})
+      window.removeEventListener('ionScroll', () => {});
+      window.removeEventListener('scroll', () => {});
+      window.removeEventListener('resize', () => {});
+      screen.orientation.removeEventListener('change', () => {});
     }
   }
 
@@ -218,8 +239,7 @@ export class GoogleMap {
 
     let parentElement = this.element.parentElement;
     while (parentElement !== null) {
-      if (parentElement.classList.contains('mapContainer')) {
-        console.log('Parent Element Found');
+      if (parentElement.classList.contains('mapContainer')) {        
         return parentElement;
       }
 

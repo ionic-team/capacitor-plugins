@@ -254,12 +254,13 @@ onScroll(args: OnScrollArgs) => Promise<void>
 
 #### CreateMapArgs
 
-| Prop              | Type                                                        |
-| ----------------- | ----------------------------------------------------------- |
-| **`id`**          | <code>string</code>                                         |
-| **`apiKey`**      | <code>string</code>                                         |
-| **`config`**      | <code><a href="#googlemapconfig">GoogleMapConfig</a></code> |
-| **`forceCreate`** | <code>boolean</code>                                        |
+| Prop              | Type                                                                  |
+| ----------------- | --------------------------------------------------------------------- |
+| **`id`**          | <code>string</code>                                                   |
+| **`apiKey`**      | <code>string</code>                                                   |
+| **`config`**      | <code><a href="#googlemapconfig">GoogleMapConfig</a></code>           |
+| **`frame`**       | <code>{ x: number; y: number; width: number; height: number; }</code> |
+| **`forceCreate`** | <code>boolean</code>                                                  |
 
 
 #### GoogleMapConfig

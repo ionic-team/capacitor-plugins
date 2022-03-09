@@ -12,6 +12,12 @@ export interface CreateMapArgs {
   id: string;
   apiKey: string;
   config: GoogleMapConfig;
+  frame?: {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+  },
   forceCreate?: boolean;
 }
 

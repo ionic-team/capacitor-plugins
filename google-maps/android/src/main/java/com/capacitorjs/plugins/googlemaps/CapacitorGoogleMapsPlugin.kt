@@ -40,7 +40,7 @@ class CapacitorGoogleMapsPlugin : Plugin() {
             val configObject = call.getObject("config")
                 ?: throw InvalidArgumentsError("GoogleMapConfig is missing")
 
-            val forceCreate = call.getBoolean("forceCreate", false)!!
+            val forceCreate = call.getBoolean("forceCreate", false)!!            
 
             val config = GoogleMapConfig(configObject)
 
@@ -56,6 +56,21 @@ class CapacitorGoogleMapsPlugin : Plugin() {
 
             val newMap = CapacitorGoogleMap(id, config, this)
             maps[id] = newMap
+
+            val frameObj = call.getObject("frame")
+            if (frameObj != null) {
+                val boundsObj = JSONObject()
+                boundsObj.put("width", config.width)
+                boundsObj.put("height", config.height)
+                boundsObj.put("x", config.x)
+                boundsObj.put("y", config.y)
+
+                val bounds = boundsObjectToRect(boundsObj)
+                val frame = boundsObjectToRect(frameObj)
+
+                newMap.updateRender(bounds, frame)
+            }
+
             call.resolve()
         }
         catch(e: GoogleMapsError) {
