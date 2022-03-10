@@ -22,6 +22,7 @@ import com.getcapacitor.CapConfig;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Logger;
 import com.getcapacitor.PluginCall;
+import com.getcapacitor.PluginConfig;
 import com.getcapacitor.android.R;
 import com.getcapacitor.plugin.util.AssetUtil;
 import java.text.SimpleDateFormat;
@@ -36,7 +37,6 @@ import org.json.JSONObject;
  */
 public class LocalNotificationManager {
 
-    private static final String CONFIG_KEY_PREFIX = "plugins.LocalNotifications.";
     private static int defaultSoundID = AssetUtil.RESOURCE_ID_ZERO_VALUE;
     private static int defaultSmallIconID = AssetUtil.RESOURCE_ID_ZERO_VALUE;
     // Action constants
@@ -52,13 +52,13 @@ public class LocalNotificationManager {
     private Context context;
     private Activity activity;
     private NotificationStorage storage;
-    private CapConfig config;
+    private PluginConfig config;
 
     public LocalNotificationManager(NotificationStorage notificationStorage, Activity activity, Context context, CapConfig config) {
         storage = notificationStorage;
         this.activity = activity;
         this.context = context;
-        this.config = config;
+        this.config = config.getPluginConfiguration("LocalNotifications");
     }
 
     /**
@@ -223,7 +223,7 @@ public class LocalNotificationManager {
         mBuilder.setSmallIcon(localNotification.getSmallIcon(context, getDefaultSmallIcon(context)));
         mBuilder.setLargeIcon(localNotification.getLargeIcon(context));
 
-        String iconColor = localNotification.getIconColor(config.getString(CONFIG_KEY_PREFIX + "iconColor"));
+        String iconColor = localNotification.getIconColor(config.getString("iconColor"));
         if (iconColor != null) {
             try {
                 mBuilder.setColor(Color.parseColor(iconColor));
@@ -428,7 +428,7 @@ public class LocalNotificationManager {
         if (defaultSoundID != AssetUtil.RESOURCE_ID_ZERO_VALUE) return defaultSoundID;
 
         int resId = AssetUtil.RESOURCE_ID_ZERO_VALUE;
-        String soundConfigResourceName = config.getString(CONFIG_KEY_PREFIX + "sound");
+        String soundConfigResourceName = config.getString("sound");
         soundConfigResourceName = AssetUtil.getResourceBaseName(soundConfigResourceName);
 
         if (soundConfigResourceName != null) {
@@ -443,7 +443,7 @@ public class LocalNotificationManager {
         if (defaultSmallIconID != AssetUtil.RESOURCE_ID_ZERO_VALUE) return defaultSmallIconID;
 
         int resId = AssetUtil.RESOURCE_ID_ZERO_VALUE;
-        String smallIconConfigResourceName = config.getString(CONFIG_KEY_PREFIX + "smallIcon");
+        String smallIconConfigResourceName = config.getString("smallIcon");
         smallIconConfigResourceName = AssetUtil.getResourceBaseName(smallIconConfigResourceName);
 
         if (smallIconConfigResourceName != null) {
