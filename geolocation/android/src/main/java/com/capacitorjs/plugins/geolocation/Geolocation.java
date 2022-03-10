@@ -53,13 +53,15 @@ public class Geolocation {
                     networkEnabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
                 } catch (Exception ex) {}
 
-                LocationRequest locationRequest = new LocationRequest();
-                locationRequest.setMaxWaitTime(timeout);
-                locationRequest.setInterval(10000);
-                locationRequest.setFastestInterval(5000);
                 int lowPriority = networkEnabled ? LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY : LocationRequest.PRIORITY_LOW_POWER;
                 int priority = enableHighAccuracy ? LocationRequest.PRIORITY_HIGH_ACCURACY : lowPriority;
-                locationRequest.setPriority(priority);
+
+                LocationRequest locationRequest = LocationRequest
+                    .create()
+                    .setMaxWaitTime(timeout)
+                    .setInterval(10000)
+                    .setFastestInterval(5000)
+                    .setPriority(priority);
 
                 locationCallback =
                     new LocationCallback() {

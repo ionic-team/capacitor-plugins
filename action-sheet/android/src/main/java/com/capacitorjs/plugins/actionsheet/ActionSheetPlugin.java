@@ -20,10 +20,6 @@ public class ActionSheetPlugin extends Plugin {
     public void showActions(final PluginCall call) {
         String title = call.getString("title");
         JSArray options = call.getArray("options");
-        if (title == null) {
-            call.reject("Must supply a title");
-            return;
-        }
         if (options == null) {
             call.reject("Must supply options");
             return;

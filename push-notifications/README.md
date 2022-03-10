@@ -33,7 +33,7 @@ The Push Notification API uses [Firebase Cloud Messaging](https://firebase.googl
 
 This plugin will use the following project variables (defined in your app's `variables.gradle` file):
 
-- `$firebaseMessagingVersion` version of `com.google.firebase:firebase-messaging` (default: `21.0.1`)
+- `$firebaseMessagingVersion` version of `com.google.firebase:firebase-messaging` (default: `23.0.0`)
 
 ---
 
@@ -362,17 +362,17 @@ Provides the push notification token.
 ### addListener('registrationError', ...)
 
 ```typescript
-addListener(eventName: 'registrationError', listenerFunc: (error: any) => void) => Promise<PluginListenerHandle> & PluginListenerHandle
+addListener(eventName: 'registrationError', listenerFunc: (error: RegistrationError) => void) => Promise<PluginListenerHandle> & PluginListenerHandle
 ```
 
 Called when the push notification registration finished with problems.
 
 Provides an error with the registration problem.
 
-| Param              | Type                                 |
-| ------------------ | ------------------------------------ |
-| **`eventName`**    | <code>'registrationError'</code>     |
-| **`listenerFunc`** | <code>(error: any) =&gt; void</code> |
+| Param              | Type                                                                                |
+| ------------------ | ----------------------------------------------------------------------------------- |
+| **`eventName`**    | <code>'registrationError'</code>                                                    |
+| **`listenerFunc`** | <code>(error: <a href="#registrationerror">RegistrationError</a>) =&gt; void</code> |
 
 **Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt; & <a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
@@ -502,6 +502,13 @@ Remove all native listeners for this plugin.
 | Prop        | Type                | Description                                                              | Since |
 | ----------- | ------------------- | ------------------------------------------------------------------------ | ----- |
 | **`value`** | <code>string</code> | On iOS it contains the APNS token. On Android it contains the FCM token. | 1.0.0 |
+
+
+#### RegistrationError
+
+| Prop        | Type                | Description                                        | Since |
+| ----------- | ------------------- | -------------------------------------------------- | ----- |
+| **`error`** | <code>string</code> | Error message describing the registration failure. | 2.0.0 |
 
 
 #### ActionPerformed
