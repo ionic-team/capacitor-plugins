@@ -1,15 +1,12 @@
 package com.capacitorjs.plugins.network;
 
-import android.Manifest;
-import android.net.NetworkInfo;
 import com.getcapacitor.JSObject;
-import com.getcapacitor.Logger;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
-import com.getcapacitor.annotation.Permission;
 
+@SuppressWarnings("deprecation")
 @CapacitorPlugin(name = "Network")
 public class NetworkPlugin extends Plugin {
 
@@ -67,7 +64,7 @@ public class NetworkPlugin extends Plugin {
      * @param info
      * @return
      */
-    private JSObject getStatusJSObject(NetworkInfo info) {
+    private JSObject getStatusJSObject(android.net.NetworkInfo info) {
         JSObject ret = new JSObject();
         if (info == null) {
             ret.put("connected", false);
@@ -84,7 +81,7 @@ public class NetworkPlugin extends Plugin {
      * @param info
      * @return
      */
-    private String getNormalizedTypeName(NetworkInfo info) {
+    private String getNormalizedTypeName(android.net.NetworkInfo info) {
         String typeName = info.getTypeName();
         if (typeName.equals("WIFI")) {
             return "wifi";
