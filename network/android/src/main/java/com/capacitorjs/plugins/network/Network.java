@@ -5,11 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+@SuppressWarnings("deprecation")
 public class Network {
 
     /**
@@ -61,7 +61,7 @@ public class Network {
      * Get the current network information.
      * @return NetworkInfo
      */
-    public NetworkInfo getNetworkStatus() {
+    public android.net.NetworkInfo getNetworkStatus() {
         return connectivityManager.getActiveNetworkInfo();
     }
 
