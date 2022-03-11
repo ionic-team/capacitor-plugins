@@ -1,9 +1,7 @@
 package com.capacitorjs.plugins.network;
 
 import android.os.Build;
-
 import androidx.annotation.RequiresApi;
-
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;

@@ -5,13 +5,10 @@ import android.net.ConnectivityManager;
 import android.net.ConnectivityManager.NetworkCallback;
 import android.net.NetworkCapabilities;
 import android.os.Build;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-
 import com.getcapacitor.JSObject;
-
 
 @RequiresApi(api = Build.VERSION_CODES.N)
 public class Network {
@@ -24,6 +21,7 @@ public class Network {
     }
 
     class ConnectivityCallback extends NetworkCallback {
+
         @Override
         public void onLost(@NonNull android.net.Network network) {
             super.onLost(network);
@@ -39,6 +37,7 @@ public class Network {
 
     @Nullable
     private NetworkStatusChangeListener statusChangeListener;
+
     private ConnectivityCallback connectivityCallback = new ConnectivityCallback();
     private Context context;
     private ConnectivityManager connectivityManager;
