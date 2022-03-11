@@ -48,6 +48,23 @@ extension CGRect {
 public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
     private var maps = [String: Map]()
     private var isInitialized = false
+    
+    func checkLocationPermission() -> String {
+        let locationState: String
+
+        switch CLLocationManager.authorizationStatus() {
+        case .notDetermined:
+            locationState = "prompt"
+        case .restricted, .denied:
+            locationState = "denied"
+        case .authorizedAlways, .authorizedWhenInUse:
+            locationState = "granted"
+        @unknown default:
+            locationState = "prompt"
+        }
+        
+        return locationState
+    }
 
     @objc func create(_ call: CAPPluginCall) {
         do {
@@ -380,6 +397,10 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
 
             guard let enabled = call.getBool("enabled") else {
                 throw GoogleMapErrors.invalidArguments("enabled is missing")
+            }
+
+            if enabled && checkLocationPermission() != "granted" {
+                throw GoogleMapErrors.permissionsDeniedLocation
             }
 
             try map.enableCurrentLocation(enabled: enabled)

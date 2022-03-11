@@ -38,7 +38,7 @@ fun getErrorObject(err: GoogleMapsError): GoogleMapErrorObject {
             GoogleMapErrorObject(err.getErrorCode(), "Marker not found for provided id.")
         }
         is PermissionDeniedLocation -> {
-            GoogleMapErrorObject(err.getErrorCode(), "Permissions denied for accessing system location.")
+            GoogleMapErrorObject(err.getErrorCode(), "Permissions denied for accessing device location.")
         }
         is GoogleMapNotAvailable -> {
             GoogleMapErrorObject(err.getErrorCode(), "Google Map is not available.")

@@ -95,40 +95,39 @@ public class Map {
 
     func updateRender(frame: CGRect, mapBounds: CGRect) {
         DispatchQueue.main.async {
-            if let mapViewController = self.mapViewController {
-                mapViewController.view.layer.mask = nil
+            self.mapViewController.view.layer.mask = nil
 
-                var updatedFrame = mapViewController.view.frame
-                updatedFrame.origin.x = mapBounds.origin.x
-                updatedFrame.origin.y = mapBounds.origin.y
+            var updatedFrame = self.mapViewController.view.frame
+            updatedFrame.origin.x = mapBounds.origin.x
+            updatedFrame.origin.y = mapBounds.origin.y
 
-                mapViewController.view.frame = updatedFrame
+            self.mapViewController.view.frame = updatedFrame
 
-                var maskBounds: [CGRect] = []
+            var maskBounds: [CGRect] = []
 
-                if !frame.contains(mapBounds) {
-                    maskBounds.append(contentsOf: self.getFrameOverflowBounds(frame: frame, mapBounds: mapBounds))
-                }
-
-                if maskBounds.count > 0 {
-                    let maskLayer = CAShapeLayer()
-                    let path = CGMutablePath()
-
-                    path.addRect(mapViewController.view.bounds)
-                    maskBounds.forEach { b in
-                        path.addRect(b)
-                    }
-
-                    maskLayer.path = path
-                    maskLayer.fillRule = .evenOdd
-
-                    mapViewController.view.layer.mask = maskLayer
-
-                }
-
-                mapViewController.view.layoutIfNeeded()
+            if !frame.contains(mapBounds) {
+                maskBounds.append(contentsOf: self.getFrameOverflowBounds(frame: frame, mapBounds: mapBounds))
             }
+
+            if maskBounds.count > 0 {
+                let maskLayer = CAShapeLayer()
+                let path = CGMutablePath()
+
+                path.addRect(self.mapViewController.view.bounds)
+                maskBounds.forEach { b in
+                    path.addRect(b)
+                }
+
+                maskLayer.path = path
+                maskLayer.fillRule = .evenOdd
+
+                self.mapViewController.view.layer.mask = maskLayer
+
+            }
+
+            self.mapViewController.view.layoutIfNeeded()
         }
+
     }
 
     func destroy() {
