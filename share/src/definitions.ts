@@ -21,6 +21,8 @@ export interface ShareOptions {
    */
   url?: string;
 
+  additionalItems?: any;
+
   /**
    * Set a title for the share modal.
    * This option is only supported on Android.

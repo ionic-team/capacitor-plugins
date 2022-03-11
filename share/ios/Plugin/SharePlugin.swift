@@ -21,6 +21,14 @@ public class SharePlugin: CAPPlugin {
             items.append(urlObj)
         }
 
+        if let additionalItems = call.getArray("additionalItems") {
+            for additonalItem in additionalItems {
+                if let urlObj = URL(string: additonalItem as! String) {
+                    items.append(urlObj)
+                }
+            }
+        }
+        
         let title = call.getString("title")
 
         if items.count == 0 {

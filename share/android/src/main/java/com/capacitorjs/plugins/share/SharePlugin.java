@@ -14,7 +14,12 @@ import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.ActivityCallback;
 import com.getcapacitor.annotation.CapacitorPlugin;
+
+import org.json.JSONException;
+
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 @CapacitorPlugin(name = "Share")
 public class SharePlugin extends Plugin {
@@ -63,6 +68,13 @@ public class SharePlugin extends Plugin {
             String title = call.getString("title", "");
             String text = call.getString("text");
             String url = call.getString("url");
+            List<String> additionalItems = null;
+            try {
+                additionalItems = call.getArray("additionalItems").toList();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
             String dialogTitle = call.getString("dialogTitle", "Share");
 
             if (text == null && url == null) {
@@ -74,35 +86,56 @@ public class SharePlugin extends Plugin {
                 call.reject("Unsupported url");
                 return;
             }
-
-            Intent intent = new Intent(Intent.ACTION_SEND);
-
-            if (text != null) {
-                // If they supplied both fields, concat them
-                if (url != null && isHttpUrl(url)) text = text + " " + url;
-                intent.putExtra(Intent.EXTRA_TEXT, text);
-                intent.setTypeAndNormalize("text/plain");
-            }
-
-            if (url != null && isHttpUrl(url) && text == null) {
-                intent.putExtra(Intent.EXTRA_TEXT, url);
-                intent.setTypeAndNormalize("text/plain");
-            } else if (url != null && isFileUrl(url)) {
+            Intent intent = new Intent();
+            if (additionalItems.size() > 0) {
+                intent.setAction(Intent.ACTION_SEND_MULTIPLE);
+                ArrayList<Uri> uriList = new ArrayList<>();
                 String type = getMimeType(url);
                 if (type == null) {
                     type = "*/*";
                 }
-                intent.setType(type);
-                Uri fileUrl = FileProvider.getUriForFile(
-                    getActivity(),
-                    getContext().getPackageName() + ".fileprovider",
-                    new File(Uri.parse(url).getPath())
-                );
-                intent.putExtra(Intent.EXTRA_STREAM, fileUrl);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    intent.setDataAndType(fileUrl, type);
+                additionalItems.add(0, url);
+                for (String additionalUrl : additionalItems) {
+                    type = type.equals(getMimeType(additionalUrl)) ? type : "*/*";
+
+                    uriList.add(FileProvider.getUriForFile(
+                            getActivity(),
+                            getContext().getPackageName() + ".fileprovider",
+                            new File(Uri.parse(additionalUrl).getPath())));
+
                 }
+                intent.setType(type);
+                intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uriList);
                 intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            } else {
+                intent.setAction(Intent.ACTION_SEND);
+                if (text != null) {
+                    // If they supplied both fields, concat them
+                    if (url != null && isHttpUrl(url)) text = text + " " + url;
+                    intent.putExtra(Intent.EXTRA_TEXT, text);
+                    intent.setTypeAndNormalize("text/plain");
+                }
+
+                if (url != null && isHttpUrl(url) && text == null) {
+                    intent.putExtra(Intent.EXTRA_TEXT, url);
+                    intent.setTypeAndNormalize("text/plain");
+                } else if (url != null && isFileUrl(url)) {
+                    String type = getMimeType(url);
+                    if (type == null) {
+                        type = "*/*";
+                    }
+                    intent.setType(type);
+                    Uri fileUrl = FileProvider.getUriForFile(
+                            getActivity(),
+                            getContext().getPackageName() + ".fileprovider",
+                            new File(Uri.parse(url).getPath())
+                    );
+                    intent.putExtra(Intent.EXTRA_STREAM, fileUrl);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        intent.setDataAndType(fileUrl, type);
+                    }
+                    intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                }
             }
 
             if (title != null) {
