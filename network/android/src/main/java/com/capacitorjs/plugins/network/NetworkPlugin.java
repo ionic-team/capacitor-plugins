@@ -1,12 +1,15 @@
 package com.capacitorjs.plugins.network;
 
-import com.getcapacitor.JSObject;
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
+
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
 
-@SuppressWarnings("deprecation")
+@RequiresApi(api = Build.VERSION_CODES.N)
 @CapacitorPlugin(name = "Network")
 public class NetworkPlugin extends Plugin {
 
@@ -36,7 +39,7 @@ public class NetworkPlugin extends Plugin {
      */
     @PluginMethod
     public void getStatus(PluginCall call) {
-        call.resolve(getStatusJSObject(implementation.getNetworkStatus()));
+        call.resolve(implementation.getNetworkStatus());
     }
 
     /**
@@ -44,7 +47,7 @@ public class NetworkPlugin extends Plugin {
      */
     @Override
     protected void handleOnResume() {
-        implementation.startMonitoring(getActivity());
+        implementation.startMonitoring();
     }
 
     /**
@@ -52,43 +55,10 @@ public class NetworkPlugin extends Plugin {
      */
     @Override
     protected void handleOnPause() {
-        implementation.stopMonitoring(getActivity());
+        implementation.stopMonitoring();
     }
 
     private void updateNetworkStatus() {
-        notifyListeners(NETWORK_CHANGE_EVENT, getStatusJSObject(implementation.getNetworkStatus()));
-    }
-
-    /**
-     * Transform a NetworkInfo object into our JSObject for returning to client
-     * @param info
-     * @return
-     */
-    private JSObject getStatusJSObject(android.net.NetworkInfo info) {
-        JSObject ret = new JSObject();
-        if (info == null) {
-            ret.put("connected", false);
-            ret.put("connectionType", "none");
-        } else {
-            ret.put("connected", info.isConnected());
-            ret.put("connectionType", getNormalizedTypeName(info));
-        }
-        return ret;
-    }
-
-    /**
-     * Convert the Android-specific naming for network types into our cross-platform type
-     * @param info
-     * @return
-     */
-    private String getNormalizedTypeName(android.net.NetworkInfo info) {
-        String typeName = info.getTypeName();
-        if (typeName.equals("WIFI")) {
-            return "wifi";
-        }
-        if (typeName.equals("MOBILE")) {
-            return "cellular";
-        }
-        return "none";
+        notifyListeners(NETWORK_CHANGE_EVENT, implementation.getNetworkStatus());
     }
 }
