@@ -1,14 +1,15 @@
 package com.capacitorjs.plugins.googlemaps
 
 import android.annotation.SuppressLint
+import android.graphics.RectF
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+
 import com.getcapacitor.Bridge
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.CameraPosition
 import kotlinx.coroutines.*
@@ -18,7 +19,7 @@ import kotlinx.coroutines.channels.Channel
 
 class CapacitorGoogleMap(val id: String, val config: GoogleMapConfig,
                          val delegate: CapacitorGoogleMapsPlugin) : OnMapReadyCallback {
-    private var mapView: MapView? = null
+    private var mapView: CapacitorGoogleMapView? = null
     private var googleMap: GoogleMap? = null
     private val markers = HashMap<String, CapacitorGoogleMapMarker>()
     private var clusterManager: ClusterManager<CapacitorGoogleMapMarker>? = null
@@ -31,13 +32,14 @@ class CapacitorGoogleMap(val id: String, val config: GoogleMapConfig,
 
     private fun initMap() {
         runBlocking {
-            CoroutineScope(Dispatchers.Main).launch {
+            val job = CoroutineScope(Dispatchers.Main).launch {
                 val bridge = delegate.bridge
 
-                val mapView = MapView(bridge.context, config.googleMapOptions)
+                val mapView = CapacitorGoogleMapView(bridge.context, config.googleMapOptions, bridge.activity.resources.displayMetrics.density)
                 mapView.onCreate(null)
                 mapView.onStart()
                 mapView.getMapAsync(this@CapacitorGoogleMap)
+                mapView.setWillNotDraw(false)
 
                 isReadyChannel.receive()
 
@@ -45,6 +47,8 @@ class CapacitorGoogleMap(val id: String, val config: GoogleMapConfig,
 
                 render()
             }
+
+            job.join()
         }
     }
 
@@ -65,6 +69,7 @@ class CapacitorGoogleMap(val id: String, val config: GoogleMapConfig,
                 layoutParams.topMargin = getScaledPixels(bridge, config.y)
 
                 mapViewParent.tag = id
+
                 mapView!!.layoutParams = layoutParams
                 mapViewParent.addView(mapView)
 
@@ -73,9 +78,25 @@ class CapacitorGoogleMap(val id: String, val config: GoogleMapConfig,
         }
     }
 
-    fun destroy() {
+    fun updateRender(updatedBounds: RectF, frame: RectF) {
+        this.mapView ?: throw GoogleMapsError("map view is not available")
+
+        this.config.x = updatedBounds.left.toInt()
+        this.config.y = updatedBounds.top.toInt()
+        this.config.width = updatedBounds.width().toInt()
+        this.config.height = updatedBounds.height().toInt()
+
+
         runBlocking {
             CoroutineScope(Dispatchers.Main).launch {
+                mapView!!.updateBounds(updatedBounds, frame)
+            }
+        }
+    }
+
+    fun destroy() {
+        runBlocking {
+            val job = CoroutineScope(Dispatchers.Main).launch {
                 val bridge = delegate.bridge
 
                 val viewToRemove: View? = ((bridge.webView.parent) as ViewGroup).findViewWithTag(id)
@@ -87,6 +108,8 @@ class CapacitorGoogleMap(val id: String, val config: GoogleMapConfig,
                 googleMap = null
                 clusterManager = null
             }
+
+            job.join()
         }
     }
 
@@ -106,7 +129,7 @@ class CapacitorGoogleMap(val id: String, val config: GoogleMapConfig,
                     }
 
                     markers[googleMapMarker!!.id] = it
-                    markerIds.add(googleMapMarker!!.id)
+                    markerIds.add(googleMapMarker.id)
                 }
 
                 if (clusterManager != null) {
@@ -388,7 +411,6 @@ class CapacitorGoogleMap(val id: String, val config: GoogleMapConfig,
         // Convert the dps to pixels, based on density scale
         return (pixels * scale + 0.5f).toInt()
     }
-
 
     override fun onMapReady(map: GoogleMap) {
         runBlocking {

@@ -12,7 +12,7 @@ const MultipleMarkers: React.FC = () => {
 
     async function createMap() {
         try {
-            const element = document.getElementById('mapBox');
+            const element = document.getElementById('multipleMarkers_map1');
             if (element !== null) {
                 const newMap = await GoogleMap.create(element, "test-map", apiKey!, {
                     center: {
@@ -100,6 +100,18 @@ const MultipleMarkers: React.FC = () => {
         }
     }
 
+    async function destroyMap() {
+        setCommandOutput("");
+        try {
+            if (map) {
+                await map.destroy();
+                setCommandOutput('Map destroyed');
+            }
+        } catch (err: any) {
+            setCommandOutput(err.message);
+        }
+    }
+
     return (
         <BaseTestingPage pageTitle="Multiple Markers">
             <div>
@@ -118,13 +130,20 @@ const MultipleMarkers: React.FC = () => {
                 <IonButton id="removeMarkersButton" onClick={removeAllMarkers}>
                     Remove Markers
                 </IonButton>
+                <IonButton id="destroyMapButton" onClick={destroyMap}>
+                    Destroy Map
+                </IonButton>   
             </div>
             <div>
                 <IonTextarea id="commandOutput" value={commandOutput}></IonTextarea>
             </div>
-            <div>
-                <div id="mapBox" style={{width: 400, height: 400}}></div>
-            </div>
+            <div id="multipleMarkers_map1" style={{
+                position: "absolute",
+                top: window.innerHeight - 150,
+                left: 0,
+                width: window.innerWidth,
+                height: 150,
+            }}></div>
         </BaseTestingPage>
     )
 }

@@ -15,12 +15,16 @@ import type {
   RemoveMarkerArgs,
   TrafficLayerArgs,
   RemoveMarkersArgs,
+  OnScrollArgs,
 } from './implementation';
 
 export class CapacitorGoogleMapsWeb
   extends WebPlugin
   implements CapacitorGoogleMapsPlugin
 {
+  onScroll(_args: OnScrollArgs): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
   private gMapsRef: typeof google.maps | undefined = undefined;
   private maps: {
     [id: string]: { element: HTMLElement; map: google.maps.Map };
@@ -79,12 +83,12 @@ export class CapacitorGoogleMapsWeb
   removeMarker(_args: RemoveMarkerArgs): Promise<void> {
     throw new Error('Method not implemented.');
   }
-  async create(_args: CreateMapArgs): Promise<void> {
-    console.log(`Create map: ${_args.id}`);
-    await this.importGoogleLib(_args.apiKey);
-    this.maps[_args.id] = {
-      map: new window.google.maps.Map(_args.element, { ..._args.config }),
-      element: _args.element,
+  async create(args: CreateMapArgs): Promise<void> {
+    console.log(`Create map: ${args.id}`);
+    await this.importGoogleLib(args.apiKey);
+    this.maps[args.id] = {
+      map: new window.google.maps.Map(args.element, { ...args.config }),
+      element: args.element,
     };
   }
   async destroy(_args: DestroyMapArgs): Promise<void> {

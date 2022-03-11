@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { GoogleMap, MapType } from '@capacitor/google-maps';
+import { GoogleMap } from '@capacitor/google-maps';
+import { MapType } from '@capacitor/google-maps';
 import { IonButton, IonTextarea } from '@ionic/react';
 import BaseTestingPage from '../../components/BaseTestingPage';
 
@@ -12,32 +13,26 @@ const ConfigMapPage: React.FC = () => {
     async function createMaps() {
         setCommandOutput("");
         setMaps([]);
-        try {
-            const viewportWidth = window.outerWidth;
-            const newMap1 = await GoogleMap.create("test-map", apiKey!, {
+        try {            
+            const mapRef1 = document.getElementById("config_map1")!
+            const mapRef2 = document.getElementById("config_map2")!
+            
+            const newMap1 = await GoogleMap.create(mapRef1, "test-map", apiKey!, {
                 center: {
                     lat: 33.6,
                     lng: -117.9,
                 },
                 zoom: 8,
                 androidLiteMode: false,
-                height: viewportWidth / 2,
-                width: viewportWidth / 2,
-                x: 0,
-                y: window.innerHeight - (viewportWidth / 2),
             });
 
-            const newMap2 = await GoogleMap.create("test-map2", apiKey!, {
+            const newMap2 = await GoogleMap.create(mapRef2, "test-map2", apiKey!, {
                 center: {
                     lat: -33.6,
                     lng: 117.9,
                 },
                 zoom: 6,
-                androidLiteMode: false,
-                height: viewportWidth / 2,
-                width: viewportWidth / 2,
-                x: viewportWidth / 2,
-                y: window.innerHeight - (viewportWidth / 2),
+                androidLiteMode: false,                
             });
     
             setMaps([newMap1, newMap2]);
@@ -222,7 +217,7 @@ const ConfigMapPage: React.FC = () => {
     }
 
     return (
-        <BaseTestingPage pageTitle="Create and Destroy Map">
+        <BaseTestingPage pageTitle="Map Configuration">
             <div>
                 <IonButton expand="block" id="createMapButton" onClick={createMaps}>
                     Create Maps
@@ -243,6 +238,20 @@ const ConfigMapPage: React.FC = () => {
             <div>
                 <IonTextarea id="commandOutput" value={commandOutput}></IonTextarea>
             </div>
+            <div id="config_map1" style={{
+                position: "absolute",
+                top: window.innerHeight - (window.outerWidth / 2),
+                left: 0,
+                width: (window.outerWidth / 2),
+                height: (window.outerWidth / 2),
+            }}></div>
+            <div id="config_map2" style={{
+                position: "absolute",
+                top: window.innerHeight - (window.outerWidth / 2),
+                left: window.outerWidth / 2,
+                width: (window.outerWidth / 2),
+                height: (window.outerWidth / 2),
+            }}></div>
         </BaseTestingPage>
     )
 }

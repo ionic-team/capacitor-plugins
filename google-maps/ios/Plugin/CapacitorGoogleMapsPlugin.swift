@@ -22,6 +22,28 @@ extension GMSMapViewType {
     }
 }
 
+extension CGRect {
+    static func fromJSObject(_ jsObject: JSObject) throws -> CGRect {
+        guard let width = jsObject["width"] as? Double else {
+            throw GoogleMapErrors.invalidArguments("bounds object is missing the required 'width' property")
+        }
+
+        guard let height = jsObject["height"] as? Double else {
+            throw GoogleMapErrors.invalidArguments("bounds object is missing the required 'height' property")
+        }
+
+        guard let x = jsObject["x"] as? Double else {
+            throw GoogleMapErrors.invalidArguments("bounds object is missing the required 'x' property")
+        }
+
+        guard let y = jsObject["y"] as? Double else {
+            throw GoogleMapErrors.invalidArguments("bounds object is missing the required 'y' property")
+        }
+
+        return CGRect(x: x, y: y, width: width, height: height)
+    }
+}
+
 @objc(CapacitorGoogleMapsPlugin)
 public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
     private var maps = [String: Map]()
@@ -397,6 +419,35 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
             }
 
             map.disableClustering()
+            call.resolve()
+        } catch {
+            handleError(call, error: error)
+        }
+    }
+
+    @objc func onScroll(_ call: CAPPluginCall) {
+        do {
+            guard let id = call.getString("id") else {
+                throw GoogleMapErrors.invalidMapId
+            }
+
+            guard let map = self.maps[id] else {
+                throw GoogleMapErrors.mapNotFound
+            }
+
+            guard let frame = call.getObject("frame") else {
+                throw GoogleMapErrors.invalidArguments("frame is missing")
+            }
+
+            guard let bounds = call.getObject("mapBounds") else {
+                throw GoogleMapErrors.invalidArguments("mapBounds is missing")
+            }
+
+            let frameRect = try CGRect.fromJSObject(frame)
+            let boundsRect = try CGRect.fromJSObject(bounds)
+
+            map.updateRender(frame: frameRect, mapBounds: boundsRect)
+
             call.resolve()
         } catch {
             handleError(call, error: error)

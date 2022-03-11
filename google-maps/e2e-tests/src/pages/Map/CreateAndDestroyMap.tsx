@@ -13,29 +13,29 @@ const CreateAndDestroyMapPage: React.FC = () => {
         setCommandOutput("");
         setMaps([]);
         try {
-            const element = document.getElementById('mapBox');
-            const element2 = document.getElementById('mapBox2');
-            if (element !== null && element2 !== null) {
-                const newMap1 = await GoogleMap.create(element, "test-map", apiKey!, {
-                    center: {
-                        lat: 33.6,
-                        lng: -117.9,
-                    },
-                    zoom: 8,
-                    androidLiteMode: false
-                });
-                const newMap2 = await GoogleMap.create(element2, "test-map2", apiKey!, {
-                    center: {
-                        lat: 38.8977,
-                        lng: -77.0365,
-                    },
-                    zoom: 10,
-                    androidLiteMode: false
-                });
-        
-                setMaps([newMap1, newMap2]);
-                setCommandOutput('Maps created');
-            }
+            const mapRef1 = document.getElementById("map1")!
+            const mapRef2 = document.getElementById("map2")!
+            
+            const newMap1 = await GoogleMap.create(mapRef1, "test-map", apiKey!, {
+                center: {
+                    lat: 33.6,
+                    lng: -117.9,
+                },
+                zoom: 8,
+                androidLiteMode: false,                
+            });
+
+            const newMap2 = await GoogleMap.create(mapRef2, "test-map2", apiKey!, {
+                center: {
+                    lat: -33.6,
+                    lng: 117.9,
+                },
+                zoom: 6,
+                androidLiteMode: false,                
+            });
+    
+            setMaps([newMap1, newMap2]);
+            setCommandOutput('Maps created');
         } catch(err: any) {
             setCommandOutput(err.message);
         }        
@@ -48,7 +48,7 @@ const CreateAndDestroyMapPage: React.FC = () => {
                 for (let map of maps) {
                     await map.destroy();
                 }
-                //setMaps([]);
+                setMaps([]);
                 setCommandOutput('Maps destroyed');
             }
         } catch (err: any) {
@@ -69,12 +69,20 @@ const CreateAndDestroyMapPage: React.FC = () => {
             <div>
                 <IonTextarea id="commandOutput" value={commandOutput}></IonTextarea>
             </div>
-            <div>
-                <div id="mapBox" style={{width: 400, height: 400}}></div>
-            </div>
-            <div style={{marginTop: 20}}>
-                <div id="mapBox2" style={{width: 400, height: 400, left: 40}}></div>
-            </div>
+            <div id="map1" style={{
+                position: "absolute",
+                top: window.innerHeight - (window.outerWidth / 2),
+                left: 0,
+                width: (window.outerWidth / 2),
+                height: (window.outerWidth / 2),
+            }}></div>
+            <div id="map2" style={{
+                position: "absolute",
+                top: window.innerHeight - (window.outerWidth / 2),
+                left: window.outerWidth / 2,
+                width: (window.outerWidth / 2),
+                height: (window.outerWidth / 2),
+            }}></div>
         </BaseTestingPage>
     )
 }

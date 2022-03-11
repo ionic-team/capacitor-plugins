@@ -11,20 +11,19 @@ const AddAndRemoveMarkers: React.FC = () => {
 
     async function createMap() {
         try {
-            const element = document.getElementById('mapBox');
-            if (element !== null) {
-                const newMap = await GoogleMap.create(element, "test-map", apiKey!, {
-                    center: {
-                        lat: 33.6,
-                        lng: -117.9,
-                    },
-                    zoom: 8,
-                    androidLiteMode: false,
-                });
-                setMap(newMap);
+            const mapRef1 = document.getElementById("markers_map1")!
+            const newMap = await GoogleMap.create(mapRef1, "test-map", apiKey!, {
+                center: {
+                    lat: 33.6,
+                    lng: -117.9,
+                },
+                zoom: 8,
+                androidLiteMode: false,                
+            });
+            setMap(newMap);
 
                 setCommandOutput("Map created");
-            }
+            
         } catch (err: any) {
             setCommandOutput(err.message);
         }
@@ -69,6 +68,18 @@ const AddAndRemoveMarkers: React.FC = () => {
         }
     }
 
+    async function destroyMap() {
+        setCommandOutput("");
+        try {
+            if (map) {
+                await map.destroy();
+                setCommandOutput('Map destroyed');
+            }
+        } catch (err: any) {
+            setCommandOutput(err.message);
+        }
+    }
+
     return (
         <BaseTestingPage pageTitle="Add and Remove Markers">
             <div>
@@ -80,14 +91,21 @@ const AddAndRemoveMarkers: React.FC = () => {
                 </IonButton>    
                 <IonButton id="removeMarkerButton" onClick={removeMarker}>
                     Remove Marker
-                </IonButton>                
+                </IonButton>   
+                <IonButton id="destroyMapButton" onClick={destroyMap}>
+                    Destroy Map
+                </IonButton>               
             </div>
             <div>
                 <IonTextarea id="commandOutput" value={commandOutput}></IonTextarea>
             </div>
-            <div>
-                <div id="mapBox" style={{width: 400, height: 400}}></div>
-            </div>
+            <div id="markers_map1" style={{
+                position: "absolute",
+                top: window.innerHeight - 300,
+                left: 0,
+                width: window.innerWidth,
+                height: 300,
+            }}></div>
         </BaseTestingPage>
     )
 }
