@@ -95,6 +95,45 @@ public class Map {
             }
         }
     }
+
+    func updateRender(frame: CGRect, mapBounds: CGRect) {
+        DispatchQueue.main.async {
+            if let mapViewController = self.mapViewController {
+                mapViewController.view.layer.mask = nil
+
+                var updatedFrame = mapViewController.view.frame
+                updatedFrame.origin.x = mapBounds.origin.x
+                updatedFrame.origin.y = mapBounds.origin.y
+
+                mapViewController.view.frame = updatedFrame
+
+                var maskBounds: [CGRect] = []
+
+                if !frame.contains(mapBounds) {
+                    maskBounds.append(contentsOf: self.getFrameOverflowBounds(frame: frame, mapBounds: mapBounds))
+                }
+
+                if maskBounds.count > 0 {
+                    let maskLayer = CAShapeLayer()
+                    let path = CGMutablePath()
+
+                    path.addRect(mapViewController.view.bounds)
+                    maskBounds.forEach { b in
+                        path.addRect(b)
+                    }
+
+                    maskLayer.path = path
+                    maskLayer.fillRule = .evenOdd
+
+                    mapViewController.view.layer.mask = maskLayer
+
+                }
+
+                mapViewController.view.layoutIfNeeded()
+            }
+        }
+    }
+
     func destroy() {
         DispatchQueue.main.async {
             if let mapViewController = self.mapViewController {
@@ -332,5 +371,25 @@ public class Map {
                 }
             }
         }
+    }
+
+    private func getFrameOverflowBounds(frame: CGRect, mapBounds: CGRect) -> [CGRect] {
+        var intersections: [CGRect] = []
+
+        // get top overflow
+        if mapBounds.origin.y < frame.origin.y {
+            let height = frame.origin.y - mapBounds.origin.y
+            let width = mapBounds.width
+            intersections.append(CGRect(x: 0, y: 0, width: width, height: height))
+        }
+
+        // get bottom overflow
+        if (mapBounds.origin.y + mapBounds.height) > (frame.origin.y + frame.height) {
+            let height = (mapBounds.origin.y + mapBounds.height) - (frame.origin.y + frame.height)
+            let width = mapBounds.width
+            intersections.append(CGRect(x: 0, y: mapBounds.height, width: width, height: height))
+        }
+
+        return intersections
     }
 }

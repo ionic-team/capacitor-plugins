@@ -9,10 +9,16 @@ import type {
 import type { Marker } from './map';
 
 export interface CreateMapArgs {
-  element: HTMLElement;
   id: string;
   apiKey: string;
   config: GoogleMapConfig;
+  element: HTMLElement;
+  frame?: {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+  };
   forceCreate?: boolean;
 }
 
@@ -74,6 +80,22 @@ export interface AddMarkersArgs {
   markers: Marker[];
 }
 
+export interface OnScrollArgs {
+  id: string;
+  frame: {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+  };
+  mapBounds: {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+  };
+}
+
 export interface CapacitorGoogleMapsPlugin {
   create(args: CreateMapArgs): Promise<void>;
   addMarker(args: AddMarkerArgs): Promise<{ id: string }>;
@@ -90,6 +112,7 @@ export interface CapacitorGoogleMapsPlugin {
   enableAccessibilityElements(args: AccElementsArgs): Promise<void>;
   enableCurrentLocation(args: CurrentLocArgs): Promise<void>;
   setPadding(args: PaddingArgs): Promise<void>;
+  onScroll(args: OnScrollArgs): Promise<void>;
 }
 
 export const CapacitorGoogleMaps = registerPlugin<CapacitorGoogleMapsPlugin>(

@@ -11,7 +11,7 @@ const BaseTestingPage: React.FC<{ children?: React.ReactNode; pageTitle: string 
           <IonTitle>{pageTitle}</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent fullscreen>
+      <IonContent fullscreen scrollEvents={true}>
         <IonHeader collapse="condense">
           <IonToolbar>
             <IonTitle size="large">{pageTitle}</IonTitle>
