@@ -2,6 +2,7 @@ package com.capacitorjs.plugins.network;
 
 import android.os.Build;
 import androidx.annotation.RequiresApi;
+import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
@@ -37,7 +38,7 @@ public class NetworkPlugin extends Plugin {
      */
     @PluginMethod
     public void getStatus(PluginCall call) {
-        call.resolve(implementation.getNetworkStatus());
+        call.resolve(parseNetworkStatus(implementation.getNetworkStatus()));
     }
 
     /**
@@ -57,6 +58,25 @@ public class NetworkPlugin extends Plugin {
     }
 
     private void updateNetworkStatus() {
-        notifyListeners(NETWORK_CHANGE_EVENT, implementation.getNetworkStatus());
+        notifyListeners(NETWORK_CHANGE_EVENT, parseNetworkStatus(implementation.getNetworkStatus()));
+    }
+
+    private JSObject parseNetworkStatus(NetworkStatus networkStatus) {
+        JSObject jsObject = new JSObject();
+        jsObject.put("connected", networkStatus.connected);
+        String connectionType = "none";
+        switch (networkStatus.connectionType) {
+            case WIFI:
+                connectionType = "wifi";
+                break;
+            case UNKNOWN:
+                connectionType = "unknown";
+                break;
+            case CELLULAR:
+                connectionType = "cellular";
+                break;
+        }
+        jsObject.put("connectionType", connectionType);
+        return jsObject;
     }
 }

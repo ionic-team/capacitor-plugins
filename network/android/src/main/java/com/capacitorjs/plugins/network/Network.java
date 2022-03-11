@@ -8,7 +8,6 @@ import android.os.Build;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import com.getcapacitor.JSObject;
 
 @RequiresApi(api = Build.VERSION_CODES.N)
 public class Network {
@@ -72,23 +71,22 @@ public class Network {
      * Get the current network information.
      * @return JSObject
      */
-    public JSObject getNetworkStatus() {
-        boolean connected = false;
-        String connectionType = "none";
+    public NetworkStatus getNetworkStatus() {
+        NetworkStatus networkStatus = new NetworkStatus();
         if (this.connectivityManager != null) {
             NetworkCapabilities capabilities = this.connectivityManager.getNetworkCapabilities(this.connectivityManager.getActiveNetwork());
             if (this.connectivityManager.getActiveNetwork() != null && capabilities != null) {
-                connected = capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET);
+                networkStatus.connected = capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET);
                 if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
-                    connectionType = "wifi";
+                    networkStatus.connectionType = NetworkStatus.ConnectionType.WIFI;
                 } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
-                    connectionType = "cellular";
+                    networkStatus.connectionType = NetworkStatus.ConnectionType.CELLULAR;
                 } else {
-                    connectionType = "unknown";
+                    networkStatus.connectionType = NetworkStatus.ConnectionType.UNKNOWN;
                 }
             }
         }
-        return (new JSObject()).put("connected", connected).put("connectionType", connectionType);
+        return networkStatus;
     }
 
     /**
