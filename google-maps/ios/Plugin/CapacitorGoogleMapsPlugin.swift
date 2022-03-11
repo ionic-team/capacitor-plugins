@@ -43,7 +43,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
             }
 
             guard let configObj = call.getObject("config") else {
-                throw GoogleMapErrors.invalidArguments("GoogleMapConfig is missing")
+                throw GoogleMapErrors.invalidArguments("config object is missing")
             }
 
             let forceCreate = call.getBool("forceCreate", false)
@@ -93,7 +93,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
             }
 
             guard let markerObj = call.getObject("marker") else {
-                throw GoogleMapErrors.invalidArguments("Marker object is missing")
+                throw GoogleMapErrors.invalidArguments("marker object is missing")
             }
 
             let marker = try Marker(fromJSObject: markerObj)
@@ -118,11 +118,11 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
             }
 
             guard let markerObjs = call.getArray("markers") as? [JSObject] else {
-                throw GoogleMapErrors.invalidArguments("Markers array is missing")
+                throw GoogleMapErrors.invalidArguments("markers array is missing")
             }
 
             if markerObjs.isEmpty {
-                throw GoogleMapErrors.invalidArguments("Markers requires at least one marker")
+                throw GoogleMapErrors.invalidArguments("markers requires at least one marker")
             }
 
             guard let map = self.maps[id] else {
@@ -188,11 +188,11 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
             }
 
             guard let markerIdString = call.getString("markerId") else {
-                throw GoogleMapErrors.invalidArguments("Marker hash id is invalid or missing")
+                throw GoogleMapErrors.invalidArguments("markerId is invalid or missing")
             }
 
             guard let markerId = Int(markerIdString) else {
-                throw GoogleMapErrors.invalidArguments("Marker hash id is invalid or missing")
+                throw GoogleMapErrors.invalidArguments("markerId is invalid or missing")
             }
 
             guard let map = self.maps[id] else {
@@ -219,7 +219,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
             }
 
             guard let configObj = call.getObject("config") else {
-                throw GoogleMapErrors.invalidArguments("CameraConfig is missing")
+                throw GoogleMapErrors.invalidArguments("config object is missing")
             }
 
             let config = try GoogleMapCameraConfig(fromJSObject: configObj)
