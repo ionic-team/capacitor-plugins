@@ -48,7 +48,7 @@ extension CGRect {
 public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
     private var maps = [String: Map]()
     private var isInitialized = false
-    
+
     func checkLocationPermission() -> String {
         let locationState: String
 
@@ -62,7 +62,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
         @unknown default:
             locationState = "prompt"
         }
-        
+
         return locationState
     }
 
@@ -99,8 +99,10 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
                 removedMap?.destroy()
             }
 
-            let newMap = Map(id: id, config: config, delegate: self)
-            self.maps[id] = newMap
+            DispatchQueue.main.sync {
+                let newMap = Map(id: id, config: config, delegate: self)
+                self.maps[id] = newMap
+            }
 
             call.resolve()
         } catch {
