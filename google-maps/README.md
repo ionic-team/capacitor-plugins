@@ -29,11 +29,14 @@ npx cap sync
 * [`enableCurrentLocation(...)`](#enablecurrentlocation)
 * [`setPadding(...)`](#setpadding)
 * [`onScroll(...)`](#onscroll)
-* [`setOnMapClickListener(...)`](#setonmapclicklistener)
-* [`setOnMarkerClickListener(...)`](#setonmarkerclicklistener)
+* [`addListener('onCameraIdle', ...)`](#addlisteneroncameraidle)
+* [`addListener('onCameraMoveStarted', ...)`](#addlisteneroncameramovestarted)
+* [`addListener('onClusterClick', ...)`](#addlisteneronclusterclick)
 * [`addListener('onMapReady', ...)`](#addlisteneronmapready)
 * [`addListener('onMapClick', ...)`](#addlisteneronmapclick)
 * [`addListener('onMarkerClick', ...)`](#addlisteneronmarkerclick)
+* [`addListener('onMyLocationButtonClick', ...)`](#addlisteneronmylocationbuttonclick)
+* [`addListener('onMyLocationClick', ...)`](#addlisteneronmylocationclick)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
 * [Enums](#enums)
@@ -255,28 +258,50 @@ onScroll(args: OnScrollArgs) => Promise<void>
 --------------------
 
 
-### setOnMapClickListener(...)
+### addListener('onCameraIdle', ...)
 
 ```typescript
-setOnMapClickListener(args: OnMapClickArgs) => Promise<void>
+addListener(eventName: 'onCameraIdle', listenerFunc: MapListenerCallback) => PluginListenerHandle
 ```
 
-| Param      | Type                                                      |
-| ---------- | --------------------------------------------------------- |
-| **`args`** | <code><a href="#onmapclickargs">OnMapClickArgs</a></code> |
+| Param              | Type                                                                |
+| ------------------ | ------------------------------------------------------------------- |
+| **`eventName`**    | <code>'onCameraIdle'</code>                                         |
+| **`listenerFunc`** | <code><a href="#maplistenercallback">MapListenerCallback</a></code> |
+
+**Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
 --------------------
 
 
-### setOnMarkerClickListener(...)
+### addListener('onCameraMoveStarted', ...)
 
 ```typescript
-setOnMarkerClickListener(args: OnMarkerClickArgs) => Promise<void>
+addListener(eventName: 'onCameraMoveStarted', listenerFunc: MapListenerCallback) => PluginListenerHandle
 ```
 
-| Param      | Type                                                            |
-| ---------- | --------------------------------------------------------------- |
-| **`args`** | <code><a href="#onmarkerclickargs">OnMarkerClickArgs</a></code> |
+| Param              | Type                                                                |
+| ------------------ | ------------------------------------------------------------------- |
+| **`eventName`**    | <code>'onCameraMoveStarted'</code>                                  |
+| **`listenerFunc`** | <code><a href="#maplistenercallback">MapListenerCallback</a></code> |
+
+**Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
+
+--------------------
+
+
+### addListener('onClusterClick', ...)
+
+```typescript
+addListener(eventName: 'onClusterClick', listenerFunc: MapListenerCallback) => PluginListenerHandle
+```
+
+| Param              | Type                                                                |
+| ------------------ | ------------------------------------------------------------------- |
+| **`eventName`**    | <code>'onClusterClick'</code>                                       |
+| **`listenerFunc`** | <code><a href="#maplistenercallback">MapListenerCallback</a></code> |
+
+**Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
 --------------------
 
@@ -322,6 +347,38 @@ addListener(eventName: 'onMarkerClick', listenerFunc: MapListenerCallback) => Pl
 | Param              | Type                                                                |
 | ------------------ | ------------------------------------------------------------------- |
 | **`eventName`**    | <code>'onMarkerClick'</code>                                        |
+| **`listenerFunc`** | <code><a href="#maplistenercallback">MapListenerCallback</a></code> |
+
+**Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
+
+--------------------
+
+
+### addListener('onMyLocationButtonClick', ...)
+
+```typescript
+addListener(eventName: 'onMyLocationButtonClick', listenerFunc: MapListenerCallback) => PluginListenerHandle
+```
+
+| Param              | Type                                                                |
+| ------------------ | ------------------------------------------------------------------- |
+| **`eventName`**    | <code>'onMyLocationButtonClick'</code>                              |
+| **`listenerFunc`** | <code><a href="#maplistenercallback">MapListenerCallback</a></code> |
+
+**Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
+
+--------------------
+
+
+### addListener('onMyLocationClick', ...)
+
+```typescript
+addListener(eventName: 'onMyLocationClick', listenerFunc: MapListenerCallback) => PluginListenerHandle
+```
+
+| Param              | Type                                                                |
+| ------------------ | ------------------------------------------------------------------- |
+| **`eventName`**    | <code>'onMyLocationClick'</code>                                    |
 | **`listenerFunc`** | <code><a href="#maplistenercallback">MapListenerCallback</a></code> |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
@@ -502,20 +559,6 @@ addListener(eventName: 'onMarkerClick', listenerFunc: MapListenerCallback) => Pl
 | **`id`**        | <code>string</code>                                                   |
 | **`frame`**     | <code>{ x: number; y: number; width: number; height: number; }</code> |
 | **`mapBounds`** | <code>{ x: number; y: number; width: number; height: number; }</code> |
-
-
-#### OnMapClickArgs
-
-| Prop           | Type                                                                |
-| -------------- | ------------------------------------------------------------------- |
-| **`callback`** | <code><a href="#maplistenercallback">MapListenerCallback</a></code> |
-
-
-#### OnMarkerClickArgs
-
-| Prop           | Type                                                                |
-| -------------- | ------------------------------------------------------------------- |
-| **`callback`** | <code><a href="#maplistenercallback">MapListenerCallback</a></code> |
 
 
 #### PluginListenerHandle

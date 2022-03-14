@@ -8,10 +8,36 @@ const MultipleMarkers: React.FC = () => {
     const [map, setMap] = useState<GoogleMap | null>(null);
     const [markerIds, setMarkerIds] = useState<string[]>([]);
     const [commandOutput, setCommandOutput] = useState('');
+    const [commandOutput2, setCommandOutput2] = useState('');
     const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
 
+    const onCameraIdle = (data: any) => {
+        setCommandOutput(`CAMERA IDLE:  ${JSON.stringify(data)}`);
+    }
+
+    const onCameraMoveStarted = (data: any) => {
+        setCommandOutput(`CAMERA MOVE STARTED:  ${JSON.stringify(data)}`);
+    }
+
+    const onClusterClick = (data: any) => {
+        setCommandOutput2(`CLUSTER CLICKED:  ${JSON.stringify(data)}`);
+    }
+
+    const onMapClick = (data: any) => {
+        setCommandOutput(`MAP CLICKED:  ${JSON.stringify(data)}`);
+        setCommandOutput2("");
+    }
+
     const onMarkerClick = (data: any) => {
-        setCommandOutput(`MARKER (${data.markerId}) WAS CLICKED ON MAP (${data.mapId})`);
+        setCommandOutput2(`MARKER CLICKED:  ${JSON.stringify(data)}`);
+    }
+
+    const onMyLocationButtonClick = (data: any) => {
+        setCommandOutput2(`MY LOCATION BUTTON CLICKED:  ${JSON.stringify(data)}`);
+    }
+
+    const onMyLocationClick = (data: any) => {
+        setCommandOutput2(`MY LOCATION CLICKED:  ${JSON.stringify(data)}`);
     }
 
     async function createMap() {
@@ -28,21 +54,31 @@ const MultipleMarkers: React.FC = () => {
                 });
                 setMap(newMap);
 
-                setCommandOutput("Map created")
+                setCommandOutput("Map created");
+                setCommandOutput2("");
             }
         } catch (err: any) {
             setCommandOutput(err.message);
+            setCommandOutput2("");
         }
     }
 
-    async function setOnMarkerClickListener() {
+    async function setEventListeners() {
+        map?.setOnCameraIdleListener(onCameraIdle);
+        map?.setOnCameraMoveStartedListener(onCameraMoveStarted);
+        map?.setOnClusterClickListener(onClusterClick);
+        map?.setOnMapClickListener(onMapClick);
         map?.setOnMarkerClickListener(onMarkerClick);
-        setCommandOutput('Set On Marker Click Listener!');
+        map?.setOnMyLocationButtonClickListener(onMyLocationButtonClick);
+        map?.setOnMyLocationClickListener(onMyLocationClick);
+        setCommandOutput('Set Event Listeners!');
+        setCommandOutput2("");
     }
 
-    async function removeOnMarkerClickListener() {
-        map?.setOnMarkerClickListener();
-        setCommandOutput('Removed On Marker Click Listener!');
+    async function removeEventListeners() {
+        map?.removeAllMapListeners();
+        setCommandOutput('Removed Event Listeners!');
+        setCommandOutput2("");
     }
 
     async function enableClustering() {
@@ -50,9 +86,11 @@ const MultipleMarkers: React.FC = () => {
             if (map) {
                 await map.enableClustering();
                 setCommandOutput("marker clustering enabled")
+                setCommandOutput2("");
             }
         } catch (err: any) {
             setCommandOutput(err.message);
+            setCommandOutput2("");
         }
     }
 
@@ -85,9 +123,11 @@ const MultipleMarkers: React.FC = () => {
                 console.log("@@IDS: ", ids);
                 setMarkerIds(ids)
                 setCommandOutput(`${ids.length} markers added`)
+                setCommandOutput2("");
             }
         } catch (err: any) {
             setCommandOutput(err.message);
+            setCommandOutput2("");
         }
     }
 
@@ -96,10 +136,12 @@ const MultipleMarkers: React.FC = () => {
             if (map) {
                 await map.removeMarkers(markerIds)
                 setCommandOutput(`${markerIds.length} markers removed`)
+                setCommandOutput2("");
                 setMarkerIds([])
             }
         } catch (err: any) {
             setCommandOutput(err.message);
+            setCommandOutput2("");
         }
     }
 
@@ -108,9 +150,11 @@ const MultipleMarkers: React.FC = () => {
             if (map) {
                 await map.disableClustering();
                 setCommandOutput("marker clustering disabled")
+                setCommandOutput2("");
             }
         } catch (err: any) {
             setCommandOutput(err.message);
+            setCommandOutput2("");
         }
     }
 
@@ -120,9 +164,11 @@ const MultipleMarkers: React.FC = () => {
             if (map) {
                 await map.destroy();
                 setCommandOutput('Map destroyed');
+                setCommandOutput2("");
             }
         } catch (err: any) {
             setCommandOutput(err.message);
+            setCommandOutput2("");
         }
     }
 
@@ -132,11 +178,11 @@ const MultipleMarkers: React.FC = () => {
                 <IonButton id="createMapButton" onClick={createMap}>
                     Create Map
                 </IonButton>
-                <IonButton  id="setOnMarkerClickButton" onClick={setOnMarkerClickListener}>
-                    Set On Marker Click Listener
+                <IonButton  id="setOnMarkerClickButton" onClick={setEventListeners}>
+                    Set Event Listeners
                 </IonButton>
-                <IonButton  id="removeOnMarkerClickButton" onClick={removeOnMarkerClickListener}>
-                    Remove On Marker Click Listener
+                <IonButton  id="removeOnMarkerClickButton" onClick={removeEventListeners}>
+                    Remove Event Listeners
                 </IonButton>
                 <IonButton id="addMarkersButton" onClick={addMultipleMarkers}>
                     Add Multiple Markers
@@ -156,6 +202,7 @@ const MultipleMarkers: React.FC = () => {
             </div>
             <div>
                 <IonTextarea id="commandOutput" value={commandOutput}></IonTextarea>
+                <IonTextarea id="commandOutput2" value={commandOutput2}></IonTextarea>
             </div>
             <div id="multipleMarkers_map1" style={{
                 position: "absolute",

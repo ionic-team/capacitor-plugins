@@ -16,8 +16,6 @@ import type {
   TrafficLayerArgs,
   RemoveMarkersArgs,
   OnScrollArgs,
-  OnMapClickArgs,
-  OnMarkerClickArgs,
 } from './implementation';
 
 export class CapacitorGoogleMapsWeb
@@ -85,12 +83,35 @@ export class CapacitorGoogleMapsWeb
   removeMarker(_args: RemoveMarkerArgs): Promise<void> {
     throw new Error('Method not implemented.');
   }
-  setOnMapClickListener(_args: OnMapClickArgs): Promise<void> {
-    throw new Error('Method not implemented.');
-  }
-  setOnMarkerClickListener(_args: OnMarkerClickArgs): Promise<void> {
-    throw new Error('Method not implemented.');
-  }
+  
+  // setOnCameraIdleListener(_args: { callback?: MapListenerCallback }): Promise<void> {
+  //   throw new Error('Method not implemented.');
+  // }
+
+  // setOnCameraMoveStartedListener(_args: { callback?: MapListenerCallback }): Promise<void> {
+  //   throw new Error('Method not implemented.');
+  // }
+
+  // setOnClusterClickListener(_args: { callback?: MapListenerCallback }): Promise<void> {
+  //   throw new Error('Method not implemented.');
+  // }
+  
+  // setOnMapClickListener(_args: { callback?: MapListenerCallback }): Promise<void> {
+  //   throw new Error('Method not implemented.');
+  // }
+
+  // setOnMarkerClickListener(_args: { callback?: MapListenerCallback }): Promise<void> {
+  //   throw new Error('Method not implemented.');
+  // }
+
+  // setOnMyLocationButtonClickListener(_args: { callback?: MapListenerCallback }): Promise<void> {
+  //   throw new Error('Method not implemented.');
+  // }
+
+  // setOnMyLocationClickListener(_args: { callback?: MapListenerCallback }): Promise<void> {
+  //   throw new Error('Method not implemented.');
+  // }
+
   async create(args: CreateMapArgs): Promise<void> {
     console.log(`Create map: ${args.id}`);
     await this.importGoogleLib(args.apiKey);

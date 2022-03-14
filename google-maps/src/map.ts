@@ -25,8 +25,13 @@ export class GoogleMap {
   private id: string;
   private element: HTMLElement | null = null;
   private frameElement: HTMLElement | null = null;
+  private onCameraIdleListener?: PluginListenerHandle;
+  private onCameraMoveStartedListener?: PluginListenerHandle;
+  private onClusterClickListener?: PluginListenerHandle;
   private onMapClickListener?: PluginListenerHandle;
   private onMarkerClickListener?: PluginListenerHandle;
+  private onMyLocationButtonClickListener?: PluginListenerHandle;
+  private onMyLocationClickListener?: PluginListenerHandle;
 
   private constructor(id: string) {
     this.id = id;
@@ -136,13 +141,7 @@ export class GoogleMap {
       this.disableScrolling();
     }
 
-    if (this.onMapClickListener) {
-      this.onMapClickListener.remove();
-    }
-
-    if (this.onMarkerClickListener) {
-      this.onMarkerClickListener.remove();
-    }
+    this.removeAllMapListeners();
 
     return CapacitorGoogleMaps.destroy({
       id: this.id,
@@ -282,6 +281,51 @@ export class GoogleMap {
     return null;
   }
 
+  async setOnCameraIdleListener(callback?: MapListenerCallback): Promise<void> {
+    if (this.onCameraIdleListener) {
+      this.onCameraIdleListener.remove();
+    }
+
+    if (callback) {
+      this.onCameraIdleListener = CapacitorGoogleMaps.addListener(
+        'onCameraIdle',
+        callback,
+      );
+    } else {
+      this.onCameraIdleListener = undefined;
+    }
+  }
+
+  async setOnCameraMoveStartedListener(callback?: MapListenerCallback): Promise<void> {
+    if (this.onCameraMoveStartedListener) {
+      this.onCameraMoveStartedListener.remove();
+    }
+
+    if (callback) {
+      this.onCameraMoveStartedListener = CapacitorGoogleMaps.addListener(
+        'onCameraMoveStarted',
+        callback,
+      );
+    } else {
+      this.onCameraMoveStartedListener = undefined;
+    }
+  }
+
+  async setOnClusterClickListener(callback?: MapListenerCallback): Promise<void> {
+    if (this.onClusterClickListener) {
+      this.onClusterClickListener.remove();
+    }
+
+    if (callback) {
+      this.onClusterClickListener = CapacitorGoogleMaps.addListener(
+        'onClusterClick',
+        callback,
+      );
+    } else {
+      this.onClusterClickListener = undefined;
+    }
+  }
+
   async setOnMapClickListener(callback?: MapListenerCallback): Promise<void> {
     if (this.onMapClickListener) {
       this.onMapClickListener.remove();
@@ -297,9 +341,7 @@ export class GoogleMap {
     }
   }
 
-  async setOnMarkerClickListener(
-    callback?: MapListenerCallback,
-  ): Promise<void> {
+  async setOnMarkerClickListener(callback?: MapListenerCallback): Promise<void> {
     if (this.onMarkerClickListener) {
       this.onMarkerClickListener.remove();
     }
@@ -311,6 +353,65 @@ export class GoogleMap {
       );
     } else {
       this.onMarkerClickListener = undefined;
+    }
+  }
+
+  async setOnMyLocationButtonClickListener(callback?: MapListenerCallback): Promise<void> {
+    if (this.onMyLocationButtonClickListener) {
+      this.onMyLocationButtonClickListener.remove();
+    }
+
+    if (callback) {
+      this.onMyLocationButtonClickListener = CapacitorGoogleMaps.addListener(
+        'onMyLocationButtonClick',
+        callback,
+      );
+    } else {
+      this.onMyLocationButtonClickListener = undefined;
+    }
+  }
+  
+  async setOnMyLocationClickListener(callback?: MapListenerCallback): Promise<void> {
+    if (this.onMyLocationClickListener) {
+      this.onMyLocationClickListener.remove();
+    }
+
+    if (callback) {
+      this.onMyLocationClickListener = CapacitorGoogleMaps.addListener(
+        'onMyLocationClick',
+        callback,
+      );
+    } else {
+      this.onMyLocationClickListener = undefined;
+    }
+  }
+
+  async removeAllMapListeners(): Promise<void> {
+    if (this.onCameraIdleListener) {
+      this.onCameraIdleListener.remove();
+    }
+    if (this.onCameraMoveStartedListener) {
+      this.onCameraMoveStartedListener.remove();
+    }
+
+    if (this.onClusterClickListener) {
+      this.onClusterClickListener.remove();
+    }
+    
+    if (this.onMapClickListener) {
+      this.onMapClickListener.remove();
+    }
+
+    if (this.onMarkerClickListener) {
+      this.onMarkerClickListener.remove();
+    }
+
+    if (this.onMyLocationButtonClickListener) {
+      this.onMyLocationButtonClickListener.remove();
+    }
+
+    if (this.onMyLocationClickListener) {
+      this.onMyLocationClickListener.remove();
     }
   }
 }

@@ -99,14 +99,6 @@ export interface OnScrollArgs {
 
 export type MapListenerCallback = (data: any) => void;
 
-export interface OnMapClickArgs {
-  callback?: MapListenerCallback;
-}
-
-export interface OnMarkerClickArgs {
-  callback?: MapListenerCallback;
-}
-
 export interface CapacitorGoogleMapsPlugin {
   create(args: CreateMapArgs): Promise<void>;
   addMarker(args: AddMarkerArgs): Promise<{ id: string }>;
@@ -124,8 +116,28 @@ export interface CapacitorGoogleMapsPlugin {
   enableCurrentLocation(args: CurrentLocArgs): Promise<void>;
   setPadding(args: PaddingArgs): Promise<void>;
   onScroll(args: OnScrollArgs): Promise<void>;
-  setOnMapClickListener(args: OnMapClickArgs): Promise<void>;
-  setOnMarkerClickListener(args: OnMarkerClickArgs): Promise<void>;
+  // setOnCameraIdleListener(args: { callback?: MapListenerCallback }): Promise<void>;
+  // setOnCameraMoveStartedListener(args: { callback?: MapListenerCallback }): Promise<void>;
+  // setOnClusterClickListener(args: { callback?: MapListenerCallback }): Promise<void>;
+  // setOnMapClickListener(args: { callback?: MapListenerCallback }): Promise<void>;
+  // setOnMarkerClickListener(args: { callback?: MapListenerCallback }): Promise<void>;
+  // setOnMyLocationButtonClickListener(args: { callback?: MapListenerCallback }): Promise<void>;
+  // setOnMyLocationClickListener(args: { callback?: MapListenerCallback }): Promise<void>;
+
+  addListener(
+    eventName: 'onCameraIdle',
+    listenerFunc: MapListenerCallback,
+  ): PluginListenerHandle;
+
+  addListener(
+    eventName: 'onCameraMoveStarted',
+    listenerFunc: MapListenerCallback,
+  ): PluginListenerHandle;
+
+  addListener(
+    eventName: 'onClusterClick',
+    listenerFunc: MapListenerCallback,
+  ): PluginListenerHandle;
 
   addListener(
     eventName: 'onMapReady',
@@ -139,6 +151,16 @@ export interface CapacitorGoogleMapsPlugin {
 
   addListener(
     eventName: 'onMarkerClick',
+    listenerFunc: MapListenerCallback,
+  ): PluginListenerHandle;
+
+  addListener(
+    eventName: 'onMyLocationButtonClick',
+    listenerFunc: MapListenerCallback,
+  ): PluginListenerHandle;
+
+  addListener(
+    eventName: 'onMyLocationClick',
     listenerFunc: MapListenerCallback,
   ): PluginListenerHandle;
 }

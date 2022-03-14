@@ -1,6 +1,7 @@
 import Foundation
 import Capacitor
 import GoogleMaps
+import GoogleMapsUtils
 
 extension GMSMapViewType {
     static func fromString(mapType: String) -> GMSMapViewType {
@@ -468,7 +469,28 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
         return ""
     }
 
-    // EVENT LISTENERS
+    // --- EVENT LISTENERS ---
+    
+    // onCameraIdle
+    public func mapView(_ mapView: GMSMapView, idleAt cameraPosition: GMSCameraPosition) {
+        self.notifyListeners("onCameraIdle", data: [
+            "mapId": self.findMapIdByMapView(mapView),
+            "bearing": cameraPosition.bearing,
+            "latitude": cameraPosition.target.latitude,
+            "longitude": cameraPosition.target.longitude,
+            "tilt": cameraPosition.viewingAngle,
+            "zoom": cameraPosition.zoom
+        ])
+    }
+
+    // onCameraMoveStarted
+    public func mapView(_ mapView: GMSMapView, willMove gesture: Bool) {
+        self.notifyListeners("onCameraIdle", data: [
+            "mapId": self.findMapIdByMapView(mapView),
+            "isGesture": gesture
+        ])
+    }
+    
     // onMapClick
     public func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
         self.notifyListeners("onMapClick", data: [
@@ -478,16 +500,58 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
         ])
     }
 
-    // onMarkerClick
+    // onClusterClick, onMarkerClick
     public func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
-        self.notifyListeners("onMarkerClick", data: [
-            "mapId": self.findMapIdByMapView(mapView),
-            "markerId": marker.hash.hashValue,
-            "latitude": marker.position.latitude,
-            "longitude": marker.position.longitude,
-            "title": marker.title ?? "",
-            "snippet": marker.snippet ?? ""
+        if marker.userData is GMUCluster {
+            let cluster: GMUCluster = marker.userData as! GMUCluster
+            
+            var items: [[String:Any?]] = []
+            
+            for item in cluster.items {
+                items.append([
+                    "markerId": item.hash.hashValue,
+                    "latitude": item.position.latitude,
+                    "longitude": item.position.longitude,
+                    "title": item.title ?? "",
+                    "snippet": item.snippet ?? ""
+                ])
+            }
+            
+            self.notifyListeners("onClusterClick", data: [
+                "mapId": self.findMapIdByMapView(mapView),
+                "latitude": cluster.position.latitude,
+                "longitude": cluster.position.longitude,
+                "size": cluster.count,
+                "items": items
+            ])
+        }
+        else {
+            self.notifyListeners("onMarkerClick", data: [
+                "mapId": self.findMapIdByMapView(mapView),
+                "markerId": marker.hash.hashValue,
+                "latitude": marker.position.latitude,
+                "longitude": marker.position.longitude,
+                "title": marker.title ?? "",
+                "snippet": marker.snippet ?? ""
+            ])
+        }
+        return false
+    }
+    
+    // onMyLocationButtonClick
+    public func didTapMyLocationButtonForMapView(for mapView: GMSMapView) -> Bool {
+        self.notifyListeners("onMyLocationButtonClick", data: [
+            "mapId": self.findMapIdByMapView(mapView)
         ])
         return false
+    }
+    
+    // onMyLocationClick
+    public func mapView(_ mapView: GMSMapView, didTapMyLocation location: CLLocationCoordinate2D) {
+        self.notifyListeners("onMyLocationButtonClick", data: [
+            "mapId": self.findMapIdByMapView(mapView),
+            "latitude": location.latitude,
+            "longitude": location.longitude
+        ])
     }
 }
