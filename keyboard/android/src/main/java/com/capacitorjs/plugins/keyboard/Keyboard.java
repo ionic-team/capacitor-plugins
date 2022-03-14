@@ -16,7 +16,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import com.getcapacitor.Logger;
 
-@RequiresApi(21)
+@RequiresApi(24)
 public class Keyboard {
 
     interface KeyboardEventListener {
