@@ -3,6 +3,8 @@ package com.capacitorjs.plugins.camera;
 import android.Manifest;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -10,6 +12,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.util.Base64;
@@ -34,6 +37,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -556,16 +560,34 @@ public class CameraPlugin extends Plugin {
             try {
                 String fileToSavePath = imageEditedFileSavePath != null ? imageEditedFileSavePath : imageFileSavePath;
                 File fileToSave = new File(fileToSavePath);
-                String inserted = MediaStore.Images.Media.insertImage(
-                    getContext().getContentResolver(),
-                    fileToSavePath,
-                    fileToSave.getName(),
-                    ""
-                );
-                if (inserted == null) {
+
+                ContentResolver resolver = getContext().getContentResolver();
+                ContentValues values = new ContentValues();
+                values.put(MediaStore.MediaColumns.DISPLAY_NAME, fileToSave.getName());
+                values.put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg");
+                values.put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DCIM);
+
+                final Uri contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+                Uri uri = resolver.insert(contentUri, values);
+
+                if (uri == null) {
+                    throw new IOException("Failed to create new MediaStore record.");
+                }
+
+                OutputStream stream = resolver.openOutputStream(uri);
+                if (stream == null) {
+                    throw new IOException("Failed to open output stream.");
+                }
+
+                Boolean inserted = bitmap.compress(Bitmap.CompressFormat.JPEG, settings.getQuality(), stream);
+
+                if (!inserted) {
                     isSaved = false;
                 }
             } catch (FileNotFoundException e) {
+                isSaved = false;
+                Logger.error(getLogTag(), IMAGE_GALLERY_SAVE_ERROR, e);
+            } catch (IOException e) {
                 isSaved = false;
                 Logger.error(getLogTag(), IMAGE_GALLERY_SAVE_ERROR, e);
             }
