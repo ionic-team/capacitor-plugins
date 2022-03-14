@@ -180,6 +180,7 @@ public class Filesystem {
         return Base64.encodeToString(byteStream.toByteArray(), Base64.NO_WRAP);
     }
 
+    @SuppressWarnings("deprecation")
     public File getDirectory(String directory) {
         Context c = this.context;
         switch (directory) {
