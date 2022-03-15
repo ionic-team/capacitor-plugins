@@ -11,6 +11,7 @@ import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Parcelable;
@@ -561,28 +562,41 @@ public class CameraPlugin extends Plugin {
                 String fileToSavePath = imageEditedFileSavePath != null ? imageEditedFileSavePath : imageFileSavePath;
                 File fileToSave = new File(fileToSavePath);
 
-                ContentResolver resolver = getContext().getContentResolver();
-                ContentValues values = new ContentValues();
-                values.put(MediaStore.MediaColumns.DISPLAY_NAME, fileToSave.getName());
-                values.put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg");
-                values.put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DCIM);
+                if (Build.VERSION.SDK_INT >= 29) {
+                    ContentResolver resolver = getContext().getContentResolver();
+                    ContentValues values = new ContentValues();
+                    values.put(MediaStore.MediaColumns.DISPLAY_NAME, fileToSave.getName());
+                    values.put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg");
+                    values.put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DCIM);
 
-                final Uri contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-                Uri uri = resolver.insert(contentUri, values);
+                    final Uri contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+                    Uri uri = resolver.insert(contentUri, values);
 
-                if (uri == null) {
-                    throw new IOException("Failed to create new MediaStore record.");
-                }
+                    if (uri == null) {
+                        throw new IOException("Failed to create new MediaStore record.");
+                    }
 
-                OutputStream stream = resolver.openOutputStream(uri);
-                if (stream == null) {
-                    throw new IOException("Failed to open output stream.");
-                }
+                    OutputStream stream = resolver.openOutputStream(uri);
+                    if (stream == null) {
+                        throw new IOException("Failed to open output stream.");
+                    }
 
-                Boolean inserted = bitmap.compress(Bitmap.CompressFormat.JPEG, settings.getQuality(), stream);
+                    Boolean inserted = bitmap.compress(Bitmap.CompressFormat.JPEG, settings.getQuality(), stream);
 
-                if (!inserted) {
-                    isSaved = false;
+                    if (!inserted) {
+                        isSaved = false;
+                    }
+                } else {
+                    String inserted = MediaStore.Images.Media.insertImage(
+                        getContext().getContentResolver(),
+                        fileToSavePath,
+                        fileToSave.getName(),
+                        ""
+                    );
+
+                    if (inserted == null) {
+                        isSaved = false;
+                    }
                 }
             } catch (FileNotFoundException e) {
                 isSaved = false;
