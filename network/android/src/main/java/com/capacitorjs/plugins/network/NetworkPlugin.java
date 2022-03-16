@@ -43,7 +43,6 @@ public class NetworkPlugin extends Plugin {
      * Register the IntentReceiver on resume
      */
     @Override
-    @SuppressWarnings("deprecation")
     protected void handleOnResume() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             implementation.startMonitoring();
