@@ -63,7 +63,7 @@ public class Network {
                     }
                 };
         } else {
-            this.connectivityCallback = new ConnectivityCallback()
+            this.connectivityCallback = new ConnectivityCallback();
         }
     }
 
