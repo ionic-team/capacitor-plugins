@@ -56,6 +56,7 @@ public class Keyboard {
         this(activity, false);
     }
 
+    @SuppressWarnings("deprecation")
     public Keyboard(AppCompatActivity activity, boolean resizeOnFullScreen) {
         this.activity = activity;
         //calculate density-independent pixels (dp)
