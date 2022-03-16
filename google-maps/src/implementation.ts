@@ -116,13 +116,6 @@ export interface CapacitorGoogleMapsPlugin {
   enableCurrentLocation(args: CurrentLocArgs): Promise<void>;
   setPadding(args: PaddingArgs): Promise<void>;
   onScroll(args: OnScrollArgs): Promise<void>;
-  // setOnCameraIdleListener(args: { callback?: MapListenerCallback }): Promise<void>;
-  // setOnCameraMoveStartedListener(args: { callback?: MapListenerCallback }): Promise<void>;
-  // setOnClusterClickListener(args: { callback?: MapListenerCallback }): Promise<void>;
-  // setOnMapClickListener(args: { callback?: MapListenerCallback }): Promise<void>;
-  // setOnMarkerClickListener(args: { callback?: MapListenerCallback }): Promise<void>;
-  // setOnMyLocationButtonClickListener(args: { callback?: MapListenerCallback }): Promise<void>;
-  // setOnMyLocationClickListener(args: { callback?: MapListenerCallback }): Promise<void>;
 
   addListener(
     eventName: 'onCameraIdle',

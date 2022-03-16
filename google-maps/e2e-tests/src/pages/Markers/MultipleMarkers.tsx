@@ -52,6 +52,7 @@ const MultipleMarkers: React.FC = () => {
                     zoom: 5,
                     androidLiteMode: false
                 });
+
                 setMap(newMap);
 
                 setCommandOutput("Map created");
@@ -172,6 +173,15 @@ const MultipleMarkers: React.FC = () => {
         }
     }
 
+    async function showCurrentLocation() {
+        await map?.setCamera({               
+            zoom: 1,
+            animate: true,
+            animationDuration: 50,
+        })
+        await map?.enableCurrentLocation(true);
+    }
+
     return (
         <BaseTestingPage pageTitle="Multiple Markers">
             <div>
@@ -183,6 +193,9 @@ const MultipleMarkers: React.FC = () => {
                 </IonButton>
                 <IonButton  id="removeOnMarkerClickButton" onClick={removeEventListeners}>
                     Remove Event Listeners
+                </IonButton>
+                <IonButton  id="showCurrentLocationButton" onClick={showCurrentLocation}>
+                    Show Current Location
                 </IonButton>
                 <IonButton id="addMarkersButton" onClick={addMultipleMarkers}>
                     Add Multiple Markers

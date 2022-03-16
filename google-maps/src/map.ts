@@ -389,29 +389,36 @@ export class GoogleMap {
   async removeAllMapListeners(): Promise<void> {
     if (this.onCameraIdleListener) {
       this.onCameraIdleListener.remove();
+      this.onCameraIdleListener = undefined;
     }
     if (this.onCameraMoveStartedListener) {
       this.onCameraMoveStartedListener.remove();
+      this.onCameraMoveStartedListener = undefined;
     }
 
     if (this.onClusterClickListener) {
       this.onClusterClickListener.remove();
+      this.onClusterClickListener = undefined;
     }
     
     if (this.onMapClickListener) {
       this.onMapClickListener.remove();
+      this.onMapClickListener = undefined;
     }
 
     if (this.onMarkerClickListener) {
       this.onMarkerClickListener.remove();
+      this.onMarkerClickListener = undefined;
     }
 
     if (this.onMyLocationButtonClickListener) {
       this.onMyLocationButtonClickListener.remove();
+      this.onMyLocationClickListener = undefined;
     }
 
     if (this.onMyLocationClickListener) {
       this.onMyLocationClickListener.remove();
+      this.onMyLocationButtonClickListener = undefined;
     }
   }
 }

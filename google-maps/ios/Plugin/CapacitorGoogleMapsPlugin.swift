@@ -485,7 +485,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
 
     // onCameraMoveStarted
     public func mapView(_ mapView: GMSMapView, willMove gesture: Bool) {
-        self.notifyListeners("onCameraIdle", data: [
+        self.notifyListeners("onCameraMoveStarted", data: [
             "mapId": self.findMapIdByMapView(mapView),
             "isGesture": gesture
         ])
