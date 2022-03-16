@@ -7,7 +7,6 @@ import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.ConnectivityManager.NetworkCallback;
 import android.net.NetworkCapabilities;
-import android.net.NetworkInfo;
 import android.os.Build;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -106,7 +105,7 @@ public class Network {
                 }
             }
         } else {
-            NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+            android.net.NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
             if (networkInfo != null) {
                 networkStatus.connected = networkInfo.isConnected();
                 String typeName = networkInfo.getTypeName();
