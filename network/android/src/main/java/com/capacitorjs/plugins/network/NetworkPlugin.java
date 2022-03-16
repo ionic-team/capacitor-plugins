@@ -70,19 +70,7 @@ public class NetworkPlugin extends Plugin {
     private JSObject parseNetworkStatus(NetworkStatus networkStatus) {
         JSObject jsObject = new JSObject();
         jsObject.put("connected", networkStatus.connected);
-        String connectionType = "none";
-        switch (networkStatus.connectionType) {
-            case WIFI:
-                connectionType = "wifi";
-                break;
-            case UNKNOWN:
-                connectionType = "unknown";
-                break;
-            case CELLULAR:
-                connectionType = "cellular";
-                break;
-        }
-        jsObject.put("connectionType", connectionType);
+        jsObject.put("connectionType", networkStatus.connectionType.getConnectionType());
         return jsObject;
     }
 }

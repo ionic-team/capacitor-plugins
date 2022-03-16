@@ -128,10 +128,9 @@ public class Network {
         connectivityManager.registerDefaultNetworkCallback(connectivityCallback);
     }
 
-    @SuppressWarnings("deprecation")
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP_MR1)
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP_MR1)
     public void startMonitoring(AppCompatActivity activity) {
-        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        IntentFilter filter = new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE");
         activity.registerReceiver(receiver, filter);
     }
 
@@ -143,7 +142,7 @@ public class Network {
         connectivityManager.unregisterNetworkCallback(connectivityCallback);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP_MR1)
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP_MR1)
     public void stopMonitoring(@NonNull AppCompatActivity activity) {
         activity.unregisterReceiver(receiver);
     }
