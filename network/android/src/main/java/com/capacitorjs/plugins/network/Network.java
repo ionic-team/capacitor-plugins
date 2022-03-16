@@ -108,12 +108,14 @@ public class Network {
             }
         } else {
             NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-            networkStatus.connected = networkInfo != null;
-            String typeName = networkInfo.getTypeName();
-            if (typeName.equals("WIFI")) {
-                networkStatus.connectionType = NetworkStatus.ConnectionType.WIFI;
-            } else if (typeName.equals("MOBILE")) {
-                networkStatus.connectionType = NetworkStatus.ConnectionType.CELLULAR;
+            if (networkInfo != null) {
+                networkStatus.connected = networkInfo.isConnected();
+                String typeName = networkInfo.getTypeName();
+                if (typeName.equals("WIFI")) {
+                    networkStatus.connectionType = NetworkStatus.ConnectionType.WIFI;
+                } else if (typeName.equals("MOBILE")) {
+                    networkStatus.connectionType = NetworkStatus.ConnectionType.CELLULAR;
+                }
             }
         }
         return networkStatus;
