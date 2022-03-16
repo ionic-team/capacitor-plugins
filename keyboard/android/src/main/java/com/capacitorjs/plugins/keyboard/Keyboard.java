@@ -61,7 +61,7 @@ public class Keyboard {
         //calculate density-independent pixels (dp)
         //http://developer.android.com/guide/practices/screens_support.html
         DisplayMetrics dm = new DisplayMetrics();
-        if (android.os.Build.VERSION.SDK_INT >= 30) {
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             activity.getDisplay().getRealMetrics(dm);
         } else {
             activity.getWindowManager().getDefaultDisplay().getMetrics(dm);
