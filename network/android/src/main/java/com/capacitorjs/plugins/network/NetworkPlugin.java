@@ -56,7 +56,6 @@ public class NetworkPlugin extends Plugin {
      * Unregister the IntentReceiver on pause to avoid leaking it
      */
     @Override
-    @SuppressWarnings("deprecation")
     protected void handleOnPause() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             implementation.stopMonitoring();
