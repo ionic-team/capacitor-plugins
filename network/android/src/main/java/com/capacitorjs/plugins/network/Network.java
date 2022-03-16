@@ -143,7 +143,6 @@ public class Network {
         connectivityManager.unregisterNetworkCallback(connectivityCallback);
     }
 
-    @SuppressWarnings("deprecation")
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP_MR1)
     public void stopMonitoring(@NonNull AppCompatActivity activity) {
         activity.unregisterReceiver(receiver);
