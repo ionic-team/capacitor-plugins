@@ -50,7 +50,6 @@ public class Network {
      * Create network monitoring object.
      * @param context
      */
-    @SuppressWarnings("deprecation")
     public Network(@NonNull Context context) {
         this.context = context;
         this.connectivityManager = (ConnectivityManager) this.context.getSystemService(Context.CONNECTIVITY_SERVICE);
