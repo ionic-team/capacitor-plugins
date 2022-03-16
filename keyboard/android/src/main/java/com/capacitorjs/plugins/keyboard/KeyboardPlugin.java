@@ -2,7 +2,6 @@ package com.capacitorjs.plugins.keyboard;
 
 import android.os.Handler;
 import android.os.Looper;
-
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;

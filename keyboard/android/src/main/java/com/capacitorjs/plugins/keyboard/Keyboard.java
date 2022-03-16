@@ -90,9 +90,7 @@ public class Keyboard {
                     int screenHeight;
 
                     if (Build.VERSION.SDK_INT >= 30) {
-                        Insets windowInsets = rootView
-                                .getRootWindowInsets()
-                                .getInsetsIgnoringVisibility(WindowInsets.Type.systemBars());
+                        Insets windowInsets = rootView.getRootWindowInsets().getInsetsIgnoringVisibility(WindowInsets.Type.systemBars());
                         screenHeight = rootViewHeight;
                         resultBottom = windowInsets.bottom;
                     } else if (Build.VERSION.SDK_INT >= 23) {
@@ -152,10 +150,7 @@ public class Keyboard {
     }
 
     public void show() {
-        ((InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(
-                activity.getCurrentFocus(),
-                0
-        );
+        ((InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(activity.getCurrentFocus(), 0);
     }
 
     public boolean hide() {
