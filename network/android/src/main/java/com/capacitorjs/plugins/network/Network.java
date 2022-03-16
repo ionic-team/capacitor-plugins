@@ -41,7 +41,7 @@ public class Network {
     @Nullable
     private NetworkStatusChangeListener statusChangeListener;
 
-    private ConnectivityCallback connectivityCallback = new ConnectivityCallback();
+    private ConnectivityCallback connectivityCallback;
     private Context context;
     private ConnectivityManager connectivityManager;
     private BroadcastReceiver receiver;
@@ -62,6 +62,8 @@ public class Network {
                         statusChangeListener.onNetworkStatusChanged();
                     }
                 };
+        } else {
+            this.connectivityCallback = new ConnectivityCallback()
         }
     }
 
