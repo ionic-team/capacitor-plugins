@@ -2,9 +2,11 @@ package com.capacitorjs.plugins.keyboard;
 
 import android.content.Context;
 import android.graphics.Insets;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Build;
 import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.Window;
@@ -12,11 +14,9 @@ import android.view.WindowInsets;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import com.getcapacitor.Logger;
 
-@RequiresApi(24)
 public class Keyboard {
 
     interface KeyboardEventListener {
@@ -90,14 +90,23 @@ public class Keyboard {
                     int screenHeight;
 
                     if (Build.VERSION.SDK_INT >= 30) {
-                        Insets windowInsets = rootView.getRootWindowInsets().getInsetsIgnoringVisibility(WindowInsets.Type.systemBars());
+                        Insets windowInsets = rootView
+                                .getRootWindowInsets()
+                                .getInsetsIgnoringVisibility(WindowInsets.Type.systemBars());
                         screenHeight = rootViewHeight;
                         resultBottom = windowInsets.bottom;
-                    } else {
+                    } else if (Build.VERSION.SDK_INT >= 23) {
                         WindowInsets windowInsets = rootView.getRootWindowInsets();
                         int stableInsetBottom = windowInsets.getStableInsetBottom();
                         screenHeight = rootViewHeight;
                         resultBottom = resultBottom + stableInsetBottom;
+                    } else {
+                        // calculate screen height differently for android versions <23: Lollipop 5.x, Marshmallow 6.x
+                        //http://stackoverflow.com/a/29257533/3642890 beware of nexus 5
+                        Display display = activity.getWindowManager().getDefaultDisplay();
+                        Point size = new Point();
+                        display.getSize(size);
+                        screenHeight = size.y;
                     }
 
                     int heightDiff = screenHeight - resultBottom;
@@ -143,7 +152,10 @@ public class Keyboard {
     }
 
     public void show() {
-        ((InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(activity.getCurrentFocus(), 0);
+        ((InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(
+                activity.getCurrentFocus(),
+                0
+        );
     }
 
     public boolean hide() {
