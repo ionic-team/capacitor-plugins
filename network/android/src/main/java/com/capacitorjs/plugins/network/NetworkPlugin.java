@@ -1,7 +1,6 @@
 package com.capacitorjs.plugins.network;
 
 import android.os.Build;
-
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;

@@ -9,12 +9,10 @@ import android.net.ConnectivityManager.NetworkCallback;
 import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.os.Build;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-
 
 public class Network {
 
@@ -26,6 +24,7 @@ public class Network {
     }
 
     class ConnectivityCallback extends NetworkCallback {
+
         @Override
         public void onLost(@NonNull android.net.Network network) {
             super.onLost(network);
@@ -41,6 +40,7 @@ public class Network {
 
     @Nullable
     private NetworkStatusChangeListener statusChangeListener;
+
     private ConnectivityCallback connectivityCallback = new ConnectivityCallback();
     private Context context;
     private ConnectivityManager connectivityManager;
@@ -55,12 +55,12 @@ public class Network {
         this.connectivityManager = (ConnectivityManager) this.context.getSystemService(Context.CONNECTIVITY_SERVICE);
         if (Build.VERSION.SDK_INT <= 23) {
             receiver =
-                    new BroadcastReceiver() {
-                        @Override
-                        public void onReceive(Context context, Intent intent) {
-                            statusChangeListener.onNetworkStatusChanged();
-                        }
-                    };
+                new BroadcastReceiver() {
+                    @Override
+                    public void onReceive(Context context, Intent intent) {
+                        statusChangeListener.onNetworkStatusChanged();
+                    }
+                };
         }
     }
 
@@ -89,7 +89,8 @@ public class Network {
         NetworkStatus networkStatus = new NetworkStatus();
         if (Build.VERSION.SDK_INT >= 24) {
             if (this.connectivityManager != null) {
-                NetworkCapabilities capabilities = this.connectivityManager.getNetworkCapabilities(this.connectivityManager.getActiveNetwork());
+                NetworkCapabilities capabilities =
+                    this.connectivityManager.getNetworkCapabilities(this.connectivityManager.getActiveNetwork());
                 if (this.connectivityManager.getActiveNetwork() != null && capabilities != null) {
                     networkStatus.connected = capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET);
                     if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
@@ -120,6 +121,7 @@ public class Network {
     public void startMonitoring() {
         connectivityManager.registerDefaultNetworkCallback(connectivityCallback);
     }
+
     @RequiresApi(22)
     public void startMonitoring(AppCompatActivity activity) {
         IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
@@ -133,6 +135,7 @@ public class Network {
     public void stopMonitoring() {
         connectivityManager.unregisterNetworkCallback(connectivityCallback);
     }
+
     @RequiresApi(22)
     public void stopMonitoring(@NonNull AppCompatActivity activity) {
         activity.unregisterReceiver(receiver);
