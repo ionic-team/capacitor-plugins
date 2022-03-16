@@ -60,7 +60,7 @@ public class NetworkPlugin extends Plugin {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             implementation.stopMonitoring();
         } else {
-            implementation.startMonitoring(getActivity());
+            implementation.stopMonitoring(getActivity());
         }
     }
 
