@@ -108,6 +108,7 @@ public class Network {
             }
         } else {
             NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+            networkStatus.connected = networkInfo != null;
             String typeName = networkInfo.getTypeName();
             if (typeName.equals("WIFI")) {
                 networkStatus.connectionType = NetworkStatus.ConnectionType.WIFI;
