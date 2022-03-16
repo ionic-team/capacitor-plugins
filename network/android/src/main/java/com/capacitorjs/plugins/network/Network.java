@@ -50,10 +50,11 @@ public class Network {
      * Create network monitoring object.
      * @param context
      */
+    @SuppressWarnings("deprecation")
     public Network(@NonNull Context context) {
         this.context = context;
         this.connectivityManager = (ConnectivityManager) this.context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (Build.VERSION.SDK_INT <= 23) {
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) {
             receiver =
                 new BroadcastReceiver() {
                     @Override
@@ -85,9 +86,10 @@ public class Network {
      * Get the current network information.
      * @return NetworkStatus
      */
+    @SuppressWarnings("deprecation")
     public NetworkStatus getNetworkStatus() {
         NetworkStatus networkStatus = new NetworkStatus();
-        if (Build.VERSION.SDK_INT >= 24) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             if (this.connectivityManager != null) {
                 NetworkCapabilities capabilities =
                     this.connectivityManager.getNetworkCapabilities(this.connectivityManager.getActiveNetwork());
@@ -117,12 +119,13 @@ public class Network {
     /**
      * Register a network callback.
      */
-    @RequiresApi(24)
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public void startMonitoring() {
         connectivityManager.registerDefaultNetworkCallback(connectivityCallback);
     }
 
-    @RequiresApi(22)
+    @SuppressWarnings("deprecation")
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP_MR1)
     public void startMonitoring(AppCompatActivity activity) {
         IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
         activity.registerReceiver(receiver, filter);
@@ -131,12 +134,13 @@ public class Network {
     /**
      * Unregister the network callback.
      */
-    @RequiresApi(24)
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public void stopMonitoring() {
         connectivityManager.unregisterNetworkCallback(connectivityCallback);
     }
 
-    @RequiresApi(22)
+    @SuppressWarnings("deprecation")
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP_MR1)
     public void stopMonitoring(@NonNull AppCompatActivity activity) {
         activity.unregisterReceiver(receiver);
     }
