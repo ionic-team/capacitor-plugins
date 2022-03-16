@@ -1,7 +1,6 @@
 package com.capacitorjs.plugins.network;
 
 public class NetworkStatus {
-
     public enum ConnectionType {
         WIFI,
         CELLULAR,

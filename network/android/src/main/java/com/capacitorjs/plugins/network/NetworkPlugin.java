@@ -1,14 +1,13 @@
 package com.capacitorjs.plugins.network;
 
 import android.os.Build;
-import androidx.annotation.RequiresApi;
+
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
 
-@RequiresApi(api = Build.VERSION_CODES.N)
 @CapacitorPlugin(name = "Network")
 public class NetworkPlugin extends Plugin {
 
@@ -46,7 +45,11 @@ public class NetworkPlugin extends Plugin {
      */
     @Override
     protected void handleOnResume() {
-        implementation.startMonitoring();
+        if (Build.VERSION.SDK_INT >= 24) {
+            implementation.startMonitoring();
+        } else {
+            implementation.startMonitoring(getActivity());
+        }
     }
 
     /**
@@ -54,7 +57,11 @@ public class NetworkPlugin extends Plugin {
      */
     @Override
     protected void handleOnPause() {
-        implementation.stopMonitoring();
+        if (Build.VERSION.SDK_INT >= 24) {
+            implementation.stopMonitoring();
+        } else {
+            implementation.startMonitoring(getActivity());
+        }
     }
 
     private void updateNetworkStatus() {

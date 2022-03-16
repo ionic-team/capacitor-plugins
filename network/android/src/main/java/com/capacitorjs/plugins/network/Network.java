@@ -1,15 +1,21 @@
 package com.capacitorjs.plugins.network;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.ConnectivityManager.NetworkCallback;
 import android.net.NetworkCapabilities;
+import android.net.NetworkInfo;
 import android.os.Build;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
 
-@RequiresApi(api = Build.VERSION_CODES.N)
+
 public class Network {
 
     /**
@@ -20,7 +26,6 @@ public class Network {
     }
 
     class ConnectivityCallback extends NetworkCallback {
-
         @Override
         public void onLost(@NonNull android.net.Network network) {
             super.onLost(network);
@@ -36,10 +41,10 @@ public class Network {
 
     @Nullable
     private NetworkStatusChangeListener statusChangeListener;
-
     private ConnectivityCallback connectivityCallback = new ConnectivityCallback();
     private Context context;
     private ConnectivityManager connectivityManager;
+    private BroadcastReceiver receiver;
 
     /**
      * Create network monitoring object.
@@ -48,6 +53,15 @@ public class Network {
     public Network(@NonNull Context context) {
         this.context = context;
         this.connectivityManager = (ConnectivityManager) this.context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (Build.VERSION.SDK_INT <= 23) {
+            receiver =
+                    new BroadcastReceiver() {
+                        @Override
+                        public void onReceive(Context context, Intent intent) {
+                            statusChangeListener.onNetworkStatusChanged();
+                        }
+                    };
+        }
     }
 
     /**
@@ -69,21 +83,31 @@ public class Network {
 
     /**
      * Get the current network information.
-     * @return JSObject
+     * @return NetworkStatus
      */
     public NetworkStatus getNetworkStatus() {
         NetworkStatus networkStatus = new NetworkStatus();
-        if (this.connectivityManager != null) {
-            NetworkCapabilities capabilities = this.connectivityManager.getNetworkCapabilities(this.connectivityManager.getActiveNetwork());
-            if (this.connectivityManager.getActiveNetwork() != null && capabilities != null) {
-                networkStatus.connected = capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET);
-                if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
-                    networkStatus.connectionType = NetworkStatus.ConnectionType.WIFI;
-                } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
-                    networkStatus.connectionType = NetworkStatus.ConnectionType.CELLULAR;
-                } else {
-                    networkStatus.connectionType = NetworkStatus.ConnectionType.UNKNOWN;
+        if (Build.VERSION.SDK_INT >= 24) {
+            if (this.connectivityManager != null) {
+                NetworkCapabilities capabilities = this.connectivityManager.getNetworkCapabilities(this.connectivityManager.getActiveNetwork());
+                if (this.connectivityManager.getActiveNetwork() != null && capabilities != null) {
+                    networkStatus.connected = capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET);
+                    if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+                        networkStatus.connectionType = NetworkStatus.ConnectionType.WIFI;
+                    } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+                        networkStatus.connectionType = NetworkStatus.ConnectionType.CELLULAR;
+                    } else {
+                        networkStatus.connectionType = NetworkStatus.ConnectionType.UNKNOWN;
+                    }
                 }
+            }
+        } else {
+            NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+            String typeName = networkInfo.getTypeName();
+            if (typeName.equals("WIFI")) {
+                networkStatus.connectionType = NetworkStatus.ConnectionType.WIFI;
+            } else if (typeName.equals("MOBILE")) {
+                networkStatus.connectionType = NetworkStatus.ConnectionType.CELLULAR;
             }
         }
         return networkStatus;
@@ -92,14 +116,25 @@ public class Network {
     /**
      * Register a network callback.
      */
+    @RequiresApi(24)
     public void startMonitoring() {
         connectivityManager.registerDefaultNetworkCallback(connectivityCallback);
+    }
+    @RequiresApi(22)
+    public void startMonitoring(AppCompatActivity activity) {
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        activity.registerReceiver(receiver, filter);
     }
 
     /**
      * Unregister the network callback.
      */
+    @RequiresApi(24)
     public void stopMonitoring() {
         connectivityManager.unregisterNetworkCallback(connectivityCallback);
+    }
+    @RequiresApi(22)
+    public void stopMonitoring(@NonNull AppCompatActivity activity) {
+        activity.unregisterReceiver(receiver);
     }
 }
