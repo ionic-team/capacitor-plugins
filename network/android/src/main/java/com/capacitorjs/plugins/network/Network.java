@@ -32,8 +32,8 @@ public class Network {
         }
 
         @Override
-        public void onCapabilitiesChanged(@NonNull android.net.Network network, @NonNull NetworkCapabilities networkCapabilities) {
-            super.onCapabilitiesChanged(network, networkCapabilities);
+        public void onAvailable(@NonNull android.net.Network network) {
+            super.onAvailable(network);
             statusChangeListener.onNetworkStatusChanged();
         }
     }
