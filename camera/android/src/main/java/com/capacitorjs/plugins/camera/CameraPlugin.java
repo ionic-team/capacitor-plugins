@@ -538,6 +538,7 @@ public class CameraPlugin extends Plugin {
      * @param bitmap
      * @param u
      */
+    @SuppressWarnings("deprecation")
     private void returnResult(PluginCall call, Bitmap bitmap, Uri u) {
         ExifWrapper exif = ImageUtils.getExifData(getContext(), bitmap, u);
         try {
@@ -562,7 +563,7 @@ public class CameraPlugin extends Plugin {
                 String fileToSavePath = imageEditedFileSavePath != null ? imageEditedFileSavePath : imageFileSavePath;
                 File fileToSave = new File(fileToSavePath);
 
-                if (Build.VERSION.SDK_INT >= 29) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                     ContentResolver resolver = getContext().getContentResolver();
                     ContentValues values = new ContentValues();
                     values.put(MediaStore.MediaColumns.DISPLAY_NAME, fileToSave.getName());
