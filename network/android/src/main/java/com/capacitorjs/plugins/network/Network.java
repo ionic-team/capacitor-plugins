@@ -20,7 +20,8 @@ public class Network {
      * Interface for callbacks when network status changes.
      */
     interface NetworkStatusChangeListener {
-        void onNetworkStatusChanged();
+        void onNetworkStatusChanged(boolean wasLostEvent);
+        void onLegacyNetworkStatusChanged();
     }
 
     class ConnectivityCallback extends NetworkCallback {
@@ -28,20 +29,20 @@ public class Network {
         @Override
         public void onLost(@NonNull android.net.Network network) {
             super.onLost(network);
-            statusChangeListener.onNetworkStatusChanged();
+            statusChangeListener.onNetworkStatusChanged(true);
         }
 
         @Override
-        public void onAvailable(@NonNull android.net.Network network) {
-            super.onAvailable(network);
-            statusChangeListener.onNetworkStatusChanged();
+        public void onCapabilitiesChanged(@NonNull android.net.Network network, @NonNull NetworkCapabilities networkCapabilities) {
+            super.onCapabilitiesChanged(network, networkCapabilities);
+            statusChangeListener.onNetworkStatusChanged(false);
         }
     }
 
     @Nullable
     private NetworkStatusChangeListener statusChangeListener;
 
-    private ConnectivityCallback connectivityCallback;
+    private ConnectivityCallback connectivityCallback = new ConnectivityCallback();
     private Context context;
     private ConnectivityManager connectivityManager;
     private BroadcastReceiver receiver;
@@ -50,6 +51,7 @@ public class Network {
      * Create network monitoring object.
      * @param context
      */
+    @SuppressWarnings("deprecation")
     public Network(@NonNull Context context) {
         this.context = context;
         this.connectivityManager = (ConnectivityManager) this.context.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -58,11 +60,9 @@ public class Network {
                 new BroadcastReceiver() {
                     @Override
                     public void onReceive(Context context, Intent intent) {
-                        statusChangeListener.onNetworkStatusChanged();
+                        statusChangeListener.onLegacyNetworkStatusChanged();
                     }
                 };
-        } else {
-            this.connectivityCallback = new ConnectivityCallback();
         }
     }
 
@@ -92,10 +92,13 @@ public class Network {
         NetworkStatus networkStatus = new NetworkStatus();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             if (this.connectivityManager != null) {
+                android.net.Network activeNetwork = this.connectivityManager.getActiveNetwork();
                 NetworkCapabilities capabilities =
                     this.connectivityManager.getNetworkCapabilities(this.connectivityManager.getActiveNetwork());
-                if (this.connectivityManager.getActiveNetwork() != null && capabilities != null) {
-                    networkStatus.connected = capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET);
+                if (activeNetwork != null && capabilities != null) {
+                    networkStatus.connected =
+                        capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED) &&
+                        capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET);
                     if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
                         networkStatus.connectionType = NetworkStatus.ConnectionType.WIFI;
                     } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {

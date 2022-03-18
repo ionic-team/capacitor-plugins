@@ -19,7 +19,25 @@ public class NetworkPlugin extends Plugin {
     @Override
     public void load() {
         implementation = new Network(getContext());
-        implementation.setStatusChangeListener(this::updateNetworkStatus);
+        Network.NetworkStatusChangeListener listener = new Network.NetworkStatusChangeListener() {
+            @Override
+            public void onNetworkStatusChanged(boolean wasLostEvent) {
+                if (wasLostEvent) {
+                    JSObject jsObject = new JSObject();
+                    jsObject.put("connected", false);
+                    jsObject.put("connectionType", "none");
+                    notifyListeners(NETWORK_CHANGE_EVENT, jsObject);
+                } else {
+                    updateNetworkStatus();
+                }
+            }
+
+            @Override
+            public void onLegacyNetworkStatusChanged() {
+                updateNetworkStatus();
+            }
+        };
+        implementation.setStatusChangeListener(listener);
     }
 
     /**
@@ -36,15 +54,17 @@ public class NetworkPlugin extends Plugin {
      */
     @PluginMethod
     public void getStatus(PluginCall call) {
-        call.resolve(parseNetworkStatus(implementation.getNetworkStatus()));
+        JSObject x = parseNetworkStatus(implementation.getNetworkStatus());
+        call.resolve(x);
     }
 
     /**
      * Register the IntentReceiver on resume
      */
     @Override
+    @SuppressWarnings("deprecation")
     protected void handleOnResume() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        if (Build.VERSION.SDK_INT >= 24) {
             implementation.startMonitoring();
         } else {
             implementation.startMonitoring(getActivity());
@@ -55,8 +75,9 @@ public class NetworkPlugin extends Plugin {
      * Unregister the IntentReceiver on pause to avoid leaking it
      */
     @Override
+    @SuppressWarnings("deprecation")
     protected void handleOnPause() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        if (Build.VERSION.SDK_INT >= 24) {
             implementation.stopMonitoring();
         } else {
             implementation.stopMonitoring(getActivity());
@@ -64,7 +85,8 @@ public class NetworkPlugin extends Plugin {
     }
 
     private void updateNetworkStatus() {
-        notifyListeners(NETWORK_CHANGE_EVENT, parseNetworkStatus(implementation.getNetworkStatus()));
+        JSObject x = parseNetworkStatus(implementation.getNetworkStatus());
+        notifyListeners(NETWORK_CHANGE_EVENT, x);
     }
 
     private JSObject parseNetworkStatus(NetworkStatus networkStatus) {
