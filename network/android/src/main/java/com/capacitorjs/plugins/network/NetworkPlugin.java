@@ -46,15 +46,13 @@ public class NetworkPlugin extends Plugin {
      */
     @PluginMethod
     public void getStatus(PluginCall call) {
-        JSObject x = parseNetworkStatus(implementation.getNetworkStatus());
-        call.resolve(x);
+        call.resolve(parseNetworkStatus(implementation.getNetworkStatus()));
     }
 
     /**
      * Register the IntentReceiver on resume
      */
     @Override
-    @SuppressWarnings("deprecation")
     protected void handleOnResume() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             implementation.startMonitoring();
@@ -67,7 +65,6 @@ public class NetworkPlugin extends Plugin {
      * Unregister the IntentReceiver on pause to avoid leaking it
      */
     @Override
-    @SuppressWarnings("deprecation")
     protected void handleOnPause() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             implementation.stopMonitoring();

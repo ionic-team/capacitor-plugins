@@ -41,7 +41,7 @@ public class Network {
     @Nullable
     private NetworkStatusChangeListener statusChangeListener;
 
-    private ConnectivityCallback connectivityCallback = new ConnectivityCallback();
+    private ConnectivityCallback connectivityCallback;
     private Context context;
     private ConnectivityManager connectivityManager;
     private BroadcastReceiver receiver;
@@ -62,6 +62,8 @@ public class Network {
                         statusChangeListener.onNetworkStatusChanged(false);
                     }
                 };
+        } else {
+            this.connectivityCallback = new ConnectivityCallback();
         }
     }
 
@@ -86,7 +88,6 @@ public class Network {
      * Get the current network information.
      * @return NetworkStatus
      */
-    @SuppressWarnings("deprecation")
     public NetworkStatus getNetworkStatus() {
         NetworkStatus networkStatus = new NetworkStatus();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -108,15 +109,22 @@ public class Network {
                 }
             }
         } else {
-            android.net.NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-            if (networkInfo != null) {
-                networkStatus.connected = networkInfo.isConnected();
-                String typeName = networkInfo.getTypeName();
-                if (typeName.equals("WIFI")) {
-                    networkStatus.connectionType = NetworkStatus.ConnectionType.WIFI;
-                } else if (typeName.equals("MOBILE")) {
-                    networkStatus.connectionType = NetworkStatus.ConnectionType.CELLULAR;
-                }
+            networkStatus = getAndParseNetworkInfo();
+        }
+        return networkStatus;
+    }
+
+    @SuppressWarnings("deprecation")
+    private NetworkStatus getAndParseNetworkInfo() {
+        NetworkStatus networkStatus = new NetworkStatus();
+        android.net.NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        if (networkInfo != null) {
+            networkStatus.connected = networkInfo.isConnected();
+            String typeName = networkInfo.getTypeName();
+            if (typeName.equals("WIFI")) {
+                networkStatus.connectionType = NetworkStatus.ConnectionType.WIFI;
+            } else if (typeName.equals("MOBILE")) {
+                networkStatus.connectionType = NetworkStatus.ConnectionType.CELLULAR;
             }
         }
         return networkStatus;
