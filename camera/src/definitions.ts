@@ -173,6 +173,14 @@ export interface ImageOptions {
    * @since 1.0.0
    */
   promptLabelPicture?: string;
+
+  /**
+   * Make prompt cancelable
+   * If true, prompt will dissmis when overlay is clicked
+   * 
+   * @default: false
+   */
+  promptCancelable?: boolean;
 }
 
 export interface Photo {
