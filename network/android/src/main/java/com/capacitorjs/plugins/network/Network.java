@@ -21,7 +21,6 @@ public class Network {
      */
     interface NetworkStatusChangeListener {
         void onNetworkStatusChanged(boolean wasLostEvent);
-        void onLegacyNetworkStatusChanged();
     }
 
     class ConnectivityCallback extends NetworkCallback {
@@ -60,7 +59,7 @@ public class Network {
                 new BroadcastReceiver() {
                     @Override
                     public void onReceive(Context context, Intent intent) {
-                        statusChangeListener.onLegacyNetworkStatusChanged();
+                        statusChangeListener.onNetworkStatusChanged(false);
                     }
                 };
         }

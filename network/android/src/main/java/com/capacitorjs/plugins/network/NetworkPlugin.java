@@ -19,21 +19,13 @@ public class NetworkPlugin extends Plugin {
     @Override
     public void load() {
         implementation = new Network(getContext());
-        Network.NetworkStatusChangeListener listener = new Network.NetworkStatusChangeListener() {
-            @Override
-            public void onNetworkStatusChanged(boolean wasLostEvent) {
-                if (wasLostEvent) {
-                    JSObject jsObject = new JSObject();
-                    jsObject.put("connected", false);
-                    jsObject.put("connectionType", "none");
-                    notifyListeners(NETWORK_CHANGE_EVENT, jsObject);
-                } else {
-                    updateNetworkStatus();
-                }
-            }
-
-            @Override
-            public void onLegacyNetworkStatusChanged() {
+        Network.NetworkStatusChangeListener listener = wasLostEvent -> {
+            if (wasLostEvent) {
+                JSObject jsObject = new JSObject();
+                jsObject.put("connected", false);
+                jsObject.put("connectionType", "none");
+                notifyListeners(NETWORK_CHANGE_EVENT, jsObject);
+            } else {
                 updateNetworkStatus();
             }
         };
@@ -64,7 +56,7 @@ public class NetworkPlugin extends Plugin {
     @Override
     @SuppressWarnings("deprecation")
     protected void handleOnResume() {
-        if (Build.VERSION.SDK_INT >= 24) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             implementation.startMonitoring();
         } else {
             implementation.startMonitoring(getActivity());
@@ -77,7 +69,7 @@ public class NetworkPlugin extends Plugin {
     @Override
     @SuppressWarnings("deprecation")
     protected void handleOnPause() {
-        if (Build.VERSION.SDK_INT >= 24) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             implementation.stopMonitoring();
         } else {
             implementation.stopMonitoring(getActivity());
@@ -85,8 +77,7 @@ public class NetworkPlugin extends Plugin {
     }
 
     private void updateNetworkStatus() {
-        JSObject x = parseNetworkStatus(implementation.getNetworkStatus());
-        notifyListeners(NETWORK_CHANGE_EVENT, x);
+        notifyListeners(NETWORK_CHANGE_EVENT, parseNetworkStatus(implementation.getNetworkStatus()));
     }
 
     private JSObject parseNetworkStatus(NetworkStatus networkStatus) {
