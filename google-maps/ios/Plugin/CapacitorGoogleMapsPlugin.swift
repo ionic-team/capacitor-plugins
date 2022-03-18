@@ -49,6 +49,23 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
     private var maps = [String: Map]()
     private var isInitialized = false
 
+    func checkLocationPermission() -> String {
+        let locationState: String
+
+        switch CLLocationManager.authorizationStatus() {
+        case .notDetermined:
+            locationState = "prompt"
+        case .restricted, .denied:
+            locationState = "denied"
+        case .authorizedAlways, .authorizedWhenInUse:
+            locationState = "granted"
+        @unknown default:
+            locationState = "prompt"
+        }
+
+        return locationState
+    }
+
     @objc func create(_ call: CAPPluginCall) {
         do {
             if !isInitialized {
@@ -65,7 +82,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
             }
 
             guard let configObj = call.getObject("config") else {
-                throw GoogleMapErrors.invalidArguments("GoogleMapConfig is missing")
+                throw GoogleMapErrors.invalidArguments("config object is missing")
             }
 
             let forceCreate = call.getBool("forceCreate", false)
@@ -82,8 +99,10 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
                 removedMap?.destroy()
             }
 
-            let newMap = Map(id: id, config: config, delegate: self)
-            self.maps[id] = newMap
+            DispatchQueue.main.sync {
+                let newMap = Map(id: id, config: config, delegate: self)
+                self.maps[id] = newMap
+            }
 
             call.resolve()
         } catch {
@@ -115,7 +134,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
             }
 
             guard let markerObj = call.getObject("marker") else {
-                throw GoogleMapErrors.invalidArguments("Marker object is missing")
+                throw GoogleMapErrors.invalidArguments("marker object is missing")
             }
 
             let marker = try Marker(fromJSObject: markerObj)
@@ -140,11 +159,11 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
             }
 
             guard let markerObjs = call.getArray("markers") as? [JSObject] else {
-                throw GoogleMapErrors.invalidArguments("Markers array is missing")
+                throw GoogleMapErrors.invalidArguments("markers array is missing")
             }
 
             if markerObjs.isEmpty {
-                throw GoogleMapErrors.invalidArguments("Markers requires at least one marker")
+                throw GoogleMapErrors.invalidArguments("markers requires at least one marker")
             }
 
             guard let map = self.maps[id] else {
@@ -210,11 +229,11 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
             }
 
             guard let markerIdString = call.getString("markerId") else {
-                throw GoogleMapErrors.invalidArguments("Marker hash id is invalid or missing")
+                throw GoogleMapErrors.invalidArguments("markerId is invalid or missing")
             }
 
             guard let markerId = Int(markerIdString) else {
-                throw GoogleMapErrors.invalidArguments("Marker hash id is invalid or missing")
+                throw GoogleMapErrors.invalidArguments("markerId is invalid or missing")
             }
 
             guard let map = self.maps[id] else {
@@ -241,7 +260,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
             }
 
             guard let configObj = call.getObject("config") else {
-                throw GoogleMapErrors.invalidArguments("CameraConfig is missing")
+                throw GoogleMapErrors.invalidArguments("config object is missing")
             }
 
             let config = try GoogleMapCameraConfig(fromJSObject: configObj)
@@ -380,6 +399,10 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
 
             guard let enabled = call.getBool("enabled") else {
                 throw GoogleMapErrors.invalidArguments("enabled is missing")
+            }
+
+            if enabled && checkLocationPermission() != "granted" {
+                throw GoogleMapErrors.permissionsDeniedLocation
             }
 
             try map.enableCurrentLocation(enabled: enabled)
