@@ -11,8 +11,8 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 
@@ -27,7 +27,12 @@ public class Geolocation {
         this.context = context;
     }
 
-    public void sendLocation(boolean enableHighAccuracy, int timeout, final boolean getCurrentPosition, final LocationResultCallback resultCallback) {
+    public void sendLocation(
+        boolean enableHighAccuracy,
+        int timeout,
+        final boolean getCurrentPosition,
+        final LocationResultCallback resultCallback
+    ) {
         requestLocationUpdates(enableHighAccuracy, timeout, getCurrentPosition, resultCallback);
     }
 
@@ -57,9 +62,7 @@ public class Geolocation {
                 if (getCurrentPosition) {
                     fusedLocationClient
                         .getCurrentLocation(priority, null)
-                        .addOnFailureListener(
-                            e -> resultCallback.error(e.getMessage())
-                        )
+                        .addOnFailureListener(e -> resultCallback.error(e.getMessage()))
                         .addOnSuccessListener(
                             location -> {
                                 if (location == null) {
@@ -71,24 +74,24 @@ public class Geolocation {
                         );
                 } else {
                     LocationRequest locationRequest = LocationRequest
-                            .create()
-                            .setMaxWaitTime(timeout)
-                            .setInterval(10000)
-                            .setFastestInterval(5000)
-                            .setPriority(priority);
+                        .create()
+                        .setMaxWaitTime(timeout)
+                        .setInterval(10000)
+                        .setFastestInterval(5000)
+                        .setPriority(priority);
 
                     locationCallback =
-                            new LocationCallback() {
-                                @Override
-                                public void onLocationResult(LocationResult locationResult) {
-                                    Location lastLocation = locationResult.getLastLocation();
-                                    if (lastLocation == null) {
-                                        resultCallback.error("location unavailable");
-                                    } else {
-                                        resultCallback.success(lastLocation);
-                                    }
+                        new LocationCallback() {
+                            @Override
+                            public void onLocationResult(LocationResult locationResult) {
+                                Location lastLocation = locationResult.getLastLocation();
+                                if (lastLocation == null) {
+                                    resultCallback.error("location unavailable");
+                                } else {
+                                    resultCallback.success(lastLocation);
                                 }
-                            };
+                            }
+                        };
 
                     fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null);
                 }
