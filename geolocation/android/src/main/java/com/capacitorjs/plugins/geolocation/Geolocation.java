@@ -4,7 +4,6 @@ import android.content.Context;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.SystemClock;
-import androidx.annotation.NonNull;
 import androidx.core.location.LocationManagerCompat;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -13,8 +12,7 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+
 
 public class Geolocation {
 
@@ -40,7 +38,7 @@ public class Geolocation {
     public void requestLocationUpdates(
         boolean enableHighAccuracy,
         int timeout,
-        boolean getCurrentPosition,
+        final boolean getCurrentPosition,
         final LocationResultCallback resultCallback
     ) {
         int resultCode = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(context);

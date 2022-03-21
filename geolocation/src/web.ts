@@ -21,8 +21,8 @@ export class GeolocationWeb extends WebPlugin implements GeolocationPlugin {
         },
         {
           enableHighAccuracy: false,
-          maximumAge: 0,
           timeout: 10000,
+          maximumAge: 0,
           ...options,
         },
       );
