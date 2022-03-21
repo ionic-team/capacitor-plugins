@@ -164,14 +164,6 @@ export interface PositionOptions {
   enableHighAccuracy?: boolean;
 
   /**
-   * The maximum wait time in milliseconds for location updates
-   *
-   * @default 10000
-   * @since 1.0.0
-   */
-  timeout?: number;
-
-  /**
    * The maximum age in milliseconds of a possible cached position that is acceptable to return
    *
    * @default 0

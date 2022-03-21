@@ -27,17 +27,15 @@ public class Geolocation {
 
     public void sendLocation(
         boolean enableHighAccuracy,
-        int timeout,
         final boolean getCurrentPosition,
         final LocationResultCallback resultCallback
     ) {
-        requestLocationUpdates(enableHighAccuracy, timeout, getCurrentPosition, resultCallback);
+        requestLocationUpdates(enableHighAccuracy, getCurrentPosition, resultCallback);
     }
 
     @SuppressWarnings("MissingPermission")
     public void requestLocationUpdates(
         boolean enableHighAccuracy,
-        int timeout,
         final boolean getCurrentPosition,
         final LocationResultCallback resultCallback
     ) {
