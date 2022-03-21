@@ -13,7 +13,6 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 
-
 public class Geolocation {
 
     private FusedLocationProviderClient fusedLocationClient;
@@ -25,11 +24,7 @@ public class Geolocation {
         this.context = context;
     }
 
-    public void sendLocation(
-        boolean enableHighAccuracy,
-        final boolean getCurrentPosition,
-        final LocationResultCallback resultCallback
-    ) {
+    public void sendLocation(boolean enableHighAccuracy, final boolean getCurrentPosition, final LocationResultCallback resultCallback) {
         requestLocationUpdates(enableHighAccuracy, getCurrentPosition, resultCallback);
     }
 
@@ -55,8 +50,10 @@ public class Geolocation {
                 int lowPriority = networkEnabled ? LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY : LocationRequest.PRIORITY_LOW_POWER;
                 int priority = enableHighAccuracy ? LocationRequest.PRIORITY_HIGH_ACCURACY : lowPriority;
 
-                fusedLocationClient.getCurrentLocation(priority, null)
-                        .addOnSuccessListener(new OnSuccessListener<Location>() {
+                fusedLocationClient
+                    .getCurrentLocation(priority, null)
+                    .addOnSuccessListener(
+                        new OnSuccessListener<Location>() {
                             @Override
                             public void onSuccess(Location location) {
                                 if (getCurrentPosition) {
@@ -69,7 +66,8 @@ public class Geolocation {
                                     resultCallback.success(location);
                                 }
                             }
-                        });
+                        }
+                    );
             } else {
                 resultCallback.error("location disabled");
             }
