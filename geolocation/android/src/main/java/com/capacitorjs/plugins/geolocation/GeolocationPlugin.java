@@ -60,8 +60,11 @@ public class GeolocationPlugin extends Plugin {
     @PermissionCallback
     private void completeCurrentPosition(PluginCall call) {
         if (getPermissionState(GeolocationPlugin.COARSE_LOCATION) == PermissionState.GRANTED) {
+            int timeout = call.getInt("timeout", 10000);
+
             implementation.sendLocation(
                 isHighAccuracy(call),
+                timeout,
                 true,
                 new LocationResultCallback() {
                     @Override
@@ -113,6 +116,7 @@ public class GeolocationPlugin extends Plugin {
 
     @SuppressWarnings("MissingPermission")
     private void getPosition(PluginCall call) {
+        int timeout = call.getInt("timeout", 10000);
         int maximumAge = call.getInt("maximumAge", 0);
         Location location = implementation.getLastLocation(maximumAge);
         if (location != null) {
@@ -120,6 +124,7 @@ public class GeolocationPlugin extends Plugin {
         } else {
             implementation.sendLocation(
                 isHighAccuracy(call),
+                timeout,
                 true,
                 new LocationResultCallback() {
                     @Override
@@ -138,8 +143,11 @@ public class GeolocationPlugin extends Plugin {
 
     @SuppressWarnings("MissingPermission")
     private void startWatch(final PluginCall call) {
+        int timeout = call.getInt("timeout", 10000);
+
         implementation.requestLocationUpdates(
             isHighAccuracy(call),
+            timeout,
             false,
             new LocationResultCallback() {
                 @Override
