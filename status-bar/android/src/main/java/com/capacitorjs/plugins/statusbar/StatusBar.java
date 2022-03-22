@@ -8,7 +8,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.core.view.WindowInsetsControllerCompat;
 
 public class StatusBar {
 
@@ -32,8 +31,7 @@ public class StatusBar {
             style = this.defaultStyle;
         }
 
-        WindowInsetsControllerCompat windowInsetsControllerCompat = new WindowInsetsControllerCompat(window, decorView);
-        windowInsetsControllerCompat.setAppearanceLightStatusBars(!style.equals("DARK"));
+        ViewCompat.getWindowInsetsController(decorView).setAppearanceLightStatusBars(!style.equals("DARK"));
     }
 
     @SuppressWarnings("deprecation")
@@ -47,17 +45,13 @@ public class StatusBar {
     }
 
     public void hide() {
-        Window window = activity.getWindow();
-        View decorView = window.getDecorView();
-        WindowInsetsControllerCompat windowInsetsControllerCompat = new WindowInsetsControllerCompat(window, decorView);
-        windowInsetsControllerCompat.hide(WindowInsetsCompat.Type.statusBars());
+        View decorView = activity.getWindow().getDecorView();
+        ViewCompat.getWindowInsetsController(decorView).hide(WindowInsetsCompat.Type.statusBars());
     }
 
     public void show() {
-        Window window = activity.getWindow();
-        View decorView = window.getDecorView();
-        WindowInsetsControllerCompat windowInsetsControllerCompat = new WindowInsetsControllerCompat(window, decorView);
-        windowInsetsControllerCompat.show(WindowInsetsCompat.Type.statusBars());
+        View decorView = activity.getWindow().getDecorView();
+        ViewCompat.getWindowInsetsController(decorView).show(WindowInsetsCompat.Type.statusBars());
     }
 
     public void setOverlaysWebView(Boolean overlays) {
@@ -78,20 +72,17 @@ public class StatusBar {
     public StatusBarInfo getInfo() {
         Window window = activity.getWindow();
         StatusBarInfo info = new StatusBarInfo();
-        WindowInsetsCompat wic = ViewCompat.getRootWindowInsets(window.getDecorView());
         info.setStyle(getStyle());
         info.setOverlays(isOverlayed);
-        info.setVisible(wic.isVisible(WindowInsetsCompat.Type.statusBars()));
+        info.setVisible(ViewCompat.getRootWindowInsets(window.getDecorView()).isVisible(WindowInsetsCompat.Type.statusBars()));
         info.setColor(String.format("#%06X", (0xFFFFFF & window.getStatusBarColor())));
         return info;
     }
 
     private String getStyle() {
-        Window window = activity.getWindow();
-        View decorView = window.getDecorView();
-        WindowInsetsControllerCompat windowInsetsControllerCompat = new WindowInsetsControllerCompat(window, decorView);
+        View decorView = activity.getWindow().getDecorView();
         String style;
-        if (windowInsetsControllerCompat.isAppearanceLightStatusBars()) {
+        if (ViewCompat.getWindowInsetsController(decorView).isAppearanceLightStatusBars()) {
             style = "LIGHT";
         } else {
             style = "DARK";
