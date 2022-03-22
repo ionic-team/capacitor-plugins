@@ -164,8 +164,8 @@ export interface PositionOptions {
   enableHighAccuracy?: boolean;
 
   /**
-   * The maximum wait time in milliseconds for location updates.  
-   * 
+   * The maximum wait time in milliseconds for location updates.
+   *
    * In Android, since version 4.0.0 of the plugin, timeout gets ignored for getCurrentPosition.
    *
    * @default 10000
