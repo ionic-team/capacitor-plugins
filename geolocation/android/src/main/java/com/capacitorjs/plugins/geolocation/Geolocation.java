@@ -28,8 +28,6 @@ public class Geolocation {
     public void sendLocation(boolean enableHighAccuracy, final LocationResultCallback resultCallback) {
         int resultCode = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(context);
         if (resultCode == ConnectionResult.SUCCESS) {
-            fusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
-
             LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
             if (LocationManagerCompat.isLocationEnabled(lm)) {
                 boolean networkEnabled = false;
