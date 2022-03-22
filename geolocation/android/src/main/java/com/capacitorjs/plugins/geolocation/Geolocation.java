@@ -24,22 +24,45 @@ public class Geolocation {
         this.context = context;
     }
 
-    public void sendLocation(
-        boolean enableHighAccuracy,
-        int timeout,
-        final boolean getCurrentPosition,
-        final LocationResultCallback resultCallback
-    ) {
-        requestLocationUpdates(enableHighAccuracy, timeout, getCurrentPosition, resultCallback);
+    @SuppressWarnings("MissingPermission")
+    public void sendLocation(boolean enableHighAccuracy, final LocationResultCallback resultCallback) {
+        int resultCode = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(context);
+        if (resultCode == ConnectionResult.SUCCESS) {
+            fusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
+
+            LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+            if (LocationManagerCompat.isLocationEnabled(lm)) {
+                boolean networkEnabled = false;
+
+                try {
+                    networkEnabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+                } catch (Exception ex) {}
+
+                int lowPriority = networkEnabled ? LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY : LocationRequest.PRIORITY_LOW_POWER;
+                int priority = enableHighAccuracy ? LocationRequest.PRIORITY_HIGH_ACCURACY : lowPriority;
+
+                fusedLocationClient
+                    .getCurrentLocation(priority, null)
+                    .addOnFailureListener(e -> resultCallback.error(e.getMessage()))
+                    .addOnSuccessListener(
+                        location -> {
+                            if (location == null) {
+                                resultCallback.error("location unavailable");
+                            } else {
+                                resultCallback.success(location);
+                            }
+                        }
+                    );
+            } else {
+                resultCallback.error("location disabled");
+            }
+        } else {
+            resultCallback.error("Google Play Services not available");
+        }
     }
 
     @SuppressWarnings("MissingPermission")
-    public void requestLocationUpdates(
-        boolean enableHighAccuracy,
-        int timeout,
-        final boolean getCurrentPosition,
-        final LocationResultCallback resultCallback
-    ) {
+    public void requestLocationUpdates(boolean enableHighAccuracy, int timeout, final LocationResultCallback resultCallback) {
         int resultCode = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(context);
         if (resultCode == ConnectionResult.SUCCESS) {
             clearLocationUpdates();
@@ -56,42 +79,27 @@ public class Geolocation {
                 int lowPriority = networkEnabled ? LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY : LocationRequest.PRIORITY_LOW_POWER;
                 int priority = enableHighAccuracy ? LocationRequest.PRIORITY_HIGH_ACCURACY : lowPriority;
 
-                if (getCurrentPosition) {
-                    fusedLocationClient
-                        .getCurrentLocation(priority, null)
-                        .addOnFailureListener(e -> resultCallback.error(e.getMessage()))
-                        .addOnSuccessListener(
-                            location -> {
-                                if (location == null) {
-                                    resultCallback.error("location unavailable");
-                                } else {
-                                    resultCallback.success(location);
-                                }
-                            }
-                        );
-                } else {
-                    LocationRequest locationRequest = LocationRequest
-                        .create()
-                        .setMaxWaitTime(timeout)
-                        .setInterval(10000)
-                        .setFastestInterval(5000)
-                        .setPriority(priority);
+                LocationRequest locationRequest = LocationRequest
+                    .create()
+                    .setMaxWaitTime(timeout)
+                    .setInterval(10000)
+                    .setFastestInterval(5000)
+                    .setPriority(priority);
 
-                    locationCallback =
-                        new LocationCallback() {
-                            @Override
-                            public void onLocationResult(LocationResult locationResult) {
-                                Location lastLocation = locationResult.getLastLocation();
-                                if (lastLocation == null) {
-                                    resultCallback.error("location unavailable");
-                                } else {
-                                    resultCallback.success(lastLocation);
-                                }
+                locationCallback =
+                    new LocationCallback() {
+                        @Override
+                        public void onLocationResult(LocationResult locationResult) {
+                            Location lastLocation = locationResult.getLastLocation();
+                            if (lastLocation == null) {
+                                resultCallback.error("location unavailable");
+                            } else {
+                                resultCallback.success(lastLocation);
                             }
-                        };
+                        }
+                    };
 
-                    fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null);
-                }
+                fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null);
             } else {
                 resultCallback.error("location disabled");
             }
