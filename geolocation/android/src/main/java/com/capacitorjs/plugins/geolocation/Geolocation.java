@@ -15,7 +15,7 @@ import com.google.android.gms.location.LocationServices;
 
 public class Geolocation {
 
-    private FusedLocationProviderClient fusedLocationClient;
+    private FusedLocationProviderClient fusedLocationClient_locationUpdates;
     private LocationCallback locationCallback;
 
     private Context context;
@@ -29,6 +29,9 @@ public class Geolocation {
         int resultCode = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(context);
         if (resultCode == ConnectionResult.SUCCESS) {
             LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+
+            FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
+
             if (LocationManagerCompat.isLocationEnabled(lm)) {
                 boolean networkEnabled = false;
 
@@ -64,7 +67,7 @@ public class Geolocation {
         int resultCode = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(context);
         if (resultCode == ConnectionResult.SUCCESS) {
             clearLocationUpdates();
-            fusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
+            fusedLocationClient_locationUpdates = LocationServices.getFusedLocationProviderClient(context);
 
             LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
             if (LocationManagerCompat.isLocationEnabled(lm)) {
@@ -97,7 +100,7 @@ public class Geolocation {
                         }
                     };
 
-                fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null);
+                fusedLocationClient_locationUpdates.requestLocationUpdates(locationRequest, locationCallback, null);
             } else {
                 resultCallback.error("location disabled");
             }
@@ -108,7 +111,7 @@ public class Geolocation {
 
     public void clearLocationUpdates() {
         if (locationCallback != null) {
-            fusedLocationClient.removeLocationUpdates(locationCallback);
+            fusedLocationClient_locationUpdates.removeLocationUpdates(locationCallback);
             locationCallback = null;
         }
     }
