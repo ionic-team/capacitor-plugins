@@ -15,7 +15,7 @@ import com.google.android.gms.location.LocationServices;
 
 public class Geolocation {
 
-    private FusedLocationProviderClient fusedLocationClient_locationUpdates;
+    private FusedLocationProviderClient fusedLocationClient;
     private LocationCallback locationCallback;
 
     private Context context;
@@ -30,8 +30,6 @@ public class Geolocation {
         if (resultCode == ConnectionResult.SUCCESS) {
             LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
 
-            FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
-
             if (LocationManagerCompat.isLocationEnabled(lm)) {
                 boolean networkEnabled = false;
 
@@ -42,7 +40,8 @@ public class Geolocation {
                 int lowPriority = networkEnabled ? LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY : LocationRequest.PRIORITY_LOW_POWER;
                 int priority = enableHighAccuracy ? LocationRequest.PRIORITY_HIGH_ACCURACY : lowPriority;
 
-                fusedLocationClient
+                LocationServices
+                    .getFusedLocationProviderClient(context)
                     .getCurrentLocation(priority, null)
                     .addOnFailureListener(e -> resultCallback.error(e.getMessage()))
                     .addOnSuccessListener(
@@ -67,7 +66,7 @@ public class Geolocation {
         int resultCode = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(context);
         if (resultCode == ConnectionResult.SUCCESS) {
             clearLocationUpdates();
-            fusedLocationClient_locationUpdates = LocationServices.getFusedLocationProviderClient(context);
+            fusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
 
             LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
             if (LocationManagerCompat.isLocationEnabled(lm)) {
@@ -100,7 +99,7 @@ public class Geolocation {
                         }
                     };
 
-                fusedLocationClient_locationUpdates.requestLocationUpdates(locationRequest, locationCallback, null);
+                fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null);
             } else {
                 resultCallback.error("location disabled");
             }
@@ -111,7 +110,7 @@ public class Geolocation {
 
     public void clearLocationUpdates() {
         if (locationCallback != null) {
-            fusedLocationClient_locationUpdates.removeLocationUpdates(locationCallback);
+            fusedLocationClient.removeLocationUpdates(locationCallback);
             locationCallback = null;
         }
     }
