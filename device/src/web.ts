@@ -67,7 +67,7 @@ export class DeviceWeb extends WebPlugin implements DevicePlugin {
 
   async getLanguageCode(): Promise<GetLanguageCodeResult> {
     return {
-      value: navigator.language,
+      value: navigator.language.split('-')[0].toLowerCase(),
     };
   }
 
