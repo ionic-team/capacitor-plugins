@@ -350,9 +350,10 @@ export interface Channel {
   /**
    * The level of interruption for notifications posted to this channel.
    *
+   * @default `3`
    * @since 1.0.0
    */
-  importance: Importance;
+  importance?: Importance;
 
   /**
    * The visibility of notifications posted to this channel.
