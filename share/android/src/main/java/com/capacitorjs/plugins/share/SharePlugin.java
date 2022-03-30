@@ -26,16 +26,14 @@ public class SharePlugin extends Plugin {
 
     @Override
     public void load() {
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
-            broadcastReceiver =
-                new BroadcastReceiver() {
-                    @Override
-                    public void onReceive(Context context, Intent intent) {
-                        chosenComponent = intent.getParcelableExtra(Intent.EXTRA_CHOSEN_COMPONENT);
-                    }
-                };
-            getActivity().registerReceiver(broadcastReceiver, new IntentFilter(Intent.EXTRA_CHOSEN_COMPONENT));
-        }
+        broadcastReceiver =
+            new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    chosenComponent = intent.getParcelableExtra(Intent.EXTRA_CHOSEN_COMPONENT);
+                }
+            };
+        getActivity().registerReceiver(broadcastReceiver, new IntentFilter(Intent.EXTRA_CHOSEN_COMPONENT));
     }
 
     @ActivityCallback
@@ -110,19 +108,15 @@ public class SharePlugin extends Plugin {
             }
 
             Intent chooser = null;
-            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
-                // requestCode parameter is not used. Providing 0
-                PendingIntent pi = PendingIntent.getBroadcast(
-                    getContext(),
-                    0,
-                    new Intent(Intent.EXTRA_CHOSEN_COMPONENT),
-                    PendingIntent.FLAG_UPDATE_CURRENT
-                );
-                chooser = Intent.createChooser(intent, dialogTitle, pi.getIntentSender());
-                chosenComponent = null;
-            } else {
-                chooser = Intent.createChooser(intent, dialogTitle);
-            }
+            // requestCode parameter is not used. Providing 0
+            PendingIntent pi = PendingIntent.getBroadcast(
+                getContext(),
+                0,
+                new Intent(Intent.EXTRA_CHOSEN_COMPONENT),
+                PendingIntent.FLAG_UPDATE_CURRENT
+            );
+            chooser = Intent.createChooser(intent, dialogTitle, pi.getIntentSender());
+            chosenComponent = null;
             chooser.addCategory(Intent.CATEGORY_DEFAULT);
             stopped = false;
             isPresenting = true;
