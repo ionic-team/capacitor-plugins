@@ -9,7 +9,6 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
 
-
 public class StatusBar {
 
     private int currentStatusbarColor;
@@ -36,7 +35,6 @@ public class StatusBar {
             windowInsetsControllerCompat.setAppearanceLightStatusBars(!style.equals("DARK"));
         }
     }
-
 
     @SuppressWarnings("deprecation")
     public void setBackgroundColor(int color) {
@@ -85,7 +83,10 @@ public class StatusBar {
 
     @SuppressWarnings("deprecation")
     private boolean getIsOverlayed() {
-        return (activity.getWindow().getDecorView().getSystemUiVisibility() & View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN) == View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
+        return (
+            (activity.getWindow().getDecorView().getSystemUiVisibility() & View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN) ==
+            View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+        );
     }
 
     public StatusBarInfo getInfo() {
