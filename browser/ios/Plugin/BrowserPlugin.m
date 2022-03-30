@@ -4,5 +4,5 @@
 CAP_PLUGIN(CAPBrowserPlugin, "Browser",
   CAP_PLUGIN_METHOD(open, CAPPluginReturnPromise);
   CAP_PLUGIN_METHOD(close, CAPPluginReturnPromise);
-  CAP_PLUGIN_METHOD(removeAllListeners, CAPPluginReturnNone);
+  CAP_PLUGIN_METHOD(removeAllListeners, CAPPluginReturnPromise);
 )
