@@ -66,11 +66,12 @@ In `capacitor.config.ts`:
 /// <reference types="@capacitor/keyboard" />
 
 import { CapacitorConfig } from '@capacitor/cli';
+import { KeyboardResize } from '@capacitor/keyboard';
 
 const config: CapacitorConfig = {
   plugins: {
     Keyboard: {
-      resize: "body",
+      resize: KeyboardResize.Body,
       style: "dark",
       resizeOnFullScreen: true,
     },
