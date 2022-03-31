@@ -107,7 +107,6 @@ public class SharePlugin extends Plugin {
                 intent.putExtra(Intent.EXTRA_SUBJECT, title);
             }
 
-            Intent chooser = null;
             // requestCode parameter is not used. Providing 0
             PendingIntent pi = PendingIntent.getBroadcast(
                 getContext(),
