@@ -115,7 +115,7 @@ public class SharePlugin extends Plugin {
                 new Intent(Intent.EXTRA_CHOSEN_COMPONENT),
                 PendingIntent.FLAG_UPDATE_CURRENT
             );
-            chooser = Intent.createChooser(intent, dialogTitle, pi.getIntentSender());
+            Intent chooser = Intent.createChooser(intent, dialogTitle, pi.getIntentSender());
             chosenComponent = null;
             chooser.addCategory(Intent.CATEGORY_DEFAULT);
             stopped = false;
