@@ -10,13 +10,43 @@ import type {
 import type { CreateMapArgs } from './implementation';
 import { CapacitorGoogleMaps } from './implementation';
 
+/**
+ * A marker is an icon placed at a particular point on the map's surface.
+ */
 export interface Marker {
+  /**
+   * Marker position
+   */
   coordinate: LatLng;
+  /**
+   * Sets the opacity of the marker, between 0 (completely transparent) and 1 inclusive. 
+   * 
+   * @default 1
+   */
   opacity?: number;
+  /**
+   * Title, a short description of the overlay. 
+   */
   title?: string;
+  /**
+   * Snippet text, shown beneath the title in the info window when selected. 
+   */
   snippet?: string;
+  /**
+   * Controls whether this marker should be flat against the Earth's surface or a billboard facing the camera.
+   * 
+   * @default false
+   */
   isFlat?: boolean;
+  /**
+   * Marker icon to render. 
+   */
   iconUrl?: string;
+  /**
+   * Controls whether this marker can be dragged interactively
+   * 
+   * @default false
+   */
   draggable?: boolean;
 }
 
@@ -28,6 +58,22 @@ export class GoogleMap {
   private constructor(id: string) {
     this.id = id;
   }
+
+  /**
+   * Creates a new instance of a Google Map
+   * 
+   * @param element 
+   * DOM element that will contain the map view and determine sizing / positioning
+   * @param id Unique id for the map instance
+   * @param apiKey 
+   * Google Maps SDK API Key
+   * @param config 
+   * Initial configuration settings for the map
+   * @param forceCreate 
+   * If a map already exists with the supplied id, automatically destroy and re-create the map instance
+   * 
+   * @returns GoogleMap
+   */
   public static async create(
     element: HTMLElement,
     id: string,
@@ -79,18 +125,34 @@ export class GoogleMap {
     return newMap;
   }
 
+  /**
+   * Enable marker clustering
+   * 
+   * @returns void
+   */
   async enableClustering(): Promise<void> {
     return CapacitorGoogleMaps.enableClustering({
       id: this.id,
     });
   }
 
+  /**
+   * Disable marker clustering
+   * 
+   * @returns void
+   */
   async disableClustering(): Promise<void> {
     return CapacitorGoogleMaps.disableClustering({
       id: this.id,
     });
   }
 
+  /**
+   * Adds a marker to the map
+   * 
+   * @param marker 
+   * @returns created marker id
+   */
   async addMarker(marker: Marker): Promise<string> {
     const res = await CapacitorGoogleMaps.addMarker({
       id: this.id,
@@ -100,6 +162,12 @@ export class GoogleMap {
     return res.id;
   }
 
+  /**
+   * Adds multiple markers to the map
+   * 
+   * @param markers 
+   * @returns array of created marker IDs
+   */
   async addMarkers(markers: Marker[]): Promise<string[]> {
     const res = await CapacitorGoogleMaps.addMarkers({
       id: this.id,
@@ -109,6 +177,12 @@ export class GoogleMap {
     return res.ids;
   }
 
+  /**
+   * Remove marker from the map
+   * 
+   * @param id id of the marker to remove from the map
+   * @returns 
+   */
   async removeMarker(id: string): Promise<void> {
     return CapacitorGoogleMaps.removeMarker({
       id: this.id,
@@ -116,6 +190,12 @@ export class GoogleMap {
     });
   }
 
+  /**
+   * Remove markers from the map
+   * 
+   * @param ids array of ids to remove from the map
+   * @returns 
+   */
   async removeMarkers(ids: string[]): Promise<void> {
     return CapacitorGoogleMaps.removeMarkers({
       id: this.id,
@@ -123,6 +203,9 @@ export class GoogleMap {
     });
   }
 
+  /**
+   * Destroy the current instance of the map
+   */
   async destroy(): Promise<void> {
     if (Capacitor.isNativePlatform()) {
       this.disableScrolling();
@@ -132,6 +215,12 @@ export class GoogleMap {
     });
   }
 
+  /**
+   * Update the map camera configuration
+   * 
+   * @param config 
+   * @returns 
+   */
   async setCamera(config: CameraConfig): Promise<void> {
     return CapacitorGoogleMaps.setCamera({
       id: this.id,
@@ -139,6 +228,12 @@ export class GoogleMap {
     });
   }
 
+  /**
+   * Sets the type of map tiles that should be displayed.
+   * 
+   * @param mapType 
+   * @returns 
+   */
   async setMapType(mapType: MapType): Promise<void> {
     return CapacitorGoogleMaps.setMapType({
       id: this.id,
@@ -146,6 +241,12 @@ export class GoogleMap {
     });
   }
 
+  /**
+   * Sets whether indoor maps are shown, where available. 
+   * 
+   * @param enabled 
+   * @returns 
+   */
   async enableIndoorMaps(enabled: boolean): Promise<void> {
     return CapacitorGoogleMaps.enableIndoorMaps({
       id: this.id,
@@ -153,6 +254,12 @@ export class GoogleMap {
     });
   }
 
+  /**
+   * Controls whether the map is drawing traffic data, if available. 
+   * 
+   * @param enabled 
+   * @returns 
+   */
   async enableTrafficLayer(enabled: boolean): Promise<void> {
     return CapacitorGoogleMaps.enableTrafficLayer({
       id: this.id,
@@ -160,6 +267,14 @@ export class GoogleMap {
     });
   }
 
+  /**
+   * Show accessibility elements for overlay objects, such as Marker and Polyline.
+   * 
+   * Only available on iOS.
+   * 
+   * @param enabled 
+   * @returns 
+   */
   async enableAccessibilityElements(enabled: boolean): Promise<void> {
     return CapacitorGoogleMaps.enableAccessibilityElements({
       id: this.id,
@@ -167,6 +282,12 @@ export class GoogleMap {
     });
   }
 
+  /**
+   * Set whether the My Location dot and accuracy circle is enabled.
+   * 
+   * @param enabled 
+   * @returns 
+   */
   async enableCurrentLocation(enabled: boolean): Promise<void> {
     return CapacitorGoogleMaps.enableCurrentLocation({
       id: this.id,
@@ -174,6 +295,12 @@ export class GoogleMap {
     });
   }
 
+  /**
+   * Set padding on the 'visible' region of the view. 
+   * 
+   * @param padding 
+   * @returns 
+   */
   async setPadding(padding: MapPadding): Promise<void> {
     return CapacitorGoogleMaps.setPadding({
       id: this.id,
@@ -181,7 +308,7 @@ export class GoogleMap {
     });
   }
 
-  initScrolling(): void {
+  private initScrolling(): void {
     if (this.frameElement) {
       let scrollEvent = 'scroll';
 
@@ -206,7 +333,7 @@ export class GoogleMap {
     }
   }
 
-  disableScrolling(): void {
+  private disableScrolling(): void {
     if (this.frameElement) {
       window.removeEventListener('ionScroll', this.handleScrollEvent);
       window.removeEventListener('scroll', this.handleScrollEvent);
@@ -223,7 +350,7 @@ export class GoogleMap {
     }
   }
 
-  handleScrollEvent = (): void => this.updateMapBounds();
+  private handleScrollEvent = (): void => this.updateMapBounds();
 
   private updateMapBounds(): void {
     if (this.element && this.frameElement) {
