@@ -106,14 +106,13 @@ public class SharePlugin extends Plugin {
             if (title != null) {
                 intent.putExtra(Intent.EXTRA_SUBJECT, title);
             }
+            int flags = PendingIntent.FLAG_UPDATE_CURRENT;
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                flags = flags | PendingIntent.FLAG_MUTABLE;
+            }
 
             // requestCode parameter is not used. Providing 0
-            PendingIntent pi = PendingIntent.getBroadcast(
-                getContext(),
-                0,
-                new Intent(Intent.EXTRA_CHOSEN_COMPONENT),
-                PendingIntent.FLAG_UPDATE_CURRENT
-            );
+            PendingIntent pi = PendingIntent.getBroadcast(getContext(), 0, new Intent(Intent.EXTRA_CHOSEN_COMPONENT), flags);
             Intent chooser = Intent.createChooser(intent, dialogTitle, pi.getIntentSender());
             chosenComponent = null;
             chooser.addCategory(Intent.CATEGORY_DEFAULT);
