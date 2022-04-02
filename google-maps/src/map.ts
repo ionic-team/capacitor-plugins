@@ -10,6 +10,30 @@ import type {
 import type { CreateMapArgs } from './implementation';
 import { CapacitorGoogleMaps } from './implementation';
 
+export interface GoogleMapInterface {
+  create(
+    element: HTMLElement,
+    id: string,
+    apiKey: string,
+    config: GoogleMapConfig,
+    forceCreate?: boolean,
+  ): Promise<GoogleMap>;
+  enableClustering(): Promise<void>;
+  disableClustering(): Promise<void>;
+  addMarker(marker: Marker): Promise<string>;
+  addMarkers(markers: Marker[]): Promise<string[]>;
+  removeMarker(id: string): Promise<void>;
+  removeMarkers(ids: string[]): Promise<void>;
+  destroy(): Promise<void>;
+  setCamera(config: CameraConfig): Promise<void>;
+  setMapType(mapType: MapType): Promise<void>;
+  enableIndoorMaps(enabled: boolean): Promise<void>;
+  enableTrafficLayer(enabled: boolean): Promise<void>;
+  enableAccessibilityElements(enabled: boolean): Promise<void>;
+  enableCurrentLocation(enabled: boolean): Promise<void>;
+  setPadding(padding: MapPadding): Promise<void>;
+}
+
 /**
  * A marker is an icon placed at a particular point on the map's surface.
  */
@@ -19,32 +43,32 @@ export interface Marker {
    */
   coordinate: LatLng;
   /**
-   * Sets the opacity of the marker, between 0 (completely transparent) and 1 inclusive. 
-   * 
+   * Sets the opacity of the marker, between 0 (completely transparent) and 1 inclusive.
+   *
    * @default 1
    */
   opacity?: number;
   /**
-   * Title, a short description of the overlay. 
+   * Title, a short description of the overlay.
    */
   title?: string;
   /**
-   * Snippet text, shown beneath the title in the info window when selected. 
+   * Snippet text, shown beneath the title in the info window when selected.
    */
   snippet?: string;
   /**
    * Controls whether this marker should be flat against the Earth's surface or a billboard facing the camera.
-   * 
+   *
    * @default false
    */
   isFlat?: boolean;
   /**
-   * Marker icon to render. 
+   * Marker icon to render.
    */
   iconUrl?: string;
   /**
    * Controls whether this marker can be dragged interactively
-   * 
+   *
    * @default false
    */
   draggable?: boolean;
@@ -61,17 +85,17 @@ export class GoogleMap {
 
   /**
    * Creates a new instance of a Google Map
-   * 
-   * @param element 
+   *
+   * @param element
    * DOM element that will contain the map view and determine sizing / positioning
    * @param id Unique id for the map instance
-   * @param apiKey 
+   * @param apiKey
    * Google Maps SDK API Key
-   * @param config 
+   * @param config
    * Initial configuration settings for the map
-   * @param forceCreate 
+   * @param forceCreate
    * If a map already exists with the supplied id, automatically destroy and re-create the map instance
-   * 
+   *
    * @returns GoogleMap
    */
   public static async create(
@@ -127,7 +151,7 @@ export class GoogleMap {
 
   /**
    * Enable marker clustering
-   * 
+   *
    * @returns void
    */
   async enableClustering(): Promise<void> {
@@ -138,7 +162,7 @@ export class GoogleMap {
 
   /**
    * Disable marker clustering
-   * 
+   *
    * @returns void
    */
   async disableClustering(): Promise<void> {
@@ -149,8 +173,8 @@ export class GoogleMap {
 
   /**
    * Adds a marker to the map
-   * 
-   * @param marker 
+   *
+   * @param marker
    * @returns created marker id
    */
   async addMarker(marker: Marker): Promise<string> {
@@ -164,8 +188,8 @@ export class GoogleMap {
 
   /**
    * Adds multiple markers to the map
-   * 
-   * @param markers 
+   *
+   * @param markers
    * @returns array of created marker IDs
    */
   async addMarkers(markers: Marker[]): Promise<string[]> {
@@ -179,9 +203,9 @@ export class GoogleMap {
 
   /**
    * Remove marker from the map
-   * 
+   *
    * @param id id of the marker to remove from the map
-   * @returns 
+   * @returns
    */
   async removeMarker(id: string): Promise<void> {
     return CapacitorGoogleMaps.removeMarker({
@@ -192,9 +216,9 @@ export class GoogleMap {
 
   /**
    * Remove markers from the map
-   * 
+   *
    * @param ids array of ids to remove from the map
-   * @returns 
+   * @returns
    */
   async removeMarkers(ids: string[]): Promise<void> {
     return CapacitorGoogleMaps.removeMarkers({
@@ -217,9 +241,9 @@ export class GoogleMap {
 
   /**
    * Update the map camera configuration
-   * 
-   * @param config 
-   * @returns 
+   *
+   * @param config
+   * @returns
    */
   async setCamera(config: CameraConfig): Promise<void> {
     return CapacitorGoogleMaps.setCamera({
@@ -230,9 +254,9 @@ export class GoogleMap {
 
   /**
    * Sets the type of map tiles that should be displayed.
-   * 
-   * @param mapType 
-   * @returns 
+   *
+   * @param mapType
+   * @returns
    */
   async setMapType(mapType: MapType): Promise<void> {
     return CapacitorGoogleMaps.setMapType({
@@ -242,10 +266,10 @@ export class GoogleMap {
   }
 
   /**
-   * Sets whether indoor maps are shown, where available. 
-   * 
-   * @param enabled 
-   * @returns 
+   * Sets whether indoor maps are shown, where available.
+   *
+   * @param enabled
+   * @returns
    */
   async enableIndoorMaps(enabled: boolean): Promise<void> {
     return CapacitorGoogleMaps.enableIndoorMaps({
@@ -255,10 +279,10 @@ export class GoogleMap {
   }
 
   /**
-   * Controls whether the map is drawing traffic data, if available. 
-   * 
-   * @param enabled 
-   * @returns 
+   * Controls whether the map is drawing traffic data, if available.
+   *
+   * @param enabled
+   * @returns
    */
   async enableTrafficLayer(enabled: boolean): Promise<void> {
     return CapacitorGoogleMaps.enableTrafficLayer({
@@ -269,11 +293,11 @@ export class GoogleMap {
 
   /**
    * Show accessibility elements for overlay objects, such as Marker and Polyline.
-   * 
+   *
    * Only available on iOS.
-   * 
-   * @param enabled 
-   * @returns 
+   *
+   * @param enabled
+   * @returns
    */
   async enableAccessibilityElements(enabled: boolean): Promise<void> {
     return CapacitorGoogleMaps.enableAccessibilityElements({
@@ -284,9 +308,9 @@ export class GoogleMap {
 
   /**
    * Set whether the My Location dot and accuracy circle is enabled.
-   * 
-   * @param enabled 
-   * @returns 
+   *
+   * @param enabled
+   * @returns
    */
   async enableCurrentLocation(enabled: boolean): Promise<void> {
     return CapacitorGoogleMaps.enableCurrentLocation({
@@ -296,10 +320,10 @@ export class GoogleMap {
   }
 
   /**
-   * Set padding on the 'visible' region of the view. 
-   * 
-   * @param padding 
-   * @returns 
+   * Set padding on the 'visible' region of the view.
+   *
+   * @param padding
+   * @returns
    */
   async setPadding(padding: MapPadding): Promise<void> {
     return CapacitorGoogleMaps.setPadding({

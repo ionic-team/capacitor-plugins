@@ -14,13 +14,13 @@ npx cap sync
 <docgen-index>
 
 * [`create(...)`](#create)
+* [`enableClustering()`](#enableclustering)
+* [`disableClustering()`](#disableclustering)
 * [`addMarker(...)`](#addmarker)
 * [`addMarkers(...)`](#addmarkers)
 * [`removeMarker(...)`](#removemarker)
 * [`removeMarkers(...)`](#removemarkers)
-* [`enableClustering(...)`](#enableclustering)
-* [`disableClustering(...)`](#disableclustering)
-* [`destroy(...)`](#destroy)
+* [`destroy()`](#destroy)
 * [`setCamera(...)`](#setcamera)
 * [`setMapType(...)`](#setmaptype)
 * [`enableIndoorMaps(...)`](#enableindoormaps)
@@ -28,7 +28,6 @@ npx cap sync
 * [`enableAccessibilityElements(...)`](#enableaccessibilityelements)
 * [`enableCurrentLocation(...)`](#enablecurrentlocation)
 * [`setPadding(...)`](#setpadding)
-* [`onScroll(...)`](#onscroll)
 * [Interfaces](#interfaces)
 * [Enums](#enums)
 
@@ -40,12 +39,36 @@ npx cap sync
 ### create(...)
 
 ```typescript
-create(args: CreateMapArgs) => Promise<void>
+create(element: any, id: string, apiKey: string, config: GoogleMapConfig, forceCreate?: boolean | undefined) => Promise<GoogleMap>
 ```
 
-| Param      | Type                                                    |
-| ---------- | ------------------------------------------------------- |
-| **`args`** | <code><a href="#createmapargs">CreateMapArgs</a></code> |
+| Param             | Type                                                        |
+| ----------------- | ----------------------------------------------------------- |
+| **`element`**     | <code>any</code>                                            |
+| **`id`**          | <code>string</code>                                         |
+| **`apiKey`**      | <code>string</code>                                         |
+| **`config`**      | <code><a href="#googlemapconfig">GoogleMapConfig</a></code> |
+| **`forceCreate`** | <code>boolean</code>                                        |
+
+**Returns:** <code>Promise&lt;GoogleMap&gt;</code>
+
+--------------------
+
+
+### enableClustering()
+
+```typescript
+enableClustering() => Promise<void>
+```
+
+--------------------
+
+
+### disableClustering()
+
+```typescript
+disableClustering() => Promise<void>
+```
 
 --------------------
 
@@ -53,14 +76,14 @@ create(args: CreateMapArgs) => Promise<void>
 ### addMarker(...)
 
 ```typescript
-addMarker(args: AddMarkerArgs) => Promise<{ id: string; }>
+addMarker(marker: Marker) => Promise<string>
 ```
 
-| Param      | Type                                                    |
-| ---------- | ------------------------------------------------------- |
-| **`args`** | <code><a href="#addmarkerargs">AddMarkerArgs</a></code> |
+| Param        | Type                                      |
+| ------------ | ----------------------------------------- |
+| **`marker`** | <code><a href="#marker">Marker</a></code> |
 
-**Returns:** <code>Promise&lt;{ id: string; }&gt;</code>
+**Returns:** <code>Promise&lt;string&gt;</code>
 
 --------------------
 
@@ -68,14 +91,14 @@ addMarker(args: AddMarkerArgs) => Promise<{ id: string; }>
 ### addMarkers(...)
 
 ```typescript
-addMarkers(args: AddMarkersArgs) => Promise<{ ids: string[]; }>
+addMarkers(markers: Marker[]) => Promise<string[]>
 ```
 
-| Param      | Type                                                      |
-| ---------- | --------------------------------------------------------- |
-| **`args`** | <code><a href="#addmarkersargs">AddMarkersArgs</a></code> |
+| Param         | Type                  |
+| ------------- | --------------------- |
+| **`markers`** | <code>Marker[]</code> |
 
-**Returns:** <code>Promise&lt;{ ids: string[]; }&gt;</code>
+**Returns:** <code>Promise&lt;string[]&gt;</code>
 
 --------------------
 
@@ -83,12 +106,12 @@ addMarkers(args: AddMarkersArgs) => Promise<{ ids: string[]; }>
 ### removeMarker(...)
 
 ```typescript
-removeMarker(args: RemoveMarkerArgs) => Promise<void>
+removeMarker(id: string) => Promise<void>
 ```
 
-| Param      | Type                                                          |
-| ---------- | ------------------------------------------------------------- |
-| **`args`** | <code><a href="#removemarkerargs">RemoveMarkerArgs</a></code> |
+| Param    | Type                |
+| -------- | ------------------- |
+| **`id`** | <code>string</code> |
 
 --------------------
 
@@ -96,51 +119,21 @@ removeMarker(args: RemoveMarkerArgs) => Promise<void>
 ### removeMarkers(...)
 
 ```typescript
-removeMarkers(args: RemoveMarkersArgs) => Promise<void>
+removeMarkers(ids: string[]) => Promise<void>
 ```
 
-| Param      | Type                                                            |
-| ---------- | --------------------------------------------------------------- |
-| **`args`** | <code><a href="#removemarkersargs">RemoveMarkersArgs</a></code> |
+| Param     | Type                  |
+| --------- | --------------------- |
+| **`ids`** | <code>string[]</code> |
 
 --------------------
 
 
-### enableClustering(...)
+### destroy()
 
 ```typescript
-enableClustering(args: { id: string; }) => Promise<void>
+destroy() => Promise<void>
 ```
-
-| Param      | Type                         |
-| ---------- | ---------------------------- |
-| **`args`** | <code>{ id: string; }</code> |
-
---------------------
-
-
-### disableClustering(...)
-
-```typescript
-disableClustering(args: { id: string; }) => Promise<void>
-```
-
-| Param      | Type                         |
-| ---------- | ---------------------------- |
-| **`args`** | <code>{ id: string; }</code> |
-
---------------------
-
-
-### destroy(...)
-
-```typescript
-destroy(args: DestroyMapArgs) => Promise<void>
-```
-
-| Param      | Type                                                      |
-| ---------- | --------------------------------------------------------- |
-| **`args`** | <code><a href="#destroymapargs">DestroyMapArgs</a></code> |
 
 --------------------
 
@@ -148,12 +141,12 @@ destroy(args: DestroyMapArgs) => Promise<void>
 ### setCamera(...)
 
 ```typescript
-setCamera(args: CameraArgs) => Promise<void>
+setCamera(config: CameraConfig) => Promise<void>
 ```
 
-| Param      | Type                                              |
-| ---------- | ------------------------------------------------- |
-| **`args`** | <code><a href="#cameraargs">CameraArgs</a></code> |
+| Param        | Type                                                  |
+| ------------ | ----------------------------------------------------- |
+| **`config`** | <code><a href="#cameraconfig">CameraConfig</a></code> |
 
 --------------------
 
@@ -161,12 +154,12 @@ setCamera(args: CameraArgs) => Promise<void>
 ### setMapType(...)
 
 ```typescript
-setMapType(args: MapTypeArgs) => Promise<void>
+setMapType(mapType: MapType) => Promise<void>
 ```
 
-| Param      | Type                                                |
-| ---------- | --------------------------------------------------- |
-| **`args`** | <code><a href="#maptypeargs">MapTypeArgs</a></code> |
+| Param         | Type                                        |
+| ------------- | ------------------------------------------- |
+| **`mapType`** | <code><a href="#maptype">MapType</a></code> |
 
 --------------------
 
@@ -174,12 +167,12 @@ setMapType(args: MapTypeArgs) => Promise<void>
 ### enableIndoorMaps(...)
 
 ```typescript
-enableIndoorMaps(args: IndoorMapArgs) => Promise<void>
+enableIndoorMaps(enabled: boolean) => Promise<void>
 ```
 
-| Param      | Type                                                    |
-| ---------- | ------------------------------------------------------- |
-| **`args`** | <code><a href="#indoormapargs">IndoorMapArgs</a></code> |
+| Param         | Type                 |
+| ------------- | -------------------- |
+| **`enabled`** | <code>boolean</code> |
 
 --------------------
 
@@ -187,12 +180,12 @@ enableIndoorMaps(args: IndoorMapArgs) => Promise<void>
 ### enableTrafficLayer(...)
 
 ```typescript
-enableTrafficLayer(args: TrafficLayerArgs) => Promise<void>
+enableTrafficLayer(enabled: boolean) => Promise<void>
 ```
 
-| Param      | Type                                                          |
-| ---------- | ------------------------------------------------------------- |
-| **`args`** | <code><a href="#trafficlayerargs">TrafficLayerArgs</a></code> |
+| Param         | Type                 |
+| ------------- | -------------------- |
+| **`enabled`** | <code>boolean</code> |
 
 --------------------
 
@@ -200,12 +193,12 @@ enableTrafficLayer(args: TrafficLayerArgs) => Promise<void>
 ### enableAccessibilityElements(...)
 
 ```typescript
-enableAccessibilityElements(args: AccElementsArgs) => Promise<void>
+enableAccessibilityElements(enabled: boolean) => Promise<void>
 ```
 
-| Param      | Type                                                        |
-| ---------- | ----------------------------------------------------------- |
-| **`args`** | <code><a href="#accelementsargs">AccElementsArgs</a></code> |
+| Param         | Type                 |
+| ------------- | -------------------- |
+| **`enabled`** | <code>boolean</code> |
 
 --------------------
 
@@ -213,12 +206,12 @@ enableAccessibilityElements(args: AccElementsArgs) => Promise<void>
 ### enableCurrentLocation(...)
 
 ```typescript
-enableCurrentLocation(args: CurrentLocArgs) => Promise<void>
+enableCurrentLocation(enabled: boolean) => Promise<void>
 ```
 
-| Param      | Type                                                      |
-| ---------- | --------------------------------------------------------- |
-| **`args`** | <code><a href="#currentlocargs">CurrentLocArgs</a></code> |
+| Param         | Type                 |
+| ------------- | -------------------- |
+| **`enabled`** | <code>boolean</code> |
 
 --------------------
 
@@ -226,25 +219,12 @@ enableCurrentLocation(args: CurrentLocArgs) => Promise<void>
 ### setPadding(...)
 
 ```typescript
-setPadding(args: PaddingArgs) => Promise<void>
+setPadding(padding: MapPadding) => Promise<void>
 ```
 
-| Param      | Type                                                |
-| ---------- | --------------------------------------------------- |
-| **`args`** | <code><a href="#paddingargs">PaddingArgs</a></code> |
-
---------------------
-
-
-### onScroll(...)
-
-```typescript
-onScroll(args: OnScrollArgs) => Promise<void>
-```
-
-| Param      | Type                                                  |
-| ---------- | ----------------------------------------------------- |
-| **`args`** | <code><a href="#onscrollargs">OnScrollArgs</a></code> |
+| Param         | Type                                              |
+| ------------- | ------------------------------------------------- |
+| **`padding`** | <code><a href="#mappadding">MapPadding</a></code> |
 
 --------------------
 
@@ -252,160 +232,61 @@ onScroll(args: OnScrollArgs) => Promise<void>
 ### Interfaces
 
 
-#### CreateMapArgs
-
-| Prop              | Type                                                                  |
-| ----------------- | --------------------------------------------------------------------- |
-| **`id`**          | <code>string</code>                                                   |
-| **`apiKey`**      | <code>string</code>                                                   |
-| **`config`**      | <code><a href="#googlemapconfig">GoogleMapConfig</a></code>           |
-| **`element`**     | <code>HTMLElement</code>                                              |
-| **`frame`**       | <code>{ x: number; y: number; width: number; height: number; }</code> |
-| **`forceCreate`** | <code>boolean</code>                                                  |
-
-
 #### GoogleMapConfig
 
-| Prop                  | Type                                      |
-| --------------------- | ----------------------------------------- |
-| **`width`**           | <code>number</code>                       |
-| **`height`**          | <code>number</code>                       |
-| **`x`**               | <code>number</code>                       |
-| **`y`**               | <code>number</code>                       |
-| **`center`**          | <code><a href="#latlng">LatLng</a></code> |
-| **`zoom`**            | <code>number</code>                       |
-| **`androidLiteMode`** | <code>boolean</code>                      |
+| Prop                  | Type                                      | Description                               | Default            |
+| --------------------- | ----------------------------------------- | ----------------------------------------- | ------------------ |
+| **`width`**           | <code>number</code>                       |                                           |                    |
+| **`height`**          | <code>number</code>                       |                                           |                    |
+| **`x`**               | <code>number</code>                       |                                           |                    |
+| **`y`**               | <code>number</code>                       |                                           |                    |
+| **`center`**          | <code><a href="#latlng">LatLng</a></code> |                                           |                    |
+| **`zoom`**            | <code>number</code>                       | Sets the zoom of the map.                 |                    |
+| **`androidLiteMode`** | <code>boolean</code>                      | Enables image-based lite mode on Android. | <code>false</code> |
 
 
 #### LatLng
 
-| Prop      | Type                |
-| --------- | ------------------- |
-| **`lat`** | <code>number</code> |
-| **`lng`** | <code>number</code> |
+An interface representing a pair of latitude and longitude coordinates.
 
-
-#### AddMarkerArgs
-
-| Prop         | Type                                      |
-| ------------ | ----------------------------------------- |
-| **`id`**     | <code>string</code>                       |
-| **`marker`** | <code><a href="#marker">Marker</a></code> |
+| Prop      | Type                | Description                                                               |
+| --------- | ------------------- | ------------------------------------------------------------------------- |
+| **`lat`** | <code>number</code> | Coordinate latitude, in degrees. This value is in the range [-90, 90].    |
+| **`lng`** | <code>number</code> | Coordinate longitude, in degrees. This value is in the range [-180, 180]. |
 
 
 #### Marker
 
-| Prop             | Type                                      |
-| ---------------- | ----------------------------------------- |
-| **`coordinate`** | <code><a href="#latlng">LatLng</a></code> |
-| **`opacity`**    | <code>number</code>                       |
-| **`title`**      | <code>string</code>                       |
-| **`snippet`**    | <code>string</code>                       |
-| **`isFlat`**     | <code>boolean</code>                      |
-| **`iconUrl`**    | <code>string</code>                       |
-| **`draggable`**  | <code>boolean</code>                      |
+A marker is an icon placed at a particular point on the map's surface.
 
-
-#### AddMarkersArgs
-
-| Prop          | Type                  |
-| ------------- | --------------------- |
-| **`id`**      | <code>string</code>   |
-| **`markers`** | <code>Marker[]</code> |
-
-
-#### RemoveMarkerArgs
-
-| Prop           | Type                |
-| -------------- | ------------------- |
-| **`id`**       | <code>string</code> |
-| **`markerId`** | <code>string</code> |
-
-
-#### RemoveMarkersArgs
-
-| Prop            | Type                  |
-| --------------- | --------------------- |
-| **`id`**        | <code>string</code>   |
-| **`markerIds`** | <code>string[]</code> |
-
-
-#### DestroyMapArgs
-
-| Prop     | Type                |
-| -------- | ------------------- |
-| **`id`** | <code>string</code> |
-
-
-#### CameraArgs
-
-| Prop         | Type                                                  |
-| ------------ | ----------------------------------------------------- |
-| **`id`**     | <code>string</code>                                   |
-| **`config`** | <code><a href="#cameraconfig">CameraConfig</a></code> |
+| Prop             | Type                                      | Description                                                                                               | Default            |
+| ---------------- | ----------------------------------------- | --------------------------------------------------------------------------------------------------------- | ------------------ |
+| **`coordinate`** | <code><a href="#latlng">LatLng</a></code> | <a href="#marker">Marker</a> position                                                                     |                    |
+| **`opacity`**    | <code>number</code>                       | Sets the opacity of the marker, between 0 (completely transparent) and 1 inclusive.                       | <code>1</code>     |
+| **`title`**      | <code>string</code>                       | Title, a short description of the overlay.                                                                |                    |
+| **`snippet`**    | <code>string</code>                       | Snippet text, shown beneath the title in the info window when selected.                                   |                    |
+| **`isFlat`**     | <code>boolean</code>                      | Controls whether this marker should be flat against the Earth's surface or a billboard facing the camera. | <code>false</code> |
+| **`iconUrl`**    | <code>string</code>                       | <a href="#marker">Marker</a> icon to render.                                                              |                    |
+| **`draggable`**  | <code>boolean</code>                      | Controls whether this marker can be dragged interactively                                                 | <code>false</code> |
 
 
 #### CameraConfig
 
-| Prop                    | Type                                      |
-| ----------------------- | ----------------------------------------- |
-| **`coordinate`**        | <code><a href="#latlng">LatLng</a></code> |
-| **`zoom`**              | <code>number</code>                       |
-| **`bearing`**           | <code>number</code>                       |
-| **`angle`**             | <code>number</code>                       |
-| **`animate`**           | <code>boolean</code>                      |
-| **`animationDuration`** | <code>number</code>                       |
+Configuration properties for a Google Map Camera
 
-
-#### MapTypeArgs
-
-| Prop          | Type                                        |
-| ------------- | ------------------------------------------- |
-| **`id`**      | <code>string</code>                         |
-| **`mapType`** | <code><a href="#maptype">MapType</a></code> |
-
-
-#### IndoorMapArgs
-
-| Prop          | Type                 |
-| ------------- | -------------------- |
-| **`id`**      | <code>string</code>  |
-| **`enabled`** | <code>boolean</code> |
-
-
-#### TrafficLayerArgs
-
-| Prop          | Type                 |
-| ------------- | -------------------- |
-| **`id`**      | <code>string</code>  |
-| **`enabled`** | <code>boolean</code> |
-
-
-#### AccElementsArgs
-
-| Prop          | Type                 |
-| ------------- | -------------------- |
-| **`id`**      | <code>string</code>  |
-| **`enabled`** | <code>boolean</code> |
-
-
-#### CurrentLocArgs
-
-| Prop          | Type                 |
-| ------------- | -------------------- |
-| **`id`**      | <code>string</code>  |
-| **`enabled`** | <code>boolean</code> |
-
-
-#### PaddingArgs
-
-| Prop          | Type                                              |
-| ------------- | ------------------------------------------------- |
-| **`id`**      | <code>string</code>                               |
-| **`padding`** | <code><a href="#mappadding">MapPadding</a></code> |
+| Prop                    | Type                                      | Description                                                                                                            | Default            |
+| ----------------------- | ----------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- | ------------------ |
+| **`coordinate`**        | <code><a href="#latlng">LatLng</a></code> | Location on the Earth towards which the camera points.                                                                 |                    |
+| **`zoom`**              | <code>number</code>                       | Sets the zoom of the map.                                                                                              |                    |
+| **`bearing`**           | <code>number</code>                       | Bearing of the camera, in degrees clockwise from true north.                                                           | <code>0</code>     |
+| **`angle`**             | <code>number</code>                       | The angle, in degrees, of the camera from the nadir (directly facing the Earth). The only allowed values are 0 and 45. | <code>0</code>     |
+| **`animate`**           | <code>boolean</code>                      | Animate the transition to the new Camera properties.                                                                   | <code>false</code> |
+| **`animationDuration`** | <code>number</code>                       |                                                                                                                        |                    |
 
 
 #### MapPadding
+
+Controls for setting padding on the 'visible' region of the view.
 
 | Prop         | Type                |
 | ------------ | ------------------- |
@@ -415,26 +296,17 @@ onScroll(args: OnScrollArgs) => Promise<void>
 | **`bottom`** | <code>number</code> |
 
 
-#### OnScrollArgs
-
-| Prop            | Type                                                                  |
-| --------------- | --------------------------------------------------------------------- |
-| **`id`**        | <code>string</code>                                                   |
-| **`frame`**     | <code>{ x: number; y: number; width: number; height: number; }</code> |
-| **`mapBounds`** | <code>{ x: number; y: number; width: number; height: number; }</code> |
-
-
 ### Enums
 
 
 #### MapType
 
-| Members         | Value                    |
-| --------------- | ------------------------ |
-| **`Normal`**    | <code>'Normal'</code>    |
-| **`Hybrid`**    | <code>'Hybrid'</code>    |
-| **`Satellite`** | <code>'Satellite'</code> |
-| **`Terrain`**   | <code>'Terrain'</code>   |
-| **`None`**      | <code>'None'</code>      |
+| Members         | Value                    | Description                              |
+| --------------- | ------------------------ | ---------------------------------------- |
+| **`Normal`**    | <code>'Normal'</code>    | Basic map.                               |
+| **`Hybrid`**    | <code>'Hybrid'</code>    | Satellite imagery with roads and labels. |
+| **`Satellite`** | <code>'Satellite'</code> | Satellite imagery with no labels.        |
+| **`Terrain`**   | <code>'Terrain'</code>   | Topographic data.                        |
+| **`None`**      | <code>'None'</code>      | No base map tiles.                       |
 
 </docgen-api>
