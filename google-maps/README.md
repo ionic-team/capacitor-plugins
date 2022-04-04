@@ -9,6 +9,58 @@ npm install @capacitor/google-maps
 npx cap sync
 ```
 
+## iOS
+
+The Google Maps SDK supports the use of showing the users current location via `enableCurrentLocation(bool)`.  To use this, Apple requires privacy descriptions to be specified in `Info.plist`:
+
+- `NSLocationAlwaysUsageDescription` (`Privacy - Location Always Usage Description`)
+- `NSLocationWhenInUseUsageDescription` (`Privacy - Location When In Use Usage Description`)
+
+Read about [Configuring `Info.plist`](https://capacitorjs.com/docs/ios/configuration#configuring-infoplist) in the [iOS Guide](https://capacitorjs.com/docs/ios) for more information on setting iOS permissions in Xcode.
+
+## Android
+Inside of your application android folder, add the following to your `local.properties` file:
+
+```
+REACT_APP_GOOGLE_MAPS_API_KEY=[YOUR_GOOGLE_MAPS_API_KEY]
+```
+
+This to use certain location features, API requires the following permissions be added to your AndroidManifest.xml:
+
+```
+<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+```
+
+
+## Example
+```
+import { GoogleMap } from '@capacitor/google-maps';
+
+const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
+
+const mapRef = document.getElementById("map");
+
+const newMap = await GoogleMap.create(mapRef, "my-map", apiKey!, {
+    center: {
+        lat: 33.6,
+        lng: -117.9,
+    },
+    zoom: 8,
+    androidLiteMode: false,
+});  
+
+await newMap.addMarkers({
+    coordinate: {
+        lat: 33.6,
+        lng: -117.9,
+    },
+    title: "Hello world",
+});
+
+
+```
+
 ## API
 
 <docgen-index>
