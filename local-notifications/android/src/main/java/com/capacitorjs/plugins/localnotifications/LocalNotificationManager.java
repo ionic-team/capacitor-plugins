@@ -253,13 +253,11 @@ public class LocalNotificationManager {
     private void createActionIntents(LocalNotification localNotification, NotificationCompat.Builder mBuilder) {
         // Open intent
         Intent intent = buildIntent(localNotification, DEFAULT_PRESS_ACTION);
-
-        PendingIntent pendingIntent = PendingIntent.getActivity(
-            context,
-            localNotification.getId(),
-            intent,
-            PendingIntent.FLAG_CANCEL_CURRENT
-        );
+        int flags = PendingIntent.FLAG_CANCEL_CURRENT;
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            flags = flags | PendingIntent.FLAG_MUTABLE;
+        }
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, localNotification.getId(), intent, flags);
         mBuilder.setContentIntent(pendingIntent);
 
         // Build action types
@@ -273,7 +271,7 @@ public class LocalNotificationManager {
                     context,
                     localNotification.getId() + notificationAction.getId().hashCode(),
                     actionIntent,
-                    PendingIntent.FLAG_CANCEL_CURRENT
+                    flags
                 );
                 NotificationCompat.Action.Builder actionBuilder = new NotificationCompat.Action.Builder(
                     R.drawable.ic_transparent,
@@ -295,7 +293,11 @@ public class LocalNotificationManager {
         dissmissIntent.putExtra(ACTION_INTENT_KEY, "dismiss");
         LocalNotificationSchedule schedule = localNotification.getSchedule();
         dissmissIntent.putExtra(NOTIFICATION_IS_REMOVABLE_KEY, schedule == null || schedule.isRemovable());
-        PendingIntent deleteIntent = PendingIntent.getBroadcast(context, localNotification.getId(), dissmissIntent, 0);
+        flags = 0;
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            flags = PendingIntent.FLAG_MUTABLE;
+        }
+        PendingIntent deleteIntent = PendingIntent.getBroadcast(context, localNotification.getId(), dissmissIntent, flags);
         mBuilder.setDeleteIntent(deleteIntent);
     }
 
@@ -330,12 +332,11 @@ public class LocalNotificationManager {
         Intent notificationIntent = new Intent(context, TimedNotificationPublisher.class);
         notificationIntent.putExtra(NOTIFICATION_INTENT_KEY, request.getId());
         notificationIntent.putExtra(TimedNotificationPublisher.NOTIFICATION_KEY, notification);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(
-            context,
-            request.getId(),
-            notificationIntent,
-            PendingIntent.FLAG_CANCEL_CURRENT
-        );
+        int flags = PendingIntent.FLAG_CANCEL_CURRENT;
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            flags = flags | PendingIntent.FLAG_MUTABLE;
+        }
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, request.getId(), notificationIntent, flags);
 
         // Schedule at specific time (with repeating support)
         Date at = schedule.getAt();
@@ -373,7 +374,7 @@ public class LocalNotificationManager {
         if (on != null) {
             long trigger = on.nextTrigger(new Date());
             notificationIntent.putExtra(TimedNotificationPublisher.CRON_KEY, on.toMatchString());
-            pendingIntent = PendingIntent.getBroadcast(context, request.getId(), notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+            pendingIntent = PendingIntent.getBroadcast(context, request.getId(), notificationIntent, flags);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && schedule.allowWhileIdle()) {
                 alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC, trigger, pendingIntent);
             } else {
@@ -399,7 +400,11 @@ public class LocalNotificationManager {
 
     private void cancelTimerForNotification(Integer notificationId) {
         Intent intent = new Intent(context, TimedNotificationPublisher.class);
-        PendingIntent pi = PendingIntent.getBroadcast(context, notificationId, intent, 0);
+        int flags = 0;
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            flags = PendingIntent.FLAG_MUTABLE;
+        }
+        PendingIntent pi = PendingIntent.getBroadcast(context, notificationId, intent, flags);
         if (pi != null) {
             AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
             alarmManager.cancel(pi);
