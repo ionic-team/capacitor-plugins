@@ -1,7 +1,6 @@
 package com.capacitorjs.plugins.statusbar;
 
 import android.graphics.Color;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -9,6 +8,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
+
+import com.getcapacitor.Logger;
 
 public class StatusBar {
 
@@ -36,7 +37,7 @@ public class StatusBar {
         if (windowInsetsControllerCompat != null) {
             windowInsetsControllerCompat.setAppearanceLightStatusBars(!style.equals("DARK"));
         } else {
-            Log.w(logTag, "Could not get a WindowInsetsControllerCompat instance. Can not set status bar style.");
+            Logger.warn(logTag, "Could not get a WindowInsetsControllerCompat instance. Can not set status bar style.");
         }
     }
 
@@ -56,7 +57,7 @@ public class StatusBar {
         if (windowInsetsControllerCompat != null) {
             windowInsetsControllerCompat.hide(WindowInsetsCompat.Type.statusBars());
         } else {
-            Log.w(logTag, "Could not get a WindowInsetsControllerCompat instance. Can not hide the status bar.");
+            Logger.warn(logTag, "Could not get a WindowInsetsControllerCompat instance. Can not hide the status bar.");
         }
     }
 
@@ -66,7 +67,7 @@ public class StatusBar {
         if (windowInsetsControllerCompat != null) {
             windowInsetsControllerCompat.show(WindowInsetsCompat.Type.statusBars());
         } else {
-            Log.w(logTag, "Could not get a WindowInsetsControllerCompat instance. Can not show the status bar.");
+            Logger.warn(logTag, "Could not get a WindowInsetsControllerCompat instance. Can not show the status bar.");
         }
     }
 
@@ -120,7 +121,7 @@ public class StatusBar {
                 style = "DARK";
             }
         } else {
-            Log.w(logTag, "Could not get a WindowInsetsControllerCompat instance. Can not get the status bar appearance.");
+            Logger.warn(logTag, "Could not get a WindowInsetsControllerCompat instance. Can not get the status bar appearance.");
         }
         return style;
     }
