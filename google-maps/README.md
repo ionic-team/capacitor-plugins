@@ -34,7 +34,7 @@ This to use certain location features, API requires the following permissions be
 
 
 ## Example
-```
+```typescript
 import { GoogleMap } from '@capacitor/google-maps';
 
 const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
@@ -286,15 +286,15 @@ setPadding(padding: MapPadding) => Promise<void>
 
 #### GoogleMapConfig
 
-| Prop                  | Type                                      | Description                               | Default            |
-| --------------------- | ----------------------------------------- | ----------------------------------------- | ------------------ |
-| **`width`**           | <code>number</code>                       |                                           |                    |
-| **`height`**          | <code>number</code>                       |                                           |                    |
-| **`x`**               | <code>number</code>                       |                                           |                    |
-| **`y`**               | <code>number</code>                       |                                           |                    |
-| **`center`**          | <code><a href="#latlng">LatLng</a></code> |                                           |                    |
-| **`zoom`**            | <code>number</code>                       | Sets the zoom of the map.                 |                    |
-| **`androidLiteMode`** | <code>boolean</code>                      | Enables image-based lite mode on Android. | <code>false</code> |
+| Prop                  | Type                                      | Description                                                    | Default            |
+| --------------------- | ----------------------------------------- | -------------------------------------------------------------- | ------------------ |
+| **`width`**           | <code>number</code>                       | Override width for native map                                  |                    |
+| **`height`**          | <code>number</code>                       | Override height for native map                                 |                    |
+| **`x`**               | <code>number</code>                       | Override absolute x coordinate position for native map         |                    |
+| **`y`**               | <code>number</code>                       | Override absolute y coordinate position for native map         |                    |
+| **`center`**          | <code><a href="#latlng">LatLng</a></code> | Default location on the Earth towards which the camera points. |                    |
+| **`zoom`**            | <code>number</code>                       | Sets the zoom of the map.                                      |                    |
+| **`androidLiteMode`** | <code>boolean</code>                      | Enables image-based lite mode on Android.                      | <code>false</code> |
 
 
 #### LatLng

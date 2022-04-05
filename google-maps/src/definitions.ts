@@ -17,10 +17,25 @@ export interface LatLng {
  * 
  */
 export interface GoogleMapConfig {
+  /**
+   * Override width for native map
+   */
   width?: number;
+  /**
+   * Override height for native map
+   */
   height?: number;
+  /**
+   * Override absolute x coordinate position for native map
+   */
   x?: number;
+  /**
+   * Override absolute y coordinate position for native map
+   */
   y?: number;
+  /**
+   * Default location on the Earth towards which the camera points.
+   */
   center: LatLng;
   /**
    * Sets the zoom of the map.
