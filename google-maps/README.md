@@ -11,7 +11,7 @@ npx cap sync
 
 ## iOS
 
-The Google Maps SDK supports the use of showing the users current location via `enableCurrentLocation(bool)`.  To use this, Apple requires privacy descriptions to be specified in `Info.plist`:
+The Google Maps SDK supports the use of showing the users current location via `enableCurrentLocation(bool)`. To use this, Apple requires privacy descriptions to be specified in `Info.plist`:
 
 - `NSLocationAlwaysUsageDescription` (`Privacy - Location Always Usage Description`)
 - `NSLocationWhenInUseUsageDescription` (`Privacy - Location When In Use Usage Description`)
@@ -19,6 +19,7 @@ The Google Maps SDK supports the use of showing the users current location via `
 Read about [Configuring `Info.plist`](https://capacitorjs.com/docs/ios/configuration#configuring-infoplist) in the [iOS Guide](https://capacitorjs.com/docs/ios) for more information on setting iOS permissions in Xcode.
 
 ## Android
+
 Inside of your application android folder, add the following to your `local.properties` file:
 
 ```
@@ -32,56 +33,65 @@ This to use certain location features, API requires the following permissions be
 <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 ```
 
-
 ## Example
+The map container element must have a defined width and height:
+
+```html
+<div id="map"
+    style={{
+        display: "inline-block",
+        width: 275,
+        height: 400,
+    }}
+></div>
+```
+
 ```typescript
 import { GoogleMap } from '@capacitor/google-maps';
 
 const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
 
-const mapRef = document.getElementById("map");
+const mapRef = document.getElementById('map');
 
-const newMap = await GoogleMap.create(mapRef, "my-map", apiKey!, {
-    center: {
-        lat: 33.6,
-        lng: -117.9,
-    },
-    zoom: 8,
-    androidLiteMode: false,
-});  
-
-await newMap.addMarkers({
-    coordinate: {
-        lat: 33.6,
-        lng: -117.9,
-    },
-    title: "Hello world",
+const newMap = await GoogleMap.create(mapRef, 'my-map', apiKey!, {
+  center: {
+    lat: 33.6,
+    lng: -117.9,
+  },
+  zoom: 8,
+  androidLiteMode: false,
 });
 
-
+await newMap.addMarkers({
+  coordinate: {
+    lat: 33.6,
+    lng: -117.9,
+  },
+  title: 'Hello world',
+});
 ```
 
 ## API
 
 <docgen-index>
 
-* [`create(...)`](#create)
-* [`enableClustering()`](#enableclustering)
-* [`disableClustering()`](#disableclustering)
-* [`addMarker(...)`](#addmarker)
-* [`addMarkers(...)`](#addmarkers)
-* [`removeMarker(...)`](#removemarker)
-* [`removeMarkers(...)`](#removemarkers)
-* [`destroy()`](#destroy)
-* [`setCamera(...)`](#setcamera)
-* [`setMapType(...)`](#setmaptype)
-* [`enableIndoorMaps(...)`](#enableindoormaps)
-* [`enableTrafficLayer(...)`](#enabletrafficlayer)
-* [`enableAccessibilityElements(...)`](#enableaccessibilityelements)
-* [`enableCurrentLocation(...)`](#enablecurrentlocation)
-* [`setPadding(...)`](#setpadding)
-* [Interfaces](#interfaces)
-* [Enums](#enums)
+- [`create(...)`](#create)
+- [`enableClustering()`](#enableclustering)
+- [`disableClustering()`](#disableclustering)
+- [`addMarker(...)`](#addmarker)
+- [`addMarkers(...)`](#addmarkers)
+- [`removeMarker(...)`](#removemarker)
+- [`removeMarkers(...)`](#removemarkers)
+- [`destroy()`](#destroy)
+- [`setCamera(...)`](#setcamera)
+- [`setMapType(...)`](#setmaptype)
+- [`enableIndoorMaps(...)`](#enableindoormaps)
+- [`enableTrafficLayer(...)`](#enabletrafficlayer)
+- [`enableAccessibilityElements(...)`](#enableaccessibilityelements)
+- [`enableCurrentLocation(...)`](#enablecurrentlocation)
+- [`setPadding(...)`](#setpadding)
+- [Interfaces](#interfaces)
+- [Enums](#enums)
 
 </docgen-index>
 
@@ -104,8 +114,7 @@ create(element: any, id: string, apiKey: string, config: GoogleMapConfig, forceC
 
 **Returns:** <code>Promise&lt;GoogleMap&gt;</code>
 
---------------------
-
+---
 
 ### enableClustering()
 
@@ -113,8 +122,7 @@ create(element: any, id: string, apiKey: string, config: GoogleMapConfig, forceC
 enableClustering() => Promise<void>
 ```
 
---------------------
-
+---
 
 ### disableClustering()
 
@@ -122,8 +130,7 @@ enableClustering() => Promise<void>
 disableClustering() => Promise<void>
 ```
 
---------------------
-
+---
 
 ### addMarker(...)
 
@@ -137,8 +144,7 @@ addMarker(marker: Marker) => Promise<string>
 
 **Returns:** <code>Promise&lt;string&gt;</code>
 
---------------------
-
+---
 
 ### addMarkers(...)
 
@@ -152,8 +158,7 @@ addMarkers(markers: Marker[]) => Promise<string[]>
 
 **Returns:** <code>Promise&lt;string[]&gt;</code>
 
---------------------
-
+---
 
 ### removeMarker(...)
 
@@ -165,8 +170,7 @@ removeMarker(id: string) => Promise<void>
 | -------- | ------------------- |
 | **`id`** | <code>string</code> |
 
---------------------
-
+---
 
 ### removeMarkers(...)
 
@@ -178,8 +182,7 @@ removeMarkers(ids: string[]) => Promise<void>
 | --------- | --------------------- |
 | **`ids`** | <code>string[]</code> |
 
---------------------
-
+---
 
 ### destroy()
 
@@ -187,8 +190,7 @@ removeMarkers(ids: string[]) => Promise<void>
 destroy() => Promise<void>
 ```
 
---------------------
-
+---
 
 ### setCamera(...)
 
@@ -200,8 +202,7 @@ setCamera(config: CameraConfig) => Promise<void>
 | ------------ | ----------------------------------------------------- |
 | **`config`** | <code><a href="#cameraconfig">CameraConfig</a></code> |
 
---------------------
-
+---
 
 ### setMapType(...)
 
@@ -213,8 +214,7 @@ setMapType(mapType: MapType) => Promise<void>
 | ------------- | ------------------------------------------- |
 | **`mapType`** | <code><a href="#maptype">MapType</a></code> |
 
---------------------
-
+---
 
 ### enableIndoorMaps(...)
 
@@ -226,8 +226,7 @@ enableIndoorMaps(enabled: boolean) => Promise<void>
 | ------------- | -------------------- |
 | **`enabled`** | <code>boolean</code> |
 
---------------------
-
+---
 
 ### enableTrafficLayer(...)
 
@@ -239,8 +238,7 @@ enableTrafficLayer(enabled: boolean) => Promise<void>
 | ------------- | -------------------- |
 | **`enabled`** | <code>boolean</code> |
 
---------------------
-
+---
 
 ### enableAccessibilityElements(...)
 
@@ -252,8 +250,7 @@ enableAccessibilityElements(enabled: boolean) => Promise<void>
 | ------------- | -------------------- |
 | **`enabled`** | <code>boolean</code> |
 
---------------------
-
+---
 
 ### enableCurrentLocation(...)
 
@@ -265,8 +262,7 @@ enableCurrentLocation(enabled: boolean) => Promise<void>
 | ------------- | -------------------- |
 | **`enabled`** | <code>boolean</code> |
 
---------------------
-
+---
 
 ### setPadding(...)
 
@@ -278,11 +274,9 @@ setPadding(padding: MapPadding) => Promise<void>
 | ------------- | ------------------------------------------------- |
 | **`padding`** | <code><a href="#mappadding">MapPadding</a></code> |
 
---------------------
-
+---
 
 ### Interfaces
-
 
 #### GoogleMapConfig
 
@@ -296,7 +290,6 @@ setPadding(padding: MapPadding) => Promise<void>
 | **`zoom`**            | <code>number</code>                       | Sets the zoom of the map.                                      |                    |
 | **`androidLiteMode`** | <code>boolean</code>                      | Enables image-based lite mode on Android.                      | <code>false</code> |
 
-
 #### LatLng
 
 An interface representing a pair of latitude and longitude coordinates.
@@ -305,7 +298,6 @@ An interface representing a pair of latitude and longitude coordinates.
 | --------- | ------------------- | ------------------------------------------------------------------------- |
 | **`lat`** | <code>number</code> | Coordinate latitude, in degrees. This value is in the range [-90, 90].    |
 | **`lng`** | <code>number</code> | Coordinate longitude, in degrees. This value is in the range [-180, 180]. |
-
 
 #### Marker
 
@@ -321,7 +313,6 @@ A marker is an icon placed at a particular point on the map's surface.
 | **`iconUrl`**    | <code>string</code>                       | <a href="#marker">Marker</a> icon to render.                                                              |                    |
 | **`draggable`**  | <code>boolean</code>                      | Controls whether this marker can be dragged interactively                                                 | <code>false</code> |
 
-
 #### CameraConfig
 
 Configuration properties for a Google Map Camera
@@ -335,7 +326,6 @@ Configuration properties for a Google Map Camera
 | **`animate`**           | <code>boolean</code>                      | Animate the transition to the new Camera properties.                                                                   | <code>false</code> |
 | **`animationDuration`** | <code>number</code>                       |                                                                                                                        |                    |
 
-
 #### MapPadding
 
 Controls for setting padding on the 'visible' region of the view.
@@ -347,9 +337,7 @@ Controls for setting padding on the 'visible' region of the view.
 | **`right`**  | <code>number</code> |
 | **`bottom`** | <code>number</code> |
 
-
 ### Enums
-
 
 #### MapType
 
