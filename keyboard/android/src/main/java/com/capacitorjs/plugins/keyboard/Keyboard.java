@@ -140,9 +140,13 @@ public class Keyboard {
                     return isOverlays() ? r.bottom : r.height();
                 }
 
+                @SuppressWarnings("deprecation")
                 private boolean isOverlays() {
                     final Window window = activity.getWindow();
-                    return window.getDecorView().getFitsSystemWindows();
+                    return (
+                        (window.getDecorView().getSystemUiVisibility() & View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN) ==
+                        View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    );
                 }
             };
         mChildOfContent = content.getChildAt(0);
