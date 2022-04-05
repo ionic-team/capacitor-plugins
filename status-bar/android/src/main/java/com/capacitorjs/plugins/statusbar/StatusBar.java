@@ -1,6 +1,7 @@
 package com.capacitorjs.plugins.statusbar;
 
 import android.graphics.Color;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -11,6 +12,7 @@ import androidx.core.view.WindowInsetsControllerCompat;
 
 public class StatusBar {
 
+    private final String logTag = "Capacitor-StatusBar";
     private int currentStatusbarColor;
     private AppCompatActivity activity;
     private String defaultStyle;
@@ -33,6 +35,8 @@ public class StatusBar {
         WindowInsetsControllerCompat windowInsetsControllerCompat = ViewCompat.getWindowInsetsController(decorView);
         if (windowInsetsControllerCompat != null) {
             windowInsetsControllerCompat.setAppearanceLightStatusBars(!style.equals("DARK"));
+        } else {
+            Log.w(logTag, "Could not get a WindowInsetsControllerCompat instance. Can not set status bar style.");
         }
     }
 
@@ -51,6 +55,8 @@ public class StatusBar {
         WindowInsetsControllerCompat windowInsetsControllerCompat = ViewCompat.getWindowInsetsController(decorView);
         if (windowInsetsControllerCompat != null) {
             windowInsetsControllerCompat.hide(WindowInsetsCompat.Type.statusBars());
+        } else {
+            Log.w(logTag, "Could not get a WindowInsetsControllerCompat instance. Can not hide the status bar.");
         }
     }
 
@@ -59,6 +65,8 @@ public class StatusBar {
         WindowInsetsControllerCompat windowInsetsControllerCompat = ViewCompat.getWindowInsetsController(decorView);
         if (windowInsetsControllerCompat != null) {
             windowInsetsControllerCompat.show(WindowInsetsCompat.Type.statusBars());
+        } else {
+            Log.w(logTag, "Could not get a WindowInsetsControllerCompat instance. Can not show the status bar.");
         }
     }
 
@@ -103,12 +111,16 @@ public class StatusBar {
 
     private String getStyle() {
         View decorView = activity.getWindow().getDecorView();
-        String style;
+        String style = "DARK";
         WindowInsetsControllerCompat windowInsetsControllerCompat = ViewCompat.getWindowInsetsController(decorView);
-        if (windowInsetsControllerCompat != null && windowInsetsControllerCompat.isAppearanceLightStatusBars()) {
-            style = "LIGHT";
+        if (windowInsetsControllerCompat != null) {
+            if (windowInsetsControllerCompat.isAppearanceLightStatusBars()) {
+                style = "LIGHT";
+            } else {
+                style = "DARK";
+            }
         } else {
-            style = "DARK";
+            Log.w(logTag, "Could not get a WindowInsetsControllerCompat instance. Can not get the status bar appearance.");
         }
         return style;
     }
