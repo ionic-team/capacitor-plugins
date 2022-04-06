@@ -90,7 +90,7 @@ public class Map {
                 bridge.viewController!.view.addSubview(self.mapViewController.view)
                 self.mapViewController.GMapView.delegate = self.delegate
                 self.delegate.notifyListeners("onMapReady", data: [
-                    "id": self.id
+                    "mapId": self.id
                 ])
             }
         }

@@ -517,7 +517,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
     // onMapClick
     public func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
         self.notifyListeners("onMapClick", data: [
-            "id": self.findMapIdByMapView(mapView),
+            "mapId": self.findMapIdByMapView(mapView),
             "latitude": coordinate.latitude,
             "longitude": coordinate.longitude
         ])

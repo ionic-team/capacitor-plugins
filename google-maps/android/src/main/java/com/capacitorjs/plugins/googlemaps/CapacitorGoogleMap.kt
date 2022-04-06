@@ -469,7 +469,7 @@ class CapacitorGoogleMap(
             googleMap = map
 
             val data = JSObject()
-            data.put("id", this@CapacitorGoogleMap.id)
+            data.put("mapId", this@CapacitorGoogleMap.id)
             delegate.notify("onMapReady", data)
 
             isReadyChannel.send(true)
@@ -550,7 +550,7 @@ class CapacitorGoogleMap(
 
     override fun onMapClick(point: LatLng) {
         val data = JSObject()
-        data.put("id", this@CapacitorGoogleMap.id)
+        data.put("mapId", this@CapacitorGoogleMap.id)
         data.put("latitude", point.latitude)
         data.put("longitude", point.longitude)
         delegate.notify("onMapClick", data)

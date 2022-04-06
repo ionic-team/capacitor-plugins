@@ -421,7 +421,7 @@ export class GoogleMap {
   private generateCallback(callback: MapListenerCallback): MapListenerCallback {
     const mapId = this.id;
     return (data: any) => {
-      if (data.mapId == mapId || data.id == mapId) {
+      if (data.mapId == mapId) {
         callback(data);
       }
     }
