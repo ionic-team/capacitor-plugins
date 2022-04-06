@@ -9,11 +9,11 @@ const CreateAndDestroyMapPage: React.FC = () => {
     const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
 
     const onMapReady = (data: any) => {
-        setCommandOutput(`MAP (${data.id}) IS READY`)
+        setCommandOutput(`MAP (${data.mapId}) IS READY`)
     }
 
     const onMapClick = (data: any) => {
-        setCommandOutput(`MAP (${data.id}) CLICKED @ (${data.latitude}, ${data.longitude})`);
+        setCommandOutput(`MAP (${data.mapId}) CLICKED @ (${data.latitude}, ${data.longitude})`);
     }
 
     async function createMaps() {

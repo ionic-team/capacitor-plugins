@@ -493,7 +493,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
     }
 
     // --- EVENT LISTENERS ---
-    
+
     // onCameraIdle
     public func mapView(_ mapView: GMSMapView, idleAt cameraPosition: GMSCameraPosition) {
         self.notifyListeners("onCameraIdle", data: [
@@ -513,7 +513,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
             "isGesture": gesture
         ])
     }
-    
+
     // onMapClick
     public func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
         self.notifyListeners("onMapClick", data: [
@@ -525,11 +525,9 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
 
     // onClusterClick, onMarkerClick
     public func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
-        if marker.userData is GMUCluster {
-            let cluster: GMUCluster = marker.userData as! GMUCluster
-            
-            var items: [[String:Any?]] = []
-            
+        if let cluster = marker.userData as? GMUCluster {
+            var items: [[String: Any?]] = []
+
             for item in cluster.items {
                 items.append([
                     "markerId": item.hash.hashValue,
@@ -539,7 +537,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
                     "snippet": item.snippet ?? ""
                 ])
             }
-            
+
             self.notifyListeners("onClusterClick", data: [
                 "mapId": self.findMapIdByMapView(mapView),
                 "latitude": cluster.position.latitude,
@@ -547,8 +545,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
                 "size": cluster.count,
                 "items": items
             ])
-        }
-        else {
+        } else {
             self.notifyListeners("onMarkerClick", data: [
                 "mapId": self.findMapIdByMapView(mapView),
                 "markerId": marker.hash.hashValue,
@@ -560,14 +557,12 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
         }
         return false
     }
-    
+
     // onClusterInfoWindowClick, onInfoWindowClick
     public func mapView(_ mapView: GMSMapView, didTapInfoWindowOf marker: GMSMarker) {
-        if marker.userData is GMUCluster {
-            let cluster: GMUCluster = marker.userData as! GMUCluster
-            
-            var items: [[String:Any?]] = []
-            
+        if let cluster = marker.userData as? GMUCluster {
+            var items: [[String: Any?]] = []
+
             for item in cluster.items {
                 items.append([
                     "markerId": item.hash.hashValue,
@@ -577,7 +572,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
                     "snippet": item.snippet ?? ""
                 ])
             }
-            
+
             self.notifyListeners("onClusterInfoWindowClick", data: [
                 "mapId": self.findMapIdByMapView(mapView),
                 "latitude": cluster.position.latitude,
@@ -585,8 +580,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
                 "size": cluster.count,
                 "items": items
             ])
-        }
-        else {
+        } else {
             self.notifyListeners("onInfoWindowClick", data: [
                 "mapId": self.findMapIdByMapView(mapView),
                 "markerId": marker.hash.hashValue,
@@ -597,7 +591,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
             ])
         }
     }
-    
+
     // onMyLocationButtonClick
     public func didTapMyLocationButtonForMapView(for mapView: GMSMapView) -> Bool {
         self.notifyListeners("onMyLocationButtonClick", data: [
@@ -605,7 +599,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
         ])
         return false
     }
-    
+
     // onMyLocationClick
     public func mapView(_ mapView: GMSMapView, didTapMyLocation location: CLLocationCoordinate2D) {
         self.notifyListeners("onMyLocationButtonClick", data: [

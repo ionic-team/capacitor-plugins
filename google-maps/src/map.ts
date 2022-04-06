@@ -298,7 +298,9 @@ export class GoogleMap {
     }
   }
 
-  async setOnCameraMoveStartedListener(callback?: MapListenerCallback): Promise<void> {
+  async setOnCameraMoveStartedListener(
+    callback?: MapListenerCallback,
+  ): Promise<void> {
     if (this.onCameraMoveStartedListener) {
       this.onCameraMoveStartedListener.remove();
     }
@@ -313,7 +315,9 @@ export class GoogleMap {
     }
   }
 
-  async setOnClusterClickListener(callback?: MapListenerCallback): Promise<void> {
+  async setOnClusterClickListener(
+    callback?: MapListenerCallback,
+  ): Promise<void> {
     if (this.onClusterClickListener) {
       this.onClusterClickListener.remove();
     }
@@ -328,7 +332,9 @@ export class GoogleMap {
     }
   }
 
-  async setOnClusterInfoWindowClickListener(callback?: MapListenerCallback): Promise<void> {
+  async setOnClusterInfoWindowClickListener(
+    callback?: MapListenerCallback,
+  ): Promise<void> {
     if (this.onClusterInfoWindowClickListener) {
       this.onClusterInfoWindowClickListener.remove();
     }
@@ -343,7 +349,9 @@ export class GoogleMap {
     }
   }
 
-  async setOnInfoWindowClickListener(callback?: MapListenerCallback): Promise<void> {
+  async setOnInfoWindowClickListener(
+    callback?: MapListenerCallback,
+  ): Promise<void> {
     if (this.onInfoWindowClickListener) {
       this.onInfoWindowClickListener.remove();
     }
@@ -373,7 +381,9 @@ export class GoogleMap {
     }
   }
 
-  async setOnMarkerClickListener(callback?: MapListenerCallback): Promise<void> {
+  async setOnMarkerClickListener(
+    callback?: MapListenerCallback,
+  ): Promise<void> {
     if (this.onMarkerClickListener) {
       this.onMarkerClickListener.remove();
     }
@@ -388,7 +398,9 @@ export class GoogleMap {
     }
   }
 
-  async setOnMyLocationButtonClickListener(callback?: MapListenerCallback): Promise<void> {
+  async setOnMyLocationButtonClickListener(
+    callback?: MapListenerCallback,
+  ): Promise<void> {
     if (this.onMyLocationButtonClickListener) {
       this.onMyLocationButtonClickListener.remove();
     }
@@ -402,8 +414,10 @@ export class GoogleMap {
       this.onMyLocationButtonClickListener = undefined;
     }
   }
-  
-  async setOnMyLocationClickListener(callback?: MapListenerCallback): Promise<void> {
+
+  async setOnMyLocationClickListener(
+    callback?: MapListenerCallback,
+  ): Promise<void> {
     if (this.onMyLocationClickListener) {
       this.onMyLocationClickListener.remove();
     }
@@ -424,7 +438,7 @@ export class GoogleMap {
       if (data.mapId == mapId) {
         callback(data);
       }
-    }
+    };
   }
 
   async removeAllMapListeners(): Promise<void> {
@@ -451,7 +465,7 @@ export class GoogleMap {
       this.onInfoWindowClickListener.remove();
       this.onInfoWindowClickListener = undefined;
     }
-    
+
     if (this.onMapClickListener) {
       this.onMapClickListener.remove();
       this.onMapClickListener = undefined;
