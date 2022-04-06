@@ -93,7 +93,7 @@ public class Keyboard {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                         Insets windowInsets = rootView.getRootWindowInsets().getInsetsIgnoringVisibility(WindowInsets.Type.systemBars());
                         screenHeight = rootViewHeight;
-                        resultBottom = windowInsets.bottom;
+                        resultBottom = resultBottom + windowInsets.bottom;
                     } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         WindowInsets windowInsets = rootView.getRootWindowInsets();
                         int stableInsetBottom = windowInsets.getStableInsetBottom();
