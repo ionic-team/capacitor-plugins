@@ -291,7 +291,7 @@ export class GoogleMap {
     if (callback) {
       this.onCameraIdleListener = CapacitorGoogleMaps.addListener(
         'onCameraIdle',
-        callback,
+        this.generateCallback(callback),
       );
     } else {
       this.onCameraIdleListener = undefined;
@@ -306,7 +306,7 @@ export class GoogleMap {
     if (callback) {
       this.onCameraMoveStartedListener = CapacitorGoogleMaps.addListener(
         'onCameraMoveStarted',
-        callback,
+        this.generateCallback(callback),
       );
     } else {
       this.onCameraMoveStartedListener = undefined;
@@ -321,7 +321,7 @@ export class GoogleMap {
     if (callback) {
       this.onClusterClickListener = CapacitorGoogleMaps.addListener(
         'onClusterClick',
-        callback,
+        this.generateCallback(callback),
       );
     } else {
       this.onClusterClickListener = undefined;
@@ -336,7 +336,7 @@ export class GoogleMap {
     if (callback) {
       this.onClusterInfoWindowClickListener = CapacitorGoogleMaps.addListener(
         'onClusterInfoWindowClick',
-        callback,
+        this.generateCallback(callback),
       );
     } else {
       this.onClusterInfoWindowClickListener = undefined;
@@ -351,7 +351,7 @@ export class GoogleMap {
     if (callback) {
       this.onInfoWindowClickListener = CapacitorGoogleMaps.addListener(
         'onInfoWindowClick',
-        callback,
+        this.generateCallback(callback),
       );
     } else {
       this.onInfoWindowClickListener = undefined;
@@ -366,7 +366,7 @@ export class GoogleMap {
     if (callback) {
       this.onMapClickListener = CapacitorGoogleMaps.addListener(
         'onMapClick',
-        callback,
+        this.generateCallback(callback),
       );
     } else {
       this.onMapClickListener = undefined;
@@ -381,7 +381,7 @@ export class GoogleMap {
     if (callback) {
       this.onMarkerClickListener = CapacitorGoogleMaps.addListener(
         'onMarkerClick',
-        callback,
+        this.generateCallback(callback),
       );
     } else {
       this.onMarkerClickListener = undefined;
@@ -396,7 +396,7 @@ export class GoogleMap {
     if (callback) {
       this.onMyLocationButtonClickListener = CapacitorGoogleMaps.addListener(
         'onMyLocationButtonClick',
-        callback,
+        this.generateCallback(callback),
       );
     } else {
       this.onMyLocationButtonClickListener = undefined;
@@ -411,10 +411,19 @@ export class GoogleMap {
     if (callback) {
       this.onMyLocationClickListener = CapacitorGoogleMaps.addListener(
         'onMyLocationClick',
-        callback,
+        this.generateCallback(callback),
       );
     } else {
       this.onMyLocationClickListener = undefined;
+    }
+  }
+
+  private generateCallback(callback: MapListenerCallback): MapListenerCallback {
+    const mapId = this.id;
+    return (data: any) => {
+      if (data.mapId == mapId || data.id == mapId) {
+        callback(data);
+      }
     }
   }
 
