@@ -24,6 +24,7 @@ public class Keyboard {
     }
 
     private AppCompatActivity activity;
+    private Context context;
     private ViewTreeObserver.OnGlobalLayoutListener list;
     private View rootView;
     private View mChildOfContent;
@@ -47,26 +48,12 @@ public class Keyboard {
     static final String EVENT_KB_WILL_HIDE = "keyboardWillHide";
     static final String EVENT_KB_DID_HIDE = "keyboardDidHide";
 
-    /**
-     * @deprecated
-     * Use {@link #Keyboard(AppCompatActivity activity, boolean resizeFullScreen)}
-     * @param activity
-     */
-    public Keyboard(AppCompatActivity activity) {
-        this(activity, false);
-    }
-
-    @SuppressWarnings("deprecation")
-    public Keyboard(AppCompatActivity activity, boolean resizeOnFullScreen) {
+    public Keyboard(AppCompatActivity activity, Context context, boolean resizeOnFullScreen) {
         this.activity = activity;
+        this.context = context;
         //calculate density-independent pixels (dp)
         //http://developer.android.com/guide/practices/screens_support.html
-        DisplayMetrics dm = new DisplayMetrics();
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            activity.getDisplay().getRealMetrics(dm);
-        } else {
-            activity.getWindowManager().getDefaultDisplay().getMetrics(dm);
-        }
+        DisplayMetrics dm = context.getResources().getDisplayMetrics();
         final float density = dm.density;
 
         //http://stackoverflow.com/a/4737265/1091751 detect if keyboard is showing
@@ -96,15 +83,11 @@ public class Keyboard {
                         resultBottom = resultBottom + windowInsets.bottom;
                     } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         WindowInsets windowInsets = rootView.getRootWindowInsets();
-                        int stableInsetBottom = windowInsets.getStableInsetBottom();
+                        int stableInsetBottom = getLegacyStableInsetBottom(windowInsets);
                         screenHeight = rootViewHeight;
                         resultBottom = resultBottom + stableInsetBottom;
                     } else {
-                        // calculate screen height differently for android versions <23: Lollipop 5.x, Marshmallow 6.x
-                        //http://stackoverflow.com/a/29257533/3642890 beware of nexus 5
-                        Display display = activity.getWindowManager().getDefaultDisplay();
-                        Point size = new Point();
-                        display.getSize(size);
+                        Point size = getLegacySizePoint();
                         screenHeight = size.y;
                     }
 
@@ -152,6 +135,21 @@ public class Keyboard {
         mChildOfContent = content.getChildAt(0);
         rootView.getViewTreeObserver().addOnGlobalLayoutListener(list);
         frameLayoutParams = (FrameLayout.LayoutParams) mChildOfContent.getLayoutParams();
+    }
+
+    @SuppressWarnings("deprecation")
+    private int getLegacyStableInsetBottom(WindowInsets windowInsets) {
+        return windowInsets.getStableInsetBottom();
+    }
+
+    @SuppressWarnings("deprecation")
+    private Point getLegacySizePoint() {
+        // calculate screen height differently for android versions <23: Lollipop 5.x, Marshmallow 6.x
+        //http://stackoverflow.com/a/29257533/3642890 beware of nexus 5
+        Display display = activity.getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        return size;
     }
 
     public void show() {
