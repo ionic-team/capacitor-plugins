@@ -24,7 +24,6 @@ public class Keyboard {
     }
 
     private AppCompatActivity activity;
-    private Context context;
     private ViewTreeObserver.OnGlobalLayoutListener list;
     private View rootView;
     private View mChildOfContent;
