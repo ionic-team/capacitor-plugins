@@ -13,6 +13,10 @@ const AddAndRemoveMarkers: React.FC = () => {
         setCommandOutput(`MARKER (${data.markerId}) WAS CLICKED ON MAP (${data.mapId})`);
     }
 
+    const onInfoWindowClick = (data: any) => {
+        setCommandOutput(`INFO WINDOW (${data.markerId}) WAS CLICKED ON MAP (${data.mapId})`);
+    }
+
     async function createMap() {
         try {
             const mapRef1 = document.getElementById("markers_map1")!
@@ -35,11 +39,13 @@ const AddAndRemoveMarkers: React.FC = () => {
 
     async function setOnMarkerClickListener() {
         map?.setOnMarkerClickListener(onMarkerClick);
+        map?.setOnInfoWindowClickListener(onInfoWindowClick);
         setCommandOutput('Set On Marker Click Listener!');
     }
 
     async function removeOnMarkerClickListener() {
         map?.setOnMarkerClickListener();
+        map?.setOnInfoWindowClickListener();
         setCommandOutput('Removed On Marker Click Listener!');
     }
 
@@ -55,6 +61,7 @@ const AddAndRemoveMarkers: React.FC = () => {
                     lng: -117.9,
                 },
                 title: "Hello world",
+                snippet: "Hola Mundo",
             });
 
             setMarkerId(id);    

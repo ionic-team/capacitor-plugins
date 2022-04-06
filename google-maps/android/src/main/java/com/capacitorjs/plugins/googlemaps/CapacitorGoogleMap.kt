@@ -17,6 +17,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
+import com.google.maps.android.clustering.Cluster
 import com.google.maps.android.clustering.ClusterManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -35,7 +36,8 @@ class CapacitorGoogleMap(
         OnMyLocationClickListener,
         OnMapReadyCallback,
         OnMapClickListener,
-        OnMarkerClickListener {
+        OnMarkerClickListener,
+        OnInfoWindowClickListener {
     private var mapView: CapacitorGoogleMapView
     private var googleMap: GoogleMap? = null
     private val markers = HashMap<String, CapacitorGoogleMapMarker>()
@@ -209,6 +211,7 @@ class CapacitorGoogleMap(
                 setClusterListeners()
 
                 googleMap?.setOnMarkerClickListener(clusterManager)
+                googleMap?.setOnInfoWindowClickListener(clusterManager)
 
                 // add existing markers to the cluster
                 if (markers.isNotEmpty()) {
@@ -487,6 +490,7 @@ class CapacitorGoogleMap(
                     this@CapacitorGoogleMap
             )
             this@CapacitorGoogleMap.googleMap?.setOnMyLocationClickListener(this@CapacitorGoogleMap)
+            this@CapacitorGoogleMap.googleMap?.setOnInfoWindowClickListener(this@CapacitorGoogleMap)
         }
     }
 
@@ -497,34 +501,51 @@ class CapacitorGoogleMap(
                 else this@CapacitorGoogleMap.onMarkerClick(it.googleMapMarker!!)
             }
 
-            clusterManager?.setOnClusterClickListener {
-                val data = JSObject()
-                data.put("mapId", this@CapacitorGoogleMap.id)
-                data.put("latitude", it.position.latitude)
-                data.put("longitude", it.position.longitude)
-                data.put("size", it.size)
-
-                val items = JSArray()
-                for (item in it.items) {
-                    val marker = item.googleMapMarker
-
-                    if (marker != null) {
-                        val jsItem = JSObject()
-                        jsItem.put("markerId", marker.id)
-                        jsItem.put("latitude", marker.position.latitude)
-                        jsItem.put("longitude", marker.position.longitude)
-                        jsItem.put("title", marker.title)
-                        jsItem.put("snippet", marker.snippet)
-
-                        items.put(jsItem)
-                    }
+            clusterManager?.setOnClusterItemInfoWindowClickListener {
+                if (null != it.googleMapMarker) {
+                    this@CapacitorGoogleMap.onInfoWindowClick(it.googleMapMarker!!)
                 }
+            }
 
-                data.put("items", items)
+            clusterManager?.setOnClusterInfoWindowClickListener {
+                val data = this@CapacitorGoogleMap.getClusterData(it)
+                delegate.notify("onClusterInfoWindowClick", data)
+            }
+
+            clusterManager?.setOnClusterClickListener {
+                val data = this@CapacitorGoogleMap.getClusterData(it)
                 delegate.notify("onClusterClick", data)
                 false
             }
         }
+    }
+
+    private fun getClusterData(it: Cluster<CapacitorGoogleMapMarker>): JSObject {
+        val data = JSObject()
+        data.put("mapId", this.id)
+        data.put("latitude", it.position.latitude)
+        data.put("longitude", it.position.longitude)
+        data.put("size", it.size)
+
+        val items = JSArray()
+        for (item in it.items) {
+            val marker = item.googleMapMarker
+
+            if (marker != null) {
+                val jsItem = JSObject()
+                jsItem.put("markerId", marker.id)
+                jsItem.put("latitude", marker.position.latitude)
+                jsItem.put("longitude", marker.position.longitude)
+                jsItem.put("title", marker.title)
+                jsItem.put("snippet", marker.snippet)
+
+                items.put(jsItem)
+            }
+        }
+
+        data.put("items", items)
+
+        return data
     }
 
     override fun onMapClick(point: LatLng) {
@@ -578,5 +599,16 @@ class CapacitorGoogleMap(
         data.put("mapId", this@CapacitorGoogleMap.id)
         data.put("isGesture", reason == 1)
         delegate.notify("onCameraMoveStarted", data)
+    }
+
+    override fun onInfoWindowClick(marker: Marker) {
+        val data = JSObject()
+        data.put("mapId", this@CapacitorGoogleMap.id)
+        data.put("markerId", marker.id)
+        data.put("latitude", marker.position.latitude)
+        data.put("longitude", marker.position.longitude)
+        data.put("title", marker.title)
+        data.put("snippet", marker.snippet)
+        delegate.notify("onInfoWindowClick", data)
     }
 }

@@ -485,7 +485,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
 
     private func findMapIdByMapView(_ mapView: GMSMapView) -> String {
         for (mapId, map) in self.maps {
-            if map.mapViewController?.GMapView === mapView {
+            if map.mapViewController.GMapView === mapView {
                 return mapId
             }
         }
@@ -559,6 +559,43 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
             ])
         }
         return false
+    }
+    
+    // onClusterInfoWindowClick, onInfoWindowClick
+    public func mapView(_ mapView: GMSMapView, didTapInfoWindowOf marker: GMSMarker) {
+        if marker.userData is GMUCluster {
+            let cluster: GMUCluster = marker.userData as! GMUCluster
+            
+            var items: [[String:Any?]] = []
+            
+            for item in cluster.items {
+                items.append([
+                    "markerId": item.hash.hashValue,
+                    "latitude": item.position.latitude,
+                    "longitude": item.position.longitude,
+                    "title": item.title ?? "",
+                    "snippet": item.snippet ?? ""
+                ])
+            }
+            
+            self.notifyListeners("onClusterInfoWindowClick", data: [
+                "mapId": self.findMapIdByMapView(mapView),
+                "latitude": cluster.position.latitude,
+                "longitude": cluster.position.longitude,
+                "size": cluster.count,
+                "items": items
+            ])
+        }
+        else {
+            self.notifyListeners("onInfoWindowClick", data: [
+                "mapId": self.findMapIdByMapView(mapView),
+                "markerId": marker.hash.hashValue,
+                "latitude": marker.position.latitude,
+                "longitude": marker.position.longitude,
+                "title": marker.title ?? "",
+                "snippet": marker.snippet ?? ""
+            ])
+        }
     }
     
     // onMyLocationButtonClick

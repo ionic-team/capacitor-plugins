@@ -32,6 +32,8 @@ npx cap sync
 * [`addListener('onCameraIdle', ...)`](#addlisteneroncameraidle)
 * [`addListener('onCameraMoveStarted', ...)`](#addlisteneroncameramovestarted)
 * [`addListener('onClusterClick', ...)`](#addlisteneronclusterclick)
+* [`addListener('onClusterInfoWindowClick', ...)`](#addlisteneronclusterinfowindowclick)
+* [`addListener('onInfoWindowClick', ...)`](#addlisteneroninfowindowclick)
 * [`addListener('onMapReady', ...)`](#addlisteneronmapready)
 * [`addListener('onMapClick', ...)`](#addlisteneronmapclick)
 * [`addListener('onMarkerClick', ...)`](#addlisteneronmarkerclick)
@@ -299,6 +301,38 @@ addListener(eventName: 'onClusterClick', listenerFunc: MapListenerCallback) => P
 | Param              | Type                                                                |
 | ------------------ | ------------------------------------------------------------------- |
 | **`eventName`**    | <code>'onClusterClick'</code>                                       |
+| **`listenerFunc`** | <code><a href="#maplistenercallback">MapListenerCallback</a></code> |
+
+**Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
+
+--------------------
+
+
+### addListener('onClusterInfoWindowClick', ...)
+
+```typescript
+addListener(eventName: 'onClusterInfoWindowClick', listenerFunc: MapListenerCallback) => PluginListenerHandle
+```
+
+| Param              | Type                                                                |
+| ------------------ | ------------------------------------------------------------------- |
+| **`eventName`**    | <code>'onClusterInfoWindowClick'</code>                             |
+| **`listenerFunc`** | <code><a href="#maplistenercallback">MapListenerCallback</a></code> |
+
+**Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
+
+--------------------
+
+
+### addListener('onInfoWindowClick', ...)
+
+```typescript
+addListener(eventName: 'onInfoWindowClick', listenerFunc: MapListenerCallback) => PluginListenerHandle
+```
+
+| Param              | Type                                                                |
+| ------------------ | ------------------------------------------------------------------- |
+| **`eventName`**    | <code>'onInfoWindowClick'</code>                                    |
 | **`listenerFunc`** | <code><a href="#maplistenercallback">MapListenerCallback</a></code> |
 
 **Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>

@@ -23,6 +23,14 @@ const MultipleMarkers: React.FC = () => {
         setCommandOutput2(`CLUSTER CLICKED:  ${JSON.stringify(data)}`);
     }
 
+    const onClusterInfoWindowClick = (data: any) => {
+        setCommandOutput2(`CLUSTER INFO WINDOW CLICKED:  ${JSON.stringify(data)}`);
+    }
+
+    const onInfoWindowClick = (data: any) => {
+        setCommandOutput2(`INFO WINDOW CLICKED:  ${JSON.stringify(data)}`);
+    }
+
     const onMapClick = (data: any) => {
         setCommandOutput(`MAP CLICKED:  ${JSON.stringify(data)}`);
         setCommandOutput2("");
@@ -68,6 +76,8 @@ const MultipleMarkers: React.FC = () => {
         map?.setOnCameraIdleListener(onCameraIdle);
         map?.setOnCameraMoveStartedListener(onCameraMoveStarted);
         map?.setOnClusterClickListener(onClusterClick);
+        map?.setOnClusterInfoWindowClickListener(onClusterInfoWindowClick);
+        map?.setOnInfoWindowClickListener(onInfoWindowClick);
         map?.setOnMapClickListener(onMapClick);
         map?.setOnMarkerClickListener(onMarkerClick);
         map?.setOnMyLocationButtonClickListener(onMyLocationButtonClick);
@@ -102,22 +112,30 @@ const MultipleMarkers: React.FC = () => {
                     coordinate: {
                         lat: 47.60,
                         lng: -122.33,
-                    }
+                    },
+                    title: "Title 1",
+                    snippet: "Snippet 1",
                 }, {
                     coordinate: {
                         lat: 47.60,
                         lng: -122.46,
-                    }
+                    },
+                    title: "Title 2",
+                    snippet: "Snippet 2",
                 }, {
                     coordinate: {
                         lat: 47.30,
                         lng: -122.46,
-                    }
+                    },
+                    title: "Title 3",
+                    snippet: "Snippet 3",
                 }, {
                     coordinate: {
                         lat: 47.20,
                         lng: -122.23,
-                    }
+                    },
+                    title: "Title 4",
+                    snippet: "Snippet 4",
                 }];
 
                 const ids = await map.addMarkers(markers);

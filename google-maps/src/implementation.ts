@@ -133,6 +133,16 @@ export interface CapacitorGoogleMapsPlugin {
   ): PluginListenerHandle;
 
   addListener(
+    eventName: 'onClusterInfoWindowClick',
+    listenerFunc: MapListenerCallback,
+  ): PluginListenerHandle;
+
+  addListener(
+    eventName: 'onInfoWindowClick',
+    listenerFunc: MapListenerCallback,
+  ): PluginListenerHandle;
+
+  addListener(
     eventName: 'onMapReady',
     listenerFunc: MapListenerCallback,
   ): PluginListenerHandle;

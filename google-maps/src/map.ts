@@ -28,6 +28,8 @@ export class GoogleMap {
   private onCameraIdleListener?: PluginListenerHandle;
   private onCameraMoveStartedListener?: PluginListenerHandle;
   private onClusterClickListener?: PluginListenerHandle;
+  private onClusterInfoWindowClickListener?: PluginListenerHandle;
+  private onInfoWindowClickListener?: PluginListenerHandle;
   private onMapClickListener?: PluginListenerHandle;
   private onMarkerClickListener?: PluginListenerHandle;
   private onMyLocationButtonClickListener?: PluginListenerHandle;
@@ -326,6 +328,36 @@ export class GoogleMap {
     }
   }
 
+  async setOnClusterInfoWindowClickListener(callback?: MapListenerCallback): Promise<void> {
+    if (this.onClusterInfoWindowClickListener) {
+      this.onClusterInfoWindowClickListener.remove();
+    }
+
+    if (callback) {
+      this.onClusterInfoWindowClickListener = CapacitorGoogleMaps.addListener(
+        'onClusterInfoWindowClick',
+        callback,
+      );
+    } else {
+      this.onClusterInfoWindowClickListener = undefined;
+    }
+  }
+
+  async setOnInfoWindowClickListener(callback?: MapListenerCallback): Promise<void> {
+    if (this.onInfoWindowClickListener) {
+      this.onInfoWindowClickListener.remove();
+    }
+
+    if (callback) {
+      this.onInfoWindowClickListener = CapacitorGoogleMaps.addListener(
+        'onInfoWindowClick',
+        callback,
+      );
+    } else {
+      this.onInfoWindowClickListener = undefined;
+    }
+  }
+
   async setOnMapClickListener(callback?: MapListenerCallback): Promise<void> {
     if (this.onMapClickListener) {
       this.onMapClickListener.remove();
@@ -399,6 +431,16 @@ export class GoogleMap {
     if (this.onClusterClickListener) {
       this.onClusterClickListener.remove();
       this.onClusterClickListener = undefined;
+    }
+
+    if (this.onClusterInfoWindowClickListener) {
+      this.onClusterInfoWindowClickListener.remove();
+      this.onClusterInfoWindowClickListener = undefined;
+    }
+
+    if (this.onInfoWindowClickListener) {
+      this.onInfoWindowClickListener.remove();
+      this.onInfoWindowClickListener = undefined;
     }
     
     if (this.onMapClickListener) {
