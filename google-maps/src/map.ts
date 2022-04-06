@@ -1,4 +1,5 @@
 import { Capacitor } from '@capacitor/core';
+import type { PluginListenerHandle } from '@capacitor/core';
 
 import type {
   CameraConfig,
@@ -7,7 +8,7 @@ import type {
   MapPadding,
   MapType,
 } from './definitions';
-import type { CreateMapArgs } from './implementation';
+import type { CreateMapArgs, MapListenerCallback } from './implementation';
 import { CapacitorGoogleMaps } from './implementation';
 
 export interface GoogleMapInterface {
@@ -78,6 +79,15 @@ export class GoogleMap {
   private id: string;
   private element: HTMLElement | null = null;
   private frameElement: HTMLElement | null = null;
+  private onCameraIdleListener?: PluginListenerHandle;
+  private onCameraMoveStartedListener?: PluginListenerHandle;
+  private onClusterClickListener?: PluginListenerHandle;
+  private onClusterInfoWindowClickListener?: PluginListenerHandle;
+  private onInfoWindowClickListener?: PluginListenerHandle;
+  private onMapClickListener?: PluginListenerHandle;
+  private onMarkerClickListener?: PluginListenerHandle;
+  private onMyLocationButtonClickListener?: PluginListenerHandle;
+  private onMyLocationClickListener?: PluginListenerHandle;
 
   private constructor(id: string) {
     this.id = id;
@@ -104,6 +114,7 @@ export class GoogleMap {
     apiKey: string,
     config: GoogleMapConfig,
     forceCreate?: boolean,
+    callback?: MapListenerCallback,
   ): Promise<GoogleMap> {
     const newMap = new GoogleMap(id);
 
@@ -145,6 +156,10 @@ export class GoogleMap {
     }
 
     await CapacitorGoogleMaps.create(args);
+
+    if (callback) {
+      CapacitorGoogleMaps.addListener('onMapReady', callback);
+    }
 
     return newMap;
   }
@@ -234,6 +249,9 @@ export class GoogleMap {
     if (Capacitor.isNativePlatform()) {
       this.disableScrolling();
     }
+
+    this.removeAllMapListeners();
+
     return CapacitorGoogleMaps.destroy({
       id: this.id,
     });
@@ -414,5 +432,209 @@ export class GoogleMap {
     }
 
     return null;
+  }
+
+  async setOnCameraIdleListener(callback?: MapListenerCallback): Promise<void> {
+    if (this.onCameraIdleListener) {
+      this.onCameraIdleListener.remove();
+    }
+
+    if (callback) {
+      this.onCameraIdleListener = CapacitorGoogleMaps.addListener(
+        'onCameraIdle',
+        this.generateCallback(callback),
+      );
+    } else {
+      this.onCameraIdleListener = undefined;
+    }
+  }
+
+  async setOnCameraMoveStartedListener(
+    callback?: MapListenerCallback,
+  ): Promise<void> {
+    if (this.onCameraMoveStartedListener) {
+      this.onCameraMoveStartedListener.remove();
+    }
+
+    if (callback) {
+      this.onCameraMoveStartedListener = CapacitorGoogleMaps.addListener(
+        'onCameraMoveStarted',
+        this.generateCallback(callback),
+      );
+    } else {
+      this.onCameraMoveStartedListener = undefined;
+    }
+  }
+
+  async setOnClusterClickListener(
+    callback?: MapListenerCallback,
+  ): Promise<void> {
+    if (this.onClusterClickListener) {
+      this.onClusterClickListener.remove();
+    }
+
+    if (callback) {
+      this.onClusterClickListener = CapacitorGoogleMaps.addListener(
+        'onClusterClick',
+        this.generateCallback(callback),
+      );
+    } else {
+      this.onClusterClickListener = undefined;
+    }
+  }
+
+  async setOnClusterInfoWindowClickListener(
+    callback?: MapListenerCallback,
+  ): Promise<void> {
+    if (this.onClusterInfoWindowClickListener) {
+      this.onClusterInfoWindowClickListener.remove();
+    }
+
+    if (callback) {
+      this.onClusterInfoWindowClickListener = CapacitorGoogleMaps.addListener(
+        'onClusterInfoWindowClick',
+        this.generateCallback(callback),
+      );
+    } else {
+      this.onClusterInfoWindowClickListener = undefined;
+    }
+  }
+
+  async setOnInfoWindowClickListener(
+    callback?: MapListenerCallback,
+  ): Promise<void> {
+    if (this.onInfoWindowClickListener) {
+      this.onInfoWindowClickListener.remove();
+    }
+
+    if (callback) {
+      this.onInfoWindowClickListener = CapacitorGoogleMaps.addListener(
+        'onInfoWindowClick',
+        this.generateCallback(callback),
+      );
+    } else {
+      this.onInfoWindowClickListener = undefined;
+    }
+  }
+
+  async setOnMapClickListener(callback?: MapListenerCallback): Promise<void> {
+    if (this.onMapClickListener) {
+      this.onMapClickListener.remove();
+    }
+
+    if (callback) {
+      this.onMapClickListener = CapacitorGoogleMaps.addListener(
+        'onMapClick',
+        this.generateCallback(callback),
+      );
+    } else {
+      this.onMapClickListener = undefined;
+    }
+  }
+
+  async setOnMarkerClickListener(
+    callback?: MapListenerCallback,
+  ): Promise<void> {
+    if (this.onMarkerClickListener) {
+      this.onMarkerClickListener.remove();
+    }
+
+    if (callback) {
+      this.onMarkerClickListener = CapacitorGoogleMaps.addListener(
+        'onMarkerClick',
+        this.generateCallback(callback),
+      );
+    } else {
+      this.onMarkerClickListener = undefined;
+    }
+  }
+
+  async setOnMyLocationButtonClickListener(
+    callback?: MapListenerCallback,
+  ): Promise<void> {
+    if (this.onMyLocationButtonClickListener) {
+      this.onMyLocationButtonClickListener.remove();
+    }
+
+    if (callback) {
+      this.onMyLocationButtonClickListener = CapacitorGoogleMaps.addListener(
+        'onMyLocationButtonClick',
+        this.generateCallback(callback),
+      );
+    } else {
+      this.onMyLocationButtonClickListener = undefined;
+    }
+  }
+
+  async setOnMyLocationClickListener(
+    callback?: MapListenerCallback,
+  ): Promise<void> {
+    if (this.onMyLocationClickListener) {
+      this.onMyLocationClickListener.remove();
+    }
+
+    if (callback) {
+      this.onMyLocationClickListener = CapacitorGoogleMaps.addListener(
+        'onMyLocationClick',
+        this.generateCallback(callback),
+      );
+    } else {
+      this.onMyLocationClickListener = undefined;
+    }
+  }
+
+  private generateCallback(callback: MapListenerCallback): MapListenerCallback {
+    const mapId = this.id;
+    return (data: any) => {
+      if (data.mapId == mapId) {
+        callback(data);
+      }
+    };
+  }
+
+  async removeAllMapListeners(): Promise<void> {
+    if (this.onCameraIdleListener) {
+      this.onCameraIdleListener.remove();
+      this.onCameraIdleListener = undefined;
+    }
+    if (this.onCameraMoveStartedListener) {
+      this.onCameraMoveStartedListener.remove();
+      this.onCameraMoveStartedListener = undefined;
+    }
+
+    if (this.onClusterClickListener) {
+      this.onClusterClickListener.remove();
+      this.onClusterClickListener = undefined;
+    }
+
+    if (this.onClusterInfoWindowClickListener) {
+      this.onClusterInfoWindowClickListener.remove();
+      this.onClusterInfoWindowClickListener = undefined;
+    }
+
+    if (this.onInfoWindowClickListener) {
+      this.onInfoWindowClickListener.remove();
+      this.onInfoWindowClickListener = undefined;
+    }
+
+    if (this.onMapClickListener) {
+      this.onMapClickListener.remove();
+      this.onMapClickListener = undefined;
+    }
+
+    if (this.onMarkerClickListener) {
+      this.onMarkerClickListener.remove();
+      this.onMarkerClickListener = undefined;
+    }
+
+    if (this.onMyLocationButtonClickListener) {
+      this.onMyLocationButtonClickListener.remove();
+      this.onMyLocationClickListener = undefined;
+    }
+
+    if (this.onMyLocationClickListener) {
+      this.onMyLocationClickListener.remove();
+      this.onMyLocationButtonClickListener = undefined;
+    }
   }
 }

@@ -89,6 +89,9 @@ public class Map {
             if let bridge = self.delegate.bridge {
                 bridge.viewController!.view.addSubview(self.mapViewController.view)
                 self.mapViewController.GMapView.delegate = self.delegate
+                self.delegate.notifyListeners("onMapReady", data: [
+                    "mapId": self.id
+                ])
             }
         }
     }
