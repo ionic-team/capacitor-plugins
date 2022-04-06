@@ -60,7 +60,7 @@ class GMViewController: UIViewController {
 public class Map {
     var id: String
     var config: GoogleMapConfig
-    var mapViewController: GMViewController?
+    var mapViewController: GMViewController
     var markers = [Int: GMSMarker]()
     private var delegate: CapacitorGoogleMapsPlugin
 
@@ -68,90 +68,78 @@ public class Map {
         self.id = id
         self.config = config
         self.delegate = delegate
+        self.mapViewController = GMViewController()
 
         self.render()
     }
 
     func render() {
         DispatchQueue.main.async {
-            self.mapViewController = GMViewController()
-
-            if let mapViewController = self.mapViewController {
-                mapViewController.mapViewBounds = [
-                    "width": self.config.width,
-                    "height": self.config.height,
-                    "x": self.config.x,
-                    "y": self.config.y
-                ]
-                mapViewController.cameraPosition = [
-                    "latitude": self.config.center.lat,
-                    "longitude": self.config.center.lng,
-                    "zoom": self.config.zoom
-                ]
-                if let bridge = self.delegate.bridge {
-                    bridge.viewController!.view.addSubview(mapViewController.view)
-                    mapViewController.GMapView.delegate = self.delegate
-
-                    self.delegate.notifyListeners("onMapReady", data: [
-                        "id": self.id
-                    ])
-                }
+            self.mapViewController.mapViewBounds = [
+                "width": self.config.width,
+                "height": self.config.height,
+                "x": self.config.x,
+                "y": self.config.y
+            ]
+            self.mapViewController.cameraPosition = [
+                "latitude": self.config.center.lat,
+                "longitude": self.config.center.lng,
+                "zoom": self.config.zoom
+            ]
+            if let bridge = self.delegate.bridge {
+                bridge.viewController!.view.addSubview(self.mapViewController.view)
+                self.mapViewController.GMapView.delegate = self.delegate
+                self.delegate.notifyListeners("onMapReady", data: [
+                    "id": self.id
+                ])
             }
         }
     }
 
     func updateRender(frame: CGRect, mapBounds: CGRect) {
         DispatchQueue.main.async {
-            if let mapViewController = self.mapViewController {
-                mapViewController.view.layer.mask = nil
+            self.mapViewController.view.layer.mask = nil
 
-                var updatedFrame = mapViewController.view.frame
-                updatedFrame.origin.x = mapBounds.origin.x
-                updatedFrame.origin.y = mapBounds.origin.y
+            var updatedFrame = self.mapViewController.view.frame
+            updatedFrame.origin.x = mapBounds.origin.x
+            updatedFrame.origin.y = mapBounds.origin.y
 
-                mapViewController.view.frame = updatedFrame
+            self.mapViewController.view.frame = updatedFrame
 
-                var maskBounds: [CGRect] = []
+            var maskBounds: [CGRect] = []
 
-                if !frame.contains(mapBounds) {
-                    maskBounds.append(contentsOf: self.getFrameOverflowBounds(frame: frame, mapBounds: mapBounds))
-                }
-
-                if maskBounds.count > 0 {
-                    let maskLayer = CAShapeLayer()
-                    let path = CGMutablePath()
-
-                    path.addRect(mapViewController.view.bounds)
-                    maskBounds.forEach { b in
-                        path.addRect(b)
-                    }
-
-                    maskLayer.path = path
-                    maskLayer.fillRule = .evenOdd
-
-                    mapViewController.view.layer.mask = maskLayer
-
-                }
-
-                mapViewController.view.layoutIfNeeded()
+            if !frame.contains(mapBounds) {
+                maskBounds.append(contentsOf: self.getFrameOverflowBounds(frame: frame, mapBounds: mapBounds))
             }
+
+            if maskBounds.count > 0 {
+                let maskLayer = CAShapeLayer()
+                let path = CGMutablePath()
+
+                path.addRect(self.mapViewController.view.bounds)
+                maskBounds.forEach { b in
+                    path.addRect(b)
+                }
+
+                maskLayer.path = path
+                maskLayer.fillRule = .evenOdd
+
+                self.mapViewController.view.layer.mask = maskLayer
+
+            }
+
+            self.mapViewController.view.layoutIfNeeded()
         }
+
     }
 
     func destroy() {
         DispatchQueue.main.async {
-            if let mapViewController = self.mapViewController {
-                mapViewController.view = nil
-                self.mapViewController = nil
-            }
+            self.mapViewController.view = nil
         }
     }
 
     func addMarker(marker: Marker) throws -> Int {
-        guard let mapViewController = mapViewController else {
-            throw GoogleMapErrors.unhandledError("map view controller not available")
-        }
-
         var markerHash = 0
 
         DispatchQueue.main.sync {
@@ -163,10 +151,10 @@ public class Map {
             newMarker.opacity = marker.opacity ?? 1
             newMarker.isDraggable = marker.draggable ?? false
 
-            if mapViewController.clusteringEnabled {
-                mapViewController.addMarkersToCluster(markers: [newMarker])
+            if self.mapViewController.clusteringEnabled {
+                self.mapViewController.addMarkersToCluster(markers: [newMarker])
             } else {
-                newMarker.map = mapViewController.GMapView
+                newMarker.map = self.mapViewController.GMapView
             }
 
             self.markers[newMarker.hash.hashValue] = newMarker
@@ -178,10 +166,6 @@ public class Map {
     }
 
     func addMarkers(markers: [Marker]) throws -> [Int] {
-        guard let mapViewController = mapViewController else {
-            throw GoogleMapErrors.unhandledError("map view controller not available")
-        }
-
         var markerHashes: [Int] = []
 
         DispatchQueue.main.sync {
@@ -196,10 +180,10 @@ public class Map {
                 newMarker.opacity = marker.opacity ?? 1
                 newMarker.isDraggable = marker.draggable ?? false
 
-                if mapViewController.clusteringEnabled {
+                if self.mapViewController.clusteringEnabled {
                     googleMapsMarkers.append(newMarker)
                 } else {
-                    newMarker.map = mapViewController.GMapView
+                    newMarker.map = self.mapViewController.GMapView
                 }
 
                 self.markers[newMarker.hash.hashValue] = newMarker
@@ -207,8 +191,8 @@ public class Map {
                 markerHashes.append(newMarker.hash.hashValue)
             }
 
-            if mapViewController.clusteringEnabled {
-                mapViewController.addMarkersToCluster(markers: googleMapsMarkers)
+            if self.mapViewController.clusteringEnabled {
+                self.mapViewController.addMarkersToCluster(markers: googleMapsMarkers)
             }
         }
 
@@ -216,36 +200,32 @@ public class Map {
     }
 
     func enableClustering() {
-        if let mapViewController = mapViewController {
-            if !mapViewController.clusteringEnabled {
-                DispatchQueue.main.sync {
-                    mapViewController.initClusterManager()
+        if !self.mapViewController.clusteringEnabled {
+            DispatchQueue.main.sync {
+                self.mapViewController.initClusterManager()
 
-                    // add existing markers to the cluster
-                    if !self.markers.isEmpty {
-                        var existingMarkers: [GMSMarker] = []
-                        for (_, marker) in self.markers {
-                            marker.map = nil
-                            existingMarkers.append(marker)
-                        }
-
-                        mapViewController.addMarkersToCluster(markers: existingMarkers)
+                // add existing markers to the cluster
+                if !self.markers.isEmpty {
+                    var existingMarkers: [GMSMarker] = []
+                    for (_, marker) in self.markers {
+                        marker.map = nil
+                        existingMarkers.append(marker)
                     }
+
+                    self.mapViewController.addMarkersToCluster(markers: existingMarkers)
                 }
             }
         }
     }
 
     func disableClustering() {
-        if let mapViewController = mapViewController {
-            DispatchQueue.main.sync {
-                mapViewController.destroyClusterManager()
+        DispatchQueue.main.sync {
+            self.mapViewController.destroyClusterManager()
 
-                // add existing markers back to the map
-                if !self.markers.isEmpty {
-                    for (_, marker) in self.markers {
-                        marker.map = mapViewController.GMapView
-                    }
+            // add existing markers back to the map
+            if !self.markers.isEmpty {
+                for (_, marker) in self.markers {
+                    marker.map = self.mapViewController.GMapView
                 }
             }
         }
@@ -254,10 +234,8 @@ public class Map {
     func removeMarker(id: Int) throws {
         if let marker = self.markers[id] {
             DispatchQueue.main.async {
-                if let mapViewController = self.mapViewController {
-                    if mapViewController.clusteringEnabled {
-                        mapViewController.removeMarkersFromCluster(markers: [marker])
-                    }
+                if self.mapViewController.clusteringEnabled {
+                    self.mapViewController.removeMarkersFromCluster(markers: [marker])
                 }
 
                 marker.map = nil
@@ -270,11 +248,7 @@ public class Map {
     }
 
     func setCamera(config: GoogleMapCameraConfig) throws {
-        guard let mapViewController = mapViewController else {
-            throw GoogleMapErrors.unhandledError("map view controller not available")
-        }
-
-        let currentCamera = mapViewController.GMapView.camera
+        let currentCamera = self.mapViewController.GMapView.camera
 
         let lat = config.coordinate?.lat ?? currentCamera.target.latitude
         let lng = config.coordinate?.lng ?? currentCamera.target.longitude
@@ -289,72 +263,48 @@ public class Map {
             let newCamera = GMSCameraPosition(latitude: lat, longitude: lng, zoom: zoom, bearing: bearing, viewingAngle: angle)
 
             if animate {
-                mapViewController.GMapView.animate(to: newCamera)
+                self.mapViewController.GMapView.animate(to: newCamera)
             } else {
-                mapViewController.GMapView.camera = newCamera
+                self.mapViewController.GMapView.camera = newCamera
             }
         }
 
     }
 
     func setMapType(mapType: GMSMapViewType) throws {
-        guard let mapViewController = mapViewController else {
-            throw GoogleMapErrors.unhandledError("map view controller not available")
-        }
-
         DispatchQueue.main.sync {
-            mapViewController.GMapView.mapType = mapType
+            self.mapViewController.GMapView.mapType = mapType
         }
     }
 
     func enableIndoorMaps(enabled: Bool) throws {
-        guard let mapViewController = mapViewController else {
-            throw GoogleMapErrors.unhandledError("map view controller not available")
-        }
-
         DispatchQueue.main.sync {
-            mapViewController.GMapView.isIndoorEnabled = enabled
+            self.mapViewController.GMapView.isIndoorEnabled = enabled
         }
     }
 
     func enableTrafficLayer(enabled: Bool) throws {
-        guard let mapViewController = mapViewController else {
-            throw GoogleMapErrors.unhandledError("map view controller not available")
-        }
-
         DispatchQueue.main.sync {
-            mapViewController.GMapView.isTrafficEnabled = enabled
+            self.mapViewController.GMapView.isTrafficEnabled = enabled
         }
     }
 
     func enableAccessibilityElements(enabled: Bool) throws {
-        guard let mapViewController = mapViewController else {
-            throw GoogleMapErrors.unhandledError("map view controller not available")
-        }
-
         DispatchQueue.main.sync {
-            mapViewController.GMapView.accessibilityElementsHidden = enabled
+            self.mapViewController.GMapView.accessibilityElementsHidden = enabled
         }
     }
 
     func enableCurrentLocation(enabled: Bool) throws {
-        guard let mapViewController = mapViewController else {
-            throw GoogleMapErrors.unhandledError("map view controller not available")
-        }
-
         DispatchQueue.main.sync {
-            mapViewController.GMapView.isMyLocationEnabled = enabled
+            self.mapViewController.GMapView.isMyLocationEnabled = enabled
         }
     }
 
     func setPadding(padding: GoogleMapPadding) throws {
-        guard let mapViewController = mapViewController else {
-            throw GoogleMapErrors.unhandledError("map view controller not available")
-        }
-
         DispatchQueue.main.sync {
             let mapInsets = UIEdgeInsets(top: CGFloat(padding.top), left: CGFloat(padding.left), bottom: CGFloat(padding.bottom), right: CGFloat(padding.right))
-            mapViewController.GMapView.padding = mapInsets
+            self.mapViewController.GMapView.padding = mapInsets
         }
     }
 
@@ -369,10 +319,8 @@ public class Map {
                 }
             }
 
-            if let mapViewController = self.mapViewController {
-                if mapViewController.clusteringEnabled {
-                    mapViewController.removeMarkersFromCluster(markers: markers)
-                }
+            if self.mapViewController.clusteringEnabled {
+                self.mapViewController.removeMarkersFromCluster(markers: markers)
             }
         }
     }

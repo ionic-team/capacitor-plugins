@@ -64,7 +64,7 @@ class CapacitorGoogleMapsPlugin : Plugin() {
 
             val configObject =
                     call.getObject("config")
-                            ?: throw InvalidArgumentsError("GoogleMapConfig is missing")
+                            ?: throw InvalidArgumentsError("config object is missing")
 
             val forceCreate = call.getBoolean("forceCreate", false)!!
 
@@ -132,7 +132,7 @@ class CapacitorGoogleMapsPlugin : Plugin() {
             id ?: throw InvalidMapIdError()
 
             val markerObj = call.getObject("marker", null)
-            markerObj ?: throw InvalidArgumentsError("Marker object is missing")
+            markerObj ?: throw InvalidArgumentsError("marker object is missing")
 
             val map = maps[id]
             map ?: throw MapNotFoundError()
@@ -159,10 +159,10 @@ class CapacitorGoogleMapsPlugin : Plugin() {
             id ?: throw InvalidMapIdError()
 
             val markerObjectArray = call.getArray("markers", null)
-            markerObjectArray ?: throw InvalidArgumentsError("Markers array is missing")
+            markerObjectArray ?: throw InvalidArgumentsError("markers array is missing")
 
             if (markerObjectArray.length() == 0) {
-                throw InvalidArgumentsError("Markers array requires at least one marker")
+                throw InvalidArgumentsError("markers array requires at least one marker")
             }
 
             val map = maps[id]
@@ -247,7 +247,7 @@ class CapacitorGoogleMapsPlugin : Plugin() {
             id ?: throw InvalidMapIdError()
 
             val markerId = call.getString("markerId")
-            markerId ?: throw InvalidArgumentsError("marker id is invalid or missing")
+            markerId ?: throw InvalidArgumentsError("markerId is invalid or missing")
 
             val map = maps[id]
             map ?: throw MapNotFoundError()
@@ -273,7 +273,7 @@ class CapacitorGoogleMapsPlugin : Plugin() {
             id ?: throw InvalidMapIdError()
 
             val markerIdsArray = call.getArray("markerIds")
-            markerIdsArray ?: throw InvalidArgumentsError("marker ids are invalid or missing")
+            markerIdsArray ?: throw InvalidArgumentsError("markerIds are invalid or missing")
 
             if (markerIdsArray.length() == 0) {
                 throw InvalidArgumentsError("markerIds requires at least one marker id")
@@ -314,7 +314,7 @@ class CapacitorGoogleMapsPlugin : Plugin() {
 
             val cameraConfigObject =
                     call.getObject("config")
-                            ?: throw InvalidArgumentsError("GoogleMapCameraConfig is missing")
+                            ?: throw InvalidArgumentsError("config object is missing")
 
             val config = GoogleMapCameraConfig(cameraConfigObject)
 

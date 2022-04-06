@@ -36,7 +36,7 @@ class CapacitorGoogleMap(
         OnMapReadyCallback,
         OnMapClickListener,
         OnMarkerClickListener {
-    private var mapView: CapacitorGoogleMapView? = null
+    private var mapView: CapacitorGoogleMapView
     private var googleMap: GoogleMap? = null
     private val markers = HashMap<String, CapacitorGoogleMapMarker>()
     private var clusterManager: ClusterManager<CapacitorGoogleMapMarker>? = null
@@ -44,6 +44,13 @@ class CapacitorGoogleMap(
     private val isReadyChannel = Channel<Boolean>()
 
     init {
+        val bridge = delegate.bridge
+        mapView =
+                CapacitorGoogleMapView(
+                        bridge.context,
+                        config.googleMapOptions,
+                        bridge.activity.resources.displayMetrics.density
+                )
         initMap()
         setListeners()
     }
@@ -52,14 +59,6 @@ class CapacitorGoogleMap(
         runBlocking {
             val job =
                     CoroutineScope(Dispatchers.Main).launch {
-                        val bridge = delegate.bridge
-
-                        val mapView =
-                                CapacitorGoogleMapView(
-                                        bridge.context,
-                                        config.googleMapOptions,
-                                        bridge.activity.resources.displayMetrics.density
-                                )
                         mapView.onCreate(null)
                         mapView.onStart()
                         mapView.getMapAsync(this@CapacitorGoogleMap)
@@ -77,12 +76,9 @@ class CapacitorGoogleMap(
     }
 
     private fun render() {
-        this.mapView ?: throw GoogleMapsError("map view is not available")
-
         runBlocking {
             CoroutineScope(Dispatchers.Main).launch {
                 val bridge = delegate.bridge
-
                 val mapViewParent = FrameLayout(bridge.context)
                 val layoutParams =
                         FrameLayout.LayoutParams(
@@ -94,7 +90,7 @@ class CapacitorGoogleMap(
 
                 mapViewParent.tag = id
 
-                mapView!!.layoutParams = layoutParams
+                mapView.layoutParams = layoutParams
                 mapViewParent.addView(mapView)
 
                 ((bridge.webView.parent) as ViewGroup).addView(mapViewParent)
@@ -103,15 +99,13 @@ class CapacitorGoogleMap(
     }
 
     fun updateRender(updatedBounds: RectF, frame: RectF) {
-        this.mapView ?: throw GoogleMapsError("map view is not available")
-
         this.config.x = updatedBounds.left.toInt()
         this.config.y = updatedBounds.top.toInt()
         this.config.width = updatedBounds.width().toInt()
         this.config.height = updatedBounds.height().toInt()
 
         runBlocking {
-            CoroutineScope(Dispatchers.Main).launch { mapView!!.updateBounds(updatedBounds, frame) }
+            CoroutineScope(Dispatchers.Main).launch { mapView.updateBounds(updatedBounds, frame) }
         }
     }
 
@@ -126,8 +120,7 @@ class CapacitorGoogleMap(
                         if (null != viewToRemove) {
                             ((bridge.webView.parent) as ViewGroup).removeView(viewToRemove)
                         }
-                        mapView?.onDestroy()
-                        mapView = null
+                        mapView.onDestroy()
                         googleMap = null
                         clusterManager = null
                     }
@@ -141,7 +134,7 @@ class CapacitorGoogleMap(
             callback: (ids: Result<List<String>>) -> Unit
     ) {
         try {
-            googleMap ?: throw GoogleMapsError("google map is not available")
+            googleMap ?: throw GoogleMapNotAvailable()
             val markerIds: MutableList<String> = mutableListOf()
 
             CoroutineScope(Dispatchers.Main).launch {
@@ -171,7 +164,7 @@ class CapacitorGoogleMap(
 
     fun addMarker(marker: CapacitorGoogleMapMarker, callback: (result: Result<String>) -> Unit) {
         try {
-            googleMap ?: throw GoogleMapsError("google map is not available")
+            googleMap ?: throw GoogleMapNotAvailable()
 
             var markerId: String
 
@@ -200,7 +193,7 @@ class CapacitorGoogleMap(
     @SuppressLint("PotentialBehaviorOverride")
     fun enableClustering(callback: (error: GoogleMapsError?) -> Unit) {
         try {
-            googleMap ?: throw GoogleMapsError("google map is not available")
+            googleMap ?: throw GoogleMapNotAvailable()
 
             if (clusterManager != null) {
                 callback(null)
@@ -237,7 +230,7 @@ class CapacitorGoogleMap(
     @SuppressLint("PotentialBehaviorOverride")
     fun disableClustering(callback: (error: GoogleMapsError?) -> Unit) {
         try {
-            googleMap ?: throw GoogleMapsError("google map is not available")
+            googleMap ?: throw GoogleMapNotAvailable()
 
             CoroutineScope(Dispatchers.Main).launch {
                 clusterManager?.clearItems()
@@ -263,7 +256,7 @@ class CapacitorGoogleMap(
 
     fun removeMarker(id: String, callback: (error: GoogleMapsError?) -> Unit) {
         try {
-            googleMap ?: throw GoogleMapsError("google map is not available")
+            googleMap ?: throw GoogleMapNotAvailable()
 
             val marker = markers[id]
             marker ?: throw MarkerNotFoundError()
@@ -286,7 +279,7 @@ class CapacitorGoogleMap(
 
     fun removeMarkers(ids: List<String>, callback: (error: GoogleMapsError?) -> Unit) {
         try {
-            googleMap ?: throw GoogleMapsError("google map is not available")
+            googleMap ?: throw GoogleMapNotAvailable()
 
             CoroutineScope(Dispatchers.Main).launch {
                 val deletedMarkers: MutableList<CapacitorGoogleMapMarker> = mutableListOf()
@@ -315,7 +308,7 @@ class CapacitorGoogleMap(
 
     fun setCamera(config: GoogleMapCameraConfig, callback: (error: GoogleMapsError?) -> Unit) {
         try {
-            googleMap ?: throw GoogleMapsError("google map is not available")
+            googleMap ?: throw GoogleMapNotAvailable()
             CoroutineScope(Dispatchers.Main).launch {
                 val currentPosition = googleMap!!.cameraPosition
 
@@ -353,11 +346,9 @@ class CapacitorGoogleMap(
                                 .build()
 
                 if (animate) {
-                    googleMap!!.animateCamera(
-                            CameraUpdateFactory.newCameraPosition(updatedPosition)
-                    )
+                    googleMap?.animateCamera(CameraUpdateFactory.newCameraPosition(updatedPosition))
                 } else {
-                    googleMap!!.moveCamera(CameraUpdateFactory.newCameraPosition(updatedPosition))
+                    googleMap?.moveCamera(CameraUpdateFactory.newCameraPosition(updatedPosition))
                 }
                 callback(null)
             }
@@ -368,7 +359,7 @@ class CapacitorGoogleMap(
 
     fun setMapType(mapType: String, callback: (error: GoogleMapsError?) -> Unit) {
         try {
-            googleMap ?: throw GoogleMapsError("google map is not available")
+            googleMap ?: throw GoogleMapNotAvailable()
             CoroutineScope(Dispatchers.Main).launch {
                 val mapTypeInt: Int =
                         when (mapType) {
@@ -386,7 +377,7 @@ class CapacitorGoogleMap(
                             }
                         }
 
-                googleMap!!.mapType = mapTypeInt
+                googleMap?.mapType = mapTypeInt
                 callback(null)
             }
         } catch (e: GoogleMapsError) {
@@ -396,9 +387,9 @@ class CapacitorGoogleMap(
 
     fun enableIndoorMaps(enabled: Boolean, callback: (error: GoogleMapsError?) -> Unit) {
         try {
-            googleMap ?: throw GoogleMapsError("google map is not available")
+            googleMap ?: throw GoogleMapNotAvailable()
             CoroutineScope(Dispatchers.Main).launch {
-                googleMap!!.isIndoorEnabled = enabled
+                googleMap?.isIndoorEnabled = enabled
                 callback(null)
             }
         } catch (e: GoogleMapsError) {
@@ -408,9 +399,9 @@ class CapacitorGoogleMap(
 
     fun enableTrafficLayer(enabled: Boolean, callback: (error: GoogleMapsError?) -> Unit) {
         try {
-            googleMap ?: throw GoogleMapsError("google map is not available")
+            googleMap ?: throw GoogleMapNotAvailable()
             CoroutineScope(Dispatchers.Main).launch {
-                googleMap!!.isTrafficEnabled = enabled
+                googleMap?.isTrafficEnabled = enabled
                 callback(null)
             }
         } catch (e: GoogleMapsError) {
@@ -421,9 +412,9 @@ class CapacitorGoogleMap(
     @SuppressLint("MissingPermission")
     fun enableCurrentLocation(enabled: Boolean, callback: (error: GoogleMapsError?) -> Unit) {
         try {
-            googleMap ?: throw GoogleMapsError("google map is not available")
+            googleMap ?: throw GoogleMapNotAvailable()
             CoroutineScope(Dispatchers.Main).launch {
-                googleMap!!.isMyLocationEnabled = enabled
+                googleMap?.isMyLocationEnabled = enabled
                 callback(null)
             }
         } catch (e: GoogleMapsError) {
@@ -433,9 +424,9 @@ class CapacitorGoogleMap(
 
     fun setPadding(padding: GoogleMapPadding, callback: (error: GoogleMapsError?) -> Unit) {
         try {
-            googleMap ?: throw GoogleMapsError("google map is not available")
+            googleMap ?: throw GoogleMapNotAvailable()
             CoroutineScope(Dispatchers.Main).launch {
-                googleMap!!.setPadding(padding.left, padding.top, padding.right, padding.bottom)
+                googleMap?.setPadding(padding.left, padding.top, padding.right, padding.bottom)
                 callback(null)
             }
         } catch (e: GoogleMapsError) {
@@ -451,23 +442,23 @@ class CapacitorGoogleMap(
     }
 
     fun onStart() {
-        mapView?.onStart()
+        mapView.onStart()
     }
 
     fun onResume() {
-        mapView?.onResume()
+        mapView.onResume()
     }
 
     fun onStop() {
-        mapView?.onStop()
+        mapView.onStop()
     }
 
     fun onPause() {
-        mapView?.onPause()
+        mapView.onPause()
     }
 
     fun onDestroy() {
-        mapView?.onDestroy()
+        mapView.onDestroy()
     }
 
     override fun onMapReady(map: GoogleMap) {

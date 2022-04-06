@@ -1,7 +1,6 @@
 import Foundation
 import Capacitor
 
-// swiftlint:disable identifier_name
 public struct GoogleMapConfig: Codable {
     let width: Double
     let height: Double
@@ -47,4 +46,3 @@ public struct GoogleMapConfig: Codable {
         self.center = LatLng(lat: lat, lng: lng)
     }
 }
-// swiftlint:enable identifier_name
