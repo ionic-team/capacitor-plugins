@@ -8,6 +8,13 @@ const CreateAndDestroyMapPage: React.FC = () => {
     const [commandOutput, setCommandOutput] = useState('');
     const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
 
+    const onMapReady = (data: any) => {
+        setCommandOutput(`MAP (${data.mapId}) IS READY`)
+    }
+
+    const onMapClick = (data: any) => {
+        setCommandOutput(`MAP (${data.mapId}) CLICKED @ (${data.latitude}, ${data.longitude})`);
+    }
 
     async function createMaps() {
         setCommandOutput("");
@@ -23,7 +30,7 @@ const CreateAndDestroyMapPage: React.FC = () => {
                 },
                 zoom: 8,
                 androidLiteMode: false,                
-            });
+            }, true, onMapReady);
 
             const newMap2 = await GoogleMap.create(mapRef2, "test-map2", apiKey!, {
                 center: {
@@ -32,13 +39,42 @@ const CreateAndDestroyMapPage: React.FC = () => {
                 },
                 zoom: 6,
                 androidLiteMode: false,                
-            });
+            }, true, onMapReady);
     
             setMaps([newMap1, newMap2]);
             setCommandOutput('Maps created');
         } catch(err: any) {
             setCommandOutput(err.message);
         }        
+    }
+
+    async function setOnMapClickListeners() {
+        setCommandOutput("");
+        try {
+            if (maps) {
+                for (let map of maps) {
+                    map.setOnMapClickListener(onMapClick);
+                }
+                setCommandOutput('Map Click Listeners Set');
+            }
+        } catch (err: any) {
+            setCommandOutput(err.message);
+        }
+    }
+
+    async function removeOnMapClickListeners() {
+        setCommandOutput("");
+        try {
+            if (maps) {
+                for (let map of maps) {
+                    map.setOnMapClickListener();
+                }
+
+                setCommandOutput('Map Click Listeners Destroyed');
+            }
+        } catch (err: any) {
+            setCommandOutput(err.message);
+        }
     }
 
     async function destroyMaps() {
@@ -61,6 +97,12 @@ const CreateAndDestroyMapPage: React.FC = () => {
             <div>
                 <IonButton expand="block" id="createMapButton" onClick={createMaps}>
                     Create Maps
+                </IonButton>
+                <IonButton expand="block" id="setOnMapClickButton" onClick={setOnMapClickListeners}>
+                    Set On Map Click Listeners
+                </IonButton>
+                <IonButton expand="block" id="removeOnMapClickButton" onClick={removeOnMapClickListeners}>
+                    Remove On Map Click Listeners
                 </IonButton>
                 <IonButton expand="block" id="destroyMapButton" onClick={destroyMaps}>
                     Destroy Maps
