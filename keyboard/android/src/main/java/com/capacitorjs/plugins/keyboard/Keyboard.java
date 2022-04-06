@@ -48,12 +48,11 @@ public class Keyboard {
     static final String EVENT_KB_WILL_HIDE = "keyboardWillHide";
     static final String EVENT_KB_DID_HIDE = "keyboardDidHide";
 
-    public Keyboard(AppCompatActivity activity, Context context, boolean resizeOnFullScreen) {
+    public Keyboard(AppCompatActivity activity, boolean resizeOnFullScreen) {
         this.activity = activity;
-        this.context = context;
         //calculate density-independent pixels (dp)
         //http://developer.android.com/guide/practices/screens_support.html
-        DisplayMetrics dm = context.getResources().getDisplayMetrics();
+        DisplayMetrics dm = activity.getResources().getDisplayMetrics();
         final float density = dm.density;
 
         //http://stackoverflow.com/a/4737265/1091751 detect if keyboard is showing
