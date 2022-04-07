@@ -14,7 +14,7 @@ export interface LatLng {
 }
 
 /**
- * 
+ *
  */
 export interface GoogleMapConfig {
   /**
@@ -43,7 +43,7 @@ export interface GoogleMapConfig {
   zoom: number;
   /**
    * Enables image-based lite mode on Android.
-   * 
+   *
    * @default false
    */
   androidLiteMode: boolean;
@@ -62,28 +62,28 @@ export interface CameraConfig {
    */
   zoom?: number;
   /**
-   * Bearing of the camera, in degrees clockwise from true north. 
-   * 
+   * Bearing of the camera, in degrees clockwise from true north.
+   *
    * @default 0
    */
   bearing?: number;
   /**
-   * The angle, in degrees, of the camera from the nadir (directly facing the Earth). 
-   * 
+   * The angle, in degrees, of the camera from the nadir (directly facing the Earth).
+   *
    * The only allowed values are 0 and 45.
-   * 
+   *
    * @default 0
    */
   angle?: number;
   /**
    * Animate the transition to the new Camera properties.
-   * 
+   *
    * @default false
    */
   animate?: boolean;
 
   /**
-   * 
+   *
    */
   animationDuration?: number;
 }
@@ -112,7 +112,7 @@ export enum MapType {
 }
 
 /**
- * Controls for setting padding on the 'visible' region of the view. 
+ * Controls for setting padding on the 'visible' region of the view.
  */
 export interface MapPadding {
   top: number;

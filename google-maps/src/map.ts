@@ -363,6 +363,12 @@ export class GoogleMap {
     });
   }
 
+  /**
+   * Set the event listener on the map for 'onCameraIdle' events.
+   *
+   * @param callback
+   * @returns
+   */
   async setOnCameraIdleListener(callback?: MapListenerCallback): Promise<void> {
     if (this.onCameraIdleListener) {
       this.onCameraIdleListener.remove();
@@ -378,6 +384,12 @@ export class GoogleMap {
     }
   }
 
+  /**
+   * Set the event listener on the map for 'onCameraMoveStarted' events.
+   *
+   * @param callback
+   * @returns
+   */
   async setOnCameraMoveStartedListener(
     callback?: MapListenerCallback,
   ): Promise<void> {
@@ -395,6 +407,12 @@ export class GoogleMap {
     }
   }
 
+  /**
+   * Set the event listener on the map for 'onClusterClick' events.
+   *
+   * @param callback
+   * @returns
+   */
   async setOnClusterClickListener(
     callback?: MapListenerCallback,
   ): Promise<void> {
@@ -412,6 +430,12 @@ export class GoogleMap {
     }
   }
 
+  /**
+   * Set the event listener on the map for 'onClusterInfoWindowClick' events.
+   *
+   * @param callback
+   * @returns
+   */
   async setOnClusterInfoWindowClickListener(
     callback?: MapListenerCallback,
   ): Promise<void> {
@@ -429,6 +453,12 @@ export class GoogleMap {
     }
   }
 
+  /**
+   * Set the event listener on the map for 'onInfoWindowClick' events.
+   *
+   * @param callback
+   * @returns
+   */
   async setOnInfoWindowClickListener(
     callback?: MapListenerCallback,
   ): Promise<void> {
@@ -446,6 +476,12 @@ export class GoogleMap {
     }
   }
 
+  /**
+   * Set the event listener on the map for 'onMapClick' events.
+   *
+   * @param callback
+   * @returns
+   */
   async setOnMapClickListener(callback?: MapListenerCallback): Promise<void> {
     if (this.onMapClickListener) {
       this.onMapClickListener.remove();
@@ -461,6 +497,12 @@ export class GoogleMap {
     }
   }
 
+  /**
+   * Set the event listener on the map for 'onMarkerClick' events.
+   *
+   * @param callback
+   * @returns
+   */
   async setOnMarkerClickListener(
     callback?: MapListenerCallback,
   ): Promise<void> {
@@ -478,6 +520,12 @@ export class GoogleMap {
     }
   }
 
+  /**
+   * Set the event listener on the map for 'onMyLocationButtonClick' events.
+   *
+   * @param callback
+   * @returns
+   */
   async setOnMyLocationButtonClickListener(
     callback?: MapListenerCallback,
   ): Promise<void> {
@@ -495,6 +543,12 @@ export class GoogleMap {
     }
   }
 
+  /**
+   * Set the event listener on the map for 'onMyLocationClick' events.
+   *
+   * @param callback
+   * @returns
+   */
   async setOnMyLocationClickListener(
     callback?: MapListenerCallback,
   ): Promise<void> {
@@ -509,6 +563,58 @@ export class GoogleMap {
       );
     } else {
       this.onMyLocationClickListener = undefined;
+    }
+  }
+
+  /**
+   * Remove all event listeners on the map.
+   *
+   * @param callback
+   * @returns
+   */
+  async removeAllMapListeners(): Promise<void> {
+    if (this.onCameraIdleListener) {
+      this.onCameraIdleListener.remove();
+      this.onCameraIdleListener = undefined;
+    }
+    if (this.onCameraMoveStartedListener) {
+      this.onCameraMoveStartedListener.remove();
+      this.onCameraMoveStartedListener = undefined;
+    }
+
+    if (this.onClusterClickListener) {
+      this.onClusterClickListener.remove();
+      this.onClusterClickListener = undefined;
+    }
+
+    if (this.onClusterInfoWindowClickListener) {
+      this.onClusterInfoWindowClickListener.remove();
+      this.onClusterInfoWindowClickListener = undefined;
+    }
+
+    if (this.onInfoWindowClickListener) {
+      this.onInfoWindowClickListener.remove();
+      this.onInfoWindowClickListener = undefined;
+    }
+
+    if (this.onMapClickListener) {
+      this.onMapClickListener.remove();
+      this.onMapClickListener = undefined;
+    }
+
+    if (this.onMarkerClickListener) {
+      this.onMarkerClickListener.remove();
+      this.onMarkerClickListener = undefined;
+    }
+
+    if (this.onMyLocationButtonClickListener) {
+      this.onMyLocationButtonClickListener.remove();
+      this.onMyLocationClickListener = undefined;
+    }
+
+    if (this.onMyLocationClickListener) {
+      this.onMyLocationClickListener.remove();
+      this.onMyLocationButtonClickListener = undefined;
     }
   }
 
@@ -603,51 +709,5 @@ export class GoogleMap {
         callback(data);
       }
     };
-  }
-
-  async removeAllMapListeners(): Promise<void> {
-    if (this.onCameraIdleListener) {
-      this.onCameraIdleListener.remove();
-      this.onCameraIdleListener = undefined;
-    }
-    if (this.onCameraMoveStartedListener) {
-      this.onCameraMoveStartedListener.remove();
-      this.onCameraMoveStartedListener = undefined;
-    }
-
-    if (this.onClusterClickListener) {
-      this.onClusterClickListener.remove();
-      this.onClusterClickListener = undefined;
-    }
-
-    if (this.onClusterInfoWindowClickListener) {
-      this.onClusterInfoWindowClickListener.remove();
-      this.onClusterInfoWindowClickListener = undefined;
-    }
-
-    if (this.onInfoWindowClickListener) {
-      this.onInfoWindowClickListener.remove();
-      this.onInfoWindowClickListener = undefined;
-    }
-
-    if (this.onMapClickListener) {
-      this.onMapClickListener.remove();
-      this.onMapClickListener = undefined;
-    }
-
-    if (this.onMarkerClickListener) {
-      this.onMarkerClickListener.remove();
-      this.onMarkerClickListener = undefined;
-    }
-
-    if (this.onMyLocationButtonClickListener) {
-      this.onMyLocationButtonClickListener.remove();
-      this.onMyLocationClickListener = undefined;
-    }
-
-    if (this.onMyLocationClickListener) {
-      this.onMyLocationClickListener.remove();
-      this.onMyLocationButtonClickListener = undefined;
-    }
   }
 }
