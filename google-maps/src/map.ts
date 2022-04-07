@@ -57,7 +57,7 @@ export class GoogleMap {
       forceCreate,
     };
 
-    if (Capacitor.isNativePlatform()) {
+    if (Capacitor.getPlatform() == 'android') {
       (args.element as any) = {};
       newMap.frameElement = newMap.findMapContainerElement();
       newMap.initScrolling();
@@ -71,6 +71,21 @@ export class GoogleMap {
           x: frameRect.x,
           y: frameRect.y,
         };
+      }
+    }
+
+    if (Capacitor.getPlatform() == 'ios') {
+      (args.element as any) = {};
+      try {
+        newMap.element.style.overflow = 'scroll';
+        //@ts-ignore
+        newMap.element.style["-webkit-overflow-scrolling"] = 'touch';
+        const overflowDiv = document.createElement('div');
+        overflowDiv.className = 'iosWebKitStub';
+        overflowDiv.style.height = '200%';
+        newMap.element.appendChild(overflowDiv);
+      } catch (e: any) {
+        console.log(e);
       }
     }
 
@@ -124,8 +139,19 @@ export class GoogleMap {
   }
 
   async destroy(): Promise<void> {
-    if (Capacitor.isNativePlatform()) {
+    if (Capacitor.getPlatform() == 'android') {
       this.disableScrolling();
+    }
+
+    if (Capacitor.getPlatform() == 'ios') {
+      if (this.element) {
+        const children = Array.from(
+          this.element.getElementsByClassName('iosWebKitStub'),
+        );
+        for (const c of children) {
+          c.remove();
+        }
+      }
     }
     return CapacitorGoogleMaps.destroy({
       id: this.id,
