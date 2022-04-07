@@ -71,6 +71,10 @@ class CapacitorGoogleMap(val id: String, val config: GoogleMapConfig,
                 mapViewParent.addView(mapView)
 
                 ((bridge.webView.parent) as ViewGroup).addView(mapViewParent)
+
+                bridge.webView.bringToFront()
+                bridge.webView.setBackgroundColor(Color.TRANSPARENT);
+                bridge.webView.loadUrl("javascript:document.documentElement.style.backgroundColor = 'transparent';void(0);");
             }
         }
     }
