@@ -7,7 +7,7 @@ export type PresentationOption = 'badge' | 'sound' | 'alert';
 declare module '@capacitor/cli' {
   export interface PluginsConfig {
     /**
-     * On iOS you can configure the way the push notifications are displayed when the app is in foreground.
+     * You can configure the way the push notifications are displayed when the app is in foreground.
      */
     PushNotifications?: {
       /**
@@ -18,7 +18,7 @@ declare module '@capacitor/cli' {
        *
        * An empty array can be provided if none of the options are desired.
        *
-       * Only available for iOS.
+       * badge is only available for iOS.
        *
        * @since 1.0.0
        * @example ["badge", "sound", "alert"]
