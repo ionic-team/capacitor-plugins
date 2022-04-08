@@ -61,7 +61,7 @@ public class Map {
     var id: String
     var config: GoogleMapConfig
     var mapViewController: GMViewController
-    var targetViewContaoller: UIView?
+    var targetViewController: UIView?
     var markers = [Int: GMSMarker]()
     private var delegate: CapacitorGoogleMapsPlugin
 
@@ -96,15 +96,15 @@ public class Map {
                     if let typeClass = NSClassFromString("WKChildScrollView"), item.isKind(of: typeClass) {
                         (item as? UIScrollView)?.isScrollEnabled = true
                         
-                        if item.bounds.width == self.config.width && item.bounds.height == self.config.height {
-                            self.targetViewContaoller = item
+                        if item.bounds.width == self.config.width && item.bounds.height == self.config.height && item.tag == 0 {
+                            self.targetViewController = item
+                            break
                         }
-                        
-                        print(item.bounds)
                     }
                 }
                 
-                if let target = self.targetViewContaoller {
+                if let target = self.targetViewController {
+                    target.tag = 1
                     target.removeAllSubview()
                     self.mapViewController.view.frame = target.bounds
                     target.addSubview(self.mapViewController.view)
@@ -153,7 +153,9 @@ public class Map {
 
     func destroy() {
         DispatchQueue.main.async {
+            self.targetViewController?.tag = 0
             self.mapViewController.view = nil
+            
         }
     }
 

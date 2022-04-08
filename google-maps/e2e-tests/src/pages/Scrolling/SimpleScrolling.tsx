@@ -52,7 +52,7 @@ const SimpleScrollingPage: React.FC = () => {
           Destroy Maps
         </IonButton>
       </div>
-      <IonContent className="capacitorGoogleMapContainer">
+      <IonContent>
         <p>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
           vulputate eget ipsum vel venenatis. Ut dui enim, elementum vel
@@ -98,18 +98,17 @@ const SimpleScrollingPage: React.FC = () => {
           a ornare neque efficitur id. Duis a quam ut lacus euismod ultrices sed
           non libero.
         </p>
-        <div
-          id="#map"
+        
+        
+        <capacitor-google-map id="#map" 
           style={{
             display: 'inline-block',
             width: 275,
             height: 400,
             float: 'left',
             marginRight: 20,
-            marginBottom: 20,
-            WebkitOverflowScrolling: "touch"
-          }}
-        ></div>
+            marginBottom: 20
+          }}></capacitor-google-map>
         <div
           style={{
             display: 'block',

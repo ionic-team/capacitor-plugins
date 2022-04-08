@@ -20,6 +20,25 @@ export interface Marker {
   draggable?: boolean;
 }
 
+class MapCustomElement extends HTMLElement {
+  constructor() {
+    super();
+  }
+
+  connectedCallback() {
+    this.style.overflow = 'scroll';
+    //@ts-ignore
+    this.style['-webkit-overflow-scrolling'] = 'touch';
+
+    const overflowDiv = document.createElement('div');
+    overflowDiv.style.height = '200%';
+
+    this.appendChild(overflowDiv);
+  }
+}
+
+customElements.define('capacitor-google-map', MapCustomElement);
+
 export class GoogleMap {
   private id: string;
   private element: HTMLElement | null = null;
@@ -28,6 +47,7 @@ export class GoogleMap {
   private constructor(id: string) {
     this.id = id;
   }
+
   public static async create(
     element: HTMLElement,
     id: string,
@@ -76,17 +96,6 @@ export class GoogleMap {
 
     if (Capacitor.getPlatform() == 'ios') {
       (args.element as any) = {};
-      try {
-        newMap.element.style.overflow = 'scroll';
-        //@ts-ignore
-        newMap.element.style["-webkit-overflow-scrolling"] = 'touch';
-        const overflowDiv = document.createElement('div');
-        overflowDiv.className = 'iosWebKitStub';
-        overflowDiv.style.height = '200%';
-        newMap.element.appendChild(overflowDiv);
-      } catch (e: any) {
-        console.log(e);
-      }
     }
 
     await CapacitorGoogleMaps.create(args);
@@ -143,16 +152,6 @@ export class GoogleMap {
       this.disableScrolling();
     }
 
-    if (Capacitor.getPlatform() == 'ios') {
-      if (this.element) {
-        const children = Array.from(
-          this.element.getElementsByClassName('iosWebKitStub'),
-        );
-        for (const c of children) {
-          c.remove();
-        }
-      }
-    }
     return CapacitorGoogleMaps.destroy({
       id: this.id,
     });
