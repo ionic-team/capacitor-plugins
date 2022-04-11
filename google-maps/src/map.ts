@@ -194,16 +194,30 @@ export class GoogleMap {
   }
 
   initScrolling(): void {
-    window.addEventListener('scroll', this.handleScrollEvent);
-    window.addEventListener('resize', this.handleScrollEvent);
-    if (screen.orientation) {
-      screen.orientation.addEventListener('change', () => {
-        setTimeout(this.updateMapBounds, 500);
-      });
-    } else {
-      window.addEventListener('orientationchange', () => {
-        setTimeout(this.updateMapBounds, 500);
-      });
+    console.log("Setup scrolling");
+
+    const parentContainer = this.findContainerElement();
+    console.log(parentContainer);
+
+    if (parentContainer) {
+      let scrollEvent = 'scroll';
+
+      if (parentContainer.tagName.toLowerCase() == 'ion-content') {
+        (parentContainer as any).scrollEvents = true;
+        scrollEvent = 'ionScroll';
+      }
+
+      window.addEventListener(scrollEvent, this.handleScrollEvent);      
+      window.addEventListener('resize', this.handleScrollEvent);
+      if (screen.orientation) {
+        screen.orientation.addEventListener('change', () => {
+          setTimeout(this.updateMapBounds, 500);
+        });
+      } else {
+        window.addEventListener('orientationchange', () => {
+          setTimeout(this.updateMapBounds, 500);
+        });
+      }
     }
   }
 
@@ -226,10 +240,11 @@ export class GoogleMap {
 
   private updateMapBounds(): void {
     if (this.element) {
+      console.log('scroll fired');
       const mapRect = this.element.getBoundingClientRect();
 
       CapacitorGoogleMaps.onScroll({
-        id: this.id,        
+        id: this.id,
         mapBounds: {
           x: mapRect.x,
           y: mapRect.y,
@@ -238,5 +253,22 @@ export class GoogleMap {
         },
       });
     }
+  }
+
+  private findContainerElement(): HTMLElement | null {
+    if (!this.element) {
+      return null;
+    }
+
+    let parentElement = this.element.parentElement;
+    while (parentElement !== null) {
+      if (window.getComputedStyle(parentElement).overflowY !== "hidden") {      
+        return parentElement;
+      }
+
+      parentElement = parentElement.parentElement;
+    }
+
+    return null;
   }
 }
