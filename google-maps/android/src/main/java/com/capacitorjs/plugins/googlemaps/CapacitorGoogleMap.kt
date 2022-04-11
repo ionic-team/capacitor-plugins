@@ -1,25 +1,30 @@
 package com.capacitorjs.plugins.googlemaps
 
 import android.annotation.SuppressLint
+import android.graphics.Color
+import android.graphics.Rect
 import android.graphics.RectF
 import android.util.Log
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-
 import com.getcapacitor.Bridge
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.CameraPosition
-import kotlinx.coroutines.*
-
 import com.google.maps.android.clustering.ClusterManager
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class CapacitorGoogleMap(val id: String, val config: GoogleMapConfig,
                          val delegate: CapacitorGoogleMapsPlugin) : OnMapReadyCallback {
-    private var mapView: CapacitorGoogleMapView
+    private var mapView: MapView
     private var googleMap: GoogleMap? = null
     private val markers = HashMap<String, CapacitorGoogleMapMarker>()
     private var clusterManager: ClusterManager<CapacitorGoogleMapMarker>? = null
@@ -28,7 +33,7 @@ class CapacitorGoogleMap(val id: String, val config: GoogleMapConfig,
 
     init {
         val bridge = delegate.bridge
-        mapView = CapacitorGoogleMapView(bridge.context, config.googleMapOptions, bridge.activity.resources.displayMetrics.density)
+        mapView = MapView(bridge.context, config.googleMapOptions)
         initMap()
     }
 
@@ -79,7 +84,7 @@ class CapacitorGoogleMap(val id: String, val config: GoogleMapConfig,
         }
     }
 
-    fun updateRender(updatedBounds: RectF, frame: RectF) {
+    fun updateRender(updatedBounds: RectF) {
         this.config.x = updatedBounds.left.toInt()
         this.config.y = updatedBounds.top.toInt()
         this.config.width = updatedBounds.width().toInt()
@@ -88,8 +93,31 @@ class CapacitorGoogleMap(val id: String, val config: GoogleMapConfig,
 
         runBlocking {
             CoroutineScope(Dispatchers.Main).launch {
-                mapView.updateBounds(updatedBounds, frame)
+                val mapRect = getScaledRect(delegate.bridge, updatedBounds)
+                this@CapacitorGoogleMap.mapView.x = mapRect.left
+                this@CapacitorGoogleMap.mapView.y = mapRect.top
             }
+        }
+    }
+
+    fun dispatchTouchEvent(event: MotionEvent) {
+        val offsetViewBounds = Rect()
+        mapView.getDrawingRect(offsetViewBounds)
+
+        val parent = delegate.bridge.webView.parent as ViewGroup
+        parent.offsetDescendantRectToMyCoords(mapView, offsetViewBounds)
+
+        val relativeTop = offsetViewBounds.top
+        val relativeLeft = offsetViewBounds.left
+
+        event.setLocation(event.x - relativeLeft, event.y - relativeTop)
+        mapView.dispatchTouchEvent(event)
+    }
+
+    fun bringToFront() {
+        CoroutineScope(Dispatchers.Main).launch {
+            val mapViewParent = ((delegate.bridge.webView.parent) as ViewGroup).findViewWithTag<ViewGroup>(this@CapacitorGoogleMap.id)
+            mapViewParent.bringToFront()
         }
     }
 
@@ -403,11 +431,36 @@ class CapacitorGoogleMap(val id: String, val config: GoogleMapConfig,
         }
     }
 
+    fun getMapBounds(): Rect {
+        return Rect(
+                getScaledPixels(delegate.bridge, config.x).toInt(),
+                getScaledPixels(delegate.bridge, config.y).toInt(),
+                getScaledPixels(delegate.bridge, config.x + config.width).toInt(),
+                getScaledPixels(delegate.bridge, config.y + config.height).toInt()
+        )
+    }
+
     private fun getScaledPixels(bridge: Bridge, pixels: Int): Int {
         // Get the screen's density scale
         val scale = bridge.activity.resources.displayMetrics.density
         // Convert the dps to pixels, based on density scale
         return (pixels * scale + 0.5f).toInt()
+    }
+
+    private fun getScaledPixelsF(bridge: Bridge, pixels: Float): Float {
+        // Get the screen's density scale
+        val scale = bridge.activity.resources.displayMetrics.density
+        // Convert the dps to pixels, based on density scale
+        return (pixels * scale + 0.5f)
+    }
+
+    private fun getScaledRect(bridge: Bridge, rectF: RectF): RectF {
+        return RectF(
+            getScaledPixelsF(bridge, rectF.left),
+            getScaledPixelsF(bridge, rectF.top),
+            getScaledPixelsF(bridge, rectF.right),
+            getScaledPixelsF(bridge, rectF.bottom)
+        )
     }
 
     override fun onMapReady(map: GoogleMap) {

@@ -42,7 +42,6 @@ customElements.define('capacitor-google-map', MapCustomElement);
 export class GoogleMap {
   private id: string;
   private element: HTMLElement | null = null;
-  private frameElement: HTMLElement | null = null;
 
   private constructor(id: string) {
     this.id = id;
@@ -79,19 +78,7 @@ export class GoogleMap {
 
     if (Capacitor.getPlatform() == 'android') {
       (args.element as any) = {};
-      newMap.frameElement = newMap.findMapContainerElement();
       newMap.initScrolling();
-
-      const frameRect = newMap.frameElement?.getBoundingClientRect();
-
-      if (frameRect) {
-        args.frame = {
-          height: frameRect.height,
-          width: frameRect.width,
-          x: frameRect.x,
-          y: frameRect.y,
-        };
-      }
     }
 
     if (Capacitor.getPlatform() == 'ios') {
@@ -207,62 +194,42 @@ export class GoogleMap {
   }
 
   initScrolling(): void {
-    if (this.frameElement) {
-      let scrollEvent = 'scroll';
-
-      if (this.frameElement.tagName.toLowerCase() == 'ion-content') {
-        (this.frameElement as any).scrollEvents = true;
-        scrollEvent = 'ionScroll';
-      }
-
-      window.addEventListener(scrollEvent, this.handleScrollEvent);
-      window.addEventListener('resize', this.handleScrollEvent);
-      if (screen.orientation) {
-        screen.orientation.addEventListener('change', () => {
-          setTimeout(this.updateMapBounds, 500);
-        });
-      } else {
-        window.addEventListener('orientationchange', () => {
-          setTimeout(this.updateMapBounds, 500);
-        });
-      }
+    window.addEventListener('scroll', this.handleScrollEvent);
+    window.addEventListener('resize', this.handleScrollEvent);
+    if (screen.orientation) {
+      screen.orientation.addEventListener('change', () => {
+        setTimeout(this.updateMapBounds, 500);
+      });
     } else {
-      console.warn('An appropriate map container element has not been found');
+      window.addEventListener('orientationchange', () => {
+        setTimeout(this.updateMapBounds, 500);
+      });
     }
   }
 
   disableScrolling(): void {
-    if (this.frameElement) {
-      window.removeEventListener('ionScroll', this.handleScrollEvent);
-      window.removeEventListener('scroll', this.handleScrollEvent);
-      window.removeEventListener('resize', this.handleScrollEvent);
-      if (screen.orientation) {
-        screen.orientation.removeEventListener('change', () => {
-          setTimeout(this.updateMapBounds, 1000);
-        });
-      } else {
-        window.removeEventListener('orientationchange', () => {
-          setTimeout(this.updateMapBounds, 1000);
-        });
-      }
+    window.removeEventListener('ionScroll', this.handleScrollEvent);
+    window.removeEventListener('scroll', this.handleScrollEvent);
+    window.removeEventListener('resize', this.handleScrollEvent);
+    if (screen.orientation) {
+      screen.orientation.removeEventListener('change', () => {
+        setTimeout(this.updateMapBounds, 1000);
+      });
+    } else {
+      window.removeEventListener('orientationchange', () => {
+        setTimeout(this.updateMapBounds, 1000);
+      });
     }
   }
 
   handleScrollEvent = (): void => this.updateMapBounds();
 
   private updateMapBounds(): void {
-    if (this.element && this.frameElement) {
+    if (this.element) {
       const mapRect = this.element.getBoundingClientRect();
-      const frameRect = this.frameElement.getBoundingClientRect();
 
       CapacitorGoogleMaps.onScroll({
-        id: this.id,
-        frame: {
-          x: frameRect.x,
-          y: frameRect.y,
-          width: frameRect.width,
-          height: frameRect.height,
-        },
+        id: this.id,        
         mapBounds: {
           x: mapRect.x,
           y: mapRect.y,
@@ -271,22 +238,5 @@ export class GoogleMap {
         },
       });
     }
-  }
-
-  private findMapContainerElement(): HTMLElement | null {
-    if (!this.element) {
-      return null;
-    }
-
-    let parentElement = this.element.parentElement;
-    while (parentElement !== null) {
-      if (parentElement.classList.contains('capacitorGoogleMapContainer')) {
-        return parentElement;
-      }
-
-      parentElement = parentElement.parentElement;
-    }
-
-    return null;
   }
 }
