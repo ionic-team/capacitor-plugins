@@ -52,7 +52,7 @@ const SimpleScrollingPage: React.FC = () => {
           Destroy Maps
         </IonButton>
       </div>
-      <IonContent>
+      <IonContent style={{background: 'transparent'}}>
         <p>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
           vulputate eget ipsum vel venenatis. Ut dui enim, elementum vel
@@ -100,7 +100,8 @@ const SimpleScrollingPage: React.FC = () => {
         </p>
         
         
-        <capacitor-google-map id="#map" 
+        <capacitor-google-map
+          id="#map"
           style={{
             display: 'inline-block',
             width: 275,
