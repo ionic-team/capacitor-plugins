@@ -35,22 +35,27 @@ class CapacitorGoogleMapsPlugin : Plugin() {
     override fun load() {
         super.load()
 
-        this.bridge.webView.setOnTouchListener { _, event ->
-            val touchX = event.x
-            val touchY = event.y
+        this.bridge.webView.setOnTouchListener(object : View.OnTouchListener {
+            override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+                if (event != null) {
+                    val touchX = event.x
+                    val touchY = event.y
 
-            maps.forEach { entry ->
-                val map = entry.value;
+                    maps.forEach { entry ->
+                        val map = entry.value;
 
-                val mapRect = map.getMapBounds()
-                if (mapRect.contains(touchX.toInt(), touchY.toInt())) {
-                    map.bringToFront()
-                    map.dispatchTouchEvent(event)
+                        val mapRect = map.getMapBounds()
+                        if (mapRect.contains(touchX.toInt(), touchY.toInt())) {
+                            map.dispatchTouchEvent(event)
+
+                            return true
+                        }
+                    }
                 }
-            }
 
-            false
-        }
+                return v?.onTouchEvent(event) ?: true
+            }
+        })
     }
 
     @PluginMethod
