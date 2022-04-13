@@ -28,8 +28,7 @@ class MapCustomElement extends HTMLElement {
 
   connectedCallback() {
     this.style.overflow = 'scroll';
-    //@ts-ignore
-    this.style['-webkit-overflow-scrolling'] = 'touch';
+    (this.style as any)['-webkit-overflow-scrolling'] = 'touch';
 
     const overflowDiv = document.createElement('div');
     overflowDiv.style.height = '200%';
@@ -43,7 +42,7 @@ customElements.define('capacitor-google-map', MapCustomElement);
 export class GoogleMap {
   private id: string;
   private element: HTMLElement | null = null;
-  
+
   private onCameraIdleListener?: PluginListenerHandle;
   private onCameraMoveStartedListener?: PluginListenerHandle;
   private onClusterClickListener?: PluginListenerHandle;
@@ -212,10 +211,7 @@ export class GoogleMap {
   }
 
   initScrolling(): void {
-    console.log("Setup scrolling");
-
     const parentContainer = this.findContainerElement();
-    console.log(parentContainer);
 
     if (parentContainer) {
       let scrollEvent = 'scroll';
@@ -225,7 +221,7 @@ export class GoogleMap {
         scrollEvent = 'ionScroll';
       }
 
-      window.addEventListener(scrollEvent, this.handleScrollEvent);      
+      window.addEventListener(scrollEvent, this.handleScrollEvent);
       window.addEventListener('resize', this.handleScrollEvent);
       if (screen.orientation) {
         screen.orientation.addEventListener('change', () => {
@@ -258,7 +254,6 @@ export class GoogleMap {
 
   private updateMapBounds(): void {
     if (this.element) {
-      console.log('scroll fired');
       const mapRect = this.element.getBoundingClientRect();
 
       CapacitorGoogleMaps.onScroll({
@@ -280,7 +275,7 @@ export class GoogleMap {
 
     let parentElement = this.element.parentElement;
     while (parentElement !== null) {
-      if (window.getComputedStyle(parentElement).overflowY !== "hidden") {      
+      if (window.getComputedStyle(parentElement).overflowY !== 'hidden') {
         return parentElement;
       }
 

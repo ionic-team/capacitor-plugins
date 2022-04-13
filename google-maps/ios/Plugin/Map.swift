@@ -82,25 +82,25 @@ public class Map {
                 "x": self.config.x,
                 "y": self.config.y
             ]
-            
+
             self.mapViewController.cameraPosition = [
                 "latitude": self.config.center.lat,
                 "longitude": self.config.center.lng,
                 "zoom": self.config.zoom
             ]
             if let bridge = self.delegate.bridge {
-                
+
                 for item in bridge.webView!.getAllSubViews() {
                     if let typeClass = NSClassFromString("WKChildScrollView"), item.isKind(of: typeClass) {
                         (item as? UIScrollView)?.isScrollEnabled = true
-                        
+
                         if item.bounds.width == self.config.width && item.bounds.height == self.config.height && item.tag == 0 {
                             self.targetViewController = item
                             break
                         }
                     }
                 }
-                
+
                 if let target = self.targetViewController {
                     target.tag = 1
                     target.removeAllSubview()
@@ -108,10 +108,10 @@ public class Map {
                     target.addSubview(self.mapViewController.view)
                     self.mapViewController.GMapView.delegate = self.delegate
                 }
-                
+
                 self.delegate.notifyListeners("onMapReady", data: [
                     "mapId": self.id
-                ])                
+                ])
             }
         }
     }
@@ -157,7 +157,7 @@ public class Map {
         DispatchQueue.main.async {
             self.targetViewController?.tag = 0
             self.mapViewController.view = nil
-            
+
         }
     }
 
@@ -369,7 +369,7 @@ public class Map {
 }
 
 extension WKWebView {
-    open override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+    override open func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         var hitView = super.hitTest(point, with: event)
 
         if let typeClass = NSClassFromString("WKChildScrollView"), let tempHitView = hitView, tempHitView.isKind(of: typeClass) {
@@ -388,7 +388,7 @@ extension WKWebView {
 
 extension UIView {
     private static var allSubviews: [UIView] = []
-    
+
     private func viewArray(root: UIView) -> [UIView] {
         for view in root.subviews {
             if view.isKind(of: UIView.self) {
@@ -398,12 +398,12 @@ extension UIView {
         }
         return UIView.allSubviews
     }
-    
+
     fileprivate func getAllSubViews() -> [UIView] {
         UIView.allSubviews = []
         return viewArray(root: self)
     }
-    
+
     fileprivate func removeAllSubview() {
         subviews.forEach {
             $0.removeFromSuperview()
