@@ -81,6 +81,9 @@ class CapacitorGoogleMap(
             CoroutineScope(Dispatchers.Main).launch {
                 val bridge = delegate.bridge
                 val mapViewParent = FrameLayout(bridge.context)
+                mapViewParent.minimumHeight = bridge.webView.height
+                mapViewParent.minimumWidth = bridge.webView.width
+
                 val layoutParams =
                         FrameLayout.LayoutParams(
                                 getScaledPixels(bridge, config.width),
@@ -120,11 +123,7 @@ class CapacitorGoogleMap(
     }
 
     fun dispatchTouchEvent(event: MotionEvent) {
-        val offsetViewBounds = Rect()
-        mapView.getDrawingRect(offsetViewBounds)
-
-        val parent = delegate.bridge.webView.parent as ViewGroup
-        parent.offsetDescendantRectToMyCoords(mapView, offsetViewBounds)
+        val offsetViewBounds = getMapBounds()        
 
         val relativeTop = offsetViewBounds.top
         val relativeLeft = offsetViewBounds.left
