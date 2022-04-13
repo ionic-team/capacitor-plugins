@@ -15,13 +15,13 @@ import org.json.JSONArray
 import org.json.JSONObject
 
 @CapacitorPlugin(
-        name = "CapacitorGoogleMaps",
-        permissions = [
-            Permission(
-                    strings = [Manifest.permission.ACCESS_FINE_LOCATION],
-                    alias = CapacitorGoogleMapsPlugin.LOCATION
-            ),
-        ],
+    name = "CapacitorGoogleMaps",
+    permissions = [
+        Permission(
+                strings = [Manifest.permission.ACCESS_FINE_LOCATION],
+                alias = CapacitorGoogleMapsPlugin.LOCATION
+        ),
+    ],
 )
 class CapacitorGoogleMapsPlugin : Plugin() {
     private var maps: HashMap<String, CapacitorGoogleMap> = HashMap()
@@ -57,6 +57,31 @@ class CapacitorGoogleMapsPlugin : Plugin() {
             }
         })
     }
+    
+    override fun handleOnStart() {
+        super.handleOnStart()
+        maps.forEach { it.value.onStart() }
+    }
+
+    override fun handleOnResume() {
+        super.handleOnResume()
+        maps.forEach { it.value.onResume() }
+    }
+
+    override fun handleOnPause() {
+        super.handleOnPause()
+        maps.forEach { it.value.onPause() }
+    }
+
+    override fun handleOnStop() {
+        super.handleOnStop()
+        maps.forEach { it.value.onStop() }
+    }
+
+    override fun handleOnDestroy() {
+        super.handleOnDestroy()
+        maps.forEach { it.value.onDestroy() }
+    }
 
     @PluginMethod
     fun create(call: PluginCall) {
@@ -88,11 +113,9 @@ class CapacitorGoogleMapsPlugin : Plugin() {
             maps[id] = newMap
 
             call.resolve()
-        }
-        catch(e: GoogleMapsError) {
+        } catch (e: GoogleMapsError) {
             handleError(call, e)
-        }
-        catch (e: Exception) {
+        } catch (e: Exception) {
             handleError(call, e)
         }
     }
@@ -110,11 +133,9 @@ class CapacitorGoogleMapsPlugin : Plugin() {
             removedMap.destroy()
 
             call.resolve()
-        }
-        catch(e: GoogleMapsError) {
+        } catch (e: GoogleMapsError) {
             handleError(call, e)
-        }
-        catch (e: Exception) {
+        } catch (e: Exception) {
             handleError(call, e)
         }
     }
@@ -138,11 +159,10 @@ class CapacitorGoogleMapsPlugin : Plugin() {
                 val res = JSObject()
                 res.put("id", markerId)
                 call.resolve(res)
-
             }
         } catch (e: GoogleMapsError) {
             handleError(call, e)
-        } catch(e: Exception) {
+        } catch (e: Exception) {
             handleError(call, e)
         }
     }
@@ -176,9 +196,7 @@ class CapacitorGoogleMapsPlugin : Plugin() {
                 val ids = result.getOrThrow()
 
                 val jsonIDs = JSONArray()
-                ids.forEach {
-                    jsonIDs.put(it)
-                }
+                ids.forEach { jsonIDs.put(it) }
 
                 val res = JSObject()
                 res.put("ids", jsonIDs)
@@ -186,7 +204,7 @@ class CapacitorGoogleMapsPlugin : Plugin() {
             }
         } catch (e: GoogleMapsError) {
             handleError(call, e)
-        } catch(e: Exception) {
+        } catch (e: Exception) {
             handleError(call, e)
         }
     }
@@ -209,7 +227,7 @@ class CapacitorGoogleMapsPlugin : Plugin() {
             }
         } catch (e: GoogleMapsError) {
             handleError(call, e)
-        } catch(e: Exception) {
+        } catch (e: Exception) {
             handleError(call, e)
         }
     }
@@ -232,7 +250,7 @@ class CapacitorGoogleMapsPlugin : Plugin() {
             }
         } catch (e: GoogleMapsError) {
             handleError(call, e)
-        } catch(e: Exception) {
+        } catch (e: Exception) {
             handleError(call, e)
         }
     }
@@ -258,7 +276,7 @@ class CapacitorGoogleMapsPlugin : Plugin() {
             }
         } catch (e: GoogleMapsError) {
             handleError(call, e)
-        } catch(e: Exception) {
+        } catch (e: Exception) {
             handleError(call, e)
         }
     }
@@ -295,7 +313,7 @@ class CapacitorGoogleMapsPlugin : Plugin() {
             }
         } catch (e: GoogleMapsError) {
             handleError(call, e)
-        } catch(e: Exception) {
+        } catch (e: Exception) {
             handleError(call, e)
         }
     }
@@ -323,7 +341,7 @@ class CapacitorGoogleMapsPlugin : Plugin() {
             }
         } catch (e: GoogleMapsError) {
             handleError(call, e)
-        } catch(e: Exception) {
+        } catch (e: Exception) {
             handleError(call, e)
         }
     }
@@ -349,7 +367,7 @@ class CapacitorGoogleMapsPlugin : Plugin() {
             }
         } catch (e: GoogleMapsError) {
             handleError(call, e)
-        } catch(e: Exception) {
+        } catch (e: Exception) {
             handleError(call, e)
         }
     }
@@ -375,7 +393,7 @@ class CapacitorGoogleMapsPlugin : Plugin() {
             }
         } catch (e: GoogleMapsError) {
             handleError(call, e)
-        } catch(e: Exception) {
+        } catch (e: Exception) {
             handleError(call, e)
         }
     }
@@ -401,7 +419,7 @@ class CapacitorGoogleMapsPlugin : Plugin() {
             }
         } catch (e: GoogleMapsError) {
             handleError(call, e)
-        } catch(e: Exception) {
+        } catch (e: Exception) {
             handleError(call, e)
         }
     }
@@ -447,7 +465,7 @@ class CapacitorGoogleMapsPlugin : Plugin() {
             }
         } catch (e: GoogleMapsError) {
             handleError(call, e)
-        } catch(e: Exception) {
+        } catch (e: Exception) {
             handleError(call, e)
         }
     }
@@ -473,10 +491,9 @@ class CapacitorGoogleMapsPlugin : Plugin() {
             map.updateRender(bounds)
 
             call.resolve()
-
         } catch (e: GoogleMapsError) {
             handleError(call, e)
-        } catch(e: Exception) {
+        } catch (e: Exception) {
             handleError(call, e)
         }
     }
@@ -501,9 +518,13 @@ class CapacitorGoogleMapsPlugin : Plugin() {
             }
         } catch (e: GoogleMapsError) {
             handleError(call, e)
-        } catch(e: Exception) {
+        } catch (e: Exception) {
             handleError(call, e)
         }
+    }
+
+    fun notify(event: String, data: JSObject) {
+        notifyListeners(event, data)
     }
 
     private fun handleError(call: PluginCall, e: Exception) {
@@ -519,20 +540,28 @@ class CapacitorGoogleMapsPlugin : Plugin() {
     }
 
     private fun boundsObjectToRect(jsonObject: JSONObject): RectF {
-        if(!jsonObject.has("width")) {
-            throw InvalidArgumentsError("GoogleMapConfig object is missing the required 'width' property")
+        if (!jsonObject.has("width")) {
+            throw InvalidArgumentsError(
+                    "GoogleMapConfig object is missing the required 'width' property"
+            )
         }
 
-        if(!jsonObject.has("height")) {
-            throw InvalidArgumentsError("GoogleMapConfig object is missing the required 'height' property")
+        if (!jsonObject.has("height")) {
+            throw InvalidArgumentsError(
+                    "GoogleMapConfig object is missing the required 'height' property"
+            )
         }
 
-        if(!jsonObject.has("x")) {
-            throw InvalidArgumentsError("GoogleMapConfig object is missing the required 'x' property")
+        if (!jsonObject.has("x")) {
+            throw InvalidArgumentsError(
+                    "GoogleMapConfig object is missing the required 'x' property"
+            )
         }
 
-        if(!jsonObject.has("y")) {
-            throw InvalidArgumentsError("GoogleMapConfig object is missing the required 'y' property")
+        if (!jsonObject.has("y")) {
+            throw InvalidArgumentsError(
+                    "GoogleMapConfig object is missing the required 'y' property"
+            )
         }
 
         val width = jsonObject.getDouble("width")

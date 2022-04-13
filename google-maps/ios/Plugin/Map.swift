@@ -83,8 +83,6 @@ public class Map {
                 "y": self.config.y
             ]
             
-            print(self.config)
-            
             self.mapViewController.cameraPosition = [
                 "latitude": self.config.center.lat,
                 "longitude": self.config.center.lng,
@@ -110,6 +108,10 @@ public class Map {
                     target.addSubview(self.mapViewController.view)
                     self.mapViewController.GMapView.delegate = self.delegate
                 }
+                
+                self.delegate.notifyListeners("onMapReady", data: [
+                    "mapId": self.id
+                ])                
             }
         }
     }

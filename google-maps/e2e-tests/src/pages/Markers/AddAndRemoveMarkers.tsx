@@ -9,6 +9,14 @@ const AddAndRemoveMarkers: React.FC = () => {
     const [commandOutput, setCommandOutput] = useState('');
     const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
 
+    const onMarkerClick = (data: any) => {
+        setCommandOutput(`MARKER (${data.markerId}) WAS CLICKED ON MAP (${data.mapId})`);
+    }
+
+    const onInfoWindowClick = (data: any) => {
+        setCommandOutput(`INFO WINDOW (${data.markerId}) WAS CLICKED ON MAP (${data.mapId})`);
+    }
+
     async function createMap() {
         try {
             const mapRef1 = document.getElementById("markers_map1")!
@@ -29,6 +37,18 @@ const AddAndRemoveMarkers: React.FC = () => {
         }
     }
 
+    async function setOnMarkerClickListener() {
+        map?.setOnMarkerClickListener(onMarkerClick);
+        map?.setOnInfoWindowClickListener(onInfoWindowClick);
+        setCommandOutput('Set On Marker Click Listener!');
+    }
+
+    async function removeOnMarkerClickListener() {
+        map?.setOnMarkerClickListener();
+        map?.setOnInfoWindowClickListener();
+        setCommandOutput('Removed On Marker Click Listener!');
+    }
+
     async function addMarker() {
         try {
             if (!map) {
@@ -41,6 +61,7 @@ const AddAndRemoveMarkers: React.FC = () => {
                     lng: -117.9,
                 },
                 title: "Hello world",
+                snippet: "Hola Mundo",
             });
 
             setMarkerId(id);    
@@ -85,6 +106,12 @@ const AddAndRemoveMarkers: React.FC = () => {
             <div>
                 <IonButton  id="createMapButton" onClick={createMap}>
                     Create Map
+                </IonButton>
+                <IonButton  id="setOnMarkerClickButton" onClick={setOnMarkerClickListener}>
+                    Set On Marker Click Listener
+                </IonButton>
+                <IonButton  id="removeOnMarkerClickButton" onClick={removeOnMarkerClickListener}>
+                    Remove On Marker Click Listener
                 </IonButton>
                 <IonButton  id="addMarkerButton" onClick={addMarker}>
                     Add 1 Marker
