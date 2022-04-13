@@ -235,13 +235,13 @@ const MultipleMarkers: React.FC = () => {
                 <IonTextarea id="commandOutput" value={commandOutput}></IonTextarea>
                 <IonTextarea id="commandOutput2" value={commandOutput2}></IonTextarea>
             </div>
-            <div id="multipleMarkers_map1" style={{
+            <capacitor-google-map id="multipleMarkers_map1" style={{
                 position: "absolute",
                 top: window.innerHeight - 150,
                 left: 0,
                 width: window.innerWidth,
                 height: 150,
-            }}></div>
+            }}></capacitor-google-map>
         </BaseTestingPage>
     )
 }
