@@ -4,22 +4,19 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.service.notification.StatusBarNotification;
-import com.getcapacitor.Bridge;
-import com.getcapacitor.JSArray;
-import com.getcapacitor.JSObject;
-import com.getcapacitor.Plugin;
-import com.getcapacitor.PluginCall;
-import com.getcapacitor.PluginHandle;
-import com.getcapacitor.PluginMethod;
+import androidx.core.app.NotificationCompat;
+import com.getcapacitor.*;
 import com.getcapacitor.annotation.CapacitorPlugin;
 import com.getcapacitor.annotation.Permission;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.RemoteMessage;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -46,7 +43,7 @@ public class PushNotificationsPlugin extends Plugin {
             lastMessage = null;
         }
 
-        notificationChannelManager = new NotificationChannelManager(getActivity(), notificationManager);
+        notificationChannelManager = new NotificationChannelManager(getActivity(), notificationManager, getConfig());
     }
 
     @Override
@@ -215,8 +212,30 @@ public class PushNotificationsPlugin extends Plugin {
 
         RemoteMessage.Notification notification = remoteMessage.getNotification();
         if (notification != null) {
-            remoteMessageData.put("title", notification.getTitle());
-            remoteMessageData.put("body", notification.getBody());
+            String title = notification.getTitle();
+            String body = notification.getBody();
+            String[] presentation = getConfig().getArray("presentationOptions");
+            if (presentation != null) {
+                if (Arrays.asList(presentation).contains("alert")) {
+                    ApplicationInfo applicationInfo = getContext().getApplicationInfo();
+                    Bundle bundle = applicationInfo.metaData;
+                    int pushIcon = android.R.drawable.ic_dialog_info;
+                    if (bundle != null && bundle.getInt("com.google.firebase.messaging.default_notification_icon") != 0) {
+                        pushIcon = bundle.getInt("com.google.firebase.messaging.default_notification_icon");
+                    }
+                    NotificationCompat.Builder builder = new NotificationCompat.Builder(
+                        getContext(),
+                        NotificationChannelManager.FOREGROUND_NOTIFICATION_CHANNEL_ID
+                    )
+                        .setSmallIcon(pushIcon)
+                        .setContentTitle(title)
+                        .setContentText(body)
+                        .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                    notificationManager.notify(0, builder.build());
+                }
+            }
+            remoteMessageData.put("title", title);
+            remoteMessageData.put("body", body);
             remoteMessageData.put("click_action", notification.getClickAction());
 
             Uri link = notification.getLink();
