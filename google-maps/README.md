@@ -34,16 +34,16 @@ This to use certain location features, API requires the following permissions be
 ```
 
 ## Example
-The map container element must have a defined width and height:
+It's required to use the `<capacitor-google-map />` custom element to create your container element for the map.  The map container element must have a defined width and height:
 
 ```html
-<div id="map"
+<capacitor-google-map id="map"
     style={{
         display: "inline-block",
         width: 275,
         height: 400,
     }}
-></div>
+></capacitor-google-map>
 ```
 
 ```typescript
