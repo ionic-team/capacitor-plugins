@@ -240,7 +240,13 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
     }
 
     if (occupiedEntry !== undefined) {
-      data = occupiedEntry.content + data;
+      if (occupiedEntry.content && this.isBase64String(occupiedEntry.content)) {
+        if (!this.isBase64String(data))
+          throw Error('Supplied data does not match the current file data encoding (base64)');
+        data = btoa(atob(occupiedEntry.content) + atob(data));
+      } else {
+        data = occupiedEntry.content + data;
+      }
       ctime = occupiedEntry.ctime;
     }
     const pathObj: EntryObj = {
@@ -596,6 +602,11 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
         }
       }
     }
+  }
+
+  private isBase64String(str: string): boolean {
+    const base64regex = /^([0-9a-zA-Z+/]{4})*(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?$/;
+    return base64regex.test(str);
   }
 }
 
