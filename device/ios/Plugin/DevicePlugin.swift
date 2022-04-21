@@ -24,6 +24,7 @@ public class DevicePlugin: CAPPlugin {
         let diskFree = implementation.getFreeDiskSize() ?? 0
         let realDiskFree = implementation.getRealFreeDiskSize() ?? 0
         let diskTotal = implementation.getTotalDiskSize() ?? 0
+        let modelName = implementation.getModelName()
 
         call.resolve([
             "memUsed": memUsed,
@@ -32,7 +33,7 @@ public class DevicePlugin: CAPPlugin {
             "realDiskFree": realDiskFree,
             "realDiskTotal": diskTotal,
             "name": UIDevice.current.name,
-            "model": UIDevice.current.model,
+            "model": modelName,
             "operatingSystem": "ios",
             "osVersion": UIDevice.current.systemVersion,
             "platform": "ios",
