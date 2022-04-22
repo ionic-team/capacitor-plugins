@@ -415,7 +415,7 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
    * @return a promise that resolves with the rename result
    */
   async rename(options: RenameOptions): Promise<void> {
-    await this._copy(options, true)
+    await this._copy(options, true);
     return;
   }
 
@@ -442,7 +442,10 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
    * @param doRename whether to perform a rename or copy operation
    * @return a promise that resolves with the result
    */
-  private async _copy(options: CopyOptions, doRename = false): Promise<CopyResult> {
+  private async _copy(
+    options: CopyOptions,
+    doRename = false,
+  ): Promise<CopyResult> {
     let { toDirectory } = options;
     const { to, from, directory: fromDirectory } = options;
 

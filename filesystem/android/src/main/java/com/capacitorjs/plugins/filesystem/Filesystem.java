@@ -83,7 +83,8 @@ public class Filesystem {
         return files;
     }
 
-    public File copy(String from, String directory, String to, String toDirectory, boolean doRename) throws IOException, CopyFailedException {
+    public File copy(String from, String directory, String to, String toDirectory, boolean doRename)
+        throws IOException, CopyFailedException {
         if (toDirectory == null) {
             toDirectory = directory;
         }
