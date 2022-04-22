@@ -83,8 +83,7 @@ public class Filesystem {
         return files;
     }
 
-    public boolean copy(String from, String directory, String to, String toDirectory, boolean doRename)
-        throws IOException, CopyFailedException {
+    public File copy(String from, String directory, String to, String toDirectory, boolean doRename) throws IOException, CopyFailedException {
         if (toDirectory == null) {
             toDirectory = directory;
         }
@@ -100,7 +99,7 @@ public class Filesystem {
         }
 
         if (toObject.equals(fromObject)) {
-            return true;
+            return toObject;
         }
 
         if (!fromObject.exists()) {
@@ -130,7 +129,7 @@ public class Filesystem {
             copyRecursively(fromObject, toObject);
         }
 
-        return true;
+        return toObject;
     }
 
     public InputStream getInputStream(String path, String directory) throws IOException {
