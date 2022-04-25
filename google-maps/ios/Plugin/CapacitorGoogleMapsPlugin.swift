@@ -450,32 +450,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
     }
 
     @objc func onScroll(_ call: CAPPluginCall) {
-        do {
-            guard let id = call.getString("id") else {
-                throw GoogleMapErrors.invalidMapId
-            }
-
-            guard let map = self.maps[id] else {
-                throw GoogleMapErrors.mapNotFound
-            }
-
-            guard let frame = call.getObject("frame") else {
-                throw GoogleMapErrors.invalidArguments("frame is missing")
-            }
-
-            guard let bounds = call.getObject("mapBounds") else {
-                throw GoogleMapErrors.invalidArguments("mapBounds is missing")
-            }
-
-            let frameRect = try CGRect.fromJSObject(frame)
-            let boundsRect = try CGRect.fromJSObject(bounds)
-
-            map.updateRender(frame: frameRect, mapBounds: boundsRect)
-
-            call.resolve()
-        } catch {
-            handleError(call, error: error)
-        }
+        call.unavailable("not supported on iOS")
     }
 
     private func handleError(_ call: CAPPluginCall, error: Error) {

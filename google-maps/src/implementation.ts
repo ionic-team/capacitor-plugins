@@ -9,17 +9,11 @@ import type {
 } from './definitions';
 import type { Marker } from './map';
 
-export interface CreateMapArgs {
+export interface CreateMapOptions {
   id: string;
   apiKey: string;
   config: GoogleMapConfig;
   element: HTMLElement;
-  frame?: {
-    x: number;
-    y: number;
-    width: number;
-    height: number;
-  };
   forceCreate?: boolean;
 }
 
@@ -83,12 +77,6 @@ export interface AddMarkersArgs {
 
 export interface OnScrollArgs {
   id: string;
-  frame: {
-    x: number;
-    y: number;
-    width: number;
-    height: number;
-  };
   mapBounds: {
     x: number;
     y: number;
@@ -100,7 +88,7 @@ export interface OnScrollArgs {
 export type MapListenerCallback = (data: any) => void;
 
 export interface CapacitorGoogleMapsPlugin {
-  create(args: CreateMapArgs): Promise<void>;
+  create(options: CreateMapOptions): Promise<void>;
   addMarker(args: AddMarkerArgs): Promise<{ id: string }>;
   addMarkers(args: AddMarkersArgs): Promise<{ ids: string[] }>;
   removeMarker(args: RemoveMarkerArgs): Promise<void>;

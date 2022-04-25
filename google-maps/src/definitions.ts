@@ -46,7 +46,7 @@ export interface GoogleMapConfig {
    *
    * @default false
    */
-  androidLiteMode: boolean;
+  androidLiteMode?: boolean;
 }
 
 /**

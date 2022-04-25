@@ -31,7 +31,7 @@ const App: React.FC = () => {
   const routes = getRouterSetup();
 
   return (
-    <IonApp>
+    <IonApp style={{background: "transparent"}}>
       <IonReactRouter>
         <IonSplitPane contentId="main">
           <Menu />

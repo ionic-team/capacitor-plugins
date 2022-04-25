@@ -61,6 +61,7 @@ public class Map {
     var id: String
     var config: GoogleMapConfig
     var mapViewController: GMViewController
+    var targetViewController: UIView?
     var markers = [Int: GMSMarker]()
     private var delegate: CapacitorGoogleMapsPlugin
 
@@ -81,14 +82,33 @@ public class Map {
                 "x": self.config.x,
                 "y": self.config.y
             ]
+
             self.mapViewController.cameraPosition = [
                 "latitude": self.config.center.lat,
                 "longitude": self.config.center.lng,
                 "zoom": self.config.zoom
             ]
             if let bridge = self.delegate.bridge {
-                bridge.viewController!.view.addSubview(self.mapViewController.view)
-                self.mapViewController.GMapView.delegate = self.delegate
+
+                for item in bridge.webView!.getAllSubViews() {
+                    if let typeClass = NSClassFromString("WKChildScrollView"), item.isKind(of: typeClass) {
+                        (item as? UIScrollView)?.isScrollEnabled = true
+
+                        if item.bounds.width == self.config.width && item.bounds.height == self.config.height && (item as? UIView)?.tag == 0 {
+                            self.targetViewController = item
+                            break
+                        }
+                    }
+                }
+
+                if let target = self.targetViewController {
+                    target.tag = 1
+                    target.removeAllSubview()
+                    self.mapViewController.view.frame = target.bounds
+                    target.addSubview(self.mapViewController.view)
+                    self.mapViewController.GMapView.delegate = self.delegate
+                }
+
                 self.delegate.notifyListeners("onMapReady", data: [
                     "mapId": self.id
                 ])
@@ -135,7 +155,9 @@ public class Map {
 
     func destroy() {
         DispatchQueue.main.async {
+            self.targetViewController?.tag = 0
             self.mapViewController.view = nil
+
         }
     }
 
@@ -343,5 +365,48 @@ public class Map {
         }
 
         return intersections
+    }
+}
+
+extension WKWebView {
+    override open func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        var hitView = super.hitTest(point, with: event)
+
+        if let typeClass = NSClassFromString("WKChildScrollView"), let tempHitView = hitView, tempHitView.isKind(of: typeClass) {
+            for item in tempHitView.subviews.reversed() {
+                let convertPoint = item.convert(point, from: self)
+                if let hitTestView = item.hitTest(convertPoint, with: event) {
+                    hitView = hitTestView
+                    break
+                }
+            }
+        }
+
+        return hitView
+    }
+}
+
+extension UIView {
+    private static var allSubviews: [UIView] = []
+
+    private func viewArray(root: UIView) -> [UIView] {
+        for view in root.subviews {
+            if view.isKind(of: UIView.self) {
+                UIView.allSubviews.append(view)
+            }
+            _ = viewArray(root: view)
+        }
+        return UIView.allSubviews
+    }
+
+    fileprivate func getAllSubViews() -> [UIView] {
+        UIView.allSubviews = []
+        return viewArray(root: self)
+    }
+
+    fileprivate func removeAllSubview() {
+        subviews.forEach {
+            $0.removeFromSuperview()
+        }
     }
 }

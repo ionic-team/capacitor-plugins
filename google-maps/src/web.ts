@@ -6,7 +6,7 @@ import type {
   CameraArgs,
   AddMarkersArgs,
   CapacitorGoogleMapsPlugin,
-  CreateMapArgs,
+  CreateMapOptions,
   CurrentLocArgs,
   DestroyMapArgs,
   IndoorMapArgs,
@@ -22,9 +22,6 @@ export class CapacitorGoogleMapsWeb
   extends WebPlugin
   implements CapacitorGoogleMapsPlugin
 {
-  onScroll(_args: OnScrollArgs): Promise<void> {
-    throw new Error('Method not implemented.');
-  }
   private gMapsRef: typeof google.maps | undefined = undefined;
   private maps: {
     [id: string]: { element: HTMLElement; map: google.maps.Map };
@@ -83,14 +80,19 @@ export class CapacitorGoogleMapsWeb
   removeMarker(_args: RemoveMarkerArgs): Promise<void> {
     throw new Error('Method not implemented.');
   }
-  async create(args: CreateMapArgs): Promise<void> {
-    console.log(`Create map: ${args.id}`);
-    await this.importGoogleLib(args.apiKey);
-    this.maps[args.id] = {
-      map: new window.google.maps.Map(args.element, { ...args.config }),
-      element: args.element,
+  onScroll(_args: OnScrollArgs): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
+
+  async create(options: CreateMapOptions): Promise<void> {
+    console.log(`Create map: ${options.id}`);
+    await this.importGoogleLib(options.apiKey);
+    this.maps[options.id] = {
+      map: new window.google.maps.Map(options.element, { ...options.config }),
+      element: options.element,
     };
   }
+
   async destroy(_args: DestroyMapArgs): Promise<void> {
     console.log(`Destroy map: ${_args.id}`);
     const mapItem = this.maps[_args.id];
