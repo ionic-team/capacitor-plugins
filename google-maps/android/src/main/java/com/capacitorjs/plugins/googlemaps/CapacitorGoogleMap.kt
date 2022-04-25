@@ -101,8 +101,6 @@ class CapacitorGoogleMap(
 
                 bridge.webView.bringToFront()
                 bridge.webView.setBackgroundColor(Color.TRANSPARENT);
-                bridge.webView.loadUrl("javascript:document.documentElement.style.backgroundColor = 'transparent';void(0);");
-                bridge.webView.loadUrl("javascript:document.body.style.backgroundColor = 'transparent';void(0);");
             }
         }
     }

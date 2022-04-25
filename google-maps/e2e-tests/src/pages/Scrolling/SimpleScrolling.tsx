@@ -9,17 +9,21 @@ const SimpleScrollingPage: React.FC = () => {
   const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
 
   async function createMaps() {
-    const mapRef = document.getElementById('#map')!;
+    const mapRef = document.getElementById('map')!;
     setCommandOutput('');
     setMap(null);
     try {
-      const newMap1 = await GoogleMap.create(mapRef, 'test-map', apiKey!, {
-        center: {
-          lat: 33.6,
-          lng: -117.9,
-        },
-        zoom: 8,
-        androidLiteMode: false,
+      const newMap1 = await GoogleMap.create({
+        element: mapRef, 
+        id: 'test-map', 
+        apiKey: apiKey!, 
+        config: {
+          center: {
+            lat: 33.6,
+            lng: -117.9,
+          },
+          zoom: 8,
+        }
       });
 
       setMap(newMap1);
@@ -101,7 +105,7 @@ const SimpleScrollingPage: React.FC = () => {
         
         
         <capacitor-google-map
-          id="#map"
+          id="map"
           style={{
             display: 'inline-block',
             width: 275,

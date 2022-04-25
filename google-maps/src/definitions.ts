@@ -10,7 +10,7 @@ export interface GoogleMapConfig {
   y?: number;
   center: LatLng;
   zoom: number;
-  androidLiteMode: boolean;
+  androidLiteMode?: boolean;
 }
 
 export interface CameraConfig {
