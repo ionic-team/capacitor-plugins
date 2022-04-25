@@ -1,12 +1,7 @@
 import { Capacitor } from '@capacitor/core';
 import type { PluginListenerHandle } from '@capacitor/core';
 
-import type {
-  CameraConfig,
-  LatLng,
-  MapPadding,
-  MapType,
-} from './definitions';
+import type { CameraConfig, LatLng, MapPadding, MapType } from './definitions';
 import type { CreateMapOptions, MapListenerCallback } from './implementation';
 import { CapacitorGoogleMaps } from './implementation';
 
