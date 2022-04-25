@@ -17,22 +17,30 @@ const ConfigMapPage: React.FC = () => {
             const mapRef1 = document.getElementById("config_map1")!
             const mapRef2 = document.getElementById("config_map2")!
             
-            const newMap1 = await GoogleMap.create(mapRef1, "test-map", apiKey!, {
-                center: {
-                    lat: 33.6,
-                    lng: -117.9,
-                },
-                zoom: 8,
-                androidLiteMode: false,
+            const newMap1 = await GoogleMap.create({
+                element: mapRef1,
+                id: "test-map",
+                apiKey: apiKey!,
+                config: {
+                    center: {
+                        lat: 33.6,
+                        lng: -117.9,
+                    },
+                    zoom: 8
+                }
             });
 
-            const newMap2 = await GoogleMap.create(mapRef2, "test-map2", apiKey!, {
-                center: {
-                    lat: -33.6,
-                    lng: 117.9,
-                },
-                zoom: 6,
-                androidLiteMode: false,                
+            const newMap2 = await GoogleMap.create({
+                element: mapRef2, 
+                id: "test-map2", 
+                apiKey: apiKey!, 
+                config: {
+                    center: {
+                        lat: -33.6,
+                        lng: 117.9,
+                    },
+                    zoom: 6,                
+                }
             });
     
             setMaps([newMap1, newMap2]);

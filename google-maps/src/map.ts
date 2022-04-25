@@ -3,12 +3,11 @@ import type { PluginListenerHandle } from '@capacitor/core';
 
 import type {
   CameraConfig,
-  GoogleMapConfig,
   LatLng,
   MapPadding,
   MapType,
 } from './definitions';
-import type { CreateMapArgs, MapListenerCallback } from './implementation';
+import type { CreateMapOptions, MapListenerCallback } from './implementation';
 import { CapacitorGoogleMaps } from './implementation';
 
 export interface Marker {
@@ -58,45 +57,33 @@ export class GoogleMap {
   }
 
   public static async create(
-    element: HTMLElement,
-    id: string,
-    apiKey: string,
-    config: GoogleMapConfig,
-    forceCreate?: boolean,
+    options: CreateMapOptions,
     callback?: MapListenerCallback,
   ): Promise<GoogleMap> {
-    const newMap = new GoogleMap(id);
+    const newMap = new GoogleMap(options.id);
 
-    if (!element) {
+    if (!options.element) {
       throw new Error('container element is required');
     }
 
-    newMap.element = element;
+    newMap.element = options.element;
 
-    const elementBounds = element.getBoundingClientRect();
-    config.width = elementBounds.width;
-    config.height = elementBounds.height;
-    config.x = elementBounds.x;
-    config.y = elementBounds.y;
-
-    const args: CreateMapArgs = {
-      element,
-      id,
-      apiKey,
-      config,
-      forceCreate,
-    };
+    const elementBounds = options.element.getBoundingClientRect();
+    options.config.width = elementBounds.width;
+    options.config.height = elementBounds.height;
+    options.config.x = elementBounds.x;
+    options.config.y = elementBounds.y;
 
     if (Capacitor.getPlatform() == 'android') {
-      (args.element as any) = {};
+      (options.element as any) = {};
       newMap.initScrolling();
     }
 
     if (Capacitor.getPlatform() == 'ios') {
-      (args.element as any) = {};
+      (options.element as any) = {};
     }
 
-    await CapacitorGoogleMaps.create(args);
+    await CapacitorGoogleMaps.create(options);
 
     if (callback) {
       CapacitorGoogleMaps.addListener('onMapReady', callback);

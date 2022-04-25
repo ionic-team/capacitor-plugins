@@ -51,12 +51,12 @@ npx cap sync
 ### create(...)
 
 ```typescript
-create(args: CreateMapArgs) => Promise<void>
+create(options: CreateMapOptions) => Promise<void>
 ```
 
-| Param      | Type                                                    |
-| ---------- | ------------------------------------------------------- |
-| **`args`** | <code><a href="#createmapargs">CreateMapArgs</a></code> |
+| Param         | Type                                                          |
+| ------------- | ------------------------------------------------------------- |
+| **`options`** | <code><a href="#createmapoptions">CreateMapOptions</a></code> |
 
 --------------------
 
@@ -423,7 +423,7 @@ addListener(eventName: 'onMyLocationClick', listenerFunc: MapListenerCallback) =
 ### Interfaces
 
 
-#### CreateMapArgs
+#### CreateMapOptions
 
 | Prop              | Type                                                        |
 | ----------------- | ----------------------------------------------------------- |

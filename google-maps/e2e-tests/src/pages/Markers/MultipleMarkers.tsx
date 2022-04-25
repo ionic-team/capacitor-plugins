@@ -52,13 +52,17 @@ const MultipleMarkers: React.FC = () => {
         try {
             const element = document.getElementById('multipleMarkers_map1');
             if (element !== null) {
-                const newMap = await GoogleMap.create(element, "test-map", apiKey!, {
-                    center: {
-                        lat: 47.60,
-                        lng: -122.33,
-                    },
-                    zoom: 5,
-                    androidLiteMode: false
+                const newMap = await GoogleMap.create({
+                    element: element, 
+                    id: "test-map", 
+                    apiKey: apiKey!, 
+                    config: {
+                        center: {
+                            lat: 47.60,
+                            lng: -122.33,
+                        },
+                        zoom: 5,
+                    }
                 });
 
                 setMap(newMap);
