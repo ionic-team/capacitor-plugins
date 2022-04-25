@@ -66,6 +66,10 @@ export class GoogleMap {
       throw new Error('container element is required');
     }
 
+    if (options.config.androidLiteMode === undefined) {
+      options.config.androidLiteMode = false;
+    }
+
     newMap.element = options.element;
 
     const elementBounds = options.element.getBoundingClientRect();
