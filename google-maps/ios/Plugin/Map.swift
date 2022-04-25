@@ -94,7 +94,7 @@ public class Map {
                     if let typeClass = NSClassFromString("WKChildScrollView"), item.isKind(of: typeClass) {
                         (item as? UIScrollView)?.isScrollEnabled = true
 
-                        if item.bounds.width == self.config.width && item.bounds.height == self.config.height && (item as UIView).tag == 0 {
+                        if item.bounds.width == self.config.width && item.bounds.height == self.config.height && (item as? UIView)?.tag == 0 {
                             self.targetViewController = item
                             break
                         }
