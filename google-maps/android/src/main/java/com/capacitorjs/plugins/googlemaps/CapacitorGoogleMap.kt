@@ -1,9 +1,12 @@
 package com.capacitorjs.plugins.googlemaps
 
 import android.annotation.SuppressLint
+import android.graphics.Color
+import android.graphics.Rect
 import android.graphics.RectF
 import android.location.Location
 import android.util.Log
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
@@ -12,6 +15,7 @@ import com.getcapacitor.JSArray
 import com.getcapacitor.JSObject
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.GoogleMap.*
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.CameraPosition
@@ -38,7 +42,7 @@ class CapacitorGoogleMap(
         OnMapClickListener,
         OnMarkerClickListener,
         OnInfoWindowClickListener {
-    private var mapView: CapacitorGoogleMapView
+    private var mapView: MapView
     private var googleMap: GoogleMap? = null
     private val markers = HashMap<String, CapacitorGoogleMapMarker>()
     private var clusterManager: ClusterManager<CapacitorGoogleMapMarker>? = null
@@ -47,12 +51,7 @@ class CapacitorGoogleMap(
 
     init {
         val bridge = delegate.bridge
-        mapView =
-                CapacitorGoogleMapView(
-                        bridge.context,
-                        config.googleMapOptions,
-                        bridge.activity.resources.displayMetrics.density
-                )
+        mapView = MapView(bridge.context, config.googleMapOptions)
         initMap()
         setListeners()
     }
@@ -82,6 +81,9 @@ class CapacitorGoogleMap(
             CoroutineScope(Dispatchers.Main).launch {
                 val bridge = delegate.bridge
                 val mapViewParent = FrameLayout(bridge.context)
+                mapViewParent.minimumHeight = bridge.webView.height
+                mapViewParent.minimumWidth = bridge.webView.width
+
                 val layoutParams =
                         FrameLayout.LayoutParams(
                                 getScaledPixels(bridge, config.width),
@@ -96,18 +98,44 @@ class CapacitorGoogleMap(
                 mapViewParent.addView(mapView)
 
                 ((bridge.webView.parent) as ViewGroup).addView(mapViewParent)
+
+                bridge.webView.bringToFront()
+                bridge.webView.setBackgroundColor(Color.TRANSPARENT);
+                bridge.webView.loadUrl("javascript:document.documentElement.style.backgroundColor = 'transparent';void(0);");
+                bridge.webView.loadUrl("javascript:document.body.style.backgroundColor = 'transparent';void(0);");
             }
         }
     }
 
-    fun updateRender(updatedBounds: RectF, frame: RectF) {
+    fun updateRender(updatedBounds: RectF) {
         this.config.x = updatedBounds.left.toInt()
         this.config.y = updatedBounds.top.toInt()
         this.config.width = updatedBounds.width().toInt()
         this.config.height = updatedBounds.height().toInt()
 
         runBlocking {
-            CoroutineScope(Dispatchers.Main).launch { mapView.updateBounds(updatedBounds, frame) }
+            CoroutineScope(Dispatchers.Main).launch {
+                val mapRect = getScaledRect(delegate.bridge, updatedBounds)
+                this@CapacitorGoogleMap.mapView.x = mapRect.left
+                this@CapacitorGoogleMap.mapView.y = mapRect.top
+            }
+        }
+    }
+
+    fun dispatchTouchEvent(event: MotionEvent) {
+        val offsetViewBounds = getMapBounds()        
+
+        val relativeTop = offsetViewBounds.top
+        val relativeLeft = offsetViewBounds.left
+
+        event.setLocation(event.x - relativeLeft, event.y - relativeTop)
+        mapView.dispatchTouchEvent(event)
+    }
+
+    fun bringToFront() {
+        CoroutineScope(Dispatchers.Main).launch {
+            val mapViewParent = ((delegate.bridge.webView.parent) as ViewGroup).findViewWithTag<ViewGroup>(this@CapacitorGoogleMap.id)
+            mapViewParent.bringToFront()
         }
     }
 
@@ -437,11 +465,36 @@ class CapacitorGoogleMap(
         }
     }
 
+    fun getMapBounds(): Rect {
+        return Rect(
+                getScaledPixels(delegate.bridge, config.x).toInt(),
+                getScaledPixels(delegate.bridge, config.y).toInt(),
+                getScaledPixels(delegate.bridge, config.x + config.width).toInt(),
+                getScaledPixels(delegate.bridge, config.y + config.height).toInt()
+        )
+    }
+
     private fun getScaledPixels(bridge: Bridge, pixels: Int): Int {
         // Get the screen's density scale
         val scale = bridge.activity.resources.displayMetrics.density
         // Convert the dps to pixels, based on density scale
         return (pixels * scale + 0.5f).toInt()
+    }
+
+    private fun getScaledPixelsF(bridge: Bridge, pixels: Float): Float {
+        // Get the screen's density scale
+        val scale = bridge.activity.resources.displayMetrics.density
+        // Convert the dps to pixels, based on density scale
+        return (pixels * scale + 0.5f)
+    }
+
+    private fun getScaledRect(bridge: Bridge, rectF: RectF): RectF {
+        return RectF(
+            getScaledPixelsF(bridge, rectF.left),
+            getScaledPixelsF(bridge, rectF.top),
+            getScaledPixelsF(bridge, rectF.right),
+            getScaledPixelsF(bridge, rectF.bottom)
+        )
     }
 
     fun onStart() {

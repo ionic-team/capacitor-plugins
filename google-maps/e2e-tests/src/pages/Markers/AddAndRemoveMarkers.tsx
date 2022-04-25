@@ -126,13 +126,13 @@ const AddAndRemoveMarkers: React.FC = () => {
             <div>
                 <IonTextarea id="commandOutput" value={commandOutput}></IonTextarea>
             </div>
-            <div id="markers_map1" style={{
+            <capacitor-google-map id="markers_map1" style={{
                 position: "absolute",
                 top: window.innerHeight - 300,
                 left: 0,
                 width: window.innerWidth,
                 height: 300,
-            }}></div>
+            }}></capacitor-google-map>
         </BaseTestingPage>
     )
 }

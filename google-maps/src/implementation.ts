@@ -14,12 +14,6 @@ export interface CreateMapArgs {
   apiKey: string;
   config: GoogleMapConfig;
   element: HTMLElement;
-  frame?: {
-    x: number;
-    y: number;
-    width: number;
-    height: number;
-  };
   forceCreate?: boolean;
 }
 
@@ -83,12 +77,6 @@ export interface AddMarkersArgs {
 
 export interface OnScrollArgs {
   id: string;
-  frame: {
-    x: number;
-    y: number;
-    width: number;
-    height: number;
-  };
   mapBounds: {
     x: number;
     y: number;

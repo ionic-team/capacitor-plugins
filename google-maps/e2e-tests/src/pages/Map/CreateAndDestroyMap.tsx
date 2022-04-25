@@ -111,20 +111,20 @@ const CreateAndDestroyMapPage: React.FC = () => {
             <div>
                 <IonTextarea id="commandOutput" value={commandOutput}></IonTextarea>
             </div>
-            <div id="map1" style={{
+            <capacitor-google-map id="map1" style={{
                 position: "absolute",
                 top: window.innerHeight - (window.outerWidth / 2),
                 left: 0,
                 width: (window.outerWidth / 2),
                 height: (window.outerWidth / 2),
-            }}></div>
-            <div id="map2" style={{
+            }}></capacitor-google-map>
+            <capacitor-google-map id="map2" style={{
                 position: "absolute",
                 top: window.innerHeight - (window.outerWidth / 2),
                 left: window.outerWidth / 2,
                 width: (window.outerWidth / 2),
                 height: (window.outerWidth / 2),
-            }}></div>
+            }}></capacitor-google-map>
         </BaseTestingPage>
     )
 }

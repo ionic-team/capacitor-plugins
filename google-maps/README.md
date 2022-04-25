@@ -425,14 +425,13 @@ addListener(eventName: 'onMyLocationClick', listenerFunc: MapListenerCallback) =
 
 #### CreateMapArgs
 
-| Prop              | Type                                                                  |
-| ----------------- | --------------------------------------------------------------------- |
-| **`id`**          | <code>string</code>                                                   |
-| **`apiKey`**      | <code>string</code>                                                   |
-| **`config`**      | <code><a href="#googlemapconfig">GoogleMapConfig</a></code>           |
-| **`element`**     | <code>HTMLElement</code>                                              |
-| **`frame`**       | <code>{ x: number; y: number; width: number; height: number; }</code> |
-| **`forceCreate`** | <code>boolean</code>                                                  |
+| Prop              | Type                                                        |
+| ----------------- | ----------------------------------------------------------- |
+| **`id`**          | <code>string</code>                                         |
+| **`apiKey`**      | <code>string</code>                                         |
+| **`config`**      | <code><a href="#googlemapconfig">GoogleMapConfig</a></code> |
+| **`element`**     | <code>HTMLElement</code>                                    |
+| **`forceCreate`** | <code>boolean</code>                                        |
 
 
 #### GoogleMapConfig
@@ -591,7 +590,6 @@ addListener(eventName: 'onMyLocationClick', listenerFunc: MapListenerCallback) =
 | Prop            | Type                                                                  |
 | --------------- | --------------------------------------------------------------------- |
 | **`id`**        | <code>string</code>                                                   |
-| **`frame`**     | <code>{ x: number; y: number; width: number; height: number; }</code> |
 | **`mapBounds`** | <code>{ x: number; y: number; width: number; height: number; }</code> |
 
 
