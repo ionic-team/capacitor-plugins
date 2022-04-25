@@ -103,6 +103,15 @@ import Foundation
         return try FileManager.default.attributesOfItem(atPath: fileUrl.path)
     }
 
+    func getType(from attr: [FileAttributeKey: Any]) -> String {
+        let fileType = attr[.type] as? String ?? ""
+        if fileType == "NSFileTypeDirectory" {
+            return "directory"
+        } else {
+            return "file"
+        }
+    }
+
     @objc public func rename(at srcURL: URL, to dstURL: URL) throws {
         try _copy(at: srcURL, to: dstURL, doRename: true)
     }
