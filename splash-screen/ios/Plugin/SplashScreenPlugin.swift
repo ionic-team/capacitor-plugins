@@ -26,6 +26,16 @@ public class SplashScreenPlugin: CAPPlugin {
 
     }
 
+    // Show and update progress of progress bar.
+    @objc public func updateProgress(_ call: CAPPluginCall) {
+        if let splash = splashScreen {
+            splash.updateProgress(percentage: call.getFloat("progress", 0))
+            call.resolve()
+        } else {
+            call.reject("Unable to hide Splash Screen")
+        }
+    }
+
     // Hide the splash screen
     @objc public func hide(_ call: CAPPluginCall) {
         if let splash = splashScreen {
