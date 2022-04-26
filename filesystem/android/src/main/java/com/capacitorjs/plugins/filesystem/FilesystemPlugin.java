@@ -169,6 +169,8 @@ public class FilesystemPlugin extends Plugin {
                 ex
             );
             call.reject("FILE_NOTCREATED");
+        } catch (IllegalArgumentException ex) {
+            call.reject("The supplied data is not valid base64 content.");
         }
     }
 

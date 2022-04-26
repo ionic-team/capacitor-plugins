@@ -226,8 +226,8 @@ public class FilesystemPlugin: CAPPlugin {
             }
 
             call.resolve([
-                "type": attr[.type] as? String ?? "",
-                "size": attr[.size] as? UInt64 ?? "",
+                "type": implementation.getType(from: attr),
+                "size": attr[.size] as? UInt64 ?? 0,
                 "ctime": ctime,
                 "mtime": mtime,
                 "uri": fileUrl.absoluteString
