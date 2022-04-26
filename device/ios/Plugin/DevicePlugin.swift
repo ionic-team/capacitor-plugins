@@ -19,7 +19,7 @@ public class DevicePlugin: CAPPlugin {
         var modelName = ""
         #if targetEnvironment(simulator)
         isSimulator = true
-        modelName = ProcessInfo().environment["SIMULATOR_MODEL_IDENTIFIER"]
+        modelName = ProcessInfo().environment["SIMULATOR_MODEL_IDENTIFIER"] ?? "Simulator"
         #else
         modelName = implementation.getModelName()
         #endif
