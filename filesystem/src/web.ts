@@ -3,6 +3,7 @@ import { WebPlugin } from '@capacitor/core';
 import type {
   AppendFileOptions,
   CopyOptions,
+  CopyResult,
   DeleteFileOptions,
   FilesystemPlugin,
   GetUriOptions,
@@ -414,7 +415,8 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
    * @return a promise that resolves with the rename result
    */
   async rename(options: RenameOptions): Promise<void> {
-    return this._copy(options, true);
+    await this._copy(options, true);
+    return;
   }
 
   /**
@@ -422,7 +424,7 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
    * @param options the options for the copy operation
    * @return a promise that resolves with the copy result
    */
-  async copy(options: CopyOptions): Promise<void> {
+  async copy(options: CopyOptions): Promise<CopyResult> {
     return this._copy(options, false);
   }
 
@@ -440,7 +442,10 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
    * @param doRename whether to perform a rename or copy operation
    * @return a promise that resolves with the result
    */
-  private async _copy(options: CopyOptions, doRename = false): Promise<void> {
+  private async _copy(
+    options: CopyOptions,
+    doRename = false,
+  ): Promise<CopyResult> {
     let { toDirectory } = options;
     const { to, from, directory: fromDirectory } = options;
 
@@ -458,7 +463,9 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
 
     // Test that the "to" and "from" locations are different
     if (fromPath === toPath) {
-      return;
+      return {
+        uri: toPath,
+      };
     }
 
     if (isPathParent(fromPath, toPath)) {
@@ -531,7 +538,7 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
         }
 
         // Write the file to the new location
-        await this.writeFile({
+        const writeResult = await this.writeFile({
           path: to,
           directory: toDirectory,
           data: file.data,
@@ -543,7 +550,7 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
         }
 
         // Resolve promise
-        return;
+        return writeResult;
       }
       case 'directory': {
         if (toObj) {
@@ -596,6 +603,9 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
         }
       }
     }
+    return {
+      uri: toPath,
+    };
   }
 }
 

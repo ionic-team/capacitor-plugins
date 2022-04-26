@@ -282,7 +282,7 @@ Rename a file or directory
 ### copy(...)
 
 ```typescript
-copy(options: CopyOptions) => Promise<void>
+copy(options: CopyOptions) => Promise<CopyResult>
 ```
 
 Copy a file or directory
@@ -290,6 +290,8 @@ Copy a file or directory
 | Param         | Type                                                |
 | ------------- | --------------------------------------------------- |
 | **`options`** | <code><a href="#copyoptions">CopyOptions</a></code> |
+
+**Returns:** <code>Promise&lt;<a href="#copyresult">CopyResult</a>&gt;</code>
 
 **Since:** 1.0.0
 
@@ -460,6 +462,13 @@ Required on Android, only when using <a href="#directory">`Directory.Documents`<
 | **`to`**          | <code>string</code>                             | The destination file or directory                                                                                                                            | 1.0.0 |
 | **`directory`**   | <code><a href="#directory">Directory</a></code> | The <a href="#directory">`Directory`</a> containing the existing file or directory                                                                           | 1.0.0 |
 | **`toDirectory`** | <code><a href="#directory">Directory</a></code> | The <a href="#directory">`Directory`</a> containing the destination file or directory. If not supplied will use the 'directory' parameter as the destination | 1.0.0 |
+
+
+#### CopyResult
+
+| Prop      | Type                | Description                            | Since |
+| --------- | ------------------- | -------------------------------------- | ----- |
+| **`uri`** | <code>string</code> | The uri where the file was copied into | 4.0.0 |
 
 
 #### PermissionStatus

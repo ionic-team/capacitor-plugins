@@ -422,6 +422,15 @@ export interface StatResult {
   uri: string;
 }
 
+export interface CopyResult {
+  /**
+   * The uri where the file was copied into
+   *
+   * @since 4.0.0
+   */
+  uri: string;
+}
+
 export interface FilesystemPlugin {
   /**
    * Read a file from disk
@@ -498,7 +507,7 @@ export interface FilesystemPlugin {
    *
    * @since 1.0.0
    */
-  copy(options: CopyOptions): Promise<void>;
+  copy(options: CopyOptions): Promise<CopyResult>;
 
   /**
    * Check read/write permissions.
