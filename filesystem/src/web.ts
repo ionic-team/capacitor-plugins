@@ -246,10 +246,11 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
       }
     }
 
+    if (!encoding && !this.isBase64String(data))
+      throw Error('The supplied data is not valid base64 content.');
+
     if (occupiedEntry !== undefined) {
-      if (occupiedEntry.content && !encoding) {
-        if (!this.isBase64String(data))
-          throw Error('The supplied data is not valid base64 content.');
+      if (occupiedEntry.content !== undefined && !encoding) {
         data = btoa(atob(occupiedEntry.content) + atob(data));
       } else {
         data = occupiedEntry.content + data;
