@@ -622,7 +622,7 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
 interface EntryObj {
   path: string;
   folder: string;
-  type: string;
+  type: 'directory' | 'file';
   size: number;
   ctime: number;
   mtime: number;

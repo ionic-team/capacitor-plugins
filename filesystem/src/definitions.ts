@@ -385,14 +385,14 @@ export interface GetUriResult {
 
 export interface StatResult {
   /**
-   * Type of the file
+   * Type of the file.
    *
    * @since 1.0.0
    */
-  type: string;
+  type: 'directory' | 'file';
 
   /**
-   * Size of the file
+   * Size of the file in bytes.
    *
    * @since 1.0.0
    */
