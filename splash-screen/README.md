@@ -64,6 +64,39 @@ For iOS, `iosSpinnerStyle` has the following options:
 
 To set the color of the spinner use `spinnerColor`, values are either `#RRGGBB` or `#RRGGBBAA`.
 
+## Animated Splash Screen
+### iOS
+If you want to have an animated splash screen on iOS, set `animated` to `true`, and `launchAnimationDuration` to the desired animation length in milliseconds in your [Capacitor configuration file] (https://capacitorjs.com/docs/config).
+
+Once done, you can add the splash screen assets into your app's `Assets.xcassets` file inside a folder called `Splash`. Each frame should be placed in order, with `Splash_xx` (where xx is the number it belongs to in sequence, e.g. splash_1.png, splash_2.png, ...).
+
+## Android
+If you want to have an animated splash screen on Android, create a `splash.xml` in your app's `res/drawable` folder with an animation list showing the location and duration of each frame.
+
+For example:
+
+```
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android" android:oneshot="false">
+	<item android:duration="22" android:drawable="@drawable/splash_1">
+	</item>
+	<item android:duration="22" android:drawable="@drawable/splash_2">
+	</item>
+	<item android:duration="22" android:drawable="@drawable/splash_3">
+	</item>
+	<item android:duration="22" android:drawable="@drawable/splash_4">
+	</item>
+	<item android:duration="22" android:drawable="@drawable/splash_5">
+	</item>
+	<item android:duration="22" android:drawable="@drawable/splash_6">
+	</item>
+	<item android:duration="22" android:drawable="@drawable/splash_7">
+	</item>
+</animation-list>
+```
+
+Be sure to correctly scale your images as well, as not scaling them may cause significant performance degradation when loading your app.
+
 ## Configuration
 
 <docgen-config>
@@ -86,6 +119,8 @@ These config values are available:
 | **`splashImmersive`**           | <code>boolean</code>                                                                                                          | Hide the status bar and the software navigation buttons on the Splash Screen. Only available on Android.                                                                                                     |                     | 1.0.0 |
 | **`layoutName`**                | <code>string</code>                                                                                                           | If `useDialog` is set to true, configure the Dialog layout. If `useDialog` is not set or false, use a layout instead of the ImageView. Only available on Android.                                            |                     | 1.1.0 |
 | **`useDialog`**                 | <code>boolean</code>                                                                                                          | Use a Dialog instead of an ImageView. If `layoutName` is not configured, it will use a layout that uses the splash image as background. Only available on Android.                                           |                     | 1.1.0 |
+| **`animated`**                  | <code>boolean</code>                                                                                                          | Animate the splash screen using a series of image files.                                                                                                                                                     |                     | 1.2.3 |
+| **`launchAnimationDuration`**   | <code>number</code>                                                                                                           | Play the multiple frames across the amount of milliseconds specified.                                                                                                                                        |                     | 1.2.3 |
 
 ### Examples
 
@@ -107,7 +142,9 @@ In `capacitor.config.json`:
       "splashFullScreen": true,
       "splashImmersive": true,
       "layoutName": "launch_screen",
-      "useDialog": true
+      "useDialog": true,
+      "animated": true,
+      "launchAnimationDuration": 3000
     }
   }
 }
@@ -136,6 +173,8 @@ const config: CapacitorConfig = {
       splashImmersive: true,
       layoutName: "launch_screen",
       useDialog: true,
+      animated: true,
+      launchAnimationDuration: 3000,
     },
   },
 };

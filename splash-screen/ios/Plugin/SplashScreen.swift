@@ -5,6 +5,9 @@ import Capacitor
 
     var parentView: UIView
     var viewController = UIViewController()
+    // This image view / images are used to show the series of images for an animation.
+    var imageView = UIImageView()
+    var image: UIImage?
     var spinner = UIActivityIndicatorView()
     var config: SplashScreenConfig = SplashScreenConfig()
     var hideTask: Any?
@@ -56,6 +59,13 @@ import Capacitor
 
             strongSelf.parentView.addSubview(strongSelf.viewController.view)
 
+            // If the config says to animate.
+            if strongSelf.config.animated {
+                // Add the animated imageview across to the main view for viewing.
+                // Done with the subview to ensure the fade is done evenly.
+                strongSelf.viewController.view.addSubview(strongSelf.imageView)
+            }
+
             if strongSelf.config.showSpinner {
                 strongSelf.parentView.addSubview(strongSelf.spinner)
                 strongSelf.spinner.centerXAnchor.constraint(equalTo: strongSelf.parentView.centerXAnchor).isActive = true
@@ -65,6 +75,7 @@ import Capacitor
             strongSelf.parentView.isUserInteractionEnabled = false
 
             UIView.transition(with: strongSelf.viewController.view, duration: TimeInterval(Double(settings.fadeInDuration) / 1000), options: .curveLinear, animations: {
+                // The animated imageview (if any) should fade in evenly with this.
                 strongSelf.viewController.view.alpha = 1
 
                 if strongSelf.config.showSpinner {
@@ -87,6 +98,19 @@ import Capacitor
         }
     }
 
+    // Creates an array of UIImage to play a sequence of images as an animation.
+    // Ref: https://blog.devgenius.io/how-to-animate-your-images-in-swift-ios-swift-guide-64de30ea616b
+    func animatedImages(for name: String) -> [UIImage] {
+        var i = 0
+        var images = [UIImage]()
+
+        while let image = UIImage(named: "\(name)/\(name)_\(i)") {
+            images.append(image)
+            i += 1
+        }
+        return images
+    }
+
     private func buildViews() {
         let storyboardName = Bundle.main.infoDictionary?["UILaunchStoryboardName"] as? String ?? "LaunchScreen"
         if let vc = UIStoryboard(name: storyboardName, bundle: nil).instantiateInitialViewController() {
@@ -102,6 +126,18 @@ import Capacitor
             spinner.translatesAutoresizingMaskIntoConstraints = false
             spinner.startAnimating()
         }
+
+        // If the app config says to animate.
+        if config.animated {
+            // Use the first image of the image set as a placeholder until it animates.
+            imageView.image = UIImage(named: "Splash/Splash_0")
+            // Create the list of images to make it animated.
+            imageView.animationImages = self.animatedImages(for: "Splash")
+            // Set how long to play the images over. e.g. if it's set to 3 sec, then play all images over 3 sec.
+            imageView.animationDuration = TimeInterval(Double(config.launchAnimationDuration) / 1000)
+            // Start the animation.
+            imageView.startAnimating()
+        }
     }
 
     private func tearDown() {
@@ -111,6 +147,12 @@ import Capacitor
 
         if config.showSpinner {
             spinner.removeFromSuperview()
+        }
+
+        // If the splash screen is animated.
+        if config.animated {
+            // Remove it from the view.
+            imageView.removeFromSuperview()
         }
     }
 
@@ -129,6 +171,14 @@ import Capacitor
 
         if let unwrappedWindow = window {
             viewController.view.frame = CGRect(origin: CGPoint(x: 0, y: 0), size: unwrappedWindow.bounds.size)
+
+            // If config says it's to be animated.
+            if config.animated {
+                // Fit the image view to the screen.
+                imageView.frame = CGRect(origin: CGPoint(x: 0, y: 0), size: window!.bounds.size)
+                // Ensure that the image fits the whole screen.
+                imageView.contentMode = .scaleAspectFit
+            }
         } else {
             CAPLog.print("Unable to find root window object for SplashScreen bounds. Please file an issue")
         }
@@ -147,6 +197,7 @@ import Capacitor
         if !isVisible { return }
         DispatchQueue.main.async {
             UIView.transition(with: self.viewController.view, duration: TimeInterval(Double(fadeOutDuration) / 1000), options: .curveLinear, animations: {
+                // ImageView for animated splash will fade with this.
                 self.viewController.view.alpha = 0
 
                 if self.config.showSpinner {

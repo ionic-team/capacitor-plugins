@@ -10,6 +10,7 @@ import android.graphics.PixelFormat;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
+import android.os.Build;
 import android.os.Handler;
 import android.view.*;
 import android.view.animation.LinearInterpolator;
@@ -266,7 +267,17 @@ public class SplashScreen {
     }
 
     private Drawable getSplashDrawable() {
-        int splashId = context.getResources().getIdentifier(config.getResourceName(), "drawable", context.getPackageName());
+        int splashId;
+        // Disables animations on older versions of Android as it may cause OOM issues.
+        if (config.getAnimated() == true && Build.VERSION.SDK_INT <= Build.VERSION_CODES.N) {
+            // Uses the first image in the animation sequence in the aforementioned case.
+            splashId = context.getResources().getIdentifier(config.getResourceName() + "_0", "drawable", context.getPackageName());
+        } else {
+            // In all other cases, use the splash resource.
+            // In the case it is an animation, it would be an Animation List XML which would play in sequence.
+            // Otherwise, it should be just a standard image file.
+            splashId = context.getResources().getIdentifier(config.getResourceName(), "drawable", context.getPackageName());
+        }
         try {
             Drawable drawable = context.getResources().getDrawable(splashId, context.getTheme());
             return drawable;

@@ -153,6 +153,22 @@ declare module '@capacitor/cli' {
        * @example true
        */
       useDialog?: boolean;
+
+      /**
+       * Animate the splash screen using a series of image files.
+       *
+       * @since 1.2.3
+       * @example true
+       */
+      animated?: boolean;
+
+       /**
+       * Play the multiple frames across the amount of milliseconds specified.
+       *
+       * @since 1.2.3
+       * @example 3000
+       */
+      launchAnimationDuration?: number;
     };
   }
 }

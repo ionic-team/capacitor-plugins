@@ -155,6 +155,12 @@ public class SplashScreenPlugin extends Plugin {
             config.setLayoutName(getConfig().getString("layoutName"));
         }
 
+        // This reads the Capacitor config for whether the splash screen should be animated.
+        // Defaults to false.
+        Boolean animated = getConfig().getBoolean("animated", false);
+        // Set the config that the splash screen should/should not be animated.
+        config.setAnimated(animated);
+
         return config;
     }
 }

@@ -82,6 +82,14 @@ public class SplashScreenPlugin: CAPPlugin {
         if let launchAutoHide = getConfigValue("launchAutoHide") as? Bool {
             config.launchAutoHide = launchAutoHide
         }
+        // Animate the splash screen using multiple image files.
+        if let animated = getConfigValue("animated") as? Bool {
+            config.animated = animated
+        }
+        // Play the multiple image frames across the amount of milliseconds specified.
+        if let launchAnimationDuration = getConfigValue("launchAnimationDuration") as? Int {
+            config.launchAnimationDuration = launchAnimationDuration
+        }
         return config
     }
 
