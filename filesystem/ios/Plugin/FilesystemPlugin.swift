@@ -307,7 +307,9 @@ public class FilesystemPlugin: CAPPlugin {
         }
         do {
             try implementation.copy(at: fromUrl, to: toUrl)
-            call.resolve()
+            call.resolve([
+                "uri": toUrl.absoluteString
+            ])
         } catch let error as NSError {
             handleError(call, error.localizedDescription, error)
         }

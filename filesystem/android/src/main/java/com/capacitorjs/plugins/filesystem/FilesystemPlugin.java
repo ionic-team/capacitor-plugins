@@ -366,8 +366,14 @@ public class FilesystemPlugin extends Plugin {
             }
         }
         try {
-            implementation.copy(from, directory, to, toDirectory, doRename);
-            call.resolve();
+            File file = implementation.copy(from, directory, to, toDirectory, doRename);
+            if (!doRename) {
+                JSObject result = new JSObject();
+                result.put("uri", Uri.fromFile(file).toString());
+                call.resolve(result);
+            } else {
+                call.resolve();
+            }
         } catch (CopyFailedException ex) {
             call.reject(ex.getMessage());
         } catch (IOException ex) {
