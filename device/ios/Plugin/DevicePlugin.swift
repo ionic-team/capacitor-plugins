@@ -16,16 +16,19 @@ public class DevicePlugin: CAPPlugin {
     }
     @objc func getInfo(_ call: CAPPluginCall) {
         var isSimulator = false
+        var modelName = ""
         #if targetEnvironment(simulator)
         isSimulator = true
+        modelName = ProcessInfo().environment["SIMULATOR_MODEL_IDENTIFIER"]
+        #else
+        modelName = implementation.getModelName()
         #endif
 
         let memUsed = implementation.getMemoryUsage()
         let diskFree = implementation.getFreeDiskSize() ?? 0
         let realDiskFree = implementation.getRealFreeDiskSize() ?? 0
         let diskTotal = implementation.getTotalDiskSize() ?? 0
-        let modelName = isSimulator ? ProcessInfo().environment["SIMULATOR_MODEL_IDENTIFIER"] : implementation.getModelName()
-
+        
         call.resolve([
             "memUsed": memUsed,
             "diskFree": diskFree,
