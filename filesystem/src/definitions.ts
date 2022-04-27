@@ -385,14 +385,14 @@ export interface GetUriResult {
 
 export interface StatResult {
   /**
-   * Type of the file
+   * Type of the file.
    *
    * @since 1.0.0
    */
-  type: string;
+  type: 'directory' | 'file';
 
   /**
-   * Size of the file
+   * Size of the file in bytes.
    *
    * @since 1.0.0
    */
@@ -418,6 +418,15 @@ export interface StatResult {
    * The uri of the file
    *
    * @since 1.0.0
+   */
+  uri: string;
+}
+
+export interface CopyResult {
+  /**
+   * The uri where the file was copied into
+   *
+   * @since 4.0.0
    */
   uri: string;
 }
@@ -498,7 +507,7 @@ export interface FilesystemPlugin {
    *
    * @since 1.0.0
    */
-  copy(options: CopyOptions): Promise<void>;
+  copy(options: CopyOptions): Promise<CopyResult>;
 
   /**
    * Check read/write permissions.
