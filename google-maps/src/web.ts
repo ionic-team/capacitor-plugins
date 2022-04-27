@@ -85,7 +85,10 @@ export class CapacitorGoogleMapsWeb
     throw new Error('Method not implemented.');
   }
 
-  async create(options: CreateMapArgs, _callback?: MapListenerCallback): Promise<void> {
+  async create(
+    options: CreateMapArgs,
+    _callback?: MapListenerCallback,
+  ): Promise<void> {
     console.log(`Create map: ${options.id}`);
     await this.importGoogleLib(options.apiKey);
     this.maps[options.id] = {

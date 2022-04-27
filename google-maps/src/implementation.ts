@@ -6,7 +6,7 @@ import type {
   GoogleMapConfig,
   MapPadding,
   MapType,
-  Marker
+  Marker,
 } from './definitions';
 
 export interface CreateMapArgs {
