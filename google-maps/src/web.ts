@@ -1,4 +1,4 @@
-import { WebPlugin } from '@capacitor/core';
+import { Capacitor, WebPlugin } from '@capacitor/core';
 import { MarkerClusterer } from '@googlemaps/markerclusterer';
 
 import type {
@@ -178,7 +178,11 @@ export class CapacitorGoogleMapsWeb
 
     this.maps[_args.id].markerClusterer = new MarkerClusterer({
       map: this.maps[_args.id].map,
-      markers: markers
+      markers: markers,
+      onClusterClick: () => {
+        // onClusterClick
+        
+      }
     });
   }
   
@@ -207,5 +211,84 @@ export class CapacitorGoogleMapsWeb
     mapItem.element.innerHTML = '';
     mapItem.map.unbindAll();
     delete this.maps[_args.id];
+  }
+
+  // async setMarkerListeners(marker: google.maps.Marker): Promise<void> {
+  //   marker.addListener('')
+  // }
+
+  async setMapListeners(map: google.maps.Map): Promise<void> {
+    map.addListener('idle', () => {
+
+    });
+
+    map.addListener('center_changed', () => {
+
+    });
+
+    map.addListener('idle', () => {
+
+    });
+
+    map.addListener('idle', () => {
+
+    });
+
+    map.addListener('idle', () => {
+
+    });
+    
+    /*
+     addListener(
+    eventName: 'onCameraIdle',
+    listenerFunc: MapListenerCallback,
+  ): PluginListenerHandle;
+
+  addListener(
+    eventName: 'onCameraMoveStarted',
+    listenerFunc: MapListenerCallback,
+  ): PluginListenerHandle;
+
+  addListener(
+    eventName: 'onClusterClick',
+    listenerFunc: MapListenerCallback,
+  ): PluginListenerHandle;
+
+  addListener(
+    eventName: 'onClusterInfoWindowClick',
+    listenerFunc: MapListenerCallback,
+  ): PluginListenerHandle;
+
+  addListener(
+    eventName: 'onInfoWindowClick',
+    listenerFunc: MapListenerCallback,
+  ): PluginListenerHandle;
+
+  addListener(
+    eventName: 'onMapReady',
+    listenerFunc: MapListenerCallback,
+  ): PluginListenerHandle;
+
+  addListener(
+    eventName: 'onMapClick',
+    listenerFunc: MapListenerCallback,
+  ): PluginListenerHandle;
+
+  addListener(
+    eventName: 'onMarkerClick',
+    listenerFunc: MapListenerCallback,
+  ): PluginListenerHandle;
+
+  addListener(
+    eventName: 'onMyLocationButtonClick',
+    listenerFunc: MapListenerCallback,
+  ): PluginListenerHandle;
+
+  addListener(
+    eventName: 'onMyLocationClick',
+    listenerFunc: MapListenerCallback,
+  ): PluginListenerHandle;
+     */
+    
   }
 }
