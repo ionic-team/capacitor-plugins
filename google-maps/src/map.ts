@@ -1,18 +1,12 @@
 import { Capacitor } from '@capacitor/core';
 import type { PluginListenerHandle } from '@capacitor/core';
 
-import type { CameraConfig, GoogleMapConfig, LatLng, MapPadding, MapType } from './definitions';
-import type { CreateMapOptions, MapListenerCallback } from './implementation';
+import type { CameraConfig, Marker, MapPadding, MapType } from './definitions';
+import type { CreateMapArgs, MapListenerCallback } from './implementation';
 import { CapacitorGoogleMaps } from './implementation';
 
 export interface GoogleMapInterface {
-  create(
-    element: HTMLElement,
-    id: string,
-    apiKey: string,
-    config: GoogleMapConfig,
-    forceCreate?: boolean,
-  ): Promise<GoogleMap>;
+  create(options: CreateMapArgs, callback?: MapListenerCallback): Promise<GoogleMap>;
   enableClustering(): Promise<void>;
   disableClustering(): Promise<void>;
   addMarker(marker: Marker): Promise<string>;
@@ -40,46 +34,6 @@ export interface GoogleMapInterface {
     callback?: MapListenerCallback,
   ): Promise<void>;
   setOnMyLocationClickListener(callback?: MapListenerCallback): Promise<void>;
-}
-
-/**
- * A marker is an icon placed at a particular point on the map's surface.
- */
-export interface Marker {
-  /**
-   * Marker position
-   */
-  coordinate: LatLng;
-  /**
-   * Sets the opacity of the marker, between 0 (completely transparent) and 1 inclusive.
-   *
-   * @default 1
-   */
-  opacity?: number;
-  /**
-   * Title, a short description of the overlay.
-   */
-  title?: string;
-  /**
-   * Snippet text, shown beneath the title in the info window when selected.
-   */
-  snippet?: string;
-  /**
-   * Controls whether this marker should be flat against the Earth's surface or a billboard facing the camera.
-   *
-   * @default false
-   */
-  isFlat?: boolean;
-  /**
-   * Marker icon to render.
-   */
-  iconUrl?: string;
-  /**
-   * Controls whether this marker can be dragged interactively
-   *
-   * @default false
-   */
-  draggable?: boolean;
 }
 
 class MapCustomElement extends HTMLElement {
@@ -134,7 +88,7 @@ export class GoogleMap {
    * @returns GoogleMap
    */
   public static async create(
-    options: CreateMapOptions,
+    options: CreateMapArgs,
     callback?: MapListenerCallback,
   ): Promise<GoogleMap> {
     const newMap = new GoogleMap(options.id);
@@ -361,7 +315,7 @@ export class GoogleMap {
 
   initScrolling(): void {
     const parentContainer = this.findContainerElement();
-
+    
     if (parentContainer) {
       let scrollEvent = 'scroll';
 

@@ -120,3 +120,43 @@ export interface MapPadding {
   right: number;
   bottom: number;
 }
+
+/**
+ * A marker is an icon placed at a particular point on the map's surface.
+ */
+export interface Marker {
+  /**
+   * Marker position
+   */
+  coordinate: LatLng;
+  /**
+   * Sets the opacity of the marker, between 0 (completely transparent) and 1 inclusive.
+   *
+   * @default 1
+   */
+  opacity?: number;
+  /**
+   * Title, a short description of the overlay.
+   */
+  title?: string;
+  /**
+   * Snippet text, shown beneath the title in the info window when selected.
+   */
+  snippet?: string;
+  /**
+   * Controls whether this marker should be flat against the Earth's surface or a billboard facing the camera.
+   *
+   * @default false
+   */
+  isFlat?: boolean;
+  /**
+   * Marker icon to render.
+   */
+  iconUrl?: string;
+  /**
+   * Controls whether this marker can be dragged interactively
+   *
+   * @default false
+   */
+  draggable?: boolean;
+}

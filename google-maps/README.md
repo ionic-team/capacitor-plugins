@@ -76,33 +76,33 @@ await newMap.addMarkers({
 
 <docgen-index>
 
-- [`create(...)`](#create)
-- [`enableClustering()`](#enableclustering)
-- [`disableClustering()`](#disableclustering)
-- [`addMarker(...)`](#addmarker)
-- [`addMarkers(...)`](#addmarkers)
-- [`removeMarker(...)`](#removemarker)
-- [`removeMarkers(...)`](#removemarkers)
-- [`destroy()`](#destroy)
-- [`setCamera(...)`](#setcamera)
-- [`setMapType(...)`](#setmaptype)
-- [`enableIndoorMaps(...)`](#enableindoormaps)
-- [`enableTrafficLayer(...)`](#enabletrafficlayer)
-- [`enableAccessibilityElements(...)`](#enableaccessibilityelements)
-- [`enableCurrentLocation(...)`](#enablecurrentlocation)
-- [`setPadding(...)`](#setpadding)
-- [`setOnCameraIdleListener(...)`](#setoncameraidlelistener)
-- [`setOnCameraMoveStartedListener(...)`](#setoncameramovestartedlistener)
-- [`setOnClusterClickListener(...)`](#setonclusterclicklistener)
-- [`setOnClusterInfoWindowClickListener(...)`](#setonclusterinfowindowclicklistener)
-- [`setOnInfoWindowClickListener(...)`](#setoninfowindowclicklistener)
-- [`setOnMapClickListener(...)`](#setonmapclicklistener)
-- [`setOnMarkerClickListener(...)`](#setonmarkerclicklistener)
-- [`setOnMyLocationButtonClickListener(...)`](#setonmylocationbuttonclicklistener)
-- [`setOnMyLocationClickListener(...)`](#setonmylocationclicklistener)
-- [Interfaces](#interfaces)
-- [Type Aliases](#type-aliases)
-- [Enums](#enums)
+* [`create(...)`](#create)
+* [`enableClustering()`](#enableclustering)
+* [`disableClustering()`](#disableclustering)
+* [`addMarker(...)`](#addmarker)
+* [`addMarkers(...)`](#addmarkers)
+* [`removeMarker(...)`](#removemarker)
+* [`removeMarkers(...)`](#removemarkers)
+* [`destroy()`](#destroy)
+* [`setCamera(...)`](#setcamera)
+* [`setMapType(...)`](#setmaptype)
+* [`enableIndoorMaps(...)`](#enableindoormaps)
+* [`enableTrafficLayer(...)`](#enabletrafficlayer)
+* [`enableAccessibilityElements(...)`](#enableaccessibilityelements)
+* [`enableCurrentLocation(...)`](#enablecurrentlocation)
+* [`setPadding(...)`](#setpadding)
+* [`setOnCameraIdleListener(...)`](#setoncameraidlelistener)
+* [`setOnCameraMoveStartedListener(...)`](#setoncameramovestartedlistener)
+* [`setOnClusterClickListener(...)`](#setonclusterclicklistener)
+* [`setOnClusterInfoWindowClickListener(...)`](#setonclusterinfowindowclicklistener)
+* [`setOnInfoWindowClickListener(...)`](#setoninfowindowclicklistener)
+* [`setOnMapClickListener(...)`](#setonmapclicklistener)
+* [`setOnMarkerClickListener(...)`](#setonmarkerclicklistener)
+* [`setOnMyLocationButtonClickListener(...)`](#setonmylocationbuttonclicklistener)
+* [`setOnMyLocationClickListener(...)`](#setonmylocationclicklistener)
+* [Interfaces](#interfaces)
+* [Type Aliases](#type-aliases)
+* [Enums](#enums)
 
 </docgen-index>
 
@@ -112,28 +112,15 @@ await newMap.addMarkers({
 ### create(...)
 
 ```typescript
-<<<<<<< HEAD
-create(element: any, id: string, apiKey: string, config: GoogleMapConfig, forceCreate?: boolean | undefined) => Promise<GoogleMap>
+create(options: CreateMapArgs, callback?: MapListenerCallback | undefined) => Promise<GoogleMap>
 ```
 
-| Param             | Type                                                        |
-| ----------------- | ----------------------------------------------------------- |
-| **`element`**     | <code>any</code>                                            |
-| **`id`**          | <code>string</code>                                         |
-| **`apiKey`**      | <code>string</code>                                         |
-| **`config`**      | <code><a href="#googlemapconfig">GoogleMapConfig</a></code> |
-| **`forceCreate`** | <code>boolean</code>                                        |
+| Param          | Type                                                                |
+| -------------- | ------------------------------------------------------------------- |
+| **`options`**  | <code><a href="#createmapargs">CreateMapArgs</a></code>             |
+| **`callback`** | <code><a href="#maplistenercallback">MapListenerCallback</a></code> |
 
-# **Returns:** <code>Promise&lt;GoogleMap&gt;</code>
-
-create(options: CreateMapOptions) => Promise<void>
-
-````
-
-| Param         | Type                                                          |
-| ------------- | ------------------------------------------------------------- |
-| **`options`** | <code><a href="#createmapoptions">CreateMapOptions</a></code> |
->>>>>>> plugin/google-maps
+**Returns:** <code>Promise&lt;GoogleMap&gt;</code>
 
 --------------------
 
@@ -142,9 +129,10 @@ create(options: CreateMapOptions) => Promise<void>
 
 ```typescript
 enableClustering() => Promise<void>
-````
+```
 
----
+--------------------
+
 
 ### disableClustering()
 
@@ -152,7 +140,8 @@ enableClustering() => Promise<void>
 disableClustering() => Promise<void>
 ```
 
----
+--------------------
+
 
 ### addMarker(...)
 
@@ -166,7 +155,8 @@ addMarker(marker: Marker) => Promise<string>
 
 **Returns:** <code>Promise&lt;string&gt;</code>
 
----
+--------------------
+
 
 ### addMarkers(...)
 
@@ -180,7 +170,8 @@ addMarkers(markers: Marker[]) => Promise<string[]>
 
 **Returns:** <code>Promise&lt;string[]&gt;</code>
 
----
+--------------------
+
 
 ### removeMarker(...)
 
@@ -192,7 +183,8 @@ removeMarker(id: string) => Promise<void>
 | -------- | ------------------- |
 | **`id`** | <code>string</code> |
 
----
+--------------------
+
 
 ### removeMarkers(...)
 
@@ -204,7 +196,8 @@ removeMarkers(ids: string[]) => Promise<void>
 | --------- | --------------------- |
 | **`ids`** | <code>string[]</code> |
 
----
+--------------------
+
 
 ### destroy()
 
@@ -212,7 +205,8 @@ removeMarkers(ids: string[]) => Promise<void>
 destroy() => Promise<void>
 ```
 
----
+--------------------
+
 
 ### setCamera(...)
 
@@ -224,7 +218,8 @@ setCamera(config: CameraConfig) => Promise<void>
 | ------------ | ----------------------------------------------------- |
 | **`config`** | <code><a href="#cameraconfig">CameraConfig</a></code> |
 
----
+--------------------
+
 
 ### setMapType(...)
 
@@ -236,7 +231,8 @@ setMapType(mapType: MapType) => Promise<void>
 | ------------- | ------------------------------------------- |
 | **`mapType`** | <code><a href="#maptype">MapType</a></code> |
 
----
+--------------------
+
 
 ### enableIndoorMaps(...)
 
@@ -248,7 +244,8 @@ enableIndoorMaps(enabled: boolean) => Promise<void>
 | ------------- | -------------------- |
 | **`enabled`** | <code>boolean</code> |
 
----
+--------------------
+
 
 ### enableTrafficLayer(...)
 
@@ -260,7 +257,8 @@ enableTrafficLayer(enabled: boolean) => Promise<void>
 | ------------- | -------------------- |
 | **`enabled`** | <code>boolean</code> |
 
----
+--------------------
+
 
 ### enableAccessibilityElements(...)
 
@@ -272,7 +270,8 @@ enableAccessibilityElements(enabled: boolean) => Promise<void>
 | ------------- | -------------------- |
 | **`enabled`** | <code>boolean</code> |
 
----
+--------------------
+
 
 ### enableCurrentLocation(...)
 
@@ -284,7 +283,8 @@ enableCurrentLocation(enabled: boolean) => Promise<void>
 | ------------- | -------------------- |
 | **`enabled`** | <code>boolean</code> |
 
----
+--------------------
+
 
 ### setPadding(...)
 
@@ -296,7 +296,8 @@ setPadding(padding: MapPadding) => Promise<void>
 | ------------- | ------------------------------------------------- |
 | **`padding`** | <code><a href="#mappadding">MapPadding</a></code> |
 
----
+--------------------
+
 
 ### setOnCameraIdleListener(...)
 
@@ -308,7 +309,8 @@ setOnCameraIdleListener(callback?: MapListenerCallback | undefined) => Promise<v
 | -------------- | ------------------------------------------------------------------- |
 | **`callback`** | <code><a href="#maplistenercallback">MapListenerCallback</a></code> |
 
----
+--------------------
+
 
 ### setOnCameraMoveStartedListener(...)
 
@@ -320,7 +322,8 @@ setOnCameraMoveStartedListener(callback?: MapListenerCallback | undefined) => Pr
 | -------------- | ------------------------------------------------------------------- |
 | **`callback`** | <code><a href="#maplistenercallback">MapListenerCallback</a></code> |
 
----
+--------------------
+
 
 ### setOnClusterClickListener(...)
 
@@ -332,7 +335,8 @@ setOnClusterClickListener(callback?: MapListenerCallback | undefined) => Promise
 | -------------- | ------------------------------------------------------------------- |
 | **`callback`** | <code><a href="#maplistenercallback">MapListenerCallback</a></code> |
 
----
+--------------------
+
 
 ### setOnClusterInfoWindowClickListener(...)
 
@@ -344,7 +348,8 @@ setOnClusterInfoWindowClickListener(callback?: MapListenerCallback | undefined) 
 | -------------- | ------------------------------------------------------------------- |
 | **`callback`** | <code><a href="#maplistenercallback">MapListenerCallback</a></code> |
 
----
+--------------------
+
 
 ### setOnInfoWindowClickListener(...)
 
@@ -356,7 +361,8 @@ setOnInfoWindowClickListener(callback?: MapListenerCallback | undefined) => Prom
 | -------------- | ------------------------------------------------------------------- |
 | **`callback`** | <code><a href="#maplistenercallback">MapListenerCallback</a></code> |
 
----
+--------------------
+
 
 ### setOnMapClickListener(...)
 
@@ -368,7 +374,8 @@ setOnMapClickListener(callback?: MapListenerCallback | undefined) => Promise<voi
 | -------------- | ------------------------------------------------------------------- |
 | **`callback`** | <code><a href="#maplistenercallback">MapListenerCallback</a></code> |
 
----
+--------------------
+
 
 ### setOnMarkerClickListener(...)
 
@@ -380,7 +387,8 @@ setOnMarkerClickListener(callback?: MapListenerCallback | undefined) => Promise<
 | -------------- | ------------------------------------------------------------------- |
 | **`callback`** | <code><a href="#maplistenercallback">MapListenerCallback</a></code> |
 
----
+--------------------
+
 
 ### setOnMyLocationButtonClickListener(...)
 
@@ -392,7 +400,8 @@ setOnMyLocationButtonClickListener(callback?: MapListenerCallback | undefined) =
 | -------------- | ------------------------------------------------------------------- |
 | **`callback`** | <code><a href="#maplistenercallback">MapListenerCallback</a></code> |
 
----
+--------------------
+
 
 ### setOnMyLocationClickListener(...)
 
@@ -404,13 +413,13 @@ setOnMyLocationClickListener(callback?: MapListenerCallback | undefined) => Prom
 | -------------- | ------------------------------------------------------------------- |
 | **`callback`** | <code><a href="#maplistenercallback">MapListenerCallback</a></code> |
 
----
+--------------------
+
 
 ### Interfaces
 
-# <<<<<<< HEAD
 
-#### CreateMapOptions
+#### CreateMapArgs
 
 | Prop              | Type                                                        |
 | ----------------- | ----------------------------------------------------------- |
@@ -420,7 +429,6 @@ setOnMyLocationClickListener(callback?: MapListenerCallback | undefined) => Prom
 | **`element`**     | <code>HTMLElement</code>                                    |
 | **`forceCreate`** | <code>boolean</code>                                        |
 
-> > > > > > > plugin/google-maps
 
 #### GoogleMapConfig
 
@@ -434,6 +442,7 @@ setOnMyLocationClickListener(callback?: MapListenerCallback | undefined) => Prom
 | **`zoom`**            | <code>number</code>                       | Sets the zoom of the map.                                      |                    |
 | **`androidLiteMode`** | <code>boolean</code>                      | Enables image-based lite mode on Android.                      | <code>false</code> |
 
+
 #### LatLng
 
 An interface representing a pair of latitude and longitude coordinates.
@@ -442,6 +451,7 @@ An interface representing a pair of latitude and longitude coordinates.
 | --------- | ------------------- | ------------------------------------------------------------------------- |
 | **`lat`** | <code>number</code> | Coordinate latitude, in degrees. This value is in the range [-90, 90].    |
 | **`lng`** | <code>number</code> | Coordinate longitude, in degrees. This value is in the range [-180, 180]. |
+
 
 #### Marker
 
@@ -457,6 +467,7 @@ A marker is an icon placed at a particular point on the map's surface.
 | **`iconUrl`**    | <code>string</code>                       | <a href="#marker">Marker</a> icon to render.                                                              |                    |
 | **`draggable`**  | <code>boolean</code>                      | Controls whether this marker can be dragged interactively                                                 | <code>false</code> |
 
+
 #### CameraConfig
 
 Configuration properties for a Google Map Camera
@@ -470,6 +481,7 @@ Configuration properties for a Google Map Camera
 | **`animate`**           | <code>boolean</code>                      | Animate the transition to the new Camera properties.                                                                   | <code>false</code> |
 | **`animationDuration`** | <code>number</code>                       |                                                                                                                        |                    |
 
+
 #### MapPadding
 
 Controls for setting padding on the 'visible' region of the view.
@@ -481,26 +493,17 @@ Controls for setting padding on the 'visible' region of the view.
 | **`right`**  | <code>number</code> |
 | **`bottom`** | <code>number</code> |
 
-#### OnScrollArgs
-
-| Prop            | Type                                                                  |
-| --------------- | --------------------------------------------------------------------- |
-| **`id`**        | <code>string</code>                                                   |
-| **`mapBounds`** | <code>{ x: number; y: number; width: number; height: number; }</code> |
-
-#### PluginListenerHandle
-
-| Prop         | Type                                      |
-| ------------ | ----------------------------------------- |
-| **`remove`** | <code>() =&gt; Promise&lt;void&gt;</code> |
 
 ### Type Aliases
+
 
 #### MapListenerCallback
 
 <code>(data: any): void</code>
 
+
 ### Enums
+
 
 #### MapType
 

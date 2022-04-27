@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-namespace */
-import { MapType } from './definitions';
-import { GoogleMap, Marker } from './map';
+import { MapType, Marker } from './definitions';
+import { GoogleMap } from './map';
 
 export { GoogleMap, MapType, Marker };
 
