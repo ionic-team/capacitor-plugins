@@ -1,4 +1,5 @@
 import { WebPlugin } from '@capacitor/core';
+import { MarkerClusterer } from '@googlemaps/markerclusterer';
 
 import type {
   AccElementsArgs,
@@ -30,7 +31,7 @@ export class CapacitorGoogleMapsWeb
       markers: {
         [id: string]: google.maps.Marker;
       };
-      //markerClusterer?: google.maps.MarkerClusterer;
+      markerClusterer?: MarkerClusterer;
       trafficLayer?: google.maps.TrafficLayer;
     };
   } = {};
@@ -169,11 +170,21 @@ export class CapacitorGoogleMapsWeb
   }
   
   async enableClustering(_args: { id: string }): Promise<void> {
-    throw new Error('Method not implemented.');
+    const markers: google.maps.Marker[] = [];
+
+    for (const id in this.maps[_args.id].markers) {
+      markers.push(this.maps[_args.id].markers[id]);
+    }
+
+    this.maps[_args.id].markerClusterer = new MarkerClusterer({
+      map: this.maps[_args.id].map,
+      markers: markers
+    });
   }
   
   async disableClustering(_args: { id: string }): Promise<void> {
-    throw new Error('Method not implemented.');
+    this.maps[_args.id].markerClusterer?.setMap(null);
+    this.maps[_args.id].markerClusterer = undefined;
   }
 
   async onScroll(_args: OnScrollArgs): Promise<void> {

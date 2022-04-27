@@ -93,6 +93,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@googlemaps/js-api-loader": "^1.13.7"
+    "@googlemaps/js-api-loader": "^1.13.7",
+    "@googlemaps/markerclusterer": "^2.0.4"
   }
 }

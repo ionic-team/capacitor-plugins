@@ -18,5 +18,5 @@ export default {
       inlineDynamicImports: true,
     },
   ],
-  external: ['@capacitor/core', '@googlemaps/js-api-loader'],
+  external: ['@capacitor/core', '@googlemaps/js-api-loader', '@googlemaps/markerclusterer'],
 };
