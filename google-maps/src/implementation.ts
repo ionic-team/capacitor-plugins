@@ -6,10 +6,10 @@ import type {
   GoogleMapConfig,
   MapPadding,
   MapType,
+  Marker
 } from './definitions';
-import type { Marker } from './map';
 
-export interface CreateMapOptions {
+export interface CreateMapArgs {
   id: string;
   apiKey: string;
   config: GoogleMapConfig;
@@ -88,7 +88,7 @@ export interface OnScrollArgs {
 export type MapListenerCallback = (data: any) => void;
 
 export interface CapacitorGoogleMapsPlugin {
-  create(options: CreateMapOptions): Promise<void>;
+  create(options: CreateMapArgs): Promise<void>;
   addMarker(args: AddMarkerArgs): Promise<{ id: string }>;
   addMarkers(args: AddMarkersArgs): Promise<{ ids: string[] }>;
   removeMarker(args: RemoveMarkerArgs): Promise<void>;

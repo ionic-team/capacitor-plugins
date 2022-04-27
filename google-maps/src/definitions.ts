@@ -1,3 +1,12 @@
+export interface Marker {
+  coordinate: LatLng;
+  opacity?: number;
+  title?: string;
+  snippet?: string;
+  isFlat?: boolean;
+  iconUrl?: string;
+  draggable?: boolean;
+}
 export interface LatLng {
   lat: number;
   lng: number;

@@ -1,19 +1,9 @@
 import { Capacitor } from '@capacitor/core';
 import type { PluginListenerHandle } from '@capacitor/core';
 
-import type { CameraConfig, LatLng, MapPadding, MapType } from './definitions';
-import type { CreateMapOptions, MapListenerCallback } from './implementation';
+import type { CameraConfig, MapPadding, MapType, Marker } from './definitions';
+import type { CreateMapArgs, MapListenerCallback } from './implementation';
 import { CapacitorGoogleMaps } from './implementation';
-
-export interface Marker {
-  coordinate: LatLng;
-  opacity?: number;
-  title?: string;
-  snippet?: string;
-  isFlat?: boolean;
-  iconUrl?: string;
-  draggable?: boolean;
-}
 
 class MapCustomElement extends HTMLElement {
   constructor() {
@@ -32,6 +22,37 @@ class MapCustomElement extends HTMLElement {
 }
 
 customElements.define('capacitor-google-map', MapCustomElement);
+
+export interface GoogleMapInterface {
+  create(options: CreateMapArgs, callback?: MapListenerCallback): Promise<GoogleMap>;
+  enableClustering(): Promise<void>;
+  disableClustering(): Promise<void>;
+  addMarker(marker: Marker): Promise<string>;
+  addMarkers(markers: Marker[]): Promise<string[]>;
+  removeMarker(id: string): Promise<void>;
+  removeMarkers(ids: string[]): Promise<void>;
+  destroy(): Promise<void>;
+  setCamera(config: CameraConfig): Promise<void>;
+  setMapType(mapType: MapType): Promise<void>;
+  enableIndoorMaps(enabled: boolean): Promise<void>;
+  enableTrafficLayer(enabled: boolean): Promise<void>;
+  enableAccessibilityElements(enabled: boolean): Promise<void>;
+  enableCurrentLocation(enabled: boolean): Promise<void>;
+  setPadding(padding: MapPadding): Promise<void>;
+  setOnCameraIdleListener(callback?: MapListenerCallback): Promise<void>;
+  setOnCameraMoveStartedListener(callback?: MapListenerCallback): Promise<void>;
+  setOnClusterClickListener(callback?: MapListenerCallback): Promise<void>;
+  setOnClusterInfoWindowClickListener(
+    callback?: MapListenerCallback,
+  ): Promise<void>;
+  setOnInfoWindowClickListener(callback?: MapListenerCallback): Promise<void>;
+  setOnMapClickListener(callback?: MapListenerCallback): Promise<void>;
+  setOnMarkerClickListener(callback?: MapListenerCallback): Promise<void>;
+  setOnMyLocationButtonClickListener(
+    callback?: MapListenerCallback,
+  ): Promise<void>;
+  setOnMyLocationClickListener(callback?: MapListenerCallback): Promise<void>;
+}
 
 export class GoogleMap {
   private id: string;
@@ -52,7 +73,7 @@ export class GoogleMap {
   }
 
   public static async create(
-    options: CreateMapOptions,
+    options: CreateMapArgs,
     callback?: MapListenerCallback,
   ): Promise<GoogleMap> {
     const newMap = new GoogleMap(options.id);
