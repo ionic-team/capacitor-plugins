@@ -65,4 +65,8 @@ import Foundation
     public func getLanguageCode() -> String {
         return String(Locale.preferredLanguages[0].prefix(2))
     }
+
+    public func getLanguageTag() -> String {
+        return String(Locale.preferredLanguages[0])
+    }
 }
