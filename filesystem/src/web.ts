@@ -171,14 +171,14 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
    */
   async writeFile(options: WriteFileOptions): Promise<WriteFileResult> {
     const path: string = this.getPath(options.directory, options.path);
-    const data = options.data;
+    let data = options.data;
+    const encoding = options.encoding;
     const doRecursive = options.recursive;
 
     const occupiedEntry = (await this.dbRequest('get', [path])) as EntryObj;
     if (occupiedEntry && occupiedEntry.type === 'directory')
       throw Error('The supplied path is a directory.');
 
-    const encoding = options.encoding;
     const parentPath = path.substr(0, path.lastIndexOf('/'));
 
     const parentEntry = (await this.dbRequest('get', [parentPath])) as EntryObj;
@@ -193,6 +193,13 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
         });
       }
     }
+
+    if (!encoding) {
+      data = data.indexOf(',') >= 0 ? data.split(',')[1] : data;
+      if (!this.isBase64String(data))
+        throw Error('The supplied data is not valid base64 content.');
+    }
+
     const now = Date.now();
     const pathObj: EntryObj = {
       path: path,
@@ -201,7 +208,7 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
       size: data.length,
       ctime: now,
       mtime: now,
-      content: !encoding && data.indexOf(',') >= 0 ? data.split(',')[1] : data,
+      content: data,
     };
     await this.dbRequest('put', [pathObj]);
     return {
@@ -217,7 +224,7 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
   async appendFile(options: AppendFileOptions): Promise<void> {
     const path: string = this.getPath(options.directory, options.path);
     let data = options.data;
-    // const encoding = options.encoding;
+    const encoding = options.encoding;
     const parentPath = path.substr(0, path.lastIndexOf('/'));
 
     const now = Date.now();
@@ -240,8 +247,15 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
       }
     }
 
+    if (!encoding && !this.isBase64String(data))
+      throw Error('The supplied data is not valid base64 content.');
+
     if (occupiedEntry !== undefined) {
-      data = occupiedEntry.content + data;
+      if (occupiedEntry.content !== undefined && !encoding) {
+        data = btoa(atob(occupiedEntry.content) + atob(data));
+      } else {
+        data = occupiedEntry.content + data;
+      }
       ctime = occupiedEntry.ctime;
     }
     const pathObj: EntryObj = {
@@ -606,6 +620,12 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
     return {
       uri: toPath,
     };
+  }
+
+  private isBase64String(str: string): boolean {
+    const base64regex =
+      /^([0-9a-zA-Z+/]{4})*(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?$/;
+    return base64regex.test(str);
   }
 }
 
