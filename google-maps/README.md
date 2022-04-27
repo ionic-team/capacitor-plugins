@@ -14,13 +14,13 @@ npx cap sync
 <docgen-index>
 
 * [`create(...)`](#create)
+* [`enableClustering()`](#enableclustering)
+* [`disableClustering()`](#disableclustering)
 * [`addMarker(...)`](#addmarker)
 * [`addMarkers(...)`](#addmarkers)
 * [`removeMarker(...)`](#removemarker)
 * [`removeMarkers(...)`](#removemarkers)
-* [`enableClustering(...)`](#enableclustering)
-* [`disableClustering(...)`](#disableclustering)
-* [`destroy(...)`](#destroy)
+* [`destroy()`](#destroy)
 * [`setCamera(...)`](#setcamera)
 * [`setMapType(...)`](#setmaptype)
 * [`enableIndoorMaps(...)`](#enableindoormaps)
@@ -28,17 +28,15 @@ npx cap sync
 * [`enableAccessibilityElements(...)`](#enableaccessibilityelements)
 * [`enableCurrentLocation(...)`](#enablecurrentlocation)
 * [`setPadding(...)`](#setpadding)
-* [`onScroll(...)`](#onscroll)
-* [`addListener('onCameraIdle', ...)`](#addlisteneroncameraidle)
-* [`addListener('onCameraMoveStarted', ...)`](#addlisteneroncameramovestarted)
-* [`addListener('onClusterClick', ...)`](#addlisteneronclusterclick)
-* [`addListener('onClusterInfoWindowClick', ...)`](#addlisteneronclusterinfowindowclick)
-* [`addListener('onInfoWindowClick', ...)`](#addlisteneroninfowindowclick)
-* [`addListener('onMapReady', ...)`](#addlisteneronmapready)
-* [`addListener('onMapClick', ...)`](#addlisteneronmapclick)
-* [`addListener('onMarkerClick', ...)`](#addlisteneronmarkerclick)
-* [`addListener('onMyLocationButtonClick', ...)`](#addlisteneronmylocationbuttonclick)
-* [`addListener('onMyLocationClick', ...)`](#addlisteneronmylocationclick)
+* [`setOnCameraIdleListener(...)`](#setoncameraidlelistener)
+* [`setOnCameraMoveStartedListener(...)`](#setoncameramovestartedlistener)
+* [`setOnClusterClickListener(...)`](#setonclusterclicklistener)
+* [`setOnClusterInfoWindowClickListener(...)`](#setonclusterinfowindowclicklistener)
+* [`setOnInfoWindowClickListener(...)`](#setoninfowindowclicklistener)
+* [`setOnMapClickListener(...)`](#setonmapclicklistener)
+* [`setOnMarkerClickListener(...)`](#setonmarkerclicklistener)
+* [`setOnMyLocationButtonClickListener(...)`](#setonmylocationbuttonclicklistener)
+* [`setOnMyLocationClickListener(...)`](#setonmylocationclicklistener)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
 * [Enums](#enums)
@@ -51,12 +49,33 @@ npx cap sync
 ### create(...)
 
 ```typescript
-create(options: CreateMapOptions) => Promise<void>
+create(options: CreateMapArgs, callback?: MapListenerCallback | undefined) => Promise<GoogleMap>
 ```
 
-| Param         | Type                                                          |
-| ------------- | ------------------------------------------------------------- |
-| **`options`** | <code><a href="#createmapoptions">CreateMapOptions</a></code> |
+| Param          | Type                                                                |
+| -------------- | ------------------------------------------------------------------- |
+| **`options`**  | <code><a href="#createmapargs">CreateMapArgs</a></code>             |
+| **`callback`** | <code><a href="#maplistenercallback">MapListenerCallback</a></code> |
+
+**Returns:** <code>Promise&lt;GoogleMap&gt;</code>
+
+--------------------
+
+
+### enableClustering()
+
+```typescript
+enableClustering() => Promise<void>
+```
+
+--------------------
+
+
+### disableClustering()
+
+```typescript
+disableClustering() => Promise<void>
+```
 
 --------------------
 
@@ -64,14 +83,14 @@ create(options: CreateMapOptions) => Promise<void>
 ### addMarker(...)
 
 ```typescript
-addMarker(args: AddMarkerArgs) => Promise<{ id: string; }>
+addMarker(marker: Marker) => Promise<string>
 ```
 
-| Param      | Type                                                    |
-| ---------- | ------------------------------------------------------- |
-| **`args`** | <code><a href="#addmarkerargs">AddMarkerArgs</a></code> |
+| Param        | Type                                      |
+| ------------ | ----------------------------------------- |
+| **`marker`** | <code><a href="#marker">Marker</a></code> |
 
-**Returns:** <code>Promise&lt;{ id: string; }&gt;</code>
+**Returns:** <code>Promise&lt;string&gt;</code>
 
 --------------------
 
@@ -79,14 +98,14 @@ addMarker(args: AddMarkerArgs) => Promise<{ id: string; }>
 ### addMarkers(...)
 
 ```typescript
-addMarkers(args: AddMarkersArgs) => Promise<{ ids: string[]; }>
+addMarkers(markers: Marker[]) => Promise<string[]>
 ```
 
-| Param      | Type                                                      |
-| ---------- | --------------------------------------------------------- |
-| **`args`** | <code><a href="#addmarkersargs">AddMarkersArgs</a></code> |
+| Param         | Type                  |
+| ------------- | --------------------- |
+| **`markers`** | <code>Marker[]</code> |
 
-**Returns:** <code>Promise&lt;{ ids: string[]; }&gt;</code>
+**Returns:** <code>Promise&lt;string[]&gt;</code>
 
 --------------------
 
@@ -94,12 +113,12 @@ addMarkers(args: AddMarkersArgs) => Promise<{ ids: string[]; }>
 ### removeMarker(...)
 
 ```typescript
-removeMarker(args: RemoveMarkerArgs) => Promise<void>
+removeMarker(id: string) => Promise<void>
 ```
 
-| Param      | Type                                                          |
-| ---------- | ------------------------------------------------------------- |
-| **`args`** | <code><a href="#removemarkerargs">RemoveMarkerArgs</a></code> |
+| Param    | Type                |
+| -------- | ------------------- |
+| **`id`** | <code>string</code> |
 
 --------------------
 
@@ -107,51 +126,21 @@ removeMarker(args: RemoveMarkerArgs) => Promise<void>
 ### removeMarkers(...)
 
 ```typescript
-removeMarkers(args: RemoveMarkersArgs) => Promise<void>
+removeMarkers(ids: string[]) => Promise<void>
 ```
 
-| Param      | Type                                                            |
-| ---------- | --------------------------------------------------------------- |
-| **`args`** | <code><a href="#removemarkersargs">RemoveMarkersArgs</a></code> |
+| Param     | Type                  |
+| --------- | --------------------- |
+| **`ids`** | <code>string[]</code> |
 
 --------------------
 
 
-### enableClustering(...)
+### destroy()
 
 ```typescript
-enableClustering(args: { id: string; }) => Promise<void>
+destroy() => Promise<void>
 ```
-
-| Param      | Type                         |
-| ---------- | ---------------------------- |
-| **`args`** | <code>{ id: string; }</code> |
-
---------------------
-
-
-### disableClustering(...)
-
-```typescript
-disableClustering(args: { id: string; }) => Promise<void>
-```
-
-| Param      | Type                         |
-| ---------- | ---------------------------- |
-| **`args`** | <code>{ id: string; }</code> |
-
---------------------
-
-
-### destroy(...)
-
-```typescript
-destroy(args: DestroyMapArgs) => Promise<void>
-```
-
-| Param      | Type                                                      |
-| ---------- | --------------------------------------------------------- |
-| **`args`** | <code><a href="#destroymapargs">DestroyMapArgs</a></code> |
 
 --------------------
 
@@ -159,12 +148,12 @@ destroy(args: DestroyMapArgs) => Promise<void>
 ### setCamera(...)
 
 ```typescript
-setCamera(args: CameraArgs) => Promise<void>
+setCamera(config: CameraConfig) => Promise<void>
 ```
 
-| Param      | Type                                              |
-| ---------- | ------------------------------------------------- |
-| **`args`** | <code><a href="#cameraargs">CameraArgs</a></code> |
+| Param        | Type                                                  |
+| ------------ | ----------------------------------------------------- |
+| **`config`** | <code><a href="#cameraconfig">CameraConfig</a></code> |
 
 --------------------
 
@@ -172,12 +161,12 @@ setCamera(args: CameraArgs) => Promise<void>
 ### setMapType(...)
 
 ```typescript
-setMapType(args: MapTypeArgs) => Promise<void>
+setMapType(mapType: MapType) => Promise<void>
 ```
 
-| Param      | Type                                                |
-| ---------- | --------------------------------------------------- |
-| **`args`** | <code><a href="#maptypeargs">MapTypeArgs</a></code> |
+| Param         | Type                                        |
+| ------------- | ------------------------------------------- |
+| **`mapType`** | <code><a href="#maptype">MapType</a></code> |
 
 --------------------
 
@@ -185,12 +174,12 @@ setMapType(args: MapTypeArgs) => Promise<void>
 ### enableIndoorMaps(...)
 
 ```typescript
-enableIndoorMaps(args: IndoorMapArgs) => Promise<void>
+enableIndoorMaps(enabled: boolean) => Promise<void>
 ```
 
-| Param      | Type                                                    |
-| ---------- | ------------------------------------------------------- |
-| **`args`** | <code><a href="#indoormapargs">IndoorMapArgs</a></code> |
+| Param         | Type                 |
+| ------------- | -------------------- |
+| **`enabled`** | <code>boolean</code> |
 
 --------------------
 
@@ -198,12 +187,12 @@ enableIndoorMaps(args: IndoorMapArgs) => Promise<void>
 ### enableTrafficLayer(...)
 
 ```typescript
-enableTrafficLayer(args: TrafficLayerArgs) => Promise<void>
+enableTrafficLayer(enabled: boolean) => Promise<void>
 ```
 
-| Param      | Type                                                          |
-| ---------- | ------------------------------------------------------------- |
-| **`args`** | <code><a href="#trafficlayerargs">TrafficLayerArgs</a></code> |
+| Param         | Type                 |
+| ------------- | -------------------- |
+| **`enabled`** | <code>boolean</code> |
 
 --------------------
 
@@ -211,12 +200,12 @@ enableTrafficLayer(args: TrafficLayerArgs) => Promise<void>
 ### enableAccessibilityElements(...)
 
 ```typescript
-enableAccessibilityElements(args: AccElementsArgs) => Promise<void>
+enableAccessibilityElements(enabled: boolean) => Promise<void>
 ```
 
-| Param      | Type                                                        |
-| ---------- | ----------------------------------------------------------- |
-| **`args`** | <code><a href="#accelementsargs">AccElementsArgs</a></code> |
+| Param         | Type                 |
+| ------------- | -------------------- |
+| **`enabled`** | <code>boolean</code> |
 
 --------------------
 
@@ -224,12 +213,12 @@ enableAccessibilityElements(args: AccElementsArgs) => Promise<void>
 ### enableCurrentLocation(...)
 
 ```typescript
-enableCurrentLocation(args: CurrentLocArgs) => Promise<void>
+enableCurrentLocation(enabled: boolean) => Promise<void>
 ```
 
-| Param      | Type                                                      |
-| ---------- | --------------------------------------------------------- |
-| **`args`** | <code><a href="#currentlocargs">CurrentLocArgs</a></code> |
+| Param         | Type                 |
+| ------------- | -------------------- |
+| **`enabled`** | <code>boolean</code> |
 
 --------------------
 
@@ -237,185 +226,129 @@ enableCurrentLocation(args: CurrentLocArgs) => Promise<void>
 ### setPadding(...)
 
 ```typescript
-setPadding(args: PaddingArgs) => Promise<void>
+setPadding(padding: MapPadding) => Promise<void>
 ```
 
-| Param      | Type                                                |
-| ---------- | --------------------------------------------------- |
-| **`args`** | <code><a href="#paddingargs">PaddingArgs</a></code> |
+| Param         | Type                                              |
+| ------------- | ------------------------------------------------- |
+| **`padding`** | <code><a href="#mappadding">MapPadding</a></code> |
 
 --------------------
 
 
-### onScroll(...)
+### setOnCameraIdleListener(...)
 
 ```typescript
-onScroll(args: OnScrollArgs) => Promise<void>
+setOnCameraIdleListener(callback?: MapListenerCallback | undefined) => Promise<void>
 ```
 
-| Param      | Type                                                  |
-| ---------- | ----------------------------------------------------- |
-| **`args`** | <code><a href="#onscrollargs">OnScrollArgs</a></code> |
+| Param          | Type                                                                |
+| -------------- | ------------------------------------------------------------------- |
+| **`callback`** | <code><a href="#maplistenercallback">MapListenerCallback</a></code> |
 
 --------------------
 
 
-### addListener('onCameraIdle', ...)
+### setOnCameraMoveStartedListener(...)
 
 ```typescript
-addListener(eventName: 'onCameraIdle', listenerFunc: MapListenerCallback) => PluginListenerHandle
+setOnCameraMoveStartedListener(callback?: MapListenerCallback | undefined) => Promise<void>
 ```
 
-| Param              | Type                                                                |
-| ------------------ | ------------------------------------------------------------------- |
-| **`eventName`**    | <code>'onCameraIdle'</code>                                         |
-| **`listenerFunc`** | <code><a href="#maplistenercallback">MapListenerCallback</a></code> |
-
-**Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
+| Param          | Type                                                                |
+| -------------- | ------------------------------------------------------------------- |
+| **`callback`** | <code><a href="#maplistenercallback">MapListenerCallback</a></code> |
 
 --------------------
 
 
-### addListener('onCameraMoveStarted', ...)
+### setOnClusterClickListener(...)
 
 ```typescript
-addListener(eventName: 'onCameraMoveStarted', listenerFunc: MapListenerCallback) => PluginListenerHandle
+setOnClusterClickListener(callback?: MapListenerCallback | undefined) => Promise<void>
 ```
 
-| Param              | Type                                                                |
-| ------------------ | ------------------------------------------------------------------- |
-| **`eventName`**    | <code>'onCameraMoveStarted'</code>                                  |
-| **`listenerFunc`** | <code><a href="#maplistenercallback">MapListenerCallback</a></code> |
-
-**Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
+| Param          | Type                                                                |
+| -------------- | ------------------------------------------------------------------- |
+| **`callback`** | <code><a href="#maplistenercallback">MapListenerCallback</a></code> |
 
 --------------------
 
 
-### addListener('onClusterClick', ...)
+### setOnClusterInfoWindowClickListener(...)
 
 ```typescript
-addListener(eventName: 'onClusterClick', listenerFunc: MapListenerCallback) => PluginListenerHandle
+setOnClusterInfoWindowClickListener(callback?: MapListenerCallback | undefined) => Promise<void>
 ```
 
-| Param              | Type                                                                |
-| ------------------ | ------------------------------------------------------------------- |
-| **`eventName`**    | <code>'onClusterClick'</code>                                       |
-| **`listenerFunc`** | <code><a href="#maplistenercallback">MapListenerCallback</a></code> |
-
-**Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
+| Param          | Type                                                                |
+| -------------- | ------------------------------------------------------------------- |
+| **`callback`** | <code><a href="#maplistenercallback">MapListenerCallback</a></code> |
 
 --------------------
 
 
-### addListener('onClusterInfoWindowClick', ...)
+### setOnInfoWindowClickListener(...)
 
 ```typescript
-addListener(eventName: 'onClusterInfoWindowClick', listenerFunc: MapListenerCallback) => PluginListenerHandle
+setOnInfoWindowClickListener(callback?: MapListenerCallback | undefined) => Promise<void>
 ```
 
-| Param              | Type                                                                |
-| ------------------ | ------------------------------------------------------------------- |
-| **`eventName`**    | <code>'onClusterInfoWindowClick'</code>                             |
-| **`listenerFunc`** | <code><a href="#maplistenercallback">MapListenerCallback</a></code> |
-
-**Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
+| Param          | Type                                                                |
+| -------------- | ------------------------------------------------------------------- |
+| **`callback`** | <code><a href="#maplistenercallback">MapListenerCallback</a></code> |
 
 --------------------
 
 
-### addListener('onInfoWindowClick', ...)
+### setOnMapClickListener(...)
 
 ```typescript
-addListener(eventName: 'onInfoWindowClick', listenerFunc: MapListenerCallback) => PluginListenerHandle
+setOnMapClickListener(callback?: MapListenerCallback | undefined) => Promise<void>
 ```
 
-| Param              | Type                                                                |
-| ------------------ | ------------------------------------------------------------------- |
-| **`eventName`**    | <code>'onInfoWindowClick'</code>                                    |
-| **`listenerFunc`** | <code><a href="#maplistenercallback">MapListenerCallback</a></code> |
-
-**Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
+| Param          | Type                                                                |
+| -------------- | ------------------------------------------------------------------- |
+| **`callback`** | <code><a href="#maplistenercallback">MapListenerCallback</a></code> |
 
 --------------------
 
 
-### addListener('onMapReady', ...)
+### setOnMarkerClickListener(...)
 
 ```typescript
-addListener(eventName: 'onMapReady', listenerFunc: MapListenerCallback) => PluginListenerHandle
+setOnMarkerClickListener(callback?: MapListenerCallback | undefined) => Promise<void>
 ```
 
-| Param              | Type                                                                |
-| ------------------ | ------------------------------------------------------------------- |
-| **`eventName`**    | <code>'onMapReady'</code>                                           |
-| **`listenerFunc`** | <code><a href="#maplistenercallback">MapListenerCallback</a></code> |
-
-**Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
+| Param          | Type                                                                |
+| -------------- | ------------------------------------------------------------------- |
+| **`callback`** | <code><a href="#maplistenercallback">MapListenerCallback</a></code> |
 
 --------------------
 
 
-### addListener('onMapClick', ...)
+### setOnMyLocationButtonClickListener(...)
 
 ```typescript
-addListener(eventName: 'onMapClick', listenerFunc: MapListenerCallback) => PluginListenerHandle
+setOnMyLocationButtonClickListener(callback?: MapListenerCallback | undefined) => Promise<void>
 ```
 
-| Param              | Type                                                                |
-| ------------------ | ------------------------------------------------------------------- |
-| **`eventName`**    | <code>'onMapClick'</code>                                           |
-| **`listenerFunc`** | <code><a href="#maplistenercallback">MapListenerCallback</a></code> |
-
-**Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
+| Param          | Type                                                                |
+| -------------- | ------------------------------------------------------------------- |
+| **`callback`** | <code><a href="#maplistenercallback">MapListenerCallback</a></code> |
 
 --------------------
 
 
-### addListener('onMarkerClick', ...)
+### setOnMyLocationClickListener(...)
 
 ```typescript
-addListener(eventName: 'onMarkerClick', listenerFunc: MapListenerCallback) => PluginListenerHandle
+setOnMyLocationClickListener(callback?: MapListenerCallback | undefined) => Promise<void>
 ```
 
-| Param              | Type                                                                |
-| ------------------ | ------------------------------------------------------------------- |
-| **`eventName`**    | <code>'onMarkerClick'</code>                                        |
-| **`listenerFunc`** | <code><a href="#maplistenercallback">MapListenerCallback</a></code> |
-
-**Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
-
---------------------
-
-
-### addListener('onMyLocationButtonClick', ...)
-
-```typescript
-addListener(eventName: 'onMyLocationButtonClick', listenerFunc: MapListenerCallback) => PluginListenerHandle
-```
-
-| Param              | Type                                                                |
-| ------------------ | ------------------------------------------------------------------- |
-| **`eventName`**    | <code>'onMyLocationButtonClick'</code>                              |
-| **`listenerFunc`** | <code><a href="#maplistenercallback">MapListenerCallback</a></code> |
-
-**Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
-
---------------------
-
-
-### addListener('onMyLocationClick', ...)
-
-```typescript
-addListener(eventName: 'onMyLocationClick', listenerFunc: MapListenerCallback) => PluginListenerHandle
-```
-
-| Param              | Type                                                                |
-| ------------------ | ------------------------------------------------------------------- |
-| **`eventName`**    | <code>'onMyLocationClick'</code>                                    |
-| **`listenerFunc`** | <code><a href="#maplistenercallback">MapListenerCallback</a></code> |
-
-**Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
+| Param          | Type                                                                |
+| -------------- | ------------------------------------------------------------------- |
+| **`callback`** | <code><a href="#maplistenercallback">MapListenerCallback</a></code> |
 
 --------------------
 
@@ -423,7 +356,7 @@ addListener(eventName: 'onMyLocationClick', listenerFunc: MapListenerCallback) =
 ### Interfaces
 
 
-#### CreateMapOptions
+#### CreateMapArgs
 
 | Prop              | Type                                                        |
 | ----------------- | ----------------------------------------------------------- |
@@ -455,14 +388,6 @@ addListener(eventName: 'onMyLocationClick', listenerFunc: MapListenerCallback) =
 | **`lng`** | <code>number</code> |
 
 
-#### AddMarkerArgs
-
-| Prop         | Type                                      |
-| ------------ | ----------------------------------------- |
-| **`id`**     | <code>string</code>                       |
-| **`marker`** | <code><a href="#marker">Marker</a></code> |
-
-
 #### Marker
 
 | Prop             | Type                                      |
@@ -474,45 +399,6 @@ addListener(eventName: 'onMyLocationClick', listenerFunc: MapListenerCallback) =
 | **`isFlat`**     | <code>boolean</code>                      |
 | **`iconUrl`**    | <code>string</code>                       |
 | **`draggable`**  | <code>boolean</code>                      |
-
-
-#### AddMarkersArgs
-
-| Prop          | Type                  |
-| ------------- | --------------------- |
-| **`id`**      | <code>string</code>   |
-| **`markers`** | <code>Marker[]</code> |
-
-
-#### RemoveMarkerArgs
-
-| Prop           | Type                |
-| -------------- | ------------------- |
-| **`id`**       | <code>string</code> |
-| **`markerId`** | <code>string</code> |
-
-
-#### RemoveMarkersArgs
-
-| Prop            | Type                  |
-| --------------- | --------------------- |
-| **`id`**        | <code>string</code>   |
-| **`markerIds`** | <code>string[]</code> |
-
-
-#### DestroyMapArgs
-
-| Prop     | Type                |
-| -------- | ------------------- |
-| **`id`** | <code>string</code> |
-
-
-#### CameraArgs
-
-| Prop         | Type                                                  |
-| ------------ | ----------------------------------------------------- |
-| **`id`**     | <code>string</code>                                   |
-| **`config`** | <code><a href="#cameraconfig">CameraConfig</a></code> |
 
 
 #### CameraConfig
@@ -527,54 +413,6 @@ addListener(eventName: 'onMyLocationClick', listenerFunc: MapListenerCallback) =
 | **`animationDuration`** | <code>number</code>                       |
 
 
-#### MapTypeArgs
-
-| Prop          | Type                                        |
-| ------------- | ------------------------------------------- |
-| **`id`**      | <code>string</code>                         |
-| **`mapType`** | <code><a href="#maptype">MapType</a></code> |
-
-
-#### IndoorMapArgs
-
-| Prop          | Type                 |
-| ------------- | -------------------- |
-| **`id`**      | <code>string</code>  |
-| **`enabled`** | <code>boolean</code> |
-
-
-#### TrafficLayerArgs
-
-| Prop          | Type                 |
-| ------------- | -------------------- |
-| **`id`**      | <code>string</code>  |
-| **`enabled`** | <code>boolean</code> |
-
-
-#### AccElementsArgs
-
-| Prop          | Type                 |
-| ------------- | -------------------- |
-| **`id`**      | <code>string</code>  |
-| **`enabled`** | <code>boolean</code> |
-
-
-#### CurrentLocArgs
-
-| Prop          | Type                 |
-| ------------- | -------------------- |
-| **`id`**      | <code>string</code>  |
-| **`enabled`** | <code>boolean</code> |
-
-
-#### PaddingArgs
-
-| Prop          | Type                                              |
-| ------------- | ------------------------------------------------- |
-| **`id`**      | <code>string</code>                               |
-| **`padding`** | <code><a href="#mappadding">MapPadding</a></code> |
-
-
 #### MapPadding
 
 | Prop         | Type                |
@@ -583,21 +421,6 @@ addListener(eventName: 'onMyLocationClick', listenerFunc: MapListenerCallback) =
 | **`left`**   | <code>number</code> |
 | **`right`**  | <code>number</code> |
 | **`bottom`** | <code>number</code> |
-
-
-#### OnScrollArgs
-
-| Prop            | Type                                                                  |
-| --------------- | --------------------------------------------------------------------- |
-| **`id`**        | <code>string</code>                                                   |
-| **`mapBounds`** | <code>{ x: number; y: number; width: number; height: number; }</code> |
-
-
-#### PluginListenerHandle
-
-| Prop         | Type                                      |
-| ------------ | ----------------------------------------- |
-| **`remove`** | <code>() =&gt; Promise&lt;void&gt;</code> |
 
 
 ### Type Aliases
