@@ -203,6 +203,15 @@ export interface ShowOptions {
   showDuration?: number;
 }
 
+export interface UpdateProgressOptions {
+  /**
+   * Set percentage of progress bar.
+   *
+   * @since 1.2.3
+   */
+  progress: number;
+}
+
 export interface HideOptions {
   /**
    * How long (in ms) to fade out.
@@ -220,6 +229,12 @@ export interface SplashScreenPlugin {
    * @since 1.0.0
    */
   show(options?: ShowOptions): Promise<void>;
+  /**
+   * Update progress of splash screen
+   *
+   * @since 1.2.3
+   */
+  updateProgress(options: UpdateProgressOptions): Promise<void>;
   /**
    * Hide the splash screen
    *

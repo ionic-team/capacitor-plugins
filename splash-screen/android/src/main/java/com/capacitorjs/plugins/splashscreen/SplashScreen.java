@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
@@ -29,6 +30,7 @@ public class SplashScreen {
     private Dialog dialog;
     private View splashImage;
     private ProgressBar spinnerBar;
+    private ProgressBar progressBar;
     private WindowManager windowManager;
     private boolean isVisible = false;
     private boolean isHiding = false;
@@ -400,6 +402,44 @@ public class SplashScreen {
         );
     }
 
+    // This function when called will automatically add a progress bar to the splash screen
+    // if it is not available yet, and update the progress bar's progress.
+    public void updateProgress(final AppCompatActivity activity, final float percentage) {
+        Handler mainHandler = new Handler(context.getMainLooper());
+
+        // Updating UI from main thread would cause issues hence a Handler is used.
+        // This is similar to the approach used by functions `show` and `hide`.
+        mainHandler.post(
+            () -> {
+                // If the progress bar does not exist yet.
+                if (progressBar == null) {
+                    // Create a horizontal progress bar.
+                    progressBar = new ProgressBar(context, null, android.R.attr.progressBarStyleHorizontal);
+
+                    // Ensure the progress filling is white.
+                    progressBar.setProgressTintList(ColorStateList.valueOf(Color.WHITE));
+
+                    WindowManager.LayoutParams params = new WindowManager.LayoutParams();
+
+                    // Required to enable the view to actually fade.
+                    params.format = PixelFormat.TRANSLUCENT;
+
+                    // Set the dimensions of the progress bar.
+                    params.height = WindowManager.LayoutParams.WRAP_CONTENT;
+                    params.width = activity.getWindow().getDecorView().getWidth() / 2;
+
+                    // Put the progress bar just a bit away from the center of the screen so there's room for a logo.
+                    params.y = (int) ((activity.getWindow().getDecorView().getHeight() / 2) * 0.25);
+
+                    // Add the progress bar.
+                    windowManager.addView(progressBar, params);
+                }
+                // Set the progress of the progress bar.
+                progressBar.setProgress((int) percentage);
+            }
+        );
+    }
+
     private void hide(final int fadeOutDuration, boolean isLaunchSplash) {
         // Warn the user if the splash was hidden automatically, which means they could be experiencing an app
         // that feels slower than it actually is.
@@ -443,6 +483,15 @@ public class SplashScreen {
                     spinnerBar.setAlpha(1f);
 
                     spinnerBar.animate().alpha(0).setInterpolator(new LinearInterpolator()).setDuration(fadeOutDuration).start();
+                }
+
+                // In the case the progress bar has been added.
+                if (progressBar != null) {
+                    // Make the progress bar invisible.
+                    progressBar.setAlpha(1f);
+
+                    // Start the animation to make it invisible and blend into the layer below.
+                    progressBar.animate().alpha(0).setInterpolator(new LinearInterpolator()).setDuration(fadeOutDuration).start();
                 }
 
                 splashImage.setAlpha(1f);
@@ -501,6 +550,15 @@ public class SplashScreen {
             splashImage.setVisibility(View.INVISIBLE);
 
             windowManager.removeView(splashImage);
+        }
+
+        // In the case that the progress bar doesn't exist.
+        if (progressBar != null && progressBar.getParent() != null) {
+            // Make it invisible.
+            progressBar.setVisibility(View.INVISIBLE);
+
+            // Remove the progress bar entirely.
+            windowManager.removeView(progressBar);
         }
 
         isHiding = false;

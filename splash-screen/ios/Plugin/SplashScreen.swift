@@ -9,6 +9,10 @@ import Capacitor
     var imageView = UIImageView()
     var image: UIImage?
     var spinner = UIActivityIndicatorView()
+    // Used for `updateProgress` function.
+    // Progress bar will only be shown when `updateProgress` is called by web app.
+    var progressBar = UIProgressView()
+    var progressBarVisible = false
     var config: SplashScreenConfig = SplashScreenConfig()
     var hideTask: Any?
     var isVisible: Bool = false
@@ -32,6 +36,32 @@ import Capacitor
 
     public func show(settings: SplashScreenSettings, completion: @escaping () -> Void) {
         self.showSplash(settings: settings, completion: completion, isLaunchSplash: false)
+    }
+
+    // This function when called will automatically add a progress bar to the splash screen
+    // if it is not available yet, and update the progress bar's progress.
+    public func updateProgress(percentage: Float) {
+        // Updating UI from main thread would cause issues hence a DispatchQueue is used.
+        // This is similar to the approach used by functions `showSplash` and `hideSplash`.
+        DispatchQueue.main.async { [weak self] in
+            guard let strongSelf = self else {
+                return
+            }
+            
+            // In the case the progress bar is not visible yet.
+            if !strongSelf.progressBarVisible {
+                // Make the progress bar's progress white.
+                strongSelf.progressBar.tintColor = .white
+                // Add it to the parent view so it can be shown.
+                strongSelf.parentView.addSubview(strongSelf.progressBar)
+                // Make the progress bar show in the middle of the screen (x) but 75% down (y) to allow for the logo to not be blocked.
+                strongSelf.progressBar.frame = CGRect(x: strongSelf.parentView.frame.midX - (strongSelf.parentView.frame.midX / 2), y: strongSelf.parentView.frame.midY * 1.25, width: strongSelf.parentView.frame.midX, height: 0)
+                strongSelf.progressBarVisible = true
+            }
+            
+            // Update the progress.
+            strongSelf.progressBar.setProgress(percentage / 100, animated: true)
+        }
     }
 
     public func hide(settings: SplashScreenSettings) {
@@ -148,11 +178,18 @@ import Capacitor
         if config.showSpinner {
             spinner.removeFromSuperview()
         }
-
+      
         // If the splash screen is animated.
         if config.animated {
             // Remove it from the view.
             imageView.removeFromSuperview()
+        }
+      
+        // In the case that the progress bar has been activated.
+        if self.progressBarVisible {
+            // Remove the progress bar.
+            progressBar.removeFromSuperview()
+            self.progressBarVisible = false
         }
     }
 
@@ -202,6 +239,12 @@ import Capacitor
 
                 if self.config.showSpinner {
                     self.spinner.alpha = 0
+                }
+                
+                // In the case the progress bar has been added.
+                if self.progressBarVisible {
+                    // Make the progress bar invisible.
+                    self.progressBar.alpha = 0
                 }
             }) { (_: Bool) in
                 self.tearDown()
