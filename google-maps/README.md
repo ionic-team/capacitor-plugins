@@ -9,6 +9,10 @@ npm install @capacitor/google-maps
 npx cap sync
 ```
 
+## API Keys
+
+To use the Google Maps SDK on any platform, API keys associated with an account *with billing enabled* are required. These can be obtained from the [Google Cloud Console](https://console.cloud.google.com). This is required for all three platforms, Android, iOS, and Javascript. Additional information about obtaining these API keys can be found in the [Google Maps documentation](https://developers.google.com/maps/documentation/android-sdk/overview) for each platform.
+
 ## iOS
 
 The Google Maps SDK supports the use of showing the users current location via `enableCurrentLocation(bool)`. To use this, Apple requires privacy descriptions to be specified in `Info.plist`:
@@ -20,89 +24,273 @@ Read about [Configuring `Info.plist`](https://capacitorjs.com/docs/ios/configura
 
 ## Android
 
-Inside of your application android folder, add the following to your `local.properties` file:
+The Google Maps SDK for Android requires you to add your API key to the AndroidManifest.xml file in your project.
 
-```
-REACT_APP_GOOGLE_MAPS_API_KEY=[YOUR_GOOGLE_MAPS_API_KEY]
+```xml
+<meta-data android:name="com.google.android.geo.API_KEY" android:value="YOUR_API_KEY_HERE"/>
 ```
 
-This to use certain location features, API requires the following permissions be added to your AndroidManifest.xml:
+To use certain location features, the SDK requires the following permissions to also be added to your AndroidManifest.xml:
 
-```
+```xml
 <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 ```
 
-## Example
+## Usage
 
-It's required to use the `<capacitor-google-map />` custom element to create your container element for the map. The map container element must have a defined width and height:
+The Google Maps Capacitor plugin ships with a web component that must be used to render the map in your application as it enables us to embed the native view more effectively on iOS. The plugin will automatically register this web component for use in your application.
+
+> For Angular users, you will get an error warning that this web component is unknown to the Angular compiler. This is resolved by modifying the module that declares your component to allow for custom web components.
+>
+> ```typescript
+> import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+> 
+> @NgModule({
+>   schemas: [CUSTOM_ELEMENTS_SCHEMA]
+> })
+> ```
+
+Include this component in your HTML and assign it an ID so that you can easily query for that element reference later.
 
 ```html
-<capacitor-google-map id="map"
-    style={{
-        display: "inline-block",
-        width: 275,
-        height: 400,
-    }}
-></capacitor-google-map>
+<capacitor-google-map id="map"></capacitor-google-map>
 ```
+
+The Google Map element itself comes unstyled, so you should style it to fit within the layout of your page structure. Because we're rendering a view into this slot, by itself the element has no width or height, so be sure to set those explicitly.
+
+```css
+capacitor-google-map {
+  display: inline-block;
+  width: 275px;
+  height: 400px;
+}
+```
+
+Next, we should create the map reference. This is done by importing the GoogleMap class from the Capacitor plugin and calling the create method, and passing in the required parameters.
 
 ```typescript
 import { GoogleMap } from '@capacitor/google-maps';
 
-const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
+const apiKey = 'YOUR_API_KEY_HERE';
 
 const mapRef = document.getElementById('map');
 
-const newMap = await GoogleMap.create(mapRef, 'my-map', apiKey!, {
-  center: {
-    lat: 33.6,
-    lng: -117.9,
-  },
-  zoom: 8,
-  androidLiteMode: false,
-});
+const newMap = await GoogleMap.create({
+  id: 'my-map', // Unique identifier for this map instance
+  element: mapRef, // reference to the capacitor-google-map element
+  apiKey: apiKey, // Your Google Maps API Key
+  config: {
+    center: { // The initial position to be rendered by the map
+      lat: 33.6,
+      lng: -117.9
+    },
+    zoom: 8 // The initial zoom level to be rendered by the map
+  }
+})
+```
 
-await newMap.addMarkers({
+At this point, your map should be created within your application. Using the returned reference to the map, you can easily interact with your map in a number of way, a few of which are shown here.
+
+```typescript
+const newMap = await GoogleMap.create({...});
+
+// Add a marker to the map
+const markerId = await newMap.addMarker({
   coordinate: {
     lat: 33.6,
-    lng: -117.9,
-  },
-  title: 'Hello world',
+    lng: -117.9
+  }
 });
+
+// Move the map programmatically
+await newMap.setCamera({
+  coordinate: {
+    lat: 33.6,
+    lng: -117.9
+  }
+});
+
+// Enable marker clustering
+await newMap.enableClustering();
+
+// Handle marker click
+await newMap.setOnMarkerClickListener((event) => {...});
+
+// Clean up map reference
+await newMap.destroy();
+```
+
+## Full Examples
+
+### Angular
+
+```typescript
+import { GoogleMap } from '@capacitor/google-maps';
+
+@Component({
+  template: `
+    <capacitor-google-maps #map></capacitor-google-maps>
+    <button (click)="createMap()">Create Map</button>
+  `,
+  styles: [`
+    capacitor-google-maps {
+      display: inline-block;
+      width: 275px;
+      height: 400px;
+    }
+  `]
+})
+export class MyMap {
+  @ViewChild('map')
+  mapRef: ElementRef<HTMLElement>;
+  newMap: GoogleMap;
+
+  async createMap() {
+    this.newMap = await GoogleMap.create({
+      id: 'my-cool-map',
+      element: this.mapRef.nativeElement,
+      apiKey: environment.apiKey,
+      config: {
+        center: {
+          lat: 33.6,
+          lng: -117.9
+        },
+        zoom: 8
+      }
+    });
+  }
+}
+```
+
+### React
+
+```jsx
+import { GoogleMap } from '@capacitor/google-maps';
+
+const MyMap: React.FC = () => {
+  const mapRef = useRef<HTMLElement>();
+  let newMap: GoogleMap;
+
+  async function createMap() {
+    if (!mapRef.current) return;
+
+    newMap = await GoogleMap.create({
+      id: 'my-cool-map',
+      element: mapRef.current,
+      apiKey: process.env.REACT_APP_YOUR_API_KEY_HERE,
+      config: {
+        center: {
+          lat: 33.6,
+          lng: -117.9
+        },
+        zoom: 8
+      }
+    })
+  }
+
+  return (
+    <div class="component-wrapper">
+      <capacitor-google-map ref={mapRef} style={{
+        display: 'inline-block',
+        width: 275,
+        height: 400
+      }}></capacitor-google-map>
+
+      <button onClick={createMap}>Create Map</button>
+    </div>
+  )
+}
+
+export default MyMap;
+```
+
+### Javascript
+
+```html
+<capacitor-google-map id="map"></capacitor-google-map>
+<button onclick="createMap()">Create Map</button>
+
+<style>
+  capacitor-google-map {
+    display: inline-block;
+    width: 275px;
+    height: 400px;
+  }
+</style>
+
+<script>
+  import { GoogleMap } from '@capacitor/google-maps';
+
+  const createMap = async () => {
+    const mapRef = document.getElementById('map');
+
+    const newMap = await GoogleMap.create({
+      id: 'my-map', // Unique identifier for this map instance
+      element: mapRef, // reference to the capacitor-google-map element
+      apiKey: 'YOUR_API_KEY_HERE', // Your Google Maps API Key
+      config: {
+        center: { // The initial position to be rendered by the map
+          lat: 33.6,
+          lng: -117.9
+        },
+        zoom: 8 // The initial zoom level to be rendered by the map
+      }
+    });
+  }
+</script>
 ```
 
 ## API
 
 <docgen-index>
 
-* [`create(...)`](#create)
-* [`enableClustering()`](#enableclustering)
-* [`disableClustering()`](#disableclustering)
-* [`addMarker(...)`](#addmarker)
-* [`addMarkers(...)`](#addmarkers)
-* [`removeMarker(...)`](#removemarker)
-* [`removeMarkers(...)`](#removemarkers)
-* [`destroy()`](#destroy)
-* [`setCamera(...)`](#setcamera)
-* [`setMapType(...)`](#setmaptype)
-* [`enableIndoorMaps(...)`](#enableindoormaps)
-* [`enableTrafficLayer(...)`](#enabletrafficlayer)
-* [`enableAccessibilityElements(...)`](#enableaccessibilityelements)
-* [`enableCurrentLocation(...)`](#enablecurrentlocation)
-* [`setPadding(...)`](#setpadding)
-* [`setOnCameraIdleListener(...)`](#setoncameraidlelistener)
-* [`setOnCameraMoveStartedListener(...)`](#setoncameramovestartedlistener)
-* [`setOnClusterClickListener(...)`](#setonclusterclicklistener)
-* [`setOnClusterInfoWindowClickListener(...)`](#setonclusterinfowindowclicklistener)
-* [`setOnInfoWindowClickListener(...)`](#setoninfowindowclicklistener)
-* [`setOnMapClickListener(...)`](#setonmapclicklistener)
-* [`setOnMarkerClickListener(...)`](#setonmarkerclicklistener)
-* [`setOnMyLocationButtonClickListener(...)`](#setonmylocationbuttonclicklistener)
-* [`setOnMyLocationClickListener(...)`](#setonmylocationclicklistener)
-* [Interfaces](#interfaces)
-* [Type Aliases](#type-aliases)
-* [Enums](#enums)
+- [@capacitor/google-maps](#capacitorgoogle-maps)
+  - [Install](#install)
+  - [API Keys](#api-keys)
+  - [iOS](#ios)
+  - [Android](#android)
+  - [Usage](#usage)
+  - [Full Examples](#full-examples)
+    - [Angular](#angular)
+    - [React](#react)
+    - [Javascript](#javascript)
+  - [API](#api)
+    - [create(...)](#create)
+    - [enableClustering()](#enableclustering)
+    - [disableClustering()](#disableclustering)
+    - [addMarker(...)](#addmarker)
+    - [addMarkers(...)](#addmarkers)
+    - [removeMarker(...)](#removemarker)
+    - [removeMarkers(...)](#removemarkers)
+    - [destroy()](#destroy)
+    - [setCamera(...)](#setcamera)
+    - [setMapType(...)](#setmaptype)
+    - [enableIndoorMaps(...)](#enableindoormaps)
+    - [enableTrafficLayer(...)](#enabletrafficlayer)
+    - [enableAccessibilityElements(...)](#enableaccessibilityelements)
+    - [enableCurrentLocation(...)](#enablecurrentlocation)
+    - [setPadding(...)](#setpadding)
+    - [setOnCameraIdleListener(...)](#setoncameraidlelistener)
+    - [setOnCameraMoveStartedListener(...)](#setoncameramovestartedlistener)
+    - [setOnClusterClickListener(...)](#setonclusterclicklistener)
+    - [setOnClusterInfoWindowClickListener(...)](#setonclusterinfowindowclicklistener)
+    - [setOnInfoWindowClickListener(...)](#setoninfowindowclicklistener)
+    - [setOnMapClickListener(...)](#setonmapclicklistener)
+    - [setOnMarkerClickListener(...)](#setonmarkerclicklistener)
+    - [setOnMyLocationButtonClickListener(...)](#setonmylocationbuttonclicklistener)
+    - [setOnMyLocationClickListener(...)](#setonmylocationclicklistener)
+    - [Interfaces](#interfaces)
+      - [CreateMapArgs](#createmapargs)
+      - [GoogleMapConfig](#googlemapconfig)
+      - [LatLng](#latlng)
+      - [Marker](#marker)
+      - [CameraConfig](#cameraconfig)
+      - [MapPadding](#mappadding)
+    - [Type Aliases](#type-aliases)
+      - [MapListenerCallback](#maplistenercallback)
+    - [Enums](#enums)
+      - [MapType](#maptype)
 
 </docgen-index>
 
