@@ -197,27 +197,24 @@ export class GoogleMap {
   }
 
   initScrolling(): void {
-    const parentContainer = this.findContainerElement();
+    const ionContents = document.getElementsByTagName('ion-content');
 
-    if (parentContainer) {
-      let scrollEvent = 'scroll';
+    // eslint-disable-next-line @typescript-eslint/prefer-for-of
+    for (let i = 0; i < ionContents.length; i++) {
+      (ionContents[i] as any).scrollEvents = true;
+    }
 
-      if (parentContainer.tagName.toLowerCase() == 'ion-content') {
-        (parentContainer as any).scrollEvents = true;
-        scrollEvent = 'ionScroll';
-      }
-
-      window.addEventListener(scrollEvent, this.handleScrollEvent);
-      window.addEventListener('resize', this.handleScrollEvent);
-      if (screen.orientation) {
-        screen.orientation.addEventListener('change', () => {
-          setTimeout(this.updateMapBounds, 500);
-        });
-      } else {
-        window.addEventListener('orientationchange', () => {
-          setTimeout(this.updateMapBounds, 500);
-        });
-      }
+    window.addEventListener('ionScroll', this.handleScrollEvent);
+    window.addEventListener('scroll', this.handleScrollEvent);
+    window.addEventListener('resize', this.handleScrollEvent);
+    if (screen.orientation) {
+      screen.orientation.addEventListener('change', () => {
+        setTimeout(this.updateMapBounds, 500);
+      });
+    } else {
+      window.addEventListener('orientationchange', () => {
+        setTimeout(this.updateMapBounds, 500);
+      });
     }
   }
 
@@ -254,6 +251,7 @@ export class GoogleMap {
     }
   }
 
+  /*
   private findContainerElement(): HTMLElement | null {
     if (!this.element) {
       return null;
@@ -270,6 +268,7 @@ export class GoogleMap {
 
     return null;
   }
+  */
 
   async setOnCameraIdleListener(callback?: MapListenerCallback): Promise<void> {
     if (this.onCameraIdleListener) {
