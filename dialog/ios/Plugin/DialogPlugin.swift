@@ -8,10 +8,7 @@ import Capacitor
 public class DialogPlugin: CAPPlugin {
 
     @objc public func alert(_ call: CAPPluginCall) {
-        guard let title = call.options["title"] as? String else {
-            call.reject("title must be provided")
-            return
-        }
+        let title = call.options["title"] as? String
         let message = call.options["message"] as? String
         let buttonTitle = call.options["buttonTitle"] as? String ?? "OK"
 
@@ -25,10 +22,7 @@ public class DialogPlugin: CAPPlugin {
     }
 
     @objc public func confirm(_ call: CAPPluginCall) {
-        guard let title = call.options["title"] as? String else {
-            call.reject("title must be provided")
-            return
-        }
+        let title = call.options["title"] as? String
         let message = call.options["message"] as? String ?? ""
         let okButtonTitle = call.options["okButtonTitle"] as? String ?? "OK"
         let cancelButtonTitle = call.options["cancelButtonTitle"] as? String ?? "Cancel"
@@ -50,10 +44,7 @@ public class DialogPlugin: CAPPlugin {
     }
 
     @objc public func prompt (_ call: CAPPluginCall) {
-        guard let title = call.options["title"] as? String else {
-            call.reject("title must be provided")
-            return
-        }
+        let title = call.options["title"] as? String
         let message = call.options["message"] as? String ?? ""
         let okButtonTitle = call.options["okButtonTitle"] as? String ?? "OK"
         let cancelButtonTitle = call.options["cancelButtonTitle"] as? String ?? "Cancel"

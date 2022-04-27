@@ -17,7 +17,7 @@ public class DialogPlugin extends Plugin {
         final String message = call.getString("message");
         final String buttonTitle = call.getString("buttonTitle", "OK");
 
-        if (title == null || message == null) {
+        if (title == null && message == null) {
             call.reject("Please provide a title or message for the alert");
             return;
         }
@@ -38,7 +38,7 @@ public class DialogPlugin extends Plugin {
         final String okButtonTitle = call.getString("okButtonTitle", "OK");
         final String cancelButtonTitle = call.getString("cancelButtonTitle", "Cancel");
 
-        if (title == null || message == null) {
+        if (title == null && message == null) {
             call.reject("Please provide a title or message for the alert");
             return;
         }
@@ -72,7 +72,7 @@ public class DialogPlugin extends Plugin {
         final String inputPlaceholder = call.getString("inputPlaceholder", "");
         final String inputText = call.getString("inputText", "");
 
-        if (title == null || message == null) {
+        if (title == null && message == null) {
             call.reject("Please provide a title or message for the alert");
             return;
         }
