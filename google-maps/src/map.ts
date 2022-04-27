@@ -24,7 +24,10 @@ class MapCustomElement extends HTMLElement {
 customElements.define('capacitor-google-map', MapCustomElement);
 
 export interface GoogleMapInterface {
-  create(options: CreateMapArgs, callback?: MapListenerCallback): Promise<GoogleMap>;
+  create(
+    options: CreateMapArgs,
+    callback?: MapListenerCallback,
+  ): Promise<GoogleMap>;
   enableClustering(): Promise<void>;
   disableClustering(): Promise<void>;
   addMarker(marker: Marker): Promise<string>;
