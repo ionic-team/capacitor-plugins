@@ -28,7 +28,7 @@ public class DevicePlugin: CAPPlugin {
         let diskFree = implementation.getFreeDiskSize() ?? 0
         let realDiskFree = implementation.getRealFreeDiskSize() ?? 0
         let diskTotal = implementation.getTotalDiskSize() ?? 0
-        
+
         call.resolve([
             "memUsed": memUsed,
             "diskFree": diskFree,
