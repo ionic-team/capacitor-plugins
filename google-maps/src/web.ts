@@ -16,7 +16,6 @@ import type {
   TrafficLayerArgs,
   RemoveMarkersArgs,
   OnScrollArgs,
-  MapListenerCallback,
 } from './implementation';
 
 export class CapacitorGoogleMapsWeb
@@ -28,9 +27,14 @@ export class CapacitorGoogleMapsWeb
     [id: string]: {
       element: HTMLElement;
       map: google.maps.Map;
+      markers: {
+        [id: string]: google.maps.Marker;
+      };
+      //markerClusterer?: google.maps.MarkerClusterer;
       trafficLayer?: google.maps.TrafficLayer;
     };
   } = {};
+  private currMarkerId = 0;
 
   private async importGoogleLib(apiKey: string) {
     if (this.gMapsRef === undefined) {
@@ -109,13 +113,61 @@ export class CapacitorGoogleMapsWeb
       this.maps[_args.id].map.fitBounds(bounds, _args.padding); 
     }
   }
+  
   async addMarkers(_args: AddMarkersArgs): Promise<{ ids: string[] }> {
-    throw new Error('Method not implemented.');
+    const markerIds: string[] = [];
+    const map = this.maps[_args.id];
+
+    for (const markerArgs of _args.markers) {
+      const marker = new google.maps.Marker({
+        position: markerArgs.coordinate,
+        map: map.map,
+        opacity: markerArgs.opacity,
+        title: markerArgs.title,
+        icon: markerArgs.iconUrl,
+        draggable: markerArgs.draggable
+      });
+  
+      const id = '' + this.currMarkerId;
+      map.markers[id] = marker;
+      markerIds.push(id);
+      this.currMarkerId++;
+    }
+
+    return { ids: markerIds };
+  }
+
+  async addMarker(_args: AddMarkerArgs): Promise<{ id: string }> {
+    const marker = new google.maps.Marker({
+      position: _args.marker.coordinate,
+      map: this.maps[_args.id].map,
+      opacity: _args.marker.opacity,
+      title: _args.marker.title,
+      icon: _args.marker.iconUrl,
+      draggable: _args.marker.draggable
+    });
+
+    const id = '' + this.currMarkerId;
+    this.maps[_args.id].markers[id] = marker;
+    this.currMarkerId++;
+
+    return { id: id };
   }
   
   async removeMarkers(_args: RemoveMarkersArgs): Promise<void> {
-    throw new Error('Method not implemented.');
+    const map = this.maps[_args.id];
+
+    for (const id of _args.markerIds) {
+      map.markers[id].setMap(null);
+      delete map.markers[id];
+    }
   }
+
+  async removeMarker(_args: RemoveMarkerArgs): Promise<void> {
+    this.maps[_args.id].markers[_args.markerId].setMap(null);
+    delete this.maps[_args.id].markers[_args.markerId];
+  }
+  
   async enableClustering(_args: { id: string }): Promise<void> {
     throw new Error('Method not implemented.');
   }
@@ -123,15 +175,7 @@ export class CapacitorGoogleMapsWeb
   async disableClustering(_args: { id: string }): Promise<void> {
     throw new Error('Method not implemented.');
   }
-  
-  async addMarker(_args: AddMarkerArgs): Promise<{ id: string }> {
-    throw new Error('Method not implemented.');
-  }
-  
-  async removeMarker(_args: RemoveMarkerArgs): Promise<void> {
-    throw new Error('Method not implemented.');
-  }
-  
+
   async onScroll(_args: OnScrollArgs): Promise<void> {
     throw new Error('Method not supported on web.');
   }
@@ -142,6 +186,7 @@ export class CapacitorGoogleMapsWeb
     this.maps[_args.id] = {
       map: new window.google.maps.Map(_args.element, { ..._args.config }),
       element: _args.element,
+      markers: {},
     };
   }
 
