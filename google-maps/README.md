@@ -11,7 +11,7 @@ npx cap sync
 
 ## API Keys
 
-To use the Google Maps SDK on any platform, API keys associated with an account *with billing enabled* are required. These can be obtained from the [Google Cloud Console](https://console.cloud.google.com). This is required for all three platforms, Android, iOS, and Javascript. Additional information about obtaining these API keys can be found in the [Google Maps documentation](https://developers.google.com/maps/documentation/android-sdk/overview) for each platform.
+To use the Google Maps SDK on any platform, API keys associated with an account _with billing enabled_ are required. These can be obtained from the [Google Cloud Console](https://console.cloud.google.com). This is required for all three platforms, Android, iOS, and Javascript. Additional information about obtaining these API keys can be found in the [Google Maps documentation](https://developers.google.com/maps/documentation/android-sdk/overview) for each platform.
 
 ## iOS
 
@@ -47,7 +47,7 @@ The Google Maps Capacitor plugin ships with a web component that must be used to
 >
 > ```typescript
 > import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-> 
+>
 > @NgModule({
 >   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 > })
@@ -59,7 +59,7 @@ Include this component in your HTML and assign it an ID so that you can easily q
 <capacitor-google-map id="map"></capacitor-google-map>
 ```
 
-> On Android, the map is rendered beneath the entire webview, and uses this component to manage its positioning during scrolling events. This means that as the developer, you *must* ensure that the webview is transparent all the way through the layers to the very bottom. In a typically Ionic application, that means setting transparency on elements such as IonContent and the root HTML tag to ensure that it can be seen. If you can't see your map on Android, this should be the first thing you check.
+> On Android, the map is rendered beneath the entire webview, and uses this component to manage its positioning during scrolling events. This means that as the developer, you _must_ ensure that the webview is transparent all the way through the layers to the very bottom. In a typically Ionic application, that means setting transparency on elements such as IonContent and the root HTML tag to ensure that it can be seen. If you can't see your map on Android, this should be the first thing you check.
 >
 > On iOS, we render the map directly into the webview and so the same transparency effects are not required. We are investigating alternate methods for Android still and hope to resolve this better in a future update.
 
@@ -87,13 +87,14 @@ const newMap = await GoogleMap.create({
   element: mapRef, // reference to the capacitor-google-map element
   apiKey: apiKey, // Your Google Maps API Key
   config: {
-    center: { // The initial position to be rendered by the map
+    center: {
+      // The initial position to be rendered by the map
       lat: 33.6,
-      lng: -117.9
+      lng: -117.9,
     },
-    zoom: 8 // The initial zoom level to be rendered by the map
-  }
-})
+    zoom: 8, // The initial zoom level to be rendered by the map
+  },
+});
 ```
 
 At this point, your map should be created within your application. Using the returned reference to the map, you can easily interact with your map in a number of way, a few of which are shown here.
@@ -139,13 +140,15 @@ import { GoogleMap } from '@capacitor/google-maps';
     <capacitor-google-maps #map></capacitor-google-maps>
     <button (click)="createMap()">Create Map</button>
   `,
-  styles: [`
-    capacitor-google-maps {
-      display: inline-block;
-      width: 275px;
-      height: 400px;
-    }
-  `]
+  styles: [
+    `
+      capacitor-google-maps {
+        display: inline-block;
+        width: 275px;
+        height: 400px;
+      }
+    `,
+  ],
 })
 export class MyMap {
   @ViewChild('map')
@@ -160,10 +163,10 @@ export class MyMap {
       config: {
         center: {
           lat: 33.6,
-          lng: -117.9
+          lng: -117.9,
         },
-        zoom: 8
-      }
+        zoom: 8,
+      },
     });
   }
 }
@@ -236,14 +239,15 @@ export default MyMap;
       element: mapRef, // reference to the capacitor-google-map element
       apiKey: 'YOUR_API_KEY_HERE', // Your Google Maps API Key
       config: {
-        center: { // The initial position to be rendered by the map
+        center: {
+          // The initial position to be rendered by the map
           lat: 33.6,
-          lng: -117.9
+          lng: -117.9,
         },
-        zoom: 8 // The initial zoom level to be rendered by the map
-      }
+        zoom: 8, // The initial zoom level to be rendered by the map
+      },
     });
-  }
+  };
 </script>
 ```
 
@@ -251,52 +255,33 @@ export default MyMap;
 
 <docgen-index>
 
-- [@capacitor/google-maps](#capacitorgoogle-maps)
-  - [Install](#install)
-  - [API Keys](#api-keys)
-  - [iOS](#ios)
-  - [Android](#android)
-  - [Usage](#usage)
-  - [Full Examples](#full-examples)
-    - [Angular](#angular)
-    - [React](#react)
-    - [Javascript](#javascript)
-  - [API](#api)
-    - [create(...)](#create)
-    - [enableClustering()](#enableclustering)
-    - [disableClustering()](#disableclustering)
-    - [addMarker(...)](#addmarker)
-    - [addMarkers(...)](#addmarkers)
-    - [removeMarker(...)](#removemarker)
-    - [removeMarkers(...)](#removemarkers)
-    - [destroy()](#destroy)
-    - [setCamera(...)](#setcamera)
-    - [setMapType(...)](#setmaptype)
-    - [enableIndoorMaps(...)](#enableindoormaps)
-    - [enableTrafficLayer(...)](#enabletrafficlayer)
-    - [enableAccessibilityElements(...)](#enableaccessibilityelements)
-    - [enableCurrentLocation(...)](#enablecurrentlocation)
-    - [setPadding(...)](#setpadding)
-    - [setOnCameraIdleListener(...)](#setoncameraidlelistener)
-    - [setOnCameraMoveStartedListener(...)](#setoncameramovestartedlistener)
-    - [setOnClusterClickListener(...)](#setonclusterclicklistener)
-    - [setOnClusterInfoWindowClickListener(...)](#setonclusterinfowindowclicklistener)
-    - [setOnInfoWindowClickListener(...)](#setoninfowindowclicklistener)
-    - [setOnMapClickListener(...)](#setonmapclicklistener)
-    - [setOnMarkerClickListener(...)](#setonmarkerclicklistener)
-    - [setOnMyLocationButtonClickListener(...)](#setonmylocationbuttonclicklistener)
-    - [setOnMyLocationClickListener(...)](#setonmylocationclicklistener)
-    - [Interfaces](#interfaces)
-      - [CreateMapArgs](#createmapargs)
-      - [GoogleMapConfig](#googlemapconfig)
-      - [LatLng](#latlng)
-      - [Marker](#marker)
-      - [CameraConfig](#cameraconfig)
-      - [MapPadding](#mappadding)
-    - [Type Aliases](#type-aliases)
-      - [MapListenerCallback](#maplistenercallback)
-    - [Enums](#enums)
-      - [MapType](#maptype)
+* [`create(...)`](#create)
+* [`enableClustering()`](#enableclustering)
+* [`disableClustering()`](#disableclustering)
+* [`addMarker(...)`](#addmarker)
+* [`addMarkers(...)`](#addmarkers)
+* [`removeMarker(...)`](#removemarker)
+* [`removeMarkers(...)`](#removemarkers)
+* [`destroy()`](#destroy)
+* [`setCamera(...)`](#setcamera)
+* [`setMapType(...)`](#setmaptype)
+* [`enableIndoorMaps(...)`](#enableindoormaps)
+* [`enableTrafficLayer(...)`](#enabletrafficlayer)
+* [`enableAccessibilityElements(...)`](#enableaccessibilityelements)
+* [`enableCurrentLocation(...)`](#enablecurrentlocation)
+* [`setPadding(...)`](#setpadding)
+* [`setOnCameraIdleListener(...)`](#setoncameraidlelistener)
+* [`setOnCameraMoveStartedListener(...)`](#setoncameramovestartedlistener)
+* [`setOnClusterClickListener(...)`](#setonclusterclicklistener)
+* [`setOnClusterInfoWindowClickListener(...)`](#setonclusterinfowindowclicklistener)
+* [`setOnInfoWindowClickListener(...)`](#setoninfowindowclicklistener)
+* [`setOnMapClickListener(...)`](#setonmapclicklistener)
+* [`setOnMarkerClickListener(...)`](#setonmarkerclicklistener)
+* [`setOnMyLocationButtonClickListener(...)`](#setonmylocationbuttonclicklistener)
+* [`setOnMyLocationClickListener(...)`](#setonmylocationclicklistener)
+* [Interfaces](#interfaces)
+* [Type Aliases](#type-aliases)
+* [Enums](#enums)
 
 </docgen-index>
 

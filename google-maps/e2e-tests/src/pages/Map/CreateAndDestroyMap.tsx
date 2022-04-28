@@ -77,7 +77,7 @@ const CreateAndDestroyMapPage: React.FC = () => {
         try {
             if (maps) {
                 for (let map of maps) {
-                    map.setOnMapClickListener();
+                    map.removeAllMapListeners();
                 }
 
                 setCommandOutput('Map Click Listeners Destroyed');
