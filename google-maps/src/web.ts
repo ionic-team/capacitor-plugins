@@ -1,4 +1,4 @@
-import { Capacitor, WebPlugin } from '@capacitor/core';
+import { WebPlugin } from '@capacitor/core';
 import { MarkerClusterer } from '@googlemaps/markerclusterer';
 
 import type {

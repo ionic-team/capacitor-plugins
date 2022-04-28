@@ -54,6 +54,40 @@ class MapCustomElement extends HTMLElement {
 
 customElements.define('capacitor-google-map', MapCustomElement);
 
+export interface GoogleMapInterface {
+  create(
+    options: CreateMapArgs,
+    callback?: MapListenerCallback,
+  ): Promise<GoogleMap>;
+  enableClustering(): Promise<void>;
+  disableClustering(): Promise<void>;
+  addMarker(marker: Marker): Promise<string>;
+  addMarkers(markers: Marker[]): Promise<string[]>;
+  removeMarker(id: string): Promise<void>;
+  removeMarkers(ids: string[]): Promise<void>;
+  destroy(): Promise<void>;
+  setCamera(config: CameraConfig): Promise<void>;
+  setMapType(mapType: MapType): Promise<void>;
+  enableIndoorMaps(enabled: boolean): Promise<void>;
+  enableTrafficLayer(enabled: boolean): Promise<void>;
+  enableAccessibilityElements(enabled: boolean): Promise<void>;
+  enableCurrentLocation(enabled: boolean): Promise<void>;
+  setPadding(padding: MapPadding): Promise<void>;
+  setOnCameraIdleListener(callback?: MapListenerCallback): Promise<void>;
+  setOnCameraMoveStartedListener(callback?: MapListenerCallback): Promise<void>;
+  setOnClusterClickListener(callback?: MapListenerCallback): Promise<void>;
+  setOnClusterInfoWindowClickListener(
+    callback?: MapListenerCallback,
+  ): Promise<void>;
+  setOnInfoWindowClickListener(callback?: MapListenerCallback): Promise<void>;
+  setOnMapClickListener(callback?: MapListenerCallback): Promise<void>;
+  setOnMarkerClickListener(callback?: MapListenerCallback): Promise<void>;
+  setOnMyLocationButtonClickListener(
+    callback?: MapListenerCallback,
+  ): Promise<void>;
+  setOnMyLocationClickListener(callback?: MapListenerCallback): Promise<void>;
+}
+
 export class GoogleMap {
   private id: string;
   private element: HTMLElement | null = null;
@@ -314,27 +348,24 @@ export class GoogleMap {
   }
 
   initScrolling(): void {
-    const parentContainer = this.findContainerElement();
-    
-    if (parentContainer) {
-      let scrollEvent = 'scroll';
+    const ionContents = document.getElementsByTagName('ion-content');
 
-      if (parentContainer.tagName.toLowerCase() == 'ion-content') {
-        (parentContainer as any).scrollEvents = true;
-        scrollEvent = 'ionScroll';
-      }
+    // eslint-disable-next-line @typescript-eslint/prefer-for-of
+    for (let i = 0; i < ionContents.length; i++) {
+      (ionContents[i] as any).scrollEvents = true;
+    }
 
-      window.addEventListener(scrollEvent, this.handleScrollEvent);
-      window.addEventListener('resize', this.handleScrollEvent);
-      if (screen.orientation) {
-        screen.orientation.addEventListener('change', () => {
-          setTimeout(this.updateMapBounds, 500);
-        });
-      } else {
-        window.addEventListener('orientationchange', () => {
-          setTimeout(this.updateMapBounds, 500);
-        });
-      }
+    window.addEventListener('ionScroll', this.handleScrollEvent);
+    window.addEventListener('scroll', this.handleScrollEvent);
+    window.addEventListener('resize', this.handleScrollEvent);
+    if (screen.orientation) {
+      screen.orientation.addEventListener('change', () => {
+        setTimeout(this.updateMapBounds, 500);
+      });
+    } else {
+      window.addEventListener('orientationchange', () => {
+        setTimeout(this.updateMapBounds, 500);
+      });
     }
   }
 
@@ -371,6 +402,7 @@ export class GoogleMap {
     }
   }
 
+  /*
   private findContainerElement(): HTMLElement | null {
     if (!this.element) {
       return null;
@@ -387,6 +419,7 @@ export class GoogleMap {
 
     return null;
   }
+  */
 
   /**
    * Set the event listener on the map for 'onCameraIdle' events.

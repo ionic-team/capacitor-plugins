@@ -56,131 +56,133 @@ const SimpleScrollingPage: React.FC = () => {
           Destroy Maps
         </IonButton>
       </div>
-      <IonContent style={{background: 'transparent'}}>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
-          vulputate eget ipsum vel venenatis. Ut dui enim, elementum vel
-          convallis a, malesuada a nibh. Etiam sit amet purus orci. Sed sit amet
-          sapien non libero mollis tempus eget non lacus. Proin vel nisi sit
-          amet neque luctus hendrerit ac at nisi. Maecenas malesuada neque dui,
-          a ornare neque efficitur id. Duis a quam ut lacus euismod ultrices sed
-          non libero.
-        </p>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
-          vulputate eget ipsum vel venenatis. Ut dui enim, elementum vel
-          convallis a, malesuada a nibh. Etiam sit amet purus orci. Sed sit amet
-          sapien non libero mollis tempus eget non lacus. Proin vel nisi sit
-          amet neque luctus hendrerit ac at nisi. Maecenas malesuada neque dui,
-          a ornare neque efficitur id. Duis a quam ut lacus euismod ultrices sed
-          non libero.
-        </p>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
-          vulputate eget ipsum vel venenatis. Ut dui enim, elementum vel
-          convallis a, malesuada a nibh. Etiam sit amet purus orci. Sed sit amet
-          sapien non libero mollis tempus eget non lacus. Proin vel nisi sit
-          amet neque luctus hendrerit ac at nisi. Maecenas malesuada neque dui,
-          a ornare neque efficitur id. Duis a quam ut lacus euismod ultrices sed
-          non libero.
-        </p>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
-          vulputate eget ipsum vel venenatis. Ut dui enim, elementum vel
-          convallis a, malesuada a nibh. Etiam sit amet purus orci. Sed sit amet
-          sapien non libero mollis tempus eget non lacus. Proin vel nisi sit
-          amet neque luctus hendrerit ac at nisi. Maecenas malesuada neque dui,
-          a ornare neque efficitur id. Duis a quam ut lacus euismod ultrices sed
-          non libero.
-        </p>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
-          vulputate eget ipsum vel venenatis. Ut dui enim, elementum vel
-          convallis a, malesuada a nibh. Etiam sit amet purus orci. Sed sit amet
-          sapien non libero mollis tempus eget non lacus. Proin vel nisi sit
-          amet neque luctus hendrerit ac at nisi. Maecenas malesuada neque dui,
-          a ornare neque efficitur id. Duis a quam ut lacus euismod ultrices sed
-          non libero.
-        </p>
-        
-        
-        <capacitor-google-map
-          id="map"
-          style={{
-            display: 'inline-block',
-            width: 275,
-            height: 400,
-            float: 'left',
-            marginRight: 20,
-            marginBottom: 20
-          }}></capacitor-google-map>
-        <div
-          style={{
-            display: 'block',
-            width: 75,
-            height: 75,
-            backgroundColor: 'blue',
-            position: 'relative',
-            top: 0,
-            left: 40,
-            zIndex: 1000,
-            opacity: 0.5,
-          }}
-        ></div>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
-          vulputate eget ipsum vel venenatis. Ut dui enim, elementum vel
-          convallis a, malesuada a nibh. Etiam sit amet purus orci. Sed sit amet
-          sapien non libero mollis tempus eget non lacus. Proin vel nisi sit
-          amet neque luctus hendrerit ac at nisi. Maecenas malesuada neque dui,
-          a ornare neque efficitur id. Duis a quam ut lacus euismod ultrices sed
-          non libero.
-        </p>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
-          vulputate eget ipsum vel venenatis. Ut dui enim, elementum vel
-          convallis a, malesuada a nibh. Etiam sit amet purus orci. Sed sit amet
-          sapien non libero mollis tempus eget non lacus. Proin vel nisi sit
-          amet neque luctus hendrerit ac at nisi. Maecenas malesuada neque dui,
-          a ornare neque efficitur id. Duis a quam ut lacus euismod ultrices sed
-          non libero.
-        </p>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
-          vulputate eget ipsum vel venenatis. Ut dui enim, elementum vel
-          convallis a, malesuada a nibh. Etiam sit amet purus orci. Sed sit amet
-          sapien non libero mollis tempus eget non lacus. Proin vel nisi sit
-          amet neque luctus hendrerit ac at nisi. Maecenas malesuada neque dui,
-          a ornare neque efficitur id. Duis a quam ut lacus euismod ultrices sed
-          non libero.
-        </p>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
-          vulputate eget ipsum vel venenatis. Ut dui enim, elementum vel
-          convallis a, malesuada a nibh. Etiam sit amet purus orci. Sed sit amet
-          sapien non libero mollis tempus eget non lacus. Proin vel nisi sit
-          amet neque luctus hendrerit ac at nisi. Maecenas malesuada neque dui,
-          a ornare neque efficitur id. Duis a quam ut lacus euismod ultrices sed
-          non libero.
-        </p>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
-          vulputate eget ipsum vel venenatis. Ut dui enim, elementum vel
-          convallis a, malesuada a nibh. Etiam sit amet purus orci. Sed sit amet
-          sapien non libero mollis tempus eget non lacus. Proin vel nisi sit
-          amet neque luctus hendrerit ac at nisi. Maecenas malesuada neque dui,
-          a ornare neque efficitur id. Duis a quam ut lacus euismod ultrices sed
-          non libero.
-        </p>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
-          vulputate eget ipsum vel venenatis. Ut dui enim, elementum vel
-          convallis a, malesuada a nibh. Etiam sit amet purus orci. Sed sit amet
-          sapien non libero mollis tempus eget non lacus. Proin vel nisi sit
-          amet neque luctus hendrerit ac at nisi. Maecenas malesuada neque dui,
-          a ornare neque efficitur id. Duis a quam ut lacus euismod ultrices sed
-          non libero.
-        </p>
+      <IonContent style={{ background: 'transparent' }}>
+        <div>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
+            vulputate eget ipsum vel venenatis. Ut dui enim, elementum vel
+            convallis a, malesuada a nibh. Etiam sit amet purus orci. Sed sit amet
+            sapien non libero mollis tempus eget non lacus. Proin vel nisi sit
+            amet neque luctus hendrerit ac at nisi. Maecenas malesuada neque dui,
+            a ornare neque efficitur id. Duis a quam ut lacus euismod ultrices sed
+            non libero.
+          </p>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
+            vulputate eget ipsum vel venenatis. Ut dui enim, elementum vel
+            convallis a, malesuada a nibh. Etiam sit amet purus orci. Sed sit amet
+            sapien non libero mollis tempus eget non lacus. Proin vel nisi sit
+            amet neque luctus hendrerit ac at nisi. Maecenas malesuada neque dui,
+            a ornare neque efficitur id. Duis a quam ut lacus euismod ultrices sed
+            non libero.
+          </p>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
+            vulputate eget ipsum vel venenatis. Ut dui enim, elementum vel
+            convallis a, malesuada a nibh. Etiam sit amet purus orci. Sed sit amet
+            sapien non libero mollis tempus eget non lacus. Proin vel nisi sit
+            amet neque luctus hendrerit ac at nisi. Maecenas malesuada neque dui,
+            a ornare neque efficitur id. Duis a quam ut lacus euismod ultrices sed
+            non libero.
+          </p>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
+            vulputate eget ipsum vel venenatis. Ut dui enim, elementum vel
+            convallis a, malesuada a nibh. Etiam sit amet purus orci. Sed sit amet
+            sapien non libero mollis tempus eget non lacus. Proin vel nisi sit
+            amet neque luctus hendrerit ac at nisi. Maecenas malesuada neque dui,
+            a ornare neque efficitur id. Duis a quam ut lacus euismod ultrices sed
+            non libero.
+          </p>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
+            vulputate eget ipsum vel venenatis. Ut dui enim, elementum vel
+            convallis a, malesuada a nibh. Etiam sit amet purus orci. Sed sit amet
+            sapien non libero mollis tempus eget non lacus. Proin vel nisi sit
+            amet neque luctus hendrerit ac at nisi. Maecenas malesuada neque dui,
+            a ornare neque efficitur id. Duis a quam ut lacus euismod ultrices sed
+            non libero.
+          </p>
+          
+          
+          <capacitor-google-map
+            id="map"
+            style={{
+              display: 'inline-block',
+              width: 275,
+              height: 400,
+              float: 'left',
+              marginRight: 20,
+              marginBottom: 20
+            }}></capacitor-google-map>
+          <div
+            style={{
+              display: 'block',
+              width: 75,
+              height: 75,
+              backgroundColor: 'blue',
+              position: 'relative',
+              top: 0,
+              left: 40,
+              zIndex: 1000,
+              opacity: 0.5,
+            }}
+          ></div>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
+            vulputate eget ipsum vel venenatis. Ut dui enim, elementum vel
+            convallis a, malesuada a nibh. Etiam sit amet purus orci. Sed sit amet
+            sapien non libero mollis tempus eget non lacus. Proin vel nisi sit
+            amet neque luctus hendrerit ac at nisi. Maecenas malesuada neque dui,
+            a ornare neque efficitur id. Duis a quam ut lacus euismod ultrices sed
+            non libero.
+          </p>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
+            vulputate eget ipsum vel venenatis. Ut dui enim, elementum vel
+            convallis a, malesuada a nibh. Etiam sit amet purus orci. Sed sit amet
+            sapien non libero mollis tempus eget non lacus. Proin vel nisi sit
+            amet neque luctus hendrerit ac at nisi. Maecenas malesuada neque dui,
+            a ornare neque efficitur id. Duis a quam ut lacus euismod ultrices sed
+            non libero.
+          </p>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
+            vulputate eget ipsum vel venenatis. Ut dui enim, elementum vel
+            convallis a, malesuada a nibh. Etiam sit amet purus orci. Sed sit amet
+            sapien non libero mollis tempus eget non lacus. Proin vel nisi sit
+            amet neque luctus hendrerit ac at nisi. Maecenas malesuada neque dui,
+            a ornare neque efficitur id. Duis a quam ut lacus euismod ultrices sed
+            non libero.
+          </p>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
+            vulputate eget ipsum vel venenatis. Ut dui enim, elementum vel
+            convallis a, malesuada a nibh. Etiam sit amet purus orci. Sed sit amet
+            sapien non libero mollis tempus eget non lacus. Proin vel nisi sit
+            amet neque luctus hendrerit ac at nisi. Maecenas malesuada neque dui,
+            a ornare neque efficitur id. Duis a quam ut lacus euismod ultrices sed
+            non libero.
+          </p>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
+            vulputate eget ipsum vel venenatis. Ut dui enim, elementum vel
+            convallis a, malesuada a nibh. Etiam sit amet purus orci. Sed sit amet
+            sapien non libero mollis tempus eget non lacus. Proin vel nisi sit
+            amet neque luctus hendrerit ac at nisi. Maecenas malesuada neque dui,
+            a ornare neque efficitur id. Duis a quam ut lacus euismod ultrices sed
+            non libero.
+          </p>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
+            vulputate eget ipsum vel venenatis. Ut dui enim, elementum vel
+            convallis a, malesuada a nibh. Etiam sit amet purus orci. Sed sit amet
+            sapien non libero mollis tempus eget non lacus. Proin vel nisi sit
+            amet neque luctus hendrerit ac at nisi. Maecenas malesuada neque dui,
+            a ornare neque efficitur id. Duis a quam ut lacus euismod ultrices sed
+            non libero.
+          </p>
+        </div>
       </IonContent>
     </BaseTestingPage>
   );
