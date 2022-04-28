@@ -52,8 +52,8 @@ export class CapacitorGoogleMapsWeb
 
         items.push({
           "markerId": markerId,
-          "latitude": marker.getPosition()?.lat,
-          "longitude": marker.getPosition()?.lng,
+          "latitude": marker.getPosition()?.lat(),
+          "longitude": marker.getPosition()?.lng(),
           "title": marker.getTitle(),
           "snippet": ""
         });
@@ -62,8 +62,8 @@ export class CapacitorGoogleMapsWeb
 
     this.notifyListeners('onClusterClick', {
       "mapId": mapId,
-      "latitude": cluster.position.lat,
-      "longitude": cluster.position.lng,
+      "latitude": cluster.position.lat(),
+      "longitude": cluster.position.lng(),
       "size": cluster.count,
       "items": items
     });
@@ -282,8 +282,8 @@ export class CapacitorGoogleMapsWeb
       this.notifyListeners('onMarkerClick', {
         "mapId": mapId,
         "markerId": markerId,
-        "latitude": marker.getPosition()?.lat,
-        "longitude": marker.getPosition()?.lng,
+        "latitude": marker.getPosition()?.lat(),
+        "longitude": marker.getPosition()?.lng(),
         "title": marker.getTitle(),
         "snippet": ""
       });
@@ -297,8 +297,8 @@ export class CapacitorGoogleMapsWeb
       this.notifyListeners('onCameraIdle', {
         "mapId": mapId,
         "bearing": map.getHeading(),
-        "latitude": map.getCenter()?.lat,
-        "longitude": map.getCenter()?.lng,
+        "latitude": map.getCenter()?.lat(),
+        "longitude": map.getCenter()?.lng(),
         "tilt": map.getTilt(),
         "zoom": map.getZoom(),
       });
@@ -314,8 +314,8 @@ export class CapacitorGoogleMapsWeb
     map.addListener('click', (e: google.maps.MapMouseEvent|google.maps.IconMouseEvent) => {
       this.notifyListeners('onMapClick', {
         "mapId": mapId,
-        "latitude": e.latLng?.lat,
-        "longitude": e.latLng?.lng,
+        "latitude": e.latLng?.lat(),
+        "longitude": e.latLng?.lng(),
       });
     });
 
