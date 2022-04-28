@@ -9,6 +9,69 @@ npm install @capacitor/google-maps
 npx cap sync
 ```
 
+## iOS
+
+The Google Maps SDK supports the use of showing the users current location via `enableCurrentLocation(bool)`. To use this, Apple requires privacy descriptions to be specified in `Info.plist`:
+
+- `NSLocationAlwaysUsageDescription` (`Privacy - Location Always Usage Description`)
+- `NSLocationWhenInUseUsageDescription` (`Privacy - Location When In Use Usage Description`)
+
+Read about [Configuring `Info.plist`](https://capacitorjs.com/docs/ios/configuration#configuring-infoplist) in the [iOS Guide](https://capacitorjs.com/docs/ios) for more information on setting iOS permissions in Xcode.
+
+## Android
+
+Inside of your application android folder, add the following to your `local.properties` file:
+
+```
+REACT_APP_GOOGLE_MAPS_API_KEY=[YOUR_GOOGLE_MAPS_API_KEY]
+```
+
+This to use certain location features, API requires the following permissions be added to your AndroidManifest.xml:
+
+```
+<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+```
+
+## Example
+
+It's required to use the `<capacitor-google-map />` custom element to create your container element for the map. The map container element must have a defined width and height:
+
+```html
+<capacitor-google-map id="map"
+    style={{
+        display: "inline-block",
+        width: 275,
+        height: 400,
+    }}
+></capacitor-google-map>
+```
+
+```typescript
+import { GoogleMap } from '@capacitor/google-maps';
+
+const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
+
+const mapRef = document.getElementById('map');
+
+const newMap = await GoogleMap.create(mapRef, 'my-map', apiKey!, {
+  center: {
+    lat: 33.6,
+    lng: -117.9,
+  },
+  zoom: 8,
+  androidLiteMode: false,
+});
+
+await newMap.addMarkers({
+  coordinate: {
+    lat: 33.6,
+    lng: -117.9,
+  },
+  title: 'Hello world',
+});
+```
+
 ## API
 
 <docgen-index>
@@ -369,51 +432,59 @@ setOnMyLocationClickListener(callback?: MapListenerCallback | undefined) => Prom
 
 #### GoogleMapConfig
 
-| Prop                  | Type                                      |
-| --------------------- | ----------------------------------------- |
-| **`width`**           | <code>number</code>                       |
-| **`height`**          | <code>number</code>                       |
-| **`x`**               | <code>number</code>                       |
-| **`y`**               | <code>number</code>                       |
-| **`center`**          | <code><a href="#latlng">LatLng</a></code> |
-| **`zoom`**            | <code>number</code>                       |
-| **`androidLiteMode`** | <code>boolean</code>                      |
+| Prop                  | Type                                      | Description                                                    | Default            |
+| --------------------- | ----------------------------------------- | -------------------------------------------------------------- | ------------------ |
+| **`width`**           | <code>number</code>                       | Override width for native map                                  |                    |
+| **`height`**          | <code>number</code>                       | Override height for native map                                 |                    |
+| **`x`**               | <code>number</code>                       | Override absolute x coordinate position for native map         |                    |
+| **`y`**               | <code>number</code>                       | Override absolute y coordinate position for native map         |                    |
+| **`center`**          | <code><a href="#latlng">LatLng</a></code> | Default location on the Earth towards which the camera points. |                    |
+| **`zoom`**            | <code>number</code>                       | Sets the zoom of the map.                                      |                    |
+| **`androidLiteMode`** | <code>boolean</code>                      | Enables image-based lite mode on Android.                      | <code>false</code> |
 
 
 #### LatLng
 
-| Prop      | Type                |
-| --------- | ------------------- |
-| **`lat`** | <code>number</code> |
-| **`lng`** | <code>number</code> |
+An interface representing a pair of latitude and longitude coordinates.
+
+| Prop      | Type                | Description                                                               |
+| --------- | ------------------- | ------------------------------------------------------------------------- |
+| **`lat`** | <code>number</code> | Coordinate latitude, in degrees. This value is in the range [-90, 90].    |
+| **`lng`** | <code>number</code> | Coordinate longitude, in degrees. This value is in the range [-180, 180]. |
 
 
 #### Marker
 
-| Prop             | Type                                      |
-| ---------------- | ----------------------------------------- |
-| **`coordinate`** | <code><a href="#latlng">LatLng</a></code> |
-| **`opacity`**    | <code>number</code>                       |
-| **`title`**      | <code>string</code>                       |
-| **`snippet`**    | <code>string</code>                       |
-| **`isFlat`**     | <code>boolean</code>                      |
-| **`iconUrl`**    | <code>string</code>                       |
-| **`draggable`**  | <code>boolean</code>                      |
+A marker is an icon placed at a particular point on the map's surface.
+
+| Prop             | Type                                      | Description                                                                                               | Default            |
+| ---------------- | ----------------------------------------- | --------------------------------------------------------------------------------------------------------- | ------------------ |
+| **`coordinate`** | <code><a href="#latlng">LatLng</a></code> | <a href="#marker">Marker</a> position                                                                     |                    |
+| **`opacity`**    | <code>number</code>                       | Sets the opacity of the marker, between 0 (completely transparent) and 1 inclusive.                       | <code>1</code>     |
+| **`title`**      | <code>string</code>                       | Title, a short description of the overlay.                                                                |                    |
+| **`snippet`**    | <code>string</code>                       | Snippet text, shown beneath the title in the info window when selected.                                   |                    |
+| **`isFlat`**     | <code>boolean</code>                      | Controls whether this marker should be flat against the Earth's surface or a billboard facing the camera. | <code>false</code> |
+| **`iconUrl`**    | <code>string</code>                       | <a href="#marker">Marker</a> icon to render.                                                              |                    |
+| **`draggable`**  | <code>boolean</code>                      | Controls whether this marker can be dragged interactively                                                 | <code>false</code> |
 
 
 #### CameraConfig
 
-| Prop                    | Type                                      |
-| ----------------------- | ----------------------------------------- |
-| **`coordinate`**        | <code><a href="#latlng">LatLng</a></code> |
-| **`zoom`**              | <code>number</code>                       |
-| **`bearing`**           | <code>number</code>                       |
-| **`angle`**             | <code>number</code>                       |
-| **`animate`**           | <code>boolean</code>                      |
-| **`animationDuration`** | <code>number</code>                       |
+Configuration properties for a Google Map Camera
+
+| Prop                    | Type                                      | Description                                                                                                            | Default            |
+| ----------------------- | ----------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- | ------------------ |
+| **`coordinate`**        | <code><a href="#latlng">LatLng</a></code> | Location on the Earth towards which the camera points.                                                                 |                    |
+| **`zoom`**              | <code>number</code>                       | Sets the zoom of the map.                                                                                              |                    |
+| **`bearing`**           | <code>number</code>                       | Bearing of the camera, in degrees clockwise from true north.                                                           | <code>0</code>     |
+| **`angle`**             | <code>number</code>                       | The angle, in degrees, of the camera from the nadir (directly facing the Earth). The only allowed values are 0 and 45. | <code>0</code>     |
+| **`animate`**           | <code>boolean</code>                      | Animate the transition to the new Camera properties.                                                                   | <code>false</code> |
+| **`animationDuration`** | <code>number</code>                       |                                                                                                                        |                    |
 
 
 #### MapPadding
+
+Controls for setting padding on the 'visible' region of the view.
 
 | Prop         | Type                |
 | ------------ | ------------------- |
@@ -436,12 +507,12 @@ setOnMyLocationClickListener(callback?: MapListenerCallback | undefined) => Prom
 
 #### MapType
 
-| Members         | Value                    |
-| --------------- | ------------------------ |
-| **`Normal`**    | <code>'Normal'</code>    |
-| **`Hybrid`**    | <code>'Hybrid'</code>    |
-| **`Satellite`** | <code>'Satellite'</code> |
-| **`Terrain`**   | <code>'Terrain'</code>   |
-| **`None`**      | <code>'None'</code>      |
+| Members         | Value                    | Description                              |
+| --------------- | ------------------------ | ---------------------------------------- |
+| **`Normal`**    | <code>'Normal'</code>    | Basic map.                               |
+| **`Hybrid`**    | <code>'Hybrid'</code>    | Satellite imagery with roads and labels. |
+| **`Satellite`** | <code>'Satellite'</code> | Satellite imagery with no labels.        |
+| **`Terrain`**   | <code>'Terrain'</code>   | Topographic data.                        |
+| **`None`**      | <code>'None'</code>      | No base map tiles.                       |
 
 </docgen-api>

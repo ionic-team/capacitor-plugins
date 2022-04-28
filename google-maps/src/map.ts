@@ -1,27 +1,9 @@
 import { Capacitor } from '@capacitor/core';
 import type { PluginListenerHandle } from '@capacitor/core';
 
-import type { CameraConfig, MapPadding, MapType, Marker } from './definitions';
+import type { CameraConfig, Marker, MapPadding, MapType } from './definitions';
 import type { CreateMapArgs, MapListenerCallback } from './implementation';
 import { CapacitorGoogleMaps } from './implementation';
-
-class MapCustomElement extends HTMLElement {
-  constructor() {
-    super();
-  }
-
-  connectedCallback() {
-    this.style.overflow = 'scroll';
-    (this.style as any)['-webkit-overflow-scrolling'] = 'touch';
-
-    const overflowDiv = document.createElement('div');
-    overflowDiv.style.height = '200%';
-
-    this.appendChild(overflowDiv);
-  }
-}
-
-customElements.define('capacitor-google-map', MapCustomElement);
 
 export interface GoogleMapInterface {
   create(
@@ -57,6 +39,24 @@ export interface GoogleMapInterface {
   setOnMyLocationClickListener(callback?: MapListenerCallback): Promise<void>;
 }
 
+class MapCustomElement extends HTMLElement {
+  constructor() {
+    super();
+  }
+
+  connectedCallback() {
+    this.style.overflow = 'scroll';
+    (this.style as any)['-webkit-overflow-scrolling'] = 'touch';
+
+    const overflowDiv = document.createElement('div');
+    overflowDiv.style.height = '200%';
+
+    this.appendChild(overflowDiv);
+  }
+}
+
+customElements.define('capacitor-google-map', MapCustomElement);
+
 export class GoogleMap {
   private id: string;
   private element: HTMLElement | null = null;
@@ -75,6 +75,21 @@ export class GoogleMap {
     this.id = id;
   }
 
+  /**
+   * Creates a new instance of a Google Map
+   *
+   * @param element
+   * DOM element that will contain the map view and determine sizing / positioning
+   * @param id Unique id for the map instance
+   * @param apiKey
+   * Google Maps SDK API Key
+   * @param config
+   * Initial configuration settings for the map
+   * @param forceCreate
+   * If a map already exists with the supplied id, automatically destroy and re-create the map instance
+   *
+   * @returns GoogleMap
+   */
   public static async create(
     options: CreateMapArgs,
     callback?: MapListenerCallback,
@@ -115,18 +130,34 @@ export class GoogleMap {
     return newMap;
   }
 
+  /**
+   * Enable marker clustering
+   *
+   * @returns void
+   */
   async enableClustering(): Promise<void> {
     return CapacitorGoogleMaps.enableClustering({
       id: this.id,
     });
   }
 
+  /**
+   * Disable marker clustering
+   *
+   * @returns void
+   */
   async disableClustering(): Promise<void> {
     return CapacitorGoogleMaps.disableClustering({
       id: this.id,
     });
   }
 
+  /**
+   * Adds a marker to the map
+   *
+   * @param marker
+   * @returns created marker id
+   */
   async addMarker(marker: Marker): Promise<string> {
     const res = await CapacitorGoogleMaps.addMarker({
       id: this.id,
@@ -136,6 +167,12 @@ export class GoogleMap {
     return res.id;
   }
 
+  /**
+   * Adds multiple markers to the map
+   *
+   * @param markers
+   * @returns array of created marker IDs
+   */
   async addMarkers(markers: Marker[]): Promise<string[]> {
     const res = await CapacitorGoogleMaps.addMarkers({
       id: this.id,
@@ -145,6 +182,12 @@ export class GoogleMap {
     return res.ids;
   }
 
+  /**
+   * Remove marker from the map
+   *
+   * @param id id of the marker to remove from the map
+   * @returns
+   */
   async removeMarker(id: string): Promise<void> {
     return CapacitorGoogleMaps.removeMarker({
       id: this.id,
@@ -152,6 +195,12 @@ export class GoogleMap {
     });
   }
 
+  /**
+   * Remove markers from the map
+   *
+   * @param ids array of ids to remove from the map
+   * @returns
+   */
   async removeMarkers(ids: string[]): Promise<void> {
     return CapacitorGoogleMaps.removeMarkers({
       id: this.id,
@@ -159,6 +208,9 @@ export class GoogleMap {
     });
   }
 
+  /**
+   * Destroy the current instance of the map
+   */
   async destroy(): Promise<void> {
     if (Capacitor.getPlatform() == 'android') {
       this.disableScrolling();
@@ -171,6 +223,12 @@ export class GoogleMap {
     });
   }
 
+  /**
+   * Update the map camera configuration
+   *
+   * @param config
+   * @returns
+   */
   async setCamera(config: CameraConfig): Promise<void> {
     return CapacitorGoogleMaps.setCamera({
       id: this.id,
@@ -178,6 +236,12 @@ export class GoogleMap {
     });
   }
 
+  /**
+   * Sets the type of map tiles that should be displayed.
+   *
+   * @param mapType
+   * @returns
+   */
   async setMapType(mapType: MapType): Promise<void> {
     return CapacitorGoogleMaps.setMapType({
       id: this.id,
@@ -185,6 +249,12 @@ export class GoogleMap {
     });
   }
 
+  /**
+   * Sets whether indoor maps are shown, where available.
+   *
+   * @param enabled
+   * @returns
+   */
   async enableIndoorMaps(enabled: boolean): Promise<void> {
     return CapacitorGoogleMaps.enableIndoorMaps({
       id: this.id,
@@ -192,6 +262,12 @@ export class GoogleMap {
     });
   }
 
+  /**
+   * Controls whether the map is drawing traffic data, if available.
+   *
+   * @param enabled
+   * @returns
+   */
   async enableTrafficLayer(enabled: boolean): Promise<void> {
     return CapacitorGoogleMaps.enableTrafficLayer({
       id: this.id,
@@ -199,6 +275,14 @@ export class GoogleMap {
     });
   }
 
+  /**
+   * Show accessibility elements for overlay objects, such as Marker and Polyline.
+   *
+   * Only available on iOS.
+   *
+   * @param enabled
+   * @returns
+   */
   async enableAccessibilityElements(enabled: boolean): Promise<void> {
     return CapacitorGoogleMaps.enableAccessibilityElements({
       id: this.id,
@@ -206,6 +290,12 @@ export class GoogleMap {
     });
   }
 
+  /**
+   * Set whether the My Location dot and accuracy circle is enabled.
+   *
+   * @param enabled
+   * @returns
+   */
   async enableCurrentLocation(enabled: boolean): Promise<void> {
     return CapacitorGoogleMaps.enableCurrentLocation({
       id: this.id,
@@ -213,6 +303,12 @@ export class GoogleMap {
     });
   }
 
+  /**
+   * Set padding on the 'visible' region of the view.
+   *
+   * @param padding
+   * @returns
+   */
   async setPadding(padding: MapPadding): Promise<void> {
     return CapacitorGoogleMaps.setPadding({
       id: this.id,
@@ -294,6 +390,12 @@ export class GoogleMap {
   }
   */
 
+  /**
+   * Set the event listener on the map for 'onCameraIdle' events.
+   *
+   * @param callback
+   * @returns
+   */
   async setOnCameraIdleListener(callback?: MapListenerCallback): Promise<void> {
     if (this.onCameraIdleListener) {
       this.onCameraIdleListener.remove();
@@ -309,6 +411,12 @@ export class GoogleMap {
     }
   }
 
+  /**
+   * Set the event listener on the map for 'onCameraMoveStarted' events.
+   *
+   * @param callback
+   * @returns
+   */
   async setOnCameraMoveStartedListener(
     callback?: MapListenerCallback,
   ): Promise<void> {
@@ -326,6 +434,12 @@ export class GoogleMap {
     }
   }
 
+  /**
+   * Set the event listener on the map for 'onClusterClick' events.
+   *
+   * @param callback
+   * @returns
+   */
   async setOnClusterClickListener(
     callback?: MapListenerCallback,
   ): Promise<void> {
@@ -343,6 +457,12 @@ export class GoogleMap {
     }
   }
 
+  /**
+   * Set the event listener on the map for 'onClusterInfoWindowClick' events.
+   *
+   * @param callback
+   * @returns
+   */
   async setOnClusterInfoWindowClickListener(
     callback?: MapListenerCallback,
   ): Promise<void> {
@@ -360,6 +480,12 @@ export class GoogleMap {
     }
   }
 
+  /**
+   * Set the event listener on the map for 'onInfoWindowClick' events.
+   *
+   * @param callback
+   * @returns
+   */
   async setOnInfoWindowClickListener(
     callback?: MapListenerCallback,
   ): Promise<void> {
@@ -377,6 +503,12 @@ export class GoogleMap {
     }
   }
 
+  /**
+   * Set the event listener on the map for 'onMapClick' events.
+   *
+   * @param callback
+   * @returns
+   */
   async setOnMapClickListener(callback?: MapListenerCallback): Promise<void> {
     if (this.onMapClickListener) {
       this.onMapClickListener.remove();
@@ -392,6 +524,12 @@ export class GoogleMap {
     }
   }
 
+  /**
+   * Set the event listener on the map for 'onMarkerClick' events.
+   *
+   * @param callback
+   * @returns
+   */
   async setOnMarkerClickListener(
     callback?: MapListenerCallback,
   ): Promise<void> {
@@ -409,6 +547,12 @@ export class GoogleMap {
     }
   }
 
+  /**
+   * Set the event listener on the map for 'onMyLocationButtonClick' events.
+   *
+   * @param callback
+   * @returns
+   */
   async setOnMyLocationButtonClickListener(
     callback?: MapListenerCallback,
   ): Promise<void> {
@@ -426,6 +570,12 @@ export class GoogleMap {
     }
   }
 
+  /**
+   * Set the event listener on the map for 'onMyLocationClick' events.
+   *
+   * @param callback
+   * @returns
+   */
   async setOnMyLocationClickListener(
     callback?: MapListenerCallback,
   ): Promise<void> {
@@ -443,15 +593,12 @@ export class GoogleMap {
     }
   }
 
-  private generateCallback(callback: MapListenerCallback): MapListenerCallback {
-    const mapId = this.id;
-    return (data: any) => {
-      if (data.mapId == mapId) {
-        callback(data);
-      }
-    };
-  }
-
+  /**
+   * Remove all event listeners on the map.
+   *
+   * @param callback
+   * @returns
+   */
   async removeAllMapListeners(): Promise<void> {
     if (this.onCameraIdleListener) {
       this.onCameraIdleListener.remove();
@@ -496,5 +643,14 @@ export class GoogleMap {
       this.onMyLocationClickListener.remove();
       this.onMyLocationButtonClickListener = undefined;
     }
+  }
+
+  private generateCallback(callback: MapListenerCallback): MapListenerCallback {
+    const mapId = this.id;
+    return (data: any) => {
+      if (data.mapId == mapId) {
+        callback(data);
+      }
+    };
   }
 }
