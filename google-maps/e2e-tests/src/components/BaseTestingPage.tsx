@@ -2,7 +2,7 @@ import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, Io
 
 const BaseTestingPage: React.FC<{ children?: React.ReactNode; pageTitle: string }> = ({ children, pageTitle }) => {
   return (
-    <IonPage style={{background: 'transparent'}}>
+    <IonPage>
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">
@@ -11,7 +11,7 @@ const BaseTestingPage: React.FC<{ children?: React.ReactNode; pageTitle: string 
           <IonTitle>{pageTitle}</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent fullscreen scrollEvents={true} style={{background: 'transparent'}}>
+      <IonContent fullscreen scrollEvents={true}>
         <IonHeader collapse="condense">
           <IonToolbar>
             <IonTitle size="large">{pageTitle}</IonTitle>

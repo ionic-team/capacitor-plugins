@@ -54,6 +54,14 @@ class MapCustomElement extends HTMLElement {
 
 customElements.define('capacitor-google-map', MapCustomElement);
 
+interface TransparencyState {
+  element: HTMLElement;
+  initialBackground: string;
+  initialMask: string;
+  initialWebkitMask: string;
+  initialWebkitMaskComposite: string;
+}
+
 export class GoogleMap {
   private id: string;
   private element: HTMLElement | null = null;
@@ -67,6 +75,8 @@ export class GoogleMap {
   private onMarkerClickListener?: PluginListenerHandle;
   private onMyLocationButtonClickListener?: PluginListenerHandle;
   private onMyLocationClickListener?: PluginListenerHandle;
+
+  private transparencyStates: TransparencyState[] = [];
 
   private constructor(id: string) {
     this.id = id;
@@ -112,6 +122,7 @@ export class GoogleMap {
     if (Capacitor.getPlatform() == 'android') {
       (options.element as any) = {};
       newMap.initScrolling();
+      newMap.initTransparencyStates();
     }
 
     if (Capacitor.getPlatform() == 'ios') {
@@ -211,6 +222,7 @@ export class GoogleMap {
   async destroy(): Promise<void> {
     if (Capacitor.getPlatform() == 'android') {
       this.disableScrolling();
+      this.resetTransparencyStates();
     }
 
     this.removeAllMapListeners();
@@ -354,6 +366,7 @@ export class GoogleMap {
 
   private updateMapBounds(): void {
     if (this.element) {
+      this.initTransparencyStates();
       const mapRect = this.element.getBoundingClientRect();
 
       CapacitorGoogleMaps.onScroll({
@@ -649,5 +662,129 @@ export class GoogleMap {
         callback(data);
       }
     };
+  }
+
+  private initTransparencyStates(): void {
+    this.resetTransparencyStates();
+    const elements: HTMLElement[] = [];
+    
+    if (this.element) {
+      const mapRect = this.element.getBoundingClientRect();
+      
+      const x = mapRect.x;
+      const y = mapRect.y;
+
+      let currX = x;
+      let currY = y;
+
+      const maxX = x + mapRect.width;
+      const maxY = y + mapRect.height;
+
+      while ((currX += 10) <= maxX) {
+        while ((currY += 10) <= maxY) {
+          const elementsAtPoint = document.elementsFromPoint(currX, currY);
+          let foundMapElement = false;
+
+          // eslint-disable-next-line @typescript-eslint/prefer-for-of
+          for (let i = 0; i < elementsAtPoint.length; i++) {
+            const element: HTMLElement = elementsAtPoint[i] as HTMLElement;
+
+            if (element == this.element)  foundMapElement = true;
+            if (!foundMapElement || elements.includes(element)) continue;
+
+            if (element.shadowRoot) {
+              let shadowElement: any = element.shadowRoot.children[0];
+              if (shadowElement.part.contains('background')) {
+                shadowElement = shadowElement as HTMLElement;
+                elements.push(shadowElement);
+                this.transparencyStates.push({
+                  element: shadowElement,
+                  initialBackground: shadowElement.style.background,
+                  initialMask: shadowElement.style.mask,
+                  initialWebkitMask: shadowElement.style.webkitMask,
+                  initialWebkitMaskComposite: shadowElement.style.webkitMaskComposite
+                });
+
+                this.addSvgMasks(shadowElement, x, y, maxX, maxY);
+                //shadowElement.style.background = 'transparent';
+              }
+            }
+
+            elements.push(element);
+            this.transparencyStates.push({
+              element: element,
+              initialBackground: element.style.background,
+              initialMask: element.style.mask,
+              initialWebkitMask: element.style.webkitMask,
+              initialWebkitMaskComposite: element.style.webkitMaskComposite
+            });
+        
+            //this.addSvgMasks(element, x, y, maxX, maxY);
+            element.style.background = 'transparent';
+          }
+        }
+
+        currY = y;
+      }
+    }
+  }
+
+  private addSvgMasks(element: HTMLElement, x: number, y: number, maxX: number, maxY: number): void {
+    const elementRect = element.getBoundingClientRect();
+    const elX = elementRect.x;
+    const elY = elementRect.y;
+
+    const width = elementRect.width;
+    const height = elementRect.height;
+
+    const elMaxX = elX + width;
+    const elMaxY = elY + height;
+
+    const xPercents = [
+      Math.floor((elX >= x ? 0 : Math.min(100, (x - elX) / width * 100))),
+      Math.ceil((elMaxX <= maxX ? 1 : 100 - Math.min(100, (elMaxX - maxX) / width * 100)))
+    ];
+
+    const yPercents = [
+      Math.floor((elY >= y ? 0 : Math.min(100, (y - elY) / height * 100))),
+      Math.ceil((elMaxY <= maxY ? 1 : 100 - Math.min(100, (elMaxY - maxY) / height * 100)))
+    ];
+
+    const polygonString =
+      xPercents[0] + ',' + yPercents[0] + ' ' +
+      xPercents[1] + ',' + yPercents[0] + ' ' +
+      xPercents[1] + ',' + yPercents[1] + ' ' +
+      xPercents[0] + ',' + yPercents[1];
+
+    const svgString = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><polygon points="' +
+      polygonString + '" fill="black"/></svg>'
+
+    let maskString = "url(data:image/svg+xml;base64," + window.btoa(svgString) + ") 0px center / 100% 100% ";
+
+    if (element.style.mask != '') {
+      maskString += (', ' + element.style.mask);
+    }
+    else if (element.style.webkitMask != '') {
+      maskString += (', ' + element.style.webkitMask);
+    }
+
+    if (!maskString.includes('linear-gradient')) {
+      maskString += ', linear-gradient(#fff,#fff)';
+    }
+
+    element.style.mask = maskString;
+    element.style.webkitMask = maskString;
+    element.style.webkitMaskComposite = 'destination-out';
+  }
+
+  private resetTransparencyStates(): void {
+    for (const transparencyState of this.transparencyStates) {
+      transparencyState.element.style.background = transparencyState.initialBackground;
+      transparencyState.element.style.mask = transparencyState.initialMask;
+      transparencyState.element.style.webkitMask = transparencyState.initialWebkitMask;
+      transparencyState.element.style.webkitMaskComposite = transparencyState.initialWebkitMaskComposite;
+    }
+
+    this.transparencyStates = [];
   }
 }

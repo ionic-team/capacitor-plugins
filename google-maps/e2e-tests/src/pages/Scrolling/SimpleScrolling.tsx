@@ -56,7 +56,7 @@ const SimpleScrollingPage: React.FC = () => {
           Destroy Maps
         </IonButton>
       </div>
-      <IonContent style={{ background: 'transparent' }}>
+      <IonContent>
         <div>
           <p>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
