@@ -6,7 +6,10 @@ import type { CreateMapArgs, MapListenerCallback } from './implementation';
 import { CapacitorGoogleMaps } from './implementation';
 
 export interface GoogleMapInterface {
-  create(options: CreateMapArgs, callback?: MapListenerCallback): Promise<GoogleMap>;
+  create(
+    options: CreateMapArgs,
+    callback?: MapListenerCallback,
+  ): Promise<GoogleMap>;
   enableClustering(): Promise<void>;
   disableClustering(): Promise<void>;
   addMarker(marker: Marker): Promise<string>;
