@@ -54,40 +54,6 @@ class MapCustomElement extends HTMLElement {
 
 customElements.define('capacitor-google-map', MapCustomElement);
 
-export interface GoogleMapInterface {
-  create(
-    options: CreateMapArgs,
-    callback?: MapListenerCallback,
-  ): Promise<GoogleMap>;
-  enableClustering(): Promise<void>;
-  disableClustering(): Promise<void>;
-  addMarker(marker: Marker): Promise<string>;
-  addMarkers(markers: Marker[]): Promise<string[]>;
-  removeMarker(id: string): Promise<void>;
-  removeMarkers(ids: string[]): Promise<void>;
-  destroy(): Promise<void>;
-  setCamera(config: CameraConfig): Promise<void>;
-  setMapType(mapType: MapType): Promise<void>;
-  enableIndoorMaps(enabled: boolean): Promise<void>;
-  enableTrafficLayer(enabled: boolean): Promise<void>;
-  enableAccessibilityElements(enabled: boolean): Promise<void>;
-  enableCurrentLocation(enabled: boolean): Promise<void>;
-  setPadding(padding: MapPadding): Promise<void>;
-  setOnCameraIdleListener(callback?: MapListenerCallback): Promise<void>;
-  setOnCameraMoveStartedListener(callback?: MapListenerCallback): Promise<void>;
-  setOnClusterClickListener(callback?: MapListenerCallback): Promise<void>;
-  setOnClusterInfoWindowClickListener(
-    callback?: MapListenerCallback,
-  ): Promise<void>;
-  setOnInfoWindowClickListener(callback?: MapListenerCallback): Promise<void>;
-  setOnMapClickListener(callback?: MapListenerCallback): Promise<void>;
-  setOnMarkerClickListener(callback?: MapListenerCallback): Promise<void>;
-  setOnMyLocationButtonClickListener(
-    callback?: MapListenerCallback,
-  ): Promise<void>;
-  setOnMyLocationClickListener(callback?: MapListenerCallback): Promise<void>;
-}
-
 export class GoogleMap {
   private id: string;
   private element: HTMLElement | null = null;

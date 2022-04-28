@@ -1,4 +1,5 @@
 import { WebPlugin } from '@capacitor/core';
+import type { Cluster, onClusterClickHandler } from '@googlemaps/markerclusterer';
 import { MarkerClusterer } from '@googlemaps/markerclusterer';
 
 import type {
@@ -36,6 +37,57 @@ export class CapacitorGoogleMapsWeb
     };
   } = {};
   private currMarkerId = 0;
+
+  private onClusterClickHandler: onClusterClickHandler = (
+    _: google.maps.MapMouseEvent,
+    cluster: Cluster,
+    map: google.maps.Map
+  ): void => {
+    const mapId = this.getIdFromMap(map);
+    const items: any[] = [];
+    
+    if (cluster.markers != undefined) {
+      for (const marker of cluster.markers) {
+        const markerId = this.getIdFromMarker(mapId, marker);
+
+        items.push({
+          "markerId": markerId,
+          "latitude": marker.getPosition()?.lat,
+          "longitude": marker.getPosition()?.lng,
+          "title": marker.getTitle(),
+          "snippet": ""
+        });
+      }
+    }
+
+    this.notifyListeners('onClusterClick', {
+      "mapId": mapId,
+      "latitude": cluster.position.lat,
+      "longitude": cluster.position.lng,
+      "size": cluster.count,
+      "items": items
+    });
+  };
+
+  private getIdFromMap(map: google.maps.Map): string {
+    for (const id in this.maps) {
+      if (this.maps[id].map == map) {
+        return id;
+      }
+    }
+
+    return "";
+  }
+
+  private getIdFromMarker(mapId: string, marker: google.maps.Marker): string {
+    for (const id in this.maps[mapId].markers) {
+      if (this.maps[id].markers[id] == marker) {
+        return id;
+      }
+    }
+
+    return "";
+  }
 
   private async importGoogleLib(apiKey: string) {
     if (this.gMapsRef === undefined) {
@@ -97,6 +149,14 @@ export class CapacitorGoogleMapsWeb
             };
 
             this.maps[_args.id].map.setCenter(pos);
+
+            this.notifyListeners('onMyLocationButtonClick', {
+
+            });
+
+            this.notifyListeners('onMyLocationClick', {
+
+            });
           },
           () => {
             throw new Error('Geolocation not supported on web browser.');
@@ -130,7 +190,10 @@ export class CapacitorGoogleMapsWeb
       });
   
       const id = '' + this.currMarkerId;
+
       map.markers[id] = marker;
+      this.setMarkerListeners(_args.id, id, marker);
+      
       markerIds.push(id);
       this.currMarkerId++;
     }
@@ -149,7 +212,10 @@ export class CapacitorGoogleMapsWeb
     });
 
     const id = '' + this.currMarkerId;
+
     this.maps[_args.id].markers[id] = marker;
+    this.setMarkerListeners(_args.id, id, marker);
+
     this.currMarkerId++;
 
     return { id: id };
@@ -179,10 +245,7 @@ export class CapacitorGoogleMapsWeb
     this.maps[_args.id].markerClusterer = new MarkerClusterer({
       map: this.maps[_args.id].map,
       markers: markers,
-      onClusterClick: () => {
-        // onClusterClick
-        
-      }
+      onClusterClick: this.onClusterClickHandler
     });
   }
   
@@ -203,6 +266,7 @@ export class CapacitorGoogleMapsWeb
       element: _args.element,
       markers: {},
     };
+    this.setMapListeners(_args.id);
   }
 
   async destroy(_args: DestroyMapArgs): Promise<void> {
@@ -213,82 +277,50 @@ export class CapacitorGoogleMapsWeb
     delete this.maps[_args.id];
   }
 
-  // async setMarkerListeners(marker: google.maps.Marker): Promise<void> {
-  //   marker.addListener('')
-  // }
+  async setMarkerListeners(mapId: string, markerId: string, marker: google.maps.Marker): Promise<void> {
+    marker.addListener('click', () => {
+      this.notifyListeners('onMarkerClick', {
+        "mapId": mapId,
+        "markerId": markerId,
+        "latitude": marker.getPosition()?.lat,
+        "longitude": marker.getPosition()?.lng,
+        "title": marker.getTitle(),
+        "snippet": ""
+      });
+    });
+  }
 
-  async setMapListeners(map: google.maps.Map): Promise<void> {
+  async setMapListeners(mapId: string): Promise<void> {
+    const map = this.maps[mapId].map;
+
     map.addListener('idle', () => {
-
+      this.notifyListeners('onCameraIdle', {
+        "mapId": mapId,
+        "bearing": map.getHeading(),
+        "latitude": map.getCenter()?.lat,
+        "longitude": map.getCenter()?.lng,
+        "tilt": map.getTilt(),
+        "zoom": map.getZoom(),
+      });
     });
 
     map.addListener('center_changed', () => {
-
+      this.notifyListeners('onCameraMoveStarted', {
+        "mapId": mapId,
+        "isGesture": true
+      });
     });
 
-    map.addListener('idle', () => {
-
+    map.addListener('click', (e: google.maps.MapMouseEvent|google.maps.IconMouseEvent) => {
+      this.notifyListeners('onMapClick', {
+        "mapId": mapId,
+        "latitude": e.latLng?.lat,
+        "longitude": e.latLng?.lng,
+      });
     });
 
-    map.addListener('idle', () => {
-
-    });
-
-    map.addListener('idle', () => {
-
-    });
-    
-    /*
-     addListener(
-    eventName: 'onCameraIdle',
-    listenerFunc: MapListenerCallback,
-  ): PluginListenerHandle;
-
-  addListener(
-    eventName: 'onCameraMoveStarted',
-    listenerFunc: MapListenerCallback,
-  ): PluginListenerHandle;
-
-  addListener(
-    eventName: 'onClusterClick',
-    listenerFunc: MapListenerCallback,
-  ): PluginListenerHandle;
-
-  addListener(
-    eventName: 'onClusterInfoWindowClick',
-    listenerFunc: MapListenerCallback,
-  ): PluginListenerHandle;
-
-  addListener(
-    eventName: 'onInfoWindowClick',
-    listenerFunc: MapListenerCallback,
-  ): PluginListenerHandle;
-
-  addListener(
-    eventName: 'onMapReady',
-    listenerFunc: MapListenerCallback,
-  ): PluginListenerHandle;
-
-  addListener(
-    eventName: 'onMapClick',
-    listenerFunc: MapListenerCallback,
-  ): PluginListenerHandle;
-
-  addListener(
-    eventName: 'onMarkerClick',
-    listenerFunc: MapListenerCallback,
-  ): PluginListenerHandle;
-
-  addListener(
-    eventName: 'onMyLocationButtonClick',
-    listenerFunc: MapListenerCallback,
-  ): PluginListenerHandle;
-
-  addListener(
-    eventName: 'onMyLocationClick',
-    listenerFunc: MapListenerCallback,
-  ): PluginListenerHandle;
-     */
-    
+    this.notifyListeners('onMapReady', {
+      "mapId": mapId,
+    });  
   }
 }
