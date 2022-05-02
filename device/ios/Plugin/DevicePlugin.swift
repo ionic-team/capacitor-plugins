@@ -64,4 +64,11 @@ public class DevicePlugin: CAPPlugin {
         ])
     }
 
+    @objc func getLanguageTag(_ call: CAPPluginCall) {
+        let tag = implementation.getLanguageTag()
+        call.resolve([
+            "value": tag
+        ])
+    }
+
 }

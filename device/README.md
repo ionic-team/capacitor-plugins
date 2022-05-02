@@ -35,6 +35,7 @@ const logBatteryInfo = async () => {
 * [`getInfo()`](#getinfo)
 * [`getBatteryInfo()`](#getbatteryinfo)
 * [`getLanguageCode()`](#getlanguagecode)
+* [`getLanguageTag()`](#getlanguagetag)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
 
@@ -103,6 +104,21 @@ Get the device's current language locale code.
 --------------------
 
 
+### getLanguageTag()
+
+```typescript
+getLanguageTag() => Promise<LanguageTag>
+```
+
+Get the device's current language locale tag.
+
+**Returns:** <code>Promise&lt;<a href="#languagetag">LanguageTag</a>&gt;</code>
+
+**Since:** 4.0.0
+
+--------------------
+
+
 ### Interfaces
 
 
@@ -145,6 +161,13 @@ Get the device's current language locale code.
 | Prop        | Type                | Description                  | Since |
 | ----------- | ------------------- | ---------------------------- | ----- |
 | **`value`** | <code>string</code> | Two character language code. | 1.0.0 |
+
+
+#### LanguageTag
+
+| Prop        | Type                | Description                                     | Since |
+| ----------- | ------------------- | ----------------------------------------------- | ----- |
+| **`value`** | <code>string</code> | Returns a well-formed IETF BCP 47 language tag. | 4.0.0 |
 
 
 ### Type Aliases
