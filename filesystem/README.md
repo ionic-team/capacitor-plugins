@@ -407,9 +407,21 @@ Required on Android, only when using <a href="#directory">`Directory.Documents`<
 
 #### ReaddirResult
 
-| Prop        | Type                  | Description                                        | Since |
-| ----------- | --------------------- | -------------------------------------------------- | ----- |
-| **`files`** | <code>string[]</code> | List of files and directories inside the directory | 1.0.0 |
+| Prop        | Type                    | Description                                        | Since |
+| ----------- | ----------------------- | -------------------------------------------------- | ----- |
+| **`files`** | <code>FileInfo[]</code> | List of files and directories inside the directory | 1.0.0 |
+
+
+#### FileInfo
+
+| Prop        | Type                               | Description                                                                          | Since |
+| ----------- | ---------------------------------- | ------------------------------------------------------------------------------------ | ----- |
+| **`name`**  | <code>string</code>                | Name of the file or directory                                                        |       |
+| **`type`**  | <code>'directory' \| 'file'</code> | Type of the file.                                                                    | 4.0.0 |
+| **`size`**  | <code>number</code>                | Size of the file in bytes.                                                           | 4.0.0 |
+| **`ctime`** | <code>number</code>                | Time of creation in milliseconds. It's not available on Android 7 and older devices. | 4.0.0 |
+| **`mtime`** | <code>number</code>                | Time of last modification in milliseconds.                                           | 4.0.0 |
+| **`uri`**   | <code>string</code>                | The uri of the file.                                                                 | 4.0.0 |
 
 
 #### ReaddirOptions

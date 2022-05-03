@@ -72,11 +72,11 @@ public class Filesystem {
         return created;
     }
 
-    public String[] readdir(String path, String directory) throws DirectoryNotFoundException {
-        String[] files = null;
+    public File[] readdir(String path, String directory) throws DirectoryNotFoundException {
+        File[] files = null;
         File fileObject = getFileObject(path, directory);
         if (fileObject != null && fileObject.exists()) {
-            files = fileObject.list();
+            files = fileObject.listFiles();
         } else {
             throw new DirectoryNotFoundException("Directory does not exist");
         }
