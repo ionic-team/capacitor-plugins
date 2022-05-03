@@ -176,6 +176,7 @@ export class MyMap {
 
 ```jsx
 import { GoogleMap } from '@capacitor/google-maps';
+import { useRef } from 'react';
 
 const MyMap: React.FC = () => {
   const mapRef = useRef<HTMLElement>();
