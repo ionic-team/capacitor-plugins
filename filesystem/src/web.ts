@@ -377,10 +377,23 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
       'getAllKeys',
       [IDBKeyRange.only(path)],
     );
-    const names = entries.map(e => {
-      return e.substring(path.length + 1);
-    });
-    return { files: names };
+    const files = await Promise.all(
+      entries.map(async e => {
+        let subEntry = (await this.dbRequest('get', [e])) as EntryObj;
+        if (subEntry === undefined) {
+          subEntry = (await this.dbRequest('get', [e + '/'])) as EntryObj;
+        }
+        return {
+          name: e.substring(path.length + 1),
+          type: subEntry.type,
+          size: subEntry.size,
+          ctime: subEntry.ctime,
+          mtime: subEntry.mtime,
+          uri: subEntry.path,
+        };
+      }),
+    );
+    return { files: files };
   }
 
   /**

@@ -371,7 +371,50 @@ export interface ReaddirResult {
    *
    * @since 1.0.0
    */
-  files: string[];
+  files: FileInfo[];
+}
+
+export interface FileInfo {
+  /**
+   * Name of the file or directory.
+   */
+  name: string;
+  /**
+   * Type of the file.
+   *
+   * @since 4.0.0
+   */
+  type: 'directory' | 'file';
+
+  /**
+   * Size of the file in bytes.
+   *
+   * @since 4.0.0
+   */
+  size: number;
+
+  /**
+   * Time of creation in milliseconds.
+   *
+   * It's not available on Android 7 and older devices.
+   *
+   * @since 4.0.0
+   */
+  ctime?: number;
+
+  /**
+   * Time of last modification in milliseconds.
+   *
+   * @since 4.0.0
+   */
+  mtime: number;
+
+  /**
+   * The uri of the file.
+   *
+   * @since 4.0.0
+   */
+  uri: string;
 }
 
 export interface GetUriResult {
