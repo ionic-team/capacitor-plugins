@@ -176,6 +176,7 @@ export class MyMap {
 
 ```jsx
 import { GoogleMap } from '@capacitor/google-maps';
+import { useRef } from 'react';
 
 const MyMap: React.FC = () => {
   const mapRef = useRef<HTMLElement>();
@@ -199,7 +200,7 @@ const MyMap: React.FC = () => {
   }
 
   return (
-    <div class="component-wrapper">
+    <div className="component-wrapper">
       <capacitor-google-map ref={mapRef} style={{
         display: 'inline-block',
         width: 275,
