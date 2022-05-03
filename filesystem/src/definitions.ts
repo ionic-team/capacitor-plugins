@@ -376,7 +376,7 @@ export interface ReaddirResult {
 
 export interface FileInfo {
   /**
-   * Name of the file or directory
+   * Name of the file or directory.
    */
   name: string;
   /**
