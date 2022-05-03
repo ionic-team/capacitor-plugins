@@ -296,7 +296,7 @@ export interface RegistrationError {
   /**
    * Error message describing the registration failure.
    *
-   * @since 2.0.0
+   * @since 4.0.0
    */
   error: string;
 }
