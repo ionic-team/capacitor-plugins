@@ -377,7 +377,12 @@ public class LocalNotificationManager {
         }
     }
 
-    private void setExactIfPossible(AlarmManager alarmManager, LocalNotificationSchedule schedule, long trigger, PendingIntent pendingIntent) {
+    private void setExactIfPossible(
+        AlarmManager alarmManager,
+        LocalNotificationSchedule schedule,
+        long trigger,
+        PendingIntent pendingIntent
+    ) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms()) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && schedule.allowWhileIdle()) {
                 alarmManager.setAndAllowWhileIdle(AlarmManager.RTC, trigger, pendingIntent);
