@@ -508,7 +508,7 @@ Remove all native listeners for this plugin.
 
 | Prop        | Type                | Description                                        | Since |
 | ----------- | ------------------- | -------------------------------------------------- | ----- |
-| **`error`** | <code>string</code> | Error message describing the registration failure. | 2.0.0 |
+| **`error`** | <code>string</code> | Error message describing the registration failure. | 4.0.0 |
 
 
 #### ActionPerformed
