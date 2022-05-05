@@ -349,11 +349,7 @@ public class LocalNotificationManager {
                 long interval = at.getTime() - new Date().getTime();
                 alarmManager.setRepeating(AlarmManager.RTC, at.getTime(), interval, pendingIntent);
             } else {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && schedule.allowWhileIdle()) {
-                    alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC, at.getTime(), pendingIntent);
-                } else {
-                    alarmManager.setExact(AlarmManager.RTC, at.getTime(), pendingIntent);
-                }
+                setExactIfPossible(alarmManager, schedule, at.getTime(), pendingIntent);
             }
             return;
         }
@@ -375,14 +371,30 @@ public class LocalNotificationManager {
             long trigger = on.nextTrigger(new Date());
             notificationIntent.putExtra(TimedNotificationPublisher.CRON_KEY, on.toMatchString());
             pendingIntent = PendingIntent.getBroadcast(context, request.getId(), notificationIntent, flags);
+            setExactIfPossible(alarmManager, schedule, trigger, pendingIntent);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+            Logger.debug(Logger.tags("LN"), "notification " + request.getId() + " will next fire at " + sdf.format(new Date(trigger)));
+        }
+    }
+
+    private void setExactIfPossible(
+        AlarmManager alarmManager,
+        LocalNotificationSchedule schedule,
+        long trigger,
+        PendingIntent pendingIntent
+    ) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms()) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && schedule.allowWhileIdle()) {
+                alarmManager.setAndAllowWhileIdle(AlarmManager.RTC, trigger, pendingIntent);
+            } else {
+                alarmManager.set(AlarmManager.RTC, trigger, pendingIntent);
+            }
+        } else {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && schedule.allowWhileIdle()) {
                 alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC, trigger, pendingIntent);
             } else {
                 alarmManager.setExact(AlarmManager.RTC, trigger, pendingIntent);
             }
-
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-            Logger.debug(Logger.tags("LN"), "notification " + request.getId() + " will next fire at " + sdf.format(new Date(trigger)));
         }
     }
 

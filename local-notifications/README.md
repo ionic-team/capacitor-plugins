@@ -9,6 +9,16 @@ npm install @capacitor/local-notifications
 npx cap sync
 ```
 
+## Android
+
+Starting on Android 12, scheduled notifications won't be exact unless this permission is added to your `AndroidManifest.xml`:
+
+```xml
+<uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+```
+
+Note that even if the permission is present, users can still disable exact notifications from the app settings.
+
 ## Configuration
 
 <docgen-config>
