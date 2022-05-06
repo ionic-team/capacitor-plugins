@@ -1,5 +1,8 @@
 import { WebPlugin } from '@capacitor/core';
-import type { Cluster, onClusterClickHandler } from '@googlemaps/markerclusterer';
+import type {
+  Cluster,
+  onClusterClickHandler,
+} from '@googlemaps/markerclusterer';
 import { MarkerClusterer } from '@googlemaps/markerclusterer';
 
 import type {
@@ -41,31 +44,31 @@ export class CapacitorGoogleMapsWeb
   private onClusterClickHandler: onClusterClickHandler = (
     _: google.maps.MapMouseEvent,
     cluster: Cluster,
-    map: google.maps.Map
+    map: google.maps.Map,
   ): void => {
     const mapId = this.getIdFromMap(map);
     const items: any[] = [];
-    
+
     if (cluster.markers != undefined) {
       for (const marker of cluster.markers) {
         const markerId = this.getIdFromMarker(mapId, marker);
 
         items.push({
-          "markerId": markerId,
-          "latitude": marker.getPosition()?.lat(),
-          "longitude": marker.getPosition()?.lng(),
-          "title": marker.getTitle(),
-          "snippet": ""
+          markerId: markerId,
+          latitude: marker.getPosition()?.lat(),
+          longitude: marker.getPosition()?.lng(),
+          title: marker.getTitle(),
+          snippet: '',
         });
       }
     }
 
     this.notifyListeners('onClusterClick', {
-      "mapId": mapId,
-      "latitude": cluster.position.lat(),
-      "longitude": cluster.position.lng(),
-      "size": cluster.count,
-      "items": items
+      mapId: mapId,
+      latitude: cluster.position.lat(),
+      longitude: cluster.position.lng(),
+      size: cluster.count,
+      items: items,
     });
   };
 
@@ -76,7 +79,7 @@ export class CapacitorGoogleMapsWeb
       }
     }
 
-    return "";
+    return '';
   }
 
   private getIdFromMarker(mapId: string, marker: google.maps.Marker): string {
@@ -86,7 +89,7 @@ export class CapacitorGoogleMapsWeb
       }
     }
 
-    return "";
+    return '';
   }
 
   private async importGoogleLib(apiKey: string) {
@@ -112,32 +115,32 @@ export class CapacitorGoogleMapsWeb
       zoom: _args.config.zoom,
     });
   }
-  
+
   async setMapType(_args: MapTypeArgs): Promise<void> {
     this.maps[_args.id].map.setMapTypeId(_args.mapType);
   }
-  
+
   async enableIndoorMaps(_args: IndoorMapArgs): Promise<void> {
     throw new Error('Method not supported on web.');
   }
-  
+
   async enableTrafficLayer(_args: TrafficLayerArgs): Promise<void> {
-    const trafficLayer = this.maps[_args.id].trafficLayer ?? new google.maps.TrafficLayer();
-    
+    const trafficLayer =
+      this.maps[_args.id].trafficLayer ?? new google.maps.TrafficLayer();
+
     if (_args.enabled) {
       trafficLayer.setMap(this.maps[_args.id].map);
       this.maps[_args.id].trafficLayer = trafficLayer;
-    }
-    else if(this.maps[_args.id].trafficLayer) {
+    } else if (this.maps[_args.id].trafficLayer) {
       trafficLayer.setMap(null);
       this.maps[_args.id].trafficLayer = undefined;
     }
   }
-  
+
   async enableAccessibilityElements(_args: AccElementsArgs): Promise<void> {
     throw new Error('Method not supported on web.');
   }
-  
+
   async enableCurrentLocation(_args: CurrentLocArgs): Promise<void> {
     if (_args.enabled) {
       if (navigator.geolocation) {
@@ -150,17 +153,13 @@ export class CapacitorGoogleMapsWeb
 
             this.maps[_args.id].map.setCenter(pos);
 
-            this.notifyListeners('onMyLocationButtonClick', {
+            this.notifyListeners('onMyLocationButtonClick', {});
 
-            });
-
-            this.notifyListeners('onMyLocationClick', {
-
-            });
+            this.notifyListeners('onMyLocationClick', {});
           },
           () => {
             throw new Error('Geolocation not supported on web browser.');
-          }
+          },
         );
       } else {
         throw new Error('Geolocation not supported on web browser.');
@@ -169,12 +168,12 @@ export class CapacitorGoogleMapsWeb
   }
   async setPadding(_args: PaddingArgs): Promise<void> {
     const bounds = this.maps[_args.id].map.getBounds();
-    
+
     if (bounds !== undefined) {
-      this.maps[_args.id].map.fitBounds(bounds, _args.padding); 
+      this.maps[_args.id].map.fitBounds(bounds, _args.padding);
     }
   }
-  
+
   async addMarkers(_args: AddMarkersArgs): Promise<{ ids: string[] }> {
     const markerIds: string[] = [];
     const map = this.maps[_args.id];
@@ -186,14 +185,13 @@ export class CapacitorGoogleMapsWeb
         opacity: markerArgs.opacity,
         title: markerArgs.title,
         icon: markerArgs.iconUrl,
-        draggable: markerArgs.draggable
+        draggable: markerArgs.draggable,
       });
-  
+
       const id = '' + this.currMarkerId;
 
       map.markers[id] = marker;
       this.setMarkerListeners(_args.id, id, marker);
-      
       markerIds.push(id);
       this.currMarkerId++;
     }
@@ -208,7 +206,7 @@ export class CapacitorGoogleMapsWeb
       opacity: _args.marker.opacity,
       title: _args.marker.title,
       icon: _args.marker.iconUrl,
-      draggable: _args.marker.draggable
+      draggable: _args.marker.draggable,
     });
 
     const id = '' + this.currMarkerId;
@@ -220,7 +218,6 @@ export class CapacitorGoogleMapsWeb
 
     return { id: id };
   }
-  
   async removeMarkers(_args: RemoveMarkersArgs): Promise<void> {
     const map = this.maps[_args.id];
 
@@ -234,7 +231,6 @@ export class CapacitorGoogleMapsWeb
     this.maps[_args.id].markers[_args.markerId].setMap(null);
     delete this.maps[_args.id].markers[_args.markerId];
   }
-  
   async enableClustering(_args: { id: string }): Promise<void> {
     const markers: google.maps.Marker[] = [];
 
@@ -245,10 +241,10 @@ export class CapacitorGoogleMapsWeb
     this.maps[_args.id].markerClusterer = new MarkerClusterer({
       map: this.maps[_args.id].map,
       markers: markers,
-      onClusterClick: this.onClusterClickHandler
+      onClusterClick: this.onClusterClickHandler,
     });
   }
-  
+
   async disableClustering(_args: { id: string }): Promise<void> {
     this.maps[_args.id].markerClusterer?.setMap(null);
     this.maps[_args.id].markerClusterer = undefined;
@@ -277,15 +273,19 @@ export class CapacitorGoogleMapsWeb
     delete this.maps[_args.id];
   }
 
-  async setMarkerListeners(mapId: string, markerId: string, marker: google.maps.Marker): Promise<void> {
+  async setMarkerListeners(
+    mapId: string,
+    markerId: string,
+    marker: google.maps.Marker,
+  ): Promise<void> {
     marker.addListener('click', () => {
       this.notifyListeners('onMarkerClick', {
-        "mapId": mapId,
-        "markerId": markerId,
-        "latitude": marker.getPosition()?.lat(),
-        "longitude": marker.getPosition()?.lng(),
-        "title": marker.getTitle(),
-        "snippet": ""
+        mapId: mapId,
+        markerId: markerId,
+        latitude: marker.getPosition()?.lat(),
+        longitude: marker.getPosition()?.lng(),
+        title: marker.getTitle(),
+        snippet: '',
       });
     });
   }
@@ -295,32 +295,35 @@ export class CapacitorGoogleMapsWeb
 
     map.addListener('idle', () => {
       this.notifyListeners('onCameraIdle', {
-        "mapId": mapId,
-        "bearing": map.getHeading(),
-        "latitude": map.getCenter()?.lat(),
-        "longitude": map.getCenter()?.lng(),
-        "tilt": map.getTilt(),
-        "zoom": map.getZoom(),
+        mapId: mapId,
+        bearing: map.getHeading(),
+        latitude: map.getCenter()?.lat(),
+        longitude: map.getCenter()?.lng(),
+        tilt: map.getTilt(),
+        zoom: map.getZoom(),
       });
     });
 
     map.addListener('center_changed', () => {
       this.notifyListeners('onCameraMoveStarted', {
-        "mapId": mapId,
-        "isGesture": true
+        mapId: mapId,
+        isGesture: true,
       });
     });
 
-    map.addListener('click', (e: google.maps.MapMouseEvent|google.maps.IconMouseEvent) => {
-      this.notifyListeners('onMapClick', {
-        "mapId": mapId,
-        "latitude": e.latLng?.lat(),
-        "longitude": e.latLng?.lng(),
-      });
-    });
+    map.addListener(
+      'click',
+      (e: google.maps.MapMouseEvent | google.maps.IconMouseEvent) => {
+        this.notifyListeners('onMapClick', {
+          mapId: mapId,
+          latitude: e.latLng?.lat(),
+          longitude: e.latLng?.lng(),
+        });
+      },
+    );
 
     this.notifyListeners('onMapReady', {
-      "mapId": mapId,
-    });  
+      mapId: mapId,
+    });
   }
 }

@@ -4,9 +4,13 @@ import type { PluginListenerHandle } from '@capacitor/core';
 import type { CameraConfig, Marker, MapPadding, MapType } from './definitions';
 import type { CreateMapArgs, MapListenerCallback } from './implementation';
 import { CapacitorGoogleMaps } from './implementation';
+import { CompareStackingOrder } from './stacking-order';
 
 export interface GoogleMapInterface {
-  create(options: CreateMapArgs, callback?: MapListenerCallback): Promise<GoogleMap>;
+  create(
+    options: CreateMapArgs,
+    callback?: MapListenerCallback,
+  ): Promise<GoogleMap>;
   enableClustering(): Promise<void>;
   disableClustering(): Promise<void>;
   addMarker(marker: Marker): Promise<string>;
@@ -57,9 +61,6 @@ customElements.define('capacitor-google-map', MapCustomElement);
 interface TransparencyState {
   element: HTMLElement;
   initialBackground: string;
-  initialMask: string;
-  initialWebkitMask: string;
-  initialWebkitMaskComposite: string;
 }
 
 export class GoogleMap {
@@ -666,97 +667,77 @@ export class GoogleMap {
 
   private initTransparencyStates(): void {
     this.resetTransparencyStates();
-    const elements: HTMLElement[] = [];
     
     if (this.element) {
-      const mapRect = this.element.getBoundingClientRect();
-      
-      const x = mapRect.x;
-      const y = mapRect.y;
+      const elementsFromMap = this.getElementsInBox(this.element);
 
-      let currX = x;
-      let currY = y;
-
-      const maxX = x + mapRect.width;
-      const maxY = y + mapRect.height;
-
-      while ((currX += 10) <= maxX) {
-        while ((currY += 10) <= maxY) {
-          const elementsAtPoint = document.elementsFromPoint(currX, currY);
-          let foundMapElement = false;
-
-          // eslint-disable-next-line @typescript-eslint/prefer-for-of
-          for (let i = 0; i < elementsAtPoint.length; i++) {
-            const element: HTMLElement = elementsAtPoint[i] as HTMLElement;
-
-            if (element == this.element)  foundMapElement = true;
-            if (!foundMapElement || elements.includes(element)) continue;
-
-            if (element.shadowRoot) {
-              let shadowElement: any = element.shadowRoot.children[0];
-              if (shadowElement.part.contains('background')) {
-                shadowElement = shadowElement as HTMLElement;
-                elements.push(shadowElement);
-                this.transparencyStates.push({
-                  element: shadowElement,
-                  initialBackground: shadowElement.style.background,
-                  initialMask: shadowElement.style.mask,
-                  initialWebkitMask: shadowElement.style.webkitMask,
-                  initialWebkitMaskComposite: shadowElement.style.webkitMaskComposite
-                });
-
-                this.addSvgMasks(shadowElement, x, y, maxX, maxY);
-                //shadowElement.style.background = 'transparent';
-              }
-            }
-
-            elements.push(element);
-            this.transparencyStates.push({
-              element: element,
-              initialBackground: element.style.background,
-              initialMask: element.style.mask,
-              initialWebkitMask: element.style.webkitMask,
-              initialWebkitMaskComposite: element.style.webkitMaskComposite
-            });
-        
-            //this.addSvgMasks(element, x, y, maxX, maxY);
-            element.style.background = 'transparent';
-          }
+      for (const element of elementsFromMap) {
+        this.transparencyStates.push({
+          element: element,
+          initialBackground: element.style.background,
+        });
+    
+        if (element.tagName == "HTML" || element.tagName == "BODY") {
+          element.style.background = 'transparent';
         }
-
-        currY = y;
+        else {
+          this.addSvgMasks(element, this.element.getBoundingClientRect());
+        }
       }
     }
   }
 
-  private addSvgMasks(element: HTMLElement, x: number, y: number, maxX: number, maxY: number): void {
-    const elementRect = element.getBoundingClientRect();
-    const elX = elementRect.x;
-    const elY = elementRect.y;
+  private getElementsInBox(element: HTMLElement): HTMLElement[] {
+    const elements: HTMLElement[] = [];
+    const mapRect = element.getBoundingClientRect();
+    
+    let foundElement = false;
+    const allElements = Array.from(document.getElementsByTagName('*'))
+      .sort((a, b) => CompareStackingOrder(b, a))
+      .filter((item) => {
+        foundElement = foundElement || item as HTMLElement == element;
+        const rect = item.getBoundingClientRect();
+        return foundElement && this.doElementsOverlap(mapRect, rect);
+      }
+    );
 
-    const width = elementRect.width;
-    const height = elementRect.height;
+    for (const el of allElements) {
+      if (el.shadowRoot) {
+        let shadowElement: any = el.shadowRoot.children[0];
+        if (shadowElement.part.contains('background')) {
+          shadowElement = shadowElement as HTMLElement;          
+          elements.push(shadowElement);
+        }
+      }
+      elements.push(el as HTMLElement);
+    }
 
-    const elMaxX = elX + width;
-    const elMaxY = elY + height;
+    return elements;
+  }
 
-    const xPercents = [
-      Math.floor((elX >= x ? 0 : Math.min(100, (x - elX) / width * 100))),
-      Math.ceil((elMaxX <= maxX ? 1 : 100 - Math.min(100, (elMaxX - maxX) / width * 100)))
-    ];
+  private doElementsOverlap(rect1: any, rect2: any) {
+    return !(
+      rect1.top > rect2.bottom ||
+      rect1.right < rect2.left ||
+      rect1.bottom < rect2.top ||
+      rect1.left > rect2.right
+    );
+  }
 
-    const yPercents = [
-      Math.floor((elY >= y ? 0 : Math.min(100, (y - elY) / height * 100))),
-      Math.ceil((elMaxY <= maxY ? 1 : 100 - Math.min(100, (elMaxY - maxY) / height * 100)))
-    ];
+  private addSvgMasks(element: HTMLElement, mapRect: any): void {
+    const rect = element.getBoundingClientRect();
+    const left = Math.max(0, mapRect.left - rect.left);
+    const right = rect.width - Math.max(0, rect.right - mapRect.right);
+    const top = Math.max(0, mapRect.top - rect.top);
+    const bottom = rect.height - Math.max(0, rect.bottom - mapRect.bottom);
 
     const polygonString =
-      xPercents[0] + ',' + yPercents[0] + ' ' +
-      xPercents[1] + ',' + yPercents[0] + ' ' +
-      xPercents[1] + ',' + yPercents[1] + ' ' +
-      xPercents[0] + ',' + yPercents[1];
+      left + ',' + top + ' ' +
+      right + ',' + top + ' ' +
+      right + ',' + bottom + ' ' +
+      left + ',' + bottom;
 
-    const svgString = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><polygon points="' +
+    const svgString = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + rect.width + ' ' + rect.height + '"><polygon points="' +
       polygonString + '" fill="black"/></svg>'
 
     let maskString = "url(data:image/svg+xml;base64," + window.btoa(svgString) + ") 0px center / 100% 100% ";
@@ -776,13 +757,14 @@ export class GoogleMap {
     element.style.webkitMask = maskString;
     element.style.webkitMaskComposite = 'destination-out';
   }
+  
 
   private resetTransparencyStates(): void {
     for (const transparencyState of this.transparencyStates) {
       transparencyState.element.style.background = transparencyState.initialBackground;
-      transparencyState.element.style.mask = transparencyState.initialMask;
-      transparencyState.element.style.webkitMask = transparencyState.initialWebkitMask;
-      transparencyState.element.style.webkitMaskComposite = transparencyState.initialWebkitMaskComposite;
+      transparencyState.element.style.mask = '';
+      transparencyState.element.style.webkitMask = '';
+      transparencyState.element.style.webkitMaskComposite = '';
     }
 
     this.transparencyStates = [];
