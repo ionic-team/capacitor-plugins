@@ -33,9 +33,6 @@ Keyboard.addListener('keyboardDidHide', () => {
 
 ## Configuration
 
-<docgen-config>
-<!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
-
 On iOS, the keyboard can be configured with the following options:
 
 | Prop                     | Type                                                      | Description                                                                                                                                                                                                                                                                                                       | Default             | Since |
@@ -66,11 +63,12 @@ In `capacitor.config.ts`:
 /// <reference types="@capacitor/keyboard" />
 
 import { CapacitorConfig } from '@capacitor/cli';
+import { KeyboardResize } from '@capacitor/keyboard';
 
 const config: CapacitorConfig = {
   plugins: {
     Keyboard: {
-      resize: "body",
+      resize: KeyboardResize.Body,
       style: "dark",
       resizeOnFullScreen: true,
     },
@@ -79,8 +77,6 @@ const config: CapacitorConfig = {
 
 export default config;
 ```
-
-</docgen-config>
 
 ## Compatibility with `cordova-plugin-ionic-keyboard`
 
