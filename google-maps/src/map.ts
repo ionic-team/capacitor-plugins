@@ -738,7 +738,7 @@ export class GoogleMap {
       left + ',' + bottom;
 
     const svgString = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + rect.width + ' ' + rect.height + '"><polygon points="' +
-      polygonString + '" fill="black"/></svg>'
+      polygonString + '" fill="black"/></svg>';
 
     let maskString = "url(data:image/svg+xml;base64," + window.btoa(svgString) + ") 0px center / 100% 100% ";
 
