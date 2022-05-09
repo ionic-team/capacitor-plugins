@@ -38,7 +38,7 @@ jobs:
         with:
           files: ${{ steps.files.outputs.all }}
   lint:
-    runs-on: macos-latest
+    runs-on: macos-12
     timeout-minutes: 30
     needs:
       - setup
