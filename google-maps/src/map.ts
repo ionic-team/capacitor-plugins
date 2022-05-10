@@ -61,15 +61,15 @@ export class GoogleMap {
   private id: string;
   private element: HTMLElement | null = null;
 
-  private onCameraIdleListener?: PluginListenerHandle;
-  private onCameraMoveStartedListener?: PluginListenerHandle;
-  private onClusterClickListener?: PluginListenerHandle;
-  private onClusterInfoWindowClickListener?: PluginListenerHandle;
-  private onInfoWindowClickListener?: PluginListenerHandle;
-  private onMapClickListener?: PluginListenerHandle;
-  private onMarkerClickListener?: PluginListenerHandle;
-  private onMyLocationButtonClickListener?: PluginListenerHandle;
-  private onMyLocationClickListener?: PluginListenerHandle;
+  private onCameraIdleListener?: Promise<PluginListenerHandle>;
+  private onCameraMoveStartedListener?: Promise<PluginListenerHandle>;
+  private onClusterClickListener?: Promise<PluginListenerHandle>;
+  private onClusterInfoWindowClickListener?: Promise<PluginListenerHandle>;
+  private onInfoWindowClickListener?: Promise<PluginListenerHandle>;
+  private onMapClickListener?: Promise<PluginListenerHandle>;
+  private onMarkerClickListener?: Promise<PluginListenerHandle>;
+  private onMyLocationButtonClickListener?: Promise<PluginListenerHandle>;
+  private onMyLocationClickListener?: Promise<PluginListenerHandle>;
 
   private constructor(id: string) {
     this.id = id;
@@ -105,14 +105,21 @@ export class GoogleMap {
     }
 
     newMap.element = options.element;
+    newMap.element.dataset.internalId = options.id;
 
     const elementBounds = options.element.getBoundingClientRect();
     options.config.width = elementBounds.width;
     options.config.height = elementBounds.height;
     options.config.x = elementBounds.x;
     options.config.y = elementBounds.y;
+    options.devicePixelRatio = window.devicePixelRatio;    
 
     if (Capacitor.getPlatform() == 'android') {
+      const scrollDiv = newMap.element.childNodes[0];
+      if (scrollDiv) {
+        scrollDiv.remove();
+      }      
+
       (options.element as any) = {};
       newMap.initScrolling();
     }
@@ -125,7 +132,7 @@ export class GoogleMap {
 
     if (callback) {
       CapacitorGoogleMaps.addListener('onMapReady', callback);
-    }
+    } 
 
     return newMap;
   }
@@ -398,7 +405,7 @@ export class GoogleMap {
    */
   async setOnCameraIdleListener(callback?: MapListenerCallback): Promise<void> {
     if (this.onCameraIdleListener) {
-      this.onCameraIdleListener.remove();
+     this.onCameraIdleListener = undefined;
     }
 
     if (callback) {
@@ -421,7 +428,7 @@ export class GoogleMap {
     callback?: MapListenerCallback,
   ): Promise<void> {
     if (this.onCameraMoveStartedListener) {
-      this.onCameraMoveStartedListener.remove();
+      this.onCameraMoveStartedListener = undefined;
     }
 
     if (callback) {
@@ -444,7 +451,7 @@ export class GoogleMap {
     callback?: MapListenerCallback,
   ): Promise<void> {
     if (this.onClusterClickListener) {
-      this.onClusterClickListener.remove();
+      this.onClusterClickListener = undefined;
     }
 
     if (callback) {
@@ -467,7 +474,7 @@ export class GoogleMap {
     callback?: MapListenerCallback,
   ): Promise<void> {
     if (this.onClusterInfoWindowClickListener) {
-      this.onClusterInfoWindowClickListener.remove();
+      this.onClusterInfoWindowClickListener = undefined;
     }
 
     if (callback) {
@@ -490,7 +497,7 @@ export class GoogleMap {
     callback?: MapListenerCallback,
   ): Promise<void> {
     if (this.onInfoWindowClickListener) {
-      this.onInfoWindowClickListener.remove();
+      this.onInfoWindowClickListener = undefined;
     }
 
     if (callback) {
@@ -511,7 +518,7 @@ export class GoogleMap {
    */
   async setOnMapClickListener(callback?: MapListenerCallback): Promise<void> {
     if (this.onMapClickListener) {
-      this.onMapClickListener.remove();
+      this.onMapClickListener = undefined;
     }
 
     if (callback) {
@@ -534,7 +541,7 @@ export class GoogleMap {
     callback?: MapListenerCallback,
   ): Promise<void> {
     if (this.onMarkerClickListener) {
-      this.onMarkerClickListener.remove();
+      this.onMarkerClickListener = undefined;
     }
 
     if (callback) {
@@ -557,7 +564,7 @@ export class GoogleMap {
     callback?: MapListenerCallback,
   ): Promise<void> {
     if (this.onMyLocationButtonClickListener) {
-      this.onMyLocationButtonClickListener.remove();
+      this.onMyLocationButtonClickListener = undefined;
     }
 
     if (callback) {
@@ -580,7 +587,7 @@ export class GoogleMap {
     callback?: MapListenerCallback,
   ): Promise<void> {
     if (this.onMyLocationClickListener) {
-      this.onMyLocationClickListener.remove();
+      this.onMyLocationClickListener = undefined;
     }
 
     if (callback) {
@@ -600,47 +607,38 @@ export class GoogleMap {
    * @returns
    */
   async removeAllMapListeners(): Promise<void> {
-    if (this.onCameraIdleListener) {
-      this.onCameraIdleListener.remove();
+    if (this.onCameraIdleListener) {      
       this.onCameraIdleListener = undefined;
     }
-    if (this.onCameraMoveStartedListener) {
-      this.onCameraMoveStartedListener.remove();
+    if (this.onCameraMoveStartedListener) {      
       this.onCameraMoveStartedListener = undefined;
     }
 
-    if (this.onClusterClickListener) {
-      this.onClusterClickListener.remove();
+    if (this.onClusterClickListener) {      
       this.onClusterClickListener = undefined;
     }
 
-    if (this.onClusterInfoWindowClickListener) {
-      this.onClusterInfoWindowClickListener.remove();
+    if (this.onClusterInfoWindowClickListener) {      
       this.onClusterInfoWindowClickListener = undefined;
     }
 
     if (this.onInfoWindowClickListener) {
-      this.onInfoWindowClickListener.remove();
       this.onInfoWindowClickListener = undefined;
     }
 
     if (this.onMapClickListener) {
-      this.onMapClickListener.remove();
       this.onMapClickListener = undefined;
     }
 
     if (this.onMarkerClickListener) {
-      this.onMarkerClickListener.remove();
       this.onMarkerClickListener = undefined;
     }
 
     if (this.onMyLocationButtonClickListener) {
-      this.onMyLocationButtonClickListener.remove();
       this.onMyLocationClickListener = undefined;
     }
 
-    if (this.onMyLocationClickListener) {
-      this.onMyLocationClickListener.remove();
+    if (this.onMyLocationClickListener) {      
       this.onMyLocationButtonClickListener = undefined;
     }
   }

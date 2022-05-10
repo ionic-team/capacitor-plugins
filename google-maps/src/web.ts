@@ -141,6 +141,10 @@ export class CapacitorGoogleMapsWeb
     throw new Error('Method not supported on web.');
   }
 
+  dispatchMapEvent(_args: { id: string; }): Promise<void> {
+    throw new Error('Method not supported on web.');
+  }
+
   async enableCurrentLocation(_args: CurrentLocArgs): Promise<void> {
     if (_args.enabled) {
       if (navigator.geolocation) {
