@@ -118,7 +118,7 @@ export class GoogleMap {
     options.config.y = elementBounds.y;
     options.devicePixelRatio = window.devicePixelRatio;
 
-    if (Capacitor.getPlatform() == 'android') {      
+    if (Capacitor.getPlatform() == 'android') {
       newMap.initScrolling();
     }
 
