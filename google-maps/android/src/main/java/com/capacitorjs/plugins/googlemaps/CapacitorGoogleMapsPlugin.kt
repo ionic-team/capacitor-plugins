@@ -68,11 +68,12 @@ class CapacitorGoogleMapsPlugin : Plugin() {
                             payload.put("mapId", map.id)
 
                             notifyListeners("isMapInFocus", payload)
+                            return true
                         }
                     }
                 }
 
-                return false
+                return v?.onTouchEvent(event) ?: true
             }
         })
     }
