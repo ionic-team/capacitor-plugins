@@ -25,7 +25,10 @@ import org.json.JSONObject
 )
 class CapacitorGoogleMapsPlugin : Plugin() {
     private var maps: HashMap<String, CapacitorGoogleMap> = HashMap()
+    private var cachedTouchEvents: HashMap<String, MutableList<MotionEvent>> = HashMap()
     private val tag: String = "CAP-GOOGLE-MAPS"
+    private var devicePixelRatio = 1.00f
+    
 
     companion object {
         const val LOCATION = "location"
@@ -38,22 +41,38 @@ class CapacitorGoogleMapsPlugin : Plugin() {
         this.bridge.webView.setOnTouchListener(object : View.OnTouchListener {
             override fun onTouch(v: View?, event: MotionEvent?): Boolean {
                 if (event != null) {
+                    if (event.source == -1) {
+                        return v?.onTouchEvent(event) ?: true
+                    }
+
                     val touchX = event.x
                     val touchY = event.y
 
-                    maps.forEach { entry ->
-                        val map = entry.value;
-
+                    for ((id, map) in maps) {
                         val mapRect = map.getMapBounds()
                         if (mapRect.contains(touchX.toInt(), touchY.toInt())) {
-                            map.dispatchTouchEvent(event)
+                            if (event.action == MotionEvent.ACTION_DOWN) {
+                                if (cachedTouchEvents[id] == null) {
+                                    cachedTouchEvents[id] = mutableListOf<MotionEvent>()
+                                }
 
-                            return true
+                                cachedTouchEvents[id]?.clear()
+                            }
+
+                            val motionEvent = MotionEvent.obtain(event)
+                            cachedTouchEvents[id]?.add(motionEvent)
+
+                            val payload = JSObject()
+                            payload.put("x", touchX / devicePixelRatio)
+                            payload.put("y", touchY / devicePixelRatio)
+                            payload.put("mapId", map.id)
+
+                            notifyListeners("isMapInFocus", payload)
                         }
                     }
                 }
 
-                return v?.onTouchEvent(event) ?: true
+                return false
             }
         })
     }
@@ -87,6 +106,8 @@ class CapacitorGoogleMapsPlugin : Plugin() {
     fun create(call: PluginCall) {
         try {
             val id = call.getString("id")
+
+            this.devicePixelRatio = call.getFloat("devicePixelRatio", 1.00f)!!
 
             if (null == id || id.isEmpty()) {
                 throw InvalidMapIdError()
@@ -489,6 +510,39 @@ class CapacitorGoogleMapsPlugin : Plugin() {
             val bounds = boundsObjectToRect(boundsObj)
 
             map.updateRender(bounds)
+
+            call.resolve()
+        } catch (e: GoogleMapsError) {
+            handleError(call, e)
+        } catch (e: Exception) {
+            handleError(call, e)
+        }
+    }
+
+    @PluginMethod
+    fun dispatchMapEvent(call: PluginCall) {
+        try {
+            val id = call.getString("id")
+            id ?: throw InvalidMapIdError()
+
+            val map = maps[id]
+            map ?: throw MapNotFoundError()
+
+            val focus = call.getBoolean("focus", false)!!
+
+            val events = cachedTouchEvents[id]
+            if (events != null) {
+                for(event in events) {
+                    if (focus) {
+                        map.dispatchTouchEvent(event)
+                    } else {
+                        event.source = -1
+                        this.bridge.webView.dispatchTouchEvent(event)
+                    }
+                }
+            }
+
+            cachedTouchEvents[id]?.clear()
 
             call.resolve()
         } catch (e: GoogleMapsError) {
