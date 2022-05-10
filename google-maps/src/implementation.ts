@@ -105,7 +105,7 @@ export interface CapacitorGoogleMapsPlugin extends Plugin {
   enableCurrentLocation(args: CurrentLocArgs): Promise<void>;
   setPadding(args: PaddingArgs): Promise<void>;
   onScroll(args: OnScrollArgs): Promise<void>;
-  dispatchMapEvent(args: { id: string, focus: boolean }): Promise<void>;
+  dispatchMapEvent(args: { id: string; focus: boolean }): Promise<void>;
 }
 
 const CapacitorGoogleMaps = registerPlugin<CapacitorGoogleMapsPlugin>(
@@ -115,7 +115,7 @@ const CapacitorGoogleMaps = registerPlugin<CapacitorGoogleMapsPlugin>(
   },
 );
 
-CapacitorGoogleMaps.addListener('isMapInFocus', data => {  
+CapacitorGoogleMaps.addListener('isMapInFocus', data => {
   const x = data.x;
   const y = data.y;
 

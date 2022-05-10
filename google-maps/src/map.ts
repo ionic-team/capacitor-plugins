@@ -112,13 +112,13 @@ export class GoogleMap {
     options.config.height = elementBounds.height;
     options.config.x = elementBounds.x;
     options.config.y = elementBounds.y;
-    options.devicePixelRatio = window.devicePixelRatio;    
+    options.devicePixelRatio = window.devicePixelRatio;
 
     if (Capacitor.getPlatform() == 'android') {
       const scrollDiv = newMap.element.childNodes[0];
       if (scrollDiv) {
         scrollDiv.remove();
-      }      
+      }
 
       (options.element as any) = {};
       newMap.initScrolling();
@@ -132,7 +132,7 @@ export class GoogleMap {
 
     if (callback) {
       CapacitorGoogleMaps.addListener('onMapReady', callback);
-    } 
+    }
 
     return newMap;
   }
@@ -405,7 +405,7 @@ export class GoogleMap {
    */
   async setOnCameraIdleListener(callback?: MapListenerCallback): Promise<void> {
     if (this.onCameraIdleListener) {
-     this.onCameraIdleListener = undefined;
+      this.onCameraIdleListener = undefined;
     }
 
     if (callback) {
@@ -607,18 +607,18 @@ export class GoogleMap {
    * @returns
    */
   async removeAllMapListeners(): Promise<void> {
-    if (this.onCameraIdleListener) {      
+    if (this.onCameraIdleListener) {
       this.onCameraIdleListener = undefined;
     }
-    if (this.onCameraMoveStartedListener) {      
+    if (this.onCameraMoveStartedListener) {
       this.onCameraMoveStartedListener = undefined;
     }
 
-    if (this.onClusterClickListener) {      
+    if (this.onClusterClickListener) {
       this.onClusterClickListener = undefined;
     }
 
-    if (this.onClusterInfoWindowClickListener) {      
+    if (this.onClusterInfoWindowClickListener) {
       this.onClusterInfoWindowClickListener = undefined;
     }
 
@@ -638,7 +638,7 @@ export class GoogleMap {
       this.onMyLocationClickListener = undefined;
     }
 
-    if (this.onMyLocationClickListener) {      
+    if (this.onMyLocationClickListener) {
       this.onMyLocationButtonClickListener = undefined;
     }
   }

@@ -141,7 +141,7 @@ export class CapacitorGoogleMapsWeb
     throw new Error('Method not supported on web.');
   }
 
-  dispatchMapEvent(_args: { id: string; }): Promise<void> {
+  dispatchMapEvent(_args: { id: string }): Promise<void> {
     throw new Error('Method not supported on web.');
   }
 
