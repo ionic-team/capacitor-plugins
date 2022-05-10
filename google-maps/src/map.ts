@@ -45,13 +45,17 @@ class MapCustomElement extends HTMLElement {
   }
 
   connectedCallback() {
-    this.style.overflow = 'scroll';
-    (this.style as any)['-webkit-overflow-scrolling'] = 'touch';
+    console.log(Capacitor.getPlatform());
 
-    const overflowDiv = document.createElement('div');
-    overflowDiv.style.height = '200%';
+    if (Capacitor.getPlatform() == 'ios') {
+      this.style.overflow = 'scroll';
+      (this.style as any)['-webkit-overflow-scrolling'] = 'touch';
 
-    this.appendChild(overflowDiv);
+      const overflowDiv = document.createElement('div');
+      overflowDiv.style.height = '200%';
+
+      this.appendChild(overflowDiv);
+    }
   }
 }
 
@@ -114,20 +118,11 @@ export class GoogleMap {
     options.config.y = elementBounds.y;
     options.devicePixelRatio = window.devicePixelRatio;
 
-    if (Capacitor.getPlatform() == 'android') {
-      const scrollDiv = newMap.element.childNodes[0];
-      if (scrollDiv) {
-        scrollDiv.remove();
-      }
-
-      (options.element as any) = {};
+    if (Capacitor.getPlatform() == 'android') {      
       newMap.initScrolling();
     }
 
-    if (Capacitor.getPlatform() == 'ios') {
-      (options.element as any) = {};
-    }
-
+    (options.element as any) = {};
     await CapacitorGoogleMaps.create(options);
 
     if (callback) {
