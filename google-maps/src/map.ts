@@ -446,7 +446,7 @@ export class GoogleMap {
     callback?: MapListenerCallback,
   ): Promise<void> {
     if (this.onClusterClickListener) {
-      this.onClusterClickListener = undefined;
+      this.onClusterClickListener.remove();
     }
 
     if (callback) {
