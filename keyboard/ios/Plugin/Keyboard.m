@@ -61,12 +61,13 @@ NSString* UITraitsClassString;
   WKClassString = [@[@"WK", @"Content", @"View"] componentsJoinedByString:@""];
   UITraitsClassString = [@[@"UI", @"Text", @"Input", @"Traits"] componentsJoinedByString:@""];
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(statusBarDidChangeFrame:) name:UIApplicationDidChangeStatusBarFrameNotification object: nil];
-    
-  NSString * style = [self getConfigValue:@"style"];
+
+  PluginConfig * config = [self getConfig];
+  NSString * style = [config getString:@"style": nil];
   [self changeKeyboardStyle:style.uppercaseString];
 
   self.keyboardResizes = ResizeNative;
-  NSString * resizeMode = [self getConfigValue:@"resize"];
+  NSString * resizeMode = [config getString:@"resize": nil];
 
   if ([resizeMode isEqualToString:@"none"]) {
     self.keyboardResizes = ResizeNone;
