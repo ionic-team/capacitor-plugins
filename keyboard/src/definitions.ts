@@ -28,7 +28,7 @@ declare module '@capacitor/cli' {
        * @since 1.0.0
        * @example "dark"
        */
-      style?: 'dark' | 'light';
+      style?: KeyboardStyle;
 
       /**
        * There is an Android bug that prevents the keyboard from resizing the WebView
