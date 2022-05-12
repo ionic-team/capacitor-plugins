@@ -5,6 +5,7 @@ import static android.os.Build.VERSION.SDK_INT;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.UserManager;
 import com.getcapacitor.CapConfig;
 import java.util.ArrayList;
@@ -15,7 +16,7 @@ public class LocalNotificationRestoreReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        if (SDK_INT >= 24) {
+        if (SDK_INT >= Build.VERSION_CODES.N) {
             UserManager um = context.getSystemService(UserManager.class);
             if (um == null || !um.isUserUnlocked()) return;
         }
