@@ -58,10 +58,10 @@ public class SplashScreenPlugin: CAPPlugin {
     private func splashScreenConfig() -> SplashScreenConfig {
         var config = SplashScreenConfig()
 
-        if let backgroundColor = getConfig().getString(configKey: "backgroundColor") {
+        if let backgroundColor = getConfig().getString("backgroundColor") {
             config.backgroundColor = UIColor.capacitor.color(fromHex: backgroundColor)
         }
-        if let spinnerStyle = getConfig().getString(configKey: "iosSpinnerStyle") {
+        if let spinnerStyle = getConfig().getString("iosSpinnerStyle") {
             switch spinnerStyle.lowercased() {
             case "small":
                 config.spinnerStyle = .white
@@ -69,13 +69,13 @@ public class SplashScreenPlugin: CAPPlugin {
                 config.spinnerStyle = .whiteLarge
             }
         }
-        if let spinnerColor = getConfig().getString(configKey: "spinnerColor") {
+        if let spinnerColor = getConfig().getString("spinnerColor") {
             config.spinnerColor = UIColor.capacitor.color(fromHex: spinnerColor)
         }
-        config.showSpinner = getConfig().getBoolean(configKey: "showSpinner", defaultValue: config.showSpinner)
+        config.showSpinner = getConfig().getBoolean("showSpinner", config.showSpinner)
 
-        config.launchShowDuration = getConfig().getInt(configKey: "launchShowDuration", defaultValue: config.launchShowDuration)
-        config.launchAutoHide = getConfig().getBoolean(configKey: "launchAutoHide", defaultValue: config.launchAutoHide)
+        config.launchShowDuration = getConfig().getInt("launchShowDuration", config.launchShowDuration)
+        config.launchAutoHide = getConfig().getBoolean("launchAutoHide", config.launchAutoHide)
         return config
     }
 
