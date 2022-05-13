@@ -1,4 +1,4 @@
-import type { PluginListenerHandle } from '@capacitor/core';
+import type { Plugin } from '@capacitor/core';
 import { registerPlugin } from '@capacitor/core';
 
 import type {
@@ -15,6 +15,7 @@ export interface CreateMapArgs {
   config: GoogleMapConfig;
   element: HTMLElement;
   forceCreate?: boolean;
+  devicePixelRatio?: number;
 }
 
 export interface DestroyMapArgs {
@@ -87,7 +88,7 @@ export interface OnScrollArgs {
 
 export type MapListenerCallback = (data: any) => void;
 
-export interface CapacitorGoogleMapsPlugin {
+export interface CapacitorGoogleMapsPlugin extends Plugin {
   create(options: CreateMapArgs): Promise<void>;
   addMarker(args: AddMarkerArgs): Promise<{ id: string }>;
   addMarkers(args: AddMarkersArgs): Promise<{ ids: string[] }>;
@@ -104,61 +105,25 @@ export interface CapacitorGoogleMapsPlugin {
   enableCurrentLocation(args: CurrentLocArgs): Promise<void>;
   setPadding(args: PaddingArgs): Promise<void>;
   onScroll(args: OnScrollArgs): Promise<void>;
-
-  addListener(
-    eventName: 'onCameraIdle',
-    listenerFunc: MapListenerCallback,
-  ): PluginListenerHandle;
-
-  addListener(
-    eventName: 'onCameraMoveStarted',
-    listenerFunc: MapListenerCallback,
-  ): PluginListenerHandle;
-
-  addListener(
-    eventName: 'onClusterClick',
-    listenerFunc: MapListenerCallback,
-  ): PluginListenerHandle;
-
-  addListener(
-    eventName: 'onClusterInfoWindowClick',
-    listenerFunc: MapListenerCallback,
-  ): PluginListenerHandle;
-
-  addListener(
-    eventName: 'onInfoWindowClick',
-    listenerFunc: MapListenerCallback,
-  ): PluginListenerHandle;
-
-  addListener(
-    eventName: 'onMapReady',
-    listenerFunc: MapListenerCallback,
-  ): PluginListenerHandle;
-
-  addListener(
-    eventName: 'onMapClick',
-    listenerFunc: MapListenerCallback,
-  ): PluginListenerHandle;
-
-  addListener(
-    eventName: 'onMarkerClick',
-    listenerFunc: MapListenerCallback,
-  ): PluginListenerHandle;
-
-  addListener(
-    eventName: 'onMyLocationButtonClick',
-    listenerFunc: MapListenerCallback,
-  ): PluginListenerHandle;
-
-  addListener(
-    eventName: 'onMyLocationClick',
-    listenerFunc: MapListenerCallback,
-  ): PluginListenerHandle;
+  dispatchMapEvent(args: { id: string; focus: boolean }): Promise<void>;
 }
 
-export const CapacitorGoogleMaps = registerPlugin<CapacitorGoogleMapsPlugin>(
+const CapacitorGoogleMaps = registerPlugin<CapacitorGoogleMapsPlugin>(
   'CapacitorGoogleMaps',
   {
     web: () => import('./web').then(m => new m.CapacitorGoogleMapsWeb()),
   },
 );
+
+CapacitorGoogleMaps.addListener('isMapInFocus', data => {
+  const x = data.x;
+  const y = data.y;
+
+  const elem = document.elementFromPoint(x, y) as HTMLElement | null;
+  const internalId = elem?.dataset?.internalId;
+  const mapInFocus = internalId === data.mapId;
+
+  CapacitorGoogleMaps.dispatchMapEvent({ id: data.mapId, focus: mapInFocus });
+});
+
+export { CapacitorGoogleMaps };

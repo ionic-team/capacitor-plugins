@@ -601,13 +601,14 @@ setOnMyLocationClickListener(callback?: MapListenerCallback | undefined) => Prom
 
 #### CreateMapArgs
 
-| Prop              | Type                                                        |
-| ----------------- | ----------------------------------------------------------- |
-| **`id`**          | <code>string</code>                                         |
-| **`apiKey`**      | <code>string</code>                                         |
-| **`config`**      | <code><a href="#googlemapconfig">GoogleMapConfig</a></code> |
-| **`element`**     | <code>HTMLElement</code>                                    |
-| **`forceCreate`** | <code>boolean</code>                                        |
+| Prop                   | Type                                                        |
+| ---------------------- | ----------------------------------------------------------- |
+| **`id`**               | <code>string</code>                                         |
+| **`apiKey`**           | <code>string</code>                                         |
+| **`config`**           | <code><a href="#googlemapconfig">GoogleMapConfig</a></code> |
+| **`element`**          | <code>HTMLElement</code>                                    |
+| **`forceCreate`**      | <code>boolean</code>                                        |
+| **`devicePixelRatio`** | <code>number</code>                                         |
 
 
 #### GoogleMapConfig

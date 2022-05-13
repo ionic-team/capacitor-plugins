@@ -45,13 +45,17 @@ class MapCustomElement extends HTMLElement {
   }
 
   connectedCallback() {
-    this.style.overflow = 'scroll';
-    (this.style as any)['-webkit-overflow-scrolling'] = 'touch';
+    console.log(Capacitor.getPlatform());
 
-    const overflowDiv = document.createElement('div');
-    overflowDiv.style.height = '200%';
+    if (Capacitor.getPlatform() == 'ios') {
+      this.style.overflow = 'scroll';
+      (this.style as any)['-webkit-overflow-scrolling'] = 'touch';
 
-    this.appendChild(overflowDiv);
+      const overflowDiv = document.createElement('div');
+      overflowDiv.style.height = '200%';
+
+      this.appendChild(overflowDiv);
+    }
   }
 }
 
@@ -105,22 +109,20 @@ export class GoogleMap {
     }
 
     newMap.element = options.element;
+    newMap.element.dataset.internalId = options.id;
 
     const elementBounds = options.element.getBoundingClientRect();
     options.config.width = elementBounds.width;
     options.config.height = elementBounds.height;
     options.config.x = elementBounds.x;
     options.config.y = elementBounds.y;
+    options.devicePixelRatio = window.devicePixelRatio;
 
     if (Capacitor.getPlatform() == 'android') {
-      (options.element as any) = {};
       newMap.initScrolling();
     }
 
-    if (Capacitor.getPlatform() == 'ios') {
-      (options.element as any) = {};
-    }
-
+    (options.element as any) = {};
     await CapacitorGoogleMaps.create(options);
 
     if (callback) {
@@ -402,7 +404,7 @@ export class GoogleMap {
     }
 
     if (callback) {
-      this.onCameraIdleListener = CapacitorGoogleMaps.addListener(
+      this.onCameraIdleListener = await CapacitorGoogleMaps.addListener(
         'onCameraIdle',
         this.generateCallback(callback),
       );
@@ -425,7 +427,7 @@ export class GoogleMap {
     }
 
     if (callback) {
-      this.onCameraMoveStartedListener = CapacitorGoogleMaps.addListener(
+      this.onCameraMoveStartedListener = await CapacitorGoogleMaps.addListener(
         'onCameraMoveStarted',
         this.generateCallback(callback),
       );
@@ -448,7 +450,7 @@ export class GoogleMap {
     }
 
     if (callback) {
-      this.onClusterClickListener = CapacitorGoogleMaps.addListener(
+      this.onClusterClickListener = await CapacitorGoogleMaps.addListener(
         'onClusterClick',
         this.generateCallback(callback),
       );
@@ -471,10 +473,11 @@ export class GoogleMap {
     }
 
     if (callback) {
-      this.onClusterInfoWindowClickListener = CapacitorGoogleMaps.addListener(
-        'onClusterInfoWindowClick',
-        this.generateCallback(callback),
-      );
+      this.onClusterInfoWindowClickListener =
+        await CapacitorGoogleMaps.addListener(
+          'onClusterInfoWindowClick',
+          this.generateCallback(callback),
+        );
     } else {
       this.onClusterInfoWindowClickListener = undefined;
     }
@@ -494,7 +497,7 @@ export class GoogleMap {
     }
 
     if (callback) {
-      this.onInfoWindowClickListener = CapacitorGoogleMaps.addListener(
+      this.onInfoWindowClickListener = await CapacitorGoogleMaps.addListener(
         'onInfoWindowClick',
         this.generateCallback(callback),
       );
@@ -515,7 +518,7 @@ export class GoogleMap {
     }
 
     if (callback) {
-      this.onMapClickListener = CapacitorGoogleMaps.addListener(
+      this.onMapClickListener = await CapacitorGoogleMaps.addListener(
         'onMapClick',
         this.generateCallback(callback),
       );
@@ -538,7 +541,7 @@ export class GoogleMap {
     }
 
     if (callback) {
-      this.onMarkerClickListener = CapacitorGoogleMaps.addListener(
+      this.onMarkerClickListener = await CapacitorGoogleMaps.addListener(
         'onMarkerClick',
         this.generateCallback(callback),
       );
@@ -561,10 +564,11 @@ export class GoogleMap {
     }
 
     if (callback) {
-      this.onMyLocationButtonClickListener = CapacitorGoogleMaps.addListener(
-        'onMyLocationButtonClick',
-        this.generateCallback(callback),
-      );
+      this.onMyLocationButtonClickListener =
+        await CapacitorGoogleMaps.addListener(
+          'onMyLocationButtonClick',
+          this.generateCallback(callback),
+        );
     } else {
       this.onMyLocationButtonClickListener = undefined;
     }
@@ -584,7 +588,7 @@ export class GoogleMap {
     }
 
     if (callback) {
-      this.onMyLocationClickListener = CapacitorGoogleMaps.addListener(
+      this.onMyLocationClickListener = await CapacitorGoogleMaps.addListener(
         'onMyLocationClick',
         this.generateCallback(callback),
       );
@@ -636,12 +640,12 @@ export class GoogleMap {
 
     if (this.onMyLocationButtonClickListener) {
       this.onMyLocationButtonClickListener.remove();
-      this.onMyLocationClickListener = undefined;
+      this.onMyLocationButtonClickListener = undefined;
     }
 
     if (this.onMyLocationClickListener) {
       this.onMyLocationClickListener.remove();
-      this.onMyLocationButtonClickListener = undefined;
+      this.onMyLocationClickListener = undefined;
     }
   }
 

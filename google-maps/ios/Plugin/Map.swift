@@ -97,8 +97,7 @@ public class Map {
                         let isWidthEqual = Double(item.bounds.width) == self.config.width
                         let isHeightEqual = Double(item.bounds.height) == self.config.height
 
-                        if (isWidthEqual && isHeightEqual && (item as? UIView)?.tag == 0)
-                        {
+                        if isWidthEqual && isHeightEqual && (item as? UIView)?.tag == 0 {
                             self.targetViewController = item
                             break
                         }
