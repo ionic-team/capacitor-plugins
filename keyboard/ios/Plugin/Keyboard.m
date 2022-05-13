@@ -202,11 +202,9 @@ NSString* UITraitsClassString;
   }
   CGRect f, wf = CGRectZero;
   UIWindow * window = [[[UIApplication sharedApplication] delegate] window];
-  if (!window) {
-    if (@available(iOS 13.0, *)) {
-      UIScene *scene = [UIApplication sharedApplication].connectedScenes.allObjects.firstObject;
-      window = [[(UIWindowScene*)scene windows] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"isKeyWindow == YES"]].firstObject;
-    }
+  if (!window) {    
+    UIScene *scene = [UIApplication sharedApplication].connectedScenes.allObjects.firstObject;
+    window = [[(UIWindowScene*)scene windows] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"isKeyWindow == YES"]].firstObject;
   }
   if (window) {
     f = [window bounds];
