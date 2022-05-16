@@ -15,8 +15,8 @@ import com.getcapacitor.JSArray
 import com.getcapacitor.JSObject
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.GoogleMap.*
+import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
@@ -67,8 +67,6 @@ class CapacitorGoogleMap(
 
                         isReadyChannel.receive()
 
-                        this@CapacitorGoogleMap.mapView = mapView
-
                         render()
                     }
 
@@ -100,7 +98,7 @@ class CapacitorGoogleMap(
                 ((bridge.webView.parent) as ViewGroup).addView(mapViewParent)
 
                 bridge.webView.bringToFront()
-                bridge.webView.setBackgroundColor(Color.TRANSPARENT);
+                bridge.webView.setBackgroundColor(Color.TRANSPARENT)
             }
         }
     }
@@ -134,7 +132,10 @@ class CapacitorGoogleMap(
 
     fun bringToFront() {
         CoroutineScope(Dispatchers.Main).launch {
-            val mapViewParent = ((delegate.bridge.webView.parent) as ViewGroup).findViewWithTag<ViewGroup>(this@CapacitorGoogleMap.id)
+            val mapViewParent =
+                    ((delegate.bridge.webView.parent) as ViewGroup).findViewWithTag<ViewGroup>(
+                            this@CapacitorGoogleMap.id
+                    )
             mapViewParent.bringToFront()
         }
     }
@@ -394,17 +395,17 @@ class CapacitorGoogleMap(
             CoroutineScope(Dispatchers.Main).launch {
                 val mapTypeInt: Int =
                         when (mapType) {
-                            "Normal" -> GoogleMap.MAP_TYPE_NORMAL
-                            "Hybrid" -> GoogleMap.MAP_TYPE_HYBRID
-                            "Satellite" -> GoogleMap.MAP_TYPE_SATELLITE
-                            "Terrain" -> GoogleMap.MAP_TYPE_TERRAIN
-                            "None" -> GoogleMap.MAP_TYPE_NONE
+                            "Normal" -> MAP_TYPE_NORMAL
+                            "Hybrid" -> MAP_TYPE_HYBRID
+                            "Satellite" -> MAP_TYPE_SATELLITE
+                            "Terrain" -> MAP_TYPE_TERRAIN
+                            "None" -> MAP_TYPE_NONE
                             else -> {
                                 Log.w(
                                         "CapacitorGoogleMaps",
                                         "unknown mapView type '$mapType'  Defaulting to normal."
                                 )
-                                GoogleMap.MAP_TYPE_NORMAL
+                                MAP_TYPE_NORMAL
                             }
                         }
 
@@ -467,10 +468,10 @@ class CapacitorGoogleMap(
 
     fun getMapBounds(): Rect {
         return Rect(
-                getScaledPixels(delegate.bridge, config.x).toInt(),
-                getScaledPixels(delegate.bridge, config.y).toInt(),
-                getScaledPixels(delegate.bridge, config.x + config.width).toInt(),
-                getScaledPixels(delegate.bridge, config.y + config.height).toInt()
+                getScaledPixels(delegate.bridge, config.x),
+                getScaledPixels(delegate.bridge, config.y),
+                getScaledPixels(delegate.bridge, config.x + config.width),
+                getScaledPixels(delegate.bridge, config.y + config.height)
         )
     }
 
@@ -490,10 +491,10 @@ class CapacitorGoogleMap(
 
     private fun getScaledRect(bridge: Bridge, rectF: RectF): RectF {
         return RectF(
-            getScaledPixelsF(bridge, rectF.left),
-            getScaledPixelsF(bridge, rectF.top),
-            getScaledPixelsF(bridge, rectF.right),
-            getScaledPixelsF(bridge, rectF.bottom)
+                getScaledPixelsF(bridge, rectF.left),
+                getScaledPixelsF(bridge, rectF.top),
+                getScaledPixelsF(bridge, rectF.right),
+                getScaledPixelsF(bridge, rectF.bottom)
         )
     }
 

@@ -108,17 +108,8 @@ export class GoogleMap {
 
   /**
    * Creates a new instance of a Google Map
-   *
-   * @param element
-   * DOM element that will contain the map view and determine sizing / positioning
-   * @param id Unique id for the map instance
-   * @param apiKey
-   * Google Maps SDK API Key
-   * @param config
-   * Initial configuration settings for the map
-   * @param forceCreate
-   * If a map already exists with the supplied id, automatically destroy and re-create the map instance
-   *
+   * @param options
+   * @param callback
    * @returns GoogleMap
    */
   public static async create(
@@ -143,7 +134,7 @@ export class GoogleMap {
     options.config.height = elementBounds.height;
     options.config.x = elementBounds.x;
     options.config.y = elementBounds.y;
-    options.devicePixelRatio = window.devicePixelRatio;
+    options.config.devicePixelRatio = window.devicePixelRatio;
 
     if (Capacitor.getPlatform() == 'android') {
       newMap.initScrolling();
