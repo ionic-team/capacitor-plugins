@@ -86,8 +86,6 @@ export interface OnScrollArgs {
   };
 }
 
-export type MapListenerCallback = (data: any) => void;
-
 export interface CapacitorGoogleMapsPlugin extends Plugin {
   create(options: CreateMapArgs): Promise<void>;
   addMarker(args: AddMarkerArgs): Promise<{ id: string }>;

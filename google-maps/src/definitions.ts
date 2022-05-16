@@ -160,3 +160,53 @@ export interface Marker {
    */
   draggable?: boolean;
 }
+
+export type MapListenerCallback<T> = (data: T) => void;
+
+export interface MapReadyCallbackData {
+  mapId: string;
+}
+
+export interface MarkerCallbackData {
+  markerId: string;
+  latitude: number;
+  longitude: number;
+  title: string;
+  snippet: string;
+}
+
+export interface CameraIdleCallbackData {
+  mapId: string;
+  bearing: number;
+  latitude: number;
+  longitude: number;
+  tilt: number;
+  zoom: number;
+}
+
+export interface CameraMoveStartedCallbackData {
+  mapId: string;
+  isGesture: boolean;
+}
+
+export interface ClusterClickCallbackData {
+  mapId: string;
+  latitude: number;
+  longitude: number;
+  size: number;
+  items: MarkerCallbackData[];
+}
+
+export interface MapClickCallbackData {
+  mapId: string;
+  latitude: number;
+  longitude: number;
+}
+
+export interface MarkerClickCallbackData extends MarkerCallbackData {
+  mapId: string;
+}
+
+export interface MyLocationButtonClickCallbackData {
+  mapId: string;
+}
