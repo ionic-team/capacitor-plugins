@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/share@1.1.1...@capacitor/share@1.1.2) (2022-03-03)
+
+
+### Bug Fixes
+
+* **share:** correct whatsapp file sharing ([#816](https://github.com/ionic-team/capacitor-plugins/issues/816)) ([18b10c4](https://github.com/ionic-team/capacitor-plugins/commit/18b10c493e26a6b62031c3bfb57e1ffbbf926c41))
+
+
+
+
+
 ## [1.1.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/share@1.1.0...@capacitor/share@1.1.1) (2022-01-19)
 
 
