@@ -64,9 +64,9 @@ public class SplashScreenPlugin: CAPPlugin {
         if let spinnerStyle = getConfig().getString("iosSpinnerStyle") {
             switch spinnerStyle.lowercased() {
             case "small":
-                config.spinnerStyle = .white
+                config.spinnerStyle = .medium
             default:
-                config.spinnerStyle = .whiteLarge
+                config.spinnerStyle = .large
             }
         }
         if let spinnerColor = getConfig().getString("spinnerColor") {
