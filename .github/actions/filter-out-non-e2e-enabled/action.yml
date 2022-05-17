@@ -1,0 +1,12 @@
+name: Filter Out Non-E2E Enabled Packages
+description: Action for filtering out packages that dont have E2E Tests
+inputs:
+  paths:
+    description: An array of package paths
+    required: true
+outputs:
+  e2e-paths:
+    description: An array of relative paths to packages that have e2e
+runs:
+  using: node16
+  main: main.js
