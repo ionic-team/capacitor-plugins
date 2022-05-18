@@ -18,19 +18,19 @@ export interface LatLng {
  */
 export interface GoogleMapConfig {
   /**
-   * Override width for native map
+   * Override width for native map.
    */
   width?: number;
   /**
-   * Override height for native map
+   * Override height for native map.
    */
   height?: number;
   /**
-   * Override absolute x coordinate position for native map
+   * Override absolute x coordinate position for native map.
    */
   x?: number;
   /**
-   * Override absolute y coordinate position for native map
+   * Override absolute y coordinate position for native map.
    */
   y?: number;
   /**
@@ -47,6 +47,10 @@ export interface GoogleMapConfig {
    * @default false
    */
   androidLiteMode?: boolean;
+  /**
+   * Override pixel ratio for native map.
+   */
+  devicePixelRatio?: number;
 }
 
 /**
@@ -159,4 +163,57 @@ export interface Marker {
    * @default false
    */
   draggable?: boolean;
+}
+
+/**
+ * The callback function to be called when map events are emitted.
+ */
+export type MapListenerCallback<T> = (data: T) => void;
+
+export interface MapReadyCallbackData {
+  mapId: string;
+}
+
+export interface MarkerCallbackData {
+  markerId: string;
+  latitude: number;
+  longitude: number;
+  title: string;
+  snippet: string;
+}
+
+export interface CameraIdleCallbackData {
+  mapId: string;
+  bearing: number;
+  latitude: number;
+  longitude: number;
+  tilt: number;
+  zoom: number;
+}
+
+export interface CameraMoveStartedCallbackData {
+  mapId: string;
+  isGesture: boolean;
+}
+
+export interface ClusterClickCallbackData {
+  mapId: string;
+  latitude: number;
+  longitude: number;
+  size: number;
+  items: MarkerCallbackData[];
+}
+
+export interface MapClickCallbackData {
+  mapId: string;
+  latitude: number;
+  longitude: number;
+}
+
+export interface MarkerClickCallbackData extends MarkerCallbackData {
+  mapId: string;
+}
+
+export interface MyLocationButtonClickCallbackData {
+  mapId: string;
 }
