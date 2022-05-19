@@ -4,10 +4,10 @@ buildscript {
     
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.1.0'
+        classpath 'com.android.tools.build:gradle:7.1.1'
         classpath 'com.google.gms:google-services:4.3.5'
         classpath "com.google.android.libraries.mapsplatform.secrets-gradle-plugin:secrets-gradle-plugin:2.0.0"
         // NOTE: Do not place your application dependencies here; they belong
@@ -20,7 +20,7 @@ apply from: "variables.gradle"
 allprojects {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
 }
 
