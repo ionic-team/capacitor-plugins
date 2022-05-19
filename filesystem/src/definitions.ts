@@ -49,6 +49,17 @@ export enum Directory {
   Cache = 'CACHE',
 
   /**
+   * The Temp directory
+   * On iOS it will use the Temp directory.
+   * On Android it will use the Cache directory.
+   * Can be deleted in cases of low memory, so use this directory to write app-specific files
+   * that your app can re-create easily.
+   *
+   * @since 1.1.1
+   */
+  Temp = 'TEMP',
+
+  /**
    * The external directory
    * On iOS it will use the Documents directory
    * On Android it's the directory on the primary shared/external
