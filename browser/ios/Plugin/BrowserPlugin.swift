@@ -50,7 +50,7 @@ public class CAPBrowserPlugin: CAPPlugin {
     }
 
     private func presentationStyle(for style: String?) -> UIModalPresentationStyle {
-        if let style = style, style == "popover", supportsPopover() {
+        if let style = style, style == "popover" {
             return .popover
         }
         return .fullScreen
