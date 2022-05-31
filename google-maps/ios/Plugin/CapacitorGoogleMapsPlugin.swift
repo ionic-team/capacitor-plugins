@@ -452,6 +452,50 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
     @objc func onScroll(_ call: CAPPluginCall) {
         call.unavailable("not supported on iOS")
     }
+    
+    @objc func getBounds(_ call: CAPPluginCall) {
+        do {
+            guard let id = call.getString("id") else {
+                throw GoogleMapErrors.invalidMapId
+            }
+
+            guard let map = self.maps[id] else {
+                throw GoogleMapErrors.mapNotFound
+            }
+
+            guard let bounds = map.getMapLatLngBounds() else {
+                throw GoogleMapErrors.unhandledError("Google Map Bounds could not be found.")
+            }
+            
+            call.resolve(
+                formatMapBoundsForResponse(
+                    bounds: bounds,
+                    cameraPosition: map.mapViewController.GMapView.camera
+                )
+            )
+        } catch {
+            handleError(call, error: error)
+        }
+    }
+
+    private func formatMapBoundsForResponse(bounds: GMSCoordinateBounds?, cameraPosition: GMSCameraPosition) -> PluginCallResultData {
+        return [
+            "bounds": [
+                "southwest": [
+                    "latitude": bounds?.southWest.latitude,
+                    "longitude": bounds?.southWest.longitude,
+                ],
+                "center": [
+                    "latitude": cameraPosition.target.latitude,
+                    "longitude": cameraPosition.target.longitude,
+                ],
+                "northeast": [
+                    "latitude": bounds?.northEast.latitude,
+                    "longitude": bounds?.northEast.longitude,
+                ],
+            ]
+        ]
+    }
 
     private func handleError(_ call: CAPPluginCall, error: Error) {
         let errObject = getErrorObject(error)
@@ -471,14 +515,25 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
 
     // onCameraIdle
     public func mapView(_ mapView: GMSMapView, idleAt cameraPosition: GMSCameraPosition) {
-        self.notifyListeners("onCameraIdle", data: [
-            "mapId": self.findMapIdByMapView(mapView),
+        let mapId = self.findMapIdByMapView(mapView)
+        let map = self.maps[mapId]
+        let bounds = map?.getMapLatLngBounds()
+        
+        let data: PluginCallResultData = [
+            "mapId": mapId,
+            "bounds": formatMapBoundsForResponse(
+                bounds: bounds,
+                cameraPosition: cameraPosition
+            ),
             "bearing": cameraPosition.bearing,
             "latitude": cameraPosition.target.latitude,
             "longitude": cameraPosition.target.longitude,
             "tilt": cameraPosition.viewingAngle,
             "zoom": cameraPosition.zoom
-        ])
+        ]
+        
+        self.notifyListeners("onBoundsChanged", data: data)
+        self.notifyListeners("onCameraIdle", data: data)
     }
 
     // onCameraMoveStarted

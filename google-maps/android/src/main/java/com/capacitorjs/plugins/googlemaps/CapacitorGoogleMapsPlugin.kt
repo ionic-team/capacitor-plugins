@@ -556,7 +556,7 @@ class CapacitorGoogleMapsPlugin : Plugin() {
     }
 
     @PluginMethod
-    fun getBounds(call: PluginCall) {
+    fun getMapBounds(call: PluginCall) {
         try {
             val id = call.getString("id")
             id ?: throw InvalidMapIdError()

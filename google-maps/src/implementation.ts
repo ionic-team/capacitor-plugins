@@ -4,6 +4,7 @@ import { registerPlugin } from '@capacitor/core';
 import type {
   CameraConfig,
   GoogleMapConfig,
+  LatLngBounds,
   MapPadding,
   MapType,
   Marker,
@@ -102,21 +103,6 @@ export interface OnScrollArgs {
     width: number;
     height: number;
   };
-}
-
-export interface LatLngBounds {
-  southwest: {
-    latitude: number;
-    longitude: number;
-  },
-  center: {
-    latitude: number;
-    longitude: number;
-  },
-  northeast: {
-    latitude: number;
-    longitude: number;
-  },
 }
 
 export interface CapacitorGoogleMapsPlugin extends Plugin {

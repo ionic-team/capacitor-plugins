@@ -5,6 +5,7 @@ import type {
 } from '@googlemaps/markerclusterer';
 import { MarkerClusterer } from '@googlemaps/markerclusterer';
 
+import type { LatLngBounds } from './definitions';
 import type {
   AccElementsArgs,
   AddMarkerArgs,
@@ -21,7 +22,6 @@ import type {
   TrafficLayerArgs,
   RemoveMarkersArgs,
   OnScrollArgs,
-  LatLngBounds,
 } from './implementation';
 
 export class CapacitorGoogleMapsWeb

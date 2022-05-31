@@ -1,4 +1,22 @@
 /**
+ * An interface representing the viewports latitude and longitude bounds.
+ */
+export interface LatLngBounds {
+  southwest: {
+    latitude: number;
+    longitude: number;
+  },
+  center: {
+    latitude: number;
+    longitude: number;
+  },
+  northeast: {
+    latitude: number;
+    longitude: number;
+  },
+}
+
+/**
  * An interface representing a pair of latitude and longitude coordinates.
  */
 export interface LatLng {
@@ -184,6 +202,7 @@ export interface MarkerCallbackData {
 
 export interface CameraIdleCallbackData {
   mapId: string;
+  bounds: LatLngBounds;
   bearing: number;
   latitude: number;
   longitude: number;

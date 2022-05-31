@@ -14,8 +14,9 @@ import type {
   MapClickCallbackData,
   MarkerClickCallbackData,
   MyLocationButtonClickCallbackData,
+  LatLngBounds,
 } from './definitions';
-import type { CreateMapArgs, LatLngBounds } from './implementation';
+import type { CreateMapArgs } from './implementation';
 import { CapacitorGoogleMaps } from './implementation';
 
 export interface GoogleMapInterface {

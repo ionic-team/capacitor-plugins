@@ -349,6 +349,10 @@ public class Map {
             }
         }
     }
+    
+    func getMapLatLngBounds() -> GMSCoordinateBounds? {
+        return self.mapViewController.GMapView.cameraTargetBounds
+    }
 
     private func getFrameOverflowBounds(frame: CGRect, mapBounds: CGRect) -> [CGRect] {
         var intersections: [CGRect] = []
