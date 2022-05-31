@@ -9,33 +9,6 @@ import type {
   Marker,
 } from './definitions';
 
-<<<<<<< HEAD
-/**
- * An interface containing the options used when creating a map.
- */
-export interface CreateMapArgs {
-  /**
-   * A unique identifier for the map instance.
-   */
-  id: string;
-  /**
-   * The Google Maps SDK API Key.
-   */
-  apiKey: string;
-  /**
-   * The initial configuration settings for the map.
-   */
-  config: GoogleMapConfig;
-  /**
-   * The DOM element that the Google Map View will be mounted on which determines size and positioning.
-   */
-  element: HTMLElement;
-  /**
-   * Destroy and re-create the map instance if a map with the supplied id already exists
-   * @default false
-   */
-  forceCreate?: boolean;
-=======
 export interface CreateMapArgs {
   id: string;
   apiKey: string;
@@ -43,7 +16,6 @@ export interface CreateMapArgs {
   element: HTMLElement;
   forceCreate?: boolean;
   devicePixelRatio?: number;
->>>>>>> capacitor-4
 }
 
 export interface DestroyMapArgs {
@@ -114,11 +86,8 @@ export interface OnScrollArgs {
   };
 }
 
-<<<<<<< HEAD
-=======
 export type MapListenerCallback = (data: any) => void;
 
->>>>>>> capacitor-4
 export interface CapacitorGoogleMapsPlugin extends Plugin {
   create(options: CreateMapArgs): Promise<void>;
   addMarker(args: AddMarkerArgs): Promise<{ id: string }>;

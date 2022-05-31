@@ -17,10 +17,6 @@ allprojects {
     repositories {
         google()
         mavenCentral()
-<<<<<<< HEAD
-        jcenter() // Warning: this repository is going to shut down soon
-=======
->>>>>>> capacitor-4
     }
 }
 

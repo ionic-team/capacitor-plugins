@@ -14,49 +14,6 @@ class GoogleMapConfig(fromJSONObject: JSONObject) {
     var googleMapOptions: GoogleMapOptions? = null
     var zoom: Int = 0
     var liteMode: Boolean = false
-<<<<<<< HEAD
-    var devicePixelRatio: Float = 1.00f
-
-    init {
-        if (!fromJSONObject.has("width")) {
-            throw InvalidArgumentsError(
-                    "GoogleMapConfig object is missing the required 'width' property"
-            )
-        }
-
-        if (!fromJSONObject.has("height")) {
-            throw InvalidArgumentsError(
-                    "GoogleMapConfig object is missing the required 'height' property"
-            )
-        }
-
-        if (!fromJSONObject.has("x")) {
-            throw InvalidArgumentsError(
-                    "GoogleMapConfig object is missing the required 'x' property"
-            )
-        }
-
-        if (!fromJSONObject.has("y")) {
-            throw InvalidArgumentsError(
-                    "GoogleMapConfig object is missing the required 'y' property"
-            )
-        }
-
-        if (!fromJSONObject.has("zoom")) {
-            throw InvalidArgumentsError(
-                    "GoogleMapConfig object is missing the required 'zoom' property"
-            )
-        }
-
-        if (fromJSONObject.has("devicePixelRatio")) {
-            devicePixelRatio = fromJSONObject.getDouble("devicePixelRatio").toFloat()
-        }
-
-        if (!fromJSONObject.has("center")) {
-            throw InvalidArgumentsError(
-                    "GoogleMapConfig object is missing the required 'center' property"
-            )
-=======
 
     init {
         if(!fromJSONObject.has("width")) {
@@ -81,29 +38,16 @@ class GoogleMapConfig(fromJSONObject: JSONObject) {
 
         if(!fromJSONObject.has("center")) {
             throw InvalidArgumentsError("GoogleMapConfig object is missing the required 'center' property")
->>>>>>> capacitor-4
         }
 
         val centerJSONObject = fromJSONObject.getJSONObject("center")
 
-<<<<<<< HEAD
-        if (!centerJSONObject.has("lat") || !centerJSONObject.has("lng")) {
-            throw InvalidArgumentsError(
-                    "LatLng object is missing the required 'lat' and/or 'lng' property"
-            )
-        }
-
-        liteMode =
-                fromJSONObject.has("androidLiteMode") &&
-                        fromJSONObject.getBoolean("androidLiteMode")
-=======
         if(!centerJSONObject.has("lat") || !centerJSONObject.has("lng")) {
             throw InvalidArgumentsError("LatLng object is missing the required 'lat' and/or 'lng' property")
         }
 
         liteMode = fromJSONObject.has("androidLiteMode")
                 && fromJSONObject.getBoolean("androidLiteMode")
->>>>>>> capacitor-4
 
         width = fromJSONObject.getInt("width")
         height = fromJSONObject.getInt("height")
@@ -118,8 +62,4 @@ class GoogleMapConfig(fromJSONObject: JSONObject) {
         val cameraPosition = CameraPosition(center, zoom.toFloat(), 0.0F, 0.0F)
         googleMapOptions = GoogleMapOptions().camera(cameraPosition).liteMode(liteMode)
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> capacitor-4

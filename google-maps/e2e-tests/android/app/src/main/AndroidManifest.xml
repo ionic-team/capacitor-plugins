@@ -15,12 +15,8 @@
             android:name="io.ionic.starter.MainActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBarLaunch"
-<<<<<<< HEAD
-            android:launchMode="singleTask">
-=======
             android:launchMode="singleTask"
             android:exported="true">
->>>>>>> capacitor-4
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

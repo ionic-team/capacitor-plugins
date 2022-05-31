@@ -1,13 +1,7 @@
 ext {
-<<<<<<< HEAD
-    minSdkVersion = 21
-    compileSdkVersion = 30
-    targetSdkVersion = 30
-=======
     minSdkVersion = 22
     compileSdkVersion = 32
     targetSdkVersion = 32
->>>>>>> capacitor-4
     androidxActivityVersion = '1.2.0'
     androidxAppCompatVersion = '1.2.0'
     androidxCoordinatorLayoutVersion = '1.1.0'
@@ -16,9 +10,5 @@ ext {
     junitVersion = '4.13.1'
     androidxJunitVersion = '1.1.2'
     androidxEspressoCoreVersion = '3.3.0'
-<<<<<<< HEAD
-    cordovaAndroidVersion = '7.0.0'
-=======
     cordovaAndroidVersion = '10.1.1'
->>>>>>> capacitor-4
 }

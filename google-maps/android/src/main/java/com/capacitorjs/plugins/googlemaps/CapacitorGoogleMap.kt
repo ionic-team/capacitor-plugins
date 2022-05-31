@@ -15,13 +15,8 @@ import com.getcapacitor.JSArray
 import com.getcapacitor.JSObject
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
-<<<<<<< HEAD
-import com.google.android.gms.maps.GoogleMap.*
-import com.google.android.gms.maps.MapView
-=======
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.GoogleMap.*
->>>>>>> capacitor-4
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
@@ -72,11 +67,8 @@ class CapacitorGoogleMap(
 
                         isReadyChannel.receive()
 
-<<<<<<< HEAD
-=======
                         this@CapacitorGoogleMap.mapView = mapView
 
->>>>>>> capacitor-4
                         render()
                     }
 
@@ -108,11 +100,7 @@ class CapacitorGoogleMap(
                 ((bridge.webView.parent) as ViewGroup).addView(mapViewParent)
 
                 bridge.webView.bringToFront()
-<<<<<<< HEAD
-                bridge.webView.setBackgroundColor(Color.TRANSPARENT)
-=======
                 bridge.webView.setBackgroundColor(Color.TRANSPARENT);
->>>>>>> capacitor-4
             }
         }
     }
@@ -146,14 +134,7 @@ class CapacitorGoogleMap(
 
     fun bringToFront() {
         CoroutineScope(Dispatchers.Main).launch {
-<<<<<<< HEAD
-            val mapViewParent =
-                    ((delegate.bridge.webView.parent) as ViewGroup).findViewWithTag<ViewGroup>(
-                            this@CapacitorGoogleMap.id
-                    )
-=======
             val mapViewParent = ((delegate.bridge.webView.parent) as ViewGroup).findViewWithTag<ViewGroup>(this@CapacitorGoogleMap.id)
->>>>>>> capacitor-4
             mapViewParent.bringToFront()
         }
     }
@@ -413,29 +394,17 @@ class CapacitorGoogleMap(
             CoroutineScope(Dispatchers.Main).launch {
                 val mapTypeInt: Int =
                         when (mapType) {
-<<<<<<< HEAD
-                            "Normal" -> MAP_TYPE_NORMAL
-                            "Hybrid" -> MAP_TYPE_HYBRID
-                            "Satellite" -> MAP_TYPE_SATELLITE
-                            "Terrain" -> MAP_TYPE_TERRAIN
-                            "None" -> MAP_TYPE_NONE
-=======
                             "Normal" -> GoogleMap.MAP_TYPE_NORMAL
                             "Hybrid" -> GoogleMap.MAP_TYPE_HYBRID
                             "Satellite" -> GoogleMap.MAP_TYPE_SATELLITE
                             "Terrain" -> GoogleMap.MAP_TYPE_TERRAIN
                             "None" -> GoogleMap.MAP_TYPE_NONE
->>>>>>> capacitor-4
                             else -> {
                                 Log.w(
                                         "CapacitorGoogleMaps",
                                         "unknown mapView type '$mapType'  Defaulting to normal."
                                 )
-<<<<<<< HEAD
-                                MAP_TYPE_NORMAL
-=======
                                 GoogleMap.MAP_TYPE_NORMAL
->>>>>>> capacitor-4
                             }
                         }
 
@@ -498,17 +467,10 @@ class CapacitorGoogleMap(
 
     fun getMapBounds(): Rect {
         return Rect(
-<<<<<<< HEAD
-                getScaledPixels(delegate.bridge, config.x),
-                getScaledPixels(delegate.bridge, config.y),
-                getScaledPixels(delegate.bridge, config.x + config.width),
-                getScaledPixels(delegate.bridge, config.y + config.height)
-=======
                 getScaledPixels(delegate.bridge, config.x).toInt(),
                 getScaledPixels(delegate.bridge, config.y).toInt(),
                 getScaledPixels(delegate.bridge, config.x + config.width).toInt(),
                 getScaledPixels(delegate.bridge, config.y + config.height).toInt()
->>>>>>> capacitor-4
         )
     }
 
@@ -528,17 +490,10 @@ class CapacitorGoogleMap(
 
     private fun getScaledRect(bridge: Bridge, rectF: RectF): RectF {
         return RectF(
-<<<<<<< HEAD
-                getScaledPixelsF(bridge, rectF.left),
-                getScaledPixelsF(bridge, rectF.top),
-                getScaledPixelsF(bridge, rectF.right),
-                getScaledPixelsF(bridge, rectF.bottom)
-=======
             getScaledPixelsF(bridge, rectF.left),
             getScaledPixelsF(bridge, rectF.top),
             getScaledPixelsF(bridge, rectF.right),
             getScaledPixelsF(bridge, rectF.bottom)
->>>>>>> capacitor-4
         )
     }
 
