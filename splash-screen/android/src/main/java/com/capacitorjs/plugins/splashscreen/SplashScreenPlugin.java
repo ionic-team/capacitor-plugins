@@ -90,15 +90,15 @@ public class SplashScreenPlugin extends Plugin {
         }
         Integer duration = getConfig().getInt("launchShowDuration", config.getLaunchShowDuration());
         config.setLaunchShowDuration(duration);
-        boolean autohide = getConfig().getBoolean("launchAutoHide", config.isLaunchAutoHide());
+        Boolean autohide = getConfig().getBoolean("launchAutoHide", config.isLaunchAutoHide());
         config.setLaunchAutoHide(autohide);
         if (getConfig().getString("androidSplashResourceName") != null) {
             config.setResourceName(getConfig().getString("androidSplashResourceName"));
         }
-        boolean immersive = getConfig().getBoolean("splashImmersive", config.isImmersive());
+        Boolean immersive = getConfig().getBoolean("splashImmersive", config.isImmersive());
         config.setImmersive(immersive);
 
-        boolean fullScreen = getConfig().getBoolean("splashFullScreen", config.isFullScreen());
+        Boolean fullScreen = getConfig().getBoolean("splashFullScreen", config.isFullScreen());
         config.setFullScreen(fullScreen);
 
         String spinnerStyle = getConfig().getString("androidSpinnerStyle");
@@ -146,10 +146,10 @@ public class SplashScreenPlugin extends Plugin {
             config.setScaleType(scaleType);
         }
 
-        boolean showSpinner = getConfig().getBoolean("showSpinner", config.isShowSpinner());
+        Boolean showSpinner = getConfig().getBoolean("showSpinner", config.isShowSpinner());
         config.setShowSpinner(showSpinner);
 
-        boolean useDialog = getConfig().getBoolean("useDialog", config.isUsingDialog());
+        Boolean useDialog = getConfig().getBoolean("useDialog", config.isUsingDialog());
         config.setUsingDialog(useDialog);
 
         if (getConfig().getString("layoutName") != null) {
