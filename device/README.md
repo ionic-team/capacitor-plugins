@@ -35,6 +35,7 @@ const logBatteryInfo = async () => {
 * [`getInfo()`](#getinfo)
 * [`getBatteryInfo()`](#getbatteryinfo)
 * [`getLanguageCode()`](#getlanguagecode)
+* [`getLanguageTag()`](#getlanguagetag)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
 
@@ -103,6 +104,21 @@ Get the device's current language locale code.
 --------------------
 
 
+### getLanguageTag()
+
+```typescript
+getLanguageTag() => Promise<LanguageTag>
+```
+
+Get the device's current language locale tag.
+
+**Returns:** <code>Promise&lt;<a href="#languagetag">LanguageTag</a>&gt;</code>
+
+**Since:** 4.0.0
+
+--------------------
+
+
 ### Interfaces
 
 
@@ -118,7 +134,7 @@ Get the device's current language locale code.
 | Prop                  | Type                                                        | Description                                                                                                                                                                                                                         | Since |
 | --------------------- | ----------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
 | **`name`**            | <code>string</code>                                         | The name of the device. For example, "John's iPhone". This is only supported on iOS and Android 7.1 or above.                                                                                                                       | 1.0.0 |
-| **`model`**           | <code>string</code>                                         | The device model. For example, "iPhone".                                                                                                                                                                                            | 1.0.0 |
+| **`model`**           | <code>string</code>                                         | The device model. For example, "iPhone13,4".                                                                                                                                                                                            | 1.0.0 |
 | **`platform`**        | <code>'ios' \| 'android' \| 'web'</code>                    | The device platform (lowercase).                                                                                                                                                                                                    | 1.0.0 |
 | **`operatingSystem`** | <code><a href="#operatingsystem">OperatingSystem</a></code> | The operating system of the device.                                                                                                                                                                                                 | 1.0.0 |
 | **`osVersion`**       | <code>string</code>                                         | The version of the device OS.                                                                                                                                                                                                       | 1.0.0 |
@@ -145,6 +161,13 @@ Get the device's current language locale code.
 | Prop        | Type                | Description                  | Since |
 | ----------- | ------------------- | ---------------------------- | ----- |
 | **`value`** | <code>string</code> | Two character language code. | 1.0.0 |
+
+
+#### LanguageTag
+
+| Prop        | Type                | Description                                     | Since |
+| ----------- | ------------------- | ----------------------------------------------- | ----- |
+| **`value`** | <code>string</code> | Returns a well-formed IETF BCP 47 language tag. | 4.0.0 |
 
 
 ### Type Aliases

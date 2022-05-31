@@ -18,6 +18,7 @@ export interface LatLng {
  */
 export interface GoogleMapConfig {
   /**
+<<<<<<< HEAD
    * Override width for native map.
    */
   width?: number;
@@ -31,6 +32,21 @@ export interface GoogleMapConfig {
   x?: number;
   /**
    * Override absolute y coordinate position for native map.
+=======
+   * Override width for native map
+   */
+  width?: number;
+  /**
+   * Override height for native map
+   */
+  height?: number;
+  /**
+   * Override absolute x coordinate position for native map
+   */
+  x?: number;
+  /**
+   * Override absolute y coordinate position for native map
+>>>>>>> capacitor-4
    */
   y?: number;
   /**
@@ -47,10 +63,13 @@ export interface GoogleMapConfig {
    * @default false
    */
   androidLiteMode?: boolean;
+<<<<<<< HEAD
   /**
    * Override pixel ratio for native map.
    */
   devicePixelRatio?: number;
+=======
+>>>>>>> capacitor-4
 }
 
 /**
@@ -164,6 +183,7 @@ export interface Marker {
    */
   draggable?: boolean;
 }
+<<<<<<< HEAD
 
 /**
  * The callback function to be called when map events are emitted.
@@ -217,3 +237,5 @@ export interface MarkerClickCallbackData extends MarkerCallbackData {
 export interface MyLocationButtonClickCallbackData {
   mapId: string;
 }
+=======
+>>>>>>> capacitor-4

@@ -33,7 +33,7 @@ The Push Notification API uses [Firebase Cloud Messaging](https://firebase.googl
 
 This plugin will use the following project variables (defined in your app's `variables.gradle` file):
 
-- `$firebaseMessagingVersion` version of `com.google.firebase:firebase-messaging` (default: `21.0.1`)
+- `$firebaseMessagingVersion` version of `com.google.firebase:firebase-messaging` (default: `23.0.0`)
 
 ---
 
@@ -54,11 +54,11 @@ Android Studio has an icon generator you can use to create your Push Notificatio
 <docgen-config>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
 
-On iOS you can configure the way the push notifications are displayed when the app is in foreground.
+You can configure the way the push notifications are displayed when the app is in foreground.
 
-| Prop                      | Type                              | Description                                                                                                                                                                                                                                                                                                                                                                                 | Since |
-| ------------------------- | --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`presentationOptions`** | <code>PresentationOption[]</code> | This is an array of strings you can combine. Possible values in the array are: - `badge`: badge count on the app icon is updated (default value) - `sound`: the device will ring/vibrate when the push notification is received - `alert`: the push notification is displayed in a native dialog An empty array can be provided if none of the options are desired. Only available for iOS. | 1.0.0 |
+| Prop                      | Type                              | Description                                                                                                                                                                                                                                                                                                                                                                                          | Since |
+| ------------------------- | --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`presentationOptions`** | <code>PresentationOption[]</code> | This is an array of strings you can combine. Possible values in the array are: - `badge`: badge count on the app icon is updated (default value) - `sound`: the device will ring/vibrate when the push notification is received - `alert`: the push notification is displayed in a native dialog An empty array can be provided if none of the options are desired. badge is only available for iOS. | 1.0.0 |
 
 ### Examples
 
@@ -362,17 +362,17 @@ Provides the push notification token.
 ### addListener('registrationError', ...)
 
 ```typescript
-addListener(eventName: 'registrationError', listenerFunc: (error: any) => void) => Promise<PluginListenerHandle> & PluginListenerHandle
+addListener(eventName: 'registrationError', listenerFunc: (error: RegistrationError) => void) => Promise<PluginListenerHandle> & PluginListenerHandle
 ```
 
 Called when the push notification registration finished with problems.
 
 Provides an error with the registration problem.
 
-| Param              | Type                                 |
-| ------------------ | ------------------------------------ |
-| **`eventName`**    | <code>'registrationError'</code>     |
-| **`listenerFunc`** | <code>(error: any) =&gt; void</code> |
+| Param              | Type                                                                                |
+| ------------------ | ----------------------------------------------------------------------------------- |
+| **`eventName`**    | <code>'registrationError'</code>                                                    |
+| **`listenerFunc`** | <code>(error: <a href="#registrationerror">RegistrationError</a>) =&gt; void</code> |
 
 **Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt; & <a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
@@ -463,17 +463,17 @@ Remove all native listeners for this plugin.
 
 #### Channel
 
-| Prop              | Type                                              | Description                                                                                                                                                                                                                                                | Since |
-| ----------------- | ------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`id`**          | <code>string</code>                               | The channel identifier.                                                                                                                                                                                                                                    | 1.0.0 |
-| **`name`**        | <code>string</code>                               | The human-friendly name of this channel (presented to the user).                                                                                                                                                                                           | 1.0.0 |
-| **`description`** | <code>string</code>                               | The description of this channel (presented to the user).                                                                                                                                                                                                   | 1.0.0 |
-| **`sound`**       | <code>string</code>                               | The sound that should be played for notifications posted to this channel. Notification channels with an importance of at least `3` should have a sound. The file name of a sound file should be specified relative to the android app `res/raw` directory. | 1.0.0 |
-| **`importance`**  | <code><a href="#importance">Importance</a></code> | The level of interruption for notifications posted to this channel.                                                                                                                                                                                        | 1.0.0 |
-| **`visibility`**  | <code><a href="#visibility">Visibility</a></code> | The visibility of notifications posted to this channel. This setting is for whether notifications posted to this channel appear on the lockscreen or not, and if so, whether they appear in a redacted form.                                               | 1.0.0 |
-| **`lights`**      | <code>boolean</code>                              | Whether notifications posted to this channel should display notification lights, on devices that support it.                                                                                                                                               | 1.0.0 |
-| **`lightColor`**  | <code>string</code>                               | The light color for notifications posted to this channel. Only supported if lights are enabled on this channel and the device supports it. Supported color formats are `#RRGGBB` and `#RRGGBBAA`.                                                          | 1.0.0 |
-| **`vibration`**   | <code>boolean</code>                              | Whether notifications posted to this channel should vibrate.                                                                                                                                                                                               | 1.0.0 |
+| Prop              | Type                                              | Description                                                                                                                                                                                                                                                | Default          | Since |
+| ----------------- | ------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- | ----- |
+| **`id`**          | <code>string</code>                               | The channel identifier.                                                                                                                                                                                                                                    |                  | 1.0.0 |
+| **`name`**        | <code>string</code>                               | The human-friendly name of this channel (presented to the user).                                                                                                                                                                                           |                  | 1.0.0 |
+| **`description`** | <code>string</code>                               | The description of this channel (presented to the user).                                                                                                                                                                                                   |                  | 1.0.0 |
+| **`sound`**       | <code>string</code>                               | The sound that should be played for notifications posted to this channel. Notification channels with an importance of at least `3` should have a sound. The file name of a sound file should be specified relative to the android app `res/raw` directory. |                  | 1.0.0 |
+| **`importance`**  | <code><a href="#importance">Importance</a></code> | The level of interruption for notifications posted to this channel.                                                                                                                                                                                        | <code>`3`</code> | 1.0.0 |
+| **`visibility`**  | <code><a href="#visibility">Visibility</a></code> | The visibility of notifications posted to this channel. This setting is for whether notifications posted to this channel appear on the lockscreen or not, and if so, whether they appear in a redacted form.                                               |                  | 1.0.0 |
+| **`lights`**      | <code>boolean</code>                              | Whether notifications posted to this channel should display notification lights, on devices that support it.                                                                                                                                               |                  | 1.0.0 |
+| **`lightColor`**  | <code>string</code>                               | The light color for notifications posted to this channel. Only supported if lights are enabled on this channel and the device supports it. Supported color formats are `#RRGGBB` and `#RRGGBBAA`.                                                          |                  | 1.0.0 |
+| **`vibration`**   | <code>boolean</code>                              | Whether notifications posted to this channel should vibrate.                                                                                                                                                                                               |                  | 1.0.0 |
 
 
 #### ListChannelsResult
@@ -502,6 +502,13 @@ Remove all native listeners for this plugin.
 | Prop        | Type                | Description                                                              | Since |
 | ----------- | ------------------- | ------------------------------------------------------------------------ | ----- |
 | **`value`** | <code>string</code> | On iOS it contains the APNS token. On Android it contains the FCM token. | 1.0.0 |
+
+
+#### RegistrationError
+
+| Prop        | Type                | Description                                        | Since |
+| ----------- | ------------------- | -------------------------------------------------- | ----- |
+| **`error`** | <code>string</code> | Error message describing the registration failure. | 4.0.0 |
 
 
 #### ActionPerformed

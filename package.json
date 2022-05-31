@@ -16,7 +16,7 @@
     "publish:cocoapod": "lerna run publish:cocoapod --concurrency 1"
   },
   "devDependencies": {
-    "@actions/core": "^1.2.6",
+    "@actions/core": "1.8.0",
     "@ionic/prettier-config": "^1.0.1",
     "@types/prompts": "^2.0.8",
     "esm": "^3.2.25",

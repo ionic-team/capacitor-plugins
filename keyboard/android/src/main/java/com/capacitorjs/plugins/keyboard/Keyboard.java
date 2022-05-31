@@ -1,6 +1,7 @@
 package com.capacitorjs.plugins.keyboard;
 
 import android.content.Context;
+import android.graphics.Insets;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Build;
@@ -46,21 +47,11 @@ public class Keyboard {
     static final String EVENT_KB_WILL_HIDE = "keyboardWillHide";
     static final String EVENT_KB_DID_HIDE = "keyboardDidHide";
 
-    /**
-     * @deprecated
-     * Use {@link #Keyboard(AppCompatActivity activity, boolean resizeFullScreen)}
-     * @param activity
-     */
-    public Keyboard(AppCompatActivity activity) {
-        this(activity, false);
-    }
-
     public Keyboard(AppCompatActivity activity, boolean resizeOnFullScreen) {
         this.activity = activity;
         //calculate density-independent pixels (dp)
         //http://developer.android.com/guide/practices/screens_support.html
-        DisplayMetrics dm = new DisplayMetrics();
-        activity.getWindowManager().getDefaultDisplay().getMetrics(dm);
+        DisplayMetrics dm = activity.getResources().getDisplayMetrics();
         final float density = dm.density;
 
         //http://stackoverflow.com/a/4737265/1091751 detect if keyboard is showing
@@ -84,17 +75,17 @@ public class Keyboard {
                     int resultBottom = r.bottom;
                     int screenHeight;
 
-                    if (Build.VERSION.SDK_INT >= 23) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                        Insets windowInsets = rootView.getRootWindowInsets().getInsetsIgnoringVisibility(WindowInsets.Type.systemBars());
+                        screenHeight = rootViewHeight;
+                        resultBottom = resultBottom + windowInsets.bottom;
+                    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         WindowInsets windowInsets = rootView.getRootWindowInsets();
-                        int stableInsetBottom = windowInsets.getStableInsetBottom();
+                        int stableInsetBottom = getLegacyStableInsetBottom(windowInsets);
                         screenHeight = rootViewHeight;
                         resultBottom = resultBottom + stableInsetBottom;
                     } else {
-                        // calculate screen height differently for android versions <23: Lollipop 5.x, Marshmallow 6.x
-                        //http://stackoverflow.com/a/29257533/3642890 beware of nexus 5
-                        Display display = activity.getWindowManager().getDefaultDisplay();
-                        Point size = new Point();
-                        display.getSize(size);
+                        Point size = getLegacySizePoint();
                         screenHeight = size.y;
                     }
 
@@ -130,6 +121,7 @@ public class Keyboard {
                     return isOverlays() ? r.bottom : r.height();
                 }
 
+                @SuppressWarnings("deprecation")
                 private boolean isOverlays() {
                     final Window window = activity.getWindow();
                     return (
@@ -143,11 +135,23 @@ public class Keyboard {
         frameLayoutParams = (FrameLayout.LayoutParams) mChildOfContent.getLayoutParams();
     }
 
+    @SuppressWarnings("deprecation")
+    private int getLegacyStableInsetBottom(WindowInsets windowInsets) {
+        return windowInsets.getStableInsetBottom();
+    }
+
+    @SuppressWarnings("deprecation")
+    private Point getLegacySizePoint() {
+        // calculate screen height differently for android versions <23: Lollipop 5.x, Marshmallow 6.x
+        //http://stackoverflow.com/a/29257533/3642890 beware of nexus 5
+        Display display = activity.getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        return size;
+    }
+
     public void show() {
-        ((InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE)).toggleSoftInput(
-                0,
-                InputMethodManager.HIDE_IMPLICIT_ONLY
-            );
+        ((InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(activity.getCurrentFocus(), 0);
     }
 
     public boolean hide() {

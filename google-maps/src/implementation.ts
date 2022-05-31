@@ -9,6 +9,7 @@ import type {
   Marker,
 } from './definitions';
 
+<<<<<<< HEAD
 /**
  * An interface containing the options used when creating a map.
  */
@@ -34,6 +35,15 @@ export interface CreateMapArgs {
    * @default false
    */
   forceCreate?: boolean;
+=======
+export interface CreateMapArgs {
+  id: string;
+  apiKey: string;
+  config: GoogleMapConfig;
+  element: HTMLElement;
+  forceCreate?: boolean;
+  devicePixelRatio?: number;
+>>>>>>> capacitor-4
 }
 
 export interface DestroyMapArgs {
@@ -104,6 +114,11 @@ export interface OnScrollArgs {
   };
 }
 
+<<<<<<< HEAD
+=======
+export type MapListenerCallback = (data: any) => void;
+
+>>>>>>> capacitor-4
 export interface CapacitorGoogleMapsPlugin extends Plugin {
   create(options: CreateMapArgs): Promise<void>;
   addMarker(args: AddMarkerArgs): Promise<{ id: string }>;
