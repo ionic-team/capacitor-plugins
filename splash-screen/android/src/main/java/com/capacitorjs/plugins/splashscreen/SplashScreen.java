@@ -10,6 +10,7 @@ import android.graphics.PixelFormat;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
+import android.os.Build;
 import android.os.Handler;
 import android.view.*;
 import android.view.animation.LinearInterpolator;
@@ -18,6 +19,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
+
 import com.getcapacitor.Logger;
 
 /**
@@ -125,7 +129,7 @@ public class SplashScreen {
                 isVisible = true;
 
                 if (settings.isAutoHide()) {
-                    new Handler()
+                    new Handler(context.getMainLooper())
                         .postDelayed(
                             () -> {
                                 hideDialog(activity, isLaunchSplash);
@@ -215,7 +219,7 @@ public class SplashScreen {
                     // Stops flickers dead in their tracks
                     // https://stackoverflow.com/a/21847579/32140
                     ImageView imageView = (ImageView) splashImage;
-                    imageView.setDrawingCacheEnabled(true);
+                    imageView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
                     imageView.setScaleType(config.getScaleType());
                     imageView.setImageDrawable(splash);
                 }
@@ -224,16 +228,17 @@ public class SplashScreen {
             splashImage.setFitsSystemWindows(true);
 
             if (config.isImmersive()) {
-                final int flags =
-                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
-                    View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
-                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
-                    View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
-                    View.SYSTEM_UI_FLAG_FULLSCREEN |
-                    View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
-                splashImage.setSystemUiVisibility(flags);
+                Window window = ((Activity) splashImage.getContext()).getWindow();
+                WindowCompat.setDecorFitsSystemWindows(window, false);
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    WindowInsetsController controller = splashImage.getWindowInsetsController();
+                    controller.hide(WindowInsetsCompat.Type.systemBars());
+                    controller.setSystemBarsBehavior(WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
+                }
             } else if (config.isFullScreen()) {
-                splashImage.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
+                Window window = ((Activity) splashImage.getContext()).getWindow();
+                WindowCompat.setDecorFitsSystemWindows(window, false);
             }
 
             if (config.getBackgroundColor() != null) {
@@ -301,7 +306,7 @@ public class SplashScreen {
                 isVisible = true;
 
                 if (settings.isAutoHide()) {
-                    new Handler()
+                    new Handler(context.getMainLooper())
                         .postDelayed(
                             () -> {
                                 hide(settings.getFadeOutDuration(), isLaunchSplash);
