@@ -159,12 +159,12 @@ declare module '@capacitor/cli' {
        * to show the splash screen on launch.
        * This will override most other configuration options.
        * Instead, it will use Android's recommended splash screen settings.
-       * 
+       *
        * Only available on Android SDK 31+.
-       * 
+       *
        * NOTE: You must set the splash screen icon in the `res/values-v31/styles.xml`
        * For more information, refer to the [Capacitor Splash Screen #Android Documentation](https://capacitorjs.com/docs/apis/splash-screen#android)
-       * 
+       *
        * @since 1.3.0
        * @example true
        */

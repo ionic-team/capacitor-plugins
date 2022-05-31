@@ -120,10 +120,11 @@ public class SplashScreenConfig {
         this.layoutName = layoutName;
     }
 
-    public boolean isUsingAndroid12API() { return usingAndroid12API; }
+    public boolean isUsingAndroid12API() {
+        return usingAndroid12API;
+    }
 
     public void setUsingAndroid12API(boolean usingAndroid12API) {
-        this.usingAndroid12API =
-            usingAndroid12API && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S;
+        this.usingAndroid12API = usingAndroid12API && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S;
     }
 }

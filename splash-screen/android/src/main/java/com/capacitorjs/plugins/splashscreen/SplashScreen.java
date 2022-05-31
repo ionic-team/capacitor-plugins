@@ -28,12 +28,10 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
-
 import com.getcapacitor.Logger;
 
 /**
@@ -61,12 +59,11 @@ public class SplashScreen {
      * @param activity
      */
     public void showOnLaunch(final AppCompatActivity activity) {
-        if(config.isUsingAndroid12API()) {
+        if (config.isUsingAndroid12API()) {
             SplashScreenSettings settings = new SplashScreenSettings();
             settings.setShowDuration(config.getLaunchShowDuration());
             showWithAndroid12API(activity, settings);
-        }
-        else {
+        } else {
             if (config.getLaunchShowDuration() == 0) {
                 return;
             }
@@ -87,79 +84,84 @@ public class SplashScreen {
      *
      * @param activity
      * @param settings Settings used to show the Splash Screen
-    */
+     */
     private void showWithAndroid12API(final AppCompatActivity activity, final SplashScreenSettings settings) {
         if (activity == null || activity.isFinishing() || Build.VERSION.SDK_INT < Build.VERSION_CODES.S) return;
 
-        activity.runOnUiThread(() -> {
-            android.window.SplashScreen windowSplashScreen = activity.getSplashScreen();
+        activity.runOnUiThread(
+            () -> {
+                android.window.SplashScreen windowSplashScreen = activity.getSplashScreen();
 
-            // Set Splash Screen Light/Dark Theme
-            switch (activity.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) {
-                case Configuration.UI_MODE_NIGHT_YES:
-                    windowSplashScreen.setSplashScreenTheme(R.style.capacitor_dark_style);
-                    break;
-                case Configuration.UI_MODE_NIGHT_NO:
-                    windowSplashScreen.setSplashScreenTheme(R.style.capacitor_light_style);
-                    break;
-            }
+                // Set Splash Screen Light/Dark Theme
+                switch (activity.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) {
+                    case Configuration.UI_MODE_NIGHT_YES:
+                        windowSplashScreen.setSplashScreenTheme(R.style.capacitor_dark_style);
+                        break;
+                    case Configuration.UI_MODE_NIGHT_NO:
+                        windowSplashScreen.setSplashScreenTheme(R.style.capacitor_light_style);
+                        break;
+                }
 
-            // Set Fade Out Animation
-            windowSplashScreen.setOnExitAnimationListener((windowSplashScreenView) -> {
-                final ObjectAnimator fadeAnimator = ObjectAnimator.ofFloat(
-                        windowSplashScreenView,
-                        View.ALPHA,
-                        1f, 0f
-                );
-                fadeAnimator.setInterpolator(new LinearInterpolator());
-                fadeAnimator.setDuration(settings.getFadeOutDuration());
+                // Set Fade Out Animation
+                windowSplashScreen.setOnExitAnimationListener(
+                    windowSplashScreenView -> {
+                        final ObjectAnimator fadeAnimator = ObjectAnimator.ofFloat(windowSplashScreenView, View.ALPHA, 1f, 0f);
+                        fadeAnimator.setInterpolator(new LinearInterpolator());
+                        fadeAnimator.setDuration(settings.getFadeOutDuration());
 
-                fadeAnimator.addListener(new AnimatorListenerAdapter() {
-                    @RequiresApi(api = Build.VERSION_CODES.S)
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        isHiding = false;
-                        windowSplashScreenView.remove();
-                    }
-                });
-
-
-                fadeAnimator.start();
-
-                isHiding = true;
-                isVisible = false;
-            });
-
-            if(settings.getShowDuration() > 0) {
-                // Set Pre Draw Listener & Delay Drawing Until Duration Elapses
-                final View content = activity.findViewById(android.R.id.content);
-
-                content.getViewTreeObserver().addOnPreDrawListener(
-                        new ViewTreeObserver.OnPreDrawListener() {
-                            @Override
-                            public boolean onPreDraw() {
-                                // Start Timer On First Run
-                                if(!isVisible) {
-                                    isVisible = true;
-
-                                    new Handler(context.getMainLooper()).postDelayed(() -> {
-                                        // Splash screen is done... start drawing content.
-                                        content.getViewTreeObserver().removeOnPreDrawListener(this);
-                                    }, settings.getShowDuration());
+                        fadeAnimator.addListener(
+                            new AnimatorListenerAdapter() {
+                                @RequiresApi(api = Build.VERSION_CODES.S)
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+                                    isHiding = false;
+                                    windowSplashScreenView.remove();
                                 }
-                                // Not ready to dismiss splash screen
-                                return false;
                             }
-                        }
-                );
-            }
-            else {
-                // Will automatically dismiss when content is ready to draw
-                isVisible = true;
-            }
-        });
-    }
+                        );
 
+                        fadeAnimator.start();
+
+                        isHiding = true;
+                        isVisible = false;
+                    }
+                );
+
+                if (settings.getShowDuration() > 0) {
+                    // Set Pre Draw Listener & Delay Drawing Until Duration Elapses
+                    final View content = activity.findViewById(android.R.id.content);
+
+                    content
+                        .getViewTreeObserver()
+                        .addOnPreDrawListener(
+                            new ViewTreeObserver.OnPreDrawListener() {
+                                @Override
+                                public boolean onPreDraw() {
+                                    // Start Timer On First Run
+                                    if (!isVisible) {
+                                        isVisible = true;
+
+                                        new Handler(context.getMainLooper())
+                                            .postDelayed(
+                                                () -> {
+                                                    // Splash screen is done... start drawing content.
+                                                    content.getViewTreeObserver().removeOnPreDrawListener(this);
+                                                },
+                                                settings.getShowDuration()
+                                            );
+                                    }
+                                    // Not ready to dismiss splash screen
+                                    return false;
+                                }
+                            }
+                        );
+                } else {
+                    // Will automatically dismiss when content is ready to draw
+                    isVisible = true;
+                }
+            }
+        );
+    }
 
     /**
      * Show the Splash Screen
@@ -329,19 +331,18 @@ public class SplashScreen {
                 Window window = ((Activity) splashImage.getContext()).getWindow();
                 WindowCompat.setDecorFitsSystemWindows(window, false);
 
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                     WindowInsetsController controller = splashImage.getWindowInsetsController();
                     controller.hide(WindowInsetsCompat.Type.systemBars());
                     controller.setSystemBarsBehavior(WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
-                }
-                else {
+                } else {
                     final int flags =
-                            View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
-                                    View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
-                                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
-                                    View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
-                                    View.SYSTEM_UI_FLAG_FULLSCREEN |
-                                    View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+                        View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
+                        View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
+                        View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
+                        View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
+                        View.SYSTEM_UI_FLAG_FULLSCREEN |
+                        View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
                     splashImage.setSystemUiVisibility(flags);
                 }
             } else if (config.isFullScreen()) {
