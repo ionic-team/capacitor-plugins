@@ -564,10 +564,11 @@ class CapacitorGoogleMapsPlugin : Plugin() {
             val map = maps[id]
             map ?: throw MapNotFoundError()
 
-            val bounds = map.getLatLngBounds()
-            val data = map.getLatLngBoundsJSObject(bounds)
-
-            call.resolve(data)
+            CoroutineScope(Dispatchers.Main).launch {
+                val bounds = map.getLatLngBounds()
+                val data = map.getLatLngBoundsJSObject(bounds)
+                call.resolve(data)
+            }
         } catch (e: GoogleMapsError) {
             handleError(call, e)
         } catch (e: Exception) {

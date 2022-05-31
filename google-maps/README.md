@@ -271,6 +271,7 @@ export default MyMap;
 * [`enableAccessibilityElements(...)`](#enableaccessibilityelements)
 * [`enableCurrentLocation(...)`](#enablecurrentlocation)
 * [`setPadding(...)`](#setpadding)
+* [`setOnBoundsChangedListener(...)`](#setonboundschangedlistener)
 * [`setOnCameraIdleListener(...)`](#setoncameraidlelistener)
 * [`setOnCameraMoveStartedListener(...)`](#setoncameramovestartedlistener)
 * [`setOnClusterClickListener(...)`](#setonclusterclicklistener)
@@ -475,6 +476,19 @@ setPadding(padding: MapPadding) => Promise<void>
 | Param         | Type                                              |
 | ------------- | ------------------------------------------------- |
 | **`padding`** | <code><a href="#mappadding">MapPadding</a></code> |
+
+--------------------
+
+
+### setOnBoundsChangedListener(...)
+
+```typescript
+setOnBoundsChangedListener(callback?: MapListenerCallback<CameraIdleCallbackData> | undefined) => Promise<void>
+```
+
+| Param          | Type                                                                                                                                    |
+| -------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| **`callback`** | <code><a href="#maplistenercallback">MapListenerCallback</a>&lt;<a href="#cameraidlecallbackdata">CameraIdleCallbackData</a>&gt;</code> |
 
 --------------------
 
@@ -686,14 +700,26 @@ Controls for setting padding on the 'visible' region of the view.
 
 #### CameraIdleCallbackData
 
-| Prop            | Type                |
-| --------------- | ------------------- |
-| **`mapId`**     | <code>string</code> |
-| **`bearing`**   | <code>number</code> |
-| **`latitude`**  | <code>number</code> |
-| **`longitude`** | <code>number</code> |
-| **`tilt`**      | <code>number</code> |
-| **`zoom`**      | <code>number</code> |
+| Prop            | Type                                                  |
+| --------------- | ----------------------------------------------------- |
+| **`mapId`**     | <code>string</code>                                   |
+| **`bounds`**    | <code><a href="#latlngbounds">LatLngBounds</a></code> |
+| **`bearing`**   | <code>number</code>                                   |
+| **`latitude`**  | <code>number</code>                                   |
+| **`longitude`** | <code>number</code>                                   |
+| **`tilt`**      | <code>number</code>                                   |
+| **`zoom`**      | <code>number</code>                                   |
+
+
+#### LatLngBounds
+
+An interface representing the viewports latitude and longitude bounds.
+
+| Prop            | Type                                                  |
+| --------------- | ----------------------------------------------------- |
+| **`southwest`** | <code>{ latitude: number; longitude: number; }</code> |
+| **`center`**    | <code>{ latitude: number; longitude: number; }</code> |
+| **`northeast`** | <code>{ latitude: number; longitude: number; }</code> |
 
 
 #### CameraMoveStartedCallbackData

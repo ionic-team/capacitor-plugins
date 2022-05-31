@@ -453,7 +453,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
         call.unavailable("not supported on iOS")
     }
     
-    @objc func getBounds(_ call: CAPPluginCall) {
+    @objc func getMapBounds(_ call: CAPPluginCall) {
         do {
             guard let id = call.getString("id") else {
                 throw GoogleMapErrors.invalidMapId
