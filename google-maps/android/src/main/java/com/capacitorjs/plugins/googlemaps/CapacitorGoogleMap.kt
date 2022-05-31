@@ -20,6 +20,7 @@ import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.Marker
 import com.google.maps.android.clustering.Cluster
 import com.google.maps.android.clustering.ClusterManager
@@ -475,6 +476,32 @@ class CapacitorGoogleMap(
         )
     }
 
+    fun getLatLngBounds(): LatLngBounds {
+        return googleMap?.projection?.visibleRegion?.latLngBounds
+            ?: throw BoundsNotFoundError()
+    }
+
+    fun getLatLngBoundsJSObject(bounds: LatLngBounds): JSObject {
+        val data = JSObject()
+
+        val southwestJS = JSObject()
+        val centerJS = JSObject()
+        val northeastJS = JSObject()
+
+        southwestJS.put("latitude", bounds.southwest.latitude)
+        southwestJS.put("longitude", bounds.southwest.longitude)
+        centerJS.put("latitude", bounds.center.latitude)
+        centerJS.put("longitude", bounds.center.longitude)
+        northeastJS.put("latitude", bounds.northeast.latitude)
+        northeastJS.put("longitude", bounds.northeast.longitude)
+
+        data.put("southwest", southwestJS)
+        data.put("center", centerJS)
+        data.put("northeast", northeastJS)
+
+        return data
+    }
+
     private fun getScaledPixels(bridge: Bridge, pixels: Int): Int {
         // Get the screen's density scale
         val scale = bridge.activity.resources.displayMetrics.density
@@ -640,12 +667,14 @@ class CapacitorGoogleMap(
     override fun onCameraIdle() {
         val data = JSObject()
         data.put("mapId", this@CapacitorGoogleMap.id)
+        data.put("bounds", getLatLngBoundsJSObject(getLatLngBounds()))
         data.put("bearing", this@CapacitorGoogleMap.googleMap?.cameraPosition?.bearing)
         data.put("latitude", this@CapacitorGoogleMap.googleMap?.cameraPosition?.target?.latitude)
         data.put("longitude", this@CapacitorGoogleMap.googleMap?.cameraPosition?.target?.longitude)
         data.put("tilt", this@CapacitorGoogleMap.googleMap?.cameraPosition?.tilt)
         data.put("zoom", this@CapacitorGoogleMap.googleMap?.cameraPosition?.zoom)
         delegate.notify("onCameraIdle", data)
+        delegate.notify("onBoundsChanged", data)
     }
 
     override fun onCameraMoveStarted(reason: Int) {

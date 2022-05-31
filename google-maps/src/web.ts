@@ -21,6 +21,7 @@ import type {
   TrafficLayerArgs,
   RemoveMarkersArgs,
   OnScrollArgs,
+  LatLngBounds,
 } from './implementation';
 
 export class CapacitorGoogleMapsWeb
@@ -178,6 +179,29 @@ export class CapacitorGoogleMapsWeb
     }
   }
 
+  async getMapBounds(_args: { id: string; }): Promise<LatLngBounds> {
+    const bounds = this.maps[_args.id].map.getBounds();
+
+    if (!bounds) {
+      throw new Error('Google Map Bounds could not be found.');
+    }
+
+    return {
+      southwest: {
+        latitude: bounds.getSouthWest().lat(),
+        longitude: bounds.getSouthWest().lng(),
+      },
+      center: {
+        latitude: bounds.getCenter().lat(),
+        longitude: bounds.getCenter().lng(),
+      },
+      northeast: {
+        latitude: bounds.getNorthEast().lat(),
+        longitude: bounds.getNorthEast().lng(),
+      }
+    }
+  }
+
   async addMarkers(_args: AddMarkersArgs): Promise<{ ids: string[] }> {
     const markerIds: string[] = [];
     const map = this.maps[_args.id];
@@ -300,10 +324,12 @@ export class CapacitorGoogleMapsWeb
   async setMapListeners(mapId: string): Promise<void> {
     const map = this.maps[mapId].map;
 
-    map.addListener('idle', () => {
+    map.addListener('idle', async () => {
+      const bounds = await this.getMapBounds({id: mapId});
       this.notifyListeners('onCameraIdle', {
         mapId: mapId,
         bearing: map.getHeading(),
+        bounds: bounds,
         latitude: map.getCenter()?.lat(),
         longitude: map.getCenter()?.lng(),
         tilt: map.getTilt(),
@@ -315,6 +341,19 @@ export class CapacitorGoogleMapsWeb
       this.notifyListeners('onCameraMoveStarted', {
         mapId: mapId,
         isGesture: true,
+      });
+    });
+
+    map.addListener('bounds_changed', async () => {
+      const bounds = await this.getMapBounds({id: mapId});
+      this.notifyListeners('onBoundsChanged', {
+        mapId: mapId,
+        bearing: map.getHeading(),
+        bounds: bounds,
+        latitude: map.getCenter()?.lat(),
+        longitude: map.getCenter()?.lng(),
+        tilt: map.getTilt(),
+        zoom: map.getZoom(),
       });
     });
 

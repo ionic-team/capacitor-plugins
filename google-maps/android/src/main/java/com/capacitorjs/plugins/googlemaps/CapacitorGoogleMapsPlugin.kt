@@ -555,6 +555,26 @@ class CapacitorGoogleMapsPlugin : Plugin() {
         }
     }
 
+    @PluginMethod
+    fun getBounds(call: PluginCall) {
+        try {
+            val id = call.getString("id")
+            id ?: throw InvalidMapIdError()
+
+            val map = maps[id]
+            map ?: throw MapNotFoundError()
+
+            val bounds = map.getLatLngBounds()
+            val data = map.getLatLngBoundsJSObject(bounds)
+
+            call.resolve(data)
+        } catch (e: GoogleMapsError) {
+            handleError(call, e)
+        } catch (e: Exception) {
+            handleError(call, e)
+        }
+    }
+
     private fun internalEnableCurrentLocation(call: PluginCall) {
         try {
             val id = call.getString("id")

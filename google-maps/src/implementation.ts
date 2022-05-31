@@ -104,6 +104,21 @@ export interface OnScrollArgs {
   };
 }
 
+export interface LatLngBounds {
+  southwest: {
+    latitude: number;
+    longitude: number;
+  },
+  center: {
+    latitude: number;
+    longitude: number;
+  },
+  northeast: {
+    latitude: number;
+    longitude: number;
+  },
+}
+
 export interface CapacitorGoogleMapsPlugin extends Plugin {
   create(options: CreateMapArgs): Promise<void>;
   addMarker(args: AddMarkerArgs): Promise<{ id: string }>;
@@ -122,6 +137,7 @@ export interface CapacitorGoogleMapsPlugin extends Plugin {
   setPadding(args: PaddingArgs): Promise<void>;
   onScroll(args: OnScrollArgs): Promise<void>;
   dispatchMapEvent(args: { id: string; focus: boolean }): Promise<void>;
+  getMapBounds(args: { id: string; }): Promise<LatLngBounds>;
 }
 
 const CapacitorGoogleMaps = registerPlugin<CapacitorGoogleMapsPlugin>(
