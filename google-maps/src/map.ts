@@ -351,7 +351,7 @@ export class GoogleMap {
 
   /**
    * Get the map's current viewport latitude and longitude bounds.
-   * 
+   *
    * @returns {LatLngBounds}
    */
   async getMapBounds(): Promise<LatLngBounds> {

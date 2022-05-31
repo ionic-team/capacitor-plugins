@@ -349,7 +349,7 @@ public class Map {
             }
         }
     }
-    
+
     func getMapLatLngBounds() -> GMSCoordinateBounds? {
         return self.mapViewController.GMapView.cameraTargetBounds
     }

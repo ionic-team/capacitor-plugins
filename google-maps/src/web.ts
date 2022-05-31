@@ -179,7 +179,7 @@ export class CapacitorGoogleMapsWeb
     }
   }
 
-  async getMapBounds(_args: { id: string; }): Promise<LatLngBounds> {
+  async getMapBounds(_args: { id: string }): Promise<LatLngBounds> {
     const bounds = this.maps[_args.id].map.getBounds();
 
     if (!bounds) {
@@ -198,8 +198,8 @@ export class CapacitorGoogleMapsWeb
       northeast: {
         latitude: bounds.getNorthEast().lat(),
         longitude: bounds.getNorthEast().lng(),
-      }
-    }
+      },
+    };
   }
 
   async addMarkers(_args: AddMarkersArgs): Promise<{ ids: string[] }> {
@@ -325,7 +325,7 @@ export class CapacitorGoogleMapsWeb
     const map = this.maps[mapId].map;
 
     map.addListener('idle', async () => {
-      const bounds = await this.getMapBounds({id: mapId});
+      const bounds = await this.getMapBounds({ id: mapId });
       this.notifyListeners('onCameraIdle', {
         mapId: mapId,
         bearing: map.getHeading(),
@@ -345,7 +345,7 @@ export class CapacitorGoogleMapsWeb
     });
 
     map.addListener('bounds_changed', async () => {
-      const bounds = await this.getMapBounds({id: mapId});
+      const bounds = await this.getMapBounds({ id: mapId });
       this.notifyListeners('onBoundsChanged', {
         mapId: mapId,
         bearing: map.getHeading(),

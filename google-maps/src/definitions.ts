@@ -5,15 +5,15 @@ export interface LatLngBounds {
   southwest: {
     latitude: number;
     longitude: number;
-  },
+  };
   center: {
     latitude: number;
     longitude: number;
-  },
+  };
   northeast: {
     latitude: number;
     longitude: number;
-  },
+  };
 }
 
 /**

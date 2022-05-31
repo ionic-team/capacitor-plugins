@@ -123,7 +123,7 @@ export interface CapacitorGoogleMapsPlugin extends Plugin {
   setPadding(args: PaddingArgs): Promise<void>;
   onScroll(args: OnScrollArgs): Promise<void>;
   dispatchMapEvent(args: { id: string; focus: boolean }): Promise<void>;
-  getMapBounds(args: { id: string; }): Promise<LatLngBounds>;
+  getMapBounds(args: { id: string }): Promise<LatLngBounds>;
 }
 
 const CapacitorGoogleMaps = registerPlugin<CapacitorGoogleMapsPlugin>(

@@ -452,7 +452,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
     @objc func onScroll(_ call: CAPPluginCall) {
         call.unavailable("not supported on iOS")
     }
-    
+
     @objc func getMapBounds(_ call: CAPPluginCall) {
         do {
             guard let id = call.getString("id") else {
@@ -466,7 +466,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
             guard let bounds = map.getMapLatLngBounds() else {
                 throw GoogleMapErrors.unhandledError("Google Map Bounds could not be found.")
             }
-            
+
             call.resolve(
                 formatMapBoundsForResponse(
                     bounds: bounds,
@@ -483,16 +483,16 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
             "bounds": [
                 "southwest": [
                     "latitude": bounds?.southWest.latitude,
-                    "longitude": bounds?.southWest.longitude,
+                    "longitude": bounds?.southWest.longitude
                 ],
                 "center": [
                     "latitude": cameraPosition.target.latitude,
-                    "longitude": cameraPosition.target.longitude,
+                    "longitude": cameraPosition.target.longitude
                 ],
                 "northeast": [
                     "latitude": bounds?.northEast.latitude,
-                    "longitude": bounds?.northEast.longitude,
-                ],
+                    "longitude": bounds?.northEast.longitude
+                ]
             ]
         ]
     }
@@ -518,7 +518,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
         let mapId = self.findMapIdByMapView(mapView)
         let map = self.maps[mapId]
         let bounds = map?.getMapLatLngBounds()
-        
+
         let data: PluginCallResultData = [
             "mapId": mapId,
             "bounds": formatMapBoundsForResponse(
@@ -531,7 +531,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
             "tilt": cameraPosition.viewingAngle,
             "zoom": cameraPosition.zoom
         ]
-        
+
         self.notifyListeners("onBoundsChanged", data: data)
         self.notifyListeners("onCameraIdle", data: data)
     }
