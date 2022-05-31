@@ -1,5 +1,6 @@
 package com.capacitorjs.plugins.splashscreen;
 
+import android.os.Build;
 import android.widget.ImageView;
 import com.getcapacitor.Logger;
 import com.getcapacitor.Plugin;
@@ -89,15 +90,15 @@ public class SplashScreenPlugin extends Plugin {
         }
         Integer duration = getConfig().getInt("launchShowDuration", config.getLaunchShowDuration());
         config.setLaunchShowDuration(duration);
-        Boolean autohide = getConfig().getBoolean("launchAutoHide", config.isLaunchAutoHide());
+        boolean autohide = getConfig().getBoolean("launchAutoHide", config.isLaunchAutoHide());
         config.setLaunchAutoHide(autohide);
         if (getConfig().getString("androidSplashResourceName") != null) {
             config.setResourceName(getConfig().getString("androidSplashResourceName"));
         }
-        Boolean immersive = getConfig().getBoolean("splashImmersive", config.isImmersive());
+        boolean immersive = getConfig().getBoolean("splashImmersive", config.isImmersive());
         config.setImmersive(immersive);
 
-        Boolean fullScreen = getConfig().getBoolean("splashFullScreen", config.isFullScreen());
+        boolean fullScreen = getConfig().getBoolean("splashFullScreen", config.isFullScreen());
         config.setFullScreen(fullScreen);
 
         String spinnerStyle = getConfig().getString("androidSpinnerStyle");
@@ -145,15 +146,20 @@ public class SplashScreenPlugin extends Plugin {
             config.setScaleType(scaleType);
         }
 
-        Boolean showSpinner = getConfig().getBoolean("showSpinner", config.isShowSpinner());
+        boolean showSpinner = getConfig().getBoolean("showSpinner", config.isShowSpinner());
         config.setShowSpinner(showSpinner);
 
-        Boolean useDialog = getConfig().getBoolean("useDialog", config.isUsingDialog());
+        boolean useDialog = getConfig().getBoolean("useDialog", config.isUsingDialog());
         config.setUsingDialog(useDialog);
 
         if (getConfig().getString("layoutName") != null) {
             config.setLayoutName(getConfig().getString("layoutName"));
         }
+
+        boolean useAndroid12API =
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
+                getConfig().getBoolean("useAndroid12API", false);
+        config.setUsingAndroid12API(useAndroid12API);
 
         return config;
     }

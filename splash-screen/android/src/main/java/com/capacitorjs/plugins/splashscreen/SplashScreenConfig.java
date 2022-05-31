@@ -1,5 +1,6 @@
 package com.capacitorjs.plugins.splashscreen;
 
+import android.os.Build;
 import android.widget.ImageView.ScaleType;
 
 public class SplashScreenConfig {
@@ -17,6 +18,7 @@ public class SplashScreenConfig {
     private ScaleType scaleType = ScaleType.FIT_XY;
     private boolean usingDialog = false;
     private String layoutName;
+    private boolean usingAndroid12API = false;
 
     public Integer getBackgroundColor() {
         return backgroundColor;
@@ -116,5 +118,12 @@ public class SplashScreenConfig {
 
     public void setLayoutName(String layoutName) {
         this.layoutName = layoutName;
+    }
+
+    public boolean isUsingAndroid12API() { return usingAndroid12API; }
+
+    public void setUsingAndroid12API(boolean usingAndroid12API) {
+        this.usingAndroid12API =
+            usingAndroid12API && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S;
     }
 }
