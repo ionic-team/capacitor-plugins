@@ -107,7 +107,7 @@ export interface LocalNotificationsPlugin {
    *
    * @since 1.0.0
    */
-  deleteChannel(channel: NotificationChannel): Promise<void>;
+  deleteChannel(args: { id: string }): Promise<void>;
 
   /**
    * Get a list of notification channels.
