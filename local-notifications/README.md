@@ -188,7 +188,7 @@ Check if notifications are enabled or not.
 ### createChannel(...)
 
 ```typescript
-createChannel(channel: NotificationChannel) => Promise<void>
+createChannel(channel: Channel) => Promise<void>
 ```
 
 Create a notification channel.
@@ -600,11 +600,6 @@ An action that can be taken when a notification is displayed.
 <code>'year' | 'month' | 'two-weeks' | 'week' | 'day' | 'hour' | 'minute' | 'second'</code>
 
 
-#### NotificationChannel
-
-<code><a href="#channel">Channel</a></code>
-
-
 #### Importance
 
 The importance level. For more details, see the [Android Developer Docs](https://developer.android.com/reference/android/app/NotificationManager#IMPORTANCE_DEFAULT)
@@ -617,6 +612,11 @@ The importance level. For more details, see the [Android Developer Docs](https:/
 The notification visibility. For more details, see the [Android Developer Docs](https://developer.android.com/reference/androidx/core/app/NotificationCompat#VISIBILITY_PRIVATE)
 
 <code>-1 | 0 | 1</code>
+
+
+#### NotificationChannel
+
+<code><a href="#channel">Channel</a></code>
 
 
 #### PermissionState

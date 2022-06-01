@@ -98,7 +98,7 @@ export interface LocalNotificationsPlugin {
    *
    * @since 1.0.0
    */
-  createChannel(channel: NotificationChannel): Promise<void>;
+  createChannel(channel: Channel): Promise<void>;
 
   /**
    * Delete a notification channel.
