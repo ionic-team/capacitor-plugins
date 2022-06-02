@@ -207,16 +207,16 @@ Only available for Android.
 ### deleteChannel(...)
 
 ```typescript
-deleteChannel(channel: NotificationChannel) => Promise<void>
+deleteChannel(args: { id: string; }) => Promise<void>
 ```
 
 Delete a notification channel.
 
 Only available for Android.
 
-| Param         | Type                                        |
-| ------------- | ------------------------------------------- |
-| **`channel`** | <code><a href="#channel">Channel</a></code> |
+| Param      | Type                         |
+| ---------- | ---------------------------- |
+| **`args`** | <code>{ id: string; }</code> |
 
 **Since:** 1.0.0
 

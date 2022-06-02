@@ -262,16 +262,16 @@ Only available on Android O or newer (SDK 26+).
 ### deleteChannel(...)
 
 ```typescript
-deleteChannel(channel: Channel) => Promise<void>
+deleteChannel(args: { id: string; }) => Promise<void>
 ```
 
 Delete a notification channel.
 
 Only available on Android O or newer (SDK 26+).
 
-| Param         | Type                                        |
-| ------------- | ------------------------------------------- |
-| **`channel`** | <code><a href="#channel">Channel</a></code> |
+| Param      | Type                         |
+| ---------- | ---------------------------- |
+| **`args`** | <code>{ id: string; }</code> |
 
 **Since:** 1.0.0
 
