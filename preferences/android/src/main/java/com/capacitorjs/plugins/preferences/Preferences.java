@@ -1,19 +1,19 @@
-package com.capacitorjs.plugins.storage;
+package com.capacitorjs.plugins.preferences;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import java.util.Set;
 
-public class Storage {
+public class Preferences {
 
     private SharedPreferences preferences;
 
-    private interface StorageOperation {
+    private interface PreferencesOperation {
         void execute(SharedPreferences.Editor editor);
     }
 
-    Storage(Context context, StorageConfiguration configuration) {
+    Preferences(Context context, PreferencesConfiguration configuration) {
         this.preferences = context.getSharedPreferences(configuration.group, Activity.MODE_PRIVATE);
     }
 
@@ -37,7 +37,7 @@ public class Storage {
         executeOperation(SharedPreferences.Editor::clear);
     }
 
-    private void executeOperation(StorageOperation op) {
+    private void executeOperation(PreferencesOperation op) {
         SharedPreferences.Editor editor = preferences.edit();
         op.execute(editor);
         editor.apply();
