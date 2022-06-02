@@ -79,7 +79,7 @@ export interface PushNotificationsPlugin {
    *
    * @since 1.0.0
    */
-  deleteChannel(channel: Channel): Promise<void>;
+  deleteChannel(args: { id: string }): Promise<void>;
 
   /**
    * List the available notification channels.
