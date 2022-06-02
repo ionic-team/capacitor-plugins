@@ -36,6 +36,21 @@ public class GeolocationPlugin extends Plugin {
         implementation = new Geolocation(getContext());
     }
 
+    @Override
+    protected void handleOnPause() {
+        super.handleOnPause();
+        // Clear all location updates on pause to avoid possible background location calls
+        implementation.clearLocationUpdates();
+    }
+
+    @Override
+    protected void handleOnResume() {
+        super.handleOnResume();
+        for (PluginCall call : watchingCalls.values()) {
+            startWatch(call);
+        }
+    }
+
     /**
      * Gets a snapshot of the current device position if permission is granted. The call continues
      * in the {@link #completeCurrentPosition(PluginCall)} method if a permission request is required.
