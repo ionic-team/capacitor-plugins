@@ -63,13 +63,12 @@ public class SplashScreen {
             try {
                 showWithAndroid12API(activity, settings);
                 return;
-            }
-            catch(Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
                 Logger.warn("Android 12 Splash API failed... using previous method.");
             }
         }
-        
+
         if (config.getLaunchShowDuration() == 0) {
             return;
         }
@@ -95,15 +94,15 @@ public class SplashScreen {
 
         activity.runOnUiThread(
             () -> {
-                androidx.core.splashscreen.SplashScreen windowSplashScreen
-                        = androidx.core.splashscreen.SplashScreen.installSplashScreen(activity);
+                androidx.core.splashscreen.SplashScreen windowSplashScreen = androidx.core.splashscreen.SplashScreen.installSplashScreen(
+                    activity
+                );
                 windowSplashScreen.setKeepOnScreenCondition(() -> isVisible || isHiding);
 
                 // Set Fade Out Animation
                 windowSplashScreen.setOnExitAnimationListener(
                     windowSplashScreenView -> {
-                        final ObjectAnimator fadeAnimator = ObjectAnimator.ofFloat(
-                            windowSplashScreenView.getView(), View.ALPHA, 1f, 0f);
+                        final ObjectAnimator fadeAnimator = ObjectAnimator.ofFloat(windowSplashScreenView.getView(), View.ALPHA, 1f, 0f);
                         fadeAnimator.setInterpolator(new LinearInterpolator());
                         fadeAnimator.setDuration(settings.getFadeOutDuration());
 
