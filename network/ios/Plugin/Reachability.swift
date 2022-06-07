@@ -33,7 +33,7 @@ public enum ReachabilityError: Error {
 }
 
 @available(*, unavailable, renamed: "Notification.Name.reachabilityChanged")
-public let ReachabilityChangedNotification = NSNotification.Name("ReachabilityChangedNotification")
+public let reachabilityChangedNotification = NSNotification.Name("ReachabilityChangedNotification")
 
 public extension Notification.Name {
     static let reachabilityChanged = Notification.Name("reachabilityChanged")
@@ -343,6 +343,7 @@ extension SCNetworkReachabilityFlags {
         return intersection([.connectionRequired, .transientConnection]) == [.connectionRequired, .transientConnection]
     }
 
+    // swiftlint:disable identifier_name
     var description: String {
         let W = isOnWWANFlagSet ? "W" : "-"
         let R = isReachableFlagSet ? "R" : "-"
@@ -356,6 +357,7 @@ extension SCNetworkReachabilityFlags {
 
         return "\(W)\(R) \(c)\(t)\(i)\(C)\(D)\(l)\(d)"
     }
+    // swiftlint:enable identifier_name
 }
 
 /**
