@@ -160,9 +160,10 @@ declare module '@capacitor/cli' {
        * This will override most other configuration options.
        * Instead, it will use Android's recommended splash screen settings.
        *
-       * Only available on Android SDK 31+.
+       * This will only affect Android SDK versions < 31.
+       * There is currently no way to disable the new API in SDK versions >= 31.
        *
-       * NOTE: You must set the splash screen icon in the `res/values-v31/styles.xml`
+       * NOTE: You must set the splash screen styles in the `res/values/styles.xml`
        * For more information, refer to the [Capacitor Splash Screen #Android Documentation](https://capacitorjs.com/docs/apis/splash-screen#android)
        *
        * @since 1.3.0

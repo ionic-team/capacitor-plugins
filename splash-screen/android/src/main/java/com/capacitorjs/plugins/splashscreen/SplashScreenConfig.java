@@ -125,6 +125,7 @@ public class SplashScreenConfig {
     }
 
     public void setUsingAndroid12API(boolean usingAndroid12API) {
-        this.usingAndroid12API = usingAndroid12API && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S;
+        // If SDK Version >= 31, the Android 12 Splash Screen API is required.
+        this.usingAndroid12API = usingAndroid12API || Build.VERSION.SDK_INT >= Build.VERSION_CODES.S;
     }
 }

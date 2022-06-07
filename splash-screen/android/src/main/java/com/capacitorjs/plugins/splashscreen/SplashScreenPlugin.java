@@ -156,7 +156,8 @@ public class SplashScreenPlugin extends Plugin {
             config.setLayoutName(getConfig().getString("layoutName"));
         }
 
-        boolean useAndroid12API = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && getConfig().getBoolean("useAndroid12API", false);
+        boolean useAndroid12API = getConfig().getBoolean("useAndroid12API",
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.S);
         config.setUsingAndroid12API(useAndroid12API);
 
         return config;

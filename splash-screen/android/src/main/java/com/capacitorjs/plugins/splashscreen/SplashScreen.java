@@ -7,7 +7,6 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.res.ColorStateList;
-import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.Animatable;
@@ -55,53 +54,56 @@ public class SplashScreen {
      * @param activity
      */
     public void showOnLaunch(final AppCompatActivity activity) {
+        SplashScreenSettings settings = new SplashScreenSettings();
+        settings.setShowDuration(config.getLaunchShowDuration());
+
         if (config.isUsingAndroid12API()) {
-            SplashScreenSettings settings = new SplashScreenSettings();
-            settings.setShowDuration(config.getLaunchShowDuration());
-            showWithAndroid12API(activity, settings);
-        } else {
-            if (config.getLaunchShowDuration() == 0) {
+            // Method can fail if styles are incorrectly set...
+            // If it fails, log error & fallback to old method
+            try {
+                showWithAndroid12API(activity, settings);
                 return;
             }
-            SplashScreenSettings settings = new SplashScreenSettings();
-            settings.setShowDuration(config.getLaunchShowDuration());
-            settings.setAutoHide(config.isLaunchAutoHide());
-            settings.setFadeInDuration(config.getLaunchFadeInDuration());
-            if (config.isUsingDialog()) {
-                showDialog(activity, settings, null, true);
-            } else {
-                show(activity, settings, null, true);
+            catch(Exception e) {
+                e.printStackTrace();
+                Logger.warn("Android 12 Splash API failed... using previous method.");
             }
+        }
+        
+        if (config.getLaunchShowDuration() == 0) {
+            return;
+        }
+
+        settings.setAutoHide(config.isLaunchAutoHide());
+        settings.setFadeInDuration(config.getLaunchFadeInDuration());
+        if (config.isUsingDialog()) {
+            showDialog(activity, settings, null, true);
+        } else {
+            show(activity, settings, null, true);
         }
     }
 
     /**
      * Show the Splash Screen using the Android 12 API (31+)
+     * Uses Compat Library for backwards compatibility
      *
      * @param activity
      * @param settings Settings used to show the Splash Screen
      */
     private void showWithAndroid12API(final AppCompatActivity activity, final SplashScreenSettings settings) {
-        if (activity == null || activity.isFinishing() || Build.VERSION.SDK_INT < Build.VERSION_CODES.S) return;
+        if (activity == null || activity.isFinishing()) return;
 
         activity.runOnUiThread(
             () -> {
-                android.window.SplashScreen windowSplashScreen = activity.getSplashScreen();
-
-                // Set Splash Screen Light/Dark Theme
-                switch (activity.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) {
-                    case Configuration.UI_MODE_NIGHT_YES:
-                        windowSplashScreen.setSplashScreenTheme(R.style.capacitor_dark_style);
-                        break;
-                    case Configuration.UI_MODE_NIGHT_NO:
-                        windowSplashScreen.setSplashScreenTheme(R.style.capacitor_light_style);
-                        break;
-                }
+                androidx.core.splashscreen.SplashScreen windowSplashScreen
+                        = androidx.core.splashscreen.SplashScreen.installSplashScreen(activity);
+                windowSplashScreen.setKeepOnScreenCondition(() -> isVisible || isHiding);
 
                 // Set Fade Out Animation
                 windowSplashScreen.setOnExitAnimationListener(
                     windowSplashScreenView -> {
-                        final ObjectAnimator fadeAnimator = ObjectAnimator.ofFloat(windowSplashScreenView, View.ALPHA, 1f, 0f);
+                        final ObjectAnimator fadeAnimator = ObjectAnimator.ofFloat(
+                            windowSplashScreenView.getView(), View.ALPHA, 1f, 0f);
                         fadeAnimator.setInterpolator(new LinearInterpolator());
                         fadeAnimator.setDuration(settings.getFadeOutDuration());
 
@@ -134,7 +136,7 @@ public class SplashScreen {
                                 @Override
                                 public boolean onPreDraw() {
                                     // Start Timer On First Run
-                                    if (!isVisible) {
+                                    if (!isVisible && !isHiding) {
                                         isVisible = true;
 
                                         new Handler(context.getMainLooper())
