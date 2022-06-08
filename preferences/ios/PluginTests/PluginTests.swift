@@ -1,7 +1,7 @@
 import XCTest
 @testable import Plugin
 
-class StorageTests: XCTestCase {
+class PreferencesTests: XCTestCase {
 
     override func setUp() {
         super.setUp()

@@ -1,6 +1,6 @@
 import Foundation
 
-public struct StorageConfiguration {
+public struct PreferencesConfiguration {
     public enum Group {
         case named(String), cordovaNativeStorage
     }
@@ -12,8 +12,8 @@ public struct StorageConfiguration {
     }
 }
 
-public class Storage {
-    private let configuration: StorageConfiguration
+public class Preferences {
+    private let configuration: PreferencesConfiguration
 
     private var defaults: UserDefaults {
         return UserDefaults.standard
@@ -32,7 +32,7 @@ public class Storage {
         return defaults.dictionaryRepresentation().keys.filter { $0.hasPrefix(prefix) }
     }
 
-    public init(with configuration: StorageConfiguration) {
+    public init(with configuration: PreferencesConfiguration) {
         self.configuration = configuration
     }
 

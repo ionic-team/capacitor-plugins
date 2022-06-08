@@ -1,25 +1,25 @@
 import Foundation
 import Capacitor
 
-@objc(StoragePlugin)
-public class StoragePlugin: CAPPlugin {
-    private var storage = Storage(with: StorageConfiguration())
+@objc(PreferencesPlugin)
+public class PreferencesPlugin: CAPPlugin {
+    private var preferences = Preferences(with: PreferencesConfiguration())
 
     @objc func configure(_ call: CAPPluginCall) {
         let group = call.getString("group")
-        let configuration: StorageConfiguration
+        let configuration: PreferencesConfiguration
 
         if let group = group {
             if group == "NativeStorage" {
-                configuration = StorageConfiguration(for: .cordovaNativeStorage)
+                configuration = PreferencesConfiguration(for: .cordovaNativeStorage)
             } else {
-                configuration = StorageConfiguration(for: .named(group))
+                configuration = PreferencesConfiguration(for: .named(group))
             }
         } else {
-            configuration = StorageConfiguration()
+            configuration = PreferencesConfiguration()
         }
 
-        storage = Storage(with: configuration)
+        preferences = Preferences(with: configuration)
         call.resolve()
     }
 
@@ -29,7 +29,7 @@ public class StoragePlugin: CAPPlugin {
             return
         }
 
-        let value = storage.get(by: key)
+        let value = preferences.get(by: key)
 
         call.resolve([
             "value": value as Any
@@ -43,7 +43,7 @@ public class StoragePlugin: CAPPlugin {
         }
         let value = call.getString("value", "")
 
-        storage.set(value, for: key)
+        preferences.set(value, for: key)
         call.resolve()
     }
 
@@ -53,12 +53,12 @@ public class StoragePlugin: CAPPlugin {
             return
         }
 
-        storage.remove(by: key)
+        preferences.remove(by: key)
         call.resolve()
     }
 
     @objc func keys(_ call: CAPPluginCall) {
-        let keys = storage.keys()
+        let keys = preferences.keys()
 
         call.resolve([
             "keys": keys
@@ -66,7 +66,7 @@ public class StoragePlugin: CAPPlugin {
     }
 
     @objc func clear(_ call: CAPPluginCall) {
-        storage.removeAll()
+        preferences.removeAll()
         call.resolve()
     }
 
@@ -79,10 +79,10 @@ public class StoragePlugin: CAPPlugin {
         for oldKey in oldKeys {
             let key = String(oldKey.dropFirst(oldPrefix.count))
             let value = UserDefaults.standard.string(forKey: oldKey) ?? ""
-            let currentValue = storage.get(by: key)
+            let currentValue = preferences.get(by: key)
 
             if currentValue == nil {
-                storage.set(value, for: key)
+                preferences.set(value, for: key)
                 migrated.append(key)
             } else {
                 existing.append(key)

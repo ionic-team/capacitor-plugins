@@ -4,7 +4,7 @@ export default {
     {
       file: 'dist/plugin.js',
       format: 'iife',
-      name: 'capacitorStorage',
+      name: 'capacitorPreferences',
       globals: {
         '@capacitor/core': 'capacitorExports',
       },

@@ -1,7 +1,7 @@
 {
-  "name": "@capacitor/storage",
+  "name": "@capacitor/preferences",
   "version": "1.2.5",
-  "description": "The Storage API provides a simple key/value persistent store for lightweight data.",
+  "description": "The Preferences API provides a simple key/value persistent store for lightweight data.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -11,7 +11,7 @@
     "android/build.gradle",
     "dist/",
     "ios/Plugin/",
-    "CapacitorStorage.podspec"
+    "CapacitorPreferences.podspec"
   ],
   "author": "Ionic <hi@ionicframework.com>",
   "license": "MIT",
@@ -37,12 +37,12 @@
     "eslint": "eslint . --ext ts",
     "prettier": "prettier \"**/*.{css,html,ts,js,java}\"",
     "swiftlint": "node-swiftlint",
-    "docgen": "docgen --api StoragePlugin --output-readme README.md --output-json dist/docs.json",
+    "docgen": "docgen --api PreferencesPlugin --output-readme README.md --output-json dist/docs.json",
     "build": "npm run clean && npm run docgen && tsc && rollup -c rollup.config.js",
     "clean": "rimraf ./dist",
     "watch": "tsc --watch",
     "prepublishOnly": "npm run build",
-    "publish:cocoapod": "pod trunk push ./CapacitorStorage.podspec --allow-warnings"
+    "publish:cocoapod": "pod trunk push ./CapacitorPreferences.podspec --allow-warnings"
   },
   "devDependencies": {
     "@capacitor/android": "next",
