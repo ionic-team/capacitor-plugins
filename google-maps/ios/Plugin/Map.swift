@@ -351,7 +351,7 @@ public class Map {
     }
 
     func getMapLatLngBounds() -> GMSCoordinateBounds? {
-        return self.mapViewController.GMapView.cameraTargetBounds
+        return GMSCoordinateBounds(region: self.mapViewController.GMapView.projection.visibleRegion())
     }
 
     private func getFrameOverflowBounds(frame: CGRect, mapBounds: CGRect) -> [CGRect] {

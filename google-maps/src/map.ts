@@ -145,7 +145,10 @@ export class GoogleMap {
       newMap.initScrolling();
     }
 
-    (options.element as any) = {};
+    if (Capacitor.isNativePlatform()) {
+      (options.element as any) = {};
+    }
+
     await CapacitorGoogleMaps.create(options);
 
     if (callback) {

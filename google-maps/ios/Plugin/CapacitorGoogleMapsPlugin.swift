@@ -463,16 +463,18 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
                 throw GoogleMapErrors.mapNotFound
             }
 
-            guard let bounds = map.getMapLatLngBounds() else {
-                throw GoogleMapErrors.unhandledError("Google Map Bounds could not be found.")
-            }
-
-            call.resolve(
-                formatMapBoundsForResponse(
-                    bounds: bounds,
-                    cameraPosition: map.mapViewController.GMapView.camera
+            try DispatchQueue.main.sync {
+                guard let bounds = map.getMapLatLngBounds() else {
+                    throw GoogleMapErrors.unhandledError("Google Map Bounds could not be found.")
+                }
+                
+                call.resolve(
+                    formatMapBoundsForResponse(
+                        bounds: bounds,
+                        cameraPosition: map.mapViewController.GMapView.camera
+                    )
                 )
-            )
+            }
         } catch {
             handleError(call, error: error)
         }
