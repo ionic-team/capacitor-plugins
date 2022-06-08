@@ -467,7 +467,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
                 guard let bounds = map.getMapLatLngBounds() else {
                     throw GoogleMapErrors.unhandledError("Google Map Bounds could not be found.")
                 }
-                
+
                 call.resolve(
                     formatMapBoundsForResponse(
                         bounds: bounds,
