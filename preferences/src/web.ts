@@ -1,7 +1,7 @@
 import { WebPlugin } from '@capacitor/core';
 
 import type {
-  StoragePlugin,
+  PreferencesPlugin,
   ConfigureOptions,
   GetOptions,
   GetResult,
@@ -11,7 +11,7 @@ import type {
   MigrateResult,
 } from './definitions';
 
-export class StorageWeb extends WebPlugin implements StoragePlugin {
+export class PreferencesWeb extends WebPlugin implements PreferencesPlugin {
   private group = 'CapacitorStorage';
 
   public async configure({ group }: ConfigureOptions): Promise<void> {

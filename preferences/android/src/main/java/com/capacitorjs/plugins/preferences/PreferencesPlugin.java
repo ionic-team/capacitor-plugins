@@ -1,4 +1,4 @@
-package com.capacitorjs.plugins.storage;
+package com.capacitorjs.plugins.preferences;
 
 import com.getcapacitor.JSArray;
 import com.getcapacitor.JSObject;
@@ -11,23 +11,23 @@ import java.util.List;
 import java.util.Set;
 import org.json.JSONException;
 
-@CapacitorPlugin(name = "Storage")
-public class StoragePlugin extends Plugin {
+@CapacitorPlugin(name = "Preferences")
+public class PreferencesPlugin extends Plugin {
 
-    private Storage storage;
+    private Preferences preferences;
 
     @Override
     public void load() {
-        storage = new Storage(getContext(), StorageConfiguration.DEFAULTS);
+        preferences = new Preferences(getContext(), PreferencesConfiguration.DEFAULTS);
     }
 
     @PluginMethod
     public void configure(PluginCall call) {
         try {
-            StorageConfiguration configuration = StorageConfiguration.DEFAULTS.clone();
-            configuration.group = call.getString("group", StorageConfiguration.DEFAULTS.group);
+            PreferencesConfiguration configuration = PreferencesConfiguration.DEFAULTS.clone();
+            configuration.group = call.getString("group", PreferencesConfiguration.DEFAULTS.group);
 
-            storage = new Storage(getContext(), configuration);
+            preferences = new Preferences(getContext(), configuration);
         } catch (CloneNotSupportedException e) {
             call.reject("Error while configuring", e);
             return;
@@ -43,7 +43,7 @@ public class StoragePlugin extends Plugin {
             return;
         }
 
-        String value = storage.get(key);
+        String value = preferences.get(key);
 
         JSObject ret = new JSObject();
         ret.put("value", value == null ? JSObject.NULL : value);
@@ -59,7 +59,7 @@ public class StoragePlugin extends Plugin {
         }
 
         String value = call.getString("value");
-        storage.set(key, value);
+        preferences.set(key, value);
 
         call.resolve();
     }
@@ -72,14 +72,14 @@ public class StoragePlugin extends Plugin {
             return;
         }
 
-        storage.remove(key);
+        preferences.remove(key);
 
         call.resolve();
     }
 
     @PluginMethod
     public void keys(PluginCall call) {
-        Set<String> keySet = storage.keys();
+        Set<String> keySet = preferences.keys();
         String[] keys = keySet.toArray(new String[0]);
 
         JSObject ret = new JSObject();
@@ -94,7 +94,7 @@ public class StoragePlugin extends Plugin {
 
     @PluginMethod
     public void clear(PluginCall call) {
-        storage.clear();
+        preferences.clear();
         call.resolve();
     }
 
@@ -102,14 +102,14 @@ public class StoragePlugin extends Plugin {
     public void migrate(PluginCall call) {
         List<String> migrated = new ArrayList<>();
         List<String> existing = new ArrayList<>();
-        Storage oldStorage = new Storage(getContext(), StorageConfiguration.DEFAULTS);
+        Preferences oldPreferences = new Preferences(getContext(), PreferencesConfiguration.DEFAULTS);
 
-        for (String key : oldStorage.keys()) {
-            String value = oldStorage.get(key);
-            String currentValue = storage.get(key);
+        for (String key : oldPreferences.keys()) {
+            String value = oldPreferences.get(key);
+            String currentValue = preferences.get(key);
 
             if (currentValue == null) {
-                storage.set(key, value);
+                preferences.set(key, value);
                 migrated.add(key);
             } else {
                 existing.add(key);

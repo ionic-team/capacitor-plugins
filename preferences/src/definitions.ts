@@ -1,8 +1,8 @@
 export interface ConfigureOptions {
   /**
-   * Set the storage group.
+   * Set the preferences group.
    *
-   * Storage groups are used to organize key/value pairs.
+   * Preferences groups are used to organize key/value pairs.
    *
    * Using the value 'NativeStorage' provides backwards-compatibility with
    * [`cordova-plugin-nativestorage`](https://www.npmjs.com/package/cordova-plugin-nativestorage).
@@ -17,7 +17,7 @@ export interface ConfigureOptions {
 
 export interface GetOptions {
   /**
-   * The key whose value to retrieve from storage.
+   * The key whose value to retrieve from preferences.
    *
    * @since 1.0.0
    */
@@ -26,7 +26,7 @@ export interface GetOptions {
 
 export interface GetResult {
   /**
-   * The value from storage associated with the given key.
+   * The value from preferences associated with the given key.
    *
    * If a value was not previously set or was removed, value will be `null`.
    *
@@ -37,14 +37,14 @@ export interface GetResult {
 
 export interface SetOptions {
   /**
-   * The key to associate with the value being set in storage.
+   * The key to associate with the value being set in preferences.
    *
    * @since 1.0.0
    */
   key: string;
 
   /**
-   * The value to set in storage with the associated key.
+   * The value to set in preferences with the associated key.
    *
    * @since 1.0.0
    */
@@ -53,7 +53,7 @@ export interface SetOptions {
 
 export interface RemoveOptions {
   /**
-   * The key whose value to remove from storage.
+   * The key whose value to remove from preferences.
    *
    * @since 1.0.0
    */
@@ -62,7 +62,7 @@ export interface RemoveOptions {
 
 export interface KeysResult {
   /**
-   * The known keys in storage.
+   * The known keys in preferences.
    *
    * @since 1.0.0
    */
@@ -78,17 +78,17 @@ export interface MigrateResult {
   migrated: string[];
 
   /**
-   * An array of keys that were already migrated or otherwise exist in storage
-   * that had a value in the Capacitor 2 Storage plugin.
+   * An array of keys that were already migrated or otherwise exist in preferences
+   * that had a value in the Capacitor 2 Preferences plugin.
    *
    * @since 1.0.0
    */
   existing: string[];
 }
 
-export interface StoragePlugin {
+export interface PreferencesPlugin {
   /**
-   * Configure the storage plugin at runtime.
+   * Configure the preferences plugin at runtime.
    *
    * Options that are `undefined` will not be used.
    *
@@ -97,35 +97,35 @@ export interface StoragePlugin {
   configure(options: ConfigureOptions): Promise<void>;
 
   /**
-   * Get the value from storage of a given key.
+   * Get the value from preferences of a given key.
    *
    * @since 1.0.0
    */
   get(options: GetOptions): Promise<GetResult>;
 
   /**
-   * Set the value in storage for a given key.
+   * Set the value in preferences for a given key.
    *
    * @since 1.0.0
    */
   set(options: SetOptions): Promise<void>;
 
   /**
-   * Remove the value from storage for a given key, if any.
+   * Remove the value from preferences for a given key, if any.
    *
    * @since 1.0.0
    */
   remove(options: RemoveOptions): Promise<void>;
 
   /**
-   * Clear keys and values from storage.
+   * Clear keys and values from preferences.
    *
    * @since 1.0.0
    */
   clear(): Promise<void>;
 
   /**
-   * Return the list of known keys in storage.
+   * Return the list of known keys in preferences.
    *
    * @since 1.0.0
    */
