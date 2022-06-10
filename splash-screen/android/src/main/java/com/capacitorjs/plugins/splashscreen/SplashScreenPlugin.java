@@ -1,6 +1,5 @@
 package com.capacitorjs.plugins.splashscreen;
 
-import android.os.Build;
 import android.widget.ImageView;
 import com.getcapacitor.Logger;
 import com.getcapacitor.Plugin;
