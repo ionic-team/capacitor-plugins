@@ -1,5 +1,4 @@
 import Foundation
-import Reachability
 
 public typealias NetworkConnectionChangedObserver = (Network.Connection) -> Void
 
@@ -37,7 +36,7 @@ public class Network {
 fileprivate extension Reachability.Connection {
     var equivalentEnum: Network.Connection {
         switch self {
-        case .unavailable, .none:
+        case .unavailable:
             return .unavailable
         case .wifi:
             return .wifi
