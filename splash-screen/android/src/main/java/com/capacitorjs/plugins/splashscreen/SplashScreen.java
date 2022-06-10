@@ -106,7 +106,6 @@ public class SplashScreen {
 
                         fadeAnimator.addListener(
                             new AnimatorListenerAdapter() {
-                                @RequiresApi(api = Build.VERSION_CODES.S)
                                 @Override
                                 public void onAnimationEnd(Animator animation) {
                                     isHiding = false;
