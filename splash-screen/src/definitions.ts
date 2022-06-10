@@ -153,23 +153,6 @@ declare module '@capacitor/cli' {
        * @example true
        */
       useDialog?: boolean;
-
-      /**
-       * Use the [Android 12 API](https://developer.android.com/guide/topics/ui/splash-screen)
-       * to show the splash screen on launch.
-       * This will override most other configuration options.
-       * Instead, it will use Android's recommended splash screen settings.
-       *
-       * This will only affect Android SDK versions < 31.
-       * There is currently no way to disable the new API in SDK versions >= 31.
-       *
-       * NOTE: You must set the splash screen styles in the `res/values/styles.xml`
-       * For more information, refer to the [Capacitor Splash Screen #Android Documentation](https://capacitorjs.com/docs/apis/splash-screen#android)
-       *
-       * @since 1.3.0
-       * @example true
-       */
-      useAndroid12API?: boolean;
     };
   }
 }

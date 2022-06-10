@@ -56,24 +56,23 @@ public class SplashScreen {
     public void showOnLaunch(final AppCompatActivity activity) {
         SplashScreenSettings settings = new SplashScreenSettings();
         settings.setShowDuration(config.getLaunchShowDuration());
+        settings.setAutoHide(config.isLaunchAutoHide());
 
-        if (config.isUsingAndroid12API()) {
-            // Method can fail if styles are incorrectly set...
-            // If it fails, log error & fallback to old method
-            try {
-                showWithAndroid12API(activity, settings);
-                return;
-            } catch (Exception e) {
-                e.printStackTrace();
-                Logger.warn("Android 12 Splash API failed... using previous method.");
-            }
+        // Method can fail if styles are incorrectly set...
+        // If it fails, log error & fallback to old method
+        try {
+            showWithAndroid12API(activity, settings);
+            return;
         }
-
+        catch(Exception e) {
+            e.printStackTrace();
+            Logger.warn("Android 12 Splash API failed... using previous method.");
+        }
+        
         if (config.getLaunchShowDuration() == 0) {
             return;
         }
 
-        settings.setAutoHide(config.isLaunchAutoHide());
         settings.setFadeInDuration(config.getLaunchFadeInDuration());
         if (config.isUsingDialog()) {
             showDialog(activity, settings, null, true);
@@ -94,15 +93,15 @@ public class SplashScreen {
 
         activity.runOnUiThread(
             () -> {
-                androidx.core.splashscreen.SplashScreen windowSplashScreen = androidx.core.splashscreen.SplashScreen.installSplashScreen(
-                    activity
-                );
+                androidx.core.splashscreen.SplashScreen windowSplashScreen
+                        = androidx.core.splashscreen.SplashScreen.installSplashScreen(activity);
                 windowSplashScreen.setKeepOnScreenCondition(() -> isVisible || isHiding);
 
                 // Set Fade Out Animation
                 windowSplashScreen.setOnExitAnimationListener(
                     windowSplashScreenView -> {
-                        final ObjectAnimator fadeAnimator = ObjectAnimator.ofFloat(windowSplashScreenView.getView(), View.ALPHA, 1f, 0f);
+                        final ObjectAnimator fadeAnimator = ObjectAnimator.ofFloat(
+                                windowSplashScreenView.getView(), View.ALPHA, 1f, 0f);
                         fadeAnimator.setInterpolator(new LinearInterpolator());
                         fadeAnimator.setDuration(settings.getFadeOutDuration());
 
@@ -124,38 +123,42 @@ public class SplashScreen {
                     }
                 );
 
-                if (settings.getShowDuration() > 0) {
-                    // Set Pre Draw Listener & Delay Drawing Until Duration Elapses
-                    final View content = activity.findViewById(android.R.id.content);
 
-                    content
-                        .getViewTreeObserver()
-                        .addOnPreDrawListener(
-                            new ViewTreeObserver.OnPreDrawListener() {
-                                @Override
-                                public boolean onPreDraw() {
-                                    // Start Timer On First Run
-                                    if (!isVisible && !isHiding) {
-                                        isVisible = true;
+                // Set Pre Draw Listener & Delay Drawing Until Duration Elapses
+                final View content = activity.findViewById(android.R.id.content);
 
-                                        new Handler(context.getMainLooper())
-                                            .postDelayed(
-                                                () -> {
-                                                    // Splash screen is done... start drawing content.
-                                                    content.getViewTreeObserver().removeOnPreDrawListener(this);
-                                                },
-                                                settings.getShowDuration()
-                                            );
-                                    }
-                                    // Not ready to dismiss splash screen
-                                    return false;
+                content
+                    .getViewTreeObserver()
+                    .addOnPreDrawListener(
+                        new ViewTreeObserver.OnPreDrawListener() {
+                            @Override
+                            public boolean onPreDraw() {
+                                // Run fade out animation since content is ready to draw
+                                if(settings.isAutoHide()) {
+                                    isVisible = true;
+                                    return true;
                                 }
+
+                                // Start Timer On First Run
+                                if (!isVisible && !isHiding) {
+                                    isVisible = true;
+
+                                    new Handler(context.getMainLooper())
+                                        .postDelayed(
+                                            () -> {
+                                                // Splash screen is done... start drawing content.
+                                                isVisible = false;
+                                                content.getViewTreeObserver().removeOnPreDrawListener(this);
+                                            },
+                                            settings.getShowDuration()
+                                        );
+                                }
+
+                                // Not ready to dismiss splash screen
+                                return false;
                             }
-                        );
-                } else {
-                    // Will automatically dismiss when content is ready to draw
-                    isVisible = true;
-                }
+                        }
+                    );
             }
         );
     }
