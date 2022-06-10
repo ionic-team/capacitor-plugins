@@ -63,12 +63,11 @@ public class SplashScreen {
         try {
             showWithAndroid12API(activity, settings);
             return;
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             Logger.warn("Android 12 Splash API failed... using previous method.");
         }
-        
+
         if (config.getLaunchShowDuration() == 0) {
             return;
         }
@@ -93,15 +92,15 @@ public class SplashScreen {
 
         activity.runOnUiThread(
             () -> {
-                androidx.core.splashscreen.SplashScreen windowSplashScreen
-                        = androidx.core.splashscreen.SplashScreen.installSplashScreen(activity);
+                androidx.core.splashscreen.SplashScreen windowSplashScreen = androidx.core.splashscreen.SplashScreen.installSplashScreen(
+                    activity
+                );
                 windowSplashScreen.setKeepOnScreenCondition(() -> isVisible || isHiding);
 
                 // Set Fade Out Animation
                 windowSplashScreen.setOnExitAnimationListener(
                     windowSplashScreenView -> {
-                        final ObjectAnimator fadeAnimator = ObjectAnimator.ofFloat(
-                                windowSplashScreenView.getView(), View.ALPHA, 1f, 0f);
+                        final ObjectAnimator fadeAnimator = ObjectAnimator.ofFloat(windowSplashScreenView.getView(), View.ALPHA, 1f, 0f);
                         fadeAnimator.setInterpolator(new LinearInterpolator());
                         fadeAnimator.setDuration(settings.getFadeOutDuration());
 
@@ -123,7 +122,6 @@ public class SplashScreen {
                     }
                 );
 
-
                 // Set Pre Draw Listener & Delay Drawing Until Duration Elapses
                 final View content = activity.findViewById(android.R.id.content);
 
@@ -134,7 +132,7 @@ public class SplashScreen {
                             @Override
                             public boolean onPreDraw() {
                                 // Run fade out animation since content is ready to draw
-                                if(settings.isAutoHide()) {
+                                if (settings.isAutoHide()) {
                                     isVisible = true;
                                     return true;
                                 }
