@@ -200,7 +200,12 @@ NSString* UITraitsClassString;
     _paddingBottom = _paddingBottom + 20;
   }
   CGRect f, wf = CGRectZero;
-  UIWindow * window = [[[UIApplication sharedApplication] delegate] window];
+  UIWindow * window = nil;
+    
+  if ([[[UIApplication sharedApplication] delegate] respondsToSelector:@selector(window)]) {
+    window = [[[UIApplication sharedApplication] delegate] window];
+  }
+  
   if (!window) {
     if (@available(iOS 13.0, *)) {
       UIScene *scene = [UIApplication sharedApplication].connectedScenes.allObjects.firstObject;
