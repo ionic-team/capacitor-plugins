@@ -715,11 +715,11 @@ Controls for setting padding on the 'visible' region of the view.
 
 An interface representing the viewports latitude and longitude bounds.
 
-| Prop            | Type                                                  |
-| --------------- | ----------------------------------------------------- |
-| **`southwest`** | <code>{ latitude: number; longitude: number; }</code> |
-| **`center`**    | <code>{ latitude: number; longitude: number; }</code> |
-| **`northeast`** | <code>{ latitude: number; longitude: number; }</code> |
+| Prop            | Type                                      |
+| --------------- | ----------------------------------------- |
+| **`southwest`** | <code><a href="#latlng">LatLng</a></code> |
+| **`center`**    | <code><a href="#latlng">LatLng</a></code> |
+| **`northeast`** | <code><a href="#latlng">LatLng</a></code> |
 
 
 #### CameraMoveStartedCallbackData

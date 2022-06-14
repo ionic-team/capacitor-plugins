@@ -484,16 +484,16 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
         return [
             "bounds": [
                 "southwest": [
-                    "latitude": bounds?.southWest.latitude,
-                    "longitude": bounds?.southWest.longitude
+                    "lat": bounds?.southWest.latitude,
+                    "lng": bounds?.southWest.longitude
                 ],
                 "center": [
-                    "latitude": cameraPosition.target.latitude,
-                    "longitude": cameraPosition.target.longitude
+                    "lat": cameraPosition.target.latitude,
+                    "lng": cameraPosition.target.longitude
                 ],
                 "northeast": [
-                    "latitude": bounds?.northEast.latitude,
-                    "longitude": bounds?.northEast.longitude
+                    "lat": bounds?.northEast.latitude,
+                    "lng": bounds?.northEast.longitude
                 ]
             ]
         ]

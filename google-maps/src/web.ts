@@ -188,16 +188,16 @@ export class CapacitorGoogleMapsWeb
 
     return {
       southwest: {
-        latitude: bounds.getSouthWest().lat(),
-        longitude: bounds.getSouthWest().lng(),
+        lat: bounds.getSouthWest().lat(),
+        lng: bounds.getSouthWest().lng(),
       },
       center: {
-        latitude: bounds.getCenter().lat(),
-        longitude: bounds.getCenter().lng(),
+        lat: bounds.getCenter().lat(),
+        lng: bounds.getCenter().lng(),
       },
       northeast: {
-        latitude: bounds.getNorthEast().lat(),
-        longitude: bounds.getNorthEast().lng(),
+        lat: bounds.getNorthEast().lat(),
+        lng: bounds.getNorthEast().lng(),
       },
     };
   }

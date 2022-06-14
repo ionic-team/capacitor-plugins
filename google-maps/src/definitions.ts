@@ -2,18 +2,9 @@
  * An interface representing the viewports latitude and longitude bounds.
  */
 export interface LatLngBounds {
-  southwest: {
-    latitude: number;
-    longitude: number;
-  };
-  center: {
-    latitude: number;
-    longitude: number;
-  };
-  northeast: {
-    latitude: number;
-    longitude: number;
-  };
+  southwest: LatLng;
+  center: LatLng;
+  northeast: LatLng;
 }
 
 /**

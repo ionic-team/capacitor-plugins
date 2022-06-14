@@ -488,12 +488,12 @@ class CapacitorGoogleMap(
         val centerJS = JSObject()
         val northeastJS = JSObject()
 
-        southwestJS.put("latitude", bounds.southwest.latitude)
-        southwestJS.put("longitude", bounds.southwest.longitude)
-        centerJS.put("latitude", bounds.center.latitude)
-        centerJS.put("longitude", bounds.center.longitude)
-        northeastJS.put("latitude", bounds.northeast.latitude)
-        northeastJS.put("longitude", bounds.northeast.longitude)
+        southwestJS.put("lat", bounds.southwest.latitude)
+        southwestJS.put("lng", bounds.southwest.longitude)
+        centerJS.put("lat", bounds.center.latitude)
+        centerJS.put("lng", bounds.center.longitude)
+        northeastJS.put("lat", bounds.northeast.latitude)
+        northeastJS.put("lng", bounds.northeast.longitude)
 
         data.put("southwest", southwestJS)
         data.put("center", centerJS)
