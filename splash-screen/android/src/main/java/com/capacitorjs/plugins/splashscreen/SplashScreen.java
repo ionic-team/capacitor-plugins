@@ -12,7 +12,6 @@ import android.graphics.PixelFormat;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
-import android.os.Build;
 import android.os.Handler;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -25,7 +24,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import com.getcapacitor.Logger;
 
@@ -64,7 +62,6 @@ public class SplashScreen {
             showWithAndroid12API(activity, settings);
             return;
         } catch (Exception e) {
-            e.printStackTrace();
             Logger.warn("Android 12 Splash API failed... using previous method.");
         }
 
@@ -130,12 +127,6 @@ public class SplashScreen {
                         new ViewTreeObserver.OnPreDrawListener() {
                             @Override
                             public boolean onPreDraw() {
-                                // Run fade out animation since content is ready to draw
-                                if (settings.isAutoHide()) {
-                                    isVisible = true;
-                                    return true;
-                                }
-
                                 // Start Timer On First Run
                                 if (!isVisible && !isHiding) {
                                     isVisible = true;
