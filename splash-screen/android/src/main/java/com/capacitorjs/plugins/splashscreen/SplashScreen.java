@@ -18,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.ViewTreeObserver.OnPreDrawListener;
 import android.view.WindowManager;
 import android.view.animation.LinearInterpolator;
 import android.widget.FrameLayout;
@@ -40,6 +41,7 @@ public class SplashScreen {
     private boolean isHiding = false;
     private Context context;
     private SplashScreenConfig config;
+    private OnPreDrawListener onPreDrawListener;
 
     SplashScreen(Context context, SplashScreenConfig config) {
         this.context = context;
@@ -63,6 +65,7 @@ public class SplashScreen {
             return;
         } catch (Exception e) {
             Logger.warn("Android 12 Splash API failed... using previous method.");
+            this.onPreDrawListener = null;
         }
 
         if (config.getLaunchShowDuration() == 0) {
@@ -121,32 +124,33 @@ public class SplashScreen {
                 // Set Pre Draw Listener & Delay Drawing Until Duration Elapses
                 final View content = activity.findViewById(android.R.id.content);
 
-                content
-                    .getViewTreeObserver()
-                    .addOnPreDrawListener(
-                        new ViewTreeObserver.OnPreDrawListener() {
-                            @Override
-                            public boolean onPreDraw() {
-                                // Start Timer On First Run
-                                if (!isVisible && !isHiding) {
-                                    isVisible = true;
+                this.onPreDrawListener =
+                    new ViewTreeObserver.OnPreDrawListener() {
+                        @Override
+                        public boolean onPreDraw() {
+                            // Start Timer On First Run
+                            if (!isVisible && !isHiding) {
+                                isVisible = true;
 
-                                    new Handler(context.getMainLooper())
-                                        .postDelayed(
-                                            () -> {
-                                                // Splash screen is done... start drawing content.
+                                new Handler(context.getMainLooper())
+                                    .postDelayed(
+                                        () -> {
+                                            // Splash screen is done... start drawing content.
+                                            if (settings.isAutoHide()) {
                                                 isVisible = false;
                                                 content.getViewTreeObserver().removeOnPreDrawListener(this);
-                                            },
-                                            settings.getShowDuration()
-                                        );
-                                }
-
-                                // Not ready to dismiss splash screen
-                                return false;
+                                            }
+                                        },
+                                        settings.getShowDuration()
+                                    );
                             }
+
+                            // Not ready to dismiss splash screen
+                            return false;
                         }
-                    );
+                    };
+
+                content.getViewTreeObserver().addOnPreDrawListener(this.onPreDrawListener);
             }
         );
     }
@@ -243,8 +247,8 @@ public class SplashScreen {
      *
      * @param settings Settings used to hide the Splash Screen
      */
-    public void hide(SplashScreenSettings settings) {
-        hide(settings.getFadeOutDuration(), false);
+    public void hide(final AppCompatActivity activity, SplashScreenSettings settings) {
+        hide(activity, settings.getFadeOutDuration(), false);
     }
 
     /**
@@ -396,7 +400,7 @@ public class SplashScreen {
                     new Handler()
                         .postDelayed(
                             () -> {
-                                hide(settings.getFadeOutDuration(), isLaunchSplash);
+                                hide(activity, settings.getFadeOutDuration(), isLaunchSplash);
 
                                 if (splashListener != null) {
                                     splashListener.completed();
@@ -481,7 +485,7 @@ public class SplashScreen {
         );
     }
 
-    private void hide(final int fadeOutDuration, boolean isLaunchSplash) {
+    private void hide(final AppCompatActivity activity, final int fadeOutDuration, boolean isLaunchSplash) {
         // Warn the user if the splash was hidden automatically, which means they could be experiencing an app
         // that feels slower than it actually is.
         if (isLaunchSplash && isVisible) {
@@ -492,7 +496,20 @@ public class SplashScreen {
             );
         }
 
-        if (isHiding || splashImage == null || splashImage.getParent() == null) {
+        if (isHiding) {
+            return;
+        }
+
+        // Hide with Android 12 API
+        if (null != this.onPreDrawListener) {
+            this.isVisible = false;
+            final View content = activity.findViewById(android.R.id.content);
+            content.getViewTreeObserver().removeOnPreDrawListener(this.onPreDrawListener);
+            this.onPreDrawListener = null;
+            return;
+        }
+
+        if (splashImage == null || splashImage.getParent() == null) {
             return;
         }
 
