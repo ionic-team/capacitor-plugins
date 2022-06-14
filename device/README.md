@@ -121,6 +121,7 @@ Get the device's current language locale code.
 | **`model`**           | <code>string</code>                                         | The device model. For example, "iPhone".                                                                                                                                                                                            | 1.0.0 |
 | **`platform`**        | <code>'ios' \| 'android' \| 'web'</code>                    | The device platform (lowercase).                                                                                                                                                                                                    | 1.0.0 |
 | **`operatingSystem`** | <code><a href="#operatingsystem">OperatingSystem</a></code> | The operating system of the device.                                                                                                                                                                                                 | 1.0.0 |
+| **`hardwareType`**    | <code><a href="#hardwaretype">HardwareType</a></code>       | Type of the hardware that app runs at.                                                                                                                                                                                              | 1.2.0 |
 | **`osVersion`**       | <code>string</code>                                         | The version of the device OS.                                                                                                                                                                                                       | 1.0.0 |
 | **`manufacturer`**    | <code>string</code>                                         | The manufacturer of the device.                                                                                                                                                                                                     | 1.0.0 |
 | **`isVirtual`**       | <code>boolean</code>                                        | Whether the app is running in a simulator/emulator.                                                                                                                                                                                 | 1.0.0 |
@@ -153,5 +154,10 @@ Get the device's current language locale code.
 #### OperatingSystem
 
 <code>'ios' | 'android' | 'windows' | 'mac' | 'unknown'</code>
+
+
+#### HardwareType
+
+<code>'smartphone' | 'tablet' | 'car' | 'tv' | 'desktop' | 'unknown'</code>
 
 </docgen-api>

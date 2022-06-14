@@ -1,4 +1,5 @@
 import Foundation
+import UIKit
 
 @objc public class Device: NSObject {
     /**
@@ -64,5 +65,9 @@ import Foundation
 
     public func getLanguageCode() -> String {
         return String(Locale.preferredLanguages[0].prefix(2))
+    }
+    
+    public func getHardwareType() -> String {
+        return UIDevice.current.userInterfaceIdiom.bridgeValue
     }
 }

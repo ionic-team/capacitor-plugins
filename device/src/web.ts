@@ -40,6 +40,7 @@ export class DeviceWeb extends WebPlugin implements DevicePlugin {
       model: uaFields.model,
       platform: <const>'web',
       operatingSystem: uaFields.operatingSystem,
+      hardwareType: <const>'desktop',
       osVersion: uaFields.osVersion,
       manufacturer: navigator.vendor,
       isVirtual: false,

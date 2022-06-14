@@ -1,4 +1,5 @@
 export type OperatingSystem = 'ios' | 'android' | 'windows' | 'mac' | 'unknown';
+export type HardwareType = 'smartphone' | 'tablet' | 'car' | 'tv' | 'desktop' | 'unknown';
 
 export interface DeviceId {
   /**
@@ -42,6 +43,13 @@ export interface DeviceInfo {
    * @since 1.0.0
    */
   operatingSystem: OperatingSystem;
+
+  /**
+   * Type of the hardware that app runs at.
+   *
+   * @since 1.2.0
+   */
+  hardwareType: HardwareType;
 
   /**
    * The version of the device OS.
