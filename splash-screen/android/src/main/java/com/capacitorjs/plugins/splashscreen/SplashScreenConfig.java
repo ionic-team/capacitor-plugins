@@ -17,6 +17,8 @@ public class SplashScreenConfig {
     private ScaleType scaleType = ScaleType.FIT_XY;
     private boolean usingDialog = false;
     private String layoutName;
+    // This is used to determine whether a series of images should be used to animate the splash screen.
+    private boolean animated = false;
 
     public Integer getBackgroundColor() {
         return backgroundColor;
@@ -116,5 +118,15 @@ public class SplashScreenConfig {
 
     public void setLayoutName(String layoutName) {
         this.layoutName = layoutName;
+    }
+
+    // This is used to read the config for whether the splash screen should be animated.
+    public boolean getAnimated() {
+        return animated;
+    }
+
+    // This is used to set the config for whether the splash screen should be animated.
+    public void setAnimated(Boolean animated) {
+        this.animated = animated;
     }
 }

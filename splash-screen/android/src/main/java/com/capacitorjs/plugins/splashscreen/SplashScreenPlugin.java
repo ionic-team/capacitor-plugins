@@ -40,6 +40,13 @@ public class SplashScreenPlugin extends Plugin {
         );
     }
 
+    // Show and update progress of progress bar.
+    @PluginMethod
+    public void updateProgress(final PluginCall call) {
+        splashScreen.updateProgress(call.getFloat("progress", (float) 0));
+        call.resolve();
+    }
+
     @PluginMethod
     public void hide(PluginCall call) {
         if (config.isUsingDialog()) {
@@ -154,6 +161,12 @@ public class SplashScreenPlugin extends Plugin {
         if (getConfig().getString("layoutName") != null) {
             config.setLayoutName(getConfig().getString("layoutName"));
         }
+
+        // This reads the Capacitor config for whether the splash screen should be animated.
+        // Defaults to false.
+        Boolean animated = getConfig().getBoolean("animated", false);
+        // Set the config that the splash screen should/should not be animated.
+        config.setAnimated(animated);
 
         return config;
     }

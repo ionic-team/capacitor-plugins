@@ -1,6 +1,6 @@
 {
-  "name": "@capacitor/splash-screen",
-  "version": "1.2.2",
+  "name": "@freelancercom/splash-screen",
+  "version": "1.2.2-fork.3",
   "description": "The Splash Screen API provides methods for showing or hiding a Splash image.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
