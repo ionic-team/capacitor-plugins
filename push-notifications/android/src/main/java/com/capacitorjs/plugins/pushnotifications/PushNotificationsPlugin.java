@@ -129,13 +129,13 @@ public class PushNotificationsPlugin extends Plugin {
     public void removeDeliveredNotifications(PluginCall call) {
         JSArray notifications = call.getArray("notifications");
 
-        List<Integer> ids = new ArrayList<>();
+        List<String> tags = new ArrayList<>();
         try {
             for (Object o : notifications.toList()) {
                 if (o instanceof JSONObject) {
                     JSObject notif = JSObject.fromJSONObject((JSONObject) o);
-                    Integer id = notif.getInteger("id");
-                    ids.add(id);
+                    String tag = notif.getString("tag");
+                    tags.add(tag);
                 } else {
                     call.reject("Expected notifications to be a list of notification objects");
                 }
@@ -144,8 +144,8 @@ public class PushNotificationsPlugin extends Plugin {
             call.reject(e.getMessage());
         }
 
-        for (int id : ids) {
-            notificationManager.cancel(id);
+        for (String tag : tags) {
+            notificationManager.cancel(tag, 0);
         }
 
         call.resolve();
