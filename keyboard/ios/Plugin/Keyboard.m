@@ -23,6 +23,22 @@
 #import <Capacitor/CAPBridgedPlugin.h>
 #import <Capacitor/CAPBridgedJSTypes.h>
 
+
+@interface CAPBridgeViewController (viewTransition)
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator;
+@end
+
+
+@implementation CAPBridgeViewController (viewTransition)
+-(void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+    NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+    
+    [nc postNotificationName:@"CAPKeyboardViewWillTransitionSize" object:nil];
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+}
+
+@end
+
 typedef enum : NSUInteger {
   ResizeNone,
   ResizeNative,
@@ -60,7 +76,8 @@ NSString* UITraitsClassString;
   UIClassString = [@[@"UI", @"Web", @"Browser", @"View"] componentsJoinedByString:@""];
   WKClassString = [@[@"WK", @"Content", @"View"] componentsJoinedByString:@""];
   UITraitsClassString = [@[@"UI", @"Text", @"Input", @"Traits"] componentsJoinedByString:@""];
-  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(statusBarDidChangeFrame:) name:UIApplicationDidChangeStatusBarFrameNotification object: nil];
+    
+  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(statusBarDidChangeFrame:) name:@"CAPKeyboardViewWillTransitionSize" object: nil];
 
   PluginConfig * config = [self getConfig];
   NSString * style = [config getString:@"style": nil];
@@ -192,14 +209,6 @@ NSString* UITraitsClassString;
 
 - (void)_updateFrame
 {
-  CGSize statusBarSize = [[UIApplication sharedApplication] statusBarFrame].size;
-  int statusBarHeight = MIN(statusBarSize.width, statusBarSize.height);
-  
-  int _paddingBottom = (int)self.paddingBottom;
-  
-  if (statusBarHeight == 40) {
-    _paddingBottom = _paddingBottom + 20;
-  }
   CGRect f, wf = CGRectZero;
   UIWindow * window = [[[UIApplication sharedApplication] delegate] window];
   if (!window) {    
@@ -208,6 +217,13 @@ NSString* UITraitsClassString;
   }
   if (window) {
     f = [window bounds];
+      CGSize statusBarSize = [[[window windowScene] statusBarManager] statusBarFrame].size;
+      int statusBarHeight = MIN(statusBarSize.width, statusBarSize.height);
+      
+      int _paddingBottom = (int)self.paddingBottom;
+      if (statusBarHeight == 40) {
+          _paddingBottom = _paddingBottom + 20;
+      }
   }
   if (self.webView != nil) {
     wf = self.webView.frame;
