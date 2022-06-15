@@ -202,7 +202,7 @@ export interface PushNotificationSchema {
    * 
    * Only available on Android (from push notifications).
    * 
-   * @since 1.0.9
+   * @since 4.0.0
    */
   tag?: string;
 
