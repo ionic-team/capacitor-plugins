@@ -18,9 +18,9 @@ const CreateAndDestroyMapPage: React.FC = () => {
     );
   };
 
-  const onMapBoundsChanged = (data: any) => {
+  const onMapBoundsChanged = (data: any) => {    
     setCommandOutput(
-        `MAP (${data.mapId}) BOUNDS CHANGED @ (${data.latitude}, ${data.longitude})`,
+        `MAP (${data.mapId}) BOUNDS CHANGED @ (${JSON.stringify(data.bounds)})`,
       );
   }
 
