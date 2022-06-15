@@ -482,19 +482,17 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
 
     private func formatMapBoundsForResponse(bounds: GMSCoordinateBounds?, cameraPosition: GMSCameraPosition) -> PluginCallResultData {
         return [
-            "bounds": [
-                "southwest": [
-                    "lat": bounds?.southWest.latitude,
-                    "lng": bounds?.southWest.longitude
-                ],
-                "center": [
-                    "lat": cameraPosition.target.latitude,
-                    "lng": cameraPosition.target.longitude
-                ],
-                "northeast": [
-                    "lat": bounds?.northEast.latitude,
-                    "lng": bounds?.northEast.longitude
-                ]
+            "southwest": [
+                "lat": bounds?.southWest.latitude,
+                "lng": bounds?.southWest.longitude
+            ],
+            "center": [
+                "lat": cameraPosition.target.latitude,
+                "lng": cameraPosition.target.longitude
+            ],
+            "northeast": [
+                "lat": bounds?.northEast.latitude,
+                "lng": bounds?.northEast.longitude
             ]
         ]
     }
