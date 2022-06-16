@@ -173,6 +173,16 @@ export interface ImageOptions {
    * @since 1.0.0
    */
   promptLabelPicture?: string;
+  /**
+   * Text value to use when displaying PWA Camera tip: No Devices
+   * @default: 'No Camera Found'
+   */
+  pwaNoDevicesText?: string;
+   /**
+    * Text value to use when displaying PWA Camera tip: Fallback to Choose image
+    * @default: 'Choose image'
+    */
+  pwaNoDevicesButtonText?: string;
 }
 
 export interface Photo {
