@@ -452,6 +452,7 @@ Remove all native listeners for this plugin.
 | **`subtitle`**     | <code>string</code>  | The notification subtitle.                                                                                           | 1.0.0 |
 | **`body`**         | <code>string</code>  | The main text payload for the notification.                                                                          | 1.0.0 |
 | **`id`**           | <code>string</code>  | The notification identifier.                                                                                         | 1.0.0 |
+| **`tag`**          | <code>string</code>  | The notification tag. Only available on Android (from push notifications).                                           | 4.0.0 |
 | **`badge`**        | <code>number</code>  | The number to display for the app icon badge.                                                                        | 1.0.0 |
 | **`notification`** | <code>any</code>     | It's not being returned.                                                                                             | 1.0.0 |
 | **`data`**         | <code>any</code>     | Any additional data that was included in the push notification payload.                                              | 1.0.0 |

@@ -198,6 +198,15 @@ export interface PushNotificationSchema {
   id: string;
 
   /**
+   * The notification tag.
+   *
+   * Only available on Android (from push notifications).
+   *
+   * @since 4.0.0
+   */
+  tag?: string;
+
+  /**
    * The number to display for the app icon badge.
    *
    * @since 1.0.0
