@@ -135,7 +135,7 @@ public class PushNotificationsPlugin extends Plugin {
                     JSObject notif = JSObject.fromJSONObject((JSONObject) o);
                     String tag = notif.getString("tag");
                     Integer id = notif.getInteger("id", 0);
-                    
+
                     if (tag == null) {
                         notificationManager.cancel(id);
                     } else {

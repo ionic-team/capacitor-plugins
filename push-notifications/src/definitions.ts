@@ -199,9 +199,9 @@ export interface PushNotificationSchema {
 
   /**
    * The notification tag.
-   * 
+   *
    * Only available on Android (from push notifications).
-   * 
+   *
    * @since 4.0.0
    */
   tag?: string;
