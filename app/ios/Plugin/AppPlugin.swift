@@ -48,10 +48,14 @@ public class AppPlugin: CAPPlugin {
         guard let url = object["url"] as? NSURL else {
             return [:]
         }
+        guard let referrerUrl = object["referrerUrl"] as? NSURL else {
+            return [:]
+        }
 
         let options = object["options"] as? [String: Any?] ?? [:]
         return [
             "url": url.absoluteString ?? "",
+            "referrerUrl": referrerUrl.absoluteString ?? "",
             "iosSourceApplication": options[UIApplication.OpenURLOptionsKey.sourceApplication.rawValue] as? String ?? "",
             "iosOpenInPlace": options[UIApplication.OpenURLOptionsKey.openInPlace.rawValue] as? String ?? ""
         ]

@@ -5,6 +5,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import androidx.activity.OnBackPressedCallback;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Logger;
@@ -131,6 +132,13 @@ public class AppPlugin extends Plugin {
 
         JSObject ret = new JSObject();
         ret.put("url", url.toString());
+
+        Bundle bundle = intent.getExtras();
+        if (bundle != null) {
+            Object referrerUrl = bundle.get(Intent.EXTRA_REFERRER);
+            ret.put("referrerUrl", referrerUrl.toString());
+        }
+
         notifyListeners(EVENT_URL_OPEN, ret, true);
     }
 
