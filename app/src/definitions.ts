@@ -55,6 +55,8 @@ export interface URLOpenListenerEvent {
 
   /**
    * If opened from browser, the URL the app was opened from.
+   * 
+   * @since 1.1.2
    */
    referrerUrl: string;
 
