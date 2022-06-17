@@ -10,6 +10,9 @@ import com.getcapacitor.*
 import com.getcapacitor.annotation.CapacitorPlugin
 import com.getcapacitor.annotation.Permission
 import com.getcapacitor.annotation.PermissionCallback
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -548,6 +551,27 @@ class CapacitorGoogleMapsPlugin : Plugin() {
             cachedTouchEvents[id]?.clear()
 
             call.resolve()
+        } catch (e: GoogleMapsError) {
+            handleError(call, e)
+        } catch (e: Exception) {
+            handleError(call, e)
+        }
+    }
+
+    @PluginMethod
+    fun getMapBounds(call: PluginCall) {
+        try {
+            val id = call.getString("id")
+            id ?: throw InvalidMapIdError()
+
+            val map = maps[id]
+            map ?: throw MapNotFoundError()
+
+            CoroutineScope(Dispatchers.Main).launch {
+                val bounds = map.getLatLngBounds()
+                val data = map.getLatLngBoundsJSObject(bounds)
+                call.resolve(data)
+            }
         } catch (e: GoogleMapsError) {
             handleError(call, e)
         } catch (e: Exception) {
