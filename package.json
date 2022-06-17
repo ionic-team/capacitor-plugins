@@ -24,5 +24,9 @@
     "prettier": "~2.3.0",
     "prompts": "^2.3.2"
   },
-  "prettier": "@ionic/prettier-config"
+  "prettier": "@ionic/prettier-config",
+  "volta": {
+    "node": "14.18.2",
+    "npm": "6.14.15"
+  }
 }

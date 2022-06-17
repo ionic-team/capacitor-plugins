@@ -1,0 +1,4 @@
+rootProject.name = "Google Maps Test"
+include ':app'
+include ':capacitor-android'
+project(':capacitor-android').projectDir = new File('../../node_modules/@capacitor/android/capacitor')

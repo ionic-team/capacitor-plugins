@@ -1,0 +1,4 @@
+build
+dist
+e2e-tests
+unit-tests
