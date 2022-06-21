@@ -4,6 +4,7 @@ import { registerPlugin } from '@capacitor/core';
 import type {
   CameraConfig,
   GoogleMapConfig,
+  LatLngBounds,
   MapPadding,
   MapType,
   Marker,
@@ -122,6 +123,7 @@ export interface CapacitorGoogleMapsPlugin extends Plugin {
   setPadding(args: PaddingArgs): Promise<void>;
   onScroll(args: OnScrollArgs): Promise<void>;
   dispatchMapEvent(args: { id: string; focus: boolean }): Promise<void>;
+  getMapBounds(args: { id: string }): Promise<LatLngBounds>;
 }
 
 const CapacitorGoogleMaps = registerPlugin<CapacitorGoogleMapsPlugin>(
