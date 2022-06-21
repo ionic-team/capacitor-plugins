@@ -60,7 +60,6 @@ NSString* UITraitsClassString;
   UIClassString = [@[@"UI", @"Web", @"Browser", @"View"] componentsJoinedByString:@""];
   WKClassString = [@[@"WK", @"Content", @"View"] componentsJoinedByString:@""];
   UITraitsClassString = [@[@"UI", @"Text", @"Input", @"Traits"] componentsJoinedByString:@""];
-  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(statusBarDidChangeFrame:) name:UIApplicationDidChangeStatusBarFrameNotification object: nil];
 
   PluginConfig * config = [self getConfig];
   NSString * style = [config getString:@"style": nil];
@@ -101,10 +100,6 @@ NSString* UITraitsClassString;
 
 
 #pragma mark Keyboard events
-
--(void)statusBarDidChangeFrame:(NSNotification *)notification {
-  [self _updateFrame];
-}
 
 - (void)resetScrollView
 {
@@ -192,14 +187,6 @@ NSString* UITraitsClassString;
 
 - (void)_updateFrame
 {
-  CGSize statusBarSize = [[UIApplication sharedApplication] statusBarFrame].size;
-  int statusBarHeight = MIN(statusBarSize.width, statusBarSize.height);
-  
-  int _paddingBottom = (int)self.paddingBottom;
-  
-  if (statusBarHeight == 40) {
-    _paddingBottom = _paddingBottom + 20;
-  }
   CGRect f, wf = CGRectZero;
   UIWindow * window = [[[UIApplication sharedApplication] delegate] window];
   if (!window) {    
