@@ -1,4 +1,5 @@
 ext {
+    capacitorVersion = System.getenv('CAPACITOR_VERSION')
     junitVersion = project.hasProperty('junitVersion') ? rootProject.ext.junitVersion : '4.13.1'
     androidxAppCompatVersion = project.hasProperty('androidxAppCompatVersion') ? rootProject.ext.androidxAppCompatVersion : '1.2.0'
     androidxJunitVersion = project.hasProperty('androidxJunitVersion') ? rootProject.ext.androidxJunitVersion : '1.1.2'
@@ -10,14 +11,21 @@ buildscript {
     repositories {
         google()
         jcenter()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:4.2.1'
+        classpath 'io.github.gradle-nexus:publish-plugin:1.1.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
 
 apply plugin: 'com.android.library'
+apply plugin: 'io.github.gradle-nexus.publish-plugin'
+apply from: file('../../scripts/android/publish-root.gradle')
+apply from: file('../../scripts/android/publish-module.gradle')
 apply plugin: 'kotlin-android'
 
 android {
@@ -58,7 +66,7 @@ repositories {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation project(':capacitor-android')
+    implementation "com.capacitorjs:core:$capacitorVersion"
     implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"
     testImplementation "junit:junit:$junitVersion"
     androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
