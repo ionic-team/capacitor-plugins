@@ -58,7 +58,7 @@ export interface URLOpenListenerEvent {
    * 
    * @since 1.1.2
    */
-   referrerUrl: string;
+   referrerUrl?: string;
 
   /**
    * The source application opening the app (iOS only)
