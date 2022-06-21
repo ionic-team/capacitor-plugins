@@ -14,6 +14,7 @@ import type {
   MapClickCallbackData,
   MarkerClickCallbackData,
   MyLocationButtonClickCallbackData,
+  LatLngBounds,
 } from './definitions';
 import type { CreateMapArgs } from './implementation';
 import { CapacitorGoogleMaps } from './implementation';
@@ -37,6 +38,9 @@ export interface GoogleMapInterface {
   enableAccessibilityElements(enabled: boolean): Promise<void>;
   enableCurrentLocation(enabled: boolean): Promise<void>;
   setPadding(padding: MapPadding): Promise<void>;
+  setOnBoundsChangedListener(
+    callback?: MapListenerCallback<CameraIdleCallbackData>,
+  ): Promise<void>;
   setOnCameraIdleListener(
     callback?: MapListenerCallback<CameraIdleCallbackData>,
   ): Promise<void>;
@@ -92,6 +96,7 @@ export class GoogleMap {
   private id: string;
   private element: HTMLElement | null = null;
 
+  private onBoundsChangedListener?: PluginListenerHandle;
   private onCameraIdleListener?: PluginListenerHandle;
   private onCameraMoveStartedListener?: PluginListenerHandle;
   private onClusterClickListener?: PluginListenerHandle;
@@ -140,7 +145,10 @@ export class GoogleMap {
       newMap.initScrolling();
     }
 
-    (options.element as any) = {};
+    if (Capacitor.isNativePlatform()) {
+      (options.element as any) = {};
+    }
+
     await CapacitorGoogleMaps.create(options);
 
     if (callback) {
@@ -344,6 +352,17 @@ export class GoogleMap {
     });
   }
 
+  /**
+   * Get the map's current viewport latitude and longitude bounds.
+   *
+   * @returns {LatLngBounds}
+   */
+  async getMapBounds(): Promise<LatLngBounds> {
+    return CapacitorGoogleMaps.getMapBounds({
+      id: this.id,
+    });
+  }
+
   initScrolling(): void {
     const ionContents = document.getElementsByTagName('ion-content');
 
@@ -438,6 +457,29 @@ export class GoogleMap {
       );
     } else {
       this.onCameraIdleListener = undefined;
+    }
+  }
+
+  /**
+   * Set the event listener on the map for 'onBoundsChanged' events.
+   *
+   * @param callback
+   * @returns
+   */
+  async setOnBoundsChangedListener(
+    callback?: MapListenerCallback<CameraIdleCallbackData>,
+  ): Promise<void> {
+    if (this.onBoundsChangedListener) {
+      this.onBoundsChangedListener.remove();
+    }
+
+    if (callback) {
+      this.onBoundsChangedListener = await CapacitorGoogleMaps.addListener(
+        'onBoundsChanged',
+        this.generateCallback(callback),
+      );
+    } else {
+      this.onBoundsChangedListener = undefined;
     }
   }
 
@@ -634,6 +676,10 @@ export class GoogleMap {
    * @returns
    */
   async removeAllMapListeners(): Promise<void> {
+    if (this.onBoundsChangedListener) {
+      this.onBoundsChangedListener.remove();
+      this.onBoundsChangedListener = undefined;
+    }
     if (this.onCameraIdleListener) {
       this.onCameraIdleListener.remove();
       this.onCameraIdleListener = undefined;

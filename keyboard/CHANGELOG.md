@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.3](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/keyboard@1.2.2...@capacitor/keyboard@1.2.3) (2022-06-17)
+
+
+### Bug Fixes
+
+* **ios:** Check if UIApplicationDelegate responds to window selector ([#1032](https://github.com/ionic-team/capacitor-plugins/issues/1032)) ([5be1466](https://github.com/ionic-team/capacitor-plugins/commit/5be14662181305e48bc097ade6504c579880bda8))
+
+
+
+
+
 ## [1.2.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/keyboard@1.2.1...@capacitor/keyboard@1.2.2) (2022-02-10)
 
 
