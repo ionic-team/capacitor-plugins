@@ -53,7 +53,7 @@ publish_plugin () {
 DIR=..
 
 # Get the latest version of Capacitor
-CAPACITOR_PACKAGE_JSON="https://raw.githubusercontent.com/ionic-team/capacitor/main/android/package.json"
+CAPACITOR_PACKAGE_JSON="https://raw.githubusercontent.com/ionic-team/capacitor/3.x/android/package.json"
 CAPACITOR_VERSION=$(curl -s $CAPACITOR_PACKAGE_JSON | awk -F\" '/"version":/ {print $4}')
 
 # Don't continue if there was a problem getting the latest version of Capacitor
