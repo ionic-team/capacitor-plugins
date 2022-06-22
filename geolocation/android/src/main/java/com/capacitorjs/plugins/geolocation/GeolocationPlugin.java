@@ -1,11 +1,8 @@
 package com.capacitorjs.plugins.geolocation;
 
 import android.Manifest;
-import android.content.Context;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Build;
-import androidx.core.location.LocationManagerCompat;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.PermissionState;
 import com.getcapacitor.Plugin;
@@ -57,8 +54,7 @@ public class GeolocationPlugin extends Plugin {
     @Override
     @PluginMethod
     public void checkPermissions(PluginCall call) {
-        LocationManager lm = (LocationManager) this.getContext().getSystemService(Context.LOCATION_SERVICE);
-        if (LocationManagerCompat.isLocationEnabled(lm)) {
+        if (implementation.isLocationServicesEnabled()) {
             super.checkPermissions(call);
         } else {
             call.reject("System location services are not enabled");
@@ -68,8 +64,7 @@ public class GeolocationPlugin extends Plugin {
     @Override
     @PluginMethod
     public void requestPermissions(PluginCall call) {
-        LocationManager lm = (LocationManager) this.getContext().getSystemService(Context.LOCATION_SERVICE);
-        if (LocationManagerCompat.isLocationEnabled(lm)) {
+        if (implementation.isLocationServicesEnabled()) {
             super.requestPermissions(call);
         } else {
             call.reject("System location services are not enabled");

@@ -24,6 +24,11 @@ public class Geolocation {
         this.context = context;
     }
 
+    public Boolean isLocationServicesEnabled() {
+        LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        return LocationManagerCompat.isLocationEnabled(lm);
+    }
+
     @SuppressWarnings("MissingPermission")
     public void sendLocation(boolean enableHighAccuracy, final LocationResultCallback resultCallback) {
         int resultCode = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(context);
