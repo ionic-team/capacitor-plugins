@@ -35,7 +35,7 @@ public class Geolocation {
         if (resultCode == ConnectionResult.SUCCESS) {
             LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
 
-            if (LocationManagerCompat.isLocationEnabled(lm)) {
+            if (this.isLocationServicesEnabled()) {
                 boolean networkEnabled = false;
 
                 try {
@@ -74,7 +74,7 @@ public class Geolocation {
             fusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
 
             LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-            if (LocationManagerCompat.isLocationEnabled(lm)) {
+            if (this.isLocationServicesEnabled()) {
                 boolean networkEnabled = false;
 
                 try {
