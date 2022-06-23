@@ -57,7 +57,7 @@ public class GeolocationPlugin extends Plugin {
         if (implementation.isLocationServicesEnabled()) {
             super.checkPermissions(call);
         } else {
-            call.reject("System location services are not enabled");
+            call.reject("Location services are not enabled");
         }
     }
 
@@ -67,7 +67,7 @@ public class GeolocationPlugin extends Plugin {
         if (implementation.isLocationServicesEnabled()) {
             super.requestPermissions(call);
         } else {
-            call.reject("System location services are not enabled");
+            call.reject("Location services are not enabled");
         }
     }
 
