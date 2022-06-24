@@ -178,7 +178,7 @@ export class DeviceWeb extends WebPlugin implements DevicePlugin {
   }
 
   getUid(): string {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== 'undefined' && window.localStorage) {
       let uid = window.localStorage.getItem('_capuid');
       if (uid) {
         return uid;
