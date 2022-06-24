@@ -51,6 +51,26 @@ public class GeolocationPlugin extends Plugin {
         }
     }
 
+    @Override
+    @PluginMethod
+    public void checkPermissions(PluginCall call) {
+        if (implementation.isLocationServicesEnabled()) {
+            super.checkPermissions(call);
+        } else {
+            call.reject("Location services are not enabled");
+        }
+    }
+
+    @Override
+    @PluginMethod
+    public void requestPermissions(PluginCall call) {
+        if (implementation.isLocationServicesEnabled()) {
+            super.requestPermissions(call);
+        } else {
+            call.reject("Location services are not enabled");
+        }
+    }
+
     /**
      * Gets a snapshot of the current device position if permission is granted. The call continues
      * in the {@link #completeCurrentPosition(PluginCall)} method if a permission request is required.

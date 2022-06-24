@@ -24,13 +24,18 @@ public class Geolocation {
         this.context = context;
     }
 
+    public Boolean isLocationServicesEnabled() {
+        LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        return LocationManagerCompat.isLocationEnabled(lm);
+    }
+
     @SuppressWarnings("MissingPermission")
     public void sendLocation(boolean enableHighAccuracy, final LocationResultCallback resultCallback) {
         int resultCode = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(context);
         if (resultCode == ConnectionResult.SUCCESS) {
             LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
 
-            if (LocationManagerCompat.isLocationEnabled(lm)) {
+            if (this.isLocationServicesEnabled()) {
                 boolean networkEnabled = false;
 
                 try {
@@ -69,7 +74,7 @@ public class Geolocation {
             fusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
 
             LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-            if (LocationManagerCompat.isLocationEnabled(lm)) {
+            if (this.isLocationServicesEnabled()) {
                 boolean networkEnabled = false;
 
                 try {
