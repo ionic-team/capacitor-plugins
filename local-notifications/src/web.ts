@@ -173,7 +173,7 @@ export class LocalNotificationsWeb
         notification.schedule?.at &&
         notification.schedule.at.getTime() <= now
       ) {
-        this.deliveredNotifications.push(this.buildNotification(notification));
+        this.buildNotification(notification);
         toRemove.push(notification);
       }
     }
@@ -193,7 +193,7 @@ export class LocalNotificationsWeb
       }, diff);
       return;
     }
-    this.deliveredNotifications.push(this.buildNotification(notification));
+    this.buildNotification(notification);
   }
 
   protected buildNotification(
@@ -222,6 +222,7 @@ export class LocalNotificationsWeb
       },
       false,
     );
+    this.deliveredNotifications.push(localNotification);
     return localNotification;
   }
 
