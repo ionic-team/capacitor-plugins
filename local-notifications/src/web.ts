@@ -2,6 +2,7 @@ import { WebPlugin } from '@capacitor/core';
 import type { PermissionState } from '@capacitor/core';
 
 import type {
+  DeliveredNotifications,
   EnabledResult,
   ListChannelsResult,
   LocalNotificationSchema,
@@ -17,7 +18,42 @@ export class LocalNotificationsWeb
   implements LocalNotificationsPlugin
 {
   protected pending: LocalNotificationSchema[] = [];
+  protected deliveredNotifications: Notification[] = [];
 
+  async getDeliveredNotifications(): Promise<DeliveredNotifications> {
+    const deliveredSchemas = [];
+    for (const notification of this.deliveredNotifications) {
+      const deliveredSchema: LocalNotificationSchema = {
+        title: notification.title,
+        id: parseInt(notification.tag),
+        body: notification.body,
+        smallIcon: notification.icon,
+      };
+      deliveredSchemas.push(deliveredSchema);
+    }
+    return {
+      notifications: deliveredSchemas,
+    };
+  }
+  async removeDeliveredNotifications(
+    delivered: DeliveredNotifications,
+  ): Promise<void> {
+    for (const toRemove of delivered.notifications) {
+      const found = this.deliveredNotifications.find(
+        n => n.tag === String(toRemove.id),
+      );
+      found?.close();
+      this.deliveredNotifications = this.deliveredNotifications.filter(
+        () => !found,
+      );
+    }
+  }
+  async removeAllDeliveredNotifications(): Promise<void> {
+    for (const notification of this.deliveredNotifications) {
+      notification.close();
+    }
+    this.deliveredNotifications = [];
+  }
   async createChannel(): Promise<void> {
     throw this.unimplemented('Not implemented on web.');
   }
@@ -137,7 +173,7 @@ export class LocalNotificationsWeb
         notification.schedule?.at &&
         notification.schedule.at.getTime() <= now
       ) {
-        this.buildNotification(notification);
+        this.deliveredNotifications.push(this.buildNotification(notification));
         toRemove.push(notification);
       }
     }
@@ -157,7 +193,7 @@ export class LocalNotificationsWeb
       }, diff);
       return;
     }
-    this.buildNotification(notification);
+    this.deliveredNotifications.push(this.buildNotification(notification));
   }
 
   protected buildNotification(
@@ -165,6 +201,7 @@ export class LocalNotificationsWeb
   ): Notification {
     const localNotification = new Notification(notification.title, {
       body: notification.body,
+      tag: String(notification.id),
     });
     localNotification.addEventListener(
       'click',
@@ -174,6 +211,15 @@ export class LocalNotificationsWeb
     localNotification.addEventListener(
       'show',
       this.onShow.bind(this, notification),
+      false,
+    );
+    localNotification.addEventListener(
+      'close',
+      () => {
+        this.deliveredNotifications = this.deliveredNotifications.filter(
+          () => !this,
+        );
+      },
       false,
     );
     return localNotification;

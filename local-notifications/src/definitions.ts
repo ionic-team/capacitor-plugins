@@ -92,6 +92,29 @@ export interface LocalNotificationsPlugin {
   areEnabled(): Promise<EnabledResult>;
 
   /**
+   * Get a list of notifications that are visible on the notifications screen.
+   *
+   * @since 4.0.0
+   */
+  getDeliveredNotifications(): Promise<DeliveredNotifications>;
+
+  /**
+   * Remove the specified notifications from the notifications screen.
+   *
+   * @since 4.0.0
+   */
+  removeDeliveredNotifications(
+    delivered: DeliveredNotifications,
+  ): Promise<void>;
+
+  /**
+   * Remove all the notifications from the notifications screen.
+   *
+   * @since 4.0.0
+   */
+  removeAllDeliveredNotifications(): Promise<void>;
+
+  /**
    * Create a notification channel.
    *
    * Only available for Android.
@@ -854,6 +877,16 @@ export interface EnabledResult {
    * @since 1.0.0
    */
   value: boolean;
+}
+
+export interface DeliveredNotifications {
+  /**
+   * List of notifications that are visible on the
+   * notifications screen.
+   *
+   * @since 1.0.0
+   */
+  notifications: LocalNotificationSchema[];
 }
 
 export interface Channel {

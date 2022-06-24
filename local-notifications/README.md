@@ -83,6 +83,9 @@ If the device has entered [Doze](https://developer.android.com/training/monitori
 * [`registerActionTypes(...)`](#registeractiontypes)
 * [`cancel(...)`](#cancel)
 * [`areEnabled()`](#areenabled)
+* [`getDeliveredNotifications()`](#getdeliverednotifications)
+* [`removeDeliveredNotifications(...)`](#removedeliverednotifications)
+* [`removeAllDeliveredNotifications()`](#removealldeliverednotifications)
 * [`createChannel(...)`](#createchannel)
 * [`deleteChannel(...)`](#deletechannel)
 * [`listChannels()`](#listchannels)
@@ -181,6 +184,51 @@ Check if notifications are enabled or not.
 **Returns:** <code>Promise&lt;<a href="#enabledresult">EnabledResult</a>&gt;</code>
 
 **Since:** 1.0.0
+
+--------------------
+
+
+### getDeliveredNotifications()
+
+```typescript
+getDeliveredNotifications() => Promise<DeliveredNotifications>
+```
+
+Get a list of notifications that are visible on the notifications screen.
+
+**Returns:** <code>Promise&lt;<a href="#deliverednotifications">DeliveredNotifications</a>&gt;</code>
+
+**Since:** 4.0.0
+
+--------------------
+
+
+### removeDeliveredNotifications(...)
+
+```typescript
+removeDeliveredNotifications(delivered: DeliveredNotifications) => Promise<void>
+```
+
+Remove the specified notifications from the notifications screen.
+
+| Param           | Type                                                                      |
+| --------------- | ------------------------------------------------------------------------- |
+| **`delivered`** | <code><a href="#deliverednotifications">DeliveredNotifications</a></code> |
+
+**Since:** 4.0.0
+
+--------------------
+
+
+### removeAllDeliveredNotifications()
+
+```typescript
+removeAllDeliveredNotifications() => Promise<void>
+```
+
+Remove all the notifications from the notifications screen.
+
+**Since:** 4.0.0
 
 --------------------
 
@@ -547,6 +595,13 @@ An action that can be taken when a notification is displayed.
 | **`value`** | <code>boolean</code> | Whether or not the device has local notifications enabled. | 1.0.0 |
 
 
+#### DeliveredNotifications
+
+| Prop                | Type                                   | Description                                                         | Since |
+| ------------------- | -------------------------------------- | ------------------------------------------------------------------- | ----- |
+| **`notifications`** | <code>LocalNotificationSchema[]</code> | List of notifications that are visible on the notifications screen. | 1.0.0 |
+
+
 #### Channel
 
 | Prop              | Type                                              | Description                                                                                                                                                                                                                                                                                                                                    | Default          | Since |
@@ -612,11 +667,6 @@ The importance level. For more details, see the [Android Developer Docs](https:/
 The notification visibility. For more details, see the [Android Developer Docs](https://developer.android.com/reference/androidx/core/app/NotificationCompat#VISIBILITY_PRIVATE)
 
 <code>-1 | 0 | 1</code>
-
-
-#### NotificationChannel
-
-<code><a href="#channel">Channel</a></code>
 
 
 #### PermissionState
