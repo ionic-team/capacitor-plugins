@@ -23,7 +23,7 @@ export interface DeviceInfo {
   name?: string;
 
   /**
-   * The device model. For example, "iPhone13.4".
+   * The device model. For example, "iPhone13,4".
    *
    * @since 1.0.0
    */
