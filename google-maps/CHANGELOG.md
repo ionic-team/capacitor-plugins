@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 4.0.0-beta.0 (2022-06-27)
+
+
+### Bug Fixes
+
+* **google-maps:** correctly typed event listeners ([656f916](https://github.com/ionic-team/capacitor-plugins/commit/656f9169ccd8d7fa880143b13ca5f62bb546edb0))
+* **google-maps:** Fixing map touch events on Android ([7cb89fb](https://github.com/ionic-team/capacitor-plugins/commit/7cb89fb788e05aa9e90c39698e041ebe094132ea))
+
+
+### Features
+
+* **google-maps:** Google Maps Bounds ([14a045d](https://github.com/ionic-team/capacitor-plugins/commit/14a045d3880124996b2770cec7b3e28a9f13d231))
+
+
+
+
+
 # 1.1.0 (2022-06-17)
 
 
