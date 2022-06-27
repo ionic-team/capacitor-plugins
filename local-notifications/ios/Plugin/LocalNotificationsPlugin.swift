@@ -227,7 +227,7 @@ public class LocalNotificationsPlugin: CAPPlugin {
             content.threadIdentifier = threadIdentifier
         }
 
-        if #available(iOS 12, *), let summaryArgument = notification["summaryArgument"] as? String {
+        if let summaryArgument = notification["summaryArgument"] as? String {
             content.summaryArgument = summaryArgument
         }
 

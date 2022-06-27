@@ -630,7 +630,7 @@ export interface LocalNotificationSchema {
    * Sets `summaryArgument` on the
    * [`UNMutableNotificationContent`](https://developer.apple.com/documentation/usernotifications/unmutablenotificationcontent).
    *
-   * Only available for iOS 12+.
+   * Only available for iOS.
    *
    * @since 1.0.0
    */
