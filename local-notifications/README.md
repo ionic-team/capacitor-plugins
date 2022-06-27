@@ -614,11 +614,6 @@ The notification visibility. For more details, see the [Android Developer Docs](
 <code>-1 | 0 | 1</code>
 
 
-#### NotificationChannel
-
-<code><a href="#channel">Channel</a></code>
-
-
 #### PermissionState
 
 <code>'prompt' | 'prompt-with-rationale' | 'granted' | 'denied'</code>
