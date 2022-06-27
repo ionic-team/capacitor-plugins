@@ -27,7 +27,6 @@ export class LocalNotificationsWeb
         title: notification.title,
         id: parseInt(notification.tag),
         body: notification.body,
-        smallIcon: notification.icon,
       };
       deliveredSchemas.push(deliveredSchema);
     }

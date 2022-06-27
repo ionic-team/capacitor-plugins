@@ -879,6 +879,111 @@ export interface EnabledResult {
   value: boolean;
 }
 
+export interface DeliveredNotificationSchema {
+  /**
+   * The notification identifier.
+   *
+   * @since 4.0.0
+   */
+  id: number;
+
+  /**
+   * The notification tag.
+   *
+   * Only available on Android.
+   *
+   * @since 4.0.0
+   */
+  tag?: string;
+  /**
+   * The title of the notification.
+   *
+   * @since 4.0.0
+   */
+  title: string;
+
+  /**
+   * The body of the notification, shown below the title.
+   *
+   * @since 4.0.0
+   */
+  body: string;
+
+  /**
+   * The configured group of the notification.
+   *
+   *
+   * Only available for Android.
+   *
+   * @since 4.0.0
+   */
+  group?: string;
+
+  /**
+   * If this notification is the summary for a group of notifications.
+   *
+   * Only available for Android.
+   *
+   * @since 4.0.0
+   */
+  groupSummary?: boolean;
+
+  /**
+   * Any additional data that was included in the
+   * notification payload.
+   *
+   * Only available for Android.
+   *
+   * @since 4.0.0
+   */
+  data?: any;
+
+  /**
+   * Extra data to store within this notification.
+   *
+   * Only available for iOS.
+   *
+   * @since 4.0.0
+   */
+  extra?: any;
+
+  /**
+   * The attachments for this notification.
+   *
+   * Only available for iOS.
+   *
+   * @since 1.0.0
+   */
+  attachments?: Attachment[];
+
+  /**
+   * Action type ssociated with this notification.
+   *
+   * Only available for iOS.
+   *
+   * @since 4.0.0
+   */
+  actionTypeId?: string;
+
+  /**
+   * Schedule used to fire this notification.
+   *
+   * Only available for iOS.
+   *
+   * @since 4.0.0
+   */
+  schedule?: Schedule;
+
+  /**
+   * Sound that was used when the notification was displayed.
+   *
+   * Only available for iOS.
+   *
+   * @since 4.0.0
+   */
+  sound?: string;
+}
+
 export interface DeliveredNotifications {
   /**
    * List of notifications that are visible on the
@@ -886,7 +991,7 @@ export interface DeliveredNotifications {
    *
    * @since 1.0.0
    */
-  notifications: LocalNotificationSchema[];
+  notifications: DeliveredNotificationSchema[];
 }
 
 export interface Channel {
