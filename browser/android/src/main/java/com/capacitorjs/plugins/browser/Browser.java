@@ -1,5 +1,7 @@
 package com.capacitorjs.plugins.browser;
 
+import static androidx.browser.customtabs.CustomTabsIntent.SHARE_STATE_ON;
+
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -7,11 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.browser.customtabs.CustomTabsCallback;
-import androidx.browser.customtabs.CustomTabsClient;
-import androidx.browser.customtabs.CustomTabsIntent;
-import androidx.browser.customtabs.CustomTabsServiceConnection;
-import androidx.browser.customtabs.CustomTabsSession;
+import androidx.browser.customtabs.*;
 
 /**
  * The Browser class implements Custom Chrome Tabs. See
@@ -99,10 +97,11 @@ public class Browser {
     public void open(Uri url, @Nullable Integer toolbarColor) {
         CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder(getCustomTabsSession());
 
-        builder.addDefaultShareMenuItem();
+        builder.setShareState(SHARE_STATE_ON);
 
         if (toolbarColor != null) {
-            builder.setToolbarColor(toolbarColor.intValue());
+            CustomTabColorSchemeParams params = new CustomTabColorSchemeParams.Builder().setToolbarColor(toolbarColor.intValue()).build();
+            builder.setDefaultColorSchemeParams(params);
         }
 
         CustomTabsIntent tabsIntent = builder.build();

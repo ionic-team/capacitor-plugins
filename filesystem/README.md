@@ -282,7 +282,7 @@ Rename a file or directory
 ### copy(...)
 
 ```typescript
-copy(options: CopyOptions) => Promise<void>
+copy(options: CopyOptions) => Promise<CopyResult>
 ```
 
 Copy a file or directory
@@ -290,6 +290,8 @@ Copy a file or directory
 | Param         | Type                                                |
 | ------------- | --------------------------------------------------- |
 | **`options`** | <code><a href="#copyoptions">CopyOptions</a></code> |
+
+**Returns:** <code>Promise&lt;<a href="#copyresult">CopyResult</a>&gt;</code>
 
 **Since:** 1.0.0
 
@@ -405,9 +407,21 @@ Required on Android, only when using <a href="#directory">`Directory.Documents`<
 
 #### ReaddirResult
 
-| Prop        | Type                  | Description                                        | Since |
-| ----------- | --------------------- | -------------------------------------------------- | ----- |
-| **`files`** | <code>string[]</code> | List of files and directories inside the directory | 1.0.0 |
+| Prop        | Type                    | Description                                        | Since |
+| ----------- | ----------------------- | -------------------------------------------------- | ----- |
+| **`files`** | <code>FileInfo[]</code> | List of files and directories inside the directory | 1.0.0 |
+
+
+#### FileInfo
+
+| Prop        | Type                               | Description                                                                          | Since |
+| ----------- | ---------------------------------- | ------------------------------------------------------------------------------------ | ----- |
+| **`name`**  | <code>string</code>                | Name of the file or directory.                                                       |       |
+| **`type`**  | <code>'directory' \| 'file'</code> | Type of the file.                                                                    | 4.0.0 |
+| **`size`**  | <code>number</code>                | Size of the file in bytes.                                                           | 4.0.0 |
+| **`ctime`** | <code>number</code>                | Time of creation in milliseconds. It's not available on Android 7 and older devices. | 4.0.0 |
+| **`mtime`** | <code>number</code>                | Time of last modification in milliseconds.                                           | 4.0.0 |
+| **`uri`**   | <code>string</code>                | The uri of the file.                                                                 | 4.0.0 |
 
 
 #### ReaddirOptions
@@ -435,13 +449,13 @@ Required on Android, only when using <a href="#directory">`Directory.Documents`<
 
 #### StatResult
 
-| Prop        | Type                | Description                                                                          | Since |
-| ----------- | ------------------- | ------------------------------------------------------------------------------------ | ----- |
-| **`type`**  | <code>string</code> | Type of the file                                                                     | 1.0.0 |
-| **`size`**  | <code>number</code> | Size of the file                                                                     | 1.0.0 |
-| **`ctime`** | <code>number</code> | Time of creation in milliseconds. It's not available on Android 7 and older devices. | 1.0.0 |
-| **`mtime`** | <code>number</code> | Time of last modification in milliseconds.                                           | 1.0.0 |
-| **`uri`**   | <code>string</code> | The uri of the file                                                                  | 1.0.0 |
+| Prop        | Type                               | Description                                                                          | Since |
+| ----------- | ---------------------------------- | ------------------------------------------------------------------------------------ | ----- |
+| **`type`**  | <code>'directory' \| 'file'</code> | Type of the file.                                                                    | 1.0.0 |
+| **`size`**  | <code>number</code>                | Size of the file in bytes.                                                           | 1.0.0 |
+| **`ctime`** | <code>number</code>                | Time of creation in milliseconds. It's not available on Android 7 and older devices. | 1.0.0 |
+| **`mtime`** | <code>number</code>                | Time of last modification in milliseconds.                                           | 1.0.0 |
+| **`uri`**   | <code>string</code>                | The uri of the file                                                                  | 1.0.0 |
 
 
 #### StatOptions
@@ -460,6 +474,13 @@ Required on Android, only when using <a href="#directory">`Directory.Documents`<
 | **`to`**          | <code>string</code>                             | The destination file or directory                                                                                                                            | 1.0.0 |
 | **`directory`**   | <code><a href="#directory">Directory</a></code> | The <a href="#directory">`Directory`</a> containing the existing file or directory                                                                           | 1.0.0 |
 | **`toDirectory`** | <code><a href="#directory">Directory</a></code> | The <a href="#directory">`Directory`</a> containing the destination file or directory. If not supplied will use the 'directory' parameter as the destination | 1.0.0 |
+
+
+#### CopyResult
+
+| Prop      | Type                | Description                            | Since |
+| --------- | ------------------- | -------------------------------------- | ----- |
+| **`uri`** | <code>string</code> | The uri where the file was copied into | 4.0.0 |
 
 
 #### PermissionStatus

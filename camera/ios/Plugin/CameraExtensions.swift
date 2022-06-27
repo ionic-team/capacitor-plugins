@@ -52,7 +52,7 @@ internal extension PHAsset {
         options.version = .current
 
         var result: [String: Any] = [:]
-        _ = PHCachingImageManager().requestImageData(for: self, options: options) { (data, _, _, _) in
+        _ = PHCachingImageManager().requestImageDataAndOrientation(for: self, options: options) { (data, _, _, _) in
             if let data = data as NSData? {
                 let options = [kCGImageSourceShouldCache as String: kCFBooleanFalse] as CFDictionary
                 if let imgSrc = CGImageSourceCreateWithData(data, options),

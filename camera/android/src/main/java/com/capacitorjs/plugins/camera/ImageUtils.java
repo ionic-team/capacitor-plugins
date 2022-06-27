@@ -15,14 +15,15 @@ import java.io.InputStream;
 public class ImageUtils {
 
     /**
-     * Resize an image to the given width and height considering the preserveAspectRatio flag.
+     * Resize an image to the given max width and max height. Constraint can be put
+     * on one dimension, or both. Resize will always preserve aspect ratio.
      * @param bitmap
-     * @param width
-     * @param height
+     * @param desiredMaxWidth
+     * @param desiredMaxHeight
      * @return a new, scaled Bitmap
      */
-    public static Bitmap resize(Bitmap bitmap, final int width, final int height) {
-        return ImageUtils.resizePreservingAspectRatio(bitmap, width, height);
+    public static Bitmap resize(Bitmap bitmap, final int desiredMaxWidth, final int desiredMaxHeight) {
+        return ImageUtils.resizePreservingAspectRatio(bitmap, desiredMaxWidth, desiredMaxHeight);
     }
 
     /**
