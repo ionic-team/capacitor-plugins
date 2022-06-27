@@ -572,7 +572,7 @@ public class LocalNotificationsPlugin: CAPPlugin {
             return
         }
 
-        let ids = notifications.map { $0["id"] as? String ?? "" }
+        let ids = notifications.map { "\($0["id"] ?? "")" }
         UNUserNotificationCenter.current().removeDeliveredNotifications(withIdentifiers: ids)
         call.resolve()
     }
