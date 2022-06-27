@@ -64,14 +64,14 @@ export interface GeolocationPlugin {
   clearWatch(options: ClearWatchOptions): Promise<void>;
 
   /**
-   * Check location permissions
+   * Check location permissions.  Will throw if system location services are disabled.
    *
    * @since 1.0.0
    */
   checkPermissions(): Promise<PermissionStatus>;
 
   /**
-   * Request location permissions
+   * Request location permissions.  Will throw if system location services are disabled.
    *
    * @since 1.0.0
    */
