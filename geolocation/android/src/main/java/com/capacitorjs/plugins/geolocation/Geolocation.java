@@ -12,6 +12,7 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.Priority;
 
 public class Geolocation {
 
@@ -42,8 +43,8 @@ public class Geolocation {
                     networkEnabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
                 } catch (Exception ex) {}
 
-                int lowPriority = networkEnabled ? LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY : LocationRequest.PRIORITY_LOW_POWER;
-                int priority = enableHighAccuracy ? LocationRequest.PRIORITY_HIGH_ACCURACY : lowPriority;
+                int lowPriority = networkEnabled ? Priority.PRIORITY_BALANCED_POWER_ACCURACY : Priority.PRIORITY_LOW_POWER;
+                int priority = enableHighAccuracy ? Priority.PRIORITY_HIGH_ACCURACY : lowPriority;
 
                 LocationServices
                     .getFusedLocationProviderClient(context)
@@ -81,8 +82,8 @@ public class Geolocation {
                     networkEnabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
                 } catch (Exception ex) {}
 
-                int lowPriority = networkEnabled ? LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY : LocationRequest.PRIORITY_LOW_POWER;
-                int priority = enableHighAccuracy ? LocationRequest.PRIORITY_HIGH_ACCURACY : lowPriority;
+                int lowPriority = networkEnabled ? Priority.PRIORITY_BALANCED_POWER_ACCURACY : Priority.PRIORITY_LOW_POWER;
+                int priority = enableHighAccuracy ? Priority.PRIORITY_HIGH_ACCURACY : lowPriority;
 
                 LocationRequest locationRequest = LocationRequest
                     .create()
