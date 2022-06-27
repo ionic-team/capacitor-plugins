@@ -4,18 +4,37 @@ import { registerPlugin } from '@capacitor/core';
 import type {
   CameraConfig,
   GoogleMapConfig,
+  LatLngBounds,
   MapPadding,
   MapType,
   Marker,
 } from './definitions';
 
+/**
+ * An interface containing the options used when creating a map.
+ */
 export interface CreateMapArgs {
+  /**
+   * A unique identifier for the map instance.
+   */
   id: string;
+  /**
+   * The Google Maps SDK API Key.
+   */
   apiKey: string;
+  /**
+   * The initial configuration settings for the map.
+   */
   config: GoogleMapConfig;
+  /**
+   * The DOM element that the Google Map View will be mounted on which determines size and positioning.
+   */
   element: HTMLElement;
+  /**
+   * Destroy and re-create the map instance if a map with the supplied id already exists
+   * @default false
+   */
   forceCreate?: boolean;
-  devicePixelRatio?: number;
 }
 
 export interface DestroyMapArgs {
@@ -86,8 +105,6 @@ export interface OnScrollArgs {
   };
 }
 
-export type MapListenerCallback = (data: any) => void;
-
 export interface CapacitorGoogleMapsPlugin extends Plugin {
   create(options: CreateMapArgs): Promise<void>;
   addMarker(args: AddMarkerArgs): Promise<{ id: string }>;
@@ -106,6 +123,7 @@ export interface CapacitorGoogleMapsPlugin extends Plugin {
   setPadding(args: PaddingArgs): Promise<void>;
   onScroll(args: OnScrollArgs): Promise<void>;
   dispatchMapEvent(args: { id: string; focus: boolean }): Promise<void>;
+  getMapBounds(args: { id: string }): Promise<LatLngBounds>;
 }
 
 const CapacitorGoogleMaps = registerPlugin<CapacitorGoogleMapsPlugin>(
