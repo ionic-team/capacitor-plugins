@@ -6,6 +6,7 @@ export interface DeviceId {
    * on modern mobile platforms that only allow per-app install UUIDs.
    *
    * On web, a random identifier is generated and stored on localStorage for subsequent calls.
+   * If localStorage is not available a new random identifier will be generated on every call.
    *
    * @since 1.0.0
    */
