@@ -131,7 +131,7 @@ Clear a given watch
 checkPermissions() => Promise<PermissionStatus>
 ```
 
-Check location permissions
+Check location permissions.  Will throw if system location services are disabled.
 
 **Returns:** <code>Promise&lt;<a href="#permissionstatus">PermissionStatus</a>&gt;</code>
 
@@ -146,7 +146,7 @@ Check location permissions
 requestPermissions(permissions?: GeolocationPluginPermissions | undefined) => Promise<PermissionStatus>
 ```
 
-Request location permissions
+Request location permissions.  Will throw if system location services are disabled.
 
 | Param             | Type                                                                                  |
 | ----------------- | ------------------------------------------------------------------------------------- |

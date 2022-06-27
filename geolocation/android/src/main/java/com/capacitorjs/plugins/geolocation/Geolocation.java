@@ -12,6 +12,7 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.Priority;
 
 public class Geolocation {
 
@@ -24,21 +25,26 @@ public class Geolocation {
         this.context = context;
     }
 
+    public Boolean isLocationServicesEnabled() {
+        LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        return LocationManagerCompat.isLocationEnabled(lm);
+    }
+
     @SuppressWarnings("MissingPermission")
     public void sendLocation(boolean enableHighAccuracy, final LocationResultCallback resultCallback) {
         int resultCode = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(context);
         if (resultCode == ConnectionResult.SUCCESS) {
             LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
 
-            if (LocationManagerCompat.isLocationEnabled(lm)) {
+            if (this.isLocationServicesEnabled()) {
                 boolean networkEnabled = false;
 
                 try {
                     networkEnabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
                 } catch (Exception ex) {}
 
-                int lowPriority = networkEnabled ? LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY : LocationRequest.PRIORITY_LOW_POWER;
-                int priority = enableHighAccuracy ? LocationRequest.PRIORITY_HIGH_ACCURACY : lowPriority;
+                int lowPriority = networkEnabled ? Priority.PRIORITY_BALANCED_POWER_ACCURACY : Priority.PRIORITY_LOW_POWER;
+                int priority = enableHighAccuracy ? Priority.PRIORITY_HIGH_ACCURACY : lowPriority;
 
                 LocationServices
                     .getFusedLocationProviderClient(context)
@@ -69,15 +75,15 @@ public class Geolocation {
             fusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
 
             LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-            if (LocationManagerCompat.isLocationEnabled(lm)) {
+            if (this.isLocationServicesEnabled()) {
                 boolean networkEnabled = false;
 
                 try {
                     networkEnabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
                 } catch (Exception ex) {}
 
-                int lowPriority = networkEnabled ? LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY : LocationRequest.PRIORITY_LOW_POWER;
-                int priority = enableHighAccuracy ? LocationRequest.PRIORITY_HIGH_ACCURACY : lowPriority;
+                int lowPriority = networkEnabled ? Priority.PRIORITY_BALANCED_POWER_ACCURACY : Priority.PRIORITY_LOW_POWER;
+                int priority = enableHighAccuracy ? Priority.PRIORITY_HIGH_ACCURACY : lowPriority;
 
                 LocationRequest locationRequest = LocationRequest
                     .create()
