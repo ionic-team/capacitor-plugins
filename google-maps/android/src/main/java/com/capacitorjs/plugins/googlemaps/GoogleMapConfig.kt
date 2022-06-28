@@ -14,40 +14,60 @@ class GoogleMapConfig(fromJSONObject: JSONObject) {
     var googleMapOptions: GoogleMapOptions? = null
     var zoom: Int = 0
     var liteMode: Boolean = false
+    var devicePixelRatio: Float = 1.00f
 
     init {
-        if(!fromJSONObject.has("width")) {
-            throw InvalidArgumentsError("GoogleMapConfig object is missing the required 'width' property")
+        if (!fromJSONObject.has("width")) {
+            throw InvalidArgumentsError(
+                    "GoogleMapConfig object is missing the required 'width' property"
+            )
         }
 
-        if(!fromJSONObject.has("height")) {
-            throw InvalidArgumentsError("GoogleMapConfig object is missing the required 'height' property")
+        if (!fromJSONObject.has("height")) {
+            throw InvalidArgumentsError(
+                    "GoogleMapConfig object is missing the required 'height' property"
+            )
         }
 
-        if(!fromJSONObject.has("x")) {
-            throw InvalidArgumentsError("GoogleMapConfig object is missing the required 'x' property")
+        if (!fromJSONObject.has("x")) {
+            throw InvalidArgumentsError(
+                    "GoogleMapConfig object is missing the required 'x' property"
+            )
         }
 
-        if(!fromJSONObject.has("y")) {
-            throw InvalidArgumentsError("GoogleMapConfig object is missing the required 'y' property")
+        if (!fromJSONObject.has("y")) {
+            throw InvalidArgumentsError(
+                    "GoogleMapConfig object is missing the required 'y' property"
+            )
         }
 
-        if(!fromJSONObject.has("zoom")) {
-            throw InvalidArgumentsError("GoogleMapConfig object is missing the required 'zoom' property")
+        if (!fromJSONObject.has("zoom")) {
+            throw InvalidArgumentsError(
+                    "GoogleMapConfig object is missing the required 'zoom' property"
+            )
         }
 
-        if(!fromJSONObject.has("center")) {
-            throw InvalidArgumentsError("GoogleMapConfig object is missing the required 'center' property")
+        if (fromJSONObject.has("devicePixelRatio")) {
+            devicePixelRatio = fromJSONObject.getDouble("devicePixelRatio").toFloat()
+        }
+
+        if (!fromJSONObject.has("center")) {
+            throw InvalidArgumentsError(
+                    "GoogleMapConfig object is missing the required 'center' property"
+            )
         }
 
         val centerJSONObject = fromJSONObject.getJSONObject("center")
 
-        if(!centerJSONObject.has("lat") || !centerJSONObject.has("lng")) {
-            throw InvalidArgumentsError("LatLng object is missing the required 'lat' and/or 'lng' property")
+        if (!centerJSONObject.has("lat") || !centerJSONObject.has("lng")) {
+            throw InvalidArgumentsError(
+                    "LatLng object is missing the required 'lat' and/or 'lng' property"
+            )
         }
 
-        liteMode = fromJSONObject.has("androidLiteMode")
-                && fromJSONObject.getBoolean("androidLiteMode")
+        liteMode =
+                fromJSONObject.has("androidLiteMode") &&
+                        fromJSONObject.getBoolean("androidLiteMode")
 
         width = fromJSONObject.getInt("width")
         height = fromJSONObject.getInt("height")

@@ -11,6 +11,10 @@ const MultipleMarkers: React.FC = () => {
     const [commandOutput2, setCommandOutput2] = useState('');
     const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
 
+    const onBoundsChanged = (data: any) => {
+        setCommandOutput(`BOUNDS CHANGED:  ${JSON.stringify(data)}`);
+    }
+
     const onCameraIdle = (data: any) => {
         setCommandOutput(`CAMERA IDLE:  ${JSON.stringify(data)}`);
     }
@@ -77,6 +81,7 @@ const MultipleMarkers: React.FC = () => {
     }
 
     async function setEventListeners() {
+        map?.setOnBoundsChangedListener(onBoundsChanged);
         map?.setOnCameraIdleListener(onCameraIdle);
         map?.setOnCameraMoveStartedListener(onCameraMoveStarted);
         map?.setOnClusterClickListener(onClusterClick);
@@ -204,6 +209,11 @@ const MultipleMarkers: React.FC = () => {
         await map?.enableCurrentLocation(true);
     }
 
+    async function showCurrentBounds() {
+        const bounds = await map?.getMapBounds();
+        setCommandOutput(JSON.stringify(bounds));
+    }
+
     return (
         <BaseTestingPage pageTitle="Multiple Markers">
             <div>
@@ -218,6 +228,9 @@ const MultipleMarkers: React.FC = () => {
                 </IonButton>
                 <IonButton  id="showCurrentLocationButton" onClick={showCurrentLocation}>
                     Show Current Location
+                </IonButton>
+                <IonButton  id="showCurrentBoundsButton" onClick={showCurrentBounds}>
+                    Show Current Bounds
                 </IonButton>
                 <IonButton id="addMarkersButton" onClick={addMultipleMarkers}>
                     Add Multiple Markers
