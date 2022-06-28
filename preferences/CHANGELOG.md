@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 4.0.0-beta.0 (2022-06-27)
+
+**Note:** Version bump only for package @capacitor/preferences
+
+
+
+
+
 ## [1.2.5](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/storage@1.2.4...@capacitor/storage@1.2.5) (2022-03-03)
 
 **Note:** Version bump only for package @capacitor/storage
