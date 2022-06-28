@@ -37,33 +37,29 @@ import CoreHaptics
     }
 
     @objc public func vibrate(_ duration: Double) {
-        if #available(iOS 13, *) {
-            if CHHapticEngine.capabilitiesForHardware().supportsHaptics {
-                do {
-                    let engine = try CHHapticEngine()
-                    try engine.start()
-                    engine.resetHandler = { [] in
-                        do {
-                            try engine.start()
-                        } catch {
-                            self.vibrate()
-                        }
+        if CHHapticEngine.capabilitiesForHardware().supportsHaptics {
+            do {
+                let engine = try CHHapticEngine()
+                try engine.start()
+                engine.resetHandler = { [] in
+                    do {
+                        try engine.start()
+                    } catch {
+                        self.vibrate()
                     }
-                    let intensity = CHHapticEventParameter(parameterID: .hapticIntensity, value: 1.0)
-                    let sharpness = CHHapticEventParameter(parameterID: .hapticSharpness, value: 1.0)
-
-                    let continuousEvent = CHHapticEvent(eventType: .hapticContinuous,
-                                                        parameters: [intensity, sharpness],
-                                                        relativeTime: 0.0,
-                                                        duration: duration)
-                    let pattern = try CHHapticPattern(events: [continuousEvent], parameters: [])
-                    let player = try engine.makePlayer(with: pattern)
-
-                    try player.start(atTime: 0)
-                } catch {
-                    vibrate()
                 }
-            } else {
+                let intensity = CHHapticEventParameter(parameterID: .hapticIntensity, value: 1.0)
+                let sharpness = CHHapticEventParameter(parameterID: .hapticSharpness, value: 1.0)
+
+                let continuousEvent = CHHapticEvent(eventType: .hapticContinuous,
+                                                    parameters: [intensity, sharpness],
+                                                    relativeTime: 0.0,
+                                                    duration: duration)
+                let pattern = try CHHapticPattern(events: [continuousEvent], parameters: [])
+                let player = try engine.makePlayer(with: pattern)
+
+                try player.start(atTime: 0)
+            } catch {
                 vibrate()
             }
         } else {

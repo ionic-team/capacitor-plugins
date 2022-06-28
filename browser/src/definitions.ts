@@ -87,6 +87,24 @@ export interface OpenOptions {
    * @since 1.0.0
    */
   presentationStyle?: 'fullscreen' | 'popover';
+
+  /**
+   * iOS only: The width the browser when using presentationStyle 'popover' on iPads.
+   *
+   * Ignored on other platforms.
+   *
+   * @since 4.0.0
+   */
+  width?: number;
+
+  /**
+   * iOS only: The height the browser when using presentationStyle 'popover' on iPads.
+   *
+   * Ignored on other platforms.
+   *
+   * @since 4.0.0
+   */
+  height?: number;
 }
 
 /**
