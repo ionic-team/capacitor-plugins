@@ -3,6 +3,34 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 4.0.0-beta.0 (2022-06-27)
+
+
+### Bug Fixes
+
+* inline source code in esm map files ([#760](https://github.com/ionic-team/capacitor-plugins/issues/760)) ([a960489](https://github.com/ionic-team/capacitor-plugins/commit/a960489a19db0182b90d187a50deff9dfbe51038))
+* **text-zoom:** Lazy load iOS implementation ([#735](https://github.com/ionic-team/capacitor-plugins/issues/735)) ([5039a74](https://github.com/ionic-team/capacitor-plugins/commit/5039a747efa2bc36674c70bdd9dae4439165ab4d))
+* add es2017 lib to tsconfig ([#180](https://github.com/ionic-team/capacitor-plugins/issues/180)) ([2c3776c](https://github.com/ionic-team/capacitor-plugins/commit/2c3776c38ca025c5ee965dec10ccf1cdb6c02e2f))
+* better ignore rules for npm distribution ([#32](https://github.com/ionic-team/capacitor-plugins/issues/32)) ([b8d55b9](https://github.com/ionic-team/capacitor-plugins/commit/b8d55b9233e4ad7b8a1cd41110b4e580fc2a059f))
+* correct addListeners links ([#655](https://github.com/ionic-team/capacitor-plugins/issues/655)) ([f9871e7](https://github.com/ionic-team/capacitor-plugins/commit/f9871e7bd53478addb21155e148829f550c0e457))
+* remove postpublish scripts ([#656](https://github.com/ionic-team/capacitor-plugins/issues/656)) ([ed6ac49](https://github.com/ionic-team/capacitor-plugins/commit/ed6ac499ebf4a47525071ccbfc36c27503e11f60))
+* support deprecated types from Capacitor 2 ([#139](https://github.com/ionic-team/capacitor-plugins/issues/139)) ([2d7127a](https://github.com/ionic-team/capacitor-plugins/commit/2d7127a488e26f0287951921a6db47c49d817336))
+* use correct package in manifest files ([#22](https://github.com/ionic-team/capacitor-plugins/issues/22)) ([ab62987](https://github.com/ionic-team/capacitor-plugins/commit/ab629877e1951f944594f1b23e1bffefcbc783dd))
+
+
+### Features
+
+* add commonjs output format ([#179](https://github.com/ionic-team/capacitor-plugins/issues/179)) ([8e9e098](https://github.com/ionic-team/capacitor-plugins/commit/8e9e09862064b3f6771d7facbc4008e995d9b463))
+* set targetSDK default value to 31 ([#824](https://github.com/ionic-team/capacitor-plugins/issues/824)) ([3ee10de](https://github.com/ionic-team/capacitor-plugins/commit/3ee10de98067984c1a4e75295d001c5a895c47f4))
+* set targetSDK default value to 32 ([#970](https://github.com/ionic-team/capacitor-plugins/issues/970)) ([fa70d96](https://github.com/ionic-team/capacitor-plugins/commit/fa70d96f141af751aae53ceb5642c46b204f5958))
+* Text Zoom plugin ([#9](https://github.com/ionic-team/capacitor-plugins/issues/9)) ([cc18d0f](https://github.com/ionic-team/capacitor-plugins/commit/cc18d0fb1b6f4509d95a4114c92255d8d7873311))
+* Upgrade gradle to 7.4 ([#826](https://github.com/ionic-team/capacitor-plugins/issues/826)) ([5db0906](https://github.com/ionic-team/capacitor-plugins/commit/5db0906f6264287c4f8e69dbaecf19d4d387824b))
+* Use java 11 ([#910](https://github.com/ionic-team/capacitor-plugins/issues/910)) ([5acb2a2](https://github.com/ionic-team/capacitor-plugins/commit/5acb2a288a413492b163e4e97da46a085d9e4be0))
+
+
+
+
+
 ## [1.0.8](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/text-zoom@1.0.7...@capacitor/text-zoom@1.0.8) (2022-01-19)
 
 
