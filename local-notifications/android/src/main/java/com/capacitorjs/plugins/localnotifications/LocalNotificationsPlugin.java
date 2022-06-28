@@ -1,6 +1,11 @@
 package com.capacitorjs.plugins.localnotifications;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
+import android.service.notification.StatusBarNotification;
 import com.getcapacitor.Bridge;
 import com.getcapacitor.JSArray;
 import com.getcapacitor.JSObject;
@@ -13,12 +18,15 @@ import com.getcapacitor.annotation.Permission;
 import java.util.List;
 import java.util.Map;
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 @CapacitorPlugin(name = "LocalNotifications", permissions = @Permission(strings = {}, alias = "display"))
 public class LocalNotificationsPlugin extends Plugin {
 
     private static Bridge staticBridge = null;
     private LocalNotificationManager manager;
+    public NotificationManager notificationManager;
     private NotificationStorage notificationStorage;
     private NotificationChannelManager notificationChannelManager;
 
@@ -29,6 +37,7 @@ public class LocalNotificationsPlugin extends Plugin {
         manager = new LocalNotificationManager(notificationStorage, getActivity(), getContext(), this.bridge.getConfig());
         manager.createNotificationChannel();
         notificationChannelManager = new NotificationChannelManager(getActivity());
+        notificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
         staticBridge = this.bridge;
     }
 
@@ -95,6 +104,76 @@ public class LocalNotificationsPlugin extends Plugin {
         JSObject data = new JSObject();
         data.put("value", manager.areNotificationsEnabled());
         call.resolve(data);
+    }
+
+    @PluginMethod
+    public void getDeliveredNotifications(PluginCall call) {
+        JSArray notifications = new JSArray();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            StatusBarNotification[] activeNotifications = notificationManager.getActiveNotifications();
+
+            for (StatusBarNotification notif : activeNotifications) {
+                JSObject jsNotif = new JSObject();
+
+                jsNotif.put("id", notif.getId());
+                jsNotif.put("tag", notif.getTag());
+
+                Notification notification = notif.getNotification();
+                if (notification != null) {
+                    jsNotif.put("title", notification.extras.getCharSequence(Notification.EXTRA_TITLE));
+                    jsNotif.put("body", notification.extras.getCharSequence(Notification.EXTRA_TEXT));
+                    jsNotif.put("group", notification.getGroup());
+                    jsNotif.put("groupSummary", 0 != (notification.flags & Notification.FLAG_GROUP_SUMMARY));
+
+                    JSObject extras = new JSObject();
+
+                    for (String key : notification.extras.keySet()) {
+                        extras.put(key, notification.extras.get(key));
+                    }
+
+                    jsNotif.put("data", extras);
+                }
+
+                notifications.put(jsNotif);
+            }
+        }
+
+        JSObject result = new JSObject();
+        result.put("notifications", notifications);
+        call.resolve(result);
+    }
+
+    @PluginMethod
+    public void removeDeliveredNotifications(PluginCall call) {
+        JSArray notifications = call.getArray("notifications");
+
+        try {
+            for (Object o : notifications.toList()) {
+                if (o instanceof JSONObject) {
+                    JSObject notif = JSObject.fromJSONObject((JSONObject) o);
+                    String tag = notif.getString("tag");
+                    Integer id = notif.getInteger("id");
+
+                    if (tag == null) {
+                        notificationManager.cancel(id);
+                    } else {
+                        notificationManager.cancel(tag, id);
+                    }
+                } else {
+                    call.reject("Expected notifications to be a list of notification objects");
+                }
+            }
+        } catch (JSONException e) {
+            call.reject(e.getMessage());
+        }
+
+        call.resolve();
+    }
+
+    @PluginMethod
+    public void removeAllDeliveredNotifications(PluginCall call) {
+        notificationManager.cancelAll();
+        call.resolve();
     }
 
     @PluginMethod
