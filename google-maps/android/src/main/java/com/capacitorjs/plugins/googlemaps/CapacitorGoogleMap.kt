@@ -15,11 +15,12 @@ import com.getcapacitor.JSArray
 import com.getcapacitor.JSObject
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.GoogleMap.*
+import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.Marker
 import com.google.maps.android.clustering.Cluster
 import com.google.maps.android.clustering.ClusterManager
@@ -67,8 +68,6 @@ class CapacitorGoogleMap(
 
                         isReadyChannel.receive()
 
-                        this@CapacitorGoogleMap.mapView = mapView
-
                         render()
                     }
 
@@ -100,7 +99,7 @@ class CapacitorGoogleMap(
                 ((bridge.webView.parent) as ViewGroup).addView(mapViewParent)
 
                 bridge.webView.bringToFront()
-                bridge.webView.setBackgroundColor(Color.TRANSPARENT);
+                bridge.webView.setBackgroundColor(Color.TRANSPARENT)
             }
         }
     }
@@ -134,7 +133,10 @@ class CapacitorGoogleMap(
 
     fun bringToFront() {
         CoroutineScope(Dispatchers.Main).launch {
-            val mapViewParent = ((delegate.bridge.webView.parent) as ViewGroup).findViewWithTag<ViewGroup>(this@CapacitorGoogleMap.id)
+            val mapViewParent =
+                    ((delegate.bridge.webView.parent) as ViewGroup).findViewWithTag<ViewGroup>(
+                            this@CapacitorGoogleMap.id
+                    )
             mapViewParent.bringToFront()
         }
     }
@@ -394,17 +396,17 @@ class CapacitorGoogleMap(
             CoroutineScope(Dispatchers.Main).launch {
                 val mapTypeInt: Int =
                         when (mapType) {
-                            "Normal" -> GoogleMap.MAP_TYPE_NORMAL
-                            "Hybrid" -> GoogleMap.MAP_TYPE_HYBRID
-                            "Satellite" -> GoogleMap.MAP_TYPE_SATELLITE
-                            "Terrain" -> GoogleMap.MAP_TYPE_TERRAIN
-                            "None" -> GoogleMap.MAP_TYPE_NONE
+                            "Normal" -> MAP_TYPE_NORMAL
+                            "Hybrid" -> MAP_TYPE_HYBRID
+                            "Satellite" -> MAP_TYPE_SATELLITE
+                            "Terrain" -> MAP_TYPE_TERRAIN
+                            "None" -> MAP_TYPE_NONE
                             else -> {
                                 Log.w(
                                         "CapacitorGoogleMaps",
                                         "unknown mapView type '$mapType'  Defaulting to normal."
                                 )
-                                GoogleMap.MAP_TYPE_NORMAL
+                                MAP_TYPE_NORMAL
                             }
                         }
 
@@ -467,11 +469,37 @@ class CapacitorGoogleMap(
 
     fun getMapBounds(): Rect {
         return Rect(
-                getScaledPixels(delegate.bridge, config.x).toInt(),
-                getScaledPixels(delegate.bridge, config.y).toInt(),
-                getScaledPixels(delegate.bridge, config.x + config.width).toInt(),
-                getScaledPixels(delegate.bridge, config.y + config.height).toInt()
+                getScaledPixels(delegate.bridge, config.x),
+                getScaledPixels(delegate.bridge, config.y),
+                getScaledPixels(delegate.bridge, config.x + config.width),
+                getScaledPixels(delegate.bridge, config.y + config.height)
         )
+    }
+
+    fun getLatLngBounds(): LatLngBounds {
+        return googleMap?.projection?.visibleRegion?.latLngBounds
+            ?: throw BoundsNotFoundError()
+    }
+
+    fun getLatLngBoundsJSObject(bounds: LatLngBounds): JSObject {
+        val data = JSObject()
+
+        val southwestJS = JSObject()
+        val centerJS = JSObject()
+        val northeastJS = JSObject()
+
+        southwestJS.put("lat", bounds.southwest.latitude)
+        southwestJS.put("lng", bounds.southwest.longitude)
+        centerJS.put("lat", bounds.center.latitude)
+        centerJS.put("lng", bounds.center.longitude)
+        northeastJS.put("lat", bounds.northeast.latitude)
+        northeastJS.put("lng", bounds.northeast.longitude)
+
+        data.put("southwest", southwestJS)
+        data.put("center", centerJS)
+        data.put("northeast", northeastJS)
+
+        return data
     }
 
     private fun getScaledPixels(bridge: Bridge, pixels: Int): Int {
@@ -490,10 +518,10 @@ class CapacitorGoogleMap(
 
     private fun getScaledRect(bridge: Bridge, rectF: RectF): RectF {
         return RectF(
-            getScaledPixelsF(bridge, rectF.left),
-            getScaledPixelsF(bridge, rectF.top),
-            getScaledPixelsF(bridge, rectF.right),
-            getScaledPixelsF(bridge, rectF.bottom)
+                getScaledPixelsF(bridge, rectF.left),
+                getScaledPixelsF(bridge, rectF.top),
+                getScaledPixelsF(bridge, rectF.right),
+                getScaledPixelsF(bridge, rectF.bottom)
         )
     }
 
@@ -639,12 +667,14 @@ class CapacitorGoogleMap(
     override fun onCameraIdle() {
         val data = JSObject()
         data.put("mapId", this@CapacitorGoogleMap.id)
+        data.put("bounds", getLatLngBoundsJSObject(getLatLngBounds()))
         data.put("bearing", this@CapacitorGoogleMap.googleMap?.cameraPosition?.bearing)
         data.put("latitude", this@CapacitorGoogleMap.googleMap?.cameraPosition?.target?.latitude)
         data.put("longitude", this@CapacitorGoogleMap.googleMap?.cameraPosition?.target?.longitude)
         data.put("tilt", this@CapacitorGoogleMap.googleMap?.cameraPosition?.tilt)
         data.put("zoom", this@CapacitorGoogleMap.googleMap?.cameraPosition?.zoom)
         delegate.notify("onCameraIdle", data)
+        delegate.notify("onBoundsChanged", data)
     }
 
     override fun onCameraMoveStarted(reason: Int) {
