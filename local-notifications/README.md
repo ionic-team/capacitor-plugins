@@ -83,6 +83,9 @@ If the device has entered [Doze](https://developer.android.com/training/monitori
 * [`registerActionTypes(...)`](#registeractiontypes)
 * [`cancel(...)`](#cancel)
 * [`areEnabled()`](#areenabled)
+* [`getDeliveredNotifications()`](#getdeliverednotifications)
+* [`removeDeliveredNotifications(...)`](#removedeliverednotifications)
+* [`removeAllDeliveredNotifications()`](#removealldeliverednotifications)
 * [`createChannel(...)`](#createchannel)
 * [`deleteChannel(...)`](#deletechannel)
 * [`listChannels()`](#listchannels)
@@ -181,6 +184,51 @@ Check if notifications are enabled or not.
 **Returns:** <code>Promise&lt;<a href="#enabledresult">EnabledResult</a>&gt;</code>
 
 **Since:** 1.0.0
+
+--------------------
+
+
+### getDeliveredNotifications()
+
+```typescript
+getDeliveredNotifications() => Promise<DeliveredNotifications>
+```
+
+Get a list of notifications that are visible on the notifications screen.
+
+**Returns:** <code>Promise&lt;<a href="#deliverednotifications">DeliveredNotifications</a>&gt;</code>
+
+**Since:** 4.0.0
+
+--------------------
+
+
+### removeDeliveredNotifications(...)
+
+```typescript
+removeDeliveredNotifications(delivered: DeliveredNotifications) => Promise<void>
+```
+
+Remove the specified notifications from the notifications screen.
+
+| Param           | Type                                                                      |
+| --------------- | ------------------------------------------------------------------------- |
+| **`delivered`** | <code><a href="#deliverednotifications">DeliveredNotifications</a></code> |
+
+**Since:** 4.0.0
+
+--------------------
+
+
+### removeAllDeliveredNotifications()
+
+```typescript
+removeAllDeliveredNotifications() => Promise<void>
+```
+
+Remove all the notifications from the notifications screen.
+
+**Since:** 4.0.0
 
 --------------------
 
@@ -367,7 +415,7 @@ The object that describes a local notification.
 | **`actionTypeId`**     | <code>string</code>                           | Associate an action type with this notification.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                | 1.0.0 |
 | **`extra`**            | <code>any</code>                              | Set extra data to store within this notification.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               | 1.0.0 |
 | **`threadIdentifier`** | <code>string</code>                           | Used to group multiple notifications. Sets `threadIdentifier` on the [`UNMutableNotificationContent`](https://developer.apple.com/documentation/usernotifications/unmutablenotificationcontent). Only available for iOS.                                                                                                                                                                                                                                                                                                                                                                                                        | 1.0.0 |
-| **`summaryArgument`**  | <code>string</code>                           | The string this notification adds to the category's summary format string. Sets `summaryArgument` on the [`UNMutableNotificationContent`](https://developer.apple.com/documentation/usernotifications/unmutablenotificationcontent). Only available for iOS 12+.                                                                                                                                                                                                                                                                                                                                                                | 1.0.0 |
+| **`summaryArgument`**  | <code>string</code>                           | The string this notification adds to the category's summary format string. Sets `summaryArgument` on the [`UNMutableNotificationContent`](https://developer.apple.com/documentation/usernotifications/unmutablenotificationcontent). Only available for iOS.                                                                                                                                                                                                                                                                                                                                                                    | 1.0.0 |
 | **`group`**            | <code>string</code>                           | Used to group multiple notifications. Calls `setGroup()` on [`NotificationCompat.Builder`](https://developer.android.com/reference/androidx/core/app/NotificationCompat.Builder) with the provided value. Only available for Android.                                                                                                                                                                                                                                                                                                                                                                                           | 1.0.0 |
 | **`groupSummary`**     | <code>boolean</code>                          | If true, this notification becomes the summary for a group of notifications. Calls `setGroupSummary()` on [`NotificationCompat.Builder`](https://developer.android.com/reference/androidx/core/app/NotificationCompat.Builder) with the provided value. Only available for Android when using `group`.                                                                                                                                                                                                                                                                                                                          | 1.0.0 |
 | **`channelId`**        | <code>string</code>                           | Specifies the channel the notification should be delivered on. If channel with the given name does not exist then the notification will not fire. If not provided, it will use the default channel. Calls `setChannelId()` on [`NotificationCompat.Builder`](https://developer.android.com/reference/androidx/core/app/NotificationCompat.Builder) with the provided value. Only available for Android 26+.                                                                                                                                                                                                                     | 1.0.0 |
@@ -547,6 +595,31 @@ An action that can be taken when a notification is displayed.
 | **`value`** | <code>boolean</code> | Whether or not the device has local notifications enabled. | 1.0.0 |
 
 
+#### DeliveredNotifications
+
+| Prop                | Type                                       | Description                                                         | Since |
+| ------------------- | ------------------------------------------ | ------------------------------------------------------------------- | ----- |
+| **`notifications`** | <code>DeliveredNotificationSchema[]</code> | List of notifications that are visible on the notifications screen. | 1.0.0 |
+
+
+#### DeliveredNotificationSchema
+
+| Prop               | Type                                          | Description                                                                                    | Since |
+| ------------------ | --------------------------------------------- | ---------------------------------------------------------------------------------------------- | ----- |
+| **`id`**           | <code>number</code>                           | The notification identifier.                                                                   | 4.0.0 |
+| **`tag`**          | <code>string</code>                           | The notification tag. Only available on Android.                                               | 4.0.0 |
+| **`title`**        | <code>string</code>                           | The title of the notification.                                                                 | 4.0.0 |
+| **`body`**         | <code>string</code>                           | The body of the notification, shown below the title.                                           | 4.0.0 |
+| **`group`**        | <code>string</code>                           | The configured group of the notification. Only available for Android.                          | 4.0.0 |
+| **`groupSummary`** | <code>boolean</code>                          | If this notification is the summary for a group of notifications. Only available for Android.  | 4.0.0 |
+| **`data`**         | <code>any</code>                              | Any additional data that was included in the notification payload. Only available for Android. | 4.0.0 |
+| **`extra`**        | <code>any</code>                              | Extra data to store within this notification. Only available for iOS.                          | 4.0.0 |
+| **`attachments`**  | <code>Attachment[]</code>                     | The attachments for this notification. Only available for iOS.                                 | 1.0.0 |
+| **`actionTypeId`** | <code>string</code>                           | <a href="#action">Action</a> type ssociated with this notification. Only available for iOS.    | 4.0.0 |
+| **`schedule`**     | <code><a href="#schedule">Schedule</a></code> | <a href="#schedule">Schedule</a> used to fire this notification. Only available for iOS.       | 4.0.0 |
+| **`sound`**        | <code>string</code>                           | Sound that was used when the notification was displayed. Only available for iOS.               | 4.0.0 |
+
+
 #### Channel
 
 | Prop              | Type                                              | Description                                                                                                                                                                                                                                                                                                                                    | Default          | Since |
@@ -612,11 +685,6 @@ The importance level. For more details, see the [Android Developer Docs](https:/
 The notification visibility. For more details, see the [Android Developer Docs](https://developer.android.com/reference/androidx/core/app/NotificationCompat#VISIBILITY_PRIVATE)
 
 <code>-1 | 0 | 1</code>
-
-
-#### NotificationChannel
-
-<code><a href="#channel">Channel</a></code>
 
 
 #### PermissionState

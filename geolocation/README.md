@@ -37,7 +37,7 @@ Read about [Setting Permissions](https://capacitorjs.com/docs/android/configurat
 
 This plugin will use the following project variables (defined in your app's `variables.gradle` file):
 
-- `$playServicesLocationVersion` version of `com.google.android.gms:play-services-location` (default: `19.0.1`)
+- `$playServicesLocationVersion` version of `com.google.android.gms:play-services-location` (default: `20.0.0`)
 
 ## Example
 
@@ -131,7 +131,7 @@ Clear a given watch
 checkPermissions() => Promise<PermissionStatus>
 ```
 
-Check location permissions
+Check location permissions.  Will throw if system location services are disabled.
 
 **Returns:** <code>Promise&lt;<a href="#permissionstatus">PermissionStatus</a>&gt;</code>
 
@@ -146,7 +146,7 @@ Check location permissions
 requestPermissions(permissions?: GeolocationPluginPermissions | undefined) => Promise<PermissionStatus>
 ```
 
-Request location permissions
+Request location permissions.  Will throw if system location services are disabled.
 
 | Param             | Type                                                                                  |
 | ----------------- | ------------------------------------------------------------------------------------- |

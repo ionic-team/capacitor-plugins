@@ -1,14 +1,28 @@
 import { Capacitor } from '@capacitor/core';
 import type { PluginListenerHandle } from '@capacitor/core';
 
-import type { CameraConfig, Marker, MapPadding, MapType } from './definitions';
-import type { CreateMapArgs, MapListenerCallback } from './implementation';
+import type {
+  CameraConfig,
+  Marker,
+  MapPadding,
+  MapType,
+  MapListenerCallback,
+  MapReadyCallbackData,
+  CameraIdleCallbackData,
+  CameraMoveStartedCallbackData,
+  ClusterClickCallbackData,
+  MapClickCallbackData,
+  MarkerClickCallbackData,
+  MyLocationButtonClickCallbackData,
+  LatLngBounds,
+} from './definitions';
+import type { CreateMapArgs } from './implementation';
 import { CapacitorGoogleMaps } from './implementation';
 
 export interface GoogleMapInterface {
   create(
     options: CreateMapArgs,
-    callback?: MapListenerCallback,
+    callback?: MapListenerCallback<MapReadyCallbackData>,
   ): Promise<GoogleMap>;
   enableClustering(): Promise<void>;
   disableClustering(): Promise<void>;
@@ -24,19 +38,36 @@ export interface GoogleMapInterface {
   enableAccessibilityElements(enabled: boolean): Promise<void>;
   enableCurrentLocation(enabled: boolean): Promise<void>;
   setPadding(padding: MapPadding): Promise<void>;
-  setOnCameraIdleListener(callback?: MapListenerCallback): Promise<void>;
-  setOnCameraMoveStartedListener(callback?: MapListenerCallback): Promise<void>;
-  setOnClusterClickListener(callback?: MapListenerCallback): Promise<void>;
+  setOnBoundsChangedListener(
+    callback?: MapListenerCallback<CameraIdleCallbackData>,
+  ): Promise<void>;
+  setOnCameraIdleListener(
+    callback?: MapListenerCallback<CameraIdleCallbackData>,
+  ): Promise<void>;
+  setOnCameraMoveStartedListener(
+    callback?: MapListenerCallback<CameraMoveStartedCallbackData>,
+  ): Promise<void>;
+  setOnClusterClickListener(
+    callback?: MapListenerCallback<ClusterClickCallbackData>,
+  ): Promise<void>;
   setOnClusterInfoWindowClickListener(
-    callback?: MapListenerCallback,
+    callback?: MapListenerCallback<ClusterClickCallbackData>,
   ): Promise<void>;
-  setOnInfoWindowClickListener(callback?: MapListenerCallback): Promise<void>;
-  setOnMapClickListener(callback?: MapListenerCallback): Promise<void>;
-  setOnMarkerClickListener(callback?: MapListenerCallback): Promise<void>;
+  setOnInfoWindowClickListener(
+    callback?: MapListenerCallback<MarkerClickCallbackData>,
+  ): Promise<void>;
+  setOnMapClickListener(
+    callback?: MapListenerCallback<MapClickCallbackData>,
+  ): Promise<void>;
+  setOnMarkerClickListener(
+    callback?: MapListenerCallback<MarkerClickCallbackData>,
+  ): Promise<void>;
   setOnMyLocationButtonClickListener(
-    callback?: MapListenerCallback,
+    callback?: MapListenerCallback<MyLocationButtonClickCallbackData>,
   ): Promise<void>;
-  setOnMyLocationClickListener(callback?: MapListenerCallback): Promise<void>;
+  setOnMyLocationClickListener(
+    callback?: MapListenerCallback<MapClickCallbackData>,
+  ): Promise<void>;
 }
 
 class MapCustomElement extends HTMLElement {
@@ -65,6 +96,7 @@ export class GoogleMap {
   private id: string;
   private element: HTMLElement | null = null;
 
+  private onBoundsChangedListener?: PluginListenerHandle;
   private onCameraIdleListener?: PluginListenerHandle;
   private onCameraMoveStartedListener?: PluginListenerHandle;
   private onClusterClickListener?: PluginListenerHandle;
@@ -81,22 +113,13 @@ export class GoogleMap {
 
   /**
    * Creates a new instance of a Google Map
-   *
-   * @param element
-   * DOM element that will contain the map view and determine sizing / positioning
-   * @param id Unique id for the map instance
-   * @param apiKey
-   * Google Maps SDK API Key
-   * @param config
-   * Initial configuration settings for the map
-   * @param forceCreate
-   * If a map already exists with the supplied id, automatically destroy and re-create the map instance
-   *
+   * @param options
+   * @param callback
    * @returns GoogleMap
    */
   public static async create(
     options: CreateMapArgs,
-    callback?: MapListenerCallback,
+    callback?: MapListenerCallback<MapReadyCallbackData>,
   ): Promise<GoogleMap> {
     const newMap = new GoogleMap(options.id);
 
@@ -116,17 +139,28 @@ export class GoogleMap {
     options.config.height = elementBounds.height;
     options.config.x = elementBounds.x;
     options.config.y = elementBounds.y;
-    options.devicePixelRatio = window.devicePixelRatio;
+    options.config.devicePixelRatio = window.devicePixelRatio;
 
     if (Capacitor.getPlatform() == 'android') {
       newMap.initScrolling();
     }
 
-    (options.element as any) = {};
+    if (Capacitor.isNativePlatform()) {
+      (options.element as any) = {};
+    }
+
     await CapacitorGoogleMaps.create(options);
 
     if (callback) {
-      CapacitorGoogleMaps.addListener('onMapReady', callback);
+      const onMapReadyListener = await CapacitorGoogleMaps.addListener(
+        'onMapReady',
+        (data: MapReadyCallbackData) => {
+          if (data.mapId == newMap.id) {
+            callback(data);
+            onMapReadyListener.remove();
+          }
+        },
+      );
     }
 
     return newMap;
@@ -318,6 +352,17 @@ export class GoogleMap {
     });
   }
 
+  /**
+   * Get the map's current viewport latitude and longitude bounds.
+   *
+   * @returns {LatLngBounds}
+   */
+  async getMapBounds(): Promise<LatLngBounds> {
+    return CapacitorGoogleMaps.getMapBounds({
+      id: this.id,
+    });
+  }
+
   initScrolling(): void {
     const ionContents = document.getElementsByTagName('ion-content');
 
@@ -398,7 +443,9 @@ export class GoogleMap {
    * @param callback
    * @returns
    */
-  async setOnCameraIdleListener(callback?: MapListenerCallback): Promise<void> {
+  async setOnCameraIdleListener(
+    callback?: MapListenerCallback<CameraIdleCallbackData>,
+  ): Promise<void> {
     if (this.onCameraIdleListener) {
       this.onCameraIdleListener.remove();
     }
@@ -414,13 +461,36 @@ export class GoogleMap {
   }
 
   /**
+   * Set the event listener on the map for 'onBoundsChanged' events.
+   *
+   * @param callback
+   * @returns
+   */
+  async setOnBoundsChangedListener(
+    callback?: MapListenerCallback<CameraIdleCallbackData>,
+  ): Promise<void> {
+    if (this.onBoundsChangedListener) {
+      this.onBoundsChangedListener.remove();
+    }
+
+    if (callback) {
+      this.onBoundsChangedListener = await CapacitorGoogleMaps.addListener(
+        'onBoundsChanged',
+        this.generateCallback(callback),
+      );
+    } else {
+      this.onBoundsChangedListener = undefined;
+    }
+  }
+
+  /**
    * Set the event listener on the map for 'onCameraMoveStarted' events.
    *
    * @param callback
    * @returns
    */
   async setOnCameraMoveStartedListener(
-    callback?: MapListenerCallback,
+    callback?: MapListenerCallback<CameraMoveStartedCallbackData>,
   ): Promise<void> {
     if (this.onCameraMoveStartedListener) {
       this.onCameraMoveStartedListener.remove();
@@ -443,7 +513,7 @@ export class GoogleMap {
    * @returns
    */
   async setOnClusterClickListener(
-    callback?: MapListenerCallback,
+    callback?: MapListenerCallback<ClusterClickCallbackData>,
   ): Promise<void> {
     if (this.onClusterClickListener) {
       this.onClusterClickListener.remove();
@@ -466,7 +536,7 @@ export class GoogleMap {
    * @returns
    */
   async setOnClusterInfoWindowClickListener(
-    callback?: MapListenerCallback,
+    callback?: MapListenerCallback<ClusterClickCallbackData>,
   ): Promise<void> {
     if (this.onClusterInfoWindowClickListener) {
       this.onClusterInfoWindowClickListener.remove();
@@ -490,7 +560,7 @@ export class GoogleMap {
    * @returns
    */
   async setOnInfoWindowClickListener(
-    callback?: MapListenerCallback,
+    callback?: MapListenerCallback<MarkerClickCallbackData>,
   ): Promise<void> {
     if (this.onInfoWindowClickListener) {
       this.onInfoWindowClickListener.remove();
@@ -512,7 +582,9 @@ export class GoogleMap {
    * @param callback
    * @returns
    */
-  async setOnMapClickListener(callback?: MapListenerCallback): Promise<void> {
+  async setOnMapClickListener(
+    callback?: MapListenerCallback<MapClickCallbackData>,
+  ): Promise<void> {
     if (this.onMapClickListener) {
       this.onMapClickListener.remove();
     }
@@ -534,7 +606,7 @@ export class GoogleMap {
    * @returns
    */
   async setOnMarkerClickListener(
-    callback?: MapListenerCallback,
+    callback?: MapListenerCallback<MarkerClickCallbackData>,
   ): Promise<void> {
     if (this.onMarkerClickListener) {
       this.onMarkerClickListener.remove();
@@ -557,7 +629,7 @@ export class GoogleMap {
    * @returns
    */
   async setOnMyLocationButtonClickListener(
-    callback?: MapListenerCallback,
+    callback?: MapListenerCallback<MyLocationButtonClickCallbackData>,
   ): Promise<void> {
     if (this.onMyLocationButtonClickListener) {
       this.onMyLocationButtonClickListener.remove();
@@ -581,7 +653,7 @@ export class GoogleMap {
    * @returns
    */
   async setOnMyLocationClickListener(
-    callback?: MapListenerCallback,
+    callback?: MapListenerCallback<MapClickCallbackData>,
   ): Promise<void> {
     if (this.onMyLocationClickListener) {
       this.onMyLocationClickListener.remove();
@@ -604,6 +676,10 @@ export class GoogleMap {
    * @returns
    */
   async removeAllMapListeners(): Promise<void> {
+    if (this.onBoundsChangedListener) {
+      this.onBoundsChangedListener.remove();
+      this.onBoundsChangedListener = undefined;
+    }
     if (this.onCameraIdleListener) {
       this.onCameraIdleListener.remove();
       this.onCameraIdleListener = undefined;
@@ -649,7 +725,9 @@ export class GoogleMap {
     }
   }
 
-  private generateCallback(callback: MapListenerCallback): MapListenerCallback {
+  private generateCallback(
+    callback: MapListenerCallback<any>,
+  ): MapListenerCallback<any> {
     const mapId = this.id;
     return (data: any) => {
       if (data.mapId == mapId) {

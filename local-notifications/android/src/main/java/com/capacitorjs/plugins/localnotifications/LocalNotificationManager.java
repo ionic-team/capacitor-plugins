@@ -23,7 +23,6 @@ import com.getcapacitor.JSObject;
 import com.getcapacitor.Logger;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginConfig;
-import com.getcapacitor.android.R;
 import com.getcapacitor.plugin.util.AssetUtil;
 import java.text.SimpleDateFormat;
 import java.util.Date;
