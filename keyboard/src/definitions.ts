@@ -186,6 +186,8 @@ export interface KeyboardPlugin {
    */
   setResizeMode(options: KeyboardResizeOptions): Promise<void>;
 
+  getResizeMode(): Promise<KeyboardResizeOptions>;
+
   /**
    * Listen for when the keyboard is about to be shown.
    *
