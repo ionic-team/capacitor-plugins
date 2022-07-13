@@ -126,16 +126,16 @@ const config: CapacitorConfig = {
     SplashScreen: {
       launchShowDuration: 3000,
       launchAutoHide: true,
-      backgroundColor: "#ffffffff",
-      androidSplashResourceName: "splash",
-      androidScaleType: "CENTER_CROP",
+      backgroundColor: '#ffffffff',
+      androidSplashResourceName: 'splash',
+      androidScaleType: 'CENTER_CROP',
       showSpinner: true,
-      androidSpinnerStyle: "large",
-      iosSpinnerStyle: "small",
-      spinnerColor: "#999999",
+      androidSpinnerStyle: 'large',
+      iosSpinnerStyle: 'small',
+      spinnerColor: '#999999',
       splashFullScreen: true,
       splashImmersive: true,
-      layoutName: "launch_screen",
+      layoutName: 'launch_screen',
       useDialog: true,
     },
   },
@@ -161,6 +161,7 @@ To use splash screen images named something other than `splash.png`, set `androi
 _**This only affects the launch splash screen and is not used when utilizing the programmatic `show()` method.**_
 
 To enable the new recommended **[Android 12 Splash Screen API](https://developer.android.com/guide/topics/ui/splash-screen)** in SDK Versions 30 or below:
+
 _This is enabled by default and required for SDK version 31+._
 
 - Add `$coreSplashScreenVersion` to the `variables.gradle` file.
@@ -195,9 +196,9 @@ This plugin will use the following project variables (defined in your app's `var
 
 <docgen-index>
 
-* [`show(...)`](#show)
-* [`hide(...)`](#hide)
-* [Interfaces](#interfaces)
+- [`show(...)`](#show)
+- [`hide(...)`](#hide)
+- [Interfaces](#interfaces)
 
 </docgen-index>
 
@@ -218,8 +219,7 @@ Show the splash screen
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### hide(...)
 
@@ -235,11 +235,9 @@ Hide the splash screen
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### Interfaces
-
 
 #### ShowOptions
 
@@ -249,7 +247,6 @@ Hide the splash screen
 | **`fadeInDuration`**  | <code>number</code>  | How long (in ms) to fade in.                                        | <code>200</code>  | 1.0.0 |
 | **`fadeOutDuration`** | <code>number</code>  | How long (in ms) to fade out.                                       | <code>200</code>  | 1.0.0 |
 | **`showDuration`**    | <code>number</code>  | How long to show the splash screen when autoHide is enabled (in ms) | <code>3000</code> | 1.0.0 |
-
 
 #### HideOptions
 
