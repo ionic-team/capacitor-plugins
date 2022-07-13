@@ -99,6 +99,7 @@ the following events also work with `window.addEventListener`:
 * [`setScroll(...)`](#setscroll)
 * [`setStyle(...)`](#setstyle)
 * [`setResizeMode(...)`](#setresizemode)
+* [`getResizeMode()`](#getresizemode)
 * [`addListener('keyboardWillShow', ...)`](#addlistenerkeyboardwillshow)
 * [`addListener('keyboardDidShow', ...)`](#addlistenerkeyboarddidshow)
 * [`addListener('keyboardWillHide', ...)`](#addlistenerkeyboardwillhide)
@@ -213,6 +214,23 @@ This method is only supported on iOS.
 | **`options`** | <code><a href="#keyboardresizeoptions">KeyboardResizeOptions</a></code> |
 
 **Since:** 1.0.0
+
+--------------------
+
+
+### getResizeMode()
+
+```typescript
+getResizeMode() => Promise<KeyboardResizeOptions>
+```
+
+Get the currently set keyboard style.
+
+This method is only supported on iOS.
+
+**Returns:** <code>Promise&lt;<a href="#keyboardresizeoptions">KeyboardResizeOptions</a>&gt;</code>
+
+**Since:** 4.0.0
 
 --------------------
 
