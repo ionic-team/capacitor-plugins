@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.0.0-beta.2](https://github.com/ionic-team/capacitor-plugins/compare/4.0.0-beta.0...4.0.0-beta.2) (2022-07-08)
+
+
+### Features
+
+* **local-notifications:** Add delivered notification handling ([#1060](https://github.com/ionic-team/capacitor-plugins/issues/1060)) ([0a89dc9](https://github.com/ionic-team/capacitor-plugins/commit/0a89dc97407685a7f1ec97532af304115fea7a0f))
+
+
+
+
+
 # 4.0.0-beta.0 (2022-06-27)
 
 

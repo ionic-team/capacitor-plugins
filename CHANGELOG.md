@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.0.0-beta.2](https://github.com/ionic-team/capacitor-plugins/compare/4.0.0-beta.0...4.0.0-beta.2) (2022-07-08)
+
+
+### Features
+
+* **browser:** Allow to configure popover size ([#1056](https://github.com/ionic-team/capacitor-plugins/issues/1056)) ([90eb1e5](https://github.com/ionic-team/capacitor-plugins/commit/90eb1e5356aab11103f9b1f56808102ee42f2f1b))
+* **google-maps:** provides variables for configuring dependencies ([#1063](https://github.com/ionic-team/capacitor-plugins/issues/1063)) ([5c077f1](https://github.com/ionic-team/capacitor-plugins/commit/5c077f199cbd16b459a77061509e0504029f78db))
+* **local-notifications:** Add delivered notification handling ([#1060](https://github.com/ionic-team/capacitor-plugins/issues/1060)) ([0a89dc9](https://github.com/ionic-team/capacitor-plugins/commit/0a89dc97407685a7f1ec97532af304115fea7a0f))
+
+
+
+
+
 # 4.0.0-beta.0 (2022-06-27)
 
 
