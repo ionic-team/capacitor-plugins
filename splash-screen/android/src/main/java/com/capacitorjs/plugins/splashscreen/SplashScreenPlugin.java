@@ -45,7 +45,7 @@ public class SplashScreenPlugin extends Plugin {
         if (config.isUsingDialog()) {
             splashScreen.hideDialog(getActivity());
         } else {
-            splashScreen.hide(getActivity(), getSettings(call));
+            splashScreen.hide(getSettings(call));
         }
         call.resolve();
     }
