@@ -126,16 +126,16 @@ const config: CapacitorConfig = {
     SplashScreen: {
       launchShowDuration: 3000,
       launchAutoHide: true,
-      backgroundColor: '#ffffffff',
-      androidSplashResourceName: 'splash',
-      androidScaleType: 'CENTER_CROP',
+      backgroundColor: "#ffffffff",
+      androidSplashResourceName: "splash",
+      androidScaleType: "CENTER_CROP",
       showSpinner: true,
-      androidSpinnerStyle: 'large',
-      iosSpinnerStyle: 'small',
-      spinnerColor: '#999999',
+      androidSpinnerStyle: "large",
+      iosSpinnerStyle: "small",
+      spinnerColor: "#999999",
       splashFullScreen: true,
       splashImmersive: true,
-      layoutName: 'launch_screen',
+      layoutName: "launch_screen",
       useDialog: true,
     },
   },
@@ -196,9 +196,9 @@ This plugin will use the following project variables (defined in your app's `var
 
 <docgen-index>
 
-- [`show(...)`](#show)
-- [`hide(...)`](#hide)
-- [Interfaces](#interfaces)
+* [`show(...)`](#show)
+* [`hide(...)`](#hide)
+* [Interfaces](#interfaces)
 
 </docgen-index>
 
@@ -219,7 +219,8 @@ Show the splash screen
 
 **Since:** 1.0.0
 
----
+--------------------
+
 
 ### hide(...)
 
@@ -235,9 +236,11 @@ Hide the splash screen
 
 **Since:** 1.0.0
 
----
+--------------------
+
 
 ### Interfaces
+
 
 #### ShowOptions
 
@@ -247,6 +250,7 @@ Hide the splash screen
 | **`fadeInDuration`**  | <code>number</code>  | How long (in ms) to fade in.                                        | <code>200</code>  | 1.0.0 |
 | **`fadeOutDuration`** | <code>number</code>  | How long (in ms) to fade out.                                       | <code>200</code>  | 1.0.0 |
 | **`showDuration`**    | <code>number</code>  | How long to show the splash screen when autoHide is enabled (in ms) | <code>3000</code> | 1.0.0 |
+
 
 #### HideOptions
 
