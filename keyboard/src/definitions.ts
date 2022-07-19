@@ -187,6 +187,15 @@ export interface KeyboardPlugin {
   setResizeMode(options: KeyboardResizeOptions): Promise<void>;
 
   /**
+   * Get the currently set resize mode.
+   *
+   * This method is only supported on iOS.
+   *
+   * @since 4.0.0
+   */
+  getResizeMode(): Promise<KeyboardResizeOptions>;
+
+  /**
    * Listen for when the keyboard is about to be shown.
    *
    * @since 1.0.0
