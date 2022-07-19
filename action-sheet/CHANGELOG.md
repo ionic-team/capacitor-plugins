@@ -3,6 +3,43 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.0.0-beta.2](https://github.com/ionic-team/capacitor-plugins/compare/4.0.0-beta.0...4.0.0-beta.2) (2022-07-08)
+
+**Note:** Version bump only for package @capacitor/action-sheet
+
+
+
+
+
+# 4.0.0-beta.0 (2022-06-27)
+
+
+### Bug Fixes
+
+* add es2017 lib to tsconfig ([#180](https://github.com/ionic-team/capacitor-plugins/issues/180)) ([2c3776c](https://github.com/ionic-team/capacitor-plugins/commit/2c3776c38ca025c5ee965dec10ccf1cdb6c02e2f))
+* correct addListeners links ([#655](https://github.com/ionic-team/capacitor-plugins/issues/655)) ([f9871e7](https://github.com/ionic-team/capacitor-plugins/commit/f9871e7bd53478addb21155e148829f550c0e457))
+* inline source code in esm map files ([#760](https://github.com/ionic-team/capacitor-plugins/issues/760)) ([a960489](https://github.com/ionic-team/capacitor-plugins/commit/a960489a19db0182b90d187a50deff9dfbe51038))
+* Migrate plugins from Color.parseColor() to WebColor.parseColor() ([#140](https://github.com/ionic-team/capacitor-plugins/issues/140)) ([26625cf](https://github.com/ionic-team/capacitor-plugins/commit/26625cfefe45b8d1f17ce27efbc8b04f23e99d93))
+* remove postpublish scripts ([#656](https://github.com/ionic-team/capacitor-plugins/issues/656)) ([ed6ac49](https://github.com/ionic-team/capacitor-plugins/commit/ed6ac499ebf4a47525071ccbfc36c27503e11f60))
+* **action-sheet:** add back deprecated `ActionSheetOptionStyle` type ([e026425](https://github.com/ionic-team/capacitor-plugins/commit/e0264256532624d5892e9b5468be89cd400cf823))
+* support deprecated types from Capacitor 2 ([#139](https://github.com/ionic-team/capacitor-plugins/issues/139)) ([2d7127a](https://github.com/ionic-team/capacitor-plugins/commit/2d7127a488e26f0287951921a6db47c49d817336))
+* **action-sheet:** change package name to 'actionsheet' ([#57](https://github.com/ionic-team/capacitor-plugins/issues/57)) ([5cf608b](https://github.com/ionic-team/capacitor-plugins/commit/5cf608bb82106297a8610b72c7e636d6bfd372de))
+
+
+### Features
+
+* Action Sheet plugin ([#42](https://github.com/ionic-team/capacitor-plugins/issues/42)) ([8435243](https://github.com/ionic-team/capacitor-plugins/commit/84352432587a424588e81a06bdde5cd4d83aa2cd))
+* set targetSDK default value to 32 ([#970](https://github.com/ionic-team/capacitor-plugins/issues/970)) ([fa70d96](https://github.com/ionic-team/capacitor-plugins/commit/fa70d96f141af751aae53ceb5642c46b204f5958))
+* Use java 11 ([#910](https://github.com/ionic-team/capacitor-plugins/issues/910)) ([5acb2a2](https://github.com/ionic-team/capacitor-plugins/commit/5acb2a288a413492b163e4e97da46a085d9e4be0))
+* **action-sheet:** Make title optional ([#805](https://github.com/ionic-team/capacitor-plugins/issues/805)) ([2018f78](https://github.com/ionic-team/capacitor-plugins/commit/2018f7823cc25ea39c3533772512d221d2dba926))
+* add commonjs output format ([#179](https://github.com/ionic-team/capacitor-plugins/issues/179)) ([8e9e098](https://github.com/ionic-team/capacitor-plugins/commit/8e9e09862064b3f6771d7facbc4008e995d9b463))
+* set targetSDK default value to 31 ([#824](https://github.com/ionic-team/capacitor-plugins/issues/824)) ([3ee10de](https://github.com/ionic-team/capacitor-plugins/commit/3ee10de98067984c1a4e75295d001c5a895c47f4))
+* Upgrade gradle to 7.4 ([#826](https://github.com/ionic-team/capacitor-plugins/issues/826)) ([5db0906](https://github.com/ionic-team/capacitor-plugins/commit/5db0906f6264287c4f8e69dbaecf19d4d387824b))
+
+
+
+
+
 ## [1.0.8](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/action-sheet@1.0.7...@capacitor/action-sheet@1.0.8) (2022-02-10)
 
 **Note:** Version bump only for package @capacitor/action-sheet

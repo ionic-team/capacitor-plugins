@@ -169,6 +169,8 @@ public class FilesystemPlugin extends Plugin {
                 ex
             );
             call.reject("FILE_NOTCREATED");
+        } catch (IllegalArgumentException ex) {
+            call.reject("The supplied data is not valid base64 content.");
         }
     }
 
@@ -267,10 +269,37 @@ public class FilesystemPlugin extends Plugin {
             requestAllPermissions(call, "permissionCallback");
         } else {
             try {
-                String[] files = implementation.readdir(path, directory);
+                File[] files = implementation.readdir(path, directory);
+                JSArray filesArray = new JSArray();
                 if (files != null) {
+                    for (var i = 0; i < files.length; i++) {
+                        File fileObject = files[i];
+                        JSObject data = new JSObject();
+                        data.put("name", fileObject.getName());
+                        data.put("type", fileObject.isDirectory() ? "directory" : "file");
+                        data.put("size", fileObject.length());
+                        data.put("mtime", fileObject.lastModified());
+                        data.put("uri", Uri.fromFile(fileObject).toString());
+
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            try {
+                                BasicFileAttributes attr = Files.readAttributes(fileObject.toPath(), BasicFileAttributes.class);
+
+                                // use whichever is the oldest between creationTime and lastAccessTime
+                                if (attr.creationTime().toMillis() < attr.lastAccessTime().toMillis()) {
+                                    data.put("ctime", attr.creationTime().toMillis());
+                                } else {
+                                    data.put("ctime", attr.lastAccessTime().toMillis());
+                                }
+                            } catch (Exception ex) {}
+                        } else {
+                            data.put("ctime", null);
+                        }
+                        filesArray.put(data);
+                    }
+
                     JSObject ret = new JSObject();
-                    ret.put("files", JSArray.from(files));
+                    ret.put("files", filesArray);
                     call.resolve(ret);
                 } else {
                     call.reject("Unable to read directory");
@@ -364,8 +393,14 @@ public class FilesystemPlugin extends Plugin {
             }
         }
         try {
-            implementation.copy(from, directory, to, toDirectory, doRename);
-            call.resolve();
+            File file = implementation.copy(from, directory, to, toDirectory, doRename);
+            if (!doRename) {
+                JSObject result = new JSObject();
+                result.put("uri", Uri.fromFile(file).toString());
+                call.resolve(result);
+            } else {
+                call.resolve();
+            }
         } catch (CopyFailedException ex) {
             call.reject(ex.getMessage());
         } catch (IOException ex) {

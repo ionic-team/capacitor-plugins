@@ -6,6 +6,7 @@ export interface DeviceId {
    * on modern mobile platforms that only allow per-app install UUIDs.
    *
    * On web, a random identifier is generated and stored on localStorage for subsequent calls.
+   * If localStorage is not available a new random identifier will be generated on every call.
    *
    * @since 1.0.0
    */
@@ -23,7 +24,7 @@ export interface DeviceInfo {
   name?: string;
 
   /**
-   * The device model. For example, "iPhone".
+   * The device model. For example, "iPhone13,4".
    *
    * @since 1.0.0
    */
@@ -143,6 +144,15 @@ export interface GetLanguageCodeResult {
   value: string;
 }
 
+export interface LanguageTag {
+  /**
+   * Returns a well-formed IETF BCP 47 language tag.
+   *
+   * @since 4.0.0
+   */
+  value: string;
+}
+
 export interface DevicePlugin {
   /**
    * Return an unique identifier for the device.
@@ -171,6 +181,13 @@ export interface DevicePlugin {
    * @since 1.0.0
    */
   getLanguageCode(): Promise<GetLanguageCodeResult>;
+
+  /**
+   * Get the device's current language locale tag.
+   *
+   * @since 4.0.0
+   */
+  getLanguageTag(): Promise<LanguageTag>;
 }
 
 /**

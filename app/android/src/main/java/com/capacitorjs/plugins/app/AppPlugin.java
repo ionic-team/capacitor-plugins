@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import androidx.activity.OnBackPressedCallback;
+import androidx.core.content.pm.PackageInfoCompat;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Logger;
 import com.getcapacitor.Plugin;
@@ -62,6 +63,7 @@ public class AppPlugin extends Plugin {
     @PluginMethod
     public void exitApp(PluginCall call) {
         unsetAppListeners();
+        call.resolve();
         getBridge().getActivity().finish();
     }
 
@@ -75,11 +77,7 @@ public class AppPlugin extends Plugin {
             String appName = stringId == 0 ? applicationInfo.nonLocalizedLabel.toString() : getContext().getString(stringId);
             data.put("name", appName);
             data.put("id", pinfo.packageName);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                data.put("build", Long.toString(pinfo.getLongVersionCode()));
-            } else {
-                data.put("build", Integer.toString(pinfo.versionCode));
-            }
+            data.put("build", Integer.toString((int) PackageInfoCompat.getLongVersionCode(pinfo)));
             data.put("version", pinfo.versionName);
             call.resolve(data);
         } catch (Exception ex) {

@@ -28,7 +28,11 @@ public class CAPBrowserPlugin: CAPPlugin {
         // display
         DispatchQueue.main.async { [weak self] in
             if style == .popover {
-                self?.setCenteredPopover(viewController)
+                if let width = call.getInt("width"), let height = call.getInt("height") {
+                    self?.setCenteredPopover(viewController, size: CGSize.init(width: width, height: height))
+                } else {
+                    self?.setCenteredPopover(viewController)
+                }
             }
             self?.bridge?.presentVC(viewController, animated: true, completion: {
                 call.resolve()
@@ -50,7 +54,7 @@ public class CAPBrowserPlugin: CAPPlugin {
     }
 
     private func presentationStyle(for style: String?) -> UIModalPresentationStyle {
-        if let style = style, style == "popover", supportsPopover() {
+        if let style = style, style == "popover" {
             return .popover
         }
         return .fullScreen

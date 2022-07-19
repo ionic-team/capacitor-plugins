@@ -12,7 +12,7 @@ export class AppWeb extends WebPlugin implements AppPlugin {
     );
   }
 
-  exitApp(): never {
+  exitApp(): Promise<void> {
     throw this.unimplemented('Not implemented on web.');
   }
 

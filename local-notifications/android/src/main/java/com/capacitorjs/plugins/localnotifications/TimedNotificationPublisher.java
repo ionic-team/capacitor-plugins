@@ -7,6 +7,7 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Logger;
 import java.text.SimpleDateFormat;
@@ -49,7 +50,11 @@ public class TimedNotificationPublisher extends BroadcastReceiver {
             long trigger = date.nextTrigger(new Date());
             Intent clone = (Intent) intent.clone();
             PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, clone, PendingIntent.FLAG_CANCEL_CURRENT);
-            alarmManager.setExact(AlarmManager.RTC, trigger, pendingIntent);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms()) {
+                alarmManager.set(AlarmManager.RTC, trigger, pendingIntent);
+            } else {
+                alarmManager.setExact(AlarmManager.RTC, trigger, pendingIntent);
+            }
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
             Logger.debug(Logger.tags("LN"), "notification " + id + " will next fire at " + sdf.format(new Date(trigger)));
             return true;

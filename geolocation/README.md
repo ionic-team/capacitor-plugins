@@ -37,7 +37,7 @@ Read about [Setting Permissions](https://capacitorjs.com/docs/android/configurat
 
 This plugin will use the following project variables (defined in your app's `variables.gradle` file):
 
-- `$playServicesLocationVersion` version of `com.google.android.gms:play-services-location` (default: `17.1.0`)
+- `$playServicesLocationVersion` version of `com.google.android.gms:play-services-location` (default: `20.0.0`)
 
 ## Example
 
@@ -131,7 +131,7 @@ Clear a given watch
 checkPermissions() => Promise<PermissionStatus>
 ```
 
-Check location permissions
+Check location permissions.  Will throw if system location services are disabled.
 
 **Returns:** <code>Promise&lt;<a href="#permissionstatus">PermissionStatus</a>&gt;</code>
 
@@ -146,7 +146,7 @@ Check location permissions
 requestPermissions(permissions?: GeolocationPluginPermissions | undefined) => Promise<PermissionStatus>
 ```
 
-Request location permissions
+Request location permissions.  Will throw if system location services are disabled.
 
 | Param             | Type                                                                                  |
 | ----------------- | ------------------------------------------------------------------------------------- |
@@ -175,7 +175,7 @@ Request location permissions
 | Prop                     | Type                 | Description                                                                                                                                                                           | Default            | Since |
 | ------------------------ | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
 | **`enableHighAccuracy`** | <code>boolean</code> | High accuracy mode (such as GPS, if available) On Android 12+ devices it will be ignored if users didn't grant ACCESS_FINE_LOCATION permissions (can be checked with location alias). | <code>false</code> | 1.0.0 |
-| **`timeout`**            | <code>number</code>  | The maximum wait time in milliseconds for location updates                                                                                                                            | <code>10000</code> | 1.0.0 |
+| **`timeout`**            | <code>number</code>  | The maximum wait time in milliseconds for location updates. In Android, since version 4.0.0 of the plugin, timeout gets ignored for getCurrentPosition.                               | <code>10000</code> | 1.0.0 |
 | **`maximumAge`**         | <code>number</code>  | The maximum age in milliseconds of a possible cached position that is acceptable to return                                                                                            | <code>0</code>     | 1.0.0 |
 
 

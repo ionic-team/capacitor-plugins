@@ -3,6 +3,45 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.0.0-beta.2](https://github.com/ionic-team/capacitor-plugins/compare/4.0.0-beta.0...4.0.0-beta.2) (2022-07-08)
+
+**Note:** Version bump only for package @capacitor/share
+
+
+
+
+
+# 4.0.0-beta.0 (2022-06-27)
+
+
+### Bug Fixes
+
+* **share:** avoid crash when targeting SDK 31 ([#913](https://github.com/ionic-team/capacitor-plugins/issues/913)) ([275da5f](https://github.com/ionic-team/capacitor-plugins/commit/275da5fc23cf0ef173276d9027f8c5ffdb8a5432))
+* add es2017 lib to tsconfig ([#180](https://github.com/ionic-team/capacitor-plugins/issues/180)) ([2c3776c](https://github.com/ionic-team/capacitor-plugins/commit/2c3776c38ca025c5ee965dec10ccf1cdb6c02e2f))
+* correct addListeners links ([#655](https://github.com/ionic-team/capacitor-plugins/issues/655)) ([f9871e7](https://github.com/ionic-team/capacitor-plugins/commit/f9871e7bd53478addb21155e148829f550c0e457))
+* inline source code in esm map files ([#760](https://github.com/ionic-team/capacitor-plugins/issues/760)) ([a960489](https://github.com/ionic-team/capacitor-plugins/commit/a960489a19db0182b90d187a50deff9dfbe51038))
+* remove postpublish scripts ([#656](https://github.com/ionic-team/capacitor-plugins/issues/656)) ([ed6ac49](https://github.com/ionic-team/capacitor-plugins/commit/ed6ac499ebf4a47525071ccbfc36c27503e11f60))
+* **share:** Avoid SecurityError on Android 10 file share ([#63](https://github.com/ionic-team/capacitor-plugins/issues/63)) ([b6a8191](https://github.com/ionic-team/capacitor-plugins/commit/b6a819115c84fe533a97bad9f8784499c492ddcd))
+* **share:** Prevent share if sharing in progress ([#489](https://github.com/ionic-team/capacitor-plugins/issues/489)) ([3479783](https://github.com/ionic-team/capacitor-plugins/commit/34797837363588f4511403e39017bf6b656685cb))
+* **share:** set type to */* if no mine type can be found ([#324](https://github.com/ionic-team/capacitor-plugins/issues/324)) ([40d4baa](https://github.com/ionic-team/capacitor-plugins/commit/40d4baa8b89e55b094ee568daecf8c63a53fc7cb))
+* support deprecated types from Capacitor 2 ([#139](https://github.com/ionic-team/capacitor-plugins/issues/139)) ([2d7127a](https://github.com/ionic-team/capacitor-plugins/commit/2d7127a488e26f0287951921a6db47c49d817336))
+
+
+### Features
+
+* add commonjs output format ([#179](https://github.com/ionic-team/capacitor-plugins/issues/179)) ([8e9e098](https://github.com/ionic-team/capacitor-plugins/commit/8e9e09862064b3f6771d7facbc4008e995d9b463))
+* set targetSDK default value to 31 ([#824](https://github.com/ionic-team/capacitor-plugins/issues/824)) ([3ee10de](https://github.com/ionic-team/capacitor-plugins/commit/3ee10de98067984c1a4e75295d001c5a895c47f4))
+* set targetSDK default value to 32 ([#970](https://github.com/ionic-team/capacitor-plugins/issues/970)) ([fa70d96](https://github.com/ionic-team/capacitor-plugins/commit/fa70d96f141af751aae53ceb5642c46b204f5958))
+* Share plugin ([#39](https://github.com/ionic-team/capacitor-plugins/issues/39)) ([9076c8e](https://github.com/ionic-team/capacitor-plugins/commit/9076c8e6b83b80514d23c809035fd7579b2e607a))
+* Upgrade gradle to 7.4 ([#826](https://github.com/ionic-team/capacitor-plugins/issues/826)) ([5db0906](https://github.com/ionic-team/capacitor-plugins/commit/5db0906f6264287c4f8e69dbaecf19d4d387824b))
+* Use java 11 ([#910](https://github.com/ionic-team/capacitor-plugins/issues/910)) ([5acb2a2](https://github.com/ionic-team/capacitor-plugins/commit/5acb2a288a413492b163e4e97da46a085d9e4be0))
+* **android:** implements Activity Result API changes for permissions and activity results ([#222](https://github.com/ionic-team/capacitor-plugins/issues/222)) ([f671b9f](https://github.com/ionic-team/capacitor-plugins/commit/f671b9f4b472806ef43db6dcf302d4503cf1828c))
+* **share:** Add canShare method to check availability ([#748](https://github.com/ionic-team/capacitor-plugins/issues/748)) ([3883d82](https://github.com/ionic-team/capacitor-plugins/commit/3883d82952a4453797b86c562af27f9b05e82a18))
+
+
+
+
+
 ## [1.1.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/share@1.1.1...@capacitor/share@1.1.2) (2022-03-03)
 
 
