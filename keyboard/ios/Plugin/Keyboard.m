@@ -324,6 +324,24 @@ static IMP WKOriginalImp;
   [call resolve];
 }
 
+- (void)getResizeMode:(CAPPluginCall *)call
+{
+    NSString *mode;
+    
+    if (self.keyboardResizes == ResizeIonic) {
+        mode = @"ionic";
+    } else if(self.keyboardResizes == ResizeBody) {
+        mode = @"body";
+    } else if (self.keyboardResizes == ResizeNative) {
+        mode = @"native";
+    } else {
+        mode = @"none";
+    }
+    
+    NSDictionary *response = [NSDictionary dictionaryWithObject:mode forKey:@"mode"];
+    [call resolve: response];
+}
+
 - (void)setScroll:(CAPPluginCall *)call {
   self.disableScroll = [call getBool:@"isDisabled" defaultValue:FALSE];
   [call resolve];

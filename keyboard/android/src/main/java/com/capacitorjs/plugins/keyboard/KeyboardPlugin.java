@@ -68,6 +68,11 @@ public class KeyboardPlugin extends Plugin {
     }
 
     @PluginMethod
+    public void getResizeMode(PluginCall call) {
+        call.unimplemented();
+    }
+
+    @PluginMethod
     public void setScroll(PluginCall call) {
         call.unimplemented();
     }
