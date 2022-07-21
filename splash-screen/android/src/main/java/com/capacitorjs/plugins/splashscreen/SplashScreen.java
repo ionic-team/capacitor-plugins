@@ -20,6 +20,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnPreDrawListener;
+import android.view.Window;
+import android.view.WindowInsetsController;
 import android.view.WindowManager;
 import android.view.animation.LinearInterpolator;
 import android.widget.FrameLayout;
@@ -324,6 +326,7 @@ public class SplashScreen {
             splashImage.setFitsSystemWindows(true);
 
             if (config.isImmersive()) {
+
                 Window window = ((Activity) splashImage.getContext()).getWindow();
                 WindowCompat.setDecorFitsSystemWindows(window, false);
 
