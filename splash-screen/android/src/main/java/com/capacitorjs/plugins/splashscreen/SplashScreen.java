@@ -326,7 +326,6 @@ public class SplashScreen {
             splashImage.setFitsSystemWindows(true);
 
             if (config.isImmersive()) {
-
                 Window window = ((Activity) splashImage.getContext()).getWindow();
                 WindowCompat.setDecorFitsSystemWindows(window, false);
 
