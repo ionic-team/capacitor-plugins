@@ -138,6 +138,7 @@ public class SplashScreen {
                                             // Splash screen is done... start drawing content.
                                             if (settings.isAutoHide()) {
                                                 isVisible = false;
+                                                onPreDrawListener = null;
                                                 content.getViewTreeObserver().removeOnPreDrawListener(this);
                                             }
                                         },
@@ -591,6 +592,7 @@ public class SplashScreen {
                         dialog.dismiss();
                     }
                     dialog = null;
+                    isHiding = false;
                     isVisible = false;
                 }
             }
