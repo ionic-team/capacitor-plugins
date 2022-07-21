@@ -1,6 +1,6 @@
 {
   "name": "@capacitor/google-maps",
-  "version": "1.0.0",
+  "version": "4.0.0-beta.2",
   "description": "Google maps on Capacitor",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
@@ -95,6 +95,6 @@
   },
   "dependencies": {
     "@googlemaps/js-api-loader": "^1.13.7",
-    "@googlemaps/markerclusterer": "^2.0.4"
+    "@googlemaps/markerclusterer": "^2.0.7"
   }
 }
