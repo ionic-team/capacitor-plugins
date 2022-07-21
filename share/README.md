@@ -11,6 +11,9 @@ API](https://web.dev/web-share/)), though web support is currently spotty.
 npm install @capacitor/share
 npx cap sync
 ```
+## Android
+
+By default, Capacitor apps only allow to share files from caches folder. To make other Android folders shareable, they have to be added in `android/app/src/main/res/xml/file_paths.xml` file. Check the Specifying Available Files section in [FileProvider docs](https://developer.android.com/reference/androidx/core/content/FileProvider) for the available locations.
 
 ## Example
 
