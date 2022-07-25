@@ -91,15 +91,21 @@ public class SharePlugin extends Plugin {
                     type = "*/*";
                 }
                 intent.setType(type);
-                Uri fileUrl = FileProvider.getUriForFile(
-                    getActivity(),
-                    getContext().getPackageName() + ".fileprovider",
-                    new File(Uri.parse(url).getPath())
-                );
-                intent.putExtra(Intent.EXTRA_STREAM, fileUrl);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    intent.setDataAndType(fileUrl, type);
+                try {
+                    Uri fileUrl = FileProvider.getUriForFile(
+                        getActivity(),
+                        getContext().getPackageName() + ".fileprovider",
+                        new File(Uri.parse(url).getPath())
+                    );
+                    intent.putExtra(Intent.EXTRA_STREAM, fileUrl);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        intent.setDataAndType(fileUrl, type);
+                    }
+                } catch (Exception ex) {
+                    call.reject(ex.getLocalizedMessage());
+                    return;
                 }
+
                 intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             }
 
