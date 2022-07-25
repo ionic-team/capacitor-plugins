@@ -74,7 +74,7 @@ export interface DeviceInfo {
   memUsed?: number;
 
   /**
-   * How much free disk space is available on the the normal data storage
+   * How much free disk space is available on the normal data storage
    * path for the os, in bytes.
    *
    * On Android it returns the free disk space on the "system"
@@ -98,7 +98,7 @@ export interface DeviceInfo {
   diskTotal?: number;
 
   /**
-   * How much free disk space is available on the the normal data storage, in bytes.
+   * How much free disk space is available on the normal data storage, in bytes.
    *
    * @since 1.1.0
    */
