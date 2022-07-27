@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.0.0](https://github.com/ionic-team/capacitor-plugins/compare/4.0.0-beta.2...4.0.0) (2022-07-27)
+
+
+### Bug Fixes
+
+* **share:** Prevent crash on no shareable files ([#1088](https://github.com/ionic-team/capacitor-plugins/issues/1088)) ([dc67e7b](https://github.com/ionic-team/capacitor-plugins/commit/dc67e7b96daa99e2d020b76005e37d93b610bbf2))
+* **status-bar:** not working on older devices ([#1078](https://github.com/ionic-team/capacitor-plugins/issues/1078)) ([4e34977](https://github.com/ionic-team/capacitor-plugins/commit/4e349772d3d8f8e30ce52c1831a1dc9a9f9fd408))
+
+
+### Features
+
+* **keyboard:** add getResizeMode function ([#1082](https://github.com/ionic-team/capacitor-plugins/issues/1082)) ([594d854](https://github.com/ionic-team/capacitor-plugins/commit/594d8545fa1560c2d518d0eff30e2702f1b90a45))
+* **splash-screen:** Use Android 12 Splash Screen API ([#1011](https://github.com/ionic-team/capacitor-plugins/issues/1011)) ([79185ad](https://github.com/ionic-team/capacitor-plugins/commit/79185adf76bc4ff4bae1be5ec5b5881cfbe748b1))
+
+
+
+
+
 # [4.0.0-beta.2](https://github.com/ionic-team/capacitor-plugins/compare/4.0.0-beta.0...4.0.0-beta.2) (2022-07-08)
 
 
