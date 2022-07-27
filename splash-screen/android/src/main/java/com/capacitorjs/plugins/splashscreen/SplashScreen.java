@@ -317,27 +317,17 @@ public class SplashScreen {
                     // Stops flickers dead in their tracks
                     // https://stackoverflow.com/a/21847579/32140
                     ImageView imageView = (ImageView) splashImage;
-                    imageView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                        imageView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+                    } else {
+                        imageView.setDrawingCacheEnabled(true);
+                    }
                     imageView.setScaleType(config.getScaleType());
                     imageView.setImageDrawable(splash);
                 }
             }
 
             splashImage.setFitsSystemWindows(true);
-
-            if (config.isImmersive()) {
-                Window window = ((Activity) splashImage.getContext()).getWindow();
-                WindowCompat.setDecorFitsSystemWindows(window, false);
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                    WindowInsetsController controller = splashImage.getWindowInsetsController();
-                    controller.hide(WindowInsetsCompat.Type.systemBars());
-                    controller.setSystemBarsBehavior(WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
-                }
-            } else if (config.isFullScreen()) {
-                Window window = ((Activity) splashImage.getContext()).getWindow();
-                WindowCompat.setDecorFitsSystemWindows(window, false);
-            }
 
             if (config.getBackgroundColor() != null) {
                 splashImage.setBackgroundColor(config.getBackgroundColor());
@@ -451,6 +441,33 @@ public class SplashScreen {
                     return;
                 }
 
+                if (config.isImmersive()) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                        activity.runOnUiThread(
+                            () -> {
+                                Window window = activity.getWindow();
+                                WindowCompat.setDecorFitsSystemWindows(window, false);
+                                WindowInsetsController controller = splashImage.getWindowInsetsController();
+                                controller.hide(WindowInsetsCompat.Type.systemBars());
+                                controller.setSystemBarsBehavior(WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
+                            }
+                        );
+                    } else {
+                        legacyImmersive();
+                    }
+                } else if (config.isFullScreen()) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                        activity.runOnUiThread(
+                            () -> {
+                                Window window = activity.getWindow();
+                                WindowCompat.setDecorFitsSystemWindows(window, false);
+                            }
+                        );
+                    } else {
+                        legacyFullscreen();
+                    }
+                }
+
                 splashImage.setAlpha(0f);
 
                 splashImage
@@ -490,6 +507,21 @@ public class SplashScreen {
                 }
             }
         );
+    }
+
+    private void legacyImmersive() {
+        final int flags =
+            View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
+            View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
+            View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
+            View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
+            View.SYSTEM_UI_FLAG_FULLSCREEN |
+            View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+        splashImage.setSystemUiVisibility(flags);
+    }
+
+    private void legacyFullscreen() {
+        splashImage.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
     }
 
     private void hide(final int fadeOutDuration, boolean isLaunchSplash) {
@@ -619,6 +651,10 @@ public class SplashScreen {
 
             windowManager.removeView(splashImage);
         }
+
+        // Exit fullscreen mode
+        Window window = ((Activity) context).getWindow();
+        WindowCompat.setDecorFitsSystemWindows(window, true);
 
         isHiding = false;
         isVisible = false;
