@@ -86,6 +86,7 @@ public class LocalNotificationsHandler: NSObject, NotificationHandlerProtocol {
         var notification: JSObject = [
             "id": Int(request.identifier) ?? -1,
             "title": request.content.title,
+            "subtitle": request.content.subtitle,
             "body": request.content.body
         ]
 
