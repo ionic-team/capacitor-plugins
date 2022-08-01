@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1](https://github.com/ionic-team/capacitor-plugins/compare/4.0.0...4.0.1) (2022-07-28)
+
+**Note:** Version bump only for package @capacitor/keyboard
+
+
+
+
+
+# [4.0.0](https://github.com/ionic-team/capacitor-plugins/compare/4.0.0-beta.2...4.0.0) (2022-07-27)
+
+
+### Features
+
+* **keyboard:** add getResizeMode function ([#1082](https://github.com/ionic-team/capacitor-plugins/issues/1082)) ([594d854](https://github.com/ionic-team/capacitor-plugins/commit/594d8545fa1560c2d518d0eff30e2702f1b90a45))
+
+
+
+
+
 # [4.0.0-beta.2](https://github.com/ionic-team/capacitor-plugins/compare/4.0.0-beta.0...4.0.0-beta.2) (2022-07-08)
 
 **Note:** Version bump only for package @capacitor/keyboard

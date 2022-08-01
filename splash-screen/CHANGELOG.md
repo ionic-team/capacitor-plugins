@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1](https://github.com/ionic-team/capacitor-plugins/compare/4.0.0...4.0.1) (2022-07-28)
+
+**Note:** Version bump only for package @capacitor/splash-screen
+
+
+
+
+
+# [4.0.0](https://github.com/ionic-team/capacitor-plugins/compare/4.0.0-beta.2...4.0.0) (2022-07-27)
+
+
+### Features
+
+* **splash-screen:** Use Android 12 Splash Screen API ([#1011](https://github.com/ionic-team/capacitor-plugins/issues/1011)) ([79185ad](https://github.com/ionic-team/capacitor-plugins/commit/79185adf76bc4ff4bae1be5ec5b5881cfbe748b1))
+
+
+
+
+
 # [4.0.0-beta.2](https://github.com/ionic-team/capacitor-plugins/compare/4.0.0-beta.0...4.0.0-beta.2) (2022-07-08)
 
 **Note:** Version bump only for package @capacitor/splash-screen

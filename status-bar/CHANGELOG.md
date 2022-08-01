@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1](https://github.com/ionic-team/capacitor-plugins/compare/4.0.0...4.0.1) (2022-07-28)
+
+**Note:** Version bump only for package @capacitor/status-bar
+
+
+
+
+
+# [4.0.0](https://github.com/ionic-team/capacitor-plugins/compare/4.0.0-beta.2...4.0.0) (2022-07-27)
+
+
+### Bug Fixes
+
+* **status-bar:** not working on older devices ([#1078](https://github.com/ionic-team/capacitor-plugins/issues/1078)) ([4e34977](https://github.com/ionic-team/capacitor-plugins/commit/4e349772d3d8f8e30ce52c1831a1dc9a9f9fd408))
+
+
+
+
+
 # [4.0.0-beta.2](https://github.com/ionic-team/capacitor-plugins/compare/4.0.0-beta.0...4.0.0-beta.2) (2022-07-08)
 
 **Note:** Version bump only for package @capacitor/status-bar
