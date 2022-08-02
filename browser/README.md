@@ -17,7 +17,7 @@ npx cap sync
 
 This plugin will use the following project variables (defined in your app's `variables.gradle` file):
 
-- `$androidxBrowserVersion`: version of `androidx.browser:browser` (default: `1.3.0`)
+- `$androidxBrowserVersion`: version of `androidx.browser:browser` (default: `1.4.0`)
 
 ## Example
 
@@ -146,6 +146,8 @@ Represents the options passed to `open`.
 | **`windowName`**        | <code>string</code>                    | Web only: Optional target for browser open. Follows the `target` property for window.open. Defaults to _blank. Ignored on other platforms. | 1.0.0 |
 | **`toolbarColor`**      | <code>string</code>                    | A hex color to which the toolbar color is set.                                                                                             | 1.0.0 |
 | **`presentationStyle`** | <code>'fullscreen' \| 'popover'</code> | iOS only: The presentation style of the browser. Defaults to fullscreen. Ignored on other platforms.                                       | 1.0.0 |
+| **`width`**             | <code>number</code>                    | iOS only: The width the browser when using presentationStyle 'popover' on iPads. Ignored on other platforms.                               | 4.0.0 |
+| **`height`**            | <code>number</code>                    | iOS only: The height the browser when using presentationStyle 'popover' on iPads. Ignored on other platforms.                              | 4.0.0 |
 
 
 #### PluginListenerHandle

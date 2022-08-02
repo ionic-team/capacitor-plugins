@@ -171,9 +171,9 @@ For example, call this when a user has lifted their finger from a control
 
 #### VibrateOptions
 
-| Prop           | Type                | Description                                                                   | Default          | Since |
-| -------------- | ------------------- | ----------------------------------------------------------------------------- | ---------------- | ----- |
-| **`duration`** | <code>number</code> | Duration of the vibration in milliseconds. Not supported in iOS 12 and older. | <code>300</code> | 1.0.0 |
+| Prop           | Type                | Description                                | Default          | Since |
+| -------------- | ------------------- | ------------------------------------------ | ---------------- | ----- |
+| **`duration`** | <code>number</code> | Duration of the vibration in milliseconds. | <code>300</code> | 1.0.0 |
 
 
 ### Enums

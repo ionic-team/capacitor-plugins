@@ -92,13 +92,36 @@ export interface LocalNotificationsPlugin {
   areEnabled(): Promise<EnabledResult>;
 
   /**
+   * Get a list of notifications that are visible on the notifications screen.
+   *
+   * @since 4.0.0
+   */
+  getDeliveredNotifications(): Promise<DeliveredNotifications>;
+
+  /**
+   * Remove the specified notifications from the notifications screen.
+   *
+   * @since 4.0.0
+   */
+  removeDeliveredNotifications(
+    delivered: DeliveredNotifications,
+  ): Promise<void>;
+
+  /**
+   * Remove all the notifications from the notifications screen.
+   *
+   * @since 4.0.0
+   */
+  removeAllDeliveredNotifications(): Promise<void>;
+
+  /**
    * Create a notification channel.
    *
    * Only available for Android.
    *
    * @since 1.0.0
    */
-  createChannel(channel: NotificationChannel): Promise<void>;
+  createChannel(channel: Channel): Promise<void>;
 
   /**
    * Delete a notification channel.
@@ -107,7 +130,7 @@ export interface LocalNotificationsPlugin {
    *
    * @since 1.0.0
    */
-  deleteChannel(channel: NotificationChannel): Promise<void>;
+  deleteChannel(args: { id: string }): Promise<void>;
 
   /**
    * Get a list of notification channels.
@@ -630,7 +653,7 @@ export interface LocalNotificationSchema {
    * Sets `summaryArgument` on the
    * [`UNMutableNotificationContent`](https://developer.apple.com/documentation/usernotifications/unmutablenotificationcontent).
    *
-   * Only available for iOS 12+.
+   * Only available for iOS.
    *
    * @since 1.0.0
    */
@@ -856,6 +879,121 @@ export interface EnabledResult {
   value: boolean;
 }
 
+export interface DeliveredNotificationSchema {
+  /**
+   * The notification identifier.
+   *
+   * @since 4.0.0
+   */
+  id: number;
+
+  /**
+   * The notification tag.
+   *
+   * Only available on Android.
+   *
+   * @since 4.0.0
+   */
+  tag?: string;
+  /**
+   * The title of the notification.
+   *
+   * @since 4.0.0
+   */
+  title: string;
+
+  /**
+   * The body of the notification, shown below the title.
+   *
+   * @since 4.0.0
+   */
+  body: string;
+
+  /**
+   * The configured group of the notification.
+   *
+   *
+   * Only available for Android.
+   *
+   * @since 4.0.0
+   */
+  group?: string;
+
+  /**
+   * If this notification is the summary for a group of notifications.
+   *
+   * Only available for Android.
+   *
+   * @since 4.0.0
+   */
+  groupSummary?: boolean;
+
+  /**
+   * Any additional data that was included in the
+   * notification payload.
+   *
+   * Only available for Android.
+   *
+   * @since 4.0.0
+   */
+  data?: any;
+
+  /**
+   * Extra data to store within this notification.
+   *
+   * Only available for iOS.
+   *
+   * @since 4.0.0
+   */
+  extra?: any;
+
+  /**
+   * The attachments for this notification.
+   *
+   * Only available for iOS.
+   *
+   * @since 1.0.0
+   */
+  attachments?: Attachment[];
+
+  /**
+   * Action type ssociated with this notification.
+   *
+   * Only available for iOS.
+   *
+   * @since 4.0.0
+   */
+  actionTypeId?: string;
+
+  /**
+   * Schedule used to fire this notification.
+   *
+   * Only available for iOS.
+   *
+   * @since 4.0.0
+   */
+  schedule?: Schedule;
+
+  /**
+   * Sound that was used when the notification was displayed.
+   *
+   * Only available for iOS.
+   *
+   * @since 4.0.0
+   */
+  sound?: string;
+}
+
+export interface DeliveredNotifications {
+  /**
+   * List of notifications that are visible on the
+   * notifications screen.
+   *
+   * @since 1.0.0
+   */
+  notifications: DeliveredNotificationSchema[];
+}
+
 export interface Channel {
   /**
    * The channel identifier.
@@ -897,9 +1035,10 @@ export interface Channel {
   /**
    * The level of interruption for notifications posted to this channel.
    *
+   * @default `3`
    * @since 1.0.0
    */
-  importance: Importance;
+  importance?: Importance;
 
   /**
    * The visibility of notifications posted to this channel.

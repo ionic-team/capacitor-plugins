@@ -3,6 +3,64 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1](https://github.com/ionic-team/capacitor-plugins/compare/4.0.0...4.0.1) (2022-07-28)
+
+**Note:** Version bump only for package @capacitor/device
+
+
+
+
+
+# [4.0.0](https://github.com/ionic-team/capacitor-plugins/compare/4.0.0-beta.2...4.0.0) (2022-07-27)
+
+**Note:** Version bump only for package @capacitor/device
+
+
+
+
+
+# [4.0.0-beta.2](https://github.com/ionic-team/capacitor-plugins/compare/4.0.0-beta.0...4.0.0-beta.2) (2022-07-08)
+
+**Note:** Version bump only for package @capacitor/device
+
+
+
+
+
+# 4.0.0-beta.0 (2022-06-27)
+
+
+### Bug Fixes
+
+* **device:** handle case of no localStorage for getId ([#1059](https://github.com/ionic-team/capacitor-plugins/issues/1059)) ([5f77a7d](https://github.com/ionic-team/capacitor-plugins/commit/5f77a7da48fc7f0ce5250e7cba621731ac6b210a))
+* **device:** return short language code in web ([#893](https://github.com/ionic-team/capacitor-plugins/issues/893)) ([07f0887](https://github.com/ionic-team/capacitor-plugins/commit/07f0887f4f0c9a883e55fb24b506a47dc61f13f7))
+* add es2017 lib to tsconfig ([#180](https://github.com/ionic-team/capacitor-plugins/issues/180)) ([2c3776c](https://github.com/ionic-team/capacitor-plugins/commit/2c3776c38ca025c5ee965dec10ccf1cdb6c02e2f))
+* correct addListeners links ([#655](https://github.com/ionic-team/capacitor-plugins/issues/655)) ([f9871e7](https://github.com/ionic-team/capacitor-plugins/commit/f9871e7bd53478addb21155e148829f550c0e457))
+* inline source code in esm map files ([#760](https://github.com/ionic-team/capacitor-plugins/issues/760)) ([a960489](https://github.com/ionic-team/capacitor-plugins/commit/a960489a19db0182b90d187a50deff9dfbe51038))
+* **device:** isVirtual is false on M1 simulators ([#726](https://github.com/ionic-team/capacitor-plugins/issues/726)) ([5377586](https://github.com/ionic-team/capacitor-plugins/commit/53775863df624531e8ffa4b18852b408e1bd2cbd))
+* remove postpublish scripts ([#656](https://github.com/ionic-team/capacitor-plugins/issues/656)) ([ed6ac49](https://github.com/ionic-team/capacitor-plugins/commit/ed6ac499ebf4a47525071ccbfc36c27503e11f60))
+* support deprecated types from Capacitor 2 ([#139](https://github.com/ionic-team/capacitor-plugins/issues/139)) ([2d7127a](https://github.com/ionic-team/capacitor-plugins/commit/2d7127a488e26f0287951921a6db47c49d817336))
+
+
+### Features
+
+* set targetSDK default value to 32 ([#970](https://github.com/ionic-team/capacitor-plugins/issues/970)) ([fa70d96](https://github.com/ionic-team/capacitor-plugins/commit/fa70d96f141af751aae53ceb5642c46b204f5958))
+* **device:** Add getLanguageTag function ([#939](https://github.com/ionic-team/capacitor-plugins/issues/939)) ([d268e4a](https://github.com/ionic-team/capacitor-plugins/commit/d268e4a3d5a0a0279bae6a971b0d6e65481f1899))
+* **device:** model now reflects exact model on iOS ([#929](https://github.com/ionic-team/capacitor-plugins/issues/929)) ([302d813](https://github.com/ionic-team/capacitor-plugins/commit/302d813991a755c89fbf57a6f5b2c3a2e1cd79aa))
+* add commonjs output format ([#179](https://github.com/ionic-team/capacitor-plugins/issues/179)) ([8e9e098](https://github.com/ionic-team/capacitor-plugins/commit/8e9e09862064b3f6771d7facbc4008e995d9b463))
+* Device plugin ([#47](https://github.com/ionic-team/capacitor-plugins/issues/47)) ([9870e30](https://github.com/ionic-team/capacitor-plugins/commit/9870e3006094062d7b10df6ab59aa9da35f6c34b))
+* set targetSDK default value to 31 ([#824](https://github.com/ionic-team/capacitor-plugins/issues/824)) ([3ee10de](https://github.com/ionic-team/capacitor-plugins/commit/3ee10de98067984c1a4e75295d001c5a895c47f4))
+* Upgrade gradle to 7.4 ([#826](https://github.com/ionic-team/capacitor-plugins/issues/826)) ([5db0906](https://github.com/ionic-team/capacitor-plugins/commit/5db0906f6264287c4f8e69dbaecf19d4d387824b))
+* Use java 11 ([#910](https://github.com/ionic-team/capacitor-plugins/issues/910)) ([5acb2a2](https://github.com/ionic-team/capacitor-plugins/commit/5acb2a288a413492b163e4e97da46a085d9e4be0))
+* **device:** add browser/webview version to getInfo() ([#109](https://github.com/ionic-team/capacitor-plugins/issues/109)) ([48c49c1](https://github.com/ionic-team/capacitor-plugins/commit/48c49c1cd1ffc86b40b02dd3778c0a3079cdc00c))
+* **device:** Add deviceInfo.name implementation for Android ([#88](https://github.com/ionic-team/capacitor-plugins/issues/88)) ([bdc3b38](https://github.com/ionic-team/capacitor-plugins/commit/bdc3b38f70ecc7898e2bb23c1cceaea8903f26d9))
+* **device:** Add getId function ([#370](https://github.com/ionic-team/capacitor-plugins/issues/370)) ([96664c6](https://github.com/ionic-team/capacitor-plugins/commit/96664c630140112af7e50569b98b00f774480949))
+* **device:** Add realDiskTotal and realDiskFree properties ([#694](https://github.com/ionic-team/capacitor-plugins/issues/694)) ([3f67643](https://github.com/ionic-team/capacitor-plugins/commit/3f67643edf4cfd90a84d4606c4c6349b72531b92))
+
+
+
+
+
 ## [1.1.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/device@1.1.1...@capacitor/device@1.1.2) (2022-01-19)
 
 

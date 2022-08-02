@@ -9,6 +9,16 @@ npm install @capacitor/local-notifications
 npx cap sync
 ```
 
+## Android
+
+Starting on Android 12, scheduled notifications won't be exact unless this permission is added to your `AndroidManifest.xml`:
+
+```xml
+<uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+```
+
+Note that even if the permission is present, users can still disable exact notifications from the app settings.
+
 ## Configuration
 
 <docgen-config>
@@ -73,6 +83,9 @@ If the device has entered [Doze](https://developer.android.com/training/monitori
 * [`registerActionTypes(...)`](#registeractiontypes)
 * [`cancel(...)`](#cancel)
 * [`areEnabled()`](#areenabled)
+* [`getDeliveredNotifications()`](#getdeliverednotifications)
+* [`removeDeliveredNotifications(...)`](#removedeliverednotifications)
+* [`removeAllDeliveredNotifications()`](#removealldeliverednotifications)
 * [`createChannel(...)`](#createchannel)
 * [`deleteChannel(...)`](#deletechannel)
 * [`listChannels()`](#listchannels)
@@ -175,10 +188,55 @@ Check if notifications are enabled or not.
 --------------------
 
 
+### getDeliveredNotifications()
+
+```typescript
+getDeliveredNotifications() => Promise<DeliveredNotifications>
+```
+
+Get a list of notifications that are visible on the notifications screen.
+
+**Returns:** <code>Promise&lt;<a href="#deliverednotifications">DeliveredNotifications</a>&gt;</code>
+
+**Since:** 4.0.0
+
+--------------------
+
+
+### removeDeliveredNotifications(...)
+
+```typescript
+removeDeliveredNotifications(delivered: DeliveredNotifications) => Promise<void>
+```
+
+Remove the specified notifications from the notifications screen.
+
+| Param           | Type                                                                      |
+| --------------- | ------------------------------------------------------------------------- |
+| **`delivered`** | <code><a href="#deliverednotifications">DeliveredNotifications</a></code> |
+
+**Since:** 4.0.0
+
+--------------------
+
+
+### removeAllDeliveredNotifications()
+
+```typescript
+removeAllDeliveredNotifications() => Promise<void>
+```
+
+Remove all the notifications from the notifications screen.
+
+**Since:** 4.0.0
+
+--------------------
+
+
 ### createChannel(...)
 
 ```typescript
-createChannel(channel: NotificationChannel) => Promise<void>
+createChannel(channel: Channel) => Promise<void>
 ```
 
 Create a notification channel.
@@ -197,16 +255,16 @@ Only available for Android.
 ### deleteChannel(...)
 
 ```typescript
-deleteChannel(channel: NotificationChannel) => Promise<void>
+deleteChannel(args: { id: string; }) => Promise<void>
 ```
 
 Delete a notification channel.
 
 Only available for Android.
 
-| Param         | Type                                        |
-| ------------- | ------------------------------------------- |
-| **`channel`** | <code><a href="#channel">Channel</a></code> |
+| Param      | Type                         |
+| ---------- | ---------------------------- |
+| **`args`** | <code>{ id: string; }</code> |
 
 **Since:** 1.0.0
 
@@ -357,7 +415,7 @@ The object that describes a local notification.
 | **`actionTypeId`**     | <code>string</code>                           | Associate an action type with this notification.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                | 1.0.0 |
 | **`extra`**            | <code>any</code>                              | Set extra data to store within this notification.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               | 1.0.0 |
 | **`threadIdentifier`** | <code>string</code>                           | Used to group multiple notifications. Sets `threadIdentifier` on the [`UNMutableNotificationContent`](https://developer.apple.com/documentation/usernotifications/unmutablenotificationcontent). Only available for iOS.                                                                                                                                                                                                                                                                                                                                                                                                        | 1.0.0 |
-| **`summaryArgument`**  | <code>string</code>                           | The string this notification adds to the category's summary format string. Sets `summaryArgument` on the [`UNMutableNotificationContent`](https://developer.apple.com/documentation/usernotifications/unmutablenotificationcontent). Only available for iOS 12+.                                                                                                                                                                                                                                                                                                                                                                | 1.0.0 |
+| **`summaryArgument`**  | <code>string</code>                           | The string this notification adds to the category's summary format string. Sets `summaryArgument` on the [`UNMutableNotificationContent`](https://developer.apple.com/documentation/usernotifications/unmutablenotificationcontent). Only available for iOS.                                                                                                                                                                                                                                                                                                                                                                    | 1.0.0 |
 | **`group`**            | <code>string</code>                           | Used to group multiple notifications. Calls `setGroup()` on [`NotificationCompat.Builder`](https://developer.android.com/reference/androidx/core/app/NotificationCompat.Builder) with the provided value. Only available for Android.                                                                                                                                                                                                                                                                                                                                                                                           | 1.0.0 |
 | **`groupSummary`**     | <code>boolean</code>                          | If true, this notification becomes the summary for a group of notifications. Calls `setGroupSummary()` on [`NotificationCompat.Builder`](https://developer.android.com/reference/androidx/core/app/NotificationCompat.Builder) with the provided value. Only available for Android when using `group`.                                                                                                                                                                                                                                                                                                                          | 1.0.0 |
 | **`channelId`**        | <code>string</code>                           | Specifies the channel the notification should be delivered on. If channel with the given name does not exist then the notification will not fire. If not provided, it will use the default channel. Calls `setChannelId()` on [`NotificationCompat.Builder`](https://developer.android.com/reference/androidx/core/app/NotificationCompat.Builder) with the provided value. Only available for Android 26+.                                                                                                                                                                                                                     | 1.0.0 |
@@ -537,19 +595,44 @@ An action that can be taken when a notification is displayed.
 | **`value`** | <code>boolean</code> | Whether or not the device has local notifications enabled. | 1.0.0 |
 
 
+#### DeliveredNotifications
+
+| Prop                | Type                                       | Description                                                         | Since |
+| ------------------- | ------------------------------------------ | ------------------------------------------------------------------- | ----- |
+| **`notifications`** | <code>DeliveredNotificationSchema[]</code> | List of notifications that are visible on the notifications screen. | 1.0.0 |
+
+
+#### DeliveredNotificationSchema
+
+| Prop               | Type                                          | Description                                                                                    | Since |
+| ------------------ | --------------------------------------------- | ---------------------------------------------------------------------------------------------- | ----- |
+| **`id`**           | <code>number</code>                           | The notification identifier.                                                                   | 4.0.0 |
+| **`tag`**          | <code>string</code>                           | The notification tag. Only available on Android.                                               | 4.0.0 |
+| **`title`**        | <code>string</code>                           | The title of the notification.                                                                 | 4.0.0 |
+| **`body`**         | <code>string</code>                           | The body of the notification, shown below the title.                                           | 4.0.0 |
+| **`group`**        | <code>string</code>                           | The configured group of the notification. Only available for Android.                          | 4.0.0 |
+| **`groupSummary`** | <code>boolean</code>                          | If this notification is the summary for a group of notifications. Only available for Android.  | 4.0.0 |
+| **`data`**         | <code>any</code>                              | Any additional data that was included in the notification payload. Only available for Android. | 4.0.0 |
+| **`extra`**        | <code>any</code>                              | Extra data to store within this notification. Only available for iOS.                          | 4.0.0 |
+| **`attachments`**  | <code>Attachment[]</code>                     | The attachments for this notification. Only available for iOS.                                 | 1.0.0 |
+| **`actionTypeId`** | <code>string</code>                           | <a href="#action">Action</a> type ssociated with this notification. Only available for iOS.    | 4.0.0 |
+| **`schedule`**     | <code><a href="#schedule">Schedule</a></code> | <a href="#schedule">Schedule</a> used to fire this notification. Only available for iOS.       | 4.0.0 |
+| **`sound`**        | <code>string</code>                           | Sound that was used when the notification was displayed. Only available for iOS.               | 4.0.0 |
+
+
 #### Channel
 
-| Prop              | Type                                              | Description                                                                                                                                                                                                                                                                                                                                    | Since |
-| ----------------- | ------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`id`**          | <code>string</code>                               | The channel identifier.                                                                                                                                                                                                                                                                                                                        | 1.0.0 |
-| **`name`**        | <code>string</code>                               | The human-friendly name of this channel (presented to the user).                                                                                                                                                                                                                                                                               | 1.0.0 |
-| **`description`** | <code>string</code>                               | The description of this channel (presented to the user).                                                                                                                                                                                                                                                                                       | 1.0.0 |
-| **`sound`**       | <code>string</code>                               | The sound that should be played for notifications posted to this channel. Notification channels with an importance of at least `3` should have a sound. The file name of a sound file should be specified relative to the android app `res/raw` directory. If the sound is not provided, or the sound file is not found no sound will be used. | 1.0.0 |
-| **`importance`**  | <code><a href="#importance">Importance</a></code> | The level of interruption for notifications posted to this channel.                                                                                                                                                                                                                                                                            | 1.0.0 |
-| **`visibility`**  | <code><a href="#visibility">Visibility</a></code> | The visibility of notifications posted to this channel. This setting is for whether notifications posted to this channel appear on the lockscreen or not, and if so, whether they appear in a redacted form.                                                                                                                                   | 1.0.0 |
-| **`lights`**      | <code>boolean</code>                              | Whether notifications posted to this channel should display notification lights, on devices that support it.                                                                                                                                                                                                                                   | 1.0.0 |
-| **`lightColor`**  | <code>string</code>                               | The light color for notifications posted to this channel. Only supported if lights are enabled on this channel and the device supports it. Supported color formats are `#RRGGBB` and `#RRGGBBAA`.                                                                                                                                              | 1.0.0 |
-| **`vibration`**   | <code>boolean</code>                              | Whether notifications posted to this channel should vibrate.                                                                                                                                                                                                                                                                                   | 1.0.0 |
+| Prop              | Type                                              | Description                                                                                                                                                                                                                                                                                                                                    | Default          | Since |
+| ----------------- | ------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- | ----- |
+| **`id`**          | <code>string</code>                               | The channel identifier.                                                                                                                                                                                                                                                                                                                        |                  | 1.0.0 |
+| **`name`**        | <code>string</code>                               | The human-friendly name of this channel (presented to the user).                                                                                                                                                                                                                                                                               |                  | 1.0.0 |
+| **`description`** | <code>string</code>                               | The description of this channel (presented to the user).                                                                                                                                                                                                                                                                                       |                  | 1.0.0 |
+| **`sound`**       | <code>string</code>                               | The sound that should be played for notifications posted to this channel. Notification channels with an importance of at least `3` should have a sound. The file name of a sound file should be specified relative to the android app `res/raw` directory. If the sound is not provided, or the sound file is not found no sound will be used. |                  | 1.0.0 |
+| **`importance`**  | <code><a href="#importance">Importance</a></code> | The level of interruption for notifications posted to this channel.                                                                                                                                                                                                                                                                            | <code>`3`</code> | 1.0.0 |
+| **`visibility`**  | <code><a href="#visibility">Visibility</a></code> | The visibility of notifications posted to this channel. This setting is for whether notifications posted to this channel appear on the lockscreen or not, and if so, whether they appear in a redacted form.                                                                                                                                   |                  | 1.0.0 |
+| **`lights`**      | <code>boolean</code>                              | Whether notifications posted to this channel should display notification lights, on devices that support it.                                                                                                                                                                                                                                   |                  | 1.0.0 |
+| **`lightColor`**  | <code>string</code>                               | The light color for notifications posted to this channel. Only supported if lights are enabled on this channel and the device supports it. Supported color formats are `#RRGGBB` and `#RRGGBBAA`.                                                                                                                                              |                  | 1.0.0 |
+| **`vibration`**   | <code>boolean</code>                              | Whether notifications posted to this channel should vibrate.                                                                                                                                                                                                                                                                                   |                  | 1.0.0 |
 
 
 #### ListChannelsResult
@@ -588,11 +671,6 @@ An action that can be taken when a notification is displayed.
 #### ScheduleEvery
 
 <code>'year' | 'month' | 'two-weeks' | 'week' | 'day' | 'hour' | 'minute' | 'second'</code>
-
-
-#### NotificationChannel
-
-<code><a href="#channel">Channel</a></code>
 
 
 #### Importance

@@ -75,7 +75,6 @@ public class CameraPlugin: CAPPlugin {
         if let missingUsageDescription = checkUsageDescriptions() {
             CAPLog.print("⚡️ ", self.pluginId, "-", missingUsageDescription)
             call.reject(missingUsageDescription)
-            bridge?.alert("Camera Error", "Missing required usage description. See console for more information")
             return
         }
 
@@ -158,11 +157,12 @@ extension CameraPlugin: UIImagePickerControllerDelegate, UINavigationControllerD
     }
 
     public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
-        picker.dismiss(animated: true, completion: nil)
-        if let processedImage = processImage(from: info) {
-            returnProcessedImage(processedImage)
-        } else {
-            self.call?.reject("Error processing image")
+        picker.dismiss(animated: true) {
+            if let processedImage = self.processImage(from: info) {
+                self.returnProcessedImage(processedImage)
+            } else {
+                self.call?.reject("Error processing image")
+            }
         }
     }
 }
@@ -339,7 +339,6 @@ private extension CameraPlugin {
         // check if we have a camera
         if (bridge?.isSimEnvironment ?? false) || !UIImagePickerController.isSourceTypeAvailable(UIImagePickerController.SourceType.camera) {
             CAPLog.print("⚡️ ", self.pluginId, "-", "Camera not available in simulator")
-            bridge?.alert("Camera Error", "Camera not available in Simulator")
             call?.reject("Camera not available while running in Simulator")
             return
         }

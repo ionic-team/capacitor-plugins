@@ -3,6 +3,58 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1](https://github.com/ionic-team/capacitor-plugins/compare/4.0.0...4.0.1) (2022-07-28)
+
+**Note:** Version bump only for package @capacitor/network
+
+
+
+
+
+# [4.0.0](https://github.com/ionic-team/capacitor-plugins/compare/4.0.0-beta.2...4.0.0) (2022-07-27)
+
+**Note:** Version bump only for package @capacitor/network
+
+
+
+
+
+# [4.0.0-beta.2](https://github.com/ionic-team/capacitor-plugins/compare/4.0.0-beta.0...4.0.0-beta.2) (2022-07-08)
+
+**Note:** Version bump only for package @capacitor/network
+
+
+
+
+
+# 4.0.0-beta.0 (2022-06-27)
+
+
+### Bug Fixes
+
+* inline source code in esm map files ([#760](https://github.com/ionic-team/capacitor-plugins/issues/760)) ([a960489](https://github.com/ionic-team/capacitor-plugins/commit/a960489a19db0182b90d187a50deff9dfbe51038))
+* Make removeAllListeners return a promise ([#895](https://github.com/ionic-team/capacitor-plugins/issues/895)) ([e5c49d6](https://github.com/ionic-team/capacitor-plugins/commit/e5c49d64445dca70286334e6a0441d8021197b13))
+* **network:** Don't add window event listeners if there is no window ([#678](https://github.com/ionic-team/capacitor-plugins/issues/678)) ([0c65780](https://github.com/ionic-team/capacitor-plugins/commit/0c657808083a7f4245027a2248816b3921b813bf))
+* add es2017 lib to tsconfig ([#180](https://github.com/ionic-team/capacitor-plugins/issues/180)) ([2c3776c](https://github.com/ionic-team/capacitor-plugins/commit/2c3776c38ca025c5ee965dec10ccf1cdb6c02e2f))
+* better ignore rules for npm distribution ([#32](https://github.com/ionic-team/capacitor-plugins/issues/32)) ([b8d55b9](https://github.com/ionic-team/capacitor-plugins/commit/b8d55b9233e4ad7b8a1cd41110b4e580fc2a059f))
+* correct addListeners links ([#655](https://github.com/ionic-team/capacitor-plugins/issues/655)) ([f9871e7](https://github.com/ionic-team/capacitor-plugins/commit/f9871e7bd53478addb21155e148829f550c0e457))
+* remove postpublish scripts ([#656](https://github.com/ionic-team/capacitor-plugins/issues/656)) ([ed6ac49](https://github.com/ionic-team/capacitor-plugins/commit/ed6ac499ebf4a47525071ccbfc36c27503e11f60))
+* support deprecated types from Capacitor 2 ([#139](https://github.com/ionic-team/capacitor-plugins/issues/139)) ([2d7127a](https://github.com/ionic-team/capacitor-plugins/commit/2d7127a488e26f0287951921a6db47c49d817336))
+
+
+### Features
+
+* add commonjs output format ([#179](https://github.com/ionic-team/capacitor-plugins/issues/179)) ([8e9e098](https://github.com/ionic-team/capacitor-plugins/commit/8e9e09862064b3f6771d7facbc4008e995d9b463))
+* Network plugin ([#8](https://github.com/ionic-team/capacitor-plugins/issues/8)) ([08d9891](https://github.com/ionic-team/capacitor-plugins/commit/08d9891710d576ee3c660b4d8dce89c4169d3e0b))
+* set targetSDK default value to 31 ([#824](https://github.com/ionic-team/capacitor-plugins/issues/824)) ([3ee10de](https://github.com/ionic-team/capacitor-plugins/commit/3ee10de98067984c1a4e75295d001c5a895c47f4))
+* set targetSDK default value to 32 ([#970](https://github.com/ionic-team/capacitor-plugins/issues/970)) ([fa70d96](https://github.com/ionic-team/capacitor-plugins/commit/fa70d96f141af751aae53ceb5642c46b204f5958))
+* Upgrade gradle to 7.4 ([#826](https://github.com/ionic-team/capacitor-plugins/issues/826)) ([5db0906](https://github.com/ionic-team/capacitor-plugins/commit/5db0906f6264287c4f8e69dbaecf19d4d387824b))
+* Use java 11 ([#910](https://github.com/ionic-team/capacitor-plugins/issues/910)) ([5acb2a2](https://github.com/ionic-team/capacitor-plugins/commit/5acb2a288a413492b163e4e97da46a085d9e4be0))
+
+
+
+
+
 ## [1.0.7](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/network@1.0.6...@capacitor/network@1.0.7) (2022-01-19)
 
 

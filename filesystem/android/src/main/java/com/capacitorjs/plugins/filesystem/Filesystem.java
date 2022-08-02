@@ -72,18 +72,18 @@ public class Filesystem {
         return created;
     }
 
-    public String[] readdir(String path, String directory) throws DirectoryNotFoundException {
-        String[] files = null;
+    public File[] readdir(String path, String directory) throws DirectoryNotFoundException {
+        File[] files = null;
         File fileObject = getFileObject(path, directory);
         if (fileObject != null && fileObject.exists()) {
-            files = fileObject.list();
+            files = fileObject.listFiles();
         } else {
             throw new DirectoryNotFoundException("Directory does not exist");
         }
         return files;
     }
 
-    public boolean copy(String from, String directory, String to, String toDirectory, boolean doRename)
+    public File copy(String from, String directory, String to, String toDirectory, boolean doRename)
         throws IOException, CopyFailedException {
         if (toDirectory == null) {
             toDirectory = directory;
@@ -100,7 +100,7 @@ public class Filesystem {
         }
 
         if (toObject.equals(fromObject)) {
-            return true;
+            return toObject;
         }
 
         if (!fromObject.exists()) {
@@ -130,7 +130,7 @@ public class Filesystem {
             copyRecursively(fromObject, toObject);
         }
 
-        return true;
+        return toObject;
     }
 
     public InputStream getInputStream(String path, String directory) throws IOException {
@@ -180,6 +180,7 @@ public class Filesystem {
         return Base64.encodeToString(byteStream.toByteArray(), Base64.NO_WRAP);
     }
 
+    @SuppressWarnings("deprecation")
     public File getDirectory(String directory) {
         Context c = this.context;
         switch (directory) {

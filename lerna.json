@@ -10,24 +10,27 @@
     "dialog",
     "filesystem",
     "geolocation",
+    "google-maps",
     "haptics",
     "keyboard",
     "local-notifications",
     "motion",
     "network",
+    "preferences",
     "push-notifications",
     "screen-reader",
     "share",
     "splash-screen",
     "status-bar",
-    "storage",
     "text-zoom",
     "toast"
   ],
   "command": {
     "bootstrap": {
       "ci": false,
-      "npmClientArgs": ["--no-package-lock"]
+      "npmClientArgs": [
+        "--no-package-lock"
+      ]
     },
     "version": {
       "allowBranch": "main",
@@ -37,5 +40,5 @@
       "tagVersionPrefix": ""
     }
   },
-  "version": "independent"
+  "version": "4.0.1"
 }

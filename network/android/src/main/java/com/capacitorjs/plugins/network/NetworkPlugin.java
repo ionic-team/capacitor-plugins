@@ -1,14 +1,11 @@
 package com.capacitorjs.plugins.network;
 
-import android.Manifest;
-import android.net.NetworkInfo;
+import android.os.Build;
 import com.getcapacitor.JSObject;
-import com.getcapacitor.Logger;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
-import com.getcapacitor.annotation.Permission;
 
 @CapacitorPlugin(name = "Network")
 public class NetworkPlugin extends Plugin {
@@ -22,7 +19,17 @@ public class NetworkPlugin extends Plugin {
     @Override
     public void load() {
         implementation = new Network(getContext());
-        implementation.setStatusChangeListener(this::updateNetworkStatus);
+        Network.NetworkStatusChangeListener listener = wasLostEvent -> {
+            if (wasLostEvent) {
+                JSObject jsObject = new JSObject();
+                jsObject.put("connected", false);
+                jsObject.put("connectionType", "none");
+                notifyListeners(NETWORK_CHANGE_EVENT, jsObject);
+            } else {
+                updateNetworkStatus();
+            }
+        };
+        implementation.setStatusChangeListener(listener);
     }
 
     /**
@@ -39,7 +46,7 @@ public class NetworkPlugin extends Plugin {
      */
     @PluginMethod
     public void getStatus(PluginCall call) {
-        call.resolve(getStatusJSObject(implementation.getNetworkStatus()));
+        call.resolve(parseNetworkStatus(implementation.getNetworkStatus()));
     }
 
     /**
@@ -47,7 +54,11 @@ public class NetworkPlugin extends Plugin {
      */
     @Override
     protected void handleOnResume() {
-        implementation.startMonitoring(getActivity());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            implementation.startMonitoring();
+        } else {
+            implementation.startMonitoring(getActivity());
+        }
     }
 
     /**
@@ -55,43 +66,21 @@ public class NetworkPlugin extends Plugin {
      */
     @Override
     protected void handleOnPause() {
-        implementation.stopMonitoring(getActivity());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            implementation.stopMonitoring();
+        } else {
+            implementation.stopMonitoring(getActivity());
+        }
     }
 
     private void updateNetworkStatus() {
-        notifyListeners(NETWORK_CHANGE_EVENT, getStatusJSObject(implementation.getNetworkStatus()));
+        notifyListeners(NETWORK_CHANGE_EVENT, parseNetworkStatus(implementation.getNetworkStatus()));
     }
 
-    /**
-     * Transform a NetworkInfo object into our JSObject for returning to client
-     * @param info
-     * @return
-     */
-    private JSObject getStatusJSObject(NetworkInfo info) {
-        JSObject ret = new JSObject();
-        if (info == null) {
-            ret.put("connected", false);
-            ret.put("connectionType", "none");
-        } else {
-            ret.put("connected", info.isConnected());
-            ret.put("connectionType", getNormalizedTypeName(info));
-        }
-        return ret;
-    }
-
-    /**
-     * Convert the Android-specific naming for network types into our cross-platform type
-     * @param info
-     * @return
-     */
-    private String getNormalizedTypeName(NetworkInfo info) {
-        String typeName = info.getTypeName();
-        if (typeName.equals("WIFI")) {
-            return "wifi";
-        }
-        if (typeName.equals("MOBILE")) {
-            return "cellular";
-        }
-        return "none";
+    private JSObject parseNetworkStatus(NetworkStatus networkStatus) {
+        JSObject jsObject = new JSObject();
+        jsObject.put("connected", networkStatus.connected);
+        jsObject.put("connectionType", networkStatus.connectionType.getConnectionType());
+        return jsObject;
     }
 }

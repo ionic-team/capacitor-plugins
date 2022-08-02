@@ -60,13 +60,13 @@ NSString* UITraitsClassString;
   UIClassString = [@[@"UI", @"Web", @"Browser", @"View"] componentsJoinedByString:@""];
   WKClassString = [@[@"WK", @"Content", @"View"] componentsJoinedByString:@""];
   UITraitsClassString = [@[@"UI", @"Text", @"Input", @"Traits"] componentsJoinedByString:@""];
-  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(statusBarDidChangeFrame:) name:UIApplicationDidChangeStatusBarFrameNotification object: nil];
-    
-  NSString * style = [self getConfigValue:@"style"];
+
+  PluginConfig * config = [self getConfig];
+  NSString * style = [config getString:@"style": nil];
   [self changeKeyboardStyle:style.uppercaseString];
 
   self.keyboardResizes = ResizeNative;
-  NSString * resizeMode = [self getConfigValue:@"resize"];
+  NSString * resizeMode = [config getString:@"resize": nil];
 
   if ([resizeMode isEqualToString:@"none"]) {
     self.keyboardResizes = ResizeNone;
@@ -100,10 +100,6 @@ NSString* UITraitsClassString;
 
 
 #pragma mark Keyboard events
-
--(void)statusBarDidChangeFrame:(NSNotification *)notification {
-  [self _updateFrame];
-}
 
 - (void)resetScrollView
 {
@@ -191,16 +187,13 @@ NSString* UITraitsClassString;
 
 - (void)_updateFrame
 {
-  CGSize statusBarSize = [[UIApplication sharedApplication] statusBarFrame].size;
-  int statusBarHeight = MIN(statusBarSize.width, statusBarSize.height);
-  
-  int _paddingBottom = (int)self.paddingBottom;
-  
-  if (statusBarHeight == 40) {
-    _paddingBottom = _paddingBottom + 20;
-  }
   CGRect f, wf = CGRectZero;
-  UIWindow * window = [[[UIApplication sharedApplication] delegate] window];
+  UIWindow * window = nil;
+    
+  if ([[[UIApplication sharedApplication] delegate] respondsToSelector:@selector(window)]) {
+    window = [[[UIApplication sharedApplication] delegate] window];
+  }
+  
   if (!window) {
     if (@available(iOS 13.0, *)) {
       UIScene *scene = [UIApplication sharedApplication].connectedScenes.allObjects.firstObject;
@@ -329,6 +322,24 @@ static IMP WKOriginalImp;
     self.keyboardResizes = ResizeNone;
   }
   [call resolve];
+}
+
+- (void)getResizeMode:(CAPPluginCall *)call
+{
+    NSString *mode;
+    
+    if (self.keyboardResizes == ResizeIonic) {
+        mode = @"ionic";
+    } else if(self.keyboardResizes == ResizeBody) {
+        mode = @"body";
+    } else if (self.keyboardResizes == ResizeNative) {
+        mode = @"native";
+    } else {
+        mode = @"none";
+    }
+    
+    NSDictionary *response = [NSDictionary dictionaryWithObject:mode forKey:@"mode"];
+    [call resolve: response];
 }
 
 - (void)setScroll:(CAPPluginCall *)call {

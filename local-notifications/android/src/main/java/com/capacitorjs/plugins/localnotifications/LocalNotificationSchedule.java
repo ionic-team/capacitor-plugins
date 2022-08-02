@@ -141,7 +141,8 @@ public class LocalNotificationSchedule {
     public Long getEveryInterval() {
         switch (every) {
             case "year":
-                return count * DateUtils.YEAR_IN_MILLIS;
+                // This case is just approximation as not all years have the same number of days
+                return count * DateUtils.WEEK_IN_MILLIS * 52;
             case "month":
                 // This case is just approximation as months have different number of days
                 return count * 30 * DateUtils.DAY_IN_MILLIS;

@@ -119,7 +119,7 @@ import Capacitor
     private func updateSplashImageBounds() {
         var window: UIWindow? = UIApplication.shared.delegate?.window ?? nil
 
-        if #available(iOS 13, *), window == nil {
+        if window == nil {
             let scene: UIWindowScene? = UIApplication.shared.connectedScenes.first as? UIWindowScene
             window = scene?.windows.filter({$0.isKeyWindow}).first
             if window == nil {
