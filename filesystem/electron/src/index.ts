@@ -100,7 +100,7 @@ export class Filesystem implements FilesystemPlugin {
     }).then(() => ({ uri: this._getUri(fullPath) }));
   }
 
-  appendFile(options: AppendFileOptions): Promise<void> {
+  async appendFile(options: AppendFileOptions): Promise<void> {
     const { path, directory, data, encoding } = options ?? {};
 
     Filesystem.checkPath(path);
@@ -215,7 +215,7 @@ export class Filesystem implements FilesystemPlugin {
 
   private static checkData(data: string) {
     if (!data) {
-      return Promise.reject(new Error('No data found'));
+      throw new Error('No data found');
     }
   }
 
