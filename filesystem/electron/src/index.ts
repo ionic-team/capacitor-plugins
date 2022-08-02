@@ -14,6 +14,7 @@ import {
 import { tmpdir } from 'os';
 import { join, normalize, sep, dirname, isAbsolute } from 'path';
 
+import { Encoding, Directory } from '../../src/definitions';
 import type {
   ReadFileOptions,
   ReadFileResult,
@@ -31,8 +32,8 @@ import type {
   StatResult,
   CopyOptions,
   PermissionStatus,
+  FileInfo,
 } from '../../src/definitions';
-import { Encoding, Directory } from '../../src/definitions';
 
 import type { FilesystemPlugin } from './definitions';
 
@@ -137,12 +138,29 @@ export class Filesystem implements FilesystemPlugin {
     return rmdir(Filesystem.getPath(directory, path), { recursive });
   }
 
-  readdir(options: ReaddirOptions): Promise<ReaddirResult> {
+  async readdir(options: ReaddirOptions): Promise<ReaddirResult> {
     const { path, directory } = options ?? {};
 
-    return readdir(Filesystem.getPath(directory, path ?? '')).then(files => ({
-      files,
-    }));
+    const resolvedPath = Filesystem.getPath(directory, path ?? '');
+    const entries = await readdir(resolvedPath);
+
+    const fileInfo = await Promise.all(
+      entries.map<Promise<FileInfo>>(async entry => {
+        const entryPath = join(resolvedPath, entry);
+        const stats = await stat(entryPath);
+
+        return {
+          type: stats.isDirectory() ? 'directory' : 'file',
+          uri: this._getUri(entryPath),
+          ctime: stats.ctimeMs,
+          mtime: stats.mtimeMs,
+          size: stats.size,
+          name: entry,
+        };
+      }),
+    );
+
+    return { files: fileInfo };
   }
 
   getUri(options: GetUriOptions): Promise<GetUriResult> {
