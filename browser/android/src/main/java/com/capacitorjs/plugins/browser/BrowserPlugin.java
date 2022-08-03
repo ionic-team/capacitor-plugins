@@ -1,6 +1,8 @@
 package com.capacitorjs.plugins.browser;
 
 import android.net.Uri;
+import android.content.Intent;
+import android.content.Context;
 import com.getcapacitor.Logger;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
@@ -54,7 +56,12 @@ public class BrowserPlugin extends Plugin {
 
     @PluginMethod
     public void close(PluginCall call) {
-        call.unimplemented();
+        Context context = getActivity().getBaseContext();
+        Intent myIntent = new Intent(context, getActivity().getClass());
+        myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        myIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(myIntent);
+        call.resolve();
     }
 
     @Override
