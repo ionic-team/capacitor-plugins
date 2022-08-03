@@ -276,7 +276,7 @@ Request camera and photo album permissions
 | ------------ | --------------------- | ------------------------------------------------------------------ |
 | **`Prompt`** | <code>'PROMPT'</code> | Prompts the user to select either the photo album or take a photo. |
 | **`Camera`** | <code>'CAMERA'</code> | Take a new photo using the camera.                                 |
-| **`Photos`** | <code>'PHOTOS'</code> | Pick an existing photo fron the gallery or photo album.            |
+| **`Photos`** | <code>'PHOTOS'</code> | Pick an existing photo from the gallery or photo album.            |
 
 
 #### CameraDirection
