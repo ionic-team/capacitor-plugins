@@ -170,6 +170,10 @@ import Foundation
             }
 
             return dir.appendingPathComponent(path)
+        } else if (directory === "TEMP") {
+            let dir = FileManager.default.temporaryDirectory
+
+            return dir.appendingPathComponent(path)
         } else {
             return URL(string: path)
         }

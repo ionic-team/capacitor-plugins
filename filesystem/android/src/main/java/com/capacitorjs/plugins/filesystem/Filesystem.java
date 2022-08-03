@@ -190,6 +190,7 @@ public class Filesystem {
             case "LIBRARY":
                 return c.getFilesDir();
             case "CACHE":
+            case "TEMP":
                 return c.getCacheDir();
             case "EXTERNAL":
                 return c.getExternalFilesDir(null);
