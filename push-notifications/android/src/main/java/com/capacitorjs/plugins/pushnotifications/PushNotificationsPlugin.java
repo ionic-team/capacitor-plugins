@@ -87,6 +87,25 @@ public class PushNotificationsPlugin extends Plugin {
             );
         call.resolve();
     }
+    
+    @PluginMethod
+    public void refreshToken(PluginCall call) {
+        FirebaseMessaging.getInstance().deleteToken();
+        FirebaseMessaging.getInstance().setAutoInitEnabled(true);
+        FirebaseMessaging
+            .getInstance()
+            .getToken()
+            .addOnCompleteListener(
+                task -> {
+                    if (!task.isSuccessful()) {
+                        sendError(task.getException().getLocalizedMessage());
+                        return;
+                    }
+                    sendToken(task.getResult());
+                }
+            );
+        call.resolve();
+    }
 
     @PluginMethod
     public void getDeliveredNotifications(PluginCall call) {

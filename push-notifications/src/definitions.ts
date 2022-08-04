@@ -39,6 +39,17 @@ export interface PushNotificationsPlugin {
    * @since 1.0.0
    */
   register(): Promise<void>;
+  
+  /**
+   * Generate new token to receive push notifications.
+   *
+   * This method will trigger the `'registration'` event with the push token or
+   * `'registrationError'` if there was a problem. It does not prompt the user for
+   * notification permissions, use `requestPermissions()` first.
+   *
+   * @since 1.0.0
+   */
+   refreshToken(): Promise<void>;
 
   /**
    * Get a list of notifications that are visible on the notifications screen.

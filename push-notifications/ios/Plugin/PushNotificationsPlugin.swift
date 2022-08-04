@@ -47,6 +47,20 @@ public class PushNotificationsPlugin: CAPPlugin {
         call.resolve()
     }
 
+    
+    /**
+     * Refresh token for push notifications
+     */
+    @objc func refreshToken(_ call: CAPPluginCall) {
+        DispatchQueue.main.async {
+            UIApplication.shared.unregisterForRemoteNotifications()
+        }
+        DispatchQueue.main.async {
+            UIApplication.shared.registerForRemoteNotifications()
+        }
+        call.resolve()
+    }
+
     /**
      * Request notification permission
      */
