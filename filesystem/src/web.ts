@@ -348,7 +348,7 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
       throw Error('Folder is not empty');
 
     for (const entry of readDirResult.files) {
-      const entryPath = `${path}/${entry}`;
+      const entryPath = `${path}/${entry.name}`;
       const entryObj = await this.stat({ path: entryPath, directory });
       if (entryObj.type === 'file') {
         await this.deleteFile({ path: entryPath, directory });
