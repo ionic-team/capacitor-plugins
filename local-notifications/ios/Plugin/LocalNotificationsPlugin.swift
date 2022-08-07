@@ -239,6 +239,12 @@ public class LocalNotificationsPlugin: CAPPlugin {
         if let attachments = notification["attachments"] as? [JSObject] {
             content.attachments = try makeAttachments(attachments)
         }
+        
+        if #available(iOS 15.0, *), let timeSensitive = notification["timeSensitive"] as? Bool {
+            if timeSensitive {
+                content.interruptionLevel = .timeSensitive
+            }
+        }
 
         return content
     }

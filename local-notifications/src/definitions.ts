@@ -740,6 +740,16 @@ export interface LocalNotificationSchema {
    * @since 1.0.0
    */
   inboxList?: string[];
+
+  /**
+   * If true, marks the notification as "time sensitive" on iOS.
+   * Requires Time Sensitive notification entitlement to be enabled.
+   *
+   * Only available for iOS.
+   *
+   * @since 4.0.0
+   */
+  timeSensitive?: boolean;
 }
 
 /**
