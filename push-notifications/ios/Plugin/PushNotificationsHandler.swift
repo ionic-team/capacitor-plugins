@@ -29,7 +29,7 @@ public class PushNotificationsHandler: NSObject, NotificationHandlerProtocol {
             }
         }
 
-        if let optionsArray = self.plugin?.getConfig().getArray("presentationOptions") as? [String] {
+        if let optionsArray = self.plugin?.getConfigValue("presentationOptions") as? [String] {
             var presentationOptions = UNNotificationPresentationOptions.init()
 
             optionsArray.forEach { option in
