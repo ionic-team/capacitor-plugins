@@ -66,6 +66,16 @@ public class CameraPlugin: CAPPlugin {
         }
     }
 
+    @objc func pickLimitedLibraryImages(_ call: CAPPluginCall) {
+        if #available(iOS 14, *) {
+            if let viewController = bridge?.viewController {
+                PHPhotoLibrary.shared().presentLimitedLibraryPicker(from: viewController)
+            }
+        } else {
+            call.unavailable("Not available on iOS 13 and below")
+        }
+    }
+
     @objc func getPhoto(_ call: CAPPluginCall) {
         self.multiple = false
         self.call = call
