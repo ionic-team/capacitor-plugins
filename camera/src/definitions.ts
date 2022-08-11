@@ -30,7 +30,8 @@ export interface CameraPlugin {
    */
   pickImages(options: GalleryImageOptions): Promise<GalleryPhotos>;
 
-  pickLimitedLibraryImages(): Promise<GalleryPhotos>;
+  pickLimitedLibraryPhotos(): Promise<GalleryPhotos>;
+  getLimitedLibraryPhotos(): Promise<GalleryPhotos>;
 
   /**
    * Check camera and photo album permissions

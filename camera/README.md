@@ -74,7 +74,8 @@ const takePicture = async () => {
 
 * [`getPhoto(...)`](#getphoto)
 * [`pickImages(...)`](#pickimages)
-* [`pickLimitedLibraryImages()`](#picklimitedlibraryimages)
+* [`pickLimitedLibraryPhotos()`](#picklimitedlibraryphotos)
+* [`getLimitedLibraryPhotos()`](#getlimitedlibraryphotos)
 * [`checkPermissions()`](#checkpermissions)
 * [`requestPermissions(...)`](#requestpermissions)
 * [Interfaces](#interfaces)
@@ -126,10 +127,21 @@ On iOS 13 and older it only allows to pick one picture.
 --------------------
 
 
-### pickLimitedLibraryImages()
+### pickLimitedLibraryPhotos()
 
 ```typescript
-pickLimitedLibraryImages() => Promise<GalleryPhotos>
+pickLimitedLibraryPhotos() => Promise<GalleryPhotos>
+```
+
+**Returns:** <code>Promise&lt;<a href="#galleryphotos">GalleryPhotos</a>&gt;</code>
+
+--------------------
+
+
+### getLimitedLibraryPhotos()
+
+```typescript
+getLimitedLibraryPhotos() => Promise<GalleryPhotos>
 ```
 
 **Returns:** <code>Promise&lt;<a href="#galleryphotos">GalleryPhotos</a>&gt;</code>
