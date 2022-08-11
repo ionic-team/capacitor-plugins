@@ -82,35 +82,38 @@ public class CameraPlugin: CAPPlugin {
 
     @objc func getLimitedLibraryPhotos(_ call: CAPPluginCall) {
         self.call = call
-        self.currentLimitedSelection = PHAsset.fetchAssets(with: .image, options: nil)
-        if let assets = self.currentLimitedSelection {
-            var processedImages: [ProcessedImage] = []
-            
-            let imageManager = PHImageManager.default()
-            let options = PHImageRequestOptions()
-            options.deliveryMode = .highQualityFormat
-            
-            let group = DispatchGroup()
-            
-            for i in 0...(assets.count - 1) {
-                let asset = assets.object(at: i)
-                let fullSize = CGSize(width: asset.pixelWidth, height: asset.pixelHeight)
+        DispatchQueue.global(qos: .background).async {
+            self.currentLimitedSelection = PHAsset.fetchAssets(with: .image, options: nil)
+            if let assets = self.currentLimitedSelection {
+                var processedImages: [ProcessedImage] = []
                 
-                group.enter()
-                imageManager.requestImage(for: asset, targetSize: fullSize, contentMode: .default, options: options) { image, _ in
-                    guard let image = image else {
+                let imageManager = PHImageManager.default()
+                let options = PHImageRequestOptions()
+                options.deliveryMode = .highQualityFormat
+                
+                let group = DispatchGroup()
+                
+                for i in 0...(assets.count - 1) {
+                    let asset = assets.object(at: i)
+                    let fullSize = CGSize(width: asset.pixelWidth, height: asset.pixelHeight)
+                    
+                    group.enter()
+                    imageManager.requestImage(for: asset, targetSize: fullSize, contentMode: .default, options: options) { image, _ in
+                        guard let image = image else {
+                            group.leave()
+                            return
+                        }
+                        processedImages.append(self.processedImage(from: image, with: asset.imageData))
                         group.leave()
-                        return
                     }
-                    processedImages.append(self.processedImage(from: image, with: asset.imageData))
-                    group.leave()
+                }
+                
+                group.notify(queue: .global(qos: .utility)) { [weak self] in
+                    self?.returnImages(processedImages)
                 }
             }
-            
-            group.notify(queue: DispatchQueue.main) { [weak self] in
-                self?.returnImages(processedImages)
-            }
         }
+        
     }
 
     @objc func getPhoto(_ call: CAPPluginCall) {
