@@ -1,4 +1,4 @@
-import type { PermissionState } from '@capacitor/core';
+import type { PermissionState, Plugin } from '@capacitor/core';
 
 export type CameraPermissionState = PermissionState | 'limited';
 
@@ -13,7 +13,7 @@ export interface CameraPluginPermissions {
   permissions: CameraPermissionType[];
 }
 
-export interface CameraPlugin {
+export interface CameraPlugin extends Plugin {
   /**
    * Prompt the user to pick a photo from an album, or take a new photo
    * with the camera.
