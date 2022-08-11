@@ -30,7 +30,18 @@ export interface CameraPlugin extends Plugin {
    */
   pickImages(options: GalleryImageOptions): Promise<GalleryPhotos>;
 
+
+  /**
+   * iOS 14+ Only: Allows the user to update their limited photo library selection.
+   * 
+   * @since 4.0.0
+   */
   pickLimitedLibraryPhotos(): Promise<GalleryPhotos>;
+  /**
+   * iOS 14+ Only: Return an array of photos selected from the limited photo library.
+   * 
+   * @since 4.0.0
+   */
   getLimitedLibraryPhotos(): Promise<GalleryPhotos>;
 
   /**

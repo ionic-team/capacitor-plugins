@@ -133,7 +133,11 @@ On iOS 13 and older it only allows to pick one picture.
 pickLimitedLibraryPhotos() => Promise<GalleryPhotos>
 ```
 
+iOS 14+ Only: Allows the user to update their limited photo library selection.
+
 **Returns:** <code>Promise&lt;<a href="#galleryphotos">GalleryPhotos</a>&gt;</code>
+
+**Since:** 4.0.0
 
 --------------------
 
@@ -144,7 +148,11 @@ pickLimitedLibraryPhotos() => Promise<GalleryPhotos>
 getLimitedLibraryPhotos() => Promise<GalleryPhotos>
 ```
 
+iOS 14+ Only: Return an array of photos selected from the limited photo library.
+
 **Returns:** <code>Promise&lt;<a href="#galleryphotos">GalleryPhotos</a>&gt;</code>
+
+**Since:** 4.0.0
 
 --------------------
 
