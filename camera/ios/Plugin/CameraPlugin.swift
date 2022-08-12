@@ -287,8 +287,7 @@ extension CameraPlugin: PHPickerViewControllerDelegate, PHPhotoLibraryChangeObse
         }
     }
 
-    public func photoLibraryDidChange(_ changeInstance: PHChange) {
-        print("photo library did change")
+    public func photoLibraryDidChange(_ changeInstance: PHChange) {        
         self.notifyListeners("limitedLibrarySelectionChanged", data: nil)
     }
 }
