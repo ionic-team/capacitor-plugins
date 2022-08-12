@@ -84,23 +84,23 @@ public class CameraPlugin: CAPPlugin {
             PHPhotoLibrary.requestAuthorization(for: .readWrite) { (granted) in
                 if granted == .limited {
                     PHPhotoLibrary.shared().register(self)
-                    
+
                     self.call = call
-                    
+
                     DispatchQueue.global(qos: .utility).async {
                         let assets = PHAsset.fetchAssets(with: .image, options: nil)
                         var processedImages: [ProcessedImage] = []
-                        
+
                         let imageManager = PHImageManager.default()
                         let options = PHImageRequestOptions()
                         options.deliveryMode = .highQualityFormat
-                        
+
                         let group = DispatchGroup()
-                        
+
                         for i in 0...(assets.count - 1) {
                             let asset = assets.object(at: i)
                             let fullSize = CGSize(width: asset.pixelWidth, height: asset.pixelHeight)
-                            
+
                             group.enter()
                             imageManager.requestImage(for: asset, targetSize: fullSize, contentMode: .default, options: options) { image, _ in
                                 guard let image = image else {
@@ -111,7 +111,7 @@ public class CameraPlugin: CAPPlugin {
                                 group.leave()
                             }
                         }
-                        
+
                         group.notify(queue: .global(qos: .utility)) { [weak self] in
                             self?.returnImages(processedImages)
                         }
@@ -286,10 +286,10 @@ extension CameraPlugin: PHPickerViewControllerDelegate, PHPhotoLibraryChangeObse
             }
         }
     }
-    
+
     public func photoLibraryDidChange(_ changeInstance: PHChange) {
         print("photo library did change")
-        self.notifyListeners("limitedLibrarySelectionChanged", data: nil)        
+        self.notifyListeners("limitedLibrarySelectionChanged", data: nil)
     }
 }
 

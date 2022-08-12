@@ -47,9 +47,9 @@ export interface CameraPlugin {
 
   /**
    * iOS 14+ Only: Listen for changes to selected photos within the user's limited photo library.
-   * 
-   * @param eventName 
-   * @param listenerFunc 
+   *
+   * @param eventName
+   * @param listenerFunc
    * @since 4.0.0
    */
   addListener(
