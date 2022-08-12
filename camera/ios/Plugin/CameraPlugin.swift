@@ -12,7 +12,6 @@ public class CameraPlugin: CAPPlugin {
     private var multiple = false
 
     private var imageCounter = 0
-    private var currentLimitedSelection: PHFetchResult<PHAsset>?
 
     @objc override public func checkPermissions(_ call: CAPPluginCall) {
         var result: [String: Any] = [:]
@@ -81,39 +80,51 @@ public class CameraPlugin: CAPPlugin {
     }
 
     @objc func getLimitedLibraryPhotos(_ call: CAPPluginCall) {
-        self.call = call
-        DispatchQueue.global(qos: .background).async {
-            self.currentLimitedSelection = PHAsset.fetchAssets(with: .image, options: nil)
-            if let assets = self.currentLimitedSelection {
-                var processedImages: [ProcessedImage] = []
-                
-                let imageManager = PHImageManager.default()
-                let options = PHImageRequestOptions()
-                options.deliveryMode = .highQualityFormat
-                
-                let group = DispatchGroup()
-                
-                for i in 0...(assets.count - 1) {
-                    let asset = assets.object(at: i)
-                    let fullSize = CGSize(width: asset.pixelWidth, height: asset.pixelHeight)
+        if #available(iOS 14, *) {
+            PHPhotoLibrary.requestAuthorization(for: .readWrite) { (granted) in
+                if granted == .limited {
+                    PHPhotoLibrary.shared().register(self)
                     
-                    group.enter()
-                    imageManager.requestImage(for: asset, targetSize: fullSize, contentMode: .default, options: options) { image, _ in
-                        guard let image = image else {
-                            group.leave()
-                            return
+                    self.call = call
+                    
+                    DispatchQueue.global(qos: .utility).async {
+                        let assets = PHAsset.fetchAssets(with: .image, options: nil)
+                        var processedImages: [ProcessedImage] = []
+                        
+                        let imageManager = PHImageManager.default()
+                        let options = PHImageRequestOptions()
+                        options.deliveryMode = .highQualityFormat
+                        
+                        let group = DispatchGroup()
+                        
+                        for i in 0...(assets.count - 1) {
+                            let asset = assets.object(at: i)
+                            let fullSize = CGSize(width: asset.pixelWidth, height: asset.pixelHeight)
+                            
+                            group.enter()
+                            imageManager.requestImage(for: asset, targetSize: fullSize, contentMode: .default, options: options) { image, _ in
+                                guard let image = image else {
+                                    group.leave()
+                                    return
+                                }
+                                processedImages.append(self.processedImage(from: image, with: asset.imageData))
+                                group.leave()
+                            }
                         }
-                        processedImages.append(self.processedImage(from: image, with: asset.imageData))
-                        group.leave()
+                        
+                        group.notify(queue: .global(qos: .utility)) { [weak self] in
+                            self?.returnImages(processedImages)
+                        }
                     }
-                }
-                
-                group.notify(queue: .global(qos: .utility)) { [weak self] in
-                    self?.returnImages(processedImages)
+                } else {
+                    call.resolve([
+                        "photos": []
+                    ])
                 }
             }
+        } else {
+            call.unavailable("Not available on iOS 13 and below")
         }
-        
     }
 
     @objc func getPhoto(_ call: CAPPluginCall) {
