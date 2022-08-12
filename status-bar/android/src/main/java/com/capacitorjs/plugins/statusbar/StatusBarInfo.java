@@ -6,6 +6,7 @@ public class StatusBarInfo {
     private boolean visible;
     private String style;
     private String color;
+    private float height;
 
     public boolean isOverlays() {
         return overlays;
@@ -37,5 +38,13 @@ public class StatusBarInfo {
 
     public void setColor(String color) {
         this.color = color;
+    }
+
+    public void setHeight(float height) {
+        this.height = height;
+    }
+
+    public float getHeight() {
+        return height;
     }
 }

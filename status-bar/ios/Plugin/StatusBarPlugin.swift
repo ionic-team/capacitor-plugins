@@ -1,5 +1,6 @@
 import Foundation
 import Capacitor
+import UIKit
 
 /**
  * StatusBar plugin. Requires "View controller-based status bar appearance" to
@@ -83,9 +84,18 @@ public class StatusBarPlugin: CAPPlugin {
                 style = "LIGHT"
             }
 
+            var statusBarHeight: CGFloat = 0
+            if #available(iOS 13.0, *) {
+                let window = UIApplication.shared.windows.filter {$0.isKeyWindow}.first
+                statusBarHeight = window?.windowScene?.statusBarManager?.statusBarFrame.height ?? 0
+            } else {
+                statusBarHeight = UIApplication.shared.statusBarFrame.height
+            }
+
             call.resolve([
                 "visible": bridge.statusBarVisible,
-                "style": style
+                "style": style,
+                "height": statusBarHeight
             ])
         }
     }

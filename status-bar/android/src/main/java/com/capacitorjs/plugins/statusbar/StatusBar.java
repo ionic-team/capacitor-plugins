@@ -93,6 +93,7 @@ public class StatusBar {
         info.setOverlays(getIsOverlaid());
         info.setVisible(isVisible);
         info.setColor(String.format("#%06X", (0xFFFFFF & window.getStatusBarColor())));
+        info.setHeight(getStatusBarHeight());
         return info;
     }
 
@@ -104,5 +105,15 @@ public class StatusBar {
             style = "LIGHT";
         }
         return style;
+    }
+
+    private float getStatusBarHeight() {
+        float statusBarHeight = 0;
+        int resourceId = activity.getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            float scaleRatio = activity.getResources().getDisplayMetrics().density;
+            statusBarHeight = activity.getResources().getDimension(resourceId) / scaleRatio;
+        }
+        return statusBarHeight;
     }
 }

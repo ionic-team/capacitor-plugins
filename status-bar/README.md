@@ -208,6 +208,7 @@ This method is only supported on Android.
 | **`style`**    | <code><a href="#style">Style</a></code> | The current status bar style.                                                       | 1.0.0 |
 | **`color`**    | <code>string</code>                     | The current status bar color. This option is only supported on Android.             | 1.0.0 |
 | **`overlays`** | <code>boolean</code>                    | Whether the statusbar is overlaid or not. This option is only supported on Android. | 1.0.0 |
+| **`height`**   | <code>number</code>                     | The current status bar height.                                                      |       |
 
 
 #### SetOverlaysWebViewOptions

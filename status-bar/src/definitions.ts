@@ -110,6 +110,11 @@ export interface StatusBarInfo {
    * @since 1.0.0
    */
   overlays?: boolean;
+
+  /**
+   * The current status bar height.
+   */
+  height: number;
 }
 
 export interface SetOverlaysWebViewOptions {
