@@ -46,7 +46,7 @@ export interface CameraPlugin {
   getLimitedLibraryPhotos(): Promise<GalleryPhotos>;
 
   /**
-   * Listen for changes to selected photos within the users limited photo library.
+   * iOS 14+ Only: Listen for changes to selected photos within the user's limited photo library.
    * 
    * @param eventName 
    * @param listenerFunc 
