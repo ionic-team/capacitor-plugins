@@ -97,8 +97,8 @@ public class CameraPlugin: CAPPlugin {
 
                         let group = DispatchGroup()
 
-                        for i in 0...(assets.count - 1) {
-                            let asset = assets.object(at: i)
+                        for index in 0...(assets.count - 1) {
+                            let asset = assets.object(at: index)
                             let fullSize = CGSize(width: asset.pixelWidth, height: asset.pixelHeight)
 
                             group.enter()
