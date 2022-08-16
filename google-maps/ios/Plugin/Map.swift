@@ -91,11 +91,12 @@ public class Map {
             if let bridge = self.delegate.bridge {
 
                 for item in bridge.webView!.getAllSubViews() {
-                    if let typeClass = NSClassFromString("WKChildScrollView"), item.isKind(of: typeClass) {
+                    let isScrollView = item.isKind(of: NSClassFromString("WKChildScrollView")!) || item.isKind(of: NSClassFromString("WKScrollView")!)
+                    if isScrollView {
                         (item as? UIScrollView)?.isScrollEnabled = true
 
-                        let isWidthEqual = Double(item.bounds.width) == self.config.width
-                        let isHeightEqual = Double(item.bounds.height) == self.config.height
+                        let isWidthEqual = round(Double(item.bounds.width)) == self.config.width
+                        let isHeightEqual = round(Double(item.bounds.height)) == self.config.height
 
                         if isWidthEqual && isHeightEqual && (item as? UIView)?.tag == 0 {
                             self.targetViewController = item
