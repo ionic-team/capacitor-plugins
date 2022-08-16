@@ -38,8 +38,8 @@ public struct GoogleMapConfig: Codable {
             throw GoogleMapErrors.invalidArguments("LatLng object is missing the required 'lat' and/or 'lng' property")
         }
 
-        self.width = width
-        self.height = height
+        self.width = round(width)
+        self.height = round(height)
         self.x = x
         self.y = y
         self.zoom = zoom
