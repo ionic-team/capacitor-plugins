@@ -268,6 +268,14 @@ export class CameraWeb extends WebPlugin implements CameraPlugin {
   async requestPermissions(): Promise<PermissionStatus> {
     throw this.unimplemented('Not implemented on web.');
   }
+
+  async pickLimitedLibraryPhotos(): Promise<GalleryPhotos> {
+    throw this.unavailable('Not implemented on the web.');
+  }
+
+  async getLimitedLibraryPhotos(): Promise<GalleryPhotos> {
+    throw this.unavailable('Not implemented on the web.');
+  }
 }
 
 const Camera = new CameraWeb();

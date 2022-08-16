@@ -1,8 +1,10 @@
-import type { PermissionState } from '@capacitor/core';
+import type { PermissionState, PluginListenerHandle } from '@capacitor/core';
 
 export type CameraPermissionState = PermissionState | 'limited';
 
 export type CameraPermissionType = 'camera' | 'photos';
+
+export type CameraLimitedLibrarySelectionChangeListener = () => void;
 
 export interface PermissionStatus {
   camera: CameraPermissionState;
@@ -29,6 +31,38 @@ export interface CameraPlugin {
    * @since 1.2.0
    */
   pickImages(options: GalleryImageOptions): Promise<GalleryPhotos>;
+
+  /**
+   * iOS 14+ Only: Allows the user to update their limited photo library selection.
+   *
+   * @since 4.0.0
+   */
+  pickLimitedLibraryPhotos(): Promise<GalleryPhotos>;
+  /**
+   * iOS 14+ Only: Return an array of photos selected from the limited photo library.
+   *
+   * @since 4.0.0
+   */
+  getLimitedLibraryPhotos(): Promise<GalleryPhotos>;
+
+  /**
+   * iOS 14+ Only: Listen for changes to selected photos within the user's limited photo library.
+   *
+   * @param eventName
+   * @param listenerFunc
+   * @since 4.0.0
+   */
+  addListener(
+    eventName: 'limitedLibrarySelectionChanged',
+    listenerFunc: CameraLimitedLibrarySelectionChangeListener,
+  ): Promise<PluginListenerHandle> & PluginListenerHandle;
+
+  /**
+   * Remove all listeners for this plugin.
+   *
+   * @since 4.0.0
+   */
+  removeAllListeners(): Promise<void>;
 
   /**
    * Check camera and photo album permissions

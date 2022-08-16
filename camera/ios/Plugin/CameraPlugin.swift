@@ -51,7 +51,10 @@ public class CameraPlugin: CAPPlugin {
             case .photos:
                 group.enter()
                 if #available(iOS 14, *) {
-                    PHPhotoLibrary.requestAuthorization(for: .readWrite) { (_) in
+                    PHPhotoLibrary.requestAuthorization(for: .readWrite) { (granted) in
+                        if granted == .limited {
+                            PHPhotoLibrary.shared().register(self)
+                        }
                         group.leave()
                     }
                 } else {
@@ -63,6 +66,64 @@ public class CameraPlugin: CAPPlugin {
         }
         group.notify(queue: DispatchQueue.main) { [weak self] in
             self?.checkPermissions(call)
+        }
+    }
+
+    @objc func pickLimitedLibraryPhotos(_ call: CAPPluginCall) {
+        if #available(iOS 14, *) {
+            if let viewController = bridge?.viewController {
+                PHPhotoLibrary.shared().presentLimitedLibraryPicker(from: viewController)
+            }
+        } else {
+            call.unavailable("Not available on iOS 13 and below")
+        }
+    }
+
+    @objc func getLimitedLibraryPhotos(_ call: CAPPluginCall) {
+        if #available(iOS 14, *) {
+            PHPhotoLibrary.requestAuthorization(for: .readWrite) { (granted) in
+                if granted == .limited {
+                    PHPhotoLibrary.shared().register(self)
+
+                    self.call = call
+
+                    DispatchQueue.global(qos: .utility).async {
+                        let assets = PHAsset.fetchAssets(with: .image, options: nil)
+                        var processedImages: [ProcessedImage] = []
+
+                        let imageManager = PHImageManager.default()
+                        let options = PHImageRequestOptions()
+                        options.deliveryMode = .highQualityFormat
+
+                        let group = DispatchGroup()
+
+                        for index in 0...(assets.count - 1) {
+                            let asset = assets.object(at: index)
+                            let fullSize = CGSize(width: asset.pixelWidth, height: asset.pixelHeight)
+
+                            group.enter()
+                            imageManager.requestImage(for: asset, targetSize: fullSize, contentMode: .default, options: options) { image, _ in
+                                guard let image = image else {
+                                    group.leave()
+                                    return
+                                }
+                                processedImages.append(self.processedImage(from: image, with: asset.imageData))
+                                group.leave()
+                            }
+                        }
+
+                        group.notify(queue: .global(qos: .utility)) { [weak self] in
+                            self?.returnImages(processedImages)
+                        }
+                    }
+                } else {
+                    call.resolve([
+                        "photos": []
+                    ])
+                }
+            }
+        } else {
+            call.unavailable("Not available on iOS 13 and below")
         }
     }
 
@@ -168,7 +229,7 @@ extension CameraPlugin: UIImagePickerControllerDelegate, UINavigationControllerD
 }
 
 @available(iOS 14, *)
-extension CameraPlugin: PHPickerViewControllerDelegate {
+extension CameraPlugin: PHPickerViewControllerDelegate, PHPhotoLibraryChangeObserver {
     public func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         picker.dismiss(animated: true, completion: nil)
         guard let result = results.first else {
@@ -224,7 +285,10 @@ extension CameraPlugin: PHPickerViewControllerDelegate {
                 self?.call?.reject("Error loading image")
             }
         }
+    }
 
+    public func photoLibraryDidChange(_ changeInstance: PHChange) {
+        self.notifyListeners("limitedLibrarySelectionChanged", data: nil)
     }
 }
 
