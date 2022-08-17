@@ -8,4 +8,5 @@ CAP_PLUGIN(CAPCameraPlugin, "Camera",
   CAP_PLUGIN_METHOD(requestPermissions, CAPPluginReturnPromise);
   CAP_PLUGIN_METHOD(pickLimitedLibraryPhotos, CAPPluginReturnPromise);
   CAP_PLUGIN_METHOD(getLimitedLibraryPhotos, CAPPluginReturnPromise);
+  CAP_PLUGIN_METHOD(removeAllListeners, CAPPluginReturnPromise);
 )

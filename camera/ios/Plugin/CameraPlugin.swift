@@ -75,7 +75,7 @@ public class CameraPlugin: CAPPlugin {
                 PHPhotoLibrary.shared().presentLimitedLibraryPicker(from: viewController)
             }
         } else {
-            call.unavailable("Not available on iOS 13 and below")
+            call.unavailable("Not available on iOS 13")
         }
     }
 
@@ -123,7 +123,7 @@ public class CameraPlugin: CAPPlugin {
                 }
             }
         } else {
-            call.unavailable("Not available on iOS 13 and below")
+            call.unavailable("Not available on iOS 13")
         }
     }
 

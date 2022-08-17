@@ -139,7 +139,7 @@ iOS 14+ Only: Allows the user to update their limited photo library selection.
 
 **Returns:** <code>Promise&lt;<a href="#galleryphotos">GalleryPhotos</a>&gt;</code>
 
-**Since:** 4.0.0
+**Since:** 4.1.0
 
 --------------------
 
@@ -154,7 +154,7 @@ iOS 14+ Only: Return an array of photos selected from the limited photo library.
 
 **Returns:** <code>Promise&lt;<a href="#galleryphotos">GalleryPhotos</a>&gt;</code>
 
-**Since:** 4.0.0
+**Since:** 4.1.0
 
 --------------------
 
@@ -165,7 +165,7 @@ iOS 14+ Only: Return an array of photos selected from the limited photo library.
 addListener(eventName: 'limitedLibrarySelectionChanged', listenerFunc: CameraLimitedLibrarySelectionChangeListener) => Promise<PluginListenerHandle> & PluginListenerHandle
 ```
 
-Listen for changes to selected photos within the users limited photo library.
+iOS 14+ Only: Listen for changes to selected photos within the user's limited photo library.
 
 | Param              | Type                                                                                                                |
 | ------------------ | ------------------------------------------------------------------------------------------------------------------- |
@@ -174,7 +174,7 @@ Listen for changes to selected photos within the users limited photo library.
 
 **Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt; & <a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
-**Since:** 4.0.0
+**Since:** 4.1.0
 
 --------------------
 
@@ -187,7 +187,7 @@ removeAllListeners() => Promise<void>
 
 Remove all listeners for this plugin.
 
-**Since:** 4.0.0
+**Since:** 4.1.0
 
 --------------------
 

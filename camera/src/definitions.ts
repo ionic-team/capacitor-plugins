@@ -35,13 +35,13 @@ export interface CameraPlugin {
   /**
    * iOS 14+ Only: Allows the user to update their limited photo library selection.
    *
-   * @since 4.0.0
+   * @since 4.1.0
    */
   pickLimitedLibraryPhotos(): Promise<GalleryPhotos>;
   /**
    * iOS 14+ Only: Return an array of photos selected from the limited photo library.
    *
-   * @since 4.0.0
+   * @since 4.1.0
    */
   getLimitedLibraryPhotos(): Promise<GalleryPhotos>;
 
@@ -50,7 +50,7 @@ export interface CameraPlugin {
    *
    * @param eventName
    * @param listenerFunc
-   * @since 4.0.0
+   * @since 4.1.0
    */
   addListener(
     eventName: 'limitedLibrarySelectionChanged',
@@ -60,7 +60,7 @@ export interface CameraPlugin {
   /**
    * Remove all listeners for this plugin.
    *
-   * @since 4.0.0
+   * @since 4.1.0
    */
   removeAllListeners(): Promise<void>;
 
