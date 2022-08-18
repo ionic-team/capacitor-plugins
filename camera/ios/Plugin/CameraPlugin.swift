@@ -51,10 +51,7 @@ public class CameraPlugin: CAPPlugin {
             case .photos:
                 group.enter()
                 if #available(iOS 14, *) {
-                    PHPhotoLibrary.requestAuthorization(for: .readWrite) { (granted) in
-                        if granted == .limited {
-                            PHPhotoLibrary.shared().register(self)
-                        }
+                    PHPhotoLibrary.requestAuthorization(for: .readWrite) { (_) in
                         group.leave()
                     }
                 } else {
@@ -75,7 +72,7 @@ public class CameraPlugin: CAPPlugin {
                 PHPhotoLibrary.shared().presentLimitedLibraryPicker(from: viewController)
             }
         } else {
-            call.unavailable("Not available on iOS 13 and below")
+            call.unavailable("Not available on iOS 13")
         }
     }
 
@@ -83,7 +80,6 @@ public class CameraPlugin: CAPPlugin {
         if #available(iOS 14, *) {
             PHPhotoLibrary.requestAuthorization(for: .readWrite) { (granted) in
                 if granted == .limited {
-                    PHPhotoLibrary.shared().register(self)
 
                     self.call = call
 
@@ -123,7 +119,7 @@ public class CameraPlugin: CAPPlugin {
                 }
             }
         } else {
-            call.unavailable("Not available on iOS 13 and below")
+            call.unavailable("Not available on iOS 13")
         }
     }
 
@@ -229,7 +225,7 @@ extension CameraPlugin: UIImagePickerControllerDelegate, UINavigationControllerD
 }
 
 @available(iOS 14, *)
-extension CameraPlugin: PHPickerViewControllerDelegate, PHPhotoLibraryChangeObserver {
+extension CameraPlugin: PHPickerViewControllerDelegate {
     public func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         picker.dismiss(animated: true, completion: nil)
         guard let result = results.first else {
@@ -285,10 +281,6 @@ extension CameraPlugin: PHPickerViewControllerDelegate, PHPhotoLibraryChangeObse
                 self?.call?.reject("Error loading image")
             }
         }
-    }
-
-    public func photoLibraryDidChange(_ changeInstance: PHChange) {
-        self.notifyListeners("limitedLibrarySelectionChanged", data: nil)
     }
 }
 

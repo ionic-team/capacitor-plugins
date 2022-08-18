@@ -270,11 +270,11 @@ export class CameraWeb extends WebPlugin implements CameraPlugin {
   }
 
   async pickLimitedLibraryPhotos(): Promise<GalleryPhotos> {
-    throw this.unavailable('Not implemented on the web.');
+    throw this.unavailable('Not implemented on web.');
   }
 
   async getLimitedLibraryPhotos(): Promise<GalleryPhotos> {
-    throw this.unavailable('Not implemented on the web.');
+    throw this.unavailable('Not implemented on web.');
   }
 }
 

@@ -76,8 +76,6 @@ const takePicture = async () => {
 * [`pickImages(...)`](#pickimages)
 * [`pickLimitedLibraryPhotos()`](#picklimitedlibraryphotos)
 * [`getLimitedLibraryPhotos()`](#getlimitedlibraryphotos)
-* [`addListener('limitedLibrarySelectionChanged', ...)`](#addlistenerlimitedlibraryselectionchanged)
-* [`removeAllListeners()`](#removealllisteners)
 * [`checkPermissions()`](#checkpermissions)
 * [`requestPermissions(...)`](#requestpermissions)
 * [Interfaces](#interfaces)
@@ -139,7 +137,7 @@ iOS 14+ Only: Allows the user to update their limited photo library selection.
 
 **Returns:** <code>Promise&lt;<a href="#galleryphotos">GalleryPhotos</a>&gt;</code>
 
-**Since:** 4.0.0
+**Since:** 4.1.0
 
 --------------------
 
@@ -154,40 +152,7 @@ iOS 14+ Only: Return an array of photos selected from the limited photo library.
 
 **Returns:** <code>Promise&lt;<a href="#galleryphotos">GalleryPhotos</a>&gt;</code>
 
-**Since:** 4.0.0
-
---------------------
-
-
-### addListener('limitedLibrarySelectionChanged', ...)
-
-```typescript
-addListener(eventName: 'limitedLibrarySelectionChanged', listenerFunc: CameraLimitedLibrarySelectionChangeListener) => Promise<PluginListenerHandle> & PluginListenerHandle
-```
-
-Listen for changes to selected photos within the users limited photo library.
-
-| Param              | Type                                                                                                                |
-| ------------------ | ------------------------------------------------------------------------------------------------------------------- |
-| **`eventName`**    | <code>'limitedLibrarySelectionChanged'</code>                                                                       |
-| **`listenerFunc`** | <code><a href="#cameralimitedlibraryselectionchangelistener">CameraLimitedLibrarySelectionChangeListener</a></code> |
-
-**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt; & <a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
-
-**Since:** 4.0.0
-
---------------------
-
-
-### removeAllListeners()
-
-```typescript
-removeAllListeners() => Promise<void>
-```
-
-Remove all listeners for this plugin.
-
-**Since:** 4.0.0
+**Since:** 4.1.0
 
 --------------------
 
@@ -292,13 +257,6 @@ Request camera and photo album permissions
 | **`limit`**              | <code>number</code>                    | iOS only: Maximum number of pictures the user will be able to choose.                      | <code>0 (unlimited)</code>  | 1.2.0 |
 
 
-#### PluginListenerHandle
-
-| Prop         | Type                                      |
-| ------------ | ----------------------------------------- |
-| **`remove`** | <code>() =&gt; Promise&lt;void&gt;</code> |
-
-
 #### PermissionStatus
 
 | Prop         | Type                                                                    |
@@ -315,11 +273,6 @@ Request camera and photo album permissions
 
 
 ### Type Aliases
-
-
-#### CameraLimitedLibrarySelectionChangeListener
-
-<code>(): void</code>
 
 
 #### CameraPermissionState
