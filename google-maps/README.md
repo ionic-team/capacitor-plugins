@@ -682,7 +682,28 @@ A marker is an icon placed at a particular point on the map's surface.
 | **`snippet`**    | <code>string</code>                       | Snippet text, shown beneath the title in the info window when selected.                                   |                    |
 | **`isFlat`**     | <code>boolean</code>                      | Controls whether this marker should be flat against the Earth's surface or a billboard facing the camera. | <code>false</code> |
 | **`iconUrl`**    | <code>string</code>                       | <a href="#marker">Marker</a> icon to render.                                                              |                    |
-| **`draggable`**  | <code>boolean</code>                      | Controls whether this marker can be dragged interactively                                                 | <code>false</code> |
+| **`iconSize`**   | <code><a href="#size">Size</a></code>     | Controls whether this marker can be dragged interactively                                                 | <code>false</code> |
+| **`iconOrigin`** | <code><a href="#point">Point</a></code>   |                                                                                                           |                    |
+| **`iconAnchor`** | <code><a href="#point">Point</a></code>   |                                                                                                           |                    |
+| **`draggable`**  | <code>boolean</code>                      |                                                                                                           |                    |
+| **`className`**  | <code>string</code>                       |                                                                                                           |                    |
+| **`id`**         | <code>string</code>                       |                                                                                                           |                    |
+
+
+#### Size
+
+| Prop         | Type                |
+| ------------ | ------------------- |
+| **`width`**  | <code>number</code> |
+| **`height`** | <code>number</code> |
+
+
+#### Point
+
+| Prop    | Type                |
+| ------- | ------------------- |
+| **`x`** | <code>number</code> |
+| **`y`** | <code>number</code> |
 
 
 #### CameraConfig

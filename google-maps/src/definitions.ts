@@ -22,6 +22,16 @@ export interface LatLng {
   lng: number;
 }
 
+export interface Size {
+  width: number;
+  height: number;
+}
+
+export interface Point {
+  x: number;
+  y: number;
+}
+
 /**
  *
  */
@@ -171,7 +181,16 @@ export interface Marker {
    *
    * @default false
    */
+  iconSize?: Size;
+  iconOrigin?: Point;
+  iconAnchor?: Point;
+  
   draggable?: boolean;
+
+  className?: string;
+  id?: string;
+
+
 }
 
 /**

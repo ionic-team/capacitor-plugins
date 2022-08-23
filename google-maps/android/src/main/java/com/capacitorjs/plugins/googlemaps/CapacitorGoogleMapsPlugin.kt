@@ -176,7 +176,7 @@ class CapacitorGoogleMapsPlugin : Plugin() {
             val map = maps[id]
             map ?: throw MapNotFoundError()
 
-            val marker = CapacitorGoogleMapMarker(markerObj)
+            val marker = CapacitorGoogleMapMarker(markerObj, this.context, map.config.devicePixelRatio)
             map.addMarker(marker) { result ->
                 val markerId = result.getOrThrow()
 
@@ -211,7 +211,7 @@ class CapacitorGoogleMapsPlugin : Plugin() {
 
             for (i in 0 until markerObjectArray.length()) {
                 val markerObj = markerObjectArray.getJSONObject(i)
-                val marker = CapacitorGoogleMapMarker(markerObj)
+                val marker = CapacitorGoogleMapMarker(markerObj, this.context, map.config.devicePixelRatio)
 
                 markers.add(marker)
             }

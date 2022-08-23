@@ -1,20 +1,4 @@
-plugins {
-    id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
-}
-
 apply plugin: 'com.android.application'
-
-def getApiKey() {
-    Properties properties = new Properties()
-    if (project.rootProject.file('local.properties').canRead()) {
-        properties.load(project.rootProject.file('local.properties').newDataInputStream())
-
-        if(properties.containsKey("REACT_APP_GOOGLE_MAPS_API_KEY")) {
-            return properties['REACT_APP_GOOGLE_MAPS_API_KEY']
-        } 
-    }
-    return System.getenv('REACT_APP_GOOGLE_MAPS_API_KEY')
-}
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -30,7 +14,6 @@ android {
              // Default: https://android.googlesource.com/platform/frameworks/base/+/282e181b58cf72b6ca770dc7ca5f91f135444502/tools/aapt/AaptAssets.cpp#61
             ignoreAssetsPattern '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
-        manifestPlaceholders = [MAPS_API_KEY:"${getApiKey()}"]
     }
     buildTypes {
         release {
@@ -49,6 +32,8 @@ repositories {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"
+    implementation "androidx.coordinatorlayout:coordinatorlayout:$androidxCoordinatorLayoutVersion"
+    implementation "androidx.core:core-splashscreen:$coreSplashScreenVersion"
     implementation project(':capacitor-android')
     testImplementation "junit:junit:$junitVersion"
     androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
