@@ -21,10 +21,10 @@ const MarkerCustomizations: React.FC = () => {
           apiKey: apiKey!,
           config: {
             center: {
-              lat: 47.6,
-              lng: -122.33,
+              lat: 43.547302,
+              lng: -96.728333,
             },
-            zoom: 5,
+            zoom: 12,
           },
         });
 
@@ -45,8 +45,8 @@ const MarkerCustomizations: React.FC = () => {
 
       await map.addMarker({
         coordinate: {
-          lat: 33.6,
-          lng: -117.9,
+          lat: 43.512098,
+          lng: -96.739352,
         },
         iconUrl: "assets/icon/pin.png",
         iconSize: {
