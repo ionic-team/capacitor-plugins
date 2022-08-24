@@ -44,9 +44,10 @@ public struct Marker {
         var tintColor: UIColor?
         if let rgbObject = fromJSObject["tintColor"] as? JSObject {
             if let r = rgbObject["r"] as? Double, let g = rgbObject["g"] as? Double, let b = rgbObject["b"] as? Double, let a = rgbObject["a"] as? Double {
-                let uiColorR = CGFloat(r / 255)
-                let uiColorG = CGFloat(g / 255)
-                let uiColorB = CGFloat(b / 255)
+
+                let uiColorR = CGFloat(r / 255).clamp(min: 0, max: 255)
+                let uiColorG = CGFloat(g / 255).clamp(min: 0, max: 255)
+                let uiColorB = CGFloat(b / 255).clamp(min: 0, max: 255)
                 tintColor = UIColor(red: uiColorR, green: uiColorG, blue: uiColorB, alpha: CGFloat(a))
             }
         }
@@ -61,5 +62,17 @@ public struct Marker {
         self.iconSize = iconSize
         self.iconAnchor = iconAnchor
         self.color = tintColor
+    }
+}
+
+extension CGFloat {
+    func clamp(min: CGFloat, max: CGFloat) -> CGFloat {
+        if self < min {
+            return min
+        }
+        if self > max {
+            return max
+        }
+        return self
     }
 }

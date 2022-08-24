@@ -2,6 +2,7 @@ package com.capacitorjs.plugins.googlemaps
 
 import android.graphics.Color
 import android.util.Size
+import androidx.core.math.MathUtils
 import com.google.android.gms.maps.model.*
 import com.google.maps.android.clustering.ClusterItem
 import org.json.JSONObject
@@ -49,9 +50,9 @@ class CapacitorGoogleMapMarker(fromJSONObject: JSONObject): ClusterItem {
         if(fromJSONObject.has("tintColor")) {
             val tintColorObject = fromJSONObject.getJSONObject("tintColor")
 
-            val r = tintColorObject.optDouble("r", 0.00)
-            val g = tintColorObject.optDouble("g", 0.00)
-            val b = tintColorObject.optDouble("b", 0.00)
+            val r = MathUtils.clamp(tintColorObject.optDouble("r", 0.00), 0.00, 255.0)
+            val g = MathUtils.clamp(tintColorObject.optDouble("g", 0.00), 0.00, 255.0)
+            val b = MathUtils.clamp(tintColorObject.optDouble("b", 0.00), 0.00, 255.0)
 
             val hsl = FloatArray(3)
             Color.RGBToHSV(r.toInt(), g.toInt(), b.toInt(), hsl)
