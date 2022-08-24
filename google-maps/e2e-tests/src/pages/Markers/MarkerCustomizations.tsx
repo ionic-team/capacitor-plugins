@@ -179,7 +179,7 @@ const MarkerCustomizations: React.FC = () => {
         zoom: 7,
       });
       setMarkerIds(ids);
-      setCommandOutput(`${ids.length} markers added`);
+      setCommandOutput(`${ids.length} image markers added`);
     } catch (err: any) {
       setCommandOutput(err.message);
     }
@@ -259,7 +259,7 @@ const MarkerCustomizations: React.FC = () => {
         zoom: 7,
       });
       setMarkerIds(ids);
-      setCommandOutput(`${ids.length} markers added`);
+      setCommandOutput(`${ids.length} color markers added`);
     } catch (err: any) {
       setCommandOutput(err.message);
     }
@@ -300,34 +300,34 @@ const MarkerCustomizations: React.FC = () => {
         <IonButton id="createMapButton" onClick={createMap} expand="block">
           Create Map
         </IonButton>
-        <IonButton id="addMarkerImage" onClick={addMarkerImage} expand="block">
+        <IonButton id="addMarkerImageButton" onClick={addMarkerImage} expand="block">
           Add Marker with Image
         </IonButton>
-        <IonButton id="addMarkerColor" onClick={addMarkerColor} expand="block">
+        <IonButton id="addMarkerColorButton" onClick={addMarkerColor} expand="block">
           Add Marker with Color
         </IonButton>
         <IonButton
-          id="addMultipleImageMarkers"
+          id="addMultipleImageMarkersButton"
           onClick={addMultipleImageMarkers}
           expand="block"
         >
           Add Multiple Image Markers
         </IonButton>
         <IonButton
-          id="addMultipleColorMarkers"
+          id="addMultipleColorMarkersButton"
           onClick={addMultipleColorMarkers}
           expand="block"
         >
           Add Multiple Color Markers
         </IonButton>
         <IonButton
-          id="removeAllMarkers"
+          id="removeAllMarkersButton"
           expand="block"
           onClick={removeAllMarkers}
         >
           Remove All Markers
         </IonButton>
-        <IonButton id="destroyMap" expand="block" onClick={destroyMap}>
+        <IonButton id="destroyMapButton" expand="block" onClick={destroyMap}>
           Destroy Map
         </IonButton>
       </div>
