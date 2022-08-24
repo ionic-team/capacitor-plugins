@@ -87,14 +87,14 @@ const MarkerCustomizations: React.FC = () => {
   return (
     <BaseTestingPage pageTitle="Marker Customization">
       <div>
-        <IonButton id="createMapButton" onClick={createMap}>
+        <IonButton id="createMapButton" onClick={createMap} expand="block">
           Create Map
         </IonButton>
-        <IonButton id="addMarkerImage" onClick={addMarkerImage}>
+        <IonButton id="addMarkerImage" onClick={addMarkerImage} expand="block">
           Add Marker with Image
         </IonButton>
 
-        <IonButton id="addMarkerColor" onClick={addMarkerColor}>
+        <IonButton id="addMarkerColor" onClick={addMarkerColor} expand="block">
           Add Marker with Color
         </IonButton>
       </div>
