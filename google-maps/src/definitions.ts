@@ -184,13 +184,17 @@ export interface Marker {
   iconSize?: Size;
   iconOrigin?: Point;
   iconAnchor?: Point;
-  
+  tintColor?: {
+    r: number;
+    g: number;
+    b: number;
+    a: number;
+  };
+
   draggable?: boolean;
 
   className?: string;
   id?: string;
-
-
 }
 
 /**

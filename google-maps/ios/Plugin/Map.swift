@@ -393,6 +393,10 @@ public class Map {
                     }
                 }
             }
+        } else {
+            if let color = marker.color {
+                newMarker.icon = GMSMarker.markerImage(with: color)
+            }
         }
         
         return newMarker

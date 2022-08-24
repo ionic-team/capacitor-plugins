@@ -37,7 +37,30 @@ const MarkerCustomizations: React.FC = () => {
     }
   }
 
-  const addMarker = async () => {
+  const addMarkerColor = async () => {
+    try {
+      if (!map) {
+        throw new Error('map not created');
+      }
+
+      await map.addMarker({
+        coordinate: {
+          lat: 43.581386,
+          lng: -96.739025,
+        },
+        tintColor: {
+          r: 41,
+          g: 71,
+          b: 157,
+          a: 1,
+        },
+      });
+    } catch (err: any) {
+      setCommandOutput(err.message);
+    }
+  };
+
+  const addMarkerImage = async () => {
     try {
       if (!map) {
         throw new Error('map not created');
@@ -48,13 +71,13 @@ const MarkerCustomizations: React.FC = () => {
           lat: 43.512098,
           lng: -96.739352,
         },
-        iconUrl: "assets/icon/pin.png",
+        iconUrl: 'assets/icon/pin.png',
         iconSize: {
           width: 30,
           height: 30,
         },
-        iconOrigin: {x: 0, y:0},
-        iconAnchor: {x: 15, y:30},
+        iconOrigin: { x: 0, y: 0 },
+        iconAnchor: { x: 15, y: 30 },
       });
     } catch (err: any) {
       setCommandOutput(err.message);
@@ -67,10 +90,13 @@ const MarkerCustomizations: React.FC = () => {
         <IonButton id="createMapButton" onClick={createMap}>
           Create Map
         </IonButton>
-        <IonButton id="addMarkerButton" onClick={addMarker}>
-          Add Styled Marker
+        <IonButton id="addMarkerImage" onClick={addMarkerImage}>
+          Add Marker with Image
         </IonButton>
 
+        <IonButton id="addMarkerColor" onClick={addMarkerColor}>
+          Add Marker with Color
+        </IonButton>
       </div>
       <capacitor-google-map
         id="map_marker_custom"

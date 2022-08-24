@@ -11,6 +11,7 @@ public struct Marker {
     let iconSize: CGSize?
     let iconAnchor: CGPoint?
     let draggable: Bool?
+    let color: UIColor?
 
     init(fromJSObject: JSObject) throws {
         guard let latLngObj = fromJSObject["coordinate"] as? JSObject else {
@@ -22,7 +23,6 @@ public struct Marker {
         }
         
         var iconSize: CGSize? = nil
-        
         if let sizeObj = fromJSObject["iconSize"] as? JSObject {
             if let width = sizeObj["width"] as? Double, let height = sizeObj["height"] as? Double {
                 iconSize = CGSize(width: width, height: height)
@@ -39,6 +39,16 @@ public struct Marker {
                     iconAnchor = CGPoint(x: u, y: v)
                 }
             }
+        }
+        
+        var tintColor: UIColor? = nil
+        if let rgbObject = fromJSObject["tintColor"] as? JSObject {
+            if let r = rgbObject["r"] as? Double, let g = rgbObject["g"] as? Double, let b = rgbObject["b"] as? Double, let a = rgbObject["a"] as? Double {
+                let uiColorR = CGFloat(r / 255)
+                let uiColorG = CGFloat(g / 255)
+                let uiColorB = CGFloat(b / 255)
+                tintColor = UIColor(red: uiColorR, green: uiColorG, blue: uiColorB, alpha: CGFloat(a))
+            }
         }        
 
         self.coordinate = LatLng(lat: lat, lng: lng)
@@ -50,5 +60,6 @@ public struct Marker {
         self.draggable = fromJSObject["draggable"] as? Bool
         self.iconSize = iconSize
         self.iconAnchor = iconAnchor
+        self.color = tintColor
     }
 }

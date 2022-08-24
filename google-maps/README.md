@@ -674,20 +674,21 @@ An interface representing a pair of latitude and longitude coordinates.
 
 A marker is an icon placed at a particular point on the map's surface.
 
-| Prop             | Type                                      | Description                                                                                               | Default            |
-| ---------------- | ----------------------------------------- | --------------------------------------------------------------------------------------------------------- | ------------------ |
-| **`coordinate`** | <code><a href="#latlng">LatLng</a></code> | <a href="#marker">Marker</a> position                                                                     |                    |
-| **`opacity`**    | <code>number</code>                       | Sets the opacity of the marker, between 0 (completely transparent) and 1 inclusive.                       | <code>1</code>     |
-| **`title`**      | <code>string</code>                       | Title, a short description of the overlay.                                                                |                    |
-| **`snippet`**    | <code>string</code>                       | Snippet text, shown beneath the title in the info window when selected.                                   |                    |
-| **`isFlat`**     | <code>boolean</code>                      | Controls whether this marker should be flat against the Earth's surface or a billboard facing the camera. | <code>false</code> |
-| **`iconUrl`**    | <code>string</code>                       | <a href="#marker">Marker</a> icon to render.                                                              |                    |
-| **`iconSize`**   | <code><a href="#size">Size</a></code>     | Controls whether this marker can be dragged interactively                                                 | <code>false</code> |
-| **`iconOrigin`** | <code><a href="#point">Point</a></code>   |                                                                                                           |                    |
-| **`iconAnchor`** | <code><a href="#point">Point</a></code>   |                                                                                                           |                    |
-| **`draggable`**  | <code>boolean</code>                      |                                                                                                           |                    |
-| **`className`**  | <code>string</code>                       |                                                                                                           |                    |
-| **`id`**         | <code>string</code>                       |                                                                                                           |                    |
+| Prop             | Type                                                         | Description                                                                                               | Default            |
+| ---------------- | ------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------- | ------------------ |
+| **`coordinate`** | <code><a href="#latlng">LatLng</a></code>                    | <a href="#marker">Marker</a> position                                                                     |                    |
+| **`opacity`**    | <code>number</code>                                          | Sets the opacity of the marker, between 0 (completely transparent) and 1 inclusive.                       | <code>1</code>     |
+| **`title`**      | <code>string</code>                                          | Title, a short description of the overlay.                                                                |                    |
+| **`snippet`**    | <code>string</code>                                          | Snippet text, shown beneath the title in the info window when selected.                                   |                    |
+| **`isFlat`**     | <code>boolean</code>                                         | Controls whether this marker should be flat against the Earth's surface or a billboard facing the camera. | <code>false</code> |
+| **`iconUrl`**    | <code>string</code>                                          | <a href="#marker">Marker</a> icon to render.                                                              |                    |
+| **`iconSize`**   | <code><a href="#size">Size</a></code>                        | Controls whether this marker can be dragged interactively                                                 | <code>false</code> |
+| **`iconOrigin`** | <code><a href="#point">Point</a></code>                      |                                                                                                           |                    |
+| **`iconAnchor`** | <code><a href="#point">Point</a></code>                      |                                                                                                           |                    |
+| **`tintColor`**  | <code>{ r: number; g: number; b: number; a: number; }</code> |                                                                                                           |                    |
+| **`draggable`**  | <code>boolean</code>                                         |                                                                                                           |                    |
+| **`className`**  | <code>string</code>                                          |                                                                                                           |                    |
+| **`id`**         | <code>string</code>                                          |                                                                                                           |                    |
 
 
 #### Size
