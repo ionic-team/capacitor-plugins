@@ -379,14 +379,14 @@ export class CapacitorGoogleMapsWeb
           : null,
         anchor: marker.iconAnchor
           ? new google.maps.Point(marker.iconAnchor.x, marker.iconAnchor.y)
-          : new google.maps.Point(0,0),
+          : new google.maps.Point(0, 0),
         origin: marker.iconOrigin
           ? new google.maps.Point(marker.iconOrigin.x, marker.iconOrigin.y)
-          : new google.maps.Point(0,0),
+          : new google.maps.Point(0, 0),
       };
     }
 
-    let opts: google.maps.MarkerOptions = {
+    const opts: google.maps.MarkerOptions = {
       position: marker.coordinate,
       map: map,
       opacity: marker.opacity,

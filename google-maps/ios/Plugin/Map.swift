@@ -64,7 +64,7 @@ public class Map {
     var targetViewController: UIView?
     var markers = [Int: GMSMarker]()
     var markerIcons = [String: UIImage]()
-    
+
     private var delegate: CapacitorGoogleMapsPlugin
 
     init(id: String, config: GoogleMapConfig, delegate: CapacitorGoogleMapsPlugin) {
@@ -364,7 +364,7 @@ public class Map {
 
         return intersections
     }
-    
+
     private func buildMarker(marker: Marker) -> GMSMarker {
         let newMarker = GMSMarker()
         newMarker.position = CLLocationCoordinate2D(latitude: marker.coordinate.lat, longitude: marker.coordinate.lng)
@@ -376,7 +376,7 @@ public class Map {
         if let iconAnchor = marker.iconAnchor {
             newMarker.groundAnchor = iconAnchor
         }
-        
+
         // cache and reuse marker icon uiimages
         if let iconUrl = marker.iconUrl {
             if let iconImage = self.markerIcons[iconUrl] {
@@ -398,7 +398,7 @@ public class Map {
                 newMarker.icon = GMSMarker.markerImage(with: color)
             }
         }
-        
+
         return newMarker
     }
 }
