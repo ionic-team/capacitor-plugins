@@ -1,17 +1,12 @@
 package com.capacitorjs.plugins.googlemaps
 
-import android.content.Context
-import android.content.res.AssetManager
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.util.Log
 import android.util.Size
 import com.google.android.gms.maps.model.*
 import com.google.maps.android.clustering.ClusterItem
 import org.json.JSONObject
 
 
-class CapacitorGoogleMapMarker(fromJSONObject: JSONObject, context: Context , devicePixelRatio: Float): ClusterItem {
+class CapacitorGoogleMapMarker(fromJSONObject: JSONObject): ClusterItem {
     var coordinate: LatLng = LatLng(0.0, 0.0)
     var opacity: Float = 1.0f
     private var title: String
@@ -20,7 +15,6 @@ class CapacitorGoogleMapMarker(fromJSONObject: JSONObject, context: Context , de
     var iconUrl: String? = null
     var iconSize: Size? = null
     var iconAnchor: CapacitorGoogleMapsPoint? = null
-    var icon: BitmapDescriptor? = null
     var draggable: Boolean = false
     var googleMapMarker: Marker? = null
 
@@ -51,9 +45,6 @@ class CapacitorGoogleMapMarker(fromJSONObject: JSONObject, context: Context , de
         }
 
         draggable = fromJSONObject.optBoolean("draggable", false)
-
-        icon = this.getScaledIconBitmapDescriptor(context, devicePixelRatio)
-
     }
 
     override fun getPosition(): LatLng {
@@ -68,19 +59,6 @@ class CapacitorGoogleMapMarker(fromJSONObject: JSONObject, context: Context , de
         return snippet
     }
 
-    fun getMarkerOptions(): MarkerOptions {
-        val markerOptions = MarkerOptions()
-        markerOptions.position(coordinate)
-        markerOptions.title(title)
-        markerOptions.snippet(snippet)
-        markerOptions.alpha(opacity)
-        markerOptions.flat(isFlat)
-        markerOptions.draggable(draggable)
-        markerOptions.icon(icon)
-        return markerOptions
-    }
-
-
     private fun buildIconAnchorPoint(iconAnchor: CapacitorGoogleMapsPoint): CapacitorGoogleMapsPoint? {
         iconSize ?: return null
 
@@ -88,25 +66,5 @@ class CapacitorGoogleMapMarker(fromJSONObject: JSONObject, context: Context , de
         val v: Float = iconAnchor.y / iconSize!!.height
 
         return CapacitorGoogleMapsPoint(u, v)
-    }
-
-    private fun getScaledIconBitmapDescriptor(context: Context, devicePixelRatio: Float): BitmapDescriptor? {
-        iconUrl ?: return null
-
-        try {
-            val stream = context.assets.open("public/$iconUrl")
-            var bitmap = BitmapFactory.decodeStream(stream)
-
-            if (this.iconSize != null) {
-                bitmap = Bitmap.createScaledBitmap(bitmap, (this.iconSize!!.width * devicePixelRatio).toInt(), (this.iconSize!!.height * devicePixelRatio).toInt(), false)
-            }
-
-            return BitmapDescriptorFactory.fromBitmap(bitmap)
-        } catch (e: Exception) {
-            Log.w("GoogleMapsMarkers", e.localizedMessage.toString())
-            Log.w("GoogleMapsMarkers", e.stackTrace.toString())
-
-            return null
-        }
     }
 }
