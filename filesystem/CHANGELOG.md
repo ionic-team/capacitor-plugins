@@ -3,6 +3,50 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.1.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@1.1.0...@capacitor/filesystem@4.1.0) (2022-08-24)
+
+
+### Bug Fixes
+
+* **filesystem:** failing to remove folder content on rmdir ([#1112](https://github.com/ionic-team/capacitor-plugins/issues/1112)) ([ae451aa](https://github.com/ionic-team/capacitor-plugins/commit/ae451aa08beb2138ecebdfcdd26101660aa00fde))
+* **filesystem:** make iOS return proper url on readdir ([#1142](https://github.com/ionic-team/capacitor-plugins/issues/1142)) ([77dc02f](https://github.com/ionic-team/capacitor-plugins/commit/77dc02fb829ad3479144368da16f9fff324f2706))
+
+
+
+## 4.0.1 (2022-07-28)
+
+
+
+# 4.0.0 (2022-07-27)
+
+
+
+# 4.0.0-beta.2 (2022-07-08)
+
+
+
+# 4.0.0-beta.0 (2022-06-27)
+
+
+### Bug Fixes
+
+* **filesystem:** Prevent android crash on invalid base64 write ([#937](https://github.com/ionic-team/capacitor-plugins/issues/937)) ([1af0bfe](https://github.com/ionic-team/capacitor-plugins/commit/1af0bfe24d2a36bc2949fe52866131c3327b321e))
+* **filesystem:** web appendFile with base64 data ([#928](https://github.com/ionic-team/capacitor-plugins/issues/928)) ([80253cf](https://github.com/ionic-team/capacitor-plugins/commit/80253cf2652bf7fa9c07933989cbdffeadd52a27))
+
+
+### Features
+
+* set targetSDK default value to 32 ([#970](https://github.com/ionic-team/capacitor-plugins/issues/970)) ([fa70d96](https://github.com/ionic-team/capacitor-plugins/commit/fa70d96f141af751aae53ceb5642c46b204f5958))
+* **filesystem:** Make readDir return files information ([#949](https://github.com/ionic-team/capacitor-plugins/issues/949)) ([0a9f43d](https://github.com/ionic-team/capacitor-plugins/commit/0a9f43dffd3815f600c35ed4528c017644fdb55e))
+* **filesystem:** Return path of copied file ([#931](https://github.com/ionic-team/capacitor-plugins/issues/931)) ([310f583](https://github.com/ionic-team/capacitor-plugins/commit/310f583ccec58730ab8046a1618782c950c60656))
+* set targetSDK default value to 31 ([#824](https://github.com/ionic-team/capacitor-plugins/issues/824)) ([3ee10de](https://github.com/ionic-team/capacitor-plugins/commit/3ee10de98067984c1a4e75295d001c5a895c47f4))
+* Upgrade gradle to 7.4 ([#826](https://github.com/ionic-team/capacitor-plugins/issues/826)) ([5db0906](https://github.com/ionic-team/capacitor-plugins/commit/5db0906f6264287c4f8e69dbaecf19d4d387824b))
+* Use java 11 ([#910](https://github.com/ionic-team/capacitor-plugins/issues/910)) ([5acb2a2](https://github.com/ionic-team/capacitor-plugins/commit/5acb2a288a413492b163e4e97da46a085d9e4be0))
+
+
+
+
+
 ## [4.0.1](https://github.com/ionic-team/capacitor-plugins/compare/4.0.0...4.0.1) (2022-07-28)
 
 **Note:** Version bump only for package @capacitor/filesystem
