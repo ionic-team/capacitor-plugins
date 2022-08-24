@@ -533,7 +533,7 @@ class CapacitorGoogleMap(
         markerOptions.flat(marker.isFlat)
         markerOptions.draggable(marker.draggable)
 
-        if (marker.iconUrl != null) {
+        if (!marker.iconUrl.isNullOrEmpty()) {
             if (this.markerIcons.contains(marker.iconUrl)) {
                 val cachedIcon = this.markerIcons[marker.iconUrl]
                 markerOptions.icon(cachedIcon)
@@ -554,6 +554,10 @@ class CapacitorGoogleMap(
                     Log.w("CapacitorGoogleMaps", e.localizedMessage.toString())
                     Log.w("CapacitorGoogleMaps", e.stackTrace.toString())
                 }
+            }
+        } else {
+            if (marker.colorHue != null) {
+                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(marker.colorHue!!))
             }
         }
 
