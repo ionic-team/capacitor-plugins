@@ -109,6 +109,41 @@ const MarkerCustomizations: React.FC = () => {
     }
   };
 
+  const addMarkerSVG = async () => {
+    try {
+      if (!map) {
+        throw new Error('map not created');
+      }
+
+      const id = await map.addMarker({
+        coordinate: {
+          lat: 43.512098,
+          lng: -96.739352,
+        },
+        iconUrl: 'assets/icon/marker.svg',
+        iconSize: {
+          width: 30,
+          height: 30,
+        },
+        iconOrigin: { x: 0, y: 0 },
+        iconAnchor: { x: 15, y: 30 },
+      });
+
+      map.setCamera({
+        coordinate: {
+          lat: 43.547302,
+          lng: -96.728333,
+        },
+        zoom: 9,
+      });
+
+      setMarkerIds([id]);
+      setCommandOutput('1 image marker added');
+    } catch (err: any) {
+      setCommandOutput(err.message);
+    }
+  };
+
   const addMultipleImageMarkers = async () => {
     try {
       if (!map) {
@@ -302,6 +337,9 @@ const MarkerCustomizations: React.FC = () => {
         </IonButton>
         <IonButton id="addMarkerImageButton" onClick={addMarkerImage} expand="block">
           Add Marker with Image
+        </IonButton>
+        <IonButton id="addMarkerSVGButton" onClick={addMarkerSVG} expand="block">
+          Add Marker with SVG
         </IonButton>
         <IonButton id="addMarkerColorButton" onClick={addMarkerColor} expand="block">
           Add Marker with Color
