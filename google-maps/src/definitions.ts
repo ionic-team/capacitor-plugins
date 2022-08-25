@@ -174,6 +174,8 @@ export interface Marker {
   isFlat?: boolean;
   /**
    * Path to a marker icon to render, relative to the web app public directory.
+   * 
+   * **SVGs are not supported on native platforms.**
    *
    * @usage
    * ```typescript
