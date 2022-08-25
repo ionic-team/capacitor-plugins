@@ -550,9 +550,12 @@ class CapacitorGoogleMap(
                     this.markerIcons[marker.iconUrl!!] = icon
                     markerOptions.icon(icon)
                 } catch(e: Exception) {
-                    Log.w("CapacitorGoogleMaps", "Could not load marker icon image")
-                    Log.w("CapacitorGoogleMaps", e.localizedMessage.toString())
-                    Log.w("CapacitorGoogleMaps", e.stackTrace.toString())
+                    var detailedMessage = "${e.javaClass} - ${e.localizedMessage}"
+                    if (marker.iconUrl!!.endsWith(".svg")) {
+                        detailedMessage = "SVG not supported"
+                    }
+
+                    Log.w("CapacitorGoogleMaps", "Could not load image '${marker.iconUrl}': ${detailedMessage}. Using default marker icon.")
                 }
             }
         } else {

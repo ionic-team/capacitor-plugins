@@ -391,6 +391,14 @@ public class Map {
                         self.markerIcons[iconUrl] = iconImage
                         newMarker.icon = iconImage
                     }
+                } else {
+                    var detailedMessage = ""
+
+                    if iconUrl.hasSuffix(".svg") {
+                        detailedMessage = "SVG not supported."
+                    }
+
+                    print("CapacitorGoogleMaps Warning: could not load image '\(iconUrl)'. \(detailedMessage)  Using default marker icon.")
                 }
             }
         } else {
