@@ -168,8 +168,10 @@ import Foundation
             guard let dir = FileManager.default.urls(for: directory, in: .userDomainMask).first else {
                 return nil
             }
-
-            return dir.appendingPathComponent(path)
+            if !path.isEmpty {
+                return dir.appendingPathComponent(path)
+            }
+            return dir
         } else {
             return URL(string: path)
         }

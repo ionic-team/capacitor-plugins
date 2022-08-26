@@ -3,6 +3,38 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.1.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/google-maps@1.1.0...@capacitor/google-maps@4.1.0) (2022-08-24)
+
+
+### Bug Fixes
+
+* **google-maps:** Check for WKScrollView and WKChildScrollView ([#1109](https://github.com/ionic-team/capacitor-plugins/issues/1109)) ([7513602](https://github.com/ionic-team/capacitor-plugins/commit/7513602c6c9830de305e6097db3023e42a8afa30))
+
+
+
+## 4.0.1 (2022-07-28)
+
+
+
+# 4.0.0 (2022-07-27)
+
+
+
+# 4.0.0-beta.2 (2022-07-08)
+
+
+### Features
+
+* **google-maps:** provides variables for configuring dependencies ([#1063](https://github.com/ionic-team/capacitor-plugins/issues/1063)) ([5c077f1](https://github.com/ionic-team/capacitor-plugins/commit/5c077f199cbd16b459a77061509e0504029f78db))
+
+
+
+# 4.0.0-beta.0 (2022-06-27)
+
+
+
+
+
 ## [4.0.1](https://github.com/ionic-team/capacitor-plugins/compare/4.0.0...4.0.1) (2022-07-28)
 
 **Note:** Version bump only for package @capacitor/google-maps

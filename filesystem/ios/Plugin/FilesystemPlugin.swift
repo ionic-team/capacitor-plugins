@@ -206,7 +206,7 @@ public class FilesystemPlugin: CAPPlugin {
                     "size": attr[.size] as? UInt64 ?? 0,
                     "ctime": ctime,
                     "mtime": mtime,
-                    "uri": fileUrl.absoluteString
+                    "uri": url.absoluteString
                 ]
             }
             call.resolve([
