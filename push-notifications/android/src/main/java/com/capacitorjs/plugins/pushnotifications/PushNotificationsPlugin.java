@@ -222,13 +222,15 @@ public class PushNotificationsPlugin extends Plugin {
                 if (Arrays.asList(presentation).contains("alert")) {
                     Bundle bundle = null;
                     try {
-                        ApplicationInfo applicationInfo = getContext().getPackageManager().getApplicationInfo(getContext().getPackageName(), PackageManager.GET_META_DATA);
+                        ApplicationInfo applicationInfo = getContext()
+                            .getPackageManager()
+                            .getApplicationInfo(getContext().getPackageName(), PackageManager.GET_META_DATA);
                         bundle = applicationInfo.metaData;
                     } catch (PackageManager.NameNotFoundException e) {
                         e.printStackTrace();
                     }
                     int pushIcon = android.R.drawable.ic_dialog_info;
-                    
+
                     if (bundle != null && bundle.getInt("com.google.firebase.messaging.default_notification_icon") != 0) {
                         pushIcon = bundle.getInt("com.google.firebase.messaging.default_notification_icon");
                     }
