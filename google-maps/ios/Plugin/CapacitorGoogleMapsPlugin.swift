@@ -588,6 +588,42 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
         return false
     }
 
+    // onMarkerDragStart
+    public func mapView(_ mapView: GMSMapView, didBeginDragging marker: GMSMarker) {
+        self.notifyListeners("onMarkerDragStart", data: [
+            "mapId": self.findMapIdByMapView(mapView),
+            "markerId": marker.hash.hashValue,
+            "latitude": marker.position.latitude,
+            "longitude": marker.position.longitude,
+            "title": marker.title ?? "",
+            "snippet": marker.snippet ?? ""
+        ])
+    }
+
+    // onMarkerDrag
+    public func mapView(_ mapView: GMSMapView, didDrag marker: GMSMarker) {
+        self.notifyListeners("onMarkerDrag", data: [
+            "mapId": self.findMapIdByMapView(mapView),
+            "markerId": marker.hash.hashValue,
+            "latitude": marker.position.latitude,
+            "longitude": marker.position.longitude,
+            "title": marker.title ?? "",
+            "snippet": marker.snippet ?? ""
+        ])
+    }
+
+    // onMarkerDragEnd
+    public func mapView(_ mapView: GMSMapView, didEndDragging marker: GMSMarker) {
+        self.notifyListeners("onMarkerDragEnd", data: [
+            "mapId": self.findMapIdByMapView(mapView),
+            "markerId": marker.hash.hashValue,
+            "latitude": marker.position.latitude,
+            "longitude": marker.position.longitude,
+            "title": marker.title ?? "",
+            "snippet": marker.snippet ?? ""
+        ])
+    }
+
     // onClusterInfoWindowClick, onInfoWindowClick
     public func mapView(_ mapView: GMSMapView, didTapInfoWindowOf marker: GMSMarker) {
         if let cluster = marker.userData as? GMUCluster {

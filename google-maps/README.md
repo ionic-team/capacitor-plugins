@@ -292,6 +292,9 @@ export default MyMap;
 * [`setOnInfoWindowClickListener(...)`](#setoninfowindowclicklistener)
 * [`setOnMapClickListener(...)`](#setonmapclicklistener)
 * [`setOnMarkerClickListener(...)`](#setonmarkerclicklistener)
+* [`setOnMarkerDragStartListener(...)`](#setonmarkerdragstartlistener)
+* [`setOnMarkerDragListener(...)`](#setonmarkerdraglistener)
+* [`setOnMarkerDragEndListener(...)`](#setonmarkerdragendlistener)
 * [`setOnMyLocationButtonClickListener(...)`](#setonmylocationbuttonclicklistener)
 * [`setOnMyLocationClickListener(...)`](#setonmylocationclicklistener)
 * [Interfaces](#interfaces)
@@ -588,6 +591,45 @@ setOnMapClickListener(callback?: MapListenerCallback<MapClickCallbackData> | und
 
 ```typescript
 setOnMarkerClickListener(callback?: MapListenerCallback<MarkerClickCallbackData> | undefined) => Promise<void>
+```
+
+| Param          | Type                                                                                                                                      |
+| -------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| **`callback`** | <code><a href="#maplistenercallback">MapListenerCallback</a>&lt;<a href="#markerclickcallbackdata">MarkerClickCallbackData</a>&gt;</code> |
+
+--------------------
+
+
+### setOnMarkerDragStartListener(...)
+
+```typescript
+setOnMarkerDragStartListener(callback?: MapListenerCallback<MarkerClickCallbackData> | undefined) => Promise<void>
+```
+
+| Param          | Type                                                                                                                                      |
+| -------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| **`callback`** | <code><a href="#maplistenercallback">MapListenerCallback</a>&lt;<a href="#markerclickcallbackdata">MarkerClickCallbackData</a>&gt;</code> |
+
+--------------------
+
+
+### setOnMarkerDragListener(...)
+
+```typescript
+setOnMarkerDragListener(callback?: MapListenerCallback<MarkerClickCallbackData> | undefined) => Promise<void>
+```
+
+| Param          | Type                                                                                                                                      |
+| -------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| **`callback`** | <code><a href="#maplistenercallback">MapListenerCallback</a>&lt;<a href="#markerclickcallbackdata">MarkerClickCallbackData</a>&gt;</code> |
+
+--------------------
+
+
+### setOnMarkerDragEndListener(...)
+
+```typescript
+setOnMarkerDragEndListener(callback?: MapListenerCallback<MarkerClickCallbackData> | undefined) => Promise<void>
 ```
 
 | Param          | Type                                                                                                                                      |
