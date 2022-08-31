@@ -45,6 +45,7 @@ extension CGRect {
     }
 }
 
+// swiftlint:disable type_body_length
 @objc(CapacitorGoogleMapsPlugin)
 public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
     private var maps = [String: Map]()
