@@ -67,7 +67,7 @@ const MarkerCustomizations: React.FC = () => {
         },
         zoom: 9,
       });
-      setMarkerIds([id]);
+      setMarkerIds(markerIds.concat([id]));
       setCommandOutput('1 color marker added');
     } catch (err: any) {
       setCommandOutput(err.message);
@@ -102,7 +102,7 @@ const MarkerCustomizations: React.FC = () => {
         zoom: 9,
       });
 
-      setMarkerIds([id]);
+      setMarkerIds(markerIds.concat([id]));
       setCommandOutput('1 image marker added');
     } catch (err: any) {
       setCommandOutput(err.message);
@@ -137,7 +137,7 @@ const MarkerCustomizations: React.FC = () => {
         zoom: 9,
       });
 
-      setMarkerIds([id]);
+      setMarkerIds(markerIds.concat([id]));
       setCommandOutput('1 image marker added');
     } catch (err: any) {
       setCommandOutput(err.message);
@@ -213,7 +213,7 @@ const MarkerCustomizations: React.FC = () => {
         },
         zoom: 7,
       });
-      setMarkerIds(ids);
+      setMarkerIds(markerIds.concat(ids));
       setCommandOutput(`${ids.length} image markers added`);
     } catch (err: any) {
       setCommandOutput(err.message);
@@ -293,7 +293,7 @@ const MarkerCustomizations: React.FC = () => {
         },
         zoom: 7,
       });
-      setMarkerIds(ids);
+      setMarkerIds(markerIds.concat(ids));
       setCommandOutput(`${ids.length} color markers added`);
     } catch (err: any) {
       setCommandOutput(err.message);
