@@ -312,6 +312,39 @@ export class CapacitorGoogleMapsWeb
         snippet: '',
       });
     });
+
+    marker.addListener('dragstart', () => {
+      this.notifyListeners('onMarkerDragStart', {
+        mapId: mapId,
+        markerId: markerId,
+        latitude: marker.getPosition()?.lat(),
+        longitude: marker.getPosition()?.lng(),
+        title: marker.getTitle(),
+        snippet: '',
+      });
+    });
+
+    marker.addListener('drag', () => {
+      this.notifyListeners('onMarkerDrag', {
+        mapId: mapId,
+        markerId: markerId,
+        latitude: marker.getPosition()?.lat(),
+        longitude: marker.getPosition()?.lng(),
+        title: marker.getTitle(),
+        snippet: '',
+      });
+    });
+
+    marker.addListener('dragend', () => {
+      this.notifyListeners('onMarkerDragEnd', {
+        mapId: mapId,
+        markerId: markerId,
+        latitude: marker.getPosition()?.lat(),
+        longitude: marker.getPosition()?.lng(),
+        title: marker.getTitle(),
+        snippet: '',
+      });
+    });
   }
 
   async setMapListeners(mapId: string): Promise<void> {

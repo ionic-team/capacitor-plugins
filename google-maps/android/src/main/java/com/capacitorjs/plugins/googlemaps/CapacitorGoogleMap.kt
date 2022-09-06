@@ -37,6 +37,7 @@ class CapacitorGoogleMap(
         OnMapReadyCallback,
         OnMapClickListener,
         OnMarkerClickListener,
+        OnMarkerDragListener,
         OnInfoWindowClickListener {
     private var mapView: MapView
     private var googleMap: GoogleMap? = null
@@ -608,6 +609,7 @@ class CapacitorGoogleMap(
                     this@CapacitorGoogleMap
             )
             this@CapacitorGoogleMap.googleMap?.setOnMarkerClickListener(this@CapacitorGoogleMap)
+            this@CapacitorGoogleMap.googleMap?.setOnMarkerDragListener(this@CapacitorGoogleMap)
             this@CapacitorGoogleMap.googleMap?.setOnMapClickListener(this@CapacitorGoogleMap)
             this@CapacitorGoogleMap.googleMap?.setOnMyLocationButtonClickListener(
                     this@CapacitorGoogleMap
@@ -689,6 +691,39 @@ class CapacitorGoogleMap(
         data.put("snippet", marker.snippet)
         delegate.notify("onMarkerClick", data)
         return false
+    }
+
+    override fun onMarkerDrag(marker: Marker) {
+        val data = JSObject()
+        data.put("mapId", this@CapacitorGoogleMap.id)
+        data.put("markerId", marker.id)
+        data.put("latitude", marker.position.latitude)
+        data.put("longitude", marker.position.longitude)
+        data.put("title", marker.title)
+        data.put("snippet", marker.snippet)
+        delegate.notify("onMarkerDrag", data)
+    }
+
+    override fun onMarkerDragStart(marker: Marker) {
+        val data = JSObject()
+        data.put("mapId", this@CapacitorGoogleMap.id)
+        data.put("markerId", marker.id)
+        data.put("latitude", marker.position.latitude)
+        data.put("longitude", marker.position.longitude)
+        data.put("title", marker.title)
+        data.put("snippet", marker.snippet)
+        delegate.notify("onMarkerDragStart", data)
+    }
+
+    override fun onMarkerDragEnd(marker: Marker) {
+        val data = JSObject()
+        data.put("mapId", this@CapacitorGoogleMap.id)
+        data.put("markerId", marker.id)
+        data.put("latitude", marker.position.latitude)
+        data.put("longitude", marker.position.longitude)
+        data.put("title", marker.title)
+        data.put("snippet", marker.snippet)
+        delegate.notify("onMarkerDragEnd", data)
     }
 
     override fun onMyLocationButtonClick(): Boolean {
