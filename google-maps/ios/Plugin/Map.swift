@@ -63,6 +63,7 @@ public class Map {
     var mapViewController: GMViewController
     var targetViewController: UIView?
     var markers = [Int: GMSMarker]()
+    // swiftlint:disable weak_delegate
     private var delegate: CapacitorGoogleMapsPlugin
 
     init(id: String, config: GoogleMapConfig, delegate: CapacitorGoogleMapsPlugin) {

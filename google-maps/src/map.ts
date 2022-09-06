@@ -62,6 +62,15 @@ export interface GoogleMapInterface {
   setOnMarkerClickListener(
     callback?: MapListenerCallback<MarkerClickCallbackData>,
   ): Promise<void>;
+  setOnMarkerDragStartListener(
+    callback?: MapListenerCallback<MarkerClickCallbackData>,
+  ): Promise<void>;
+  setOnMarkerDragListener(
+    callback?: MapListenerCallback<MarkerClickCallbackData>,
+  ): Promise<void>;
+  setOnMarkerDragEndListener(
+    callback?: MapListenerCallback<MarkerClickCallbackData>,
+  ): Promise<void>;
   setOnMyLocationButtonClickListener(
     callback?: MapListenerCallback<MyLocationButtonClickCallbackData>,
   ): Promise<void>;
@@ -102,6 +111,9 @@ export class GoogleMap {
   private onInfoWindowClickListener?: PluginListenerHandle;
   private onMapClickListener?: PluginListenerHandle;
   private onMarkerClickListener?: PluginListenerHandle;
+  private onMarkerDragStartListener?: PluginListenerHandle;
+  private onMarkerDragListener?: PluginListenerHandle;
+  private onMarkerDragEndListener?: PluginListenerHandle;
   private onMyLocationButtonClickListener?: PluginListenerHandle;
   private onMyLocationClickListener?: PluginListenerHandle;
 
@@ -617,6 +629,75 @@ export class GoogleMap {
       );
     } else {
       this.onMarkerClickListener = undefined;
+    }
+  }
+
+  /**
+   * Set the event listener on the map for 'onMarkerDragStart' events.
+   *
+   * @param callback
+   * @returns
+   */
+  async setOnMarkerDragStartListener(
+    callback?: MapListenerCallback<MarkerClickCallbackData>,
+  ): Promise<void> {
+    if (this.onMarkerDragStartListener) {
+      this.onMarkerDragStartListener.remove();
+    }
+
+    if (callback) {
+      this.onMarkerDragStartListener = await CapacitorGoogleMaps.addListener(
+        'onMarkerDragStart',
+        this.generateCallback(callback),
+      );
+    } else {
+      this.onMarkerDragStartListener = undefined;
+    }
+  }
+
+  /**
+   * Set the event listener on the map for 'onMarkerDrag' events.
+   *
+   * @param callback
+   * @returns
+   */
+  async setOnMarkerDragListener(
+    callback?: MapListenerCallback<MarkerClickCallbackData>,
+  ): Promise<void> {
+    if (this.onMarkerDragListener) {
+      this.onMarkerDragListener.remove();
+    }
+
+    if (callback) {
+      this.onMarkerDragListener = await CapacitorGoogleMaps.addListener(
+        'onMarkerDrag',
+        this.generateCallback(callback),
+      );
+    } else {
+      this.onMarkerDragListener = undefined;
+    }
+  }
+
+  /**
+   * Set the event listener on the map for 'onMarkerDragEnd' events.
+   *
+   * @param callback
+   * @returns
+   */
+  async setOnMarkerDragEndListener(
+    callback?: MapListenerCallback<MarkerClickCallbackData>,
+  ): Promise<void> {
+    if (this.onMarkerDragEndListener) {
+      this.onMarkerDragEndListener.remove();
+    }
+
+    if (callback) {
+      this.onMarkerDragEndListener = await CapacitorGoogleMaps.addListener(
+        'onMarkerDragEnd',
+        this.generateCallback(callback),
+      );
+    } else {
+      this.onMarkerDragEndListener = undefined;
     }
   }
 
