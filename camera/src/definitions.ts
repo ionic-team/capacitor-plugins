@@ -89,13 +89,13 @@ export interface ImageOptions {
    */
   saveToGallery?: boolean;
   /**
-   * The width of the saved image
+   * The desired maximum width of the saved image. The aspect ratio is respected.
    *
    * @since 1.0.0
    */
   width?: number;
   /**
-   * The height of the saved image
+   * The desired maximum height of the saved image. The aspect ratio is respected.
    *
    * @since 1.0.0
    */
@@ -281,13 +281,13 @@ export interface GalleryImageOptions {
    */
   quality?: number;
   /**
-   * The width of the saved image
+   * The desired maximum width of the saved image. The aspect ratio is respected.
    *
    * @since 1.2.0
    */
   width?: number;
   /**
-   * The height of the saved image
+   * The desired maximum height of the saved image. The aspect ratio is respected.
    *
    * @since 1.2.0
    */
