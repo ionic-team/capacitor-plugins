@@ -16,7 +16,7 @@ To have files appear in the Files app, you must set the following keys to `YES` 
 - `UIFileSharingEnabled` (`Application supports iTunes file sharing`)
 - `LSSupportsOpeningDocumentsInPlace` (`Supports opening documents in place`)
 
-Read about [Configuring `Info.plist`](https://capacitorjs.com/docs/ios/configuration#configuring-infoplist) in the [iOS Guide](https://capacitorjs.com/docs/ios) for more information on setting iOS permissions in Xcode.
+Read about [Configuring iOS](https://capacitorjs.com/docs/ios/configuration) for help.
 
 ## Android
 
