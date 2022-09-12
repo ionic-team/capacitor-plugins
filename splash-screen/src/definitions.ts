@@ -69,7 +69,7 @@ declare module '@capacitor/cli' {
 
       /**
        * Show a loading spinner on the Splash Screen.
-       * Doesn't work if `useDialog` is true on launch when using the Android 12 API.
+       * Doesn't work if `useDialog` is true or on launch when using the Android 12 API.
        *
        * @since 1.0.0
        * @example true
@@ -78,7 +78,7 @@ declare module '@capacitor/cli' {
 
       /**
        * Style of the Android spinner.
-       * Doesn't work if `useDialog` is true on launch when using the Android 12 API.
+       * Doesn't work if `useDialog` is true or on launch when using the Android 12 API.
        *
        * @since 1.0.0
        * @default large
@@ -106,7 +106,7 @@ declare module '@capacitor/cli' {
 
       /**
        * Color of the spinner in hex format, #RRGGBB or #RRGGBBAA.
-       * Doesn't work if `useDialog` is true on launch when using the Android 12 API.
+       * Doesn't work if `useDialog` is true or on launch when using the Android 12 API.
        *
        * @since 1.0.0
        * @example "#999999"
