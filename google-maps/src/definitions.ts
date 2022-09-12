@@ -22,6 +22,16 @@ export interface LatLng {
   lng: number;
 }
 
+export interface Size {
+  width: number;
+  height: number;
+}
+
+export interface Point {
+  x: number;
+  y: number;
+}
+
 /**
  *
  */
@@ -163,9 +173,56 @@ export interface Marker {
    */
   isFlat?: boolean;
   /**
-   * Marker icon to render.
+   * Path to a marker icon to render, relative to the web app public directory.
+   *
+   * **SVGs are not supported on native platforms.**
+   *
+   * @usage
+   * ```typescript
+   * {
+   * ...
+   *  iconUrl: 'assets/icon/pin.png',
+   *  ...
+   * }
+   * ```
+   *
+   * @since 4.2.0
    */
   iconUrl?: string;
+  /**
+   * Controls the scaled size of the marker image set in `iconUrl`.
+   *
+   * @since 4.2.0
+   */
+  iconSize?: Size;
+
+  /**
+   * The position of the image within a sprite, if any. By default, the origin is located at the top left corner of the image .
+   *
+   * @since 4.2.0
+   */
+  iconOrigin?: Point;
+
+  /**
+   * The position at which to anchor an image in correspondence to the location of the marker on the map. By default, the anchor is located along the center point of the bottom of the image.
+   *
+   * @since 4.2.0
+   */
+  iconAnchor?: Point;
+  /**
+   * Customizes the color of the default marker image.  Each value must be between 0 and 255.
+   *
+   * Only for iOS and Android.
+   *
+   * @since 4.2.0
+   */
+  tintColor?: {
+    r: number;
+    g: number;
+    b: number;
+    a: number;
+  };
+
   /**
    * Controls whether this marker can be dragged interactively
    *
