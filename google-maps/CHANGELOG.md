@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.2.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/google-maps@4.1.0...@capacitor/google-maps@4.2.0) (2022-09-12)
+
+
+### Features
+
+* **google-maps:** Marker Customization Options ([#1146](https://github.com/ionic-team/capacitor-plugins/issues/1146)) ([bb77432](https://github.com/ionic-team/capacitor-plugins/commit/bb77432ac28ec5de5c5d2584f4f2ccf874e5c197))
+* **google-maps:** Marker Drag Listeners ([833f28d](https://github.com/ionic-team/capacitor-plugins/commit/833f28dc8e28553673c861619a2ac9540f39e33a))
+
+
+
+
+
 # [4.1.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/google-maps@1.1.0...@capacitor/google-maps@4.1.0) (2022-08-24)
 
 

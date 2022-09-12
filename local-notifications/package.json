@@ -1,6 +1,6 @@
 {
   "name": "@capacitor/local-notifications",
-  "version": "4.0.1",
+  "version": "4.1.0",
   "description": "The Local Notifications API provides a way to schedule device notifications locally (i.e. without a server sending push notifications).",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
