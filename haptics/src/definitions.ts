@@ -78,6 +78,20 @@ export enum ImpactStyle {
    * @since 1.0.0
    */
   Light = 'LIGHT',
+
+  /**
+   * A rigid impact between user interface elements.
+   *
+   * @since x.x.x
+   */
+  Rigid = "RIGID",
+
+  /**
+   * A soft impact between user interface elements.
+   *
+   * @since x.x.x
+   */
+  Soft = "SOFT",
 }
 
 export interface NotificationOptions {
