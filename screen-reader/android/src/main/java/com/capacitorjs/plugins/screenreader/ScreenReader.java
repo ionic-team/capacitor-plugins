@@ -1,6 +1,7 @@
 package com.capacitorjs.plugins.screenreader;
 
 import android.content.Context;
+import android.media.AudioAttributes;
 import android.speech.tts.TextToSpeech;
 import android.view.accessibility.AccessibilityManager;
 import java.util.ArrayList;
@@ -45,11 +46,12 @@ public class ScreenReader {
     public void speak(final String text, final String languageTag) {
         if (isEnabled()) {
             final Locale locale = Locale.forLanguageTag(languageTag);
-
             textToSpeech =
                 new TextToSpeech(
                     context,
                     status -> {
+                        AudioAttributes attributes = new AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_ASSISTANCE_ACCESSIBILITY).build();
+                        textToSpeech.setAudioAttributes(attributes);
                         textToSpeech.setLanguage(locale);
                         textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, "capacitor-screen-reader" + System.currentTimeMillis());
                     }
