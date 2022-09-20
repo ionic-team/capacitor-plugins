@@ -29,6 +29,9 @@ func application(_ application: UIApplication, didFailToRegisterForRemoteNotific
 
 The Push Notification API uses [Firebase Cloud Messaging](https://firebase.google.com/docs/cloud-messaging) SDK for handling notifications.  See [Set up a Firebase Cloud Messaging client app on Android](https://firebase.google.com/docs/cloud-messaging/android/client) and follow the instructions for creating a Firebase project and registering your application.  There is no need to add the Firebase SDK to your app or edit your app manifest - the Push Notifications provides that for you.  All that is required is your Firebase project's `google-services.json` file added to the module (app-level) directory of your app.
 
+Android 13 (API level 33) and higher supports a runtime permission for sending notifications POST_NOTIFICATIONS. You are required
+ to call `checkPermissions()` and `requestPermissions()` accordingly, when targeting SDK 33, similarily to how iOS works.
+
 ### Variables
 
 This plugin will use the following project variables (defined in your app's `variables.gradle` file):
@@ -99,7 +102,7 @@ export default config;
 This plugin does not support iOS Silent Push (Remote Notifications). We recommend using native code solutions for handling these types of notifications, see [Pushing Background Updates to Your App](https://developer.apple.com/documentation/usernotifications/setting_up_a_remote_notification_server/pushing_background_updates_to_your_app).
 
 #### Android
-This plugin does support data-only notifications, but will NOT call `pushNotificationReceived` if the app has been killed. To handle this scenario, you will need to create a service that extends `FirebaseMessagingService`, see [Handling FCM Messages](https://firebase.google.com/docs/cloud-messaging/android/receive). 
+This plugin does support data-only notifications, but will NOT call `pushNotificationReceived` if the app has been killed. To handle this scenario, you will need to create a service that extends `FirebaseMessagingService`, see [Handling FCM Messages](https://firebase.google.com/docs/cloud-messaging/android/receive).
 
 ## Common Issues
 On Android, there are various system and app states that can affect the delivery of push notifications:
@@ -322,8 +325,9 @@ requestPermissions() => Promise<PermissionStatus>
 
 Request permission to receive push notifications.
 
-On Android it doesn't prompt for permission because you can always
-receive push notifications.
+On Android SDK 32 and below it doesn't prompt for permission because you can always
+receive push notifications. On Android SDK 33 and above notifications permissions
+work similar to iOS.
 
 On iOS, the first time you use the function, it will prompt the user
 for push notification permission and return granted or denied based
