@@ -425,6 +425,7 @@ export class CapacitorGoogleMapsWeb
       opacity: marker.opacity,
       title: marker.title,
       icon: iconImage,
+      draggable: marker.draggable,
     };
 
     return opts;
