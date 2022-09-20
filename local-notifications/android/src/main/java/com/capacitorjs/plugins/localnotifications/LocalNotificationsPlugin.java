@@ -1,5 +1,6 @@
 package com.capacitorjs.plugins.localnotifications;
 
+import android.Manifest;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;
@@ -21,7 +22,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-@CapacitorPlugin(name = "LocalNotifications", permissions = @Permission(strings = {}, alias = "display"))
+@CapacitorPlugin(
+    name = "LocalNotifications",
+    permissions = @Permission(strings = { Manifest.permission.POST_NOTIFICATIONS }, alias = "display")
+)
 public class LocalNotificationsPlugin extends Plugin {
 
     private static Bridge staticBridge = null;
@@ -193,16 +197,24 @@ public class LocalNotificationsPlugin extends Plugin {
 
     @PluginMethod
     public void checkPermissions(PluginCall call) {
-        JSObject permissionsResultJSON = new JSObject();
-        permissionsResultJSON.put("display", getNotificationPermissionText());
-        call.resolve(permissionsResultJSON);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+            JSObject permissionsResultJSON = new JSObject();
+            permissionsResultJSON.put("display", getNotificationPermissionText());
+            call.resolve(permissionsResultJSON);
+        } else {
+            super.checkPermissions(call);
+        }
     }
 
     @PluginMethod
     public void requestPermissions(PluginCall call) {
-        JSObject permissionsResultJSON = new JSObject();
-        permissionsResultJSON.put("display", getNotificationPermissionText());
-        call.resolve(permissionsResultJSON);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+            JSObject permissionsResultJSON = new JSObject();
+            permissionsResultJSON.put("display", getNotificationPermissionText());
+            call.resolve(permissionsResultJSON);
+        } else {
+            super.requestPermissions(call);
+        }
     }
 
     private String getNotificationPermissionText() {
