@@ -195,7 +195,7 @@ export interface Photo {
   dataUrl?: string;
   /**
    * If using CameraResultType.Uri, the path will contain a full,
-   * platform-specific file URL that can be read later using the Filsystem API.
+   * platform-specific file URL that can be read later using the Filesystem API.
    *
    * @since 1.0.0
    */
@@ -245,7 +245,7 @@ export interface GalleryPhotos {
 
 export interface GalleryPhoto {
   /**
-   * Full, platform-specific file URL that can be read later using the Filsystem API.
+   * Full, platform-specific file URL that can be read later using the Filesystem API.
    *
    * @since 1.2.0
    */
