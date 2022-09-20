@@ -68,8 +68,24 @@ public class CameraPlugin: CAPPlugin {
 
     @objc func pickLimitedLibraryPhotos(_ call: CAPPluginCall) {
         if #available(iOS 14, *) {
-            if let viewController = bridge?.viewController {
-                PHPhotoLibrary.shared().presentLimitedLibraryPicker(from: viewController)
+            PHPhotoLibrary.requestAuthorization(for: .readWrite) { (granted) in
+                if granted == .limited {
+                    if let viewController = self.bridge?.viewController {
+                        if #available(iOS 15, *) {
+                            PHPhotoLibrary.shared().presentLimitedLibraryPicker(from: viewController) { _ in
+                                self.getLimitedLibraryPhotos(call)
+                            }
+                        } else {
+                            PHPhotoLibrary.shared().register(self)
+                            PHPhotoLibrary.shared().presentLimitedLibraryPicker(from: viewController)
+                            self.call = call
+                        }
+                    }
+                } else {
+                    call.resolve([
+                        "photos": []
+                    ])
+                }
             }
         } else {
             call.unavailable("Not available on iOS 13")
@@ -225,7 +241,7 @@ extension CameraPlugin: UIImagePickerControllerDelegate, UINavigationControllerD
 }
 
 @available(iOS 14, *)
-extension CameraPlugin: PHPickerViewControllerDelegate {
+extension CameraPlugin: PHPickerViewControllerDelegate, PHPhotoLibraryChangeObserver {
     public func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         picker.dismiss(animated: true, completion: nil)
         guard let result = results.first else {
@@ -280,6 +296,14 @@ extension CameraPlugin: PHPickerViewControllerDelegate {
                 }
                 self?.call?.reject("Error loading image")
             }
+        }
+    }
+
+    public func photoLibraryDidChange(_ changeInstance: PHChange) {
+        if let call = self.call {
+            self.getLimitedLibraryPhotos(call)
+            PHPhotoLibrary.shared().unregisterChangeObserver(self)
+            self.call = nil
         }
     }
 }
