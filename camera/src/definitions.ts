@@ -32,6 +32,8 @@ export interface CameraPlugin {
 
   /**
    * iOS 14+ Only: Allows the user to update their limited photo library selection.
+   * On iOS 15+ returns all the limited photos after the picker dismissal.
+   * On iOS 14 or if the user gave full access to the photos it returns an empty array.
    *
    * @since 4.1.0
    */

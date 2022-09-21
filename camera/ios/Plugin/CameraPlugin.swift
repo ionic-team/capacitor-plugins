@@ -76,9 +76,10 @@ public class CameraPlugin: CAPPlugin {
                                 self.getLimitedLibraryPhotos(call)
                             }
                         } else {
-                            PHPhotoLibrary.shared().register(self)
                             PHPhotoLibrary.shared().presentLimitedLibraryPicker(from: viewController)
-                            self.call = call
+                            call.resolve([
+                                "photos": []
+                            ])
                         }
                     }
                 } else {
@@ -241,7 +242,7 @@ extension CameraPlugin: UIImagePickerControllerDelegate, UINavigationControllerD
 }
 
 @available(iOS 14, *)
-extension CameraPlugin: PHPickerViewControllerDelegate, PHPhotoLibraryChangeObserver {
+extension CameraPlugin: PHPickerViewControllerDelegate {
     public func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         picker.dismiss(animated: true, completion: nil)
         guard let result = results.first else {
@@ -296,14 +297,6 @@ extension CameraPlugin: PHPickerViewControllerDelegate, PHPhotoLibraryChangeObse
                 }
                 self?.call?.reject("Error loading image")
             }
-        }
-    }
-
-    public func photoLibraryDidChange(_ changeInstance: PHChange) {
-        if let call = self.call {
-            self.getLimitedLibraryPhotos(call)
-            PHPhotoLibrary.shared().unregisterChangeObserver(self)
-            self.call = nil
         }
     }
 }
