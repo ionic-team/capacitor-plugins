@@ -216,6 +216,10 @@ public class LocalNotificationManager {
             mBuilder.setWhen(localNotification.getSchedule().getAt().getTime()).setShowWhen(true);
         }
 
+        if (localNotification.isScheduled() && localNotification.getSchedule().getOn() != null) {
+            mBuilder.setWhen(localNotification.getSchedule().getOn().nextTrigger(new Date())).setShowWhen(true);
+        }
+
         mBuilder.setVisibility(NotificationCompat.VISIBILITY_PRIVATE);
         mBuilder.setOnlyAlertOnce(true);
 
