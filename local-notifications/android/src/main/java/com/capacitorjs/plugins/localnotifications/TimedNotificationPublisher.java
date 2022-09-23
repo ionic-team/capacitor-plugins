@@ -21,6 +21,7 @@ public class TimedNotificationPublisher extends BroadcastReceiver {
 
     public static String NOTIFICATION_KEY = "NotificationPublisher.notification";
     public static String CRON_KEY = "NotificationPublisher.cron";
+    public static String EVERY_KEY = "NotificationPublisher.every";
 
     /**
      * Restore and present notification
@@ -36,9 +37,17 @@ public class TimedNotificationPublisher extends BroadcastReceiver {
         NotificationStorage storage = new NotificationStorage(context);
         JSObject notificationJson = storage.getSavedNotificationAsJSObject(Integer.toString(id));
         LocalNotificationsPlugin.fireReceived(notificationJson);
+        setWhenForEverySchedule(intent, notification);
         notificationManager.notify(id, notification);
         if (!rescheduleNotificationIfNeeded(context, intent, id)) {
             storage.deleteNotification(Integer.toString(id));
+        }
+    }
+
+    private void setWhenForEverySchedule(Intent intent, Notification notification) {
+        boolean isEverySchedule = intent.getBooleanExtra(EVERY_KEY, false);
+        if (isEverySchedule) {
+            notification.when =  System.currentTimeMillis();
         }
     }
 

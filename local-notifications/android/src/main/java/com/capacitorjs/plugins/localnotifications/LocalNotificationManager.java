@@ -362,6 +362,9 @@ public class LocalNotificationManager {
         if (every != null) {
             Long everyInterval = schedule.getEveryInterval();
             if (everyInterval != null) {
+                notificationIntent.putExtra(TimedNotificationPublisher.EVERY_KEY, true);
+                pendingIntent = PendingIntent.getBroadcast(context, request.getId(), notificationIntent, flags);
+
                 long startTime = new Date().getTime() + everyInterval;
                 alarmManager.setRepeating(AlarmManager.RTC, startTime, everyInterval, pendingIntent);
             }
