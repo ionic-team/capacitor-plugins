@@ -47,7 +47,7 @@ public class TimedNotificationPublisher extends BroadcastReceiver {
     private void setWhenForEverySchedule(Intent intent, Notification notification) {
         boolean isEverySchedule = intent.getBooleanExtra(EVERY_KEY, false);
         if (isEverySchedule) {
-            notification.when =  System.currentTimeMillis();
+            notification.when = System.currentTimeMillis();
         }
     }
 
