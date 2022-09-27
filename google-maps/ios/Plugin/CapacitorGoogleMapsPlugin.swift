@@ -45,6 +45,7 @@ extension CGRect {
     }
 }
 
+// swiftlint:disable type_body_length
 @objc(CapacitorGoogleMapsPlugin)
 public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
     private var maps = [String: Map]()
@@ -453,6 +454,50 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
         call.unavailable("not supported on iOS")
     }
 
+    @objc func getMapBounds(_ call: CAPPluginCall) {
+        do {
+            guard let id = call.getString("id") else {
+                throw GoogleMapErrors.invalidMapId
+            }
+
+            guard let map = self.maps[id] else {
+                throw GoogleMapErrors.mapNotFound
+            }
+
+            try DispatchQueue.main.sync {
+                guard let bounds = map.getMapLatLngBounds() else {
+                    throw GoogleMapErrors.unhandledError("Google Map Bounds could not be found.")
+                }
+
+                call.resolve(
+                    formatMapBoundsForResponse(
+                        bounds: bounds,
+                        cameraPosition: map.mapViewController.GMapView.camera
+                    )
+                )
+            }
+        } catch {
+            handleError(call, error: error)
+        }
+    }
+
+    private func formatMapBoundsForResponse(bounds: GMSCoordinateBounds?, cameraPosition: GMSCameraPosition) -> PluginCallResultData {
+        return [
+            "southwest": [
+                "lat": bounds?.southWest.latitude,
+                "lng": bounds?.southWest.longitude
+            ],
+            "center": [
+                "lat": cameraPosition.target.latitude,
+                "lng": cameraPosition.target.longitude
+            ],
+            "northeast": [
+                "lat": bounds?.northEast.latitude,
+                "lng": bounds?.northEast.longitude
+            ]
+        ]
+    }
+
     private func handleError(_ call: CAPPluginCall, error: Error) {
         let errObject = getErrorObject(error)
         call.reject(errObject.message, "\(errObject.code)", error, [:])
@@ -471,14 +516,25 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
 
     // onCameraIdle
     public func mapView(_ mapView: GMSMapView, idleAt cameraPosition: GMSCameraPosition) {
-        self.notifyListeners("onCameraIdle", data: [
-            "mapId": self.findMapIdByMapView(mapView),
+        let mapId = self.findMapIdByMapView(mapView)
+        let map = self.maps[mapId]
+        let bounds = map?.getMapLatLngBounds()
+
+        let data: PluginCallResultData = [
+            "mapId": mapId,
+            "bounds": formatMapBoundsForResponse(
+                bounds: bounds,
+                cameraPosition: cameraPosition
+            ),
             "bearing": cameraPosition.bearing,
             "latitude": cameraPosition.target.latitude,
             "longitude": cameraPosition.target.longitude,
             "tilt": cameraPosition.viewingAngle,
             "zoom": cameraPosition.zoom
-        ])
+        ]
+
+        self.notifyListeners("onBoundsChanged", data: data)
+        self.notifyListeners("onCameraIdle", data: data)
     }
 
     // onCameraMoveStarted
@@ -531,6 +587,42 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
             ])
         }
         return false
+    }
+
+    // onMarkerDragStart
+    public func mapView(_ mapView: GMSMapView, didBeginDragging marker: GMSMarker) {
+        self.notifyListeners("onMarkerDragStart", data: [
+            "mapId": self.findMapIdByMapView(mapView),
+            "markerId": marker.hash.hashValue,
+            "latitude": marker.position.latitude,
+            "longitude": marker.position.longitude,
+            "title": marker.title ?? "",
+            "snippet": marker.snippet ?? ""
+        ])
+    }
+
+    // onMarkerDrag
+    public func mapView(_ mapView: GMSMapView, didDrag marker: GMSMarker) {
+        self.notifyListeners("onMarkerDrag", data: [
+            "mapId": self.findMapIdByMapView(mapView),
+            "markerId": marker.hash.hashValue,
+            "latitude": marker.position.latitude,
+            "longitude": marker.position.longitude,
+            "title": marker.title ?? "",
+            "snippet": marker.snippet ?? ""
+        ])
+    }
+
+    // onMarkerDragEnd
+    public func mapView(_ mapView: GMSMapView, didEndDragging marker: GMSMarker) {
+        self.notifyListeners("onMarkerDragEnd", data: [
+            "mapId": self.findMapIdByMapView(mapView),
+            "markerId": marker.hash.hashValue,
+            "latitude": marker.position.latitude,
+            "longitude": marker.position.longitude,
+            "title": marker.title ?? "",
+            "snippet": marker.snippet ?? ""
+        ])
     }
 
     // onClusterInfoWindowClick, onInfoWindowClick

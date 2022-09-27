@@ -35,6 +35,7 @@ const logBatteryInfo = async () => {
 * [`getInfo()`](#getinfo)
 * [`getBatteryInfo()`](#getbatteryinfo)
 * [`getLanguageCode()`](#getlanguagecode)
+* [`getLanguageTag()`](#getlanguagetag)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
 
@@ -103,33 +104,48 @@ Get the device's current language locale code.
 --------------------
 
 
+### getLanguageTag()
+
+```typescript
+getLanguageTag() => Promise<LanguageTag>
+```
+
+Get the device's current language locale tag.
+
+**Returns:** <code>Promise&lt;<a href="#languagetag">LanguageTag</a>&gt;</code>
+
+**Since:** 4.0.0
+
+--------------------
+
+
 ### Interfaces
 
 
 #### DeviceId
 
-| Prop       | Type                | Description                                                                                                                                                                                                                            | Since |
-| ---------- | ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`uuid`** | <code>string</code> | The UUID of the device as available to the app. This identifier may change on modern mobile platforms that only allow per-app install UUIDs. On web, a random identifier is generated and stored on localStorage for subsequent calls. | 1.0.0 |
+| Prop       | Type                | Description                                                                                                                                                                                                                                                                                                                      | Since |
+| ---------- | ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`uuid`** | <code>string</code> | The UUID of the device as available to the app. This identifier may change on modern mobile platforms that only allow per-app install UUIDs. On web, a random identifier is generated and stored on localStorage for subsequent calls. If localStorage is not available a new random identifier will be generated on every call. | 1.0.0 |
 
 
 #### DeviceInfo
 
-| Prop                  | Type                                                        | Description                                                                                                                                                                                                                         | Since |
-| --------------------- | ----------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`name`**            | <code>string</code>                                         | The name of the device. For example, "John's iPhone". This is only supported on iOS and Android 7.1 or above.                                                                                                                       | 1.0.0 |
-| **`model`**           | <code>string</code>                                         | The device model. For example, "iPhone".                                                                                                                                                                                            | 1.0.0 |
-| **`platform`**        | <code>'ios' \| 'android' \| 'web'</code>                    | The device platform (lowercase).                                                                                                                                                                                                    | 1.0.0 |
-| **`operatingSystem`** | <code><a href="#operatingsystem">OperatingSystem</a></code> | The operating system of the device.                                                                                                                                                                                                 | 1.0.0 |
-| **`osVersion`**       | <code>string</code>                                         | The version of the device OS.                                                                                                                                                                                                       | 1.0.0 |
-| **`manufacturer`**    | <code>string</code>                                         | The manufacturer of the device.                                                                                                                                                                                                     | 1.0.0 |
-| **`isVirtual`**       | <code>boolean</code>                                        | Whether the app is running in a simulator/emulator.                                                                                                                                                                                 | 1.0.0 |
-| **`memUsed`**         | <code>number</code>                                         | Approximate memory used by the current app, in bytes. Divide by 1048576 to get the number of MBs used.                                                                                                                              | 1.0.0 |
-| **`diskFree`**        | <code>number</code>                                         | How much free disk space is available on the the normal data storage path for the os, in bytes. On Android it returns the free disk space on the "system" partition holding the core Android OS. On iOS this value is not accurate. | 1.0.0 |
-| **`diskTotal`**       | <code>number</code>                                         | The total size of the normal data storage path for the OS, in bytes. On Android it returns the disk space on the "system" partition holding the core Android OS.                                                                    | 1.0.0 |
-| **`realDiskFree`**    | <code>number</code>                                         | How much free disk space is available on the the normal data storage, in bytes.                                                                                                                                                     | 1.1.0 |
-| **`realDiskTotal`**   | <code>number</code>                                         | The total size of the normal data storage path, in bytes.                                                                                                                                                                           | 1.1.0 |
-| **`webViewVersion`**  | <code>string</code>                                         | The web view browser version                                                                                                                                                                                                        | 1.0.0 |
+| Prop                  | Type                                                        | Description                                                                                                                                                                                                                     | Since |
+| --------------------- | ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`name`**            | <code>string</code>                                         | The name of the device. For example, "John's iPhone". This is only supported on iOS and Android 7.1 or above.                                                                                                                   | 1.0.0 |
+| **`model`**           | <code>string</code>                                         | The device model. For example, "iPhone13,4".                                                                                                                                                                                    | 1.0.0 |
+| **`platform`**        | <code>'ios' \| 'android' \| 'web'</code>                    | The device platform (lowercase).                                                                                                                                                                                                | 1.0.0 |
+| **`operatingSystem`** | <code><a href="#operatingsystem">OperatingSystem</a></code> | The operating system of the device.                                                                                                                                                                                             | 1.0.0 |
+| **`osVersion`**       | <code>string</code>                                         | The version of the device OS.                                                                                                                                                                                                   | 1.0.0 |
+| **`manufacturer`**    | <code>string</code>                                         | The manufacturer of the device.                                                                                                                                                                                                 | 1.0.0 |
+| **`isVirtual`**       | <code>boolean</code>                                        | Whether the app is running in a simulator/emulator.                                                                                                                                                                             | 1.0.0 |
+| **`memUsed`**         | <code>number</code>                                         | Approximate memory used by the current app, in bytes. Divide by 1048576 to get the number of MBs used.                                                                                                                          | 1.0.0 |
+| **`diskFree`**        | <code>number</code>                                         | How much free disk space is available on the normal data storage path for the os, in bytes. On Android it returns the free disk space on the "system" partition holding the core Android OS. On iOS this value is not accurate. | 1.0.0 |
+| **`diskTotal`**       | <code>number</code>                                         | The total size of the normal data storage path for the OS, in bytes. On Android it returns the disk space on the "system" partition holding the core Android OS.                                                                | 1.0.0 |
+| **`realDiskFree`**    | <code>number</code>                                         | How much free disk space is available on the normal data storage, in bytes.                                                                                                                                                     | 1.1.0 |
+| **`realDiskTotal`**   | <code>number</code>                                         | The total size of the normal data storage path, in bytes.                                                                                                                                                                       | 1.1.0 |
+| **`webViewVersion`**  | <code>string</code>                                         | The web view browser version                                                                                                                                                                                                    | 1.0.0 |
 
 
 #### BatteryInfo
@@ -145,6 +161,13 @@ Get the device's current language locale code.
 | Prop        | Type                | Description                  | Since |
 | ----------- | ------------------- | ---------------------------- | ----- |
 | **`value`** | <code>string</code> | Two character language code. | 1.0.0 |
+
+
+#### LanguageTag
+
+| Prop        | Type                | Description                                     | Since |
+| ----------- | ------------------- | ----------------------------------------------- | ----- |
+| **`value`** | <code>string</code> | Returns a well-formed IETF BCP 47 language tag. | 4.0.0 |
 
 
 ### Type Aliases

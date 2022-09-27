@@ -14,6 +14,7 @@ import type {
   MapClickCallbackData,
   MarkerClickCallbackData,
   MyLocationButtonClickCallbackData,
+  LatLngBounds,
 } from './definitions';
 import type { CreateMapArgs } from './implementation';
 import { CapacitorGoogleMaps } from './implementation';
@@ -37,6 +38,9 @@ export interface GoogleMapInterface {
   enableAccessibilityElements(enabled: boolean): Promise<void>;
   enableCurrentLocation(enabled: boolean): Promise<void>;
   setPadding(padding: MapPadding): Promise<void>;
+  setOnBoundsChangedListener(
+    callback?: MapListenerCallback<CameraIdleCallbackData>,
+  ): Promise<void>;
   setOnCameraIdleListener(
     callback?: MapListenerCallback<CameraIdleCallbackData>,
   ): Promise<void>;
@@ -58,6 +62,15 @@ export interface GoogleMapInterface {
   setOnMarkerClickListener(
     callback?: MapListenerCallback<MarkerClickCallbackData>,
   ): Promise<void>;
+  setOnMarkerDragStartListener(
+    callback?: MapListenerCallback<MarkerClickCallbackData>,
+  ): Promise<void>;
+  setOnMarkerDragListener(
+    callback?: MapListenerCallback<MarkerClickCallbackData>,
+  ): Promise<void>;
+  setOnMarkerDragEndListener(
+    callback?: MapListenerCallback<MarkerClickCallbackData>,
+  ): Promise<void>;
   setOnMyLocationButtonClickListener(
     callback?: MapListenerCallback<MyLocationButtonClickCallbackData>,
   ): Promise<void>;
@@ -72,8 +85,6 @@ class MapCustomElement extends HTMLElement {
   }
 
   connectedCallback() {
-    console.log(Capacitor.getPlatform());
-
     if (Capacitor.getPlatform() == 'ios') {
       this.style.overflow = 'scroll';
       (this.style as any)['-webkit-overflow-scrolling'] = 'touch';
@@ -92,6 +103,7 @@ export class GoogleMap {
   private id: string;
   private element: HTMLElement | null = null;
 
+  private onBoundsChangedListener?: PluginListenerHandle;
   private onCameraIdleListener?: PluginListenerHandle;
   private onCameraMoveStartedListener?: PluginListenerHandle;
   private onClusterClickListener?: PluginListenerHandle;
@@ -99,6 +111,9 @@ export class GoogleMap {
   private onInfoWindowClickListener?: PluginListenerHandle;
   private onMapClickListener?: PluginListenerHandle;
   private onMarkerClickListener?: PluginListenerHandle;
+  private onMarkerDragStartListener?: PluginListenerHandle;
+  private onMarkerDragListener?: PluginListenerHandle;
+  private onMarkerDragEndListener?: PluginListenerHandle;
   private onMyLocationButtonClickListener?: PluginListenerHandle;
   private onMyLocationClickListener?: PluginListenerHandle;
 
@@ -140,7 +155,10 @@ export class GoogleMap {
       newMap.initScrolling();
     }
 
-    (options.element as any) = {};
+    if (Capacitor.isNativePlatform()) {
+      (options.element as any) = {};
+    }
+
     await CapacitorGoogleMaps.create(options);
 
     if (callback) {
@@ -344,6 +362,17 @@ export class GoogleMap {
     });
   }
 
+  /**
+   * Get the map's current viewport latitude and longitude bounds.
+   *
+   * @returns {LatLngBounds}
+   */
+  async getMapBounds(): Promise<LatLngBounds> {
+    return CapacitorGoogleMaps.getMapBounds({
+      id: this.id,
+    });
+  }
+
   initScrolling(): void {
     const ionContents = document.getElementsByTagName('ion-content');
 
@@ -438,6 +467,29 @@ export class GoogleMap {
       );
     } else {
       this.onCameraIdleListener = undefined;
+    }
+  }
+
+  /**
+   * Set the event listener on the map for 'onBoundsChanged' events.
+   *
+   * @param callback
+   * @returns
+   */
+  async setOnBoundsChangedListener(
+    callback?: MapListenerCallback<CameraIdleCallbackData>,
+  ): Promise<void> {
+    if (this.onBoundsChangedListener) {
+      this.onBoundsChangedListener.remove();
+    }
+
+    if (callback) {
+      this.onBoundsChangedListener = await CapacitorGoogleMaps.addListener(
+        'onBoundsChanged',
+        this.generateCallback(callback),
+      );
+    } else {
+      this.onBoundsChangedListener = undefined;
     }
   }
 
@@ -581,6 +633,75 @@ export class GoogleMap {
   }
 
   /**
+   * Set the event listener on the map for 'onMarkerDragStart' events.
+   *
+   * @param callback
+   * @returns
+   */
+  async setOnMarkerDragStartListener(
+    callback?: MapListenerCallback<MarkerClickCallbackData>,
+  ): Promise<void> {
+    if (this.onMarkerDragStartListener) {
+      this.onMarkerDragStartListener.remove();
+    }
+
+    if (callback) {
+      this.onMarkerDragStartListener = await CapacitorGoogleMaps.addListener(
+        'onMarkerDragStart',
+        this.generateCallback(callback),
+      );
+    } else {
+      this.onMarkerDragStartListener = undefined;
+    }
+  }
+
+  /**
+   * Set the event listener on the map for 'onMarkerDrag' events.
+   *
+   * @param callback
+   * @returns
+   */
+  async setOnMarkerDragListener(
+    callback?: MapListenerCallback<MarkerClickCallbackData>,
+  ): Promise<void> {
+    if (this.onMarkerDragListener) {
+      this.onMarkerDragListener.remove();
+    }
+
+    if (callback) {
+      this.onMarkerDragListener = await CapacitorGoogleMaps.addListener(
+        'onMarkerDrag',
+        this.generateCallback(callback),
+      );
+    } else {
+      this.onMarkerDragListener = undefined;
+    }
+  }
+
+  /**
+   * Set the event listener on the map for 'onMarkerDragEnd' events.
+   *
+   * @param callback
+   * @returns
+   */
+  async setOnMarkerDragEndListener(
+    callback?: MapListenerCallback<MarkerClickCallbackData>,
+  ): Promise<void> {
+    if (this.onMarkerDragEndListener) {
+      this.onMarkerDragEndListener.remove();
+    }
+
+    if (callback) {
+      this.onMarkerDragEndListener = await CapacitorGoogleMaps.addListener(
+        'onMarkerDragEnd',
+        this.generateCallback(callback),
+      );
+    } else {
+      this.onMarkerDragEndListener = undefined;
+    }
+  }
+
+  /**
    * Set the event listener on the map for 'onMyLocationButtonClick' events.
    *
    * @param callback
@@ -634,6 +755,10 @@ export class GoogleMap {
    * @returns
    */
   async removeAllMapListeners(): Promise<void> {
+    if (this.onBoundsChangedListener) {
+      this.onBoundsChangedListener.remove();
+      this.onBoundsChangedListener = undefined;
+    }
     if (this.onCameraIdleListener) {
       this.onCameraIdleListener.remove();
       this.onCameraIdleListener = undefined;

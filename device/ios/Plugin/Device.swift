@@ -65,4 +65,16 @@ import Foundation
     public func getLanguageCode() -> String {
         return String(Locale.preferredLanguages[0].prefix(2))
     }
+
+    public func getLanguageTag() -> String {
+        return String(Locale.preferredLanguages[0])
+    }
+
+    public func getModelName() -> String {
+        var size = 0
+        sysctlbyname("hw.machine", nil, &size, nil, 0)
+        var machine = [CChar](repeating: 0, count: size)
+        sysctlbyname("hw.machine", &machine, &size, nil, 0)
+        return String(cString: machine)
+    }
 }

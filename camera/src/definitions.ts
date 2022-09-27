@@ -31,6 +31,21 @@ export interface CameraPlugin {
   pickImages(options: GalleryImageOptions): Promise<GalleryPhotos>;
 
   /**
+   * iOS 14+ Only: Allows the user to update their limited photo library selection.
+   * On iOS 15+ returns all the limited photos after the picker dismissal.
+   * On iOS 14 or if the user gave full access to the photos it returns an empty array.
+   *
+   * @since 4.1.0
+   */
+  pickLimitedLibraryPhotos(): Promise<GalleryPhotos>;
+  /**
+   * iOS 14+ Only: Return an array of photos selected from the limited photo library.
+   *
+   * @since 4.1.0
+   */
+  getLimitedLibraryPhotos(): Promise<GalleryPhotos>;
+
+  /**
    * Check camera and photo album permissions
    *
    * @since 1.0.0
@@ -76,25 +91,17 @@ export interface ImageOptions {
    */
   saveToGallery?: boolean;
   /**
-   * The width of the saved image
+   * The desired maximum width of the saved image. The aspect ratio is respected.
    *
    * @since 1.0.0
    */
   width?: number;
   /**
-   * The height of the saved image
+   * The desired maximum height of the saved image. The aspect ratio is respected.
    *
    * @since 1.0.0
    */
   height?: number;
-  /**
-   * This setting has no effect.
-   * Picture resizing always preserve aspect ratio.
-   *
-   * @deprecated will be removed in next major version.
-   * @since 1.0.0
-   */
-  preserveAspectRatio?: boolean;
   /**
    * Whether to automatically rotate the image "up" to correct for orientation
    * in portrait mode
@@ -190,7 +197,7 @@ export interface Photo {
   dataUrl?: string;
   /**
    * If using CameraResultType.Uri, the path will contain a full,
-   * platform-specific file URL that can be read later using the Filsystem API.
+   * platform-specific file URL that can be read later using the Filesystem API.
    *
    * @since 1.0.0
    */
@@ -240,7 +247,7 @@ export interface GalleryPhotos {
 
 export interface GalleryPhoto {
   /**
-   * Full, platform-specific file URL that can be read later using the Filsystem API.
+   * Full, platform-specific file URL that can be read later using the Filesystem API.
    *
    * @since 1.2.0
    */
@@ -276,13 +283,13 @@ export interface GalleryImageOptions {
    */
   quality?: number;
   /**
-   * The width of the saved image
+   * The desired maximum width of the saved image. The aspect ratio is respected.
    *
    * @since 1.2.0
    */
   width?: number;
   /**
-   * The height of the saved image
+   * The desired maximum height of the saved image. The aspect ratio is respected.
    *
    * @since 1.2.0
    */
@@ -323,7 +330,7 @@ export enum CameraSource {
    */
   Camera = 'CAMERA',
   /**
-   * Pick an existing photo fron the gallery or photo album.
+   * Pick an existing photo from the gallery or photo album.
    */
   Photos = 'PHOTOS',
 }

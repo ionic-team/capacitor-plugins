@@ -1,6 +1,7 @@
 package com.capacitorjs.plugins.keyboard;
 
 import android.os.Handler;
+import android.os.Looper;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
@@ -27,7 +28,7 @@ public class KeyboardPlugin extends Plugin {
     public void show(final PluginCall call) {
         execute(
             () ->
-                new Handler()
+                new Handler(Looper.getMainLooper())
                     .postDelayed(
                         () -> {
                             implementation.show();
@@ -63,6 +64,11 @@ public class KeyboardPlugin extends Plugin {
 
     @PluginMethod
     public void setResizeMode(PluginCall call) {
+        call.unimplemented();
+    }
+
+    @PluginMethod
+    public void getResizeMode(PluginCall call) {
         call.unimplemented();
     }
 

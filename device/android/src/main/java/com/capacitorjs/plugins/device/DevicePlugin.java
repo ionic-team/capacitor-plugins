@@ -63,4 +63,11 @@ public class DevicePlugin extends Plugin {
         ret.put("value", Locale.getDefault().getLanguage());
         call.resolve(ret);
     }
+
+    @PluginMethod
+    public void getLanguageTag(PluginCall call) {
+        JSObject ret = new JSObject();
+        ret.put("value", Locale.getDefault().toLanguageTag());
+        call.resolve(ret);
+    }
 }

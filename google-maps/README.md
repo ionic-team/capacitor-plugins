@@ -39,6 +39,19 @@ To use certain location features, the SDK requires the following permissions to 
 <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 ```
 
+### Variables
+
+This plugin will use the following project variables (defined in your app's `variables.gradle` file):
+
+- `$googleMapsPlayServicesVersion`: version of `com.google.android.gms:play-services-maps` (default: `18.0.2`)
+- `$googleMapsUtilsVersion`: version of `com.google.maps.android:android-maps-utils` (default: `2.3.0`)
+- `$googleMapsKtxVersion`: version of `com.google.maps.android:maps-ktx` (default: `3.4.0`)
+- `$googleMapsUtilsKtxVersion`: version of `com.google.maps.android:maps-utils-ktx` (default: `3.4.0`)
+- `$kotlinxCoroutinesVersion`: version of `org.jetbrains.kotlinx:kotlinx-coroutines-android` and `org.jetbrains.kotlinx:kotlinx-coroutines-core` (default: `1.6.3`)
+- `$androidxCoreKTXVersion`: version of `androidx.core:core-ktx` (default: `1.8.0`)
+- `$kotlin_version`: version of `org.jetbrains.kotlin:kotlin-stdlib-jdk7` (default: `1.7.0`)
+
+
 ## Usage
 
 The Google Maps Capacitor plugin ships with a web component that must be used to render the map in your application as it enables us to embed the native view more effectively on iOS. The plugin will automatically register this web component for use in your application.
@@ -271,6 +284,7 @@ export default MyMap;
 * [`enableAccessibilityElements(...)`](#enableaccessibilityelements)
 * [`enableCurrentLocation(...)`](#enablecurrentlocation)
 * [`setPadding(...)`](#setpadding)
+* [`setOnBoundsChangedListener(...)`](#setonboundschangedlistener)
 * [`setOnCameraIdleListener(...)`](#setoncameraidlelistener)
 * [`setOnCameraMoveStartedListener(...)`](#setoncameramovestartedlistener)
 * [`setOnClusterClickListener(...)`](#setonclusterclicklistener)
@@ -278,6 +292,9 @@ export default MyMap;
 * [`setOnInfoWindowClickListener(...)`](#setoninfowindowclicklistener)
 * [`setOnMapClickListener(...)`](#setonmapclicklistener)
 * [`setOnMarkerClickListener(...)`](#setonmarkerclicklistener)
+* [`setOnMarkerDragStartListener(...)`](#setonmarkerdragstartlistener)
+* [`setOnMarkerDragListener(...)`](#setonmarkerdraglistener)
+* [`setOnMarkerDragEndListener(...)`](#setonmarkerdragendlistener)
 * [`setOnMyLocationButtonClickListener(...)`](#setonmylocationbuttonclicklistener)
 * [`setOnMyLocationClickListener(...)`](#setonmylocationclicklistener)
 * [Interfaces](#interfaces)
@@ -479,6 +496,19 @@ setPadding(padding: MapPadding) => Promise<void>
 --------------------
 
 
+### setOnBoundsChangedListener(...)
+
+```typescript
+setOnBoundsChangedListener(callback?: MapListenerCallback<CameraIdleCallbackData> | undefined) => Promise<void>
+```
+
+| Param          | Type                                                                                                                                    |
+| -------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| **`callback`** | <code><a href="#maplistenercallback">MapListenerCallback</a>&lt;<a href="#cameraidlecallbackdata">CameraIdleCallbackData</a>&gt;</code> |
+
+--------------------
+
+
 ### setOnCameraIdleListener(...)
 
 ```typescript
@@ -570,6 +600,45 @@ setOnMarkerClickListener(callback?: MapListenerCallback<MarkerClickCallbackData>
 --------------------
 
 
+### setOnMarkerDragStartListener(...)
+
+```typescript
+setOnMarkerDragStartListener(callback?: MapListenerCallback<MarkerClickCallbackData> | undefined) => Promise<void>
+```
+
+| Param          | Type                                                                                                                                      |
+| -------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| **`callback`** | <code><a href="#maplistenercallback">MapListenerCallback</a>&lt;<a href="#markerclickcallbackdata">MarkerClickCallbackData</a>&gt;</code> |
+
+--------------------
+
+
+### setOnMarkerDragListener(...)
+
+```typescript
+setOnMarkerDragListener(callback?: MapListenerCallback<MarkerClickCallbackData> | undefined) => Promise<void>
+```
+
+| Param          | Type                                                                                                                                      |
+| -------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| **`callback`** | <code><a href="#maplistenercallback">MapListenerCallback</a>&lt;<a href="#markerclickcallbackdata">MarkerClickCallbackData</a>&gt;</code> |
+
+--------------------
+
+
+### setOnMarkerDragEndListener(...)
+
+```typescript
+setOnMarkerDragEndListener(callback?: MapListenerCallback<MarkerClickCallbackData> | undefined) => Promise<void>
+```
+
+| Param          | Type                                                                                                                                      |
+| -------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| **`callback`** | <code><a href="#maplistenercallback">MapListenerCallback</a>&lt;<a href="#markerclickcallbackdata">MarkerClickCallbackData</a>&gt;</code> |
+
+--------------------
+
+
 ### setOnMyLocationButtonClickListener(...)
 
 ```typescript
@@ -647,15 +716,35 @@ An interface representing a pair of latitude and longitude coordinates.
 
 A marker is an icon placed at a particular point on the map's surface.
 
-| Prop             | Type                                      | Description                                                                                               | Default            |
-| ---------------- | ----------------------------------------- | --------------------------------------------------------------------------------------------------------- | ------------------ |
-| **`coordinate`** | <code><a href="#latlng">LatLng</a></code> | <a href="#marker">Marker</a> position                                                                     |                    |
-| **`opacity`**    | <code>number</code>                       | Sets the opacity of the marker, between 0 (completely transparent) and 1 inclusive.                       | <code>1</code>     |
-| **`title`**      | <code>string</code>                       | Title, a short description of the overlay.                                                                |                    |
-| **`snippet`**    | <code>string</code>                       | Snippet text, shown beneath the title in the info window when selected.                                   |                    |
-| **`isFlat`**     | <code>boolean</code>                      | Controls whether this marker should be flat against the Earth's surface or a billboard facing the camera. | <code>false</code> |
-| **`iconUrl`**    | <code>string</code>                       | <a href="#marker">Marker</a> icon to render.                                                              |                    |
-| **`draggable`**  | <code>boolean</code>                      | Controls whether this marker can be dragged interactively                                                 | <code>false</code> |
+| Prop             | Type                                                         | Description                                                                                                                                                                               | Default            | Since |
+| ---------------- | ------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
+| **`coordinate`** | <code><a href="#latlng">LatLng</a></code>                    | <a href="#marker">Marker</a> position                                                                                                                                                     |                    |       |
+| **`opacity`**    | <code>number</code>                                          | Sets the opacity of the marker, between 0 (completely transparent) and 1 inclusive.                                                                                                       | <code>1</code>     |       |
+| **`title`**      | <code>string</code>                                          | Title, a short description of the overlay.                                                                                                                                                |                    |       |
+| **`snippet`**    | <code>string</code>                                          | Snippet text, shown beneath the title in the info window when selected.                                                                                                                   |                    |       |
+| **`isFlat`**     | <code>boolean</code>                                         | Controls whether this marker should be flat against the Earth's surface or a billboard facing the camera.                                                                                 | <code>false</code> |       |
+| **`iconUrl`**    | <code>string</code>                                          | Path to a marker icon to render, relative to the web app public directory. **SVGs are not supported on native platforms.**                                                                |                    | 4.2.0 |
+| **`iconSize`**   | <code><a href="#size">Size</a></code>                        | Controls the scaled size of the marker image set in `iconUrl`.                                                                                                                            |                    | 4.2.0 |
+| **`iconOrigin`** | <code><a href="#point">Point</a></code>                      | The position of the image within a sprite, if any. By default, the origin is located at the top left corner of the image .                                                                |                    | 4.2.0 |
+| **`iconAnchor`** | <code><a href="#point">Point</a></code>                      | The position at which to anchor an image in correspondence to the location of the marker on the map. By default, the anchor is located along the center point of the bottom of the image. |                    | 4.2.0 |
+| **`tintColor`**  | <code>{ r: number; g: number; b: number; a: number; }</code> | Customizes the color of the default marker image. Each value must be between 0 and 255. Only for iOS and Android.                                                                         |                    | 4.2.0 |
+| **`draggable`**  | <code>boolean</code>                                         | Controls whether this marker can be dragged interactively                                                                                                                                 | <code>false</code> |       |
+
+
+#### Size
+
+| Prop         | Type                |
+| ------------ | ------------------- |
+| **`width`**  | <code>number</code> |
+| **`height`** | <code>number</code> |
+
+
+#### Point
+
+| Prop    | Type                |
+| ------- | ------------------- |
+| **`x`** | <code>number</code> |
+| **`y`** | <code>number</code> |
 
 
 #### CameraConfig
@@ -686,14 +775,26 @@ Controls for setting padding on the 'visible' region of the view.
 
 #### CameraIdleCallbackData
 
-| Prop            | Type                |
-| --------------- | ------------------- |
-| **`mapId`**     | <code>string</code> |
-| **`bearing`**   | <code>number</code> |
-| **`latitude`**  | <code>number</code> |
-| **`longitude`** | <code>number</code> |
-| **`tilt`**      | <code>number</code> |
-| **`zoom`**      | <code>number</code> |
+| Prop            | Type                                                  |
+| --------------- | ----------------------------------------------------- |
+| **`mapId`**     | <code>string</code>                                   |
+| **`bounds`**    | <code><a href="#latlngbounds">LatLngBounds</a></code> |
+| **`bearing`**   | <code>number</code>                                   |
+| **`latitude`**  | <code>number</code>                                   |
+| **`longitude`** | <code>number</code>                                   |
+| **`tilt`**      | <code>number</code>                                   |
+| **`zoom`**      | <code>number</code>                                   |
+
+
+#### LatLngBounds
+
+An interface representing the viewports latitude and longitude bounds.
+
+| Prop            | Type                                      |
+| --------------- | ----------------------------------------- |
+| **`southwest`** | <code><a href="#latlng">LatLng</a></code> |
+| **`center`**    | <code><a href="#latlng">LatLng</a></code> |
+| **`northeast`** | <code><a href="#latlng">LatLng</a></code> |
 
 
 #### CameraMoveStartedCallbackData

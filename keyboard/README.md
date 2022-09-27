@@ -33,15 +33,12 @@ Keyboard.addListener('keyboardDidHide', () => {
 
 ## Configuration
 
-<docgen-config>
-<!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
-
 On iOS, the keyboard can be configured with the following options:
 
 | Prop                     | Type                                                      | Description                                                                                                                                                                                                                                                                                                       | Default             | Since |
 | ------------------------ | --------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- | ----- |
 | **`resize`**             | <code><a href="#keyboardresize">KeyboardResize</a></code> | Configure the way the app is resized when the Keyboard appears. Only available on iOS.                                                                                                                                                                                                                            | <code>native</code> | 1.0.0 |
-| **`style`**              | <code>'dark' \| 'light'</code>                            | Override the keyboard style if your app doesn't support dark/light theme changes. If not set, the keyboard style will depend on the device appearance. Only available on iOS.                                                                                                                                     |                     | 1.0.0 |
+| **`style`**              | <code><a href="#keyboardstyle">KeyboardStyle</a></code>   | Override the keyboard style if your app doesn't support dark/light theme changes. If not set, the keyboard style will depend on the device appearance. Only available on iOS.                                                                                                                                     |                     | 1.0.0 |
 | **`resizeOnFullScreen`** | <code>boolean</code>                                      | There is an Android bug that prevents the keyboard from resizing the WebView when the app is in full screen (i.e. if StatusBar plugin is used to overlay the status bar). This setting, if set to true, add a workaround that resizes the WebView even when the app is in full screen. Only available for Android |                     | 1.1.0 |
 
 ### Examples
@@ -53,7 +50,7 @@ In `capacitor.config.json`:
   "plugins": {
     "Keyboard": {
       "resize": "body",
-      "style": "dark",
+      "style": "DARK",
       "resizeOnFullScreen": true
     }
   }
@@ -66,12 +63,13 @@ In `capacitor.config.ts`:
 /// <reference types="@capacitor/keyboard" />
 
 import { CapacitorConfig } from '@capacitor/cli';
+import { KeyboardResize, KeyboardStyle } from '@capacitor/keyboard';
 
 const config: CapacitorConfig = {
   plugins: {
     Keyboard: {
-      resize: "body",
-      style: "dark",
+      resize: KeyboardResize.Body,
+      style: KeyboardStyle.Dark,
       resizeOnFullScreen: true,
     },
   },
@@ -79,8 +77,6 @@ const config: CapacitorConfig = {
 
 export default config;
 ```
-
-</docgen-config>
 
 ## Compatibility with `cordova-plugin-ionic-keyboard`
 
@@ -103,6 +99,7 @@ the following events also work with `window.addEventListener`:
 * [`setScroll(...)`](#setscroll)
 * [`setStyle(...)`](#setstyle)
 * [`setResizeMode(...)`](#setresizemode)
+* [`getResizeMode()`](#getresizemode)
 * [`addListener('keyboardWillShow', ...)`](#addlistenerkeyboardwillshow)
 * [`addListener('keyboardDidShow', ...)`](#addlistenerkeyboarddidshow)
 * [`addListener('keyboardWillHide', ...)`](#addlistenerkeyboardwillhide)
@@ -217,6 +214,23 @@ This method is only supported on iOS.
 | **`options`** | <code><a href="#keyboardresizeoptions">KeyboardResizeOptions</a></code> |
 
 **Since:** 1.0.0
+
+--------------------
+
+
+### getResizeMode()
+
+```typescript
+getResizeMode() => Promise<KeyboardResizeOptions>
+```
+
+Get the currently set resize mode.
+
+This method is only supported on iOS.
+
+**Returns:** <code>Promise&lt;<a href="#keyboardresizeoptions">KeyboardResizeOptions</a>&gt;</code>
+
+**Since:** 4.0.0
 
 --------------------
 

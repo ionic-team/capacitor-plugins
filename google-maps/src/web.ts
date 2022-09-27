@@ -5,6 +5,7 @@ import type {
 } from '@googlemaps/markerclusterer';
 import { MarkerClusterer } from '@googlemaps/markerclusterer';
 
+import type { LatLngBounds, Marker } from './definitions';
 import type {
   AccElementsArgs,
   AddMarkerArgs,
@@ -178,19 +179,36 @@ export class CapacitorGoogleMapsWeb
     }
   }
 
+  async getMapBounds(_args: { id: string }): Promise<LatLngBounds> {
+    const bounds = this.maps[_args.id].map.getBounds();
+
+    if (!bounds) {
+      throw new Error('Google Map Bounds could not be found.');
+    }
+
+    return {
+      southwest: {
+        lat: bounds.getSouthWest().lat(),
+        lng: bounds.getSouthWest().lng(),
+      },
+      center: {
+        lat: bounds.getCenter().lat(),
+        lng: bounds.getCenter().lng(),
+      },
+      northeast: {
+        lat: bounds.getNorthEast().lat(),
+        lng: bounds.getNorthEast().lng(),
+      },
+    };
+  }
+
   async addMarkers(_args: AddMarkersArgs): Promise<{ ids: string[] }> {
     const markerIds: string[] = [];
     const map = this.maps[_args.id];
 
     for (const markerArgs of _args.markers) {
-      const marker = new google.maps.Marker({
-        position: markerArgs.coordinate,
-        map: map.map,
-        opacity: markerArgs.opacity,
-        title: markerArgs.title,
-        icon: markerArgs.iconUrl,
-        draggable: markerArgs.draggable,
-      });
+      const markerOpts = this.buildMarkerOpts(markerArgs, map.map);
+      const marker = new google.maps.Marker(markerOpts);
 
       const id = '' + this.currMarkerId;
 
@@ -205,14 +223,13 @@ export class CapacitorGoogleMapsWeb
   }
 
   async addMarker(_args: AddMarkerArgs): Promise<{ id: string }> {
-    const marker = new google.maps.Marker({
-      position: _args.marker.coordinate,
-      map: this.maps[_args.id].map,
-      opacity: _args.marker.opacity,
-      title: _args.marker.title,
-      icon: _args.marker.iconUrl,
-      draggable: _args.marker.draggable,
-    });
+    const markerOpts = this.buildMarkerOpts(
+      _args.marker,
+      this.maps[_args.id].map,
+    );
+
+    console.log(markerOpts);
+    const marker = new google.maps.Marker(markerOpts);
 
     const id = '' + this.currMarkerId;
 
@@ -295,15 +312,50 @@ export class CapacitorGoogleMapsWeb
         snippet: '',
       });
     });
+
+    marker.addListener('dragstart', () => {
+      this.notifyListeners('onMarkerDragStart', {
+        mapId: mapId,
+        markerId: markerId,
+        latitude: marker.getPosition()?.lat(),
+        longitude: marker.getPosition()?.lng(),
+        title: marker.getTitle(),
+        snippet: '',
+      });
+    });
+
+    marker.addListener('drag', () => {
+      this.notifyListeners('onMarkerDrag', {
+        mapId: mapId,
+        markerId: markerId,
+        latitude: marker.getPosition()?.lat(),
+        longitude: marker.getPosition()?.lng(),
+        title: marker.getTitle(),
+        snippet: '',
+      });
+    });
+
+    marker.addListener('dragend', () => {
+      this.notifyListeners('onMarkerDragEnd', {
+        mapId: mapId,
+        markerId: markerId,
+        latitude: marker.getPosition()?.lat(),
+        longitude: marker.getPosition()?.lng(),
+        title: marker.getTitle(),
+        snippet: '',
+      });
+    });
   }
 
   async setMapListeners(mapId: string): Promise<void> {
     const map = this.maps[mapId].map;
 
-    map.addListener('idle', () => {
+    map.addListener('idle', async () => {
+      const bounds = await this.getMapBounds({ id: mapId });
       this.notifyListeners('onCameraIdle', {
         mapId: mapId,
         bearing: map.getHeading(),
+        bounds: bounds,
         latitude: map.getCenter()?.lat(),
         longitude: map.getCenter()?.lng(),
         tilt: map.getTilt(),
@@ -315,6 +367,19 @@ export class CapacitorGoogleMapsWeb
       this.notifyListeners('onCameraMoveStarted', {
         mapId: mapId,
         isGesture: true,
+      });
+    });
+
+    map.addListener('bounds_changed', async () => {
+      const bounds = await this.getMapBounds({ id: mapId });
+      this.notifyListeners('onBoundsChanged', {
+        mapId: mapId,
+        bearing: map.getHeading(),
+        bounds: bounds,
+        latitude: map.getCenter()?.lat(),
+        longitude: map.getCenter()?.lng(),
+        tilt: map.getTilt(),
+        zoom: map.getZoom(),
       });
     });
 
@@ -332,5 +397,37 @@ export class CapacitorGoogleMapsWeb
     this.notifyListeners('onMapReady', {
       mapId: mapId,
     });
+  }
+
+  private buildMarkerOpts(
+    marker: Marker,
+    map: google.maps.Map,
+  ): google.maps.MarkerOptions {
+    let iconImage: google.maps.Icon | undefined = undefined;
+    if (marker.iconUrl) {
+      iconImage = {
+        url: marker.iconUrl,
+        scaledSize: marker.iconSize
+          ? new google.maps.Size(marker.iconSize.width, marker.iconSize.height)
+          : null,
+        anchor: marker.iconAnchor
+          ? new google.maps.Point(marker.iconAnchor.x, marker.iconAnchor.y)
+          : new google.maps.Point(0, 0),
+        origin: marker.iconOrigin
+          ? new google.maps.Point(marker.iconOrigin.x, marker.iconOrigin.y)
+          : new google.maps.Point(0, 0),
+      };
+    }
+
+    const opts: google.maps.MarkerOptions = {
+      position: marker.coordinate,
+      map: map,
+      opacity: marker.opacity,
+      title: marker.title,
+      icon: iconImage,
+      draggable: marker.draggable,
+    };
+
+    return opts;
   }
 }

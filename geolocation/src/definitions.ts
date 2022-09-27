@@ -64,14 +64,14 @@ export interface GeolocationPlugin {
   clearWatch(options: ClearWatchOptions): Promise<void>;
 
   /**
-   * Check location permissions
+   * Check location permissions.  Will throw if system location services are disabled.
    *
    * @since 1.0.0
    */
   checkPermissions(): Promise<PermissionStatus>;
 
   /**
-   * Request location permissions
+   * Request location permissions.  Will throw if system location services are disabled.
    *
    * @since 1.0.0
    */
@@ -164,7 +164,9 @@ export interface PositionOptions {
   enableHighAccuracy?: boolean;
 
   /**
-   * The maximum wait time in milliseconds for location updates
+   * The maximum wait time in milliseconds for location updates.
+   *
+   * In Android, since version 4.0.0 of the plugin, timeout gets ignored for getCurrentPosition.
    *
    * @default 10000
    * @since 1.0.0

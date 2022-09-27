@@ -24,7 +24,9 @@ export interface ShowOptions {
   duration?: 'short' | 'long';
 
   /**
-   * Position of the Toast
+   * Position of the Toast.
+   *
+   * On Android 12 and newer all toasts are shown at the bottom.
    *
    * @default 'bottom'
    * @since 1.0.0

@@ -8,4 +8,5 @@ CAP_PLUGIN(DevicePlugin, "Device",
            CAP_PLUGIN_METHOD(getInfo, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(getBatteryInfo, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(getLanguageCode, CAPPluginReturnPromise);
+           CAP_PLUGIN_METHOD(getLanguageTag, CAPPluginReturnPromise);
 )

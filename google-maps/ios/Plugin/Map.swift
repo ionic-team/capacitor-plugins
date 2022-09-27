@@ -63,6 +63,9 @@ public class Map {
     var mapViewController: GMViewController
     var targetViewController: UIView?
     var markers = [Int: GMSMarker]()
+    var markerIcons = [String: UIImage]()
+
+    // swiftlint:disable weak_delegate
     private var delegate: CapacitorGoogleMapsPlugin
 
     init(id: String, config: GoogleMapConfig, delegate: CapacitorGoogleMapsPlugin) {
@@ -91,11 +94,12 @@ public class Map {
             if let bridge = self.delegate.bridge {
 
                 for item in bridge.webView!.getAllSubViews() {
-                    if let typeClass = NSClassFromString("WKChildScrollView"), item.isKind(of: typeClass) {
+                    let isScrollView = item.isKind(of: NSClassFromString("WKChildScrollView")!) || item.isKind(of: NSClassFromString("WKScrollView")!)
+                    if isScrollView {
                         (item as? UIScrollView)?.isScrollEnabled = true
 
-                        let isWidthEqual = Double(item.bounds.width) == self.config.width
-                        let isHeightEqual = Double(item.bounds.height) == self.config.height
+                        let isWidthEqual = round(Double(item.bounds.width)) == self.config.width
+                        let isHeightEqual = round(Double(item.bounds.height)) == self.config.height
 
                         if isWidthEqual && isHeightEqual && (item as? UIView)?.tag == 0 {
                             self.targetViewController = item
@@ -168,13 +172,7 @@ public class Map {
         var markerHash = 0
 
         DispatchQueue.main.sync {
-            let newMarker = GMSMarker()
-            newMarker.position = CLLocationCoordinate2D(latitude: marker.coordinate.lat, longitude: marker.coordinate.lng)
-            newMarker.title = marker.title
-            newMarker.snippet = marker.snippet
-            newMarker.isFlat = marker.isFlat ?? false
-            newMarker.opacity = marker.opacity ?? 1
-            newMarker.isDraggable = marker.draggable ?? false
+            let newMarker = self.buildMarker(marker: marker)
 
             if self.mapViewController.clusteringEnabled {
                 self.mapViewController.addMarkersToCluster(markers: [newMarker])
@@ -197,13 +195,7 @@ public class Map {
             var googleMapsMarkers: [GMSMarker] = []
 
             markers.forEach { marker in
-                let newMarker = GMSMarker()
-                newMarker.position = CLLocationCoordinate2D(latitude: marker.coordinate.lat, longitude: marker.coordinate.lng)
-                newMarker.title = marker.title
-                newMarker.snippet = marker.snippet
-                newMarker.isFlat = marker.isFlat ?? false
-                newMarker.opacity = marker.opacity ?? 1
-                newMarker.isDraggable = marker.draggable ?? false
+                let newMarker = self.buildMarker(marker: marker)
 
                 if self.mapViewController.clusteringEnabled {
                     googleMapsMarkers.append(newMarker)
@@ -350,6 +342,10 @@ public class Map {
         }
     }
 
+    func getMapLatLngBounds() -> GMSCoordinateBounds? {
+        return GMSCoordinateBounds(region: self.mapViewController.GMapView.projection.visibleRegion())
+    }
+
     private func getFrameOverflowBounds(frame: CGRect, mapBounds: CGRect) -> [CGRect] {
         var intersections: [CGRect] = []
 
@@ -368,6 +364,51 @@ public class Map {
         }
 
         return intersections
+    }
+
+    private func buildMarker(marker: Marker) -> GMSMarker {
+        let newMarker = GMSMarker()
+        newMarker.position = CLLocationCoordinate2D(latitude: marker.coordinate.lat, longitude: marker.coordinate.lng)
+        newMarker.title = marker.title
+        newMarker.snippet = marker.snippet
+        newMarker.isFlat = marker.isFlat ?? false
+        newMarker.opacity = marker.opacity ?? 1
+        newMarker.isDraggable = marker.draggable ?? false
+        if let iconAnchor = marker.iconAnchor {
+            newMarker.groundAnchor = iconAnchor
+        }
+
+        // cache and reuse marker icon uiimages
+        if let iconUrl = marker.iconUrl {
+            if let iconImage = self.markerIcons[iconUrl] {
+                newMarker.icon = iconImage
+            } else {
+                if let iconImage = UIImage(named: "public/\(iconUrl)") {
+                    if let iconSize = marker.iconSize {
+                        let resizedIconImage = iconImage.resizeImageTo(size: iconSize)
+                        self.markerIcons[iconUrl] = resizedIconImage
+                        newMarker.icon = resizedIconImage
+                    } else {
+                        self.markerIcons[iconUrl] = iconImage
+                        newMarker.icon = iconImage
+                    }
+                } else {
+                    var detailedMessage = ""
+
+                    if iconUrl.hasSuffix(".svg") {
+                        detailedMessage = "SVG not supported."
+                    }
+
+                    print("CapacitorGoogleMaps Warning: could not load image '\(iconUrl)'. \(detailedMessage)  Using default marker icon.")
+                }
+            }
+        } else {
+            if let color = marker.color {
+                newMarker.icon = GMSMarker.markerImage(with: color)
+            }
+        }
+
+        return newMarker
     }
 }
 
@@ -411,5 +452,15 @@ extension UIView {
         subviews.forEach {
             $0.removeFromSuperview()
         }
+    }
+}
+
+extension UIImage {
+    func resizeImageTo(size: CGSize) -> UIImage? {
+        UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
+        self.draw(in: CGRect(origin: CGPoint.zero, size: size))
+        let resizedImage = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+        return resizedImage
     }
 }

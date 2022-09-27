@@ -92,7 +92,12 @@ public class NotificationStorage {
 
     public JSObject getSavedNotificationAsJSObject(String key) {
         SharedPreferences storage = getStorage(NOTIFICATION_STORE_ID);
-        String notificationString = storage.getString(key, null);
+        String notificationString;
+        try {
+            notificationString = storage.getString(key, null);
+        } catch (ClassCastException ex) {
+            return null;
+        }
 
         if (notificationString == null) {
             return null;
