@@ -211,15 +211,6 @@ public class LocalNotificationManager {
             }
         }
 
-        // make sure scheduled time is shown instead of display time
-        if (localNotification.isScheduled() && localNotification.getSchedule().getAt() != null) {
-            mBuilder.setWhen(localNotification.getSchedule().getAt().getTime()).setShowWhen(true);
-        }
-
-        if (localNotification.isScheduled() && localNotification.getSchedule().getOn() != null) {
-            mBuilder.setWhen(localNotification.getSchedule().getOn().nextTrigger(new Date())).setShowWhen(true);
-        }
-
         mBuilder.setVisibility(NotificationCompat.VISIBILITY_PRIVATE);
         mBuilder.setOnlyAlertOnce(true);
 
@@ -362,9 +353,6 @@ public class LocalNotificationManager {
         if (every != null) {
             Long everyInterval = schedule.getEveryInterval();
             if (everyInterval != null) {
-                notificationIntent.putExtra(TimedNotificationPublisher.EVERY_KEY, true);
-                pendingIntent = PendingIntent.getBroadcast(context, request.getId(), notificationIntent, flags);
-
                 long startTime = new Date().getTime() + everyInterval;
                 alarmManager.setRepeating(AlarmManager.RTC, startTime, everyInterval, pendingIntent);
             }
