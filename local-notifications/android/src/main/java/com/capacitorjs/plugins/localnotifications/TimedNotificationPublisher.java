@@ -43,7 +43,7 @@ public class TimedNotificationPublisher extends BroadcastReceiver {
             storage.deleteNotification(Integer.toString(id));
         }
     }
-    
+
     private boolean rescheduleNotificationIfNeeded(Context context, Intent intent, int id) {
         String dateString = intent.getStringExtra(CRON_KEY);
         if (dateString != null) {
