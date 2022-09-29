@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/local-notifications@4.1.0...@capacitor/local-notifications@4.1.1) (2022-09-29)
+
+
+### Bug Fixes
+
+* **local-notifications:** Add FLAG_MUTABLE to schedule on notifications ([#1173](https://github.com/ionic-team/capacitor-plugins/issues/1173)) ([98a5cb1](https://github.com/ionic-team/capacitor-plugins/commit/98a5cb1c60598bd3932a47dceb1f8918241ce8cb))
+* **local-notifications:** Showing correct scheduled notification time ([#1198](https://github.com/ionic-team/capacitor-plugins/issues/1198)) ([96c5430](https://github.com/ionic-team/capacitor-plugins/commit/96c5430f9bae13b54f3897dd1bffad030bfe3a3b))
+
+
+
+
+
 # [4.1.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/local-notifications@1.1.0...@capacitor/local-notifications@4.1.0) (2022-09-12)
 
 
