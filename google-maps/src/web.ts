@@ -85,7 +85,7 @@ export class CapacitorGoogleMapsWeb
 
   private getIdFromMarker(mapId: string, marker: google.maps.Marker): string {
     for (const id in this.maps[mapId].markers) {
-      if (this.maps[id].markers[id] == marker) {
+      if (this.maps[mapId].markers[id] == marker) {
         return id;
       }
     }
