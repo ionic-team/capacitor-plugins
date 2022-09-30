@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@4.1.1...@capacitor/camera@4.1.2) (2022-09-29)
+
+
+### Bug Fixes
+
+* **camera:** make pickLimitedLibraryPhotos return photos on iOS 15+ ([#1191](https://github.com/ionic-team/capacitor-plugins/issues/1191)) ([a65c8ca](https://github.com/ionic-team/capacitor-plugins/commit/a65c8ca8582c15e16ece369b77d1eac5df43e60e))
+
+
+
+
+
 ## [4.1.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@4.1.0...@capacitor/camera@4.1.1) (2022-09-12)
 
 **Note:** Version bump only for package @capacitor/camera

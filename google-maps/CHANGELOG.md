@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.2.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/google-maps@4.2.0...@capacitor/google-maps@4.2.1) (2022-09-29)
+
+
+### Bug Fixes
+
+* **google-maps:** adding missing marker draggable property for web ([#1184](https://github.com/ionic-team/capacitor-plugins/issues/1184)) ([2eb0e7e](https://github.com/ionic-team/capacitor-plugins/commit/2eb0e7e6db9d3f6a684d2c9a0e2e7ec94d5dfa63))
+* **google-maps:** onClusterClickHandler not getting marker ids on web ([#1039](https://github.com/ionic-team/capacitor-plugins/issues/1039)) ([b04e32d](https://github.com/ionic-team/capacitor-plugins/commit/b04e32d6fcab39285ba6dbe49408e001177cf13f))
+
+
+
+
+
 # [4.2.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/google-maps@4.1.0...@capacitor/google-maps@4.2.0) (2022-09-12)
 
 

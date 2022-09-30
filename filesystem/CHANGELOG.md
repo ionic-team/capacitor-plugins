@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@4.1.1...@capacitor/filesystem@4.1.2) (2022-09-29)
+
+
+### Bug Fixes
+
+* **filesystem:** Avoid max stack size exceeded on base64 check ([#1202](https://github.com/ionic-team/capacitor-plugins/issues/1202)) ([f4ba421](https://github.com/ionic-team/capacitor-plugins/commit/f4ba421b211e78bd205fa737955780a12e86e24f))
+
+
+
+
+
 ## [4.1.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@4.1.0...@capacitor/filesystem@4.1.1) (2022-09-12)
 
 **Note:** Version bump only for package @capacitor/filesystem
