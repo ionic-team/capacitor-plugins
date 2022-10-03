@@ -36,27 +36,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
-## 4.0.1 (2022-07-28)
-
-
-
-# 4.0.0 (2022-07-27)
-
-
-
-# 4.0.0-beta.2 (2022-07-08)
-
-
-### Features
-
-* **google-maps:** provides variables for configuring dependencies ([#1063](https://github.com/ionic-team/capacitor-plugins/issues/1063)) ([5c077f1](https://github.com/ionic-team/capacitor-plugins/commit/5c077f199cbd16b459a77061509e0504029f78db))
-
-
-
-# 4.0.0-beta.0 (2022-06-27)
-
-
-
 
 
 ## [4.0.1](https://github.com/ionic-team/capacitor-plugins/compare/4.0.0...4.0.1) (2022-07-28)
