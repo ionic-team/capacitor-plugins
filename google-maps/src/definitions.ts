@@ -173,7 +173,8 @@ export interface Marker {
    */
   isFlat?: boolean;
   /**
-   * Path to a marker icon to render, relative to the web app public directory.
+   * Path to a marker icon to render. It can be relative to the web app public directory,
+   * or a https url of a remote marker icon.
    *
    * **SVGs are not supported on native platforms.**
    *
