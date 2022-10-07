@@ -29,6 +29,8 @@ public class TimedNotificationPublisher extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         Notification notification = intent.getParcelableExtra(NOTIFICATION_KEY);
+        notification.when = System.currentTimeMillis();
+
         int id = intent.getIntExtra(LocalNotificationManager.NOTIFICATION_INTENT_KEY, Integer.MIN_VALUE);
         if (id == Integer.MIN_VALUE) {
             Logger.error(Logger.tags("LN"), "No valid id supplied", null);

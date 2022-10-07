@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.1.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/screen-reader@1.0.8...@capacitor/screen-reader@4.1.0) (2022-09-29)
+
+
+### Bug Fixes
+
+* **screen-reader:** make speak use accessibility volume ([#1185](https://github.com/ionic-team/capacitor-plugins/issues/1185)) ([daa7b63](https://github.com/ionic-team/capacitor-plugins/commit/daa7b634797216123cf4eac1a04086b0c026cf90))
+
+
+
+
+
 ## [4.0.1](https://github.com/ionic-team/capacitor-plugins/compare/4.0.0...4.0.1) (2022-07-28)
 
 **Note:** Version bump only for package @capacitor/screen-reader

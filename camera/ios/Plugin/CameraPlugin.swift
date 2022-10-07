@@ -68,8 +68,25 @@ public class CameraPlugin: CAPPlugin {
 
     @objc func pickLimitedLibraryPhotos(_ call: CAPPluginCall) {
         if #available(iOS 14, *) {
-            if let viewController = bridge?.viewController {
-                PHPhotoLibrary.shared().presentLimitedLibraryPicker(from: viewController)
+            PHPhotoLibrary.requestAuthorization(for: .readWrite) { (granted) in
+                if granted == .limited {
+                    if let viewController = self.bridge?.viewController {
+                        if #available(iOS 15, *) {
+                            PHPhotoLibrary.shared().presentLimitedLibraryPicker(from: viewController) { _ in
+                                self.getLimitedLibraryPhotos(call)
+                            }
+                        } else {
+                            PHPhotoLibrary.shared().presentLimitedLibraryPicker(from: viewController)
+                            call.resolve([
+                                "photos": []
+                            ])
+                        }
+                    }
+                } else {
+                    call.resolve([
+                        "photos": []
+                    ])
+                }
             }
         } else {
             call.unavailable("Not available on iOS 13")
