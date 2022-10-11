@@ -150,12 +150,12 @@ import { GoogleMap } from '@capacitor/google-maps';
 
 @Component({
   template: `
-    <capacitor-google-maps #map></capacitor-google-maps>
+    <capacitor-google-map #map></capacitor-google-map>
     <button (click)="createMap()">Create Map</button>
   `,
   styles: [
     `
-      capacitor-google-maps {
+      capacitor-google-map {
         display: inline-block;
         width: 275px;
         height: 400px;
@@ -723,7 +723,7 @@ A marker is an icon placed at a particular point on the map's surface.
 | **`title`**      | <code>string</code>                                          | Title, a short description of the overlay.                                                                                                                                                |                    |       |
 | **`snippet`**    | <code>string</code>                                          | Snippet text, shown beneath the title in the info window when selected.                                                                                                                   |                    |       |
 | **`isFlat`**     | <code>boolean</code>                                         | Controls whether this marker should be flat against the Earth's surface or a billboard facing the camera.                                                                                 | <code>false</code> |       |
-| **`iconUrl`**    | <code>string</code>                                          | Path to a marker icon to render, relative to the web app public directory. **SVGs are not supported on native platforms.**                                                                |                    | 4.2.0 |
+| **`iconUrl`**    | <code>string</code>                                          | Path to a marker icon to render. It can be relative to the web app public directory, or a https url of a remote marker icon. **SVGs are not supported on native platforms.**              |                    | 4.2.0 |
 | **`iconSize`**   | <code><a href="#size">Size</a></code>                        | Controls the scaled size of the marker image set in `iconUrl`.                                                                                                                            |                    | 4.2.0 |
 | **`iconOrigin`** | <code><a href="#point">Point</a></code>                      | The position of the image within a sprite, if any. By default, the origin is located at the top left corner of the image .                                                                |                    | 4.2.0 |
 | **`iconAnchor`** | <code><a href="#point">Point</a></code>                      | The position at which to anchor an image in correspondence to the location of the marker on the map. By default, the anchor is located along the center point of the bottom of the image. |                    | 4.2.0 |

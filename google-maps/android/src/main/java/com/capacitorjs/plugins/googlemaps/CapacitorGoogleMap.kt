@@ -19,11 +19,15 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.*
 import com.google.maps.android.clustering.Cluster
 import com.google.maps.android.clustering.ClusterManager
+import kotlinx.coroutines.async
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import java.io.InputStream
+import java.net.URL
 
 class CapacitorGoogleMap(
         val id: String,
@@ -168,8 +172,10 @@ class CapacitorGoogleMap(
 
             CoroutineScope(Dispatchers.Main).launch {
                 newMarkers.forEach {
-                    val markerOptions = this@CapacitorGoogleMap.buildMarker(it)
-                    val googleMapMarker = googleMap?.addMarker(markerOptions)
+                    val markerOptions: Deferred<MarkerOptions> = CoroutineScope(Dispatchers.IO).async {
+                        this@CapacitorGoogleMap.buildMarker(it)
+                    }
+                    val googleMapMarker = googleMap?.addMarker(markerOptions.await())
                     it.googleMapMarker = googleMapMarker
 
                     if (clusterManager != null) {
@@ -199,8 +205,10 @@ class CapacitorGoogleMap(
             var markerId: String
 
             CoroutineScope(Dispatchers.Main).launch {
-                val markerOptions = this@CapacitorGoogleMap.buildMarker(marker)
-                val googleMapMarker = googleMap?.addMarker(markerOptions)
+                val markerOptions: Deferred<MarkerOptions> = CoroutineScope(Dispatchers.IO).async {
+                    this@CapacitorGoogleMap.buildMarker(marker)
+                }
+                val googleMapMarker = googleMap?.addMarker(markerOptions.await())
 
                 if (clusterManager == null) {
                     marker.googleMapMarker = googleMapMarker
@@ -274,8 +282,10 @@ class CapacitorGoogleMap(
                 // add existing markers back to the map
                 if (markers.isNotEmpty()) {
                     for ((_, marker) in markers) {
-                        val markerOptions = this@CapacitorGoogleMap.buildMarker(marker)
-                        val googleMapMarker = googleMap?.addMarker(markerOptions)
+                        val markerOptions: Deferred<MarkerOptions> = CoroutineScope(Dispatchers.IO).async {
+                            this@CapacitorGoogleMap.buildMarker(marker)
+                        }
+                        val googleMapMarker = googleMap?.addMarker(markerOptions.await())
                         marker.googleMapMarker = googleMapMarker
                     }
                 }
@@ -540,7 +550,12 @@ class CapacitorGoogleMap(
                 markerOptions.icon(cachedIcon)
             } else {
                 try {
-                    val stream = this.delegate.context.assets.open("public/${marker.iconUrl}")
+                    var stream: InputStream? = null
+                    if (marker.iconUrl!!.startsWith("https:")) {
+                        stream = URL(marker.iconUrl).openConnection().getInputStream()
+                    } else {
+                        stream = this.delegate.context.assets.open("public/${marker.iconUrl}")
+                    }
                     var bitmap = BitmapFactory.decodeStream(stream)
 
                     if (marker.iconSize != null) {
