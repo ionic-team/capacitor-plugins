@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -21,6 +23,9 @@ import java.util.Arrays;
 import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 @CapacitorPlugin(name = "PushNotifications", permissions = @Permission(strings = {}, alias = "receive"))
 public class PushNotificationsPlugin extends Plugin {
@@ -242,7 +247,15 @@ public class PushNotificationsPlugin extends Plugin {
                         .setContentTitle(title)
                         .setContentText(body)
                         .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-                    notificationManager.notify(0, builder.build());
+                      if(remoteMessage.getNotification().getImageUrl()!=null){
+                      setNotificationLargeIcon(remoteMessage.getNotification().getImageUrl().toString(), builder);
+                    }
+                    int notificationId = 0;
+                    try {
+                       notificationId = remoteMessage.getMessageId().hashCode();
+                    } catch (Exception ex){
+                      ex.printStackTrace();
+                    }
                 }
             }
             remoteMessageData.put("title", title);
@@ -268,4 +281,29 @@ public class PushNotificationsPlugin extends Plugin {
         }
         return null;
     }
+    
+    
+    private void setNotificationLargeIcon(String url, NotificationCompat.Builder mBuilder) {
+    if (url != null && !url.equals("")) {
+      if (url.startsWith("http://") || url.startsWith("https://")) {
+        Bitmap bitmap = getBitmapFromURL(url);
+        mBuilder.setStyle(new NotificationCompat.BigPictureStyle().bigPicture(bitmap));
+        mBuilder.setLargeIcon(bitmap);
+      }
+    }
+  }
+
+  private Bitmap getBitmapFromURL(String strURL) {
+    try {
+      URL url = new URL(strURL);
+      HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+      connection.setConnectTimeout(15000);
+      connection.setDoInput(true);
+      connection.connect();
+      return BitmapFactory.decodeStream(connection.getInputStream());
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
 }
