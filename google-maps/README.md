@@ -150,12 +150,12 @@ import { GoogleMap } from '@capacitor/google-maps';
 
 @Component({
   template: `
-    <capacitor-google-maps #map></capacitor-google-maps>
+    <capacitor-google-map #map></capacitor-google-map>
     <button (click)="createMap()">Create Map</button>
   `,
   styles: [
     `
-      capacitor-google-maps {
+      capacitor-google-map {
         display: inline-block;
         width: 275px;
         height: 400px;
