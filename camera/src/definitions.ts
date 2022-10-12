@@ -139,7 +139,7 @@ export interface ImageOptions {
    * default is to use PWA Elements if installed and fall back to file input.
    * To always use file input, set this to `true`.
    *
-   * Learn more about PWA Elements: https://capacitorjs.com/docs/pwa-elements
+   * Learn more about PWA Elements: https://capacitorjs.com/docs/web/pwa-elements
    *
    * @since 1.0.0
    */
