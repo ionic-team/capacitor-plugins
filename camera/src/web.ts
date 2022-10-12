@@ -82,7 +82,7 @@ export class CameraWeb extends WebPlugin implements CameraPlugin {
       }
     } else {
       console.error(
-        `Unable to load PWA Element 'pwa-camera-modal'. See the docs: https://capacitorjs.com/docs/pwa-elements.`,
+        `Unable to load PWA Element 'pwa-camera-modal'. See the docs: https://capacitorjs.com/docs/web/pwa-elements.`,
       );
       this.fileInputExperience(options, resolve);
     }
