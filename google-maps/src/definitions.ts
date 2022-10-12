@@ -70,6 +70,10 @@ export interface GoogleMapConfig {
    * Override pixel ratio for native map.
    */
   devicePixelRatio?: number;
+  /**
+   * removes the default ui navigation elements
+   */
+  disableDefaultUI?: boolean;
 }
 
 /**
