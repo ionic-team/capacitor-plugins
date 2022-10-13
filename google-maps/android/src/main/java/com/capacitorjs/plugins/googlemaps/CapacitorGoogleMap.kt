@@ -46,7 +46,7 @@ class CapacitorGoogleMap(
     private var mapView: MapView
     private var googleMap: GoogleMap? = null
     private val markers = HashMap<String, CapacitorGoogleMapMarker>()
-    private val markerIcons = HashMap<String, BitmapDescriptor>()
+    private val markerIcons = HashMap<String, Bitmap>()
     private var clusterManager: ClusterManager<CapacitorGoogleMapMarker>? = null
 
     private val isReadyChannel = Channel<Boolean>()
@@ -543,8 +543,8 @@ class CapacitorGoogleMap(
 
         if (!marker.iconUrl.isNullOrEmpty()) {
             if (this.markerIcons.contains(marker.iconUrl)) {
-                val cachedIcon = this.markerIcons[marker.iconUrl]
-                markerOptions.icon(cachedIcon)
+                val cachedBitmap = this.markerIcons[marker.iconUrl]
+                markerOptions.icon(getResizedIcon(cachedBitmap!!, marker))
             } else {
                 try {
                     var stream: InputStream? = null
@@ -554,22 +554,8 @@ class CapacitorGoogleMap(
                         stream = this.delegate.context.assets.open("public/${marker.iconUrl}")
                     }
                     var bitmap = BitmapFactory.decodeStream(stream)
-
-                    if (marker.iconSize != null) {
-                        bitmap =
-                                Bitmap.createScaledBitmap(
-                                        bitmap,
-                                        (marker.iconSize!!.width * this.config.devicePixelRatio)
-                                                .toInt(),
-                                        (marker.iconSize!!.height * this.config.devicePixelRatio)
-                                                .toInt(),
-                                        false
-                                )
-                    }
-
-                    val icon = BitmapDescriptorFactory.fromBitmap(bitmap)
-                    this.markerIcons[marker.iconUrl!!] = icon
-                    markerOptions.icon(icon)
+                    this.markerIcons[marker.iconUrl!!] = bitmap
+                    markerOptions.icon(getResizedIcon(bitmap, marker))
                 } catch (e: Exception) {
                     var detailedMessage = "${e.javaClass} - ${e.localizedMessage}"
                     if (marker.iconUrl!!.endsWith(".svg")) {
@@ -589,6 +575,22 @@ class CapacitorGoogleMap(
         }
 
         return markerOptions
+    }
+
+    private fun getResizedIcon(_bitmap: Bitmap, marker: CapacitorGoogleMapMarker): BitmapDescriptor {
+        var bitmap = _bitmap
+        if (marker.iconSize != null) {
+            bitmap =
+                Bitmap.createScaledBitmap(
+                    bitmap,
+                    (marker.iconSize!!.width * this.config.devicePixelRatio)
+                        .toInt(),
+                    (marker.iconSize!!.height * this.config.devicePixelRatio)
+                        .toInt(),
+                    false
+                )
+        }
+        return BitmapDescriptorFactory.fromBitmap(bitmap)
     }
 
     fun onStart() {
