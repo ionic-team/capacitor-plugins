@@ -19,15 +19,15 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.*
 import com.google.maps.android.clustering.Cluster
 import com.google.maps.android.clustering.ClusterManager
-import kotlinx.coroutines.async
+import java.io.InputStream
+import java.net.URL
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import java.io.InputStream
-import java.net.URL
 
 class CapacitorGoogleMap(
         val id: String,
@@ -172,9 +172,10 @@ class CapacitorGoogleMap(
 
             CoroutineScope(Dispatchers.Main).launch {
                 newMarkers.forEach {
-                    val markerOptions: Deferred<MarkerOptions> = CoroutineScope(Dispatchers.IO).async {
-                        this@CapacitorGoogleMap.buildMarker(it)
-                    }
+                    val markerOptions: Deferred<MarkerOptions> =
+                            CoroutineScope(Dispatchers.IO).async {
+                                this@CapacitorGoogleMap.buildMarker(it)
+                            }
                     val googleMapMarker = googleMap?.addMarker(markerOptions.await())
                     it.googleMapMarker = googleMapMarker
 
@@ -205,14 +206,15 @@ class CapacitorGoogleMap(
             var markerId: String
 
             CoroutineScope(Dispatchers.Main).launch {
-                val markerOptions: Deferred<MarkerOptions> = CoroutineScope(Dispatchers.IO).async {
-                    this@CapacitorGoogleMap.buildMarker(marker)
-                }
+                val markerOptions: Deferred<MarkerOptions> =
+                        CoroutineScope(Dispatchers.IO).async {
+                            this@CapacitorGoogleMap.buildMarker(marker)
+                        }
                 val googleMapMarker = googleMap?.addMarker(markerOptions.await())
 
-                if (clusterManager == null) {
-                    marker.googleMapMarker = googleMapMarker
-                } else {
+                marker.googleMapMarker = googleMapMarker
+
+                if (clusterManager != null) {
                     googleMapMarker?.remove()
                     clusterManager?.addItem(marker)
                     clusterManager?.cluster()
@@ -243,12 +245,7 @@ class CapacitorGoogleMap(
                 val bridge = delegate.bridge
                 clusterManager = ClusterManager(bridge.context, googleMap)
 
-                googleMap?.setOnCameraIdleListener(clusterManager)
-
                 setClusterListeners()
-
-                googleMap?.setOnMarkerClickListener(clusterManager)
-                googleMap?.setOnInfoWindowClickListener(clusterManager)
 
                 // add existing markers to the cluster
                 if (markers.isNotEmpty()) {
@@ -282,9 +279,10 @@ class CapacitorGoogleMap(
                 // add existing markers back to the map
                 if (markers.isNotEmpty()) {
                     for ((_, marker) in markers) {
-                        val markerOptions: Deferred<MarkerOptions> = CoroutineScope(Dispatchers.IO).async {
-                            this@CapacitorGoogleMap.buildMarker(marker)
-                        }
+                        val markerOptions: Deferred<MarkerOptions> =
+                                CoroutineScope(Dispatchers.IO).async {
+                                    this@CapacitorGoogleMap.buildMarker(marker)
+                                }
                         val googleMapMarker = googleMap?.addMarker(markerOptions.await())
                         marker.googleMapMarker = googleMapMarker
                     }
@@ -487,8 +485,7 @@ class CapacitorGoogleMap(
     }
 
     fun getLatLngBounds(): LatLngBounds {
-        return googleMap?.projection?.visibleRegion?.latLngBounds
-            ?: throw BoundsNotFoundError()
+        return googleMap?.projection?.visibleRegion?.latLngBounds ?: throw BoundsNotFoundError()
     }
 
     fun getLatLngBoundsJSObject(bounds: LatLngBounds): JSObject {
@@ -559,19 +556,30 @@ class CapacitorGoogleMap(
                     var bitmap = BitmapFactory.decodeStream(stream)
 
                     if (marker.iconSize != null) {
-                        bitmap = Bitmap.createScaledBitmap(bitmap, (marker.iconSize!!.width * this.config.devicePixelRatio).toInt(), (marker.iconSize!!.height * this.config.devicePixelRatio).toInt(), false)
+                        bitmap =
+                                Bitmap.createScaledBitmap(
+                                        bitmap,
+                                        (marker.iconSize!!.width * this.config.devicePixelRatio)
+                                                .toInt(),
+                                        (marker.iconSize!!.height * this.config.devicePixelRatio)
+                                                .toInt(),
+                                        false
+                                )
                     }
 
                     val icon = BitmapDescriptorFactory.fromBitmap(bitmap)
                     this.markerIcons[marker.iconUrl!!] = icon
                     markerOptions.icon(icon)
-                } catch(e: Exception) {
+                } catch (e: Exception) {
                     var detailedMessage = "${e.javaClass} - ${e.localizedMessage}"
                     if (marker.iconUrl!!.endsWith(".svg")) {
                         detailedMessage = "SVG not supported"
                     }
 
-                    Log.w("CapacitorGoogleMaps", "Could not load image '${marker.iconUrl}': ${detailedMessage}. Using default marker icon.")
+                    Log.w(
+                            "CapacitorGoogleMaps",
+                            "Could not load image '${marker.iconUrl}': ${detailedMessage}. Using default marker icon."
+                    )
                 }
             }
         } else {
