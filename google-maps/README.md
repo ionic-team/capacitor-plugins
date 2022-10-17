@@ -683,16 +683,21 @@ An interface containing the options used when creating a map.
 
 #### GoogleMapConfig
 
-| Prop                   | Type                                      | Description                                                    | Default            |
-| ---------------------- | ----------------------------------------- | -------------------------------------------------------------- | ------------------ |
-| **`width`**            | <code>number</code>                       | Override width for native map.                                 |                    |
-| **`height`**           | <code>number</code>                       | Override height for native map.                                |                    |
-| **`x`**                | <code>number</code>                       | Override absolute x coordinate position for native map.        |                    |
-| **`y`**                | <code>number</code>                       | Override absolute y coordinate position for native map.        |                    |
-| **`center`**           | <code><a href="#latlng">LatLng</a></code> | Default location on the Earth towards which the camera points. |                    |
-| **`zoom`**             | <code>number</code>                       | Sets the zoom of the map.                                      |                    |
-| **`androidLiteMode`**  | <code>boolean</code>                      | Enables image-based lite mode on Android.                      | <code>false</code> |
-| **`devicePixelRatio`** | <code>number</code>                       | Override pixel ratio for native map.                           |                    |
+For web, all the javascript Google Maps options are available as
+GoogleMapConfig extends google.maps.MapOptions.
+For iOS and Android only the config options declared on <a href="#googlemapconfig">GoogleMapConfig</a> are available.
+
+| Prop                   | Type                                      | Description                                                                                                                                               | Default            | Since |
+| ---------------------- | ----------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
+| **`width`**            | <code>number</code>                       | Override width for native map.                                                                                                                            |                    |       |
+| **`height`**           | <code>number</code>                       | Override height for native map.                                                                                                                           |                    |       |
+| **`x`**                | <code>number</code>                       | Override absolute x coordinate position for native map.                                                                                                   |                    |       |
+| **`y`**                | <code>number</code>                       | Override absolute y coordinate position for native map.                                                                                                   |                    |       |
+| **`center`**           | <code><a href="#latlng">LatLng</a></code> | Default location on the Earth towards which the camera points.                                                                                            |                    |       |
+| **`zoom`**             | <code>number</code>                       | Sets the zoom of the map.                                                                                                                                 |                    |       |
+| **`androidLiteMode`**  | <code>boolean</code>                      | Enables image-based lite mode on Android.                                                                                                                 | <code>false</code> |       |
+| **`devicePixelRatio`** | <code>number</code>                       | Override pixel ratio for native map.                                                                                                                      |                    |       |
+| **`styles`**           | <code>MapTypeStyle[] \| null</code>       | Styles to apply to each of the default map types. Note that for satellite, hybrid and terrain modes, these styles will only apply to labels and geometry. |                    | 4.3.0 |
 
 
 #### LatLng

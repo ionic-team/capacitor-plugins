@@ -66,7 +66,6 @@ class CapacitorGoogleMap(
                         mapView.onStart()
                         mapView.getMapAsync(this@CapacitorGoogleMap)
                         mapView.setWillNotDraw(false)
-
                         isReadyChannel.receive()
 
                         render()
@@ -101,6 +100,9 @@ class CapacitorGoogleMap(
 
                 bridge.webView.bringToFront()
                 bridge.webView.setBackgroundColor(Color.TRANSPARENT)
+                if (config.styles != null) {
+                    googleMap?.setMapStyle(MapStyleOptions(config.styles!!));
+                }
             }
         }
     }

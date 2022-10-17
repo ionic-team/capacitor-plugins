@@ -33,9 +33,11 @@ export interface Point {
 }
 
 /**
- *
+ * For web, all the javascript Google Maps options are available as
+ * GoogleMapConfig extends google.maps.MapOptions.
+ * For iOS and Android only the config options declared on GoogleMapConfig are available.
  */
-export interface GoogleMapConfig {
+export interface GoogleMapConfig extends google.maps.MapOptions {
   /**
    * Override width for native map.
    */
@@ -70,6 +72,14 @@ export interface GoogleMapConfig {
    * Override pixel ratio for native map.
    */
   devicePixelRatio?: number;
+  /**
+   * Styles to apply to each of the default map types. Note that for
+   * satellite, hybrid and terrain modes,
+   * these styles will only apply to labels and geometry.
+   *
+   * @since 4.3.0
+   */
+  styles?: google.maps.MapTypeStyle[] | null;
 }
 
 /**
