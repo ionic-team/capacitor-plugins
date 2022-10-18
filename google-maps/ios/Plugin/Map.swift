@@ -116,6 +116,14 @@ public class Map {
                     self.mapViewController.GMapView.delegate = self.delegate
                 }
 
+                if let styles = self.config.styles {
+                    do {
+                        self.mapViewController.GMapView.mapStyle = try GMSMapStyle(jsonString: styles)
+                    } catch {
+                        CAPLog.print("Invalid Google Maps styles")
+                    }
+                }
+
                 self.delegate.notifyListeners("onMapReady", data: [
                     "mapId": self.id
                 ])
