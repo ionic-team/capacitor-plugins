@@ -107,6 +107,16 @@ public class CameraPlugin extends Plugin {
         openPhotos(call, true, false);
     }
 
+    @PluginMethod
+    public void pickLimitedLibraryPhotos(PluginCall call) {
+        call.unimplemented("not supported on android");
+    }
+
+    @PluginMethod
+    public void getLimitedLibraryPhotos(PluginCall call) {
+        call.unimplemented("not supported on android");
+    }
+
     private void doShow(PluginCall call) {
         switch (settings.getSource()) {
             case CAMERA:

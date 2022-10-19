@@ -13,6 +13,19 @@ const AddAndRemoveMarkers: React.FC = () => {
         setCommandOutput(`MARKER (${data.markerId}) WAS CLICKED ON MAP (${data.mapId})`);
     }
 
+    const onMarkerDragStart = (data: any) => {
+        setCommandOutput(`MARKER (${data.markerId}) DRAG STARTED ON MAP (${data.mapId})`);
+    }
+
+    const onMarkerDrag = (data: any) => {
+        setCommandOutput(`MARKER (${data.markerId}) IS BEING DRAGGED ON MAP (${data.mapId})`);
+    }
+
+    const onMarkerDragEnd = (data: any) => {
+        setCommandOutput(`MARKER (${data.markerId}) DRAG ENDED ON MAP (${data.mapId})`);
+    }
+
+
     const onInfoWindowClick = (data: any) => {
         setCommandOutput(`INFO WINDOW (${data.markerId}) WAS CLICKED ON MAP (${data.mapId})`);
     }
@@ -43,14 +56,20 @@ const AddAndRemoveMarkers: React.FC = () => {
 
     async function setOnMarkerClickListener() {
         map?.setOnMarkerClickListener(onMarkerClick);
+        map?.setOnMarkerDragStartListener(onMarkerDragStart);
+        map?.setOnMarkerDragListener(onMarkerDrag);
+        map?.setOnMarkerDragEndListener(onMarkerDragEnd);
         map?.setOnInfoWindowClickListener(onInfoWindowClick);
-        setCommandOutput('Set On Marker Click Listener!');
+        setCommandOutput('Set On Marker Click / Drag Listeners!');
     }
 
     async function removeOnMarkerClickListener() {
         map?.setOnMarkerClickListener();
+        map?.setOnMarkerDragStartListener();
+        map?.setOnMarkerDragListener();
+        map?.setOnMarkerDragEndListener();
         map?.setOnInfoWindowClickListener();
-        setCommandOutput('Removed On Marker Click Listener!');
+        setCommandOutput('Removed On Marker Click / Drag Listeners!');
     }
 
     async function addMarker() {
@@ -66,6 +85,7 @@ const AddAndRemoveMarkers: React.FC = () => {
                 },
                 title: "Hello world",
                 snippet: "Hola Mundo",
+                draggable: true,
             });
 
             setMarkerId(id);    
@@ -112,10 +132,10 @@ const AddAndRemoveMarkers: React.FC = () => {
                     Create Map
                 </IonButton>
                 <IonButton  id="setOnMarkerClickButton" onClick={setOnMarkerClickListener}>
-                    Set On Marker Click Listener
+                    Set On Marker Click / Drag Listeners
                 </IonButton>
                 <IonButton  id="removeOnMarkerClickButton" onClick={removeOnMarkerClickListener}>
-                    Remove On Marker Click Listener
+                    Remove On Marker Click / Drag Listeners
                 </IonButton>
                 <IonButton  id="addMarkerButton" onClick={addMarker}>
                     Add 1 Marker

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.1.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/push-notifications@1.0.9...@capacitor/push-notifications@4.1.0) (2022-09-12)
+
+
+### Bug Fixes
+
+* **push-notifications:** properly get the configured icon from manifest ([#1118](https://github.com/ionic-team/capacitor-plugins/issues/1118)) ([20e87d3](https://github.com/ionic-team/capacitor-plugins/commit/20e87d3da337e12050cbfd6d7dd336b369b558b7))
+
+
+
+
+
 ## [4.0.1](https://github.com/ionic-team/capacitor-plugins/compare/4.0.0...4.0.1) (2022-07-28)
 
 **Note:** Version bump only for package @capacitor/push-notifications

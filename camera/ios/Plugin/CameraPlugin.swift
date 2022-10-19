@@ -66,6 +66,80 @@ public class CameraPlugin: CAPPlugin {
         }
     }
 
+    @objc func pickLimitedLibraryPhotos(_ call: CAPPluginCall) {
+        if #available(iOS 14, *) {
+            PHPhotoLibrary.requestAuthorization(for: .readWrite) { (granted) in
+                if granted == .limited {
+                    if let viewController = self.bridge?.viewController {
+                        if #available(iOS 15, *) {
+                            PHPhotoLibrary.shared().presentLimitedLibraryPicker(from: viewController) { _ in
+                                self.getLimitedLibraryPhotos(call)
+                            }
+                        } else {
+                            PHPhotoLibrary.shared().presentLimitedLibraryPicker(from: viewController)
+                            call.resolve([
+                                "photos": []
+                            ])
+                        }
+                    }
+                } else {
+                    call.resolve([
+                        "photos": []
+                    ])
+                }
+            }
+        } else {
+            call.unavailable("Not available on iOS 13")
+        }
+    }
+
+    @objc func getLimitedLibraryPhotos(_ call: CAPPluginCall) {
+        if #available(iOS 14, *) {
+            PHPhotoLibrary.requestAuthorization(for: .readWrite) { (granted) in
+                if granted == .limited {
+
+                    self.call = call
+
+                    DispatchQueue.global(qos: .utility).async {
+                        let assets = PHAsset.fetchAssets(with: .image, options: nil)
+                        var processedImages: [ProcessedImage] = []
+
+                        let imageManager = PHImageManager.default()
+                        let options = PHImageRequestOptions()
+                        options.deliveryMode = .highQualityFormat
+
+                        let group = DispatchGroup()
+
+                        for index in 0...(assets.count - 1) {
+                            let asset = assets.object(at: index)
+                            let fullSize = CGSize(width: asset.pixelWidth, height: asset.pixelHeight)
+
+                            group.enter()
+                            imageManager.requestImage(for: asset, targetSize: fullSize, contentMode: .default, options: options) { image, _ in
+                                guard let image = image else {
+                                    group.leave()
+                                    return
+                                }
+                                processedImages.append(self.processedImage(from: image, with: asset.imageData))
+                                group.leave()
+                            }
+                        }
+
+                        group.notify(queue: .global(qos: .utility)) { [weak self] in
+                            self?.returnImages(processedImages)
+                        }
+                    }
+                } else {
+                    call.resolve([
+                        "photos": []
+                    ])
+                }
+            }
+        } else {
+            call.unavailable("Not available on iOS 13")
+        }
+    }
+
     @objc func getPhoto(_ call: CAPPluginCall) {
         self.multiple = false
         self.call = call
@@ -224,7 +298,6 @@ extension CameraPlugin: PHPickerViewControllerDelegate {
                 self?.call?.reject("Error loading image")
             }
         }
-
     }
 }
 
