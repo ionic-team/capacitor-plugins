@@ -116,6 +116,14 @@ public class Map {
                     self.mapViewController.GMapView.delegate = self.delegate
                 }
 
+                if let styles = self.config.styles {
+                    do {
+                        self.mapViewController.GMapView.mapStyle = try GMSMapStyle(jsonString: styles)
+                    } catch {
+                        CAPLog.print("Invalid Google Maps styles")
+                    }
+                }
+
                 self.delegate.notifyListeners("onMapReady", data: [
                     "mapId": self.id
                 ])
@@ -381,30 +389,18 @@ public class Map {
         // cache and reuse marker icon uiimages
         if let iconUrl = marker.iconUrl {
             if let iconImage = self.markerIcons[iconUrl] {
-                newMarker.icon = iconImage
+                newMarker.icon = getResizedIcon(iconImage, marker)
             } else {
                 if iconUrl.starts(with: "https:") {
                     DispatchQueue.main.async {
                         if let url = URL(string: iconUrl), let data = try? Data(contentsOf: url), let iconImage = UIImage(data: data) {
-                            if let iconSize = marker.iconSize {
-                                let resizedIconImage = iconImage.resizeImageTo(size: iconSize)
-                                self.markerIcons[iconUrl] = resizedIconImage
-                                newMarker.icon = resizedIconImage
-                            } else {
-                                self.markerIcons[iconUrl] = iconImage
-                                newMarker.icon = iconImage
-                            }
+                            self.markerIcons[iconUrl] = iconImage
+                            newMarker.icon = getResizedIcon(iconImage, marker)
                         }
                     }
                 } else if let iconImage = UIImage(named: "public/\(iconUrl)") {
-                    if let iconSize = marker.iconSize {
-                        let resizedIconImage = iconImage.resizeImageTo(size: iconSize)
-                        self.markerIcons[iconUrl] = resizedIconImage
-                        newMarker.icon = resizedIconImage
-                    } else {
-                        self.markerIcons[iconUrl] = iconImage
-                        newMarker.icon = iconImage
-                    }
+                    self.markerIcons[iconUrl] = iconImage
+                    newMarker.icon = getResizedIcon(iconImage, marker)
                 } else {
                     var detailedMessage = ""
 
@@ -422,6 +418,14 @@ public class Map {
         }
 
         return newMarker
+    }
+}
+
+private func getResizedIcon(_ iconImage: UIImage, _ marker: Marker) -> UIImage? {
+    if let iconSize = marker.iconSize {
+        return iconImage.resizeImageTo(size: iconSize)
+    } else {
+        return iconImage
     }
 }
 
