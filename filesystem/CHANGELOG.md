@@ -3,6 +3,45 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.3](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@4.1.2...@capacitor/filesystem@4.1.3) (2022-10-21)
+
+**Note:** Version bump only for package @capacitor/filesystem
+
+
+
+
+
+## [4.1.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@4.1.1...@capacitor/filesystem@4.1.2) (2022-09-29)
+
+
+### Bug Fixes
+
+* **filesystem:** Avoid max stack size exceeded on base64 check ([#1202](https://github.com/ionic-team/capacitor-plugins/issues/1202)) ([f4ba421](https://github.com/ionic-team/capacitor-plugins/commit/f4ba421b211e78bd205fa737955780a12e86e24f))
+
+
+
+
+
+## [4.1.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@4.1.0...@capacitor/filesystem@4.1.1) (2022-09-12)
+
+**Note:** Version bump only for package @capacitor/filesystem
+
+
+
+
+
+# [4.1.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@1.1.0...@capacitor/filesystem@4.1.0) (2022-08-24)
+
+
+### Bug Fixes
+
+* **filesystem:** failing to remove folder content on rmdir ([#1112](https://github.com/ionic-team/capacitor-plugins/issues/1112)) ([ae451aa](https://github.com/ionic-team/capacitor-plugins/commit/ae451aa08beb2138ecebdfcdd26101660aa00fde))
+* **filesystem:** make iOS return proper url on readdir ([#1142](https://github.com/ionic-team/capacitor-plugins/issues/1142)) ([77dc02f](https://github.com/ionic-team/capacitor-plugins/commit/77dc02fb829ad3479144368da16f9fff324f2706))
+
+
+
+
+
 ## [4.0.1](https://github.com/ionic-team/capacitor-plugins/compare/4.0.0...4.0.1) (2022-07-28)
 
 **Note:** Version bump only for package @capacitor/filesystem

@@ -348,7 +348,7 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
       throw Error('Folder is not empty');
 
     for (const entry of readDirResult.files) {
-      const entryPath = `${path}/${entry}`;
+      const entryPath = `${path}/${entry.name}`;
       const entryObj = await this.stat({ path: entryPath, directory });
       if (entryObj.type === 'file') {
         await this.deleteFile({ path: entryPath, directory });
@@ -636,9 +636,11 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
   }
 
   private isBase64String(str: string): boolean {
-    const base64regex =
-      /^([0-9a-zA-Z+/]{4})*(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?$/;
-    return base64regex.test(str);
+    try {
+      return btoa(atob(str)) == str;
+    } catch (err) {
+      return false;
+    }
   }
 }
 

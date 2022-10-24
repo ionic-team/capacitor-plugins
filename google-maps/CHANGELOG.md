@@ -3,6 +3,59 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.3.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/google-maps@4.2.1...@capacitor/google-maps@4.3.0) (2022-10-21)
+
+
+### Bug Fixes
+
+* **google-maps:** allow remote marker icons on native platforms ([#1216](https://github.com/ionic-team/capacitor-plugins/issues/1216)) ([8b4de64](https://github.com/ionic-team/capacitor-plugins/commit/8b4de6435decf5d37c29ac6d543191f32b5a6c6e))
+* **google-maps:** allow to resize icons with same image ([#1228](https://github.com/ionic-team/capacitor-plugins/issues/1228)) ([f6522d3](https://github.com/ionic-team/capacitor-plugins/commit/f6522d37c1418933207ee9a54d08222fcf264334))
+* **google-maps:** event listeners not firing when clustering enabled ([dd80da2](https://github.com/ionic-team/capacitor-plugins/commit/dd80da263ba684463fa35c9cff3a237ffd257058))
+
+
+### Features
+
+* **google-maps:** Add more config options ([#1233](https://github.com/ionic-team/capacitor-plugins/issues/1233)) ([8bebf97](https://github.com/ionic-team/capacitor-plugins/commit/8bebf9745f6538d4bc7f1622b2b4a0317f306bfb))
+
+
+
+
+
+## [4.2.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/google-maps@4.2.0...@capacitor/google-maps@4.2.1) (2022-09-29)
+
+
+### Bug Fixes
+
+* **google-maps:** adding missing marker draggable property for web ([#1184](https://github.com/ionic-team/capacitor-plugins/issues/1184)) ([2eb0e7e](https://github.com/ionic-team/capacitor-plugins/commit/2eb0e7e6db9d3f6a684d2c9a0e2e7ec94d5dfa63))
+* **google-maps:** onClusterClickHandler not getting marker ids on web ([#1039](https://github.com/ionic-team/capacitor-plugins/issues/1039)) ([b04e32d](https://github.com/ionic-team/capacitor-plugins/commit/b04e32d6fcab39285ba6dbe49408e001177cf13f))
+
+
+
+
+
+# [4.2.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/google-maps@4.1.0...@capacitor/google-maps@4.2.0) (2022-09-12)
+
+
+### Features
+
+* **google-maps:** Marker Customization Options ([#1146](https://github.com/ionic-team/capacitor-plugins/issues/1146)) ([bb77432](https://github.com/ionic-team/capacitor-plugins/commit/bb77432ac28ec5de5c5d2584f4f2ccf874e5c197))
+* **google-maps:** Marker Drag Listeners ([833f28d](https://github.com/ionic-team/capacitor-plugins/commit/833f28dc8e28553673c861619a2ac9540f39e33a))
+
+
+
+
+
+# [4.1.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/google-maps@1.1.0...@capacitor/google-maps@4.1.0) (2022-08-24)
+
+
+### Bug Fixes
+
+* **google-maps:** Check for WKScrollView and WKChildScrollView ([#1109](https://github.com/ionic-team/capacitor-plugins/issues/1109)) ([7513602](https://github.com/ionic-team/capacitor-plugins/commit/7513602c6c9830de305e6097db3023e42a8afa30))
+
+
+
+
+
 ## [4.0.1](https://github.com/ionic-team/capacitor-plugins/compare/4.0.0...4.0.1) (2022-07-28)
 
 **Note:** Version bump only for package @capacitor/google-maps

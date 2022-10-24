@@ -3,6 +3,48 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.1.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/app@1.1.1...@capacitor/app@4.1.0) (2022-10-21)
+
+
+### Features
+
+* **app:** Add pause and resume event listeners ([#1220](https://github.com/ionic-team/capacitor-plugins/issues/1220)) ([7e93c88](https://github.com/ionic-team/capacitor-plugins/commit/7e93c888a3e3daae95c2f465941a4097484adae8))
+
+
+
+## 4.0.1 (2022-07-28)
+
+
+
+# 4.0.0 (2022-07-27)
+
+
+
+# 4.0.0-beta.2 (2022-07-08)
+
+
+
+# 4.0.0-beta.0 (2022-06-27)
+
+
+### Bug Fixes
+
+* Make removeAllListeners return a promise ([#895](https://github.com/ionic-team/capacitor-plugins/issues/895)) ([e5c49d6](https://github.com/ionic-team/capacitor-plugins/commit/e5c49d64445dca70286334e6a0441d8021197b13))
+* **app:** get correct build value ([#858](https://github.com/ionic-team/capacitor-plugins/issues/858)) ([4d3b125](https://github.com/ionic-team/capacitor-plugins/commit/4d3b1253c5a9c699c146526fab64c4184f810469))
+
+
+### Features
+
+* set targetSDK default value to 32 ([#970](https://github.com/ionic-team/capacitor-plugins/issues/970)) ([fa70d96](https://github.com/ionic-team/capacitor-plugins/commit/fa70d96f141af751aae53ceb5642c46b204f5958))
+* Use java 11 ([#910](https://github.com/ionic-team/capacitor-plugins/issues/910)) ([5acb2a2](https://github.com/ionic-team/capacitor-plugins/commit/5acb2a288a413492b163e4e97da46a085d9e4be0))
+* **app:** return promise in exitApp ([#777](https://github.com/ionic-team/capacitor-plugins/issues/777)) ([38e1efc](https://github.com/ionic-team/capacitor-plugins/commit/38e1efc742c7d9e887dfae3848261476202159c1))
+* set targetSDK default value to 31 ([#824](https://github.com/ionic-team/capacitor-plugins/issues/824)) ([3ee10de](https://github.com/ionic-team/capacitor-plugins/commit/3ee10de98067984c1a4e75295d001c5a895c47f4))
+* Upgrade gradle to 7.4 ([#826](https://github.com/ionic-team/capacitor-plugins/issues/826)) ([5db0906](https://github.com/ionic-team/capacitor-plugins/commit/5db0906f6264287c4f8e69dbaecf19d4d387824b))
+
+
+
+
+
 ## [4.0.1](https://github.com/ionic-team/capacitor-plugins/compare/4.0.0...4.0.1) (2022-07-28)
 
 **Note:** Version bump only for package @capacitor/app

@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/splash-screen@4.1.0...@capacitor/splash-screen@4.1.1) (2022-10-21)
+
+**Note:** Version bump only for package @capacitor/splash-screen
+
+
+
+
+
+# [4.1.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/splash-screen@1.2.2...@capacitor/splash-screen@4.1.0) (2022-09-29)
+
+
+
+
+
 ## [4.0.1](https://github.com/ionic-team/capacitor-plugins/compare/4.0.0...4.0.1) (2022-07-28)
 
 **Note:** Version bump only for package @capacitor/splash-screen

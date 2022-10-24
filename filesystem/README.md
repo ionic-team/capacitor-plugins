@@ -9,6 +9,15 @@ npm install @capacitor/filesystem
 npx cap sync
 ```
 
+## iOS
+
+To have files appear in the Files app, you must set the following keys to `YES` in `Info.plist`:
+
+- `UIFileSharingEnabled` (`Application supports iTunes file sharing`)
+- `LSSupportsOpeningDocumentsInPlace` (`Supports opening documents in place`)
+
+Read about [Configuring iOS](https://capacitorjs.com/docs/ios/configuration) for help.
+
 ## Android
 
 If using <a href="#directory">`Directory.Documents`</a> or

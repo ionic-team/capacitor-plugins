@@ -3,6 +3,7 @@ import React from 'react';
 import ConfigMapPage from './pages/Map/ConfigMap';
 import CreateAndDestroyMapPage from './pages/Map/CreateAndDestroyMap';
 import AddAndRemoveMarkers from './pages/Markers/AddAndRemoveMarkers';
+import MarkerCustomizations from './pages/Markers/MarkerCustomizations';
 import MultipleMarkers from './pages/Markers/MultipleMarkers';
 import SimpleScrollingPage from './pages/Scrolling/SimpleScrolling';
 
@@ -61,6 +62,13 @@ const routesList: RouteGroup[] = [
         iosIcon: triangleOutline,
         mdIcon: triangleSharp,
         component: MultipleMarkers
+      },
+      {
+        title: "Marker Customization",
+        url: "/markers/customization",
+        iosIcon: triangleOutline,
+        mdIcon: triangleSharp,
+        component: MarkerCustomizations,
       }
     ]
   }
