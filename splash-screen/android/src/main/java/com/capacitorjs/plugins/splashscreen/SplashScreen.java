@@ -320,7 +320,7 @@ public class SplashScreen {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                         imageView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
                     } else {
-                        imageView.setDrawingCacheEnabled(true);
+                        legacyStopFlickers(imageView);
                     }
                     imageView.setScaleType(config.getScaleType());
                     imageView.setImageDrawable(splash);
@@ -356,6 +356,11 @@ public class SplashScreen {
                 spinnerBar.setIndeterminateTintList(colorStateList);
             }
         }
+    }
+
+    @SuppressWarnings("deprecation")
+    private void legacyStopFlickers(ImageView imageView) {
+        imageView.setDrawingCacheEnabled(true);
     }
 
     private Drawable getSplashDrawable() {
@@ -461,6 +466,8 @@ public class SplashScreen {
                             () -> {
                                 Window window = activity.getWindow();
                                 WindowCompat.setDecorFitsSystemWindows(window, false);
+                                WindowInsetsController controller = splashImage.getWindowInsetsController();
+                                controller.hide(WindowInsetsCompat.Type.statusBars());
                             }
                         );
                     } else {
@@ -509,6 +516,7 @@ public class SplashScreen {
         );
     }
 
+    @SuppressWarnings("deprecation")
     private void legacyImmersive() {
         final int flags =
             View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
@@ -520,6 +528,7 @@ public class SplashScreen {
         splashImage.setSystemUiVisibility(flags);
     }
 
+    @SuppressWarnings("deprecation")
     private void legacyFullscreen() {
         splashImage.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
     }
@@ -652,10 +661,11 @@ public class SplashScreen {
             windowManager.removeView(splashImage);
         }
 
-        // Exit fullscreen mode
-        Window window = ((Activity) context).getWindow();
-        WindowCompat.setDecorFitsSystemWindows(window, true);
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && config.isFullScreen() || config.isImmersive()) {
+            // Exit fullscreen mode
+            Window window = ((Activity) context).getWindow();
+            WindowCompat.setDecorFitsSystemWindows(window, true);
+        }
         isHiding = false;
         isVisible = false;
     }
