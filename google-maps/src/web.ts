@@ -228,7 +228,6 @@ export class CapacitorGoogleMapsWeb
       this.maps[_args.id].map,
     );
 
-    console.log(markerOpts);
     const marker = new google.maps.Marker(markerOpts);
 
     const id = '' + this.currMarkerId;
