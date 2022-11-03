@@ -45,10 +45,10 @@
     "publish:cocoapod": "pod trunk push ./CapacitorActionSheet.podspec --allow-warnings"
   },
   "devDependencies": {
-    "@capacitor/android": "^4.0.0",
-    "@capacitor/core": "^4.0.0",
+    "@capacitor/android": "file:../../capacitor/android",
+    "@capacitor/core": "file:../../capacitor/core",
     "@capacitor/docgen": "0.0.18",
-    "@capacitor/ios": "^4.0.0",
+    "@capacitor/ios": "file:../../capacitor/ios",
     "@ionic/eslint-config": "^0.3.0",
     "@ionic/prettier-config": "~1.0.1",
     "@ionic/swiftlint-config": "^1.1.2",
