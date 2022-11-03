@@ -57,9 +57,6 @@ DIR=..
 CAPACITOR_PACKAGE_JSON="https://raw.githubusercontent.com/ionic-team/capacitor/main/android/package.json"
 CAPACITOR_VERSION=$(curl -s $CAPACITOR_PACKAGE_JSON | awk -F\" '/"version":/ {print $4}')
 
-# for test remove after
-CAPACITOR_VERSION="4.4.0-beta1"
-
 # Don't continue if there was a problem getting the latest version of Capacitor
 if [[ $CAPACITOR_VERSION ]]; then
     printf %"s\n\n" "Attempting to publish new plugins with dependency on Capacitor Version $CAPACITOR_VERSION"
