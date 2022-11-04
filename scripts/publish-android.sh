@@ -25,7 +25,7 @@ publish_plugin () {
                 # Make log dir if doesnt exist
                 mkdir -p ./tmp
 
-                printf %"s\n" "Attempting to build and publish plugin $PLUGIN_NAME for version $PLUGIN_VERSION"
+                printf %"s\n" "Attempting to build and publish plugin $PLUGIN_NAME for version $PLUGIN_VERSION to production..."
 
                 # Export ENV variables used by Gradle for the plugin
                 export PLUGIN_NAME
@@ -34,12 +34,12 @@ publish_plugin () {
                 export CAP_PLUGIN_PUBLISH=true
 
                 # Build and publish
-                "$ANDROID_PATH"/gradlew clean build publishReleasePublicationToSonatypeRepository --max-workers 1 -b "$ANDROID_PATH"/build.gradle -Pandroid.useAndroidX=true -Pandroid.enableJetifier=true > $LOG_OUTPUT 2>&1
+                "$ANDROID_PATH"/gradlew clean build publishReleasePublicationToSonatypeRepository closeAndReleaseSonatypeStagingRepository --max-workers 1 -b "$ANDROID_PATH"/build.gradle -Pandroid.useAndroidX=true -Pandroid.enableJetifier=true > $LOG_OUTPUT 2>&1
 
                 if grep --quiet "BUILD SUCCESSFUL" $LOG_OUTPUT; then
-                    printf %"s\n\n" "Success: $PLUGIN_NAME published to MavenCentral Staging. Manually review and release from the Sonatype Repository Manager https://s01.oss.sonatype.org/"
+                    printf %"s\n\n" "Success: $PLUGIN_NAME published to MavenCentral."
                 else
-                    printf %"s\n\n" "Error publishing $PLUGIN_NAME, check $LOG_OUTPUT for more info!"
+                    printf %"s\n\n" "Error publishing $PLUGIN_NAME, check $LOG_OUTPUT for more info! Manual publication review may be necessary at the Sonatype Repository Manager https://s01.oss.sonatype.org/"
                     cat $LOG_OUTPUT
                     exit 1
                 fi
