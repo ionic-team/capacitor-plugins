@@ -144,7 +144,7 @@ export class GoogleMap {
     newMap.element = options.element;
     newMap.element.dataset.internalId = options.id;
 
-    const elementBounds = options.element.getBoundingClientRect();
+    const elementBounds = await GoogleMap.getElementBounds(options.element);
     options.config.width = elementBounds.width;
     options.config.height = elementBounds.height;
     options.config.x = elementBounds.x;
@@ -174,6 +174,31 @@ export class GoogleMap {
     }
 
     return newMap;
+  }
+
+  private static async getElementBounds(
+    element: HTMLElement,
+  ): Promise<DOMRect> {
+    return new Promise(resolve => {
+      let elementBounds = element.getBoundingClientRect();
+      if (elementBounds.width == 0) {
+        let retries = 0;
+        const boundsInterval = setInterval(function () {
+          if (elementBounds.width == 0 && retries < 30) {
+            elementBounds = element.getBoundingClientRect();
+            retries++;
+          } else {
+            if (retries == 30) {
+              console.warn('Map size could not be determined');
+            }
+            clearInterval(boundsInterval);
+            resolve(elementBounds);
+          }
+        }, 100);
+      } else {
+        resolve(elementBounds);
+      }
+    });
   }
 
   /**
