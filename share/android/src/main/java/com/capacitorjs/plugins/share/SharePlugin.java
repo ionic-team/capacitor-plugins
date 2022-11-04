@@ -116,7 +116,9 @@ public class SharePlugin extends Plugin {
                     getContext(),
                     0,
                     new Intent(Intent.EXTRA_CHOSEN_COMPONENT),
-                    PendingIntent.FLAG_UPDATE_CURRENT
+                        (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) ?
+                                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE :
+                                PendingIntent.FLAG_UPDATE_CURRENT
                 );
                 chooser = Intent.createChooser(intent, dialogTitle, pi.getIntentSender());
                 chosenComponent = null;
