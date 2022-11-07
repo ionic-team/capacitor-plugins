@@ -1,5 +1,5 @@
 ext {
-    capacitorVersion = System.getenv('CAPACITOR_VERSION')
+    capacitorVersion = System.getenv('CAPACITOR_VERSION') ?: '[4.0,5.0)'
     junitVersion = project.hasProperty('junitVersion') ? rootProject.ext.junitVersion : '4.13.2'
     androidxAppCompatVersion = project.hasProperty('androidxAppCompatVersion') ? rootProject.ext.androidxAppCompatVersion : '1.4.2'
     androidxMaterialVersion = project.hasProperty('androidxMaterialVersion') ? rootProject.ext.androidxMaterialVersion : '1.6.1'
