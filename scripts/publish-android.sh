@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# The default Capacitor version(s) the plugin should depend on. Latest published in a range will be pulled by the user
+DEFAULT_CAPACITOR_VERSION="[4.0,5.0)"
+
 publish_plugin () {
     PLUGIN_PATH=$1
     if [ -d "$PLUGIN_PATH" ]; then
@@ -30,6 +33,7 @@ publish_plugin () {
                 # Export ENV variables used by Gradle for the plugin
                 export PLUGIN_NAME
                 export PLUGIN_VERSION
+                export CAPACITOR_VERSION
                 export CAP_PLUGIN_PUBLISH=true
 
                 # Build and publish
@@ -58,6 +62,15 @@ CAPACITOR_PUBLISHED_DATA=$(curl -s $CAPACITOR_PUBLISHED_URL)
 CAPACITOR_PUBLISHED_VERSION="$(perl -ne 'print and last if s/.*<latest>(.*)<\/latest>.*/\1/;' <<< $CAPACITOR_PUBLISHED_DATA)"
 
 printf %"s\n" "The latest published Android library version of Capacitor Core is $CAPACITOR_PUBLISHED_VERSION in MavenCentral."
+
+# Check if github actions passing in a custom native Capacitor dependency version
+if [[ $GITHUB_CAPACITOR_VERSION ]]; then
+    CAPACITOR_VERSION=$GITHUB_CAPACITOR_VERSION
+else
+    CAPACITOR_VERSION=$DEFAULT_CAPACITOR_VERSION
+fi
+
+printf %"s\n" "Publishing plugin(s) with dependency on Capacitor version $CAPACITOR_VERSION"
 
 # Check if github actions passing in a custom list of plugins
 if [[ $GITHUB_PLUGINS ]]; then
