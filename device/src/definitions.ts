@@ -52,6 +52,15 @@ export interface DeviceInfo {
   osVersion: string;
 
   /**
+   * The sdk version of the device OS.
+   *
+   * This is only supported on Android.
+   *
+   * @since 4.1.0
+   */
+  sdkVersion?: number;
+
+  /**
    * The manufacturer of the device.
    *
    * @since 1.0.0
