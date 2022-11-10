@@ -109,7 +109,7 @@ export interface PushNotificationsPlugin {
    *
    * On iOS, the first time you use the function, it will prompt the user
    * for push notification permission and return granted or denied based
-   * on the user selection. On following calls it will currect status of
+   * on the user selection. On following calls it will get the current status of
    * the permission without prompting again.
    *
    * @since 1.0.0
