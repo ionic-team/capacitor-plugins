@@ -96,11 +96,12 @@ Show a Share modal for sharing content with other apps
 
 #### ShareOptions
 
-| Prop              | Type                | Description                                                                | Since |
-| ----------------- | ------------------- | -------------------------------------------------------------------------- | ----- |
-| **`title`**       | <code>string</code> | Set a title for any message. This will be the subject if sharing to email  | 1.0.0 |
-| **`text`**        | <code>string</code> | Set some text to share                                                     | 1.0.0 |
-| **`url`**         | <code>string</code> | Set a URL to share, can be http, https or file:// URL                      | 1.0.0 |
-| **`dialogTitle`** | <code>string</code> | Set a title for the share modal. This option is only supported on Android. | 1.0.0 |
+| Prop              | Type                  | Description                                                                         | Since |
+| ----------------- | --------------------- | ----------------------------------------------------------------------------------- | ----- |
+| **`title`**       | <code>string</code>   | Set a title for any message. This will be the subject if sharing to email           | 1.0.0 |
+| **`text`**        | <code>string</code>   | Set some text to share                                                              | 1.0.0 |
+| **`url`**         | <code>string</code>   | Set a URL to share, can be http, https or file:// URL                               | 1.0.0 |
+| **`files`**       | <code>string[]</code> | Array of file:// URLs of the files to be shared. Only supported on iOS and Android. | 4.1.0 |
+| **`dialogTitle`** | <code>string</code>   | Set a title for the share modal. This option is only supported on Android.          | 1.0.0 |
 
 </docgen-api>

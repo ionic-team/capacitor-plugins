@@ -22,6 +22,14 @@ export interface ShareOptions {
   url?: string;
 
   /**
+   * Array of file:// URLs of the files to be shared.
+   * Only supported on iOS and Android.
+   *
+   * @since 4.1.0
+   */
+  files?: string[];
+
+  /**
    * Set a title for the share modal.
    * This option is only supported on Android.
    *
