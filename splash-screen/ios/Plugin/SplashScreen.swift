@@ -89,7 +89,7 @@ import Capacitor
 
     private func buildViews() {
         let storyboardName = Bundle.main.infoDictionary?["UILaunchStoryboardName"] as? String ?? "LaunchScreen"
-        if let vc = UIStoryboard(name: storyboardName, bundle: nil).instantiateInitialViewController() {
+        if let vc = UIStoryboard(name: storyboardName.replacingOccurrences(of: ".storyboard", with: ""), bundle: nil).instantiateInitialViewController() {
             viewController = vc
         }
 
