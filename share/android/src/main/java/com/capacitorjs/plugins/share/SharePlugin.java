@@ -142,6 +142,11 @@ public class SharePlugin extends Plugin {
                 intent.putExtra(Intent.EXTRA_SUBJECT, title);
             }
 
+                int flags = PendingIntent.FLAG_UPDATE_CURRENT;
+                        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                            flags = flags | PendingIntent.FLAG_MUTABLE;
+                        }
+
             Intent chooser = null;
             if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
                 // requestCode parameter is not used. Providing 0
