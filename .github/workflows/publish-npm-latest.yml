@@ -1,6 +1,7 @@
 name: Publish NPM Latest
 
-workflow_call:
+on:
+  workflow_call:
     secrets:
       CAP_GH_RELEASE_TOKEN:
         required: true
