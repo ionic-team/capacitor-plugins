@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/splash-screen@4.1.1...@capacitor/splash-screen@4.1.2) (2022-11-16)
+
+
+### Bug Fixes
+
+* **splash-screen:** Remove extension from storyboard name ([#1281](https://github.com/ionic-team/capacitor-plugins/issues/1281)) ([86ecc4f](https://github.com/ionic-team/capacitor-plugins/commit/86ecc4f0c45799b2a5a02700c18a3d5f0de00615))
+
+
+
+
+
 ## [4.1.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/splash-screen@4.1.0...@capacitor/splash-screen@4.1.1) (2022-10-21)
 
 **Note:** Version bump only for package @capacitor/splash-screen

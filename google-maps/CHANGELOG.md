@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.3.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/google-maps@4.3.0...@capacitor/google-maps@4.3.1) (2022-11-16)
+
+
+### Bug Fixes
+
+* **google-maps:** install google.maps types as dependency ([#1269](https://github.com/ionic-team/capacitor-plugins/issues/1269)) ([6cc7783](https://github.com/ionic-team/capacitor-plugins/commit/6cc77835d301f9c7734ae8a25dd0fc08ea91c74a))
+* **google-maps:** Remove log of marker options ([#1247](https://github.com/ionic-team/capacitor-plugins/issues/1247)) ([5bb3000](https://github.com/ionic-team/capacitor-plugins/commit/5bb30005df075ce1679695792e33f398eee298c4))
+* **google-maps:** Retry getting the map size if it's 0 ([#1252](https://github.com/ionic-team/capacitor-plugins/issues/1252)) ([9bffdb5](https://github.com/ionic-team/capacitor-plugins/commit/9bffdb529f41cadc2e5a33c4a09d5ebfacf4baed))
+
+
+
+
+
 # [4.3.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/google-maps@4.2.1...@capacitor/google-maps@4.3.0) (2022-10-21)
 
 

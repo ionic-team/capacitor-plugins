@@ -23,8 +23,16 @@ public class SharePlugin: CAPPlugin {
 
         let title = call.getString("title")
 
+        if let files = call.getArray("files") {
+            files.forEach { file in
+                if let url = file as? String, let fileUrl = URL(string: url) {
+                    items.append(fileUrl)
+                }
+            }
+        }
+
         if items.count == 0 {
-            call.reject("Must provide at least url or text")
+            call.reject("Must provide at least url, text or files")
             return
         }
 

@@ -327,7 +327,7 @@ receive push notifications.
 
 On iOS, the first time you use the function, it will prompt the user
 for push notification permission and return granted or denied based
-on the user selection. On following calls it will currect status of
+on the user selection. On following calls it will get the current status of
 the permission without prompting again.
 
 **Returns:** <code>Promise&lt;<a href="#permissionstatus">PermissionStatus</a>&gt;</code>
