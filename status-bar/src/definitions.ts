@@ -54,6 +54,7 @@ export enum Animation {
 
   /**
    * Slide animation during show/hide.
+   * It doesn't work on iOS 15+.
    *
    * @since 1.0.0
    */
@@ -140,6 +141,10 @@ export interface StatusBarPlugin {
 
   /**
    * Show the status bar.
+   * On iOS, if the status bar is initially hidden and the initial style is set to
+   * `UIStatusBarStyleLightContent`, first show call might present a glitch on the
+   * animation showing the text as dark and then transition to light. It's recommended
+   * to use `Animation.None` as the animation on the first call.
    *
    * @since 1.0.0
    */
