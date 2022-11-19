@@ -738,6 +738,15 @@ export interface LocalNotificationSchema {
    * @since 1.0.0
    */
   inboxList?: string[];
+
+  /**
+   * Sets the interruption level for this notification.
+   *
+   * Only available for iOS.
+   *
+   * @since 4.2.0
+   */
+  interruptionLevel?: InterruptionLevel;
 }
 
 /**
@@ -823,6 +832,13 @@ export type ScheduleEvery =
   | 'hour'
   | 'minute'
   | 'second';
+
+export enum InterruptionLevel {
+  PASSIVE = 0,
+  ACTIVE = 1,
+  TIME_SESIITIVE = 2,
+  CRITICAL = 3,
+}
 
 export interface ListChannelsResult {
   /**
