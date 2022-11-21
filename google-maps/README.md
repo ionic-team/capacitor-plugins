@@ -763,7 +763,7 @@ Configuration properties for a Google Map Camera
 | **`bearing`**           | <code>number</code>                       | Bearing of the camera, in degrees clockwise from true north.                                                           | <code>0</code>     |
 | **`angle`**             | <code>number</code>                       | The angle, in degrees, of the camera from the nadir (directly facing the Earth). The only allowed values are 0 and 45. | <code>0</code>     |
 | **`animate`**           | <code>boolean</code>                      | Animate the transition to the new Camera properties.                                                                   | <code>false</code> |
-| **`animationDuration`** | <code>number</code>                       |                                                                                                                        |                    |
+| **`animationDuration`** | <code>number</code>                       | This configuration option is not being used.                                                                           |                    |
 
 
 #### MapPadding
