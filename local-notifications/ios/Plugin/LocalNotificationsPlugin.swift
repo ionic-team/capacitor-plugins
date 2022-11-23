@@ -239,6 +239,14 @@ public class LocalNotificationsPlugin: CAPPlugin {
             content.attachments = try makeAttachments(attachments)
         }
 
+        if #available(iOS 15, *) {
+            if let interruptionLevel = notification["interruptionLevel"] as? UInt {
+                if interruptionLevel <= 3 {
+                    content.interruptionLevel = UNNotificationInterruptionLevel(rawValue: interruptionLevel)!
+                }
+            }
+        }
+
         return content
     }
 
