@@ -124,6 +124,8 @@ export interface CapacitorGoogleMapsPlugin extends Plugin {
   onScroll(args: OnScrollArgs): Promise<void>;
   dispatchMapEvent(args: { id: string; focus: boolean }): Promise<void>;
   getMapBounds(args: { id: string }): Promise<LatLngBounds>;
+  
+  handlerDirections(args:{id:string,result:google.maps.DirectionsResult}):Promise<void>
 }
 
 const CapacitorGoogleMaps = registerPlugin<CapacitorGoogleMapsPlugin>(

@@ -829,6 +829,34 @@ export class GoogleMap {
     }
   }
 
+  Directions(args:{origin:any,destination:any}):Promise<void>{
+     
+     return this.getDirectionsResult(args.origin,args.destination).then(async (result)=> {
+      const r = await CapacitorGoogleMaps.handlerDirections({id:this.id,result:result});
+      console.log("REALIZADO",r);
+      return
+
+     }).catch((err) => {
+      throw new Error(err);
+    })
+  }
+  private getDirectionsResult(origin:any,destination:any){
+    console.log(origin,destination);
+    const directionS = new google.maps.DirectionsService();
+    const directionRoute = directionS.route({
+      origin:origin,
+      destination:destination,
+      travelMode:google.maps.TravelMode.BICYCLING,
+    })
+    return  directionRoute.then((r) => {
+      return r;
+    }).catch((err) => {
+      throw new Error(err);
+    })
+    
+  }
+
+ 
   private generateCallback(
     callback: MapListenerCallback<any>,
   ): MapListenerCallback<any> {

@@ -42,6 +42,15 @@ export class CapacitorGoogleMapsWeb
   } = {};
   private currMarkerId = 0;
 
+
+  async handlerDirections(args:{id:string,result:google.maps.DirectionsResult}):Promise<void>{
+    const map = this.maps[args.id].map;
+    const directionRendered = new google.maps.DirectionsRenderer();
+    directionRendered.setMap(map);
+    directionRendered.setOptions({})
+    directionRendered.setDirections(args.result);
+    return
+  }
   private onClusterClickHandler: onClusterClickHandler = (
     _: google.maps.MapMouseEvent,
     cluster: Cluster,
@@ -429,4 +438,13 @@ export class CapacitorGoogleMapsWeb
 
     return opts;
   }
+
+
+
+
+
+
+
+
+
 }

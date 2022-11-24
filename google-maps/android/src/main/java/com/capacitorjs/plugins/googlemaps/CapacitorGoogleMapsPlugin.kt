@@ -343,8 +343,25 @@ class CapacitorGoogleMapsPlugin : Plugin() {
     }
 
     @PluginMethod
+    fun handlerDirections(call:PluginCall){
+        try{
+            print(call)
+            val id = call.getString("id");
+            id?: throw InvalidMapIdError()
+            val result = call.getObject("result")
+            print(result)
+            call.resolve()
+
+        }
+        catch(e:GoogleMapsError) {
+            handleError(call,e);
+        }
+    }
+
+    @PluginMethod
     fun setCamera(call: PluginCall) {
         try {
+
             val id = call.getString("id")
             id ?: throw InvalidMapIdError()
 
