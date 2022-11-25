@@ -89,7 +89,17 @@ public class Filesystem {
             toDirectory = directory;
         }
 
-        File fromObject = getFileObject(from, directory);
+        File fromObject;
+        boolean fromObjectIsTemp;
+        Uri uri = Uri.parse(from);
+        if (uri.getScheme() != null && uri.getScheme().equals("content")) {
+            fromObject = createTempFileObjectFromContentUri(uri);
+            fromObjectIsTemp = true;
+        } else {
+            fromObject = getFileObject(from, directory);
+            fromObjectIsTemp = false;
+        }
+
         File toObject = getFileObject(to, toDirectory);
 
         if (fromObject == null) {
@@ -128,6 +138,10 @@ public class Filesystem {
             }
         } else {
             copyRecursively(fromObject, toObject);
+        }
+
+        if (fromObjectIsTemp && !doRename) {
+            fromObject.delete();
         }
 
         return toObject;
@@ -218,6 +232,31 @@ public class Filesystem {
         }
 
         return new File(androidDirectory, path);
+    }
+
+    /**
+     * Resolve a content:// URI and save it to a temp file for further processing
+     */
+    public File createTempFileObjectFromContentUri(Uri contentUri) {
+        try {
+            InputStream inputStreamReader = this.context.getContentResolver().openInputStream(contentUri);
+
+            File outputFile = File.createTempFile("tempfile", "", this.context.getCacheDir());
+            FileOutputStream fileOutputStream = new FileOutputStream(outputFile);
+
+            byte[] buffer = new byte[1024];
+
+            int c;
+            while ((c = inputStreamReader.read(buffer)) > 0) {
+                fileOutputStream.write(buffer, 0, c);
+            }
+            inputStreamReader.close();
+            fileOutputStream.close();
+
+            return outputFile;
+        } catch (IOException $ex) {
+            return null;
+        }
     }
 
     public Charset getEncoding(String encoding) {
