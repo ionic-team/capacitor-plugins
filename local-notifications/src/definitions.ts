@@ -543,6 +543,8 @@ export interface LocalNotificationSchema {
   summaryText?: string;
   /**
    * The notification identifier.
+   * On Android it's a 32-bit int.
+   * So the value should be between -2147483648 and 2147483647 inclusive.
    *
    * @since 1.0.0
    */
