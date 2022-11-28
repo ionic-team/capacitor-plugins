@@ -832,7 +832,8 @@ export class GoogleMap {
   Directions(args:{origin:any,destination:any}):Promise<void>{
      
      return this.getDirectionsResult(args.origin,args.destination).then(async (result)=> {
-      const r = await CapacitorGoogleMaps.handlerDirections({id:this.id,result:result});
+      console.log(result);
+      const r = await CapacitorGoogleMaps.handlerDirections({id:this.id,result:{...result,origin:args.origin,destination:args.destination}});
       console.log("REALIZADO",r);
       return
 

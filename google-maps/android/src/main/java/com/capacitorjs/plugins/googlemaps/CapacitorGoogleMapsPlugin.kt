@@ -163,6 +163,35 @@ class CapacitorGoogleMapsPlugin : Plugin() {
             handleError(call, e)
         }
     }
+    @PluginMethod
+    fun handlerDirections(call:PluginCall){
+        try{
+            print(call)
+            val id = call.getString("id");
+            id?: throw InvalidMapIdError()
+            val result = call.getObject("result")
+
+            // need to draw directions in map
+            val map = maps[id];
+            map ?: throw MapNotFoundError()
+            map.handlerDirections(result) { err ->
+                if (err != null) {
+                    throw err
+                }
+
+                call.resolve()
+
+            };
+
+        }
+        catch(e:GoogleMapsError) {
+            handleError(call,e);
+        }
+        catch (e:Exception){
+            handleError(call,e);
+        }
+
+    }
 
     @PluginMethod
     fun addMarker(call: PluginCall) {
@@ -342,21 +371,7 @@ class CapacitorGoogleMapsPlugin : Plugin() {
         }
     }
 
-    @PluginMethod
-    fun handlerDirections(call:PluginCall){
-        try{
-            print(call)
-            val id = call.getString("id");
-            id?: throw InvalidMapIdError()
-            val result = call.getObject("result")
-            print(result)
-            call.resolve()
 
-        }
-        catch(e:GoogleMapsError) {
-            handleError(call,e);
-        }
-    }
 
     @PluginMethod
     fun setCamera(call: PluginCall) {

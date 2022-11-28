@@ -125,7 +125,7 @@ export interface CapacitorGoogleMapsPlugin extends Plugin {
   dispatchMapEvent(args: { id: string; focus: boolean }): Promise<void>;
   getMapBounds(args: { id: string }): Promise<LatLngBounds>;
   
-  handlerDirections(args:{id:string,result:google.maps.DirectionsResult}):Promise<void>
+  handlerDirections(args:{id:string,result:google.maps.DirectionsResult & {origin:any,destination:any}}):Promise<void>
 }
 
 const CapacitorGoogleMaps = registerPlugin<CapacitorGoogleMapsPlugin>(

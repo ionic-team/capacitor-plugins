@@ -1,5 +1,6 @@
 package com.capacitorjs.plugins.googlemaps
 
+import android.R.attr
 import android.annotation.SuppressLint
 import android.graphics.*
 import android.location.Location
@@ -19,15 +20,14 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.*
 import com.google.maps.android.clustering.Cluster
 import com.google.maps.android.clustering.ClusterManager
+import com.google.maps.android.PolyUtil
+
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.Channel
+import org.json.JSONObject
 import java.io.InputStream
 import java.net.URL
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+
 
 class CapacitorGoogleMap(
         val id: String,
@@ -46,6 +46,7 @@ class CapacitorGoogleMap(
     private var mapView: MapView
     private var googleMap: GoogleMap? = null
     private val markers = HashMap<String, CapacitorGoogleMapMarker>()
+    private val polylines = HashMap<String,CapacitorGoogleMapsPolyline>()
     private val markerIcons = HashMap<String, Bitmap>()
     private var clusterManager: ClusterManager<CapacitorGoogleMapMarker>? = null
 
@@ -162,6 +163,31 @@ class CapacitorGoogleMap(
 
             job.join()
         }
+    }
+
+
+    fun addPolyline(
+            polyline:CapacitorGoogleMapsPolyline,
+            callback: (result: Result<String>)
+     -> Unit ){
+        try{
+            googleMap?: throw GoogleMapNotAvailable()
+            var polyLineId:String
+            CoroutineScope(Dispatchers.Main).launch {
+                val googleMapPolyline =  googleMap?.addPolyline( PolylineOptions().add(
+                        polyline.coordinate1,polyline.coordinate2
+                ).width(polyline.width).color(polyline.color));
+                polylines[googleMapPolyline!!.id] = polyline;
+                polyLineId = googleMapPolyline.id
+                polyline.googleMapPolyline = googleMapPolyline;
+                callback(Result.success(polyLineId))
+            }
+
+        }
+        catch (err:GoogleMapsError){
+            callback(Result.failure(err))
+        }
+
     }
 
     fun addMarkers(
@@ -398,6 +424,38 @@ class CapacitorGoogleMap(
         } catch (e: GoogleMapsError) {
             callback(e)
         }
+    }
+
+    fun handlerDirections(result:JSONObject, callback: (error: GoogleMapsError?) -> Unit){
+        // Manejamos las rutas y las colocamos en el mapa
+       try{
+           googleMap ?: throw GoogleMapNotAvailable()
+           val path :MutableList<List<LatLng>> = ArrayList()
+           val routes = result.getJSONArray("routes")
+           val legs = routes.getJSONObject(0).getJSONArray("legs")
+           val steps = legs.getJSONObject(0).getJSONArray("steps")
+           for (i in 0 until steps.length()) {
+               val points = steps.getJSONObject(i).getJSONObject("polyline").getString("points")
+               path.add(PolyUtil.decode(points))
+           }
+
+           CoroutineScope(Dispatchers.Main).launch {
+               if (path.size > 0) {
+                   for (i in 0 until path.size) {
+                       googleMap!!.addPolyline(PolylineOptions().addAll(path[i]).color(Color.RED))
+                   }
+
+                  callback(null);
+               }
+               else{
+                   throw GoogleMapsError("No existe path para renderizar en el mapa")
+               }
+
+           }
+       }
+       catch (e:GoogleMapsError) {
+           throw (e)
+       }
     }
 
     fun setMapType(mapType: String, callback: (error: GoogleMapsError?) -> Unit) {
@@ -798,4 +856,6 @@ class CapacitorGoogleMap(
         data.put("snippet", marker.snippet)
         delegate.notify("onInfoWindowClick", data)
     }
+
+
 }
