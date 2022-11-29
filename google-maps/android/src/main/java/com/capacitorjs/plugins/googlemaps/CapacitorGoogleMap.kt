@@ -47,6 +47,7 @@ class CapacitorGoogleMap(
     private var googleMap: GoogleMap? = null
     private val markers = HashMap<String, CapacitorGoogleMapMarker>()
     private val polylines = HashMap<String,CapacitorGoogleMapsPolyline>()
+    private val directionsPolyline = HashMap<String,Polyline>()
     private val markerIcons = HashMap<String, Bitmap>()
     private var clusterManager: ClusterManager<CapacitorGoogleMapMarker>? = null
 
@@ -427,7 +428,6 @@ class CapacitorGoogleMap(
     }
 
     fun handlerDirections(result:JSONObject, callback: (error: GoogleMapsError?) -> Unit){
-        // Manejamos las rutas y las colocamos en el mapa
        try{
            googleMap ?: throw GoogleMapNotAvailable()
            val path :MutableList<List<LatLng>> = ArrayList()
@@ -438,17 +438,16 @@ class CapacitorGoogleMap(
                val points = steps.getJSONObject(i).getJSONObject("polyline").getString("points")
                path.add(PolyUtil.decode(points))
            }
-
            CoroutineScope(Dispatchers.Main).launch {
                if (path.size > 0) {
                    for (i in 0 until path.size) {
-                       googleMap!!.addPolyline(PolylineOptions().addAll(path[i]).color(Color.RED))
+                     var poly =   googleMap!!.addPolyline(PolylineOptions().addAll(path[i]).color(Color.RED))
+                       directionsPolyline[poly!!.id] = poly;
                    }
-
                   callback(null);
                }
                else{
-                   throw GoogleMapsError("No existe path para renderizar en el mapa")
+                   throw GoogleMapsError("does not exist path to render polylines in map")
                }
 
            }
@@ -457,6 +456,25 @@ class CapacitorGoogleMap(
            throw (e)
        }
     }
+
+    fun removeAllDirectionsPolylines(callback:(error:GoogleMapsError?) -> Unit){
+        try{
+            googleMap ?: throw GoogleMapNotAvailable()
+            CoroutineScope(Dispatchers.Main).launch {
+                if (directionsPolyline.size > 0){
+                    for (p in directionsPolyline){
+                        p.value.remove();
+                    }
+                    directionsPolyline.clear()
+                }
+                callback(null);
+            }
+        }
+        catch (err:GoogleMapsError){
+            callback(err)
+        }
+    }
+
 
     fun setMapType(mapType: String, callback: (error: GoogleMapsError?) -> Unit) {
         try {
