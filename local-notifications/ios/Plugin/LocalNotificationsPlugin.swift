@@ -23,6 +23,7 @@ enum LocalNotificationError: LocalizedError {
     }
 }
 
+// swiftlint:disable type_body_length
 @objc(LocalNotificationsPlugin)
 public class LocalNotificationsPlugin: CAPPlugin {
     private let notificationDelegationHandler = LocalNotificationsHandler()
