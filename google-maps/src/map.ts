@@ -15,6 +15,7 @@ import type {
   MarkerClickCallbackData,
   MyLocationButtonClickCallbackData,
   LatLngBounds,
+  LatLng,
 } from './definitions';
 import type { CreateMapArgs } from './implementation';
 import { CapacitorGoogleMaps } from './implementation';
@@ -828,15 +829,10 @@ export class GoogleMap {
       this.onMyLocationClickListener = undefined;
     }
   }
-
-  Directions(args:{origin:any,destination:any}):Promise<void>{
-     
+  /**Get the route from two points and render polylines in the map */
+  Directions(args:{origin:LatLng | string,destination:LatLng | string}):Promise<void>{
      return this.getDirectionsResult(args.origin,args.destination).then(async (result)=> {
-      console.log(result);
-      const r = await CapacitorGoogleMaps.handlerDirections({id:this.id,result:{...result,origin:args.origin,destination:args.destination}});
-      console.log("REALIZADO",r);
-      return
-
+      return await CapacitorGoogleMaps.handlerDirections({id:this.id,result});
      }).catch((err) => {
       throw new Error(err);
     })
@@ -845,11 +841,10 @@ export class GoogleMap {
  removeAllDirectionsPolylines():Promise<void>{
     return CapacitorGoogleMaps.removeAllDirectionsPolylines({id:this.id});
   }
-
-  private getDirectionsResult(origin:any,destination:any){
-    console.log(origin,destination);
-    const directionS = new google.maps.DirectionsService();
-    const directionRoute = directionS.route({
+  /**Get direction result from Directions API*/
+  private getDirectionsResult(origin:LatLng | string,destination:LatLng | string){
+    const directionService = new google.maps.DirectionsService();
+    const directionRoute = directionService.route({
       origin:origin,
       destination:destination,
       travelMode:google.maps.TravelMode.BICYCLING,
