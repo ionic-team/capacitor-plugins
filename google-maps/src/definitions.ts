@@ -116,7 +116,7 @@ export interface CameraConfig {
   animate?: boolean;
 
   /**
-   *
+   * This configuration option is not being used.
    */
   animationDuration?: number;
 }
