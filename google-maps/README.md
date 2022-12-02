@@ -834,10 +834,14 @@ An interface representing the viewports latitude and longitude bounds.
 
 #### MarkerClickCallbackData
 
-| Prop        | Type                |
-| ----------- | ------------------- |
-| **`mapId`** | <code>string</code> |
-
+| Prop            | Type                |
+| --------------- | ------------------- |
+| **`markerId`**  | <code>string</code> |
+| **`mapId`**     | <code>string</code> |
+| **`latitude`**  | <code>number</code> |
+| **`longitude`** | <code>number</code> |
+| **`title`**     | <code>string</code> |
+| **`snippet`**   | <code>string</code> |
 
 #### MapClickCallbackData
 
