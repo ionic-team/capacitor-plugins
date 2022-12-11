@@ -2,6 +2,7 @@ package com.capacitorjs.plugins.pushnotifications;
 
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
@@ -237,10 +238,10 @@ public class PushNotificationsPlugin extends Plugin {
                     Intent intent = new Intent(getContext(), getActivity().getClass());
                     intent.putExtras(remoteMessage.toIntent().getExtras());
                     PendingIntent pendingIntent = PendingIntent.getActivity(
-                            getContext(),
-                            0,
-                            intent,
-                            PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE
+                        getContext(),
+                        0,
+                        intent,
+                        PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE
                     );
                     NotificationCompat.Builder builder = new NotificationCompat.Builder(
                         getContext(),
