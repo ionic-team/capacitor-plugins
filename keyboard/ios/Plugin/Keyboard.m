@@ -125,7 +125,9 @@ NSString* UITraitsClassString;
     [hideTimer invalidate];
   }
   CGRect rect = [[notification.userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
-  double height = rect.size.height;
+  CGRect webViewAbsolute = [self.webView convertRect:self.webView.frame toCoordinateSpace:self.webView.window.screen.coordinateSpace];
+  CGRect intersection = CGRectIntersection(rect, webViewAbsolute);
+  double height = CGRectIntersection(rect, webViewAbsolute).size.height;
 
   double duration = [[notification.userInfo valueForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue]+0.2;
   [self setKeyboardHeight:height delay:duration];
