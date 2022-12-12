@@ -249,14 +249,15 @@ Request camera and photo album permissions
 
 #### GalleryImageOptions
 
-| Prop                     | Type                                   | Description                                                                                | Default                     | Since |
-| ------------------------ | -------------------------------------- | ------------------------------------------------------------------------------------------ | --------------------------- | ----- |
-| **`quality`**            | <code>number</code>                    | The quality of image to return as JPEG, from 0-100                                         |                             | 1.2.0 |
-| **`width`**              | <code>number</code>                    | The desired maximum width of the saved image. The aspect ratio is respected.               |                             | 1.2.0 |
-| **`height`**             | <code>number</code>                    | The desired maximum height of the saved image. The aspect ratio is respected.              |                             | 1.2.0 |
-| **`correctOrientation`** | <code>boolean</code>                   | Whether to automatically rotate the image "up" to correct for orientation in portrait mode | <code>: true</code>         | 1.2.0 |
-| **`presentationStyle`**  | <code>'fullscreen' \| 'popover'</code> | iOS only: The presentation style of the Camera.                                            | <code>: 'fullscreen'</code> | 1.2.0 |
-| **`limit`**              | <code>number</code>                    | iOS only: Maximum number of pictures the user will be able to choose.                      | <code>0 (unlimited)</code>  | 1.2.0 |
+| Prop                     | Type                                   | Description                                                                                              | Default                     | Since |
+| ------------------------ | -------------------------------------- | -------------------------------------------------------------------------------------------------------- | --------------------------- | ----- |
+| **`exif`**               | <code>boolean</code>                   | Whether to include the exif data in the response. If set to `true`, the `photos` permission is required. | <code>: true</code>         | 4.2.0 |
+| **`quality`**            | <code>number</code>                    | The quality of image to return as JPEG, from 0-100                                                       |                             | 1.2.0 |
+| **`width`**              | <code>number</code>                    | The desired maximum width of the saved image. The aspect ratio is respected.                             |                             | 1.2.0 |
+| **`height`**             | <code>number</code>                    | The desired maximum height of the saved image. The aspect ratio is respected.                            |                             | 1.2.0 |
+| **`correctOrientation`** | <code>boolean</code>                   | Whether to automatically rotate the image "up" to correct for orientation in portrait mode               | <code>: true</code>         | 1.2.0 |
+| **`presentationStyle`**  | <code>'fullscreen' \| 'popover'</code> | iOS only: The presentation style of the Camera.                                                          | <code>: 'fullscreen'</code> | 1.2.0 |
+| **`limit`**              | <code>number</code>                    | iOS only: Maximum number of pictures the user will be able to choose.                                    | <code>0 (unlimited)</code>  | 1.2.0 |
 
 
 #### PermissionStatus
