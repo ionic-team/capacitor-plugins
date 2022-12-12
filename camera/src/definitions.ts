@@ -278,11 +278,11 @@ export interface GalleryPhoto {
 export interface GalleryImageOptions {
   /**
    * Whether to include the exif data in the response.
-   * 
+   *
    * If set to `true`, the `photos` permission is required.
-   * 
+   *
    * Only available on iOS.
-   * 
+   *
    * @default true
    * @since 4.2.0
    */
