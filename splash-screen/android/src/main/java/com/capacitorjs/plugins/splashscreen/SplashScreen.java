@@ -103,28 +103,31 @@ public class SplashScreen {
                 windowSplashScreen.setKeepOnScreenCondition(() -> isVisible || isHiding);
 
                 // Set Fade Out Animation
-                windowSplashScreen.setOnExitAnimationListener(
-                    windowSplashScreenView -> {
-                        final ObjectAnimator fadeAnimator = ObjectAnimator.ofFloat(windowSplashScreenView.getView(), View.ALPHA, 1f, 0f);
-                        fadeAnimator.setInterpolator(new LinearInterpolator());
-                        fadeAnimator.setDuration(settings.getFadeOutDuration());
+                if (Build.VERSION.SDK_INT != 32) {
+                    windowSplashScreen.setOnExitAnimationListener(
+                            windowSplashScreenView -> {
+                                final ObjectAnimator fadeAnimator = ObjectAnimator.ofFloat(windowSplashScreenView.getView(), View.ALPHA, 1f, 0f);
+                                fadeAnimator.setInterpolator(new LinearInterpolator());
+                                fadeAnimator.setDuration(settings.getFadeOutDuration());
 
-                        fadeAnimator.addListener(
-                            new AnimatorListenerAdapter() {
-                                @Override
-                                public void onAnimationEnd(Animator animation) {
-                                    isHiding = false;
-                                    windowSplashScreenView.remove();
-                                }
+                                fadeAnimator.addListener(
+                                        new AnimatorListenerAdapter() {
+                                            @Override
+                                            public void onAnimationEnd(Animator animation) {
+                                                isHiding = false;
+                                                windowSplashScreenView.remove();
+                                            }
+                                        }
+                                );
+
+                                fadeAnimator.start();
+
+                                isHiding = true;
+                                isVisible = false;
                             }
-                        );
+                    );
+                }
 
-                        fadeAnimator.start();
-
-                        isHiding = true;
-                        isVisible = false;
-                    }
-                );
 
                 // Set Pre Draw Listener & Delay Drawing Until Duration Elapses
                 content = activity.findViewById(android.R.id.content);
