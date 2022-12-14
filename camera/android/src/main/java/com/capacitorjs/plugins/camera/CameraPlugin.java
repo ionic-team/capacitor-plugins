@@ -61,15 +61,15 @@ import org.json.JSONException;
         @Permission(strings = { Manifest.permission.CAMERA }, alias = CameraPlugin.CAMERA),
         @Permission(
             strings = { Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE },
-            alias = CameraPlugin.PHOTOS
-        )
-    }
-)
+            alias = CameraPlugin.PHOTOS),
+        @Permission(strings = { Manifest.permission.READ_MEDIA_IMAGES }, alias = CameraPlugin.PHOTOS_SDK_33)
+})
 public class CameraPlugin extends Plugin {
 
     // Permission alias constants
     static final String CAMERA = "camera";
     static final String PHOTOS = "photos";
+    static final String PHOTOS_SDK_33 = "photos sdk 33";
 
     // Message constants
     private static final String INVALID_RESULT_TYPE_ERROR = "Invalid resultType option";
@@ -171,7 +171,9 @@ public class CameraPlugin extends Plugin {
         // if the manifest does not contain the camera permissions key, we don't need to ask the user
         boolean needCameraPerms = isPermissionDeclared(CAMERA);
         boolean hasCameraPerms = !needCameraPerms || getPermissionState(CAMERA) == PermissionState.GRANTED;
-        boolean hasPhotoPerms = getPermissionState(PHOTOS) == PermissionState.GRANTED;
+        boolean isBelowSdk33 = Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU;
+        boolean hasPhotoPerms = (isBelowSdk33 ? getPermissionState(PHOTOS)
+                : getPermissionState(PHOTOS_SDK_33)) == PermissionState.GRANTED;
 
         // If we want to save to the gallery, we need two permissions
         if (settings.isSaveToGallery() && !(hasCameraPerms && hasPhotoPerms) && isFirstRequest) {
@@ -179,8 +181,10 @@ public class CameraPlugin extends Plugin {
             String[] aliases;
             if (needCameraPerms) {
                 aliases = new String[] { CAMERA, PHOTOS };
-            } else {
+            } else if (isBelowSdk33){
                 aliases = new String[] { PHOTOS };
+            } else {
+                aliases = new String[] { PHOTOS_SDK_33 };
             }
             requestPermissionForAliases(aliases, call, "cameraPermissionsCallback");
             return false;
@@ -194,8 +198,13 @@ public class CameraPlugin extends Plugin {
     }
 
     private boolean checkPhotosPermissions(PluginCall call) {
-        if (getPermissionState(PHOTOS) != PermissionState.GRANTED) {
-            requestPermissionForAlias(PHOTOS, call, "cameraPermissionsCallback");
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+            if (getPermissionState(PHOTOS) != PermissionState.GRANTED) {
+                requestPermissionForAlias(PHOTOS, call, "cameraPermissionsCallback");
+                return false;
+            }
+        } else if (getPermissionState(PHOTOS_SDK_33) != PermissionState.GRANTED) {
+            requestPermissionForAlias(PHOTOS_SDK_33, call, "cameraPermissionsCallback");
             return false;
         }
         return true;
@@ -216,10 +225,16 @@ public class CameraPlugin extends Plugin {
                 Logger.debug(getLogTag(), "User denied camera permission: " + getPermissionState(CAMERA).toString());
                 call.reject(PERMISSION_DENIED_ERROR_CAMERA);
                 return;
-            } else if (settings.getSource() == CameraSource.PHOTOS && getPermissionState(PHOTOS) != PermissionState.GRANTED) {
-                Logger.debug(getLogTag(), "User denied photos permission: " + getPermissionState(PHOTOS).toString());
-                call.reject(PERMISSION_DENIED_ERROR_PHOTOS);
-                return;
+            } else if (settings.getSource() == CameraSource.PHOTOS) {
+                PermissionState permissionState = (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU)
+                        ? getPermissionState(PHOTOS)
+                        : getPermissionState(PHOTOS_SDK_33);
+                if (permissionState != PermissionState.GRANTED) {
+                    Logger.debug(getLogTag(),
+                            "User denied photos permission: " + permissionState.toString());
+                    call.reject(PERMISSION_DENIED_ERROR_PHOTOS);
+                    return;
+                }
             }
             doShow(call);
         }
