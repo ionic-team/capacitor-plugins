@@ -52,6 +52,7 @@ public class BrowserPlugin extends Plugin {
         try {
             implementation.open(url, toolbarColor);
         } catch (ActivityNotFoundException ex) {
+            Logger.error(getLogTag(), ex.getLocalizedMessage(), null);
             call.reject("Unable to display URL");
             return;
         }
