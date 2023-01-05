@@ -9,6 +9,7 @@ import com.getcapacitor.annotation.CapacitorPlugin;
 
 @CapacitorPlugin(name = "ScreenOrientation")
 public class ScreenOrientationPlugin extends Plugin {
+
     private ScreenOrientation implementation;
 
     @Override
@@ -16,7 +17,7 @@ public class ScreenOrientationPlugin extends Plugin {
         implementation = new ScreenOrientation(getActivity());
     }
 
-    @PluginMethod()
+    @PluginMethod
     public void orientation(PluginCall call) {
         JSObject ret = new JSObject();
         String type = implementation.getCurrentOrientationType();
@@ -24,10 +25,10 @@ public class ScreenOrientationPlugin extends Plugin {
         call.resolve(ret);
     }
 
-    @PluginMethod()
+    @PluginMethod
     public void lock(PluginCall call) {
         String orientationType = call.getString("orientation");
-        if(orientationType == null) {
+        if (orientationType == null) {
             call.reject("Input option 'orientation' must be provided.");
             return;
         }
@@ -35,7 +36,7 @@ public class ScreenOrientationPlugin extends Plugin {
         call.resolve();
     }
 
-    @PluginMethod()
+    @PluginMethod
     public void unlock(PluginCall call) {
         implementation.unlock();
         call.resolve();
@@ -44,7 +45,7 @@ public class ScreenOrientationPlugin extends Plugin {
     @Override
     public void handleOnConfigurationChanged(Configuration newConfig) {
         super.handleOnConfigurationChanged(newConfig);
-        if(implementation.hasOrientationChanged(newConfig.orientation)) {
+        if (implementation.hasOrientationChanged(newConfig.orientation)) {
             this.onOrientationChanged();
         }
     }

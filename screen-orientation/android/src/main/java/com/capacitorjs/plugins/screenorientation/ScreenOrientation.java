@@ -2,21 +2,26 @@ package com.capacitorjs.plugins.screenorientation;
 
 import android.content.pm.ActivityInfo;
 import android.view.Surface;
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class ScreenOrientation {
+
     private AppCompatActivity activity;
-    @Nullable private int configOrientation;
+
+    @Nullable
+    private int configOrientation;
 
     public ScreenOrientation(AppCompatActivity activity) {
         this.activity = activity;
     }
 
     public String getCurrentOrientationType() {
-        int rotation = activity.getWindowManager().getDefaultDisplay().getRotation();
-        return fromRotationToOrientationType(rotation);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
+            return fromRotationToOrientationType(activity.getDisplay().getRotation());
+        } else {
+            return fromRotationToOrientationType(getLegacyDisplayRotation());
+        }
     }
 
     public void lock(String orientationType) {
@@ -62,5 +67,10 @@ public class ScreenOrientation {
                 // Case: portrait-primary
                 return ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
         }
+    }
+
+    @SuppressWarnings("deprecation")
+    private int getLegacyDisplayRotation() {
+        return activity.getWindowManager().getDefaultDisplay().getRotation();
     }
 }
