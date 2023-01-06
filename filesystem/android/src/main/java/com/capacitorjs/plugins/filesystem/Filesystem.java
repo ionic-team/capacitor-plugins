@@ -161,6 +161,7 @@ public class Filesystem {
         while ((length = is.read(buffer)) != -1) {
             outputStream.write(buffer, 0, length);
         }
+        is.close();
 
         return outputStream.toString(encoding);
     }
