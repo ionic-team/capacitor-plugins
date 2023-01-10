@@ -55,7 +55,7 @@ export interface KeyboardInfo {
 
    /**
    * Animation duration of the keyboard.
-   * 
+   *
    * @since 1.0.0
    */
   keyboardAnimationDuration: number;
@@ -229,7 +229,7 @@ export interface KeyboardPlugin {
    */
   addListener(
     eventName: 'keyboardWillHide',
-    listenerFunc: () => void,
+    listenerFunc: (info: KeyboardInfo) => void,
   ): Promise<PluginListenerHandle> & PluginListenerHandle;
 
   /**
@@ -239,7 +239,7 @@ export interface KeyboardPlugin {
    */
   addListener(
     eventName: 'keyboardDidHide',
-    listenerFunc: () => void,
+    listenerFunc: (info: KeyboardInfo) => void,
   ): Promise<PluginListenerHandle> & PluginListenerHandle;
 
   /**
