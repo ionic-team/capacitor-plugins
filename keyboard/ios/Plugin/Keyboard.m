@@ -109,8 +109,13 @@ NSString* UITraitsClassString;
 
 - (void)onKeyboardWillHide:(NSNotification *)notification
 {
-  double height = 0.0;
-  double duration = 0.01;
+CGRect rect = [[notification.userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+  CGRect webViewAbsolute = [self.webView convertRect:self.webView.frame toCoordinateSpace:self.webView.window.screen.coordinateSpace];
+  double height = (webViewAbsolute.size.height + webViewAbsolute.origin.y) - ( UIScreen.mainScreen.bounds.size.height - rect.size.height);
+  if (height < 0) {
+    height = 0;
+  }
+  double duration = [[notification.userInfo valueForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue]+0.2;
   [self setKeyboardHeight:height delay:duration];
   [self resetScrollView];
   hideTimer = [NSTimer scheduledTimerWithTimeInterval:0 repeats:NO block:^(NSTimer * _Nonnull timer) {
