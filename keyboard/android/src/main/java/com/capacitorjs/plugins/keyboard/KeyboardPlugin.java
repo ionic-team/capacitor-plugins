@@ -82,11 +82,12 @@ public class KeyboardPlugin extends Plugin {
         switch (event) {
             case Keyboard.EVENT_KB_WILL_SHOW:
             case Keyboard.EVENT_KB_DID_SHOW:
-                // Convert Handler().postDelayed() 350ms to 0.35s
-                String data = "{ 'keyboardHeight': " + size + ", 'keyboardAnimationDuration': " + 0.35 + " }";
+                // Duration of 0s to match React Native
+                final double duration = 0.0;
+                final String data = "{ 'keyboardHeight': " + size + ", 'keyboardAnimationDuration': " + duration + " }";
                 bridge.triggerWindowJSEvent(event, data);
                 kbData.put("keyboardHeight", size);
-                kbData.put("keyboardAnimationDuration", 0.35);
+                kbData.put("keyboardAnimationDuration", duration);
                 notifyListeners(event, kbData);
                 break;
             case Keyboard.EVENT_KB_WILL_HIDE:
