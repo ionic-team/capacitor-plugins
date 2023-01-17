@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.3](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/splash-screen@4.1.2...@capacitor/splash-screen@4.1.3) (2023-01-17)
+
+
+### Bug Fixes
+
+* **splash-screen:** Don't show if WebView is older than supported ([#1317](https://github.com/ionic-team/capacitor-plugins/issues/1317)) ([c884c38](https://github.com/ionic-team/capacitor-plugins/commit/c884c38cb2d24105e4667e32ffb6bbe59c97b9b4))
+
+
+
+
+
 ## [4.1.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/splash-screen@4.1.1...@capacitor/splash-screen@4.1.2) (2022-11-16)
 
 

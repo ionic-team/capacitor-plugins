@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/keyboard@4.1.0...@capacitor/keyboard@4.1.1) (2023-01-17)
+
+
+### Bug Fixes
+
+* **keyboard:** calculate overlapping keyboard height when using Stage Manager ([#1327](https://github.com/ionic-team/capacitor-plugins/issues/1327)) ([bc0b787](https://github.com/ionic-team/capacitor-plugins/commit/bc0b7876af30e190158114bc7afc68f80981fedf))
+
+
+
+
+
 # [4.1.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/keyboard@1.2.3...@capacitor/keyboard@4.1.0) (2022-11-16)
 
 
