@@ -142,7 +142,7 @@ public class SharePlugin extends Plugin {
                     );
                     fileUris.add(fileUrl);
 
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1 && filesList.size() == 1) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && filesList.size() == 1) {
                         intent.setDataAndType(fileUrl, type);
                         intent.putExtra(Intent.EXTRA_STREAM, fileUrl);
                     }
