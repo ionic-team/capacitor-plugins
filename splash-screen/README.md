@@ -9,6 +9,28 @@ npm install @capacitor/splash-screen
 npx cap sync
 ```
 
+### Android 12 Splash Screen API
+
+_**This only affects the launch splash screen and is not used when utilizing the programmatic `show()` method.**_
+
+Capacitor 4 uses the **[Android 12 Splash Screen API](https://developer.android.com/guide/topics/ui/splash-screen)** and the `androidx.core:core-splashscreen` compatibility library to make it work on Android 11 and below.
+
+The compatibility library can be disabled by changing the parent of `AppTheme.NoActionBarLaunch` from `Theme.SplashScreen` to `AppTheme.NoActionBar` in `android/app/src/main/res/values/styles.xml`.
+The Android 12 Splash Screen API can't be disabled on Android 12+ as it's part of the Android OS.
+
+```xml
+<style name="AppTheme.NoActionBarLaunch" parent="AppTheme.NoActionBar">
+    <item name="android:background">@drawable/splash</item>
+</style>
+```
+
+**NOTE**: On Android 12 and Android 12L devices the Splash Screen image is not showing when launched from third party launchers such as Nova Launcher, MIUI, Realme Launcher, OPPO Launcher, etc., from app info in Settings App, or from IDEs such as Android Studio.
+**[Google Issue Tracker](https://issuetracker.google.com/issues/205021357)**
+**[Google Issue Tracker](https://issuetracker.google.com/issues/207386164)**
+Google have fixed those problems on Android 13 but they won't be backport the fixes to Android 12 and Android 12L.
+Launcher related issues might get fixed by a launcher update.
+If you still find issues related to the Splash Screen on Android 13, please, report them to [Google](https://issuetracker.google.com/).
+
 ## Example
 
 ```typescript
@@ -155,30 +177,6 @@ To use splash screen images named something other than `splash.png`, set `androi
     <item name="android:background">@drawable/NAME</item>
 </style>
 ```
-
-### Android 12 Splash Screen API
-
-_**This only affects the launch splash screen and is not used when utilizing the programmatic `show()` method.**_
-
-To enable the new recommended **[Android 12 Splash Screen API](https://developer.android.com/guide/topics/ui/splash-screen)** in SDK Versions 30 or below:
-
-_This is enabled by default and required for SDK version 31+._
-
-- Add `$coreSplashScreenVersion` to the `variables.gradle` file.
-  _See Variables Section for more information_
-
-- Add `implementation "androidx.core:core-splashscreen:$coreSplashScreenVersion"` in the dependencies section of `/android/app/build.gradle`.
-
-- In `android/app/src/main/res/values/styles.xml`, edit the theme `parent` attribute on the Applications's MainActivity Theme to `Theme.SplashScreen` and add desired options to the theme.
-
-```xml
-<style name="AppTheme.NoActionBarLaunch" parent="Theme.SplashScreen">
-    <item name="android:background">@drawable/splash</item>
-</style>
-```
-
-**NOTE**: Some issues may exist on SDK >= 31 when using the new API for the splash screen, which pertain to the splash screen only showing when launched from the launcher icon.
-**[Google Issue Tracker](https://issuetracker.google.com/issues/205021357)**
 
 ## Variables
 
