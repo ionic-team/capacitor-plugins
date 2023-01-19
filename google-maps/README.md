@@ -270,7 +270,7 @@ export default MyMap;
 <docgen-index>
 
 * [`create(...)`](#create)
-* [`enableClustering()`](#enableclustering)
+* [`enableClustering(...)`](#enableclustering)
 * [`disableClustering()`](#disableclustering)
 * [`addMarker(...)`](#addmarker)
 * [`addMarkers(...)`](#addmarkers)
@@ -322,11 +322,15 @@ create(options: CreateMapArgs, callback?: MapListenerCallback<MapReadyCallbackDa
 --------------------
 
 
-### enableClustering()
+### enableClustering(...)
 
 ```typescript
-enableClustering() => Promise<void>
+enableClustering(minClusterSize?: number | undefined) => Promise<void>
 ```
+
+| Param                | Type                |
+| -------------------- | ------------------- |
+| **`minClusterSize`** | <code>number</code> |
 
 --------------------
 

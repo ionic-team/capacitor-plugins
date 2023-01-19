@@ -105,13 +105,23 @@ export interface OnScrollArgs {
   };
 }
 
+export interface EnableClusteringArgs {
+  id: string;
+  /**
+   * The minimum number of markers that can be clustered together.
+   *
+   * @default 4
+   */
+  minClusterSize?: number;
+}
+
 export interface CapacitorGoogleMapsPlugin extends Plugin {
   create(options: CreateMapArgs): Promise<void>;
   addMarker(args: AddMarkerArgs): Promise<{ id: string }>;
   addMarkers(args: AddMarkersArgs): Promise<{ ids: string[] }>;
   removeMarker(args: RemoveMarkerArgs): Promise<void>;
   removeMarkers(args: RemoveMarkersArgs): Promise<void>;
-  enableClustering(args: { id: string }): Promise<void>;
+  enableClustering(args: EnableClusteringArgs): Promise<void>;
   disableClustering(args: { id: string }): Promise<void>;
   destroy(args: DestroyMapArgs): Promise<void>;
   setCamera(args: CameraArgs): Promise<void>;

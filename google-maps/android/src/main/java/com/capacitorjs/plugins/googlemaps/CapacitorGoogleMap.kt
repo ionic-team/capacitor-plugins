@@ -20,15 +20,10 @@ import com.google.android.gms.maps.model.*
 import com.google.maps.android.clustering.Cluster
 import com.google.maps.android.clustering.ClusterManager
 import com.google.maps.android.clustering.view.DefaultClusterRenderer
+import kotlinx.coroutines.*
 import java.io.InputStream
 import java.net.URL
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 class CapacitorGoogleMap(
         val id: String,
@@ -52,6 +47,7 @@ class CapacitorGoogleMap(
     private var clusterManager: ClusterManager<CapacitorGoogleMapMarker>? = null
 
     private val isReadyChannel = Channel<Boolean>()
+    private var debounceJob: Job? = null
 
     init {
         val bridge = delegate.bridge
@@ -235,32 +231,38 @@ class CapacitorGoogleMap(
         }
     }
 
+    private fun setClusterManagerRenderer(minClusterSize: Int?) {
+        clusterManager?.renderer =
+            object :
+                DefaultClusterRenderer<CapacitorGoogleMapMarker>(
+                    delegate.bridge.context,
+                    googleMap,
+                    clusterManager
+                ) {
+                init {
+                    if(minClusterSize != null && minClusterSize > 0) {
+                        super.setMinClusterSize(minClusterSize)
+                    }
+                }
+            }
+    }
+
     @SuppressLint("PotentialBehaviorOverride")
-    fun enableClustering(callback: (error: GoogleMapsError?) -> Unit) {
+    fun enableClustering(minClusterSize: Int?, callback: (error: GoogleMapsError?) -> Unit) {
         try {
             googleMap ?: throw GoogleMapNotAvailable()
 
-            if (clusterManager != null) {
-                callback(null)
-                return
-            }
-
             CoroutineScope(Dispatchers.Main).launch {
+                if (clusterManager != null) {
+                    setClusterManagerRenderer(minClusterSize)
+                    callback(null)
+                    return@launch
+                }
+
                 val bridge = delegate.bridge
                 clusterManager = ClusterManager(bridge.context, googleMap)
 
-                clusterManager?.renderer =
-                        object :
-                                DefaultClusterRenderer<CapacitorGoogleMapMarker>(
-                                        bridge.context,
-                                        googleMap,
-                                        clusterManager
-                                ) {
-                            init {
-                                super.setMinClusterSize(2)
-                            }
-                        }
-
+                setClusterManagerRenderer(minClusterSize)
                 setClusterListeners()
 
                 // add existing markers to the cluster
@@ -816,6 +818,10 @@ class CapacitorGoogleMap(
     }
 
     override fun onCameraMove() {
-        clusterManager?.cluster()
+        debounceJob?.cancel()
+        debounceJob = CoroutineScope(Dispatchers.Main).launch {
+            delay(100)
+            clusterManager?.cluster()
+        }
     }
 }
