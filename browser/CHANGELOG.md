@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/browser@4.1.0...@capacitor/browser@4.1.1) (2023-01-17)
+
+
+### Bug Fixes
+
+* **browser:** Reject if custom tabs are not available ([#1323](https://github.com/ionic-team/capacitor-plugins/issues/1323)) ([3c90fea](https://github.com/ionic-team/capacitor-plugins/commit/3c90fea63e2c24deacc38ba9fd8471c2cc0bde56))
+
+
+
+
+
 # [4.1.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/browser@1.0.7...@capacitor/browser@4.1.0) (2022-11-16)
 
 
