@@ -18,7 +18,11 @@ public class SplashScreenPlugin extends Plugin {
     public void load() {
         config = getSplashScreenConfig();
         splashScreen = new SplashScreen(getContext(), config);
-        splashScreen.showOnLaunch(getActivity());
+        if (!bridge.isMinimumWebViewInstalled() && bridge.getConfig().getErrorPath() != null && !config.isLaunchAutoHide()) {
+            return;
+        } else {
+            splashScreen.showOnLaunch(getActivity());
+        }
     }
 
     @PluginMethod
