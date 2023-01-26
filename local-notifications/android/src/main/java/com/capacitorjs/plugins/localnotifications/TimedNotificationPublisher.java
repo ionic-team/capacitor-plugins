@@ -48,7 +48,11 @@ public class TimedNotificationPublisher extends BroadcastReceiver {
             AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
             long trigger = date.nextTrigger(new Date());
             Intent clone = (Intent) intent.clone();
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, clone, PendingIntent.FLAG_CANCEL_CURRENT);
+            int flags = PendingIntent.FLAG_CANCEL_CURRENT;
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                flags = flags | PendingIntent.FLAG_MUTABLE;
+            }
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, clone, flags);
             alarmManager.setExact(AlarmManager.RTC, trigger, pendingIntent);
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
             Logger.debug(Logger.tags("LN"), "notification " + id + " will next fire at " + sdf.format(new Date(trigger)));
