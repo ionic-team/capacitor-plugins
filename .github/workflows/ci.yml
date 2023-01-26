@@ -67,7 +67,7 @@ jobs:
     strategy:
       matrix:
         xcode:
-          - /Applications/Xcode_14.0.1.app
+          - /Applications/Xcode_13.3.1.app
         plugin: ${{ fromJson(needs.setup.outputs.plugins) }}
     steps:
       - run: sudo xcode-select --switch ${{ matrix.xcode }}
