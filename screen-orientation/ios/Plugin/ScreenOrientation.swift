@@ -12,6 +12,7 @@ public class ScreenOrientation: NSObject {
         DispatchQueue.main.async {
             let mask = self.fromOrientationTypeToMask(orientationType)
             let orientation = self.fromOrientationTypeToInt(orientationType)
+            #if swift(>=5.7)
             if #available(iOS 16, *) {
                 let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
                 windowScene?.keyWindow?.rootViewController?.setNeedsUpdateOfSupportedInterfaceOrientations()
@@ -24,11 +25,17 @@ public class ScreenOrientation: NSObject {
                 UINavigationController.attemptRotationToDeviceOrientation()
                 completion(mask)
             }
+            #else
+            UIDevice.current.setValue(orientation, forKey: "orientation")
+            UINavigationController.attemptRotationToDeviceOrientation()
+            completion(mask)
+            #endif
         }
     }
 
     public func unlock(completion: @escaping () -> Void) {
         DispatchQueue.main.async {
+            #if swift(>=5.7)
             if #available(iOS 16, *) {
                 let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
                 windowScene?.keyWindow?.rootViewController?.setNeedsUpdateOfSupportedInterfaceOrientations()
@@ -41,6 +48,11 @@ public class ScreenOrientation: NSObject {
                 UINavigationController.attemptRotationToDeviceOrientation()
                 completion()
             }
+            #else
+            UIDevice.current.setValue(UIInterfaceOrientation.unknown.rawValue, forKey: "orientation")
+            UINavigationController.attemptRotationToDeviceOrientation()
+            completion()
+            #endif
         }
     }
 
