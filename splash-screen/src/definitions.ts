@@ -25,6 +25,17 @@ declare module '@capacitor/cli' {
       launchAutoHide?: boolean;
 
       /**
+       * Duration for the fade out animation of the launch splash screen (in ms)
+       *
+       * Only available for Android, when using the Android 12 Splash Screen API.
+       *
+       * @since 4.2.0
+       * @default 200
+       * @example 3000
+       */
+      launchFadeOutDuration?: number;
+
+      /**
        * Color of the background of the Splash Screen in hex format, #RRGGBB or #RRGGBBAA.
        * Doesn't work if `useDialog` is true or on launch when using the Android 12 API.
        *
@@ -200,6 +211,9 @@ export interface ShowOptions {
 export interface HideOptions {
   /**
    * How long (in ms) to fade out.
+   *
+   * On Android, if using the Android 12 Splash Screen API, it's not being used.
+   * Use launchFadeOutDuration configuration option instead.
    *
    * @since 1.0.0
    * @default 200
