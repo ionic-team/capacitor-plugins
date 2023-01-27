@@ -103,7 +103,6 @@ public class SplashScreen {
                 windowSplashScreen.setKeepOnScreenCondition(() -> isVisible || isHiding);
 
                 if (config.getLaunchFadeOutDuration() > 0) {
-
                     // Set Fade Out Animation
                     windowSplashScreen.setOnExitAnimationListener(
                         windowSplashScreenView -> {
@@ -133,11 +132,13 @@ public class SplashScreen {
                         }
                     );
                 } else {
-                    windowSplashScreen.setOnExitAnimationListener(windowSplashScreenView -> {
-                        isHiding = false;
-                        isVisible = false;
-                        windowSplashScreenView.remove();
-                    });
+                    windowSplashScreen.setOnExitAnimationListener(
+                        windowSplashScreenView -> {
+                            isHiding = false;
+                            isVisible = false;
+                            windowSplashScreenView.remove();
+                        }
+                    );
                 }
 
                 // Set Pre Draw Listener & Delay Drawing Until Duration Elapses
