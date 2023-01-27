@@ -29,16 +29,26 @@ public class ScreenOrientationPlugin: CAPPlugin {
             call.reject("Input option 'orientation' must be provided.")
             return
         }
-        implementation.lock(lockToOrientation, completion: { (mask) -> Void in
-            ScreenOrientationPlugin.supportedOrientations = mask
-            call.resolve()
-        })
+        Task {
+            do {
+                let mask = try await implementation.lock(lockToOrientation)
+                ScreenOrientationPlugin.supportedOrientations = mask
+                call.resolve()
+            } catch {
+                call.reject(error.localizedDescription)
+            }
+        }
     }
 
     @objc public func unlock(_ call: CAPPluginCall) {
-        implementation.unlock {
-            ScreenOrientationPlugin.supportedOrientations = UIInterfaceOrientationMask.all
-            call.resolve()
+        Task {
+            do {
+                try await implementation.unlock()
+                ScreenOrientationPlugin.supportedOrientations = UIInterfaceOrientationMask.all
+                call.resolve()
+            } catch {
+                call.reject(error.localizedDescription)
+            }
         }
     }
 

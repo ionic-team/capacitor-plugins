@@ -31,12 +31,12 @@ func application(_ application: UIApplication, supportedInterfaceOrientationsFor
 
 <docgen-index>
 
-- [`orientation()`](#orientation)
-- [`lock(...)`](#lock)
-- [`unlock()`](#unlock)
-- [`addListener('screenOrientationChange', ...)`](#addlistenerscreenorientationchange)
-- [`removeAllListeners()`](#removealllisteners)
-- [Interfaces](#interfaces)
+* [`orientation()`](#orientation)
+* [`lock(...)`](#lock)
+* [`unlock()`](#unlock)
+* [`addListener('screenOrientationChange', ...)`](#addlistenerscreenorientationchange)
+* [`removeAllListeners()`](#removealllisteners)
+* [Interfaces](#interfaces)
 
 </docgen-index>
 
@@ -55,7 +55,8 @@ Returns the current screen orientation.
 
 **Since:** 4.0.0
 
----
+--------------------
+
 
 ### lock(...)
 
@@ -71,7 +72,8 @@ Locks the screen orientation.
 
 **Since:** 4.0.0
 
----
+--------------------
+
 
 ### unlock()
 
@@ -83,7 +85,8 @@ Unlocks the screen's orientation.
 
 **Since:** 4.0.0
 
----
+--------------------
+
 
 ### addListener('screenOrientationChange', ...)
 
@@ -102,7 +105,8 @@ Listens for screen orientation changes.
 
 **Since:** 4.0.0
 
----
+--------------------
+
 
 ### removeAllListeners()
 
@@ -114,9 +118,11 @@ Removes all listeners.
 
 **Since:** 4.0.0
 
----
+--------------------
+
 
 ### Interfaces
+
 
 #### PluginListenerHandle
 

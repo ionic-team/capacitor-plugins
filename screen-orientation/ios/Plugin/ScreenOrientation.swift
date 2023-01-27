@@ -8,52 +8,39 @@ public class ScreenOrientation: NSObject {
         return fromDeviceOrientationToOrientationType(currentOrientation)
     }
 
-    public func lock(_ orientationType: String, completion: @escaping (UIInterfaceOrientationMask) -> Void) {
-        DispatchQueue.main.async {
-            let mask = self.fromOrientationTypeToMask(orientationType)
-            let orientation = self.fromOrientationTypeToInt(orientationType)
-            #if swift(>=5.7)
-            if #available(iOS 16, *) {
-                let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
-                windowScene?.keyWindow?.rootViewController?.setNeedsUpdateOfSupportedInterfaceOrientations()
-                windowScene?.requestGeometryUpdate(.iOS(interfaceOrientations: mask)) { error in
-                    print(error)
-                    print(windowScene?.effectiveGeometry ?? "")
-                }
-            } else {
-                UIDevice.current.setValue(orientation, forKey: "orientation")
-                UINavigationController.attemptRotationToDeviceOrientation()
-                completion(mask)
-            }
-            #else
-            UIDevice.current.setValue(orientation, forKey: "orientation")
-            UINavigationController.attemptRotationToDeviceOrientation()
-            completion(mask)
-            #endif
+    public func lock(_ orientationType: String) async throws -> UIInterfaceOrientationMask {
+        let mask = self.fromOrientationTypeToMask(orientationType)
+        let orientation = self.fromOrientationTypeToInt(orientationType)
+        #if swift(>=5.7)
+        if #available(iOS 16, *) {
+            let windowScene = await UIApplication.shared.connectedScenes.first as? UIWindowScene
+            await windowScene?.keyWindow?.rootViewController?.setNeedsUpdateOfSupportedInterfaceOrientations()
+            await windowScene?.requestGeometryUpdate(.iOS(interfaceOrientations: mask))
+        } else {
+            await UIDevice.current.setValue(orientation, forKey: "orientation")
+            await UINavigationController.attemptRotationToDeviceOrientation()
         }
+        #else
+        await UIDevice.current.setValue(orientation, forKey: "orientation")
+        await UINavigationController.attemptRotationToDeviceOrientation()
+        #endif
+        return mask
     }
 
-    public func unlock(completion: @escaping () -> Void) {
-        DispatchQueue.main.async {
-            #if swift(>=5.7)
-            if #available(iOS 16, *) {
-                let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
-                windowScene?.keyWindow?.rootViewController?.setNeedsUpdateOfSupportedInterfaceOrientations()
-                windowScene?.requestGeometryUpdate(.iOS(interfaceOrientations: .all)) { error in
-                    print(error)
-                    print(windowScene?.effectiveGeometry ?? "")
-                }
-            } else {
-                UIDevice.current.setValue(UIInterfaceOrientation.unknown.rawValue, forKey: "orientation")
-                UINavigationController.attemptRotationToDeviceOrientation()
-                completion()
-            }
-            #else
-            UIDevice.current.setValue(UIInterfaceOrientation.unknown.rawValue, forKey: "orientation")
-            UINavigationController.attemptRotationToDeviceOrientation()
-            completion()
-            #endif
+    public func unlock() async throws -> Void {
+        #if swift(>=5.7)
+        if #available(iOS 16, *) {
+            let windowScene = await UIApplication.shared.connectedScenes.first as? UIWindowScene
+            await windowScene?.keyWindow?.rootViewController?.setNeedsUpdateOfSupportedInterfaceOrientations()
+            await windowScene?.requestGeometryUpdate(.iOS(interfaceOrientations: .all))
+        } else {
+            await UIDevice.current.setValue(UIInterfaceOrientation.unknown.rawValue, forKey: "orientation")
+            await UINavigationController.attemptRotationToDeviceOrientation()
         }
+        #else
+        await UIDevice.current.setValue(UIInterfaceOrientation.unknown.rawValue, forKey: "orientation")
+        await UINavigationController.attemptRotationToDeviceOrientation()
+        #endif
     }
 
     private func fromDeviceOrientationToOrientationType(_ orientation: UIDeviceOrientation) -> String {
