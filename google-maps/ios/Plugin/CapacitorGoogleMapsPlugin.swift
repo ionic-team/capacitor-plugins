@@ -481,6 +481,38 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
         }
     }
 
+    @objc func mapBoundsContains(_ call: CAPPluginCall) {
+        do {
+            guard let boundsObject = call.getObject("bounds") else {
+                throw GoogleMapErrors.invalidArguments("Invalid bounds provided")
+            }
+
+            guard let pointObject = call.getObject("point") else {
+                throw GoogleMapErrors.invalidArguments("Invalid point provided")
+            }
+
+            let bounds = getGMSCoordinateBounds(boundsObject)
+            let point = getCLLocationCoordinate(pointObject)
+
+            call.resolve([
+                "contains": bounds.contains(point)
+            ])
+        } catch {
+            handleError(call, error: error)
+        }
+    }
+
+    private func getGMSCoordinateBounds(_ bounds: JSObject) -> GMSCoordinateBounds {
+        return GMSCoordinateBounds(
+            coordinate: getCLLocationCoordinate(bounds["southwest"] as! JSObject),
+            coordinate: getCLLocationCoordinate(bounds["northeast"] as! JSObject)
+        )
+    }
+
+    private func getCLLocationCoordinate(_ point: JSObject) -> CLLocationCoordinate2D {
+        return CLLocationCoordinate2D(latitude: point["lat"] as! Double, longitude: point["lng"] as! Double)
+    }
+
     private func formatMapBoundsForResponse(bounds: GMSCoordinateBounds?, cameraPosition: GMSCameraPosition) -> PluginCallResultData {
         return [
             "southwest": [

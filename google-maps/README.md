@@ -746,10 +746,13 @@ A marker is an icon placed at a particular point on the map's surface.
 
 #### Point
 
-| Prop    | Type                |
-| ------- | ------------------- |
-| **`x`** | <code>number</code> |
-| **`y`** | <code>number</code> |
+<a href="#point">Point</a> geometry object.
+https://tools.ietf.org/html/rfc7946#section-3.1.2
+
+| Prop              | Type                                          | Description                           |
+| ----------------- | --------------------------------------------- | ------------------------------------- |
+| **`type`**        | <code>'<a href="#point">Point</a>'</code>     | Specifies the type of GeoJSON object. |
+| **`coordinates`** | <code><a href="#position">Position</a></code> |                                       |
 
 
 #### CameraConfig
@@ -780,26 +783,15 @@ Controls for setting padding on the 'visible' region of the view.
 
 #### CameraIdleCallbackData
 
-| Prop            | Type                                                  |
-| --------------- | ----------------------------------------------------- |
-| **`mapId`**     | <code>string</code>                                   |
-| **`bounds`**    | <code><a href="#latlngbounds">LatLngBounds</a></code> |
-| **`bearing`**   | <code>number</code>                                   |
-| **`latitude`**  | <code>number</code>                                   |
-| **`longitude`** | <code>number</code>                                   |
-| **`tilt`**      | <code>number</code>                                   |
-| **`zoom`**      | <code>number</code>                                   |
-
-
-#### LatLngBounds
-
-An interface representing the viewports latitude and longitude bounds.
-
-| Prop            | Type                                      |
-| --------------- | ----------------------------------------- |
-| **`southwest`** | <code><a href="#latlng">LatLng</a></code> |
-| **`center`**    | <code><a href="#latlng">LatLng</a></code> |
-| **`northeast`** | <code><a href="#latlng">LatLng</a></code> |
+| Prop            | Type                      |
+| --------------- | ------------------------- |
+| **`mapId`**     | <code>string</code>       |
+| **`bounds`**    | <code>LatLngBounds</code> |
+| **`bearing`**   | <code>number</code>       |
+| **`latitude`**  | <code>number</code>       |
+| **`longitude`** | <code>number</code>       |
+| **`tilt`**      | <code>number</code>       |
+| **`zoom`**      | <code>number</code>       |
 
 
 #### CameraMoveStartedCallbackData
@@ -863,6 +855,17 @@ An interface representing the viewports latitude and longitude bounds.
 The callback function to be called when map events are emitted.
 
 <code>(data: T): void</code>
+
+
+#### Position
+
+A <a href="#position">Position</a> is an array of coordinates.
+https://tools.ietf.org/html/rfc7946#section-3.1.1
+Array should contain between two and three elements.
+The previous GeoJSON specification allowed more elements (e.g., which could be used to represent M values),
+but the current specification only allows X, Y, and (optionally) Z to be defined.
+
+<code>number[]</code>
 
 
 ### Enums
