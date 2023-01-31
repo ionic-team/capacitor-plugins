@@ -32,6 +32,7 @@ class CapacitorGoogleMap(
 ) :
         OnCameraIdleListener,
         OnCameraMoveStartedListener,
+        OnCameraMoveListener,
         OnMyLocationButtonClickListener,
         OnMyLocationClickListener,
         OnMapReadyCallback,
@@ -46,6 +47,7 @@ class CapacitorGoogleMap(
     private var clusterManager: ClusterManager<CapacitorGoogleMapMarker>? = null
 
     private val isReadyChannel = Channel<Boolean>()
+    private var debounceJob: Job? = null
 
     init {
         val bridge = delegate.bridge
@@ -650,6 +652,7 @@ class CapacitorGoogleMap(
             this@CapacitorGoogleMap.googleMap?.setOnCameraMoveStartedListener(
                     this@CapacitorGoogleMap
             )
+            this@CapacitorGoogleMap.googleMap?.setOnCameraMoveListener(this@CapacitorGoogleMap)
             this@CapacitorGoogleMap.googleMap?.setOnMarkerClickListener(this@CapacitorGoogleMap)
             this@CapacitorGoogleMap.googleMap?.setOnMarkerDragListener(this@CapacitorGoogleMap)
             this@CapacitorGoogleMap.googleMap?.setOnMapClickListener(this@CapacitorGoogleMap)
@@ -812,5 +815,13 @@ class CapacitorGoogleMap(
         data.put("title", marker.title)
         data.put("snippet", marker.snippet)
         delegate.notify("onInfoWindowClick", data)
+    }
+
+    override fun onCameraMove() {
+        debounceJob?.cancel()
+        debounceJob = CoroutineScope(Dispatchers.Main).launch {
+            delay(100)
+            clusterManager?.cluster()
+        }
     }
 }
