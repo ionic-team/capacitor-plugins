@@ -107,11 +107,6 @@ export interface OnScrollArgs {
 
 export interface EnableClusteringArgs {
   id: string;
-  /**
-   * The minimum number of markers that can be clustered together.
-   *
-   * @default 4
-   */
   minClusterSize?: number;
 }
 

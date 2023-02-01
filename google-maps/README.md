@@ -328,9 +328,9 @@ create(options: CreateMapArgs, callback?: MapListenerCallback<MapReadyCallbackDa
 enableClustering(minClusterSize?: number | undefined) => Promise<void>
 ```
 
-| Param                | Type                |
-| -------------------- | ------------------- |
-| **`minClusterSize`** | <code>number</code> |
+| Param                | Type                | Description                                                                             |
+| -------------------- | ------------------- | --------------------------------------------------------------------------------------- |
+| **`minClusterSize`** | <code>number</code> | The minimum number of markers that can be clustered together. The default is 4 markers. |
 
 --------------------
 
