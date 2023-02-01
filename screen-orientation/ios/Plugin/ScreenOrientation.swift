@@ -27,7 +27,7 @@ public class ScreenOrientation: NSObject {
         return mask
     }
 
-    public func unlock() async throws -> Void {
+    public func unlock() async throws {
         #if swift(>=5.7)
         if #available(iOS 16, *) {
             let windowScene = await UIApplication.shared.connectedScenes.first as? UIWindowScene

@@ -1,11 +1,11 @@
 import type { PluginListenerHandle } from '@capacitor/core';
 
 export interface OrientationLockOptions {
-  orientation: OrientationLockType
+  orientation: OrientationLockType;
 }
 
 export interface ScreenOrientationResult {
-  type: OrientationType
+  type: OrientationType;
 }
 
 export interface ScreenOrientationPlugin {
