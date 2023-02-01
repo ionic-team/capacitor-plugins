@@ -1,6 +1,6 @@
 import { WebPlugin } from '@capacitor/core';
 
-import type { ScreenOrientationPlugin } from './definitions';
+import type { OrientationLockOptions, ScreenOrientationPlugin, ScreenOrientationResult } from './definitions';
 
 export class ScreenOrientationWeb
   extends WebPlugin
@@ -14,12 +14,12 @@ export class ScreenOrientationWeb
     });
   }
 
-  async orientation(): Promise<{ type: OrientationType }> {
+  async orientation(): Promise<ScreenOrientationResult> {
     return { type: window.screen.orientation.type };
   }
 
-  async lock(opts: { orientation: OrientationLockType }): Promise<void> {
-    await window.screen.orientation.lock(opts.orientation);
+  async lock(options: OrientationLockOptions): Promise<void> {
+    await window.screen.orientation.lock(options.orientation);
   }
 
   async unlock(): Promise<void> {

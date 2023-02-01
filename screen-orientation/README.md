@@ -46,12 +46,12 @@ func application(_ application: UIApplication, supportedInterfaceOrientationsFor
 ### orientation()
 
 ```typescript
-orientation() => Promise<{ type: OrientationType; }>
+orientation() => Promise<ScreenOrientationResult>
 ```
 
 Returns the current screen orientation.
 
-**Returns:** <code>Promise&lt;{ type: any; }&gt;</code>
+**Returns:** <code>Promise&lt;<a href="#screenorientationresult">ScreenOrientationResult</a>&gt;</code>
 
 **Since:** 4.0.0
 
@@ -61,14 +61,14 @@ Returns the current screen orientation.
 ### lock(...)
 
 ```typescript
-lock(opts: { orientation: OrientationLockType; }) => Promise<void>
+lock(options: OrientationLockOptions) => Promise<void>
 ```
 
 Locks the screen orientation.
 
-| Param      | Type                               |
-| ---------- | ---------------------------------- |
-| **`opts`** | <code>{ orientation: any; }</code> |
+| Param         | Type                                                                      |
+| ------------- | ------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#orientationlockoptions">OrientationLockOptions</a></code> |
 
 **Since:** 4.0.0
 
@@ -91,15 +91,15 @@ Unlocks the screen's orientation.
 ### addListener('screenOrientationChange', ...)
 
 ```typescript
-addListener(eventName: 'screenOrientationChange', listenerFunc: (orientation: { type: OrientationType; }) => void) => Promise<PluginListenerHandle> & PluginListenerHandle
+addListener(eventName: 'screenOrientationChange', listenerFunc: (orientation: ScreenOrientationResult) => void) => Promise<PluginListenerHandle> & PluginListenerHandle
 ```
 
 Listens for screen orientation changes.
 
-| Param              | Type                                                  |
-| ------------------ | ----------------------------------------------------- |
-| **`eventName`**    | <code>'screenOrientationChange'</code>                |
-| **`listenerFunc`** | <code>(orientation: { type: any; }) =&gt; void</code> |
+| Param              | Type                                                                                                  |
+| ------------------ | ----------------------------------------------------------------------------------------------------- |
+| **`eventName`**    | <code>'screenOrientationChange'</code>                                                                |
+| **`listenerFunc`** | <code>(orientation: <a href="#screenorientationresult">ScreenOrientationResult</a>) =&gt; void</code> |
 
 **Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt; & <a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
@@ -122,6 +122,20 @@ Removes all listeners.
 
 
 ### Interfaces
+
+
+#### ScreenOrientationResult
+
+| Prop       | Type                         |
+| ---------- | ---------------------------- |
+| **`type`** | <code>OrientationType</code> |
+
+
+#### OrientationLockOptions
+
+| Prop              | Type                             |
+| ----------------- | -------------------------------- |
+| **`orientation`** | <code>OrientationLockType</code> |
 
 
 #### PluginListenerHandle

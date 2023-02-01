@@ -1,19 +1,27 @@
 import type { PluginListenerHandle } from '@capacitor/core';
 
+export interface OrientationLockOptions {
+  orientation: OrientationLockType
+}
+
+export interface ScreenOrientationResult {
+  type: OrientationType
+}
+
 export interface ScreenOrientationPlugin {
   /**
    * Returns the current screen orientation.
    *
    * @since 4.0.0
    */
-  orientation(): Promise<{ type: OrientationType }>;
+  orientation(): Promise<ScreenOrientationResult>;
 
   /**
    * Locks the screen orientation.
    *
    * @since 4.0.0
    */
-  lock(opts: { orientation: OrientationLockType }): Promise<void>;
+  lock(options: OrientationLockOptions): Promise<void>;
 
   /**
    * Unlocks the screen's orientation.
@@ -29,7 +37,7 @@ export interface ScreenOrientationPlugin {
    */
   addListener(
     eventName: 'screenOrientationChange',
-    listenerFunc: (orientation: { type: OrientationType }) => void,
+    listenerFunc: (orientation: ScreenOrientationResult) => void,
   ): Promise<PluginListenerHandle> & PluginListenerHandle;
 
   /**
