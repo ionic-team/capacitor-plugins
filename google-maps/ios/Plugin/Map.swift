@@ -12,6 +12,7 @@ class GMViewController: UIViewController {
     var mapViewBounds: [String: Double]!
     var GMapView: GMSMapView!
     var cameraPosition: [String: Double]!
+    var minimumClusterSize: Int?
 
     private var clusterManager: GMUClusterManager?
 
@@ -28,11 +29,14 @@ class GMViewController: UIViewController {
         self.view = GMapView
     }
 
-    func initClusterManager() {
+    func initClusterManager(_ minClusterSize: Int?) {
         let iconGenerator = GMUDefaultClusterIconGenerator()
         let algorithm = GMUNonHierarchicalDistanceBasedAlgorithm()
         let renderer = GMUDefaultClusterRenderer(mapView: self.GMapView, clusterIconGenerator: iconGenerator)
-
+        self.minimumClusterSize = minClusterSize
+        if let minClusterSize = minClusterSize {
+            renderer.minimumClusterSize = UInt(minClusterSize)
+        }
         self.clusterManager = GMUClusterManager(map: self.GMapView, algorithm: algorithm, renderer: renderer)
     }
 
@@ -224,10 +228,10 @@ public class Map {
         return markerHashes
     }
 
-    func enableClustering() {
+    func enableClustering(_ minClusterSize: Int?) {
         if !self.mapViewController.clusteringEnabled {
             DispatchQueue.main.sync {
-                self.mapViewController.initClusterManager()
+                self.mapViewController.initClusterManager(minClusterSize)
 
                 // add existing markers to the cluster
                 if !self.markers.isEmpty {
@@ -240,6 +244,9 @@ public class Map {
                     self.mapViewController.addMarkersToCluster(markers: existingMarkers)
                 }
             }
+        } else if self.mapViewController.minimumClusterSize != minClusterSize {
+            self.mapViewController.destroyClusterManager()
+            enableClustering(minClusterSize)
         }
     }
 

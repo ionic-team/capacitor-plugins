@@ -3,7 +3,10 @@ import type {
   Cluster,
   onClusterClickHandler,
 } from '@googlemaps/markerclusterer';
-import { MarkerClusterer } from '@googlemaps/markerclusterer';
+import {
+  MarkerClusterer,
+  SuperClusterAlgorithm,
+} from '@googlemaps/markerclusterer';
 
 import type { LatLngBounds, Marker } from './definitions';
 import type {
@@ -22,6 +25,7 @@ import type {
   TrafficLayerArgs,
   RemoveMarkersArgs,
   OnScrollArgs,
+  EnableClusteringArgs,
 } from './implementation';
 
 export class CapacitorGoogleMapsWeb
@@ -254,7 +258,7 @@ export class CapacitorGoogleMapsWeb
     delete this.maps[_args.id].markers[_args.markerId];
   }
 
-  async enableClustering(_args: { id: string }): Promise<void> {
+  async enableClustering(_args: EnableClusteringArgs): Promise<void> {
     const markers: google.maps.Marker[] = [];
 
     for (const id in this.maps[_args.id].markers) {
@@ -264,6 +268,9 @@ export class CapacitorGoogleMapsWeb
     this.maps[_args.id].markerClusterer = new MarkerClusterer({
       map: this.maps[_args.id].map,
       markers: markers,
+      algorithm: new SuperClusterAlgorithm({
+        minPoints: _args.minClusterSize ?? 4,
+      }),
       onClusterClick: this.onClusterClickHandler,
     });
   }
