@@ -42,15 +42,15 @@ public class ScreenOrientationPlugin: CAPPlugin {
             }
         } else {
             implementation.lockLegacy(lockToOrientation, completion: { (mask) -> Void in
-                    ScreenOrientationPlugin.supportedOrientations = mask;
-                    call.resolve()
-                  })
+                ScreenOrientationPlugin.supportedOrientations = mask
+                call.resolve()
+            })
         }
         #else
         implementation.lockLegacy(lockToOrientation, completion: { (mask) -> Void in
-                ScreenOrientationPlugin.supportedOrientations = mask;
-                call.resolve()
-              })
+            ScreenOrientationPlugin.supportedOrientations = mask
+            call.resolve()
+        })
         #endif
     }
 
@@ -68,15 +68,15 @@ public class ScreenOrientationPlugin: CAPPlugin {
             }
         } else {
             implementation.unlockLegacy {
-                  ScreenOrientationPlugin.supportedOrientations = UIInterfaceOrientationMask.all
-                  call.resolve()
-                }
+                ScreenOrientationPlugin.supportedOrientations = UIInterfaceOrientationMask.all
+                call.resolve()
+            }
         }
         #else
         implementation.unlockLegacy {
-              ScreenOrientationPlugin.supportedOrientations = UIInterfaceOrientationMask.all
-              call.resolve()
-            }
+            ScreenOrientationPlugin.supportedOrientations = UIInterfaceOrientationMask.all
+            call.resolve()
+        }
         #endif
     }
 

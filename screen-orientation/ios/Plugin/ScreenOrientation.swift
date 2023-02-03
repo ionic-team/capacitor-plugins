@@ -10,23 +10,23 @@ public class ScreenOrientation: NSObject {
 
     public func lockLegacy(_ orientationType: String, completion: @escaping (UIInterfaceOrientationMask) -> Void) {
         DispatchQueue.main.async {
-          let mask = self.fromOrientationTypeToMask(orientationType)
-          let orientation = self.fromOrientationTypeToInt(orientationType)
-          UIDevice.current.setValue(orientation, forKey: "orientation")
-          UINavigationController.attemptRotationToDeviceOrientation()
-          completion(mask)
+            let mask = self.fromOrientationTypeToMask(orientationType)
+            let orientation = self.fromOrientationTypeToInt(orientationType)
+            UIDevice.current.setValue(orientation, forKey: "orientation")
+            UINavigationController.attemptRotationToDeviceOrientation()
+            completion(mask)
         }
-      }
-      
-      public func unlockLegacy(completion: @escaping () -> Void) {
+    }
+
+    public func unlockLegacy(completion: @escaping () -> Void) {
         DispatchQueue.main.async {
-          let unknownOrientation = UIInterfaceOrientation.unknown.rawValue
-          UIDevice.current.setValue(unknownOrientation, forKey: "orientation")
-          UINavigationController.attemptRotationToDeviceOrientation()
-          completion()
+            let unknownOrientation = UIInterfaceOrientation.unknown.rawValue
+            UIDevice.current.setValue(unknownOrientation, forKey: "orientation")
+            UINavigationController.attemptRotationToDeviceOrientation()
+            completion()
         }
-      }
-    
+    }
+
     public func lock(_ orientationType: String) async throws -> UIInterfaceOrientationMask {
         let mask = self.fromOrientationTypeToMask(orientationType)
         let orientation = self.fromOrientationTypeToInt(orientationType)
