@@ -425,7 +425,9 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
                 throw GoogleMapErrors.mapNotFound
             }
 
-            map.enableClustering()
+            let minClusterSize = call.getInt("minClusterSize")
+
+            map.enableClustering(minClusterSize)
             call.resolve()
 
         } catch {

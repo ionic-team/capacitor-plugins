@@ -19,6 +19,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.*
 import com.google.maps.android.clustering.Cluster
 import com.google.maps.android.clustering.ClusterManager
+import com.google.maps.android.clustering.view.DefaultClusterRenderer
 import kotlinx.coroutines.*
 import java.io.InputStream
 import java.net.URL
@@ -98,7 +99,7 @@ class CapacitorGoogleMap(
                 bridge.webView.bringToFront()
                 bridge.webView.setBackgroundColor(Color.TRANSPARENT)
                 if (config.styles != null) {
-                    googleMap?.setMapStyle(MapStyleOptions(config.styles!!));
+                    googleMap?.setMapStyle(MapStyleOptions(config.styles!!))
                 }
             }
         }
@@ -230,20 +231,38 @@ class CapacitorGoogleMap(
         }
     }
 
+    private fun setClusterManagerRenderer(minClusterSize: Int?) {
+        clusterManager?.renderer =
+            object :
+                DefaultClusterRenderer<CapacitorGoogleMapMarker>(
+                    delegate.bridge.context,
+                    googleMap,
+                    clusterManager
+                ) {
+                init {
+                    if(minClusterSize != null && minClusterSize > 0) {
+                        super.setMinClusterSize(minClusterSize)
+                    }
+                }
+            }
+    }
+
     @SuppressLint("PotentialBehaviorOverride")
-    fun enableClustering(callback: (error: GoogleMapsError?) -> Unit) {
+    fun enableClustering(minClusterSize: Int?, callback: (error: GoogleMapsError?) -> Unit) {
         try {
             googleMap ?: throw GoogleMapNotAvailable()
 
-            if (clusterManager != null) {
-                callback(null)
-                return
-            }
-
             CoroutineScope(Dispatchers.Main).launch {
+                if (clusterManager != null) {
+                    setClusterManagerRenderer(minClusterSize)
+                    callback(null)
+                    return@launch
+                }
+
                 val bridge = delegate.bridge
                 clusterManager = ClusterManager(bridge.context, googleMap)
 
+                setClusterManagerRenderer(minClusterSize)
                 setClusterListeners()
 
                 // add existing markers to the cluster
@@ -576,18 +595,19 @@ class CapacitorGoogleMap(
         return markerOptions
     }
 
-    private fun getResizedIcon(_bitmap: Bitmap, marker: CapacitorGoogleMapMarker): BitmapDescriptor {
+    private fun getResizedIcon(
+            _bitmap: Bitmap,
+            marker: CapacitorGoogleMapMarker
+    ): BitmapDescriptor {
         var bitmap = _bitmap
         if (marker.iconSize != null) {
             bitmap =
-                Bitmap.createScaledBitmap(
-                    bitmap,
-                    (marker.iconSize!!.width * this.config.devicePixelRatio)
-                        .toInt(),
-                    (marker.iconSize!!.height * this.config.devicePixelRatio)
-                        .toInt(),
-                    false
-                )
+                    Bitmap.createScaledBitmap(
+                            bitmap,
+                            (marker.iconSize!!.width * this.config.devicePixelRatio).toInt(),
+                            (marker.iconSize!!.height * this.config.devicePixelRatio).toInt(),
+                            false
+                    )
         }
         return BitmapDescriptorFactory.fromBitmap(bitmap)
     }
