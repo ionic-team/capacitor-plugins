@@ -29,27 +29,55 @@ public class ScreenOrientationPlugin: CAPPlugin {
             call.reject("Input option 'orientation' must be provided.")
             return
         }
-        Task {
-            do {
-                let mask = try await implementation.lock(lockToOrientation)
-                ScreenOrientationPlugin.supportedOrientations = mask
-                call.resolve()
-            } catch {
-                call.reject(error.localizedDescription)
+        #if swift(>=5.7)
+        if #available(iOS 16.0, *) {
+            Task {
+                do {
+                    let mask = try await implementation.lock(lockToOrientation)
+                    ScreenOrientationPlugin.supportedOrientations = mask
+                    call.resolve()
+                } catch {
+                    call.reject(error.localizedDescription)
+                }
             }
+        } else {
+            implementation.lockLegacy(lockToOrientation, completion: { (mask) -> Void in
+                    ScreenOrientationPlugin.supportedOrientations = mask;
+                    call.resolve()
+                  })
         }
+        #else
+        implementation.lockLegacy(lockToOrientation, completion: { (mask) -> Void in
+                ScreenOrientationPlugin.supportedOrientations = mask;
+                call.resolve()
+              })
+        #endif
     }
 
     @objc public func unlock(_ call: CAPPluginCall) {
-        Task {
-            do {
-                try await implementation.unlock()
-                ScreenOrientationPlugin.supportedOrientations = UIInterfaceOrientationMask.all
-                call.resolve()
-            } catch {
-                call.reject(error.localizedDescription)
+        #if swift(>=5.7)
+        if #available(iOS 16.0, *) {
+            Task {
+                do {
+                    try await implementation.unlock()
+                    ScreenOrientationPlugin.supportedOrientations = UIInterfaceOrientationMask.all
+                    call.resolve()
+                } catch {
+                    call.reject(error.localizedDescription)
+                }
             }
+        } else {
+            implementation.unlockLegacy {
+                  ScreenOrientationPlugin.supportedOrientations = UIInterfaceOrientationMask.all
+                  call.resolve()
+                }
         }
+        #else
+        implementation.unlockLegacy {
+              ScreenOrientationPlugin.supportedOrientations = UIInterfaceOrientationMask.all
+              call.resolve()
+            }
+        #endif
     }
 
     @objc private func orientationDidChange() {
