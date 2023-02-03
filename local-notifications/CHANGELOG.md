@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.5](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/local-notifications@4.1.4...@capacitor/local-notifications@4.1.5) (2023-02-03)
+
+
+### Bug Fixes
+
+* **local-notifications:** Use RTC_WAKEUP if schedule.allowWhileIdle is true ([#1362](https://github.com/ionic-team/capacitor-plugins/issues/1362)) ([1cd2259](https://github.com/ionic-team/capacitor-plugins/commit/1cd2259e33694d8aeb819f1713ccbc88600211b0))
+
+
+
+
+
 ## [4.1.4](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/local-notifications@4.1.3...@capacitor/local-notifications@4.1.4) (2022-12-01)
 
 
