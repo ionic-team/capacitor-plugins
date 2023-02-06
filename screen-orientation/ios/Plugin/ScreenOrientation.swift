@@ -31,18 +31,22 @@ public class ScreenOrientation: NSObject {
         let mask = self.fromOrientationTypeToMask(orientationType)
         let orientation = self.fromOrientationTypeToInt(orientationType)
         #if swift(>=5.7)
-        let windowScene = await UIApplication.shared.connectedScenes.first as? UIWindowScene
-        await windowScene?.keyWindow?.rootViewController?.setNeedsUpdateOfSupportedInterfaceOrientations()
-        await windowScene?.requestGeometryUpdate(.iOS(interfaceOrientations: mask))
+        if #available(iOS 16.0, *) {
+            let windowScene = await UIApplication.shared.connectedScenes.first as? UIWindowScene
+            await windowScene?.keyWindow?.rootViewController?.setNeedsUpdateOfSupportedInterfaceOrientations()
+            await windowScene?.requestGeometryUpdate(.iOS(interfaceOrientations: mask))
+        }
         #endif
         return mask
     }
 
     public func unlock() async throws {
         #if swift(>=5.7)
-        let windowScene = await UIApplication.shared.connectedScenes.first as? UIWindowScene
-        await windowScene?.keyWindow?.rootViewController?.setNeedsUpdateOfSupportedInterfaceOrientations()
-        await windowScene?.requestGeometryUpdate(.iOS(interfaceOrientations: .all))
+        if #available(iOS 16.0, *) {
+            let windowScene = await UIApplication.shared.connectedScenes.first as? UIWindowScene
+            await windowScene?.keyWindow?.rootViewController?.setNeedsUpdateOfSupportedInterfaceOrientations()
+            await windowScene?.requestGeometryUpdate(.iOS(interfaceOrientations: .all))
+        }
         #endif
     }
 
