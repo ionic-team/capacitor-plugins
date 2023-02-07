@@ -239,16 +239,18 @@ class CapacitorGoogleMapsPlugin : Plugin() {
             val id = call.getString("id")
             id ?: throw InvalidMapIdError()
 
+            val minClusterSize = call.getInt("minClusterSize")
+
             val map = maps[id]
             map ?: throw MapNotFoundError()
 
-            map.enableClustering { err ->
+            map.enableClustering(minClusterSize,  { err ->
                 if (err != null) {
                     throw err
                 }
 
                 call.resolve()
-            }
+            })
         } catch (e: GoogleMapsError) {
             handleError(call, e)
         } catch (e: Exception) {

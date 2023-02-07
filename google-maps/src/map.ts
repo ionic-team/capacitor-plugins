@@ -24,7 +24,12 @@ export interface GoogleMapInterface {
     options: CreateMapArgs,
     callback?: MapListenerCallback<MapReadyCallbackData>,
   ): Promise<GoogleMap>;
-  enableClustering(): Promise<void>;
+  enableClustering(
+    /**
+     * The minimum number of markers that can be clustered together. The default is 4 markers.
+     */
+    minClusterSize?: number,
+  ): Promise<void>;
   disableClustering(): Promise<void>;
   addMarker(marker: Marker): Promise<string>;
   addMarkers(markers: Marker[]): Promise<string[]>;
@@ -204,11 +209,15 @@ export class GoogleMap {
   /**
    * Enable marker clustering
    *
+   * @param minClusterSize - The minimum number of markers that can be clustered together.
+   * @defaultValue 4
+   *
    * @returns void
    */
-  async enableClustering(): Promise<void> {
+  async enableClustering(minClusterSize?: number): Promise<void> {
     return CapacitorGoogleMaps.enableClustering({
       id: this.id,
+      minClusterSize,
     });
   }
 
