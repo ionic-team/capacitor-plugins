@@ -3,9 +3,13 @@ import type {
   Cluster,
   onClusterClickHandler,
 } from '@googlemaps/markerclusterer';
-import { MarkerClusterer } from '@googlemaps/markerclusterer';
+import {
+  MarkerClusterer,
+  SuperClusterAlgorithm,
+} from '@googlemaps/markerclusterer';
 
-import type { LatLngBounds, Marker } from './definitions';
+import type { Marker } from './definitions';
+import { LatLngBounds } from './definitions';
 import type {
   AccElementsArgs,
   AddMarkerArgs,
@@ -22,6 +26,8 @@ import type {
   TrafficLayerArgs,
   RemoveMarkersArgs,
   OnScrollArgs,
+  MapBoundsContainsArgs,
+  EnableClusteringArgs,
 } from './implementation';
 
 export class CapacitorGoogleMapsWeb
@@ -186,7 +192,7 @@ export class CapacitorGoogleMapsWeb
       throw new Error('Google Map Bounds could not be found.');
     }
 
-    return {
+    return new LatLngBounds({
       southwest: {
         lat: bounds.getSouthWest().lat(),
         lng: bounds.getSouthWest().lng(),
@@ -199,7 +205,7 @@ export class CapacitorGoogleMapsWeb
         lat: bounds.getNorthEast().lat(),
         lng: bounds.getNorthEast().lng(),
       },
-    };
+    });
   }
 
   async addMarkers(_args: AddMarkersArgs): Promise<{ ids: string[] }> {
@@ -254,7 +260,7 @@ export class CapacitorGoogleMapsWeb
     delete this.maps[_args.id].markers[_args.markerId];
   }
 
-  async enableClustering(_args: { id: string }): Promise<void> {
+  async enableClustering(_args: EnableClusteringArgs): Promise<void> {
     const markers: google.maps.Marker[] = [];
 
     for (const id in this.maps[_args.id].markers) {
@@ -264,6 +270,9 @@ export class CapacitorGoogleMapsWeb
     this.maps[_args.id].markerClusterer = new MarkerClusterer({
       map: this.maps[_args.id].map,
       markers: markers,
+      algorithm: new SuperClusterAlgorithm({
+        minPoints: _args.minClusterSize ?? 4,
+      }),
       onClusterClick: this.onClusterClickHandler,
     });
   }
@@ -294,6 +303,21 @@ export class CapacitorGoogleMapsWeb
     mapItem.element.innerHTML = '';
     mapItem.map.unbindAll();
     delete this.maps[_args.id];
+  }
+
+  async mapBoundsContains(
+    _args: MapBoundsContainsArgs,
+  ): Promise<{ contains: boolean }> {
+    const bounds = this.getLatLngBounds(_args.bounds);
+    const point = new google.maps.LatLng(_args.point.lat, _args.point.lng);
+    return { contains: bounds.contains(point) };
+  }
+
+  private getLatLngBounds(_args: LatLngBounds): google.maps.LatLngBounds {
+    return new google.maps.LatLngBounds(
+      new google.maps.LatLng(_args.southwest.lat, _args.southwest.lng),
+      new google.maps.LatLng(_args.northeast.lat, _args.northeast.lng),
+    );
   }
 
   async setMarkerListeners(
