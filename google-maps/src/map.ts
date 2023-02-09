@@ -14,8 +14,8 @@ import type {
   MapClickCallbackData,
   MarkerClickCallbackData,
   MyLocationButtonClickCallbackData,
-  LatLngBounds,
 } from './definitions';
+import { LatLngBounds } from './definitions';
 import type { CreateMapArgs } from './implementation';
 import { CapacitorGoogleMaps } from './implementation';
 
@@ -402,9 +402,11 @@ export class GoogleMap {
    * @returns {LatLngBounds}
    */
   async getMapBounds(): Promise<LatLngBounds> {
-    return CapacitorGoogleMaps.getMapBounds({
-      id: this.id,
-    });
+    return new LatLngBounds(
+      await CapacitorGoogleMaps.getMapBounds({
+        id: this.id,
+      }),
+    );
   }
 
   initScrolling(): void {
