@@ -6,7 +6,6 @@ import type {
   GoogleMapConfig,
   LatLng,
   LatLngBounds,
-  LatLngBoundsInterface,
   MapPadding,
   MapType,
   Marker,
@@ -135,7 +134,7 @@ export interface CapacitorGoogleMapsPlugin extends Plugin {
   setPadding(args: PaddingArgs): Promise<void>;
   onScroll(args: OnScrollArgs): Promise<void>;
   dispatchMapEvent(args: { id: string; focus: boolean }): Promise<void>;
-  getMapBounds(args: { id: string }): Promise<LatLngBoundsInterface>;
+  getMapBounds(args: { id: string }): Promise<LatLngBounds>;
   mapBoundsContains(
     args: MapBoundsContainsArgs,
   ): Promise<{ contains: boolean }>;
