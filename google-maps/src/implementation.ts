@@ -4,6 +4,7 @@ import { registerPlugin } from '@capacitor/core';
 import type {
   CameraConfig,
   GoogleMapConfig,
+  LatLng,
   LatLngBounds,
   MapPadding,
   MapType,
@@ -105,13 +106,23 @@ export interface OnScrollArgs {
   };
 }
 
+export interface MapBoundsContainsArgs {
+  bounds: LatLngBounds;
+  point: LatLng;
+}
+
+export interface EnableClusteringArgs {
+  id: string;
+  minClusterSize?: number;
+}
+
 export interface CapacitorGoogleMapsPlugin extends Plugin {
   create(options: CreateMapArgs): Promise<void>;
   addMarker(args: AddMarkerArgs): Promise<{ id: string }>;
   addMarkers(args: AddMarkersArgs): Promise<{ ids: string[] }>;
   removeMarker(args: RemoveMarkerArgs): Promise<void>;
   removeMarkers(args: RemoveMarkersArgs): Promise<void>;
-  enableClustering(args: { id: string }): Promise<void>;
+  enableClustering(args: EnableClusteringArgs): Promise<void>;
   disableClustering(args: { id: string }): Promise<void>;
   destroy(args: DestroyMapArgs): Promise<void>;
   setCamera(args: CameraArgs): Promise<void>;
@@ -124,6 +135,9 @@ export interface CapacitorGoogleMapsPlugin extends Plugin {
   onScroll(args: OnScrollArgs): Promise<void>;
   dispatchMapEvent(args: { id: string; focus: boolean }): Promise<void>;
   getMapBounds(args: { id: string }): Promise<LatLngBounds>;
+  mapBoundsContains(
+    args: MapBoundsContainsArgs,
+  ): Promise<{ contains: boolean }>;
 }
 
 const CapacitorGoogleMaps = registerPlugin<CapacitorGoogleMapsPlugin>(

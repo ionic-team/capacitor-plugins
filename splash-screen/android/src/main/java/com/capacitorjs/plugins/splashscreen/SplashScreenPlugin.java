@@ -93,6 +93,8 @@ public class SplashScreenPlugin extends Plugin {
         }
         Integer duration = getConfig().getInt("launchShowDuration", config.getLaunchShowDuration());
         config.setLaunchShowDuration(duration);
+        Integer fadeOutDuration = getConfig().getInt("launchFadeOutDuration", config.getLaunchFadeOutDuration());
+        config.setLaunchFadeOutDuration(fadeOutDuration);
         Boolean autohide = getConfig().getBoolean("launchAutoHide", config.isLaunchAutoHide());
         config.setLaunchAutoHide(autohide);
         if (getConfig().getString("androidSplashResourceName") != null) {
