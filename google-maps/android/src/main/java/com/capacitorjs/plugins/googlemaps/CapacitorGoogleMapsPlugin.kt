@@ -542,17 +542,16 @@ class CapacitorGoogleMapsPlugin : Plugin() {
 
             val events = cachedTouchEvents[id]
             if (events != null) {
-                for (event in events) {
+                while(events.size > 0) {
+                    val event = events.first()
                     if (focus) {
                         map.dispatchTouchEvent(event)
                     } else {
-                        event.source = -1
-                        this.bridge.webView.dispatchTouchEvent(event)
+                        this.bridge.webView.onTouchEvent(event)
                     }
+                    events.removeFirst()
                 }
             }
-
-            cachedTouchEvents[id]?.clear()
 
             call.resolve()
         } catch (e: GoogleMapsError) {
