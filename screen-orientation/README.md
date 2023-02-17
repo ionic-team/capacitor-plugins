@@ -25,8 +25,8 @@ func application(_ application: UIApplication, supportedInterfaceOrientationsFor
 By default, an iPad allows Multitasking and its orientation cannot be locked. If you need to lock orientation on an iPad set the option `Requires Full Screen` to `YES` by adding the following to `Info.plist`:
 
 ```
-	<key>UIRequiresFullScreen</key>
-	<true/>
+  <key>UIRequiresFullScreen</key>
+  <true/>
 ```
 
 ## API
