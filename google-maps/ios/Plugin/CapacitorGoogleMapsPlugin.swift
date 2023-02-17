@@ -425,7 +425,9 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
                 throw GoogleMapErrors.mapNotFound
             }
 
-            map.enableClustering()
+            let minClusterSize = call.getInt("minClusterSize")
+
+            map.enableClustering(minClusterSize)
             call.resolve()
 
         } catch {
@@ -479,6 +481,54 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
         } catch {
             handleError(call, error: error)
         }
+    }
+
+    @objc func mapBoundsContains(_ call: CAPPluginCall) {
+        do {
+            guard let boundsObject = call.getObject("bounds") else {
+                throw GoogleMapErrors.invalidArguments("Invalid bounds provided")
+            }
+
+            guard let pointObject = call.getObject("point") else {
+                throw GoogleMapErrors.invalidArguments("Invalid point provided")
+            }
+
+            let bounds = try getGMSCoordinateBounds(boundsObject)
+            let point = try getCLLocationCoordinate(pointObject)
+
+            call.resolve([
+                "contains": bounds.contains(point)
+            ])
+        } catch {
+            handleError(call, error: error)
+        }
+    }
+
+    private func getGMSCoordinateBounds(_ bounds: JSObject) throws -> GMSCoordinateBounds {
+        guard let southwest = bounds["southwest"] as? JSObject else {
+            throw GoogleMapErrors.unhandledError("Bounds southwest property not formatted properly.")
+        }
+
+        guard let northeast = bounds["northeast"] as? JSObject else {
+            throw GoogleMapErrors.unhandledError("Bounds northeast property not formatted properly.")
+        }
+
+        return GMSCoordinateBounds(
+            coordinate: try getCLLocationCoordinate(southwest),
+            coordinate: try getCLLocationCoordinate(northeast)
+        )
+    }
+
+    private func getCLLocationCoordinate(_ point: JSObject) throws -> CLLocationCoordinate2D {
+        guard let lat = point["lat"] as? Double else {
+            throw GoogleMapErrors.unhandledError("Point lat property not formatted properly.")
+        }
+
+        guard let lng = point["lng"] as? Double else {
+            throw GoogleMapErrors.unhandledError("Point lng property not formatted properly.")
+        }
+
+        return CLLocationCoordinate2D(latitude: lat, longitude: lng)
     }
 
     private func formatMapBoundsForResponse(bounds: GMSCoordinateBounds?, cameraPosition: GMSCameraPosition) -> PluginCallResultData {

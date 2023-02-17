@@ -102,29 +102,44 @@ public class SplashScreen {
                 );
                 windowSplashScreen.setKeepOnScreenCondition(() -> isVisible || isHiding);
 
-                // Set Fade Out Animation
-                windowSplashScreen.setOnExitAnimationListener(
-                    windowSplashScreenView -> {
-                        final ObjectAnimator fadeAnimator = ObjectAnimator.ofFloat(windowSplashScreenView.getView(), View.ALPHA, 1f, 0f);
-                        fadeAnimator.setInterpolator(new LinearInterpolator());
-                        fadeAnimator.setDuration(settings.getFadeOutDuration());
+                if (config.getLaunchFadeOutDuration() > 0) {
+                    // Set Fade Out Animation
+                    windowSplashScreen.setOnExitAnimationListener(
+                        windowSplashScreenView -> {
+                            final ObjectAnimator fadeAnimator = ObjectAnimator.ofFloat(
+                                windowSplashScreenView.getView(),
+                                View.ALPHA,
+                                1f,
+                                0f
+                            );
+                            fadeAnimator.setInterpolator(new LinearInterpolator());
+                            fadeAnimator.setDuration(config.getLaunchFadeOutDuration());
 
-                        fadeAnimator.addListener(
-                            new AnimatorListenerAdapter() {
-                                @Override
-                                public void onAnimationEnd(Animator animation) {
-                                    isHiding = false;
-                                    windowSplashScreenView.remove();
+                            fadeAnimator.addListener(
+                                new AnimatorListenerAdapter() {
+                                    @Override
+                                    public void onAnimationEnd(Animator animation) {
+                                        isHiding = false;
+                                        windowSplashScreenView.remove();
+                                    }
                                 }
-                            }
-                        );
+                            );
 
-                        fadeAnimator.start();
+                            fadeAnimator.start();
 
-                        isHiding = true;
-                        isVisible = false;
-                    }
-                );
+                            isHiding = true;
+                            isVisible = false;
+                        }
+                    );
+                } else {
+                    windowSplashScreen.setOnExitAnimationListener(
+                        windowSplashScreenView -> {
+                            isHiding = false;
+                            isVisible = false;
+                            windowSplashScreenView.remove();
+                        }
+                    );
+                }
 
                 // Set Pre Draw Listener & Delay Drawing Until Duration Elapses
                 content = activity.findViewById(android.R.id.content);
@@ -550,6 +565,11 @@ public class SplashScreen {
 
         // Hide with Android 12 API
         if (null != this.onPreDrawListener) {
+            if (fadeOutDuration != 200) {
+                Logger.warn(
+                    "fadeOutDuration parameter doesn't work on initial splash screen, use launchFadeOutDuration configuration option"
+                );
+            }
             this.isVisible = false;
             if (null != content) {
                 content.getViewTreeObserver().removeOnPreDrawListener(this.onPreDrawListener);

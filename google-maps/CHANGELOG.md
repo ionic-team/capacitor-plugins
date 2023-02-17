@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.4.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/google-maps@4.3.2...@capacitor/google-maps@4.4.0) (2023-02-03)
+
+
+### Bug Fixes
+
+* **google-maps/android:** update clusters on map move ([#1398](https://github.com/ionic-team/capacitor-plugins/issues/1398)) ([3a23238](https://github.com/ionic-team/capacitor-plugins/commit/3a2323833779d9b545140057070f5acda38d9b32))
+
+
+### Features
+
+* **google-maps:** Add minClusterSize setting for enableClustering ([#1399](https://github.com/ionic-team/capacitor-plugins/issues/1399)) ([fba34b8](https://github.com/ionic-team/capacitor-plugins/commit/fba34b823e60aba43f82761bf7c3b42675702b7f))
+
+
+
+
+
 ## [4.3.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/google-maps@4.3.1...@capacitor/google-maps@4.3.2) (2022-12-01)
 
 **Note:** Version bump only for package @capacitor/google-maps

@@ -1,5 +1,6 @@
 import { triangleOutline, triangleSharp } from 'ionicons/icons';
 import React from 'react';
+import BoundsMapPage from './pages/Map/Bounds';
 import ConfigMapPage from './pages/Map/ConfigMap';
 import CreateAndDestroyMapPage from './pages/Map/CreateAndDestroyMap';
 import AddAndRemoveMarkers from './pages/Markers/AddAndRemoveMarkers';
@@ -37,7 +38,15 @@ const routesList: RouteGroup[] = [
         iosIcon: triangleOutline,
         mdIcon: triangleSharp,
         component: ConfigMapPage,
-      },{
+      },
+      {
+        title: 'Bounds',
+        url: '/maps/bounds',
+        iosIcon: triangleOutline,
+        mdIcon: triangleSharp,
+        component: BoundsMapPage,
+      },
+      {
         title: 'Simple Scrolling',
         url: '/maps/scrolling',
         iosIcon: triangleOutline,
