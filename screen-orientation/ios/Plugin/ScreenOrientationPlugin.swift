@@ -5,7 +5,6 @@ import Capacitor
 public class ScreenOrientationPlugin: CAPPlugin {
 
     private let implementation = ScreenOrientation()
-    private var supportedOrientations: [Int] = []
 
     override public func load() {
         NotificationCenter.default.addObserver(
