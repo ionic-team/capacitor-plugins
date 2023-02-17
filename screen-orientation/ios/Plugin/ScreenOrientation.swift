@@ -1,53 +1,77 @@
 import Foundation
 import UIKit
+import Capacitor
 
 public class ScreenOrientation: NSObject {
+
+    enum ScreenOrientationError: Error {
+        case noWindowScene
+    }
+
+    private var supportedOrientations: [Int] = []
+    private var capViewController: CAPBridgeViewController?
+
+    public func setCapacitorViewController(_ viewController: CAPBridgeViewController) {
+        self.capViewController = viewController
+        self.supportedOrientations =  viewController.supportedOrientations
+    }
 
     public func getCurrentOrientationType() -> String {
         let currentOrientation: UIDeviceOrientation = UIDevice.current.orientation
         return fromDeviceOrientationToOrientationType(currentOrientation)
     }
 
-    public func lockLegacy(_ orientationType: String, completion: @escaping (UIInterfaceOrientationMask) -> Void) {
+    private func lockLegacy(_ orientation: Int) {
+        UIDevice.current.setValue(orientation, forKey: "orientation")
+        UINavigationController.attemptRotationToDeviceOrientation()
+    }
+
+    public func lock(_ orientationType: String, completion: @escaping (Error?) -> Void) {
         DispatchQueue.main.async {
-            let mask = self.fromOrientationTypeToMask(orientationType)
             let orientation = self.fromOrientationTypeToInt(orientationType)
-            UIDevice.current.setValue(orientation, forKey: "orientation")
-            UINavigationController.attemptRotationToDeviceOrientation()
-            completion(mask)
+            self.capViewController?.supportedOrientations = [orientation]
+            let mask = self.fromOrientationTypeToMask(orientationType)
+            #if swift(>=5.7)
+            if #available(iOS 16.0, *) {
+                if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
+                    windowScene.keyWindow?.rootViewController?.setNeedsUpdateOfSupportedInterfaceOrientations()
+                    windowScene.requestGeometryUpdate(.iOS(interfaceOrientations: mask)) { error in
+                        completion(error)
+                    }
+                } else {
+                    completion(ScreenOrientationError.noWindowScene)
+                }
+            } else {
+                self.lockLegacy(orientation)
+            }
+            #else
+            self.lockLegacy(orientation)
+            #endif
+            completion(nil)
         }
     }
 
-    public func unlockLegacy(completion: @escaping () -> Void) {
+    public func unlock(completion: @escaping (Error?) -> Void) {
         DispatchQueue.main.async {
-            let unknownOrientation = UIInterfaceOrientation.unknown.rawValue
-            UIDevice.current.setValue(unknownOrientation, forKey: "orientation")
+            self.capViewController?.supportedOrientations = self.supportedOrientations
+            #if swift(>=5.7)
+            if #available(iOS 16.0, *) {
+                if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
+                    windowScene.keyWindow?.rootViewController?.setNeedsUpdateOfSupportedInterfaceOrientations()
+                    windowScene.requestGeometryUpdate(.iOS(interfaceOrientations: .all)) { error in
+                        completion(error)
+                    }
+                } else {
+                    completion(ScreenOrientationError.noWindowScene)
+                }
+            } else {
+                UINavigationController.attemptRotationToDeviceOrientation()
+            }
+            #else
             UINavigationController.attemptRotationToDeviceOrientation()
-            completion()
+            #endif
+            completion(nil)
         }
-    }
-
-    public func lock(_ orientationType: String) async throws -> UIInterfaceOrientationMask {
-        let mask = self.fromOrientationTypeToMask(orientationType)
-        let orientation = self.fromOrientationTypeToInt(orientationType)
-        #if swift(>=5.7)
-        if #available(iOS 16.0, *) {
-            let windowScene = await UIApplication.shared.connectedScenes.first as? UIWindowScene
-            await windowScene?.keyWindow?.rootViewController?.setNeedsUpdateOfSupportedInterfaceOrientations()
-            await windowScene?.requestGeometryUpdate(.iOS(interfaceOrientations: mask))
-        }
-        #endif
-        return mask
-    }
-
-    public func unlock() async throws {
-        #if swift(>=5.7)
-        if #available(iOS 16.0, *) {
-            let windowScene = await UIApplication.shared.connectedScenes.first as? UIWindowScene
-            await windowScene?.keyWindow?.rootViewController?.setNeedsUpdateOfSupportedInterfaceOrientations()
-            await windowScene?.requestGeometryUpdate(.iOS(interfaceOrientations: .all))
-        }
-        #endif
     }
 
     private func fromDeviceOrientationToOrientationType(_ orientation: UIDeviceOrientation) -> String {
