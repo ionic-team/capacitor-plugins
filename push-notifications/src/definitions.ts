@@ -4,6 +4,8 @@ import type { PermissionState, PluginListenerHandle } from '@capacitor/core';
 
 export type PresentationOption = 'badge' | 'sound' | 'alert';
 
+export type AndroidForegroundChannelOption = 'default' | 'auto' | string;
+
 declare module '@capacitor/cli' {
   export interface PluginsConfig {
     /**
@@ -24,6 +26,30 @@ declare module '@capacitor/cli' {
        * @example ["badge", "sound", "alert"]
        */
       presentationOptions: PresentationOption[];
+
+      /**
+       * The channel for android foreground notifications.
+       * - 'default': Use the default channel for foreground notifications.
+       * - 'auto': Use the channel specified in the notification for foreground notifications.
+       * - string: Use the specified channel for foreground notifications. You must create the channel manually.
+       */
+      androidForegroundChannelId?: AndroidForegroundChannelOption;
+
+      /**
+       * The name of the channel for android background notifications if using 'default' for androidForegroundChannelId.
+       */
+      androidForegroundChannelName?: string;
+
+      /**
+       * The description of the channel for android background notifications if using 'default' for androidForegroundChannelId.
+       */
+      androidForegroundChannelDescription?: string;
+
+      /**
+       * The sound for the notification channel if using 'default' for androidForegroundChannelId.
+       * This is the name of the sound file in the app's raw folder.
+       */
+      androidForegroundChannelSound?: string;
     };
   }
 }
