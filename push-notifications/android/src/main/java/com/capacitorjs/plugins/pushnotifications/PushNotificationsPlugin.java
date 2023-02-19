@@ -250,10 +250,7 @@ public class PushNotificationsPlugin extends Plugin {
                     if ((notificationChannel == "default") || (notificationChannel == null)) {
                         notificationChannel = NotificationChannelManager.FOREGROUND_NOTIFICATION_CHANNEL_ID;
                     }
-                    NotificationCompat.Builder builder = new NotificationCompat.Builder(
-                        getContext(),
-                        notificationChannel
-                    )
+                    NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext(), notificationChannel)
                         .setSmallIcon(pushIcon)
                         .setContentTitle(title)
                         .setAutoCancel(true)

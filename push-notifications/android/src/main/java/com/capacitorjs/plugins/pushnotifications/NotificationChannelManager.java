@@ -162,10 +162,12 @@ public class NotificationChannelManager {
                 if (Arrays.asList(presentation).contains("sound")) {
                     String sound = config.getString("androidForegroundChannelSound", null);
                     if (sound != null) {
-                        Uri soundUri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + context.getPackageName() + "/raw/" + sound);
+                        Uri soundUri = Uri.parse(
+                            ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + context.getPackageName() + "/raw/" + sound
+                        );
                     } else {
                         Uri soundUri = Settings.System.DEFAULT_NOTIFICATION_URI;
-                    };
+                    }
                     AudioAttributes audioAttributes = new AudioAttributes.Builder()
                         .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
                         .setUsage(AudioAttributes.USAGE_ALARM)
