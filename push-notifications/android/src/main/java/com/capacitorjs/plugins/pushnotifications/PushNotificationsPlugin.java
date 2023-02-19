@@ -243,7 +243,7 @@ public class PushNotificationsPlugin extends Plugin {
                         intent,
                         PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE
                     );
-                    String notificationChannel = config.getString("androidForegroundChannelId", null);
+                    String notificationChannel = getConfig().getString("androidForegroundChannelId", null);
                     if (notificationChannel == "auto") {
                         notificationChannel = notification.getChannelId();
                     }
