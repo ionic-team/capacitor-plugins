@@ -56,9 +56,13 @@ Android Studio has an icon generator you can use to create your Push Notificatio
 
 You can configure the way the push notifications are displayed when the app is in foreground.
 
-| Prop                      | Type                              | Description                                                                                                                                                                                                                                                                                                                                                                                          | Since |
-| ------------------------- | --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`presentationOptions`** | <code>PresentationOption[]</code> | This is an array of strings you can combine. Possible values in the array are: - `badge`: badge count on the app icon is updated (default value) - `sound`: the device will ring/vibrate when the push notification is received - `alert`: the push notification is displayed in a native dialog An empty array can be provided if none of the options are desired. badge is only available for iOS. | 1.0.0 |
+| Prop                                      | Type                                        | Description                                                                                                                                                                                                                                                                                                                                                                                          | Since |
+| ----------------------------------------- | ------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`presentationOptions`**                 | <code>PresentationOption[]</code>           | This is an array of strings you can combine. Possible values in the array are: - `badge`: badge count on the app icon is updated (default value) - `sound`: the device will ring/vibrate when the push notification is received - `alert`: the push notification is displayed in a native dialog An empty array can be provided if none of the options are desired. badge is only available for iOS. | 1.0.0 |
+| **`androidForegroundChannelId`**          | <code>AndroidForegroundChannelOption</code> | The channel for android foreground notifications. - 'default': Use the default channel for foreground notifications. - 'auto': Use the channel specified in the notification for foreground notifications. - string: Use the specified channel for foreground notifications. You must create the channel manually.                                                                                   |       |
+| **`androidForegroundChannelName`**        | <code>string</code>                         | The name of the channel for android background notifications if using 'default' for androidForegroundChannelId.                                                                                                                                                                                                                                                                                      |       |
+| **`androidForegroundChannelDescription`** | <code>string</code>                         | The description of the channel for android background notifications if using 'default' for androidForegroundChannelId.                                                                                                                                                                                                                                                                               |       |
+| **`androidForegroundChannelSound`**       | <code>string</code>                         | The sound for the notification channel if using 'default' for androidForegroundChannelId. This is the name of the sound file in the app's raw folder.                                                                                                                                                                                                                                                |       |
 
 ### Examples
 
@@ -68,7 +72,11 @@ In `capacitor.config.json`:
 {
   "plugins": {
     "PushNotifications": {
-      "presentationOptions": ["badge", "sound", "alert"]
+      "presentationOptions": ["badge", "sound", "alert"],
+      "androidForegroundChannelId": undefined,
+      "androidForegroundChannelName": undefined,
+      "androidForegroundChannelDescription": undefined,
+      "androidForegroundChannelSound": undefined
     }
   }
 }
@@ -85,6 +93,10 @@ const config: CapacitorConfig = {
   plugins: {
     PushNotifications: {
       presentationOptions: ["badge", "sound", "alert"],
+      androidForegroundChannelId: undefined,
+      androidForegroundChannelName: undefined,
+      androidForegroundChannelDescription: undefined,
+      androidForegroundChannelSound: undefined,
     },
   },
 };
