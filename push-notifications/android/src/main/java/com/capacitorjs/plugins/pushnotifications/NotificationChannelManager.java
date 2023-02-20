@@ -146,10 +146,10 @@ public class NotificationChannelManager {
      */
     public void createForegroundNotificationChannel() {
         // Create the NotificationChannel only if presentationOptions is defined
-        // and the android.foregroundChannelId is set to "default"
+        // and the androidForegroundChannelId is set to "default"
         // Because the channel can't be changed after creation
         String[] presentation = config.getArray("presentationOptions");
-        String foregroundChannelId = config.getString("androidForegroundChannelId", "default");
+        String androidForegroundChannelId = config.getString("androidForegroundChannelId", "default");
         if ((presentation != null) && (androidForegroundChannelId.equals("default"))) {
             // And only on API 26+ because the NotificationChannel class
             // is new and not in the support library
@@ -161,12 +161,13 @@ public class NotificationChannelManager {
                 channel.setDescription(description);
                 if (Arrays.asList(presentation).contains("sound")) {
                     String sound = config.getString("androidForegroundChannelSound", null);
+                    Uri soundUri;
                     if (sound != null) {
-                        Uri soundUri = Uri.parse(
+                        soundUri = Uri.parse(
                             ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + context.getPackageName() + "/raw/" + sound
                         );
                     } else {
-                        Uri soundUri = Settings.System.DEFAULT_NOTIFICATION_URI;
+                        soundUri = Settings.System.DEFAULT_NOTIFICATION_URI;
                     }
                     AudioAttributes audioAttributes = new AudioAttributes.Builder()
                         .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)

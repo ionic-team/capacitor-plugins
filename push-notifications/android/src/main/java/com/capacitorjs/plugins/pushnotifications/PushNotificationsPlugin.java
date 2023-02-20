@@ -20,6 +20,8 @@ import com.google.firebase.messaging.RemoteMessage;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -232,7 +234,7 @@ public class PushNotificationsPlugin extends Plugin {
                     }
                     int pushIcon = android.R.drawable.ic_dialog_info;
 
-                    if (bundle != null && bundle.getInt("com.google.firebase.messaging.default_notification_icon") != 0) {
+                    if (bundle != null && bundle.containsKey("com.google.firebase.messaging.default_notification_icon")) {
                         pushIcon = bundle.getInt("com.google.firebase.messaging.default_notification_icon");
                     }
                     Intent intent = new Intent(getContext(), getActivity().getClass());
@@ -243,14 +245,14 @@ public class PushNotificationsPlugin extends Plugin {
                         intent,
                         PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE
                     );
-                    String notificationChannel = getConfig().getString("androidForegroundChannelId", null);
-                    if (notificationChannel == "auto") {
-                        notificationChannel = notification.getChannelId();
+                    String notificationChannelId = getConfig().getString("androidForegroundChannelId", null);
+                    if (Objects.equals(notificationChannelId, "auto")) {
+                        notificationChannelId = notification.getChannelId();
                     }
-                    if ((notificationChannel == "default") || (notificationChannel == null)) {
-                        notificationChannel = NotificationChannelManager.FOREGROUND_NOTIFICATION_CHANNEL_ID;
+                    if ((Objects.equals(notificationChannelId, "default") || (notificationChannelId == null))) {
+                        notificationChannelId = NotificationChannelManager.FOREGROUND_NOTIFICATION_CHANNEL_ID;
                     }
-                    NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext(), notificationChannel)
+                    NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext(), notificationChannelId)
                         .setSmallIcon(pushIcon)
                         .setContentTitle(title)
                         .setAutoCancel(true)
