@@ -278,6 +278,7 @@ export default MyMap;
 * [`removeMarkers(...)`](#removemarkers)
 * [`destroy()`](#destroy)
 * [`setCamera(...)`](#setcamera)
+* [`getMapType()`](#getmaptype)
 * [`setMapType(...)`](#setmaptype)
 * [`enableIndoorMaps(...)`](#enableindoormaps)
 * [`enableTrafficLayer(...)`](#enabletrafficlayer)
@@ -418,6 +419,19 @@ setCamera(config: CameraConfig) => Promise<void>
 | Param        | Type                                                  |
 | ------------ | ----------------------------------------------------- |
 | **`config`** | <code><a href="#cameraconfig">CameraConfig</a></code> |
+
+--------------------
+
+
+### getMapType()
+
+```typescript
+getMapType() => Promise<MapType>
+```
+
+Get current map type
+
+**Returns:** <code>Promise&lt;<a href="#maptype">MapType</a>&gt;</code>
 
 --------------------
 

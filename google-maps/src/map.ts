@@ -5,7 +5,6 @@ import type {
   CameraConfig,
   Marker,
   MapPadding,
-  MapType,
   MapListenerCallback,
   MapReadyCallbackData,
   CameraIdleCallbackData,
@@ -15,7 +14,7 @@ import type {
   MarkerClickCallbackData,
   MyLocationButtonClickCallbackData,
 } from './definitions';
-import { LatLngBounds } from './definitions';
+import { LatLngBounds, MapType } from './definitions';
 import type { CreateMapArgs } from './implementation';
 import { CapacitorGoogleMaps } from './implementation';
 
@@ -37,6 +36,10 @@ export interface GoogleMapInterface {
   removeMarkers(ids: string[]): Promise<void>;
   destroy(): Promise<void>;
   setCamera(config: CameraConfig): Promise<void>;
+  /**
+   * Get current map type
+   */
+  getMapType(): Promise<MapType>;
   setMapType(mapType: MapType): Promise<void>;
   enableIndoorMaps(enabled: boolean): Promise<void>;
   enableTrafficLayer(enabled: boolean): Promise<void>;
@@ -314,6 +317,11 @@ export class GoogleMap {
       id: this.id,
       config,
     });
+  }
+
+  async getMapType(): Promise<MapType> {
+    const { type } = await CapacitorGoogleMaps.getMapType({ id: this.id });
+    return MapType[type as keyof typeof MapType];
   }
 
   /**

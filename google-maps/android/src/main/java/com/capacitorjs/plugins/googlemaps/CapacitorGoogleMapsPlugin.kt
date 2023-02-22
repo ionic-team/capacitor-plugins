@@ -376,6 +376,31 @@ class CapacitorGoogleMapsPlugin : Plugin() {
     }
 
     @PluginMethod
+    fun getMapType(call: PluginCall) {
+        try {
+            val id = call.getString("id")
+            id ?: throw InvalidMapIdError()
+
+            val map = maps[id]
+            map ?: throw MapNotFoundError()
+
+            map.getMapType() { type, err ->
+
+                if (err != null) {
+                    throw err
+                }
+                val data = JSObject()
+                data.put("type", type)
+                call.resolve(data)
+            }
+        } catch (e: GoogleMapsError) {
+            handleError(call, e)
+        } catch (e: Exception) {
+            handleError(call, e)
+        }
+    }
+
+    @PluginMethod
     fun setMapType(call: PluginCall) {
         try {
             val id = call.getString("id")
@@ -542,17 +567,16 @@ class CapacitorGoogleMapsPlugin : Plugin() {
 
             val events = cachedTouchEvents[id]
             if (events != null) {
-                for (event in events) {
+                while(events.size > 0) {
+                    val event = events.first()
                     if (focus) {
                         map.dispatchTouchEvent(event)
                     } else {
-                        event.source = -1
-                        this.bridge.webView.dispatchTouchEvent(event)
+                        this.bridge.webView.onTouchEvent(event)
                     }
+                    events.removeFirst()
                 }
             }
-
-            cachedTouchEvents[id]?.clear()
 
             call.resolve()
         } catch (e: GoogleMapsError) {

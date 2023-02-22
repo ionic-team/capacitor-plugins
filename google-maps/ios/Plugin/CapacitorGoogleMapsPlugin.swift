@@ -21,6 +21,22 @@ extension GMSMapViewType {
             return .normal
         }
     }
+    static func toString(mapType: GMSMapViewType) -> String {
+        switch mapType {
+        case .normal:
+            return "Normal"
+        case .hybrid:
+            return "Hybrid"
+        case .satellite:
+            return "Satellite"
+        case .terrain:
+            return "Terrain"
+        case .none:
+            return "None"
+        default:
+            return "Normal"
+        }
+    }
 }
 
 extension CGRect {
@@ -270,6 +286,26 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
             try map.setCamera(config: config)
 
             call.resolve()
+        } catch {
+            handleError(call, error: error)
+        }
+    }
+
+    @objc func getMapType(_ call: CAPPluginCall) {
+        do {
+            guard let id = call.getString("id") else {
+                throw GoogleMapErrors.invalidMapId
+            }
+
+            guard let map = self.maps[id] else {
+                throw GoogleMapErrors.mapNotFound
+            }
+
+            let mapType = GMSMapViewType.toString(mapType: map.getMapType())
+
+            call.resolve([
+                "type": mapType
+            ])
         } catch {
             handleError(call, error: error)
         }
