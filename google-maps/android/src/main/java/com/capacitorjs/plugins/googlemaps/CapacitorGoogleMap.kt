@@ -416,6 +416,27 @@ class CapacitorGoogleMap(
         }
     }
 
+    fun getMapType(callback: (type: String, error: GoogleMapsError?) -> Unit) {
+        try {
+            googleMap ?: throw GoogleMapNotAvailable()
+            CoroutineScope(Dispatchers.Main).launch {
+                val mapType: String = when (googleMap?.mapType) {
+                    MAP_TYPE_NORMAL -> "Normal"
+                    MAP_TYPE_HYBRID -> "Hybrid"
+                    MAP_TYPE_SATELLITE -> "Satellite"
+                    MAP_TYPE_TERRAIN -> "Terrain"
+                    MAP_TYPE_NONE -> "None"
+                    else -> {
+                        "Normal"
+                    }
+                }
+                callback(mapType, null);
+            }
+        }  catch (e: GoogleMapsError) {
+            callback("", e)
+        }
+    }
+
     fun setMapType(mapType: String, callback: (error: GoogleMapsError?) -> Unit) {
         try {
             googleMap ?: throw GoogleMapNotAvailable()
