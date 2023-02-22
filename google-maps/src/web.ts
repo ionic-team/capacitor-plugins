@@ -9,7 +9,7 @@ import {
 } from '@googlemaps/markerclusterer';
 
 import type { Marker } from './definitions';
-import { LatLngBounds } from './definitions';
+import { MapType, LatLngBounds } from './definitions';
 import type {
   AccElementsArgs,
   AddMarkerArgs,
@@ -121,6 +121,17 @@ export class CapacitorGoogleMapsWeb
       tilt: _args.config.angle,
       zoom: _args.config.zoom,
     });
+  }
+
+  async getMapType(_args: { id: string }): Promise<{ type: string }> {
+    let type = this.maps[_args.id].map.getMapTypeId();
+    if (type !== undefined) {
+      if (type === 'roadmap') {
+        type = MapType.Normal;
+      }
+      return { type };
+    }
+    throw new Error('Map type is undefined');
   }
 
   async setMapType(_args: MapTypeArgs): Promise<void> {

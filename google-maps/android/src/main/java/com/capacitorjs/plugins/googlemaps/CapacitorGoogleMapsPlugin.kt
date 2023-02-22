@@ -376,6 +376,31 @@ class CapacitorGoogleMapsPlugin : Plugin() {
     }
 
     @PluginMethod
+    fun getMapType(call: PluginCall) {
+        try {
+            val id = call.getString("id")
+            id ?: throw InvalidMapIdError()
+
+            val map = maps[id]
+            map ?: throw MapNotFoundError()
+
+            map.getMapType() { type, err ->
+
+                if (err != null) {
+                    throw err
+                }
+                val data = JSObject()
+                data.put("type", type)
+                call.resolve(data)
+            }
+        } catch (e: GoogleMapsError) {
+            handleError(call, e)
+        } catch (e: Exception) {
+            handleError(call, e)
+        }
+    }
+
+    @PluginMethod
     fun setMapType(call: PluginCall) {
         try {
             val id = call.getString("id")
