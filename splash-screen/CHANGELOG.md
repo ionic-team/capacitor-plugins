@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.2.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/splash-screen@4.1.4...@capacitor/splash-screen@4.2.0) (2023-02-22)
+
+
+### Features
+
+* **splash-screen:** Add launchFadeOutDuration configuration option ([#1393](https://github.com/ionic-team/capacitor-plugins/issues/1393)) ([66929c2](https://github.com/ionic-team/capacitor-plugins/commit/66929c2177009f65758ccbacdc166ae95294ef37))
+
+
+
+
+
 ## [4.1.4](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/splash-screen@4.1.3...@capacitor/splash-screen@4.1.4) (2023-02-03)
 
 **Note:** Version bump only for package @capacitor/splash-screen
