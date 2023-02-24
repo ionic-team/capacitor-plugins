@@ -276,6 +276,7 @@ export default MyMap;
 * [`addMarkers(...)`](#addmarkers)
 * [`removeMarker(...)`](#removemarker)
 * [`removeMarkers(...)`](#removemarkers)
+* [`removeAllMarkers()`](#removeallmarkers)
 * [`destroy()`](#destroy)
 * [`setCamera(...)`](#setcamera)
 * [`setMapType(...)`](#setmaptype)
@@ -392,6 +393,15 @@ removeMarkers(ids: string[]) => Promise<void>
 | Param     | Type                  |
 | --------- | --------------------- |
 | **`ids`** | <code>string[]</code> |
+
+--------------------
+
+
+### removeAllMarkers()
+
+```typescript
+removeAllMarkers() => Promise<void>
+```
 
 --------------------
 

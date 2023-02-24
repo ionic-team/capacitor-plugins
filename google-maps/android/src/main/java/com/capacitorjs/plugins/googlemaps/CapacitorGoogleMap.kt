@@ -9,6 +9,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import androidx.core.view.updateLayoutParams
 import com.getcapacitor.Bridge
 import com.getcapacitor.JSArray
 import com.getcapacitor.JSObject
@@ -96,12 +97,14 @@ class CapacitorGoogleMap(
                 mapViewParent.tag = id
 
                 mapView.layoutParams = layoutParams
+
                 mapViewParent.addView(mapView)
 
                 ((bridge.webView.parent) as ViewGroup).addView(mapViewParent)
 
                 bridge.webView.bringToFront()
                 bridge.webView.setBackgroundColor(Color.TRANSPARENT)
+
                 if (config.styles != null) {
                     googleMap?.setMapStyle(MapStyleOptions(config.styles!!));
                 }
@@ -375,6 +378,27 @@ class CapacitorGoogleMap(
             callback(e)
         }
     }
+    fun removeAllMarkers(callback: (error: GoogleMapsError?) -> Unit) {
+        try {
+            googleMap ?: throw GoogleMapNotAvailable()
+
+            CoroutineScope(Dispatchers.Main).launch {
+                if (clusterManager != null) {
+                    clusterManager?.clearItems()
+                    clusterManager?.cluster()
+                }
+
+                markers.forEach {
+                    it.value.googleMapMarker?.remove()
+                }
+                markers.clear()
+
+                callback(null)
+            }
+        } catch (e: GoogleMapsError) {
+            callback(e)
+        }
+    }
 
     fun setCamera(config: GoogleMapCameraConfig, callback: (error: GoogleMapsError?) -> Unit) {
         try {
@@ -441,7 +465,7 @@ class CapacitorGoogleMap(
            CoroutineScope(Dispatchers.Main).launch {
                if (path.size > 0) {
                    for (i in 0 until path.size) {
-                     var poly =   googleMap!!.addPolyline(PolylineOptions().addAll(path[i]).color(Color.RED))
+                     var poly =   googleMap!!.addPolyline(PolylineOptions().addAll(path[i]).color(Color.parseColor("#4882ff")))
                        directionsPolyline[poly!!.id] = poly;
                    }
                   callback(null);

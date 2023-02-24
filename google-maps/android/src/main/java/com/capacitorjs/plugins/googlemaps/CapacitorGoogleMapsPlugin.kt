@@ -354,6 +354,30 @@ class CapacitorGoogleMapsPlugin : Plugin() {
             handleError(call, e)
         }
     }
+    @PluginMethod
+    fun removeAllMarkers(call:PluginCall){
+        try{
+            val id = call.getString("id");
+            id ?: throw InvalidMapIdError()
+
+            val map = maps[id];
+            map ?: throw MapNotFoundError()
+
+            map.removeAllMarkers{
+                err ->
+                if (err != null){
+                    throw err
+                }
+                call.resolve();
+            }
+        }
+        catch (e:GoogleMapsError){
+            handleError(call,e)
+        }
+        catch (e:Exception){
+            handleError(call,e);
+        }
+    }
 
     @PluginMethod
     fun removeMarkers(call: PluginCall) {

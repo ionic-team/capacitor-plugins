@@ -111,6 +111,7 @@ export interface CapacitorGoogleMapsPlugin extends Plugin {
   addMarkers(args: AddMarkersArgs): Promise<{ ids: string[] }>;
   removeMarker(args: RemoveMarkerArgs): Promise<void>;
   removeMarkers(args: RemoveMarkersArgs): Promise<void>;
+  removeAllMarkers(args: { id: string }): Promise<void>;
   enableClustering(args: { id: string }): Promise<void>;
   disableClustering(args: { id: string }): Promise<void>;
   destroy(args: DestroyMapArgs): Promise<void>;
@@ -124,8 +125,11 @@ export interface CapacitorGoogleMapsPlugin extends Plugin {
   onScroll(args: OnScrollArgs): Promise<void>;
   dispatchMapEvent(args: { id: string; focus: boolean }): Promise<void>;
   getMapBounds(args: { id: string }): Promise<LatLngBounds>;
-  removeAllDirectionsPolylines(args:{id:string}):Promise<void>;
-  handlerDirections(args:{id:string,result:google.maps.DirectionsResult}):Promise<void>
+  removeAllDirectionsPolylines(args: { id: string }): Promise<void>;
+  handlerDirections(args: {
+    id: string;
+    result: google.maps.DirectionsResult;
+  }): Promise<void>;
 }
 
 const CapacitorGoogleMaps = registerPlugin<CapacitorGoogleMapsPlugin>(

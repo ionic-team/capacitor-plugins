@@ -3,6 +3,7 @@ import Capacitor
 import GoogleMaps
 import GoogleMapsUtils
 
+
 extension GMSMapViewType {
     static func fromString(mapType: String) -> GMSMapViewType {
         switch mapType {
@@ -224,6 +225,52 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
         }
     }
 
+    @objc func removeAllMarkers(_ call: CAPPluginCall) {
+        do {
+            guard let id = call.getString("id") else {
+                throw GoogleMapErrors.invalidMapId
+            }
+
+            guard let map = self.maps[id] else {
+                throw GoogleMapErrors.mapNotFound
+            }
+
+            try map.removeAllMarkers()
+
+            call.resolve()
+        } catch {
+            handleError(call, error: error)
+        }
+    }
+    @objc func handlerDirections(_ call: CAPPluginCall) {
+        do {
+            
+            guard let id = call.getString("id") else {
+                throw GoogleMapErrors.invalidMapId
+            }
+            guard let map = self.maps[id] else {
+                throw GoogleMapErrors.mapNotFound
+            }
+            // get results as any object
+            guard let result = call.getString("result") else {
+                throw GoogleMapErrors.invalidArguments("results object is missing")
+            }
+
+            // Transformamos result en un objeto de tipo JSON ANY
+            let jsonData = result.data(using: .utf8)!
+            let json = try JSONSerialization.jsonObject(with: jsonData, options: []) as! [String: Any]
+            
+            
+
+           
+            // call handlerDirections with result as object
+            try map.handlerDirections(result: json)
+            call.resolve()
+        } catch {
+            handleError(call, error: error)
+        }
+    }
+
     @objc func removeMarker(_ call: CAPPluginCall) {
         do {
             guard let id = call.getString("id") else {
@@ -246,6 +293,23 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
 
             call.resolve()
 
+        } catch {
+            handleError(call, error: error)
+        }
+    }
+    @objc func removeAllDirectionsPolylines(_ call: CAPPluginCall) {
+        do {
+            guard let id = call.getString("id") else {
+                throw GoogleMapErrors.invalidMapId
+            }
+
+            guard let map = self.maps[id] else {
+                throw GoogleMapErrors.mapNotFound
+            }
+
+            try map.removeAllDirectionsPolylines()
+
+            call.resolve()
         } catch {
             handleError(call, error: error)
         }

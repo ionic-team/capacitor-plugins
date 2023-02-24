@@ -7,6 +7,12 @@ public struct LatLng: Codable {
     let lat: Double
     let lng: Double
 }
+public struct DirectionResults {
+let routes:[Any]
+}
+
+
+
 
 class GMViewController: UIViewController {
     var mapViewBounds: [String: Double]!
@@ -64,6 +70,7 @@ public class Map {
     var targetViewController: UIView?
     var markers = [Int: GMSMarker]()
     var markerIcons = [String: UIImage]()
+    var polylines = [Int: GMSPolyline]()
 
     // swiftlint:disable weak_delegate
     private var delegate: CapacitorGoogleMapsPlugin
@@ -272,6 +279,57 @@ public class Map {
         }
     }
 
+    func removeAllMarkers() throws {
+        
+        DispatchQueue.main.async {
+            if self.mapViewController.clusteringEnabled {
+                self.mapViewController.removeMarkersFromCluster(markers: Array(self.markers.values))
+            }
+
+            self.markers.forEach { (_, marker) in
+                marker.map = nil
+            }
+            self.markers.removeAll()
+        }
+    }
+   
+    func handlerDirections(result: [String: Any]) throws {
+        let path = GMSMutablePath()
+        DispatchQueue.main.async {
+        let routes = result["routes"] as! NSArray
+        let route = routes[0] as! NSDictionary
+        let legs = route["legs"] as! NSArray
+        let leg = legs[0] as! NSDictionary
+        let steps = leg["steps"] as! NSArray
+        for step in steps {
+            let step = step as! NSDictionary
+            let start_location = step["start_location"] as! NSDictionary
+            let end_location = step["end_location"] as! NSDictionary
+            let start_lat = start_location["lat"] as! Double
+            let start_lng = start_location["lng"] as! Double
+            let end_lat = end_location["lat"] as! Double
+            let end_lng = end_location["lng"] as! Double
+            path.add(CLLocationCoordinate2D(latitude: start_lat, longitude: start_lng))
+            path.add(CLLocationCoordinate2D(latitude: end_lat, longitude: end_lng))
+        }
+        let polyline = GMSPolyline(path: path)
+        polyline.strokeWidth = 5
+        polyline.strokeColor = UIColor.blue
+        polyline.map = self.mapViewController.GMapView
+        self.polylines[polyline.hash.hashValue] = polyline    
+        }
+    }
+    func removeAllDirectionsPolylines() throws {
+        DispatchQueue.main.async {
+            self.polylines.forEach { (_, polyline) in
+                polyline.map = nil
+            }
+            self.polylines.removeAll()
+        }
+    }
+    
+    
+
     func setCamera(config: GoogleMapCameraConfig) throws {
         let currentCamera = self.mapViewController.GMapView.camera
 
@@ -349,6 +407,7 @@ public class Map {
             }
         }
     }
+  
 
     func getMapLatLngBounds() -> GMSCoordinateBounds? {
         return GMSCoordinateBounds(region: self.mapViewController.GMapView.projection.visibleRegion())
