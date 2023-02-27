@@ -34,7 +34,7 @@
       ]
     },
     "version": {
-      "allowBranch": "main",
+      "allowBranch": "4.x",
       "conventionalCommits": true,
       "createRelease": "github",
       "message": "chore(release): publish [skip ci]",
