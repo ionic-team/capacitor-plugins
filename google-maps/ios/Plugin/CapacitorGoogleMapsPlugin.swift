@@ -540,6 +540,30 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
         }
     }
 
+    @objc func fitBounds(_ call: CAPPluginCall) {
+        do {
+            guard let id = call.getString("id") else {
+                throw GoogleMapErrors.invalidMapId
+            }
+
+            guard let map = self.maps[id] else {
+                throw GoogleMapErrors.mapNotFound
+            }
+
+            guard let boundsObject = call.getObject("bounds") else {
+                throw GoogleMapErrors.invalidArguments("Invalid bounds provided")
+            }
+
+            let bounds = try getGMSCoordinateBounds(boundsObject)
+            let padding = CGFloat(call.getInt("padding", 0))
+
+            map.fitBounds(bounds: bounds, padding: padding)
+            call.resolve()
+        } catch {
+            handleError(call, error: error)
+        }
+    }
+
     private func getGMSCoordinateBounds(_ bounds: JSObject) throws -> GMSCoordinateBounds {
         guard let southwest = bounds["southwest"] as? JSObject else {
             throw GoogleMapErrors.unhandledError("Bounds southwest property not formatted properly.")

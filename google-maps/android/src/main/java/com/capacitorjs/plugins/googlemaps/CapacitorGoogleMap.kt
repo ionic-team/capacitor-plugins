@@ -21,9 +21,10 @@ import com.google.maps.android.clustering.Cluster
 import com.google.maps.android.clustering.ClusterManager
 import com.google.maps.android.clustering.view.DefaultClusterRenderer
 import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.Channel
 import java.io.InputStream
 import java.net.URL
-import kotlinx.coroutines.channels.Channel
+
 
 class CapacitorGoogleMap(
         val id: String,
@@ -546,6 +547,11 @@ class CapacitorGoogleMap(
         data.put("northeast", northeastJS)
 
         return data
+    }
+
+    fun fitBounds(bounds: LatLngBounds, padding: Int) {
+        val cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, padding)
+        googleMap?.animateCamera(cameraUpdate)
     }
 
     private fun getScaledPixels(bridge: Bridge, pixels: Int): Int {
