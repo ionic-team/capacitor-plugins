@@ -33,6 +33,8 @@ Read about [Setting Permissions](https://capacitorjs.com/docs/android/configurat
 Note that <a href="#directory">`Directory.Documents`</a> and
 `Directory.ExternalStorage` are only available on Android 9 or older.
 
+Working with large files may require you to add `android:largeHeap="true"` to the `<application>` tag in `AndroidManifest.xml`.
+
 ## Understanding Directories and Files
 
 iOS and Android have additional layers of separation between files, such as special directories that are backed up to the Cloud, or ones for storing Documents. The Filesystem API offers a simple way to scope each operation to a specific special directory on the device.
@@ -47,7 +49,7 @@ import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
 const writeSecretFile = async () => {
   await Filesystem.writeFile({
     path: 'secrets/text.txt',
-    data: "This is a test",
+    data: 'This is a test',
     directory: Directory.Documents,
     encoding: Encoding.UTF8,
   });
@@ -75,7 +77,7 @@ const readFilePath = async () => {
   // read binary data (base64 encoded) from plugins that return File URIs, such as
   // the Camera.
   const contents = await Filesystem.readFile({
-    path: 'file:///var/mobile/Containers/Data/Application/22A433FD-D82D-4989-8BE6-9FC49DEA20BB/Documents/text.txt'
+    path: 'file:///var/mobile/Containers/Data/Application/22A433FD-D82D-4989-8BE6-9FC49DEA20BB/Documents/text.txt',
   });
 
   console.log('data:', contents);
@@ -86,22 +88,22 @@ const readFilePath = async () => {
 
 <docgen-index>
 
-* [`readFile(...)`](#readfile)
-* [`writeFile(...)`](#writefile)
-* [`appendFile(...)`](#appendfile)
-* [`deleteFile(...)`](#deletefile)
-* [`mkdir(...)`](#mkdir)
-* [`rmdir(...)`](#rmdir)
-* [`readdir(...)`](#readdir)
-* [`getUri(...)`](#geturi)
-* [`stat(...)`](#stat)
-* [`rename(...)`](#rename)
-* [`copy(...)`](#copy)
-* [`checkPermissions()`](#checkpermissions)
-* [`requestPermissions()`](#requestpermissions)
-* [Interfaces](#interfaces)
-* [Type Aliases](#type-aliases)
-* [Enums](#enums)
+- [`readFile(...)`](#readfile)
+- [`writeFile(...)`](#writefile)
+- [`appendFile(...)`](#appendfile)
+- [`deleteFile(...)`](#deletefile)
+- [`mkdir(...)`](#mkdir)
+- [`rmdir(...)`](#rmdir)
+- [`readdir(...)`](#readdir)
+- [`getUri(...)`](#geturi)
+- [`stat(...)`](#stat)
+- [`rename(...)`](#rename)
+- [`copy(...)`](#copy)
+- [`checkPermissions()`](#checkpermissions)
+- [`requestPermissions()`](#requestpermissions)
+- [Interfaces](#interfaces)
+- [Type Aliases](#type-aliases)
+- [Enums](#enums)
 
 </docgen-index>
 
@@ -124,8 +126,7 @@ Read a file from disk
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### writeFile(...)
 
@@ -143,8 +144,7 @@ Write a file to disk in the specified location on device
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### appendFile(...)
 
@@ -160,8 +160,7 @@ Append to a file on disk in the specified location on device
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### deleteFile(...)
 
@@ -177,8 +176,7 @@ Delete a file from disk
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### mkdir(...)
 
@@ -194,8 +192,7 @@ Create a directory.
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### rmdir(...)
 
@@ -211,8 +208,7 @@ Remove a directory
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### readdir(...)
 
@@ -230,8 +226,7 @@ Return a list of files from the directory (not recursive)
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### getUri(...)
 
@@ -249,8 +244,7 @@ Return full File URI for a path and directory
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### stat(...)
 
@@ -268,8 +262,7 @@ Return data about a file
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### rename(...)
 
@@ -285,8 +278,7 @@ Rename a file or directory
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### copy(...)
 
@@ -304,8 +296,7 @@ Copy a file or directory
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### checkPermissions()
 
@@ -321,8 +312,7 @@ Required on Android, only when using <a href="#directory">`Directory.Documents`<
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### requestPermissions()
 
@@ -338,18 +328,15 @@ Required on Android, only when using <a href="#directory">`Directory.Documents`<
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### Interfaces
-
 
 #### ReadFileResult
 
 | Prop       | Type                | Description                                                 | Since |
 | ---------- | ------------------- | ----------------------------------------------------------- | ----- |
 | **`data`** | <code>string</code> | The string representation of the data contained in the file | 1.0.0 |
-
 
 #### ReadFileOptions
 
@@ -359,13 +346,11 @@ Required on Android, only when using <a href="#directory">`Directory.Documents`<
 | **`directory`** | <code><a href="#directory">Directory</a></code> | The <a href="#directory">`Directory`</a> to read the file from                                                                                                              | 1.0.0 |
 | **`encoding`**  | <code><a href="#encoding">Encoding</a></code>   | The encoding to read the file in, if not provided, data is read as binary and returned as base64 encoded. Pass <a href="#encoding">Encoding.UTF8</a> to read data as string | 1.0.0 |
 
-
 #### WriteFileResult
 
 | Prop      | Type                | Description                             | Since |
 | --------- | ------------------- | --------------------------------------- | ----- |
 | **`uri`** | <code>string</code> | The uri where the file was written into | 1.0.0 |
-
 
 #### WriteFileOptions
 
@@ -377,7 +362,6 @@ Required on Android, only when using <a href="#directory">`Directory.Documents`<
 | **`encoding`**  | <code><a href="#encoding">Encoding</a></code>   | The encoding to write the file in. If not provided, data is written as base64 encoded. Pass <a href="#encoding">Encoding.UTF8</a> to write data as string |                    | 1.0.0 |
 | **`recursive`** | <code>boolean</code>                            | Whether to create any missing parent directories.                                                                                                         | <code>false</code> | 1.0.0 |
 
-
 #### AppendFileOptions
 
 | Prop            | Type                                            | Description                                                                                                                                               | Since |
@@ -387,14 +371,12 @@ Required on Android, only when using <a href="#directory">`Directory.Documents`<
 | **`directory`** | <code><a href="#directory">Directory</a></code> | The <a href="#directory">`Directory`</a> to store the file in                                                                                             | 1.0.0 |
 | **`encoding`**  | <code><a href="#encoding">Encoding</a></code>   | The encoding to write the file in. If not provided, data is written as base64 encoded. Pass <a href="#encoding">Encoding.UTF8</a> to write data as string | 1.0.0 |
 
-
 #### DeleteFileOptions
 
 | Prop            | Type                                            | Description                                                      | Since |
 | --------------- | ----------------------------------------------- | ---------------------------------------------------------------- | ----- |
 | **`path`**      | <code>string</code>                             | The path of the file to delete                                   | 1.0.0 |
 | **`directory`** | <code><a href="#directory">Directory</a></code> | The <a href="#directory">`Directory`</a> to delete the file from | 1.0.0 |
-
 
 #### MkdirOptions
 
@@ -404,7 +386,6 @@ Required on Android, only when using <a href="#directory">`Directory.Documents`<
 | **`directory`** | <code><a href="#directory">Directory</a></code> | The <a href="#directory">`Directory`</a> to make the new directory in |                    | 1.0.0 |
 | **`recursive`** | <code>boolean</code>                            | Whether to create any missing parent directories as well.             | <code>false</code> | 1.0.0 |
 
-
 #### RmdirOptions
 
 | Prop            | Type                                            | Description                                                           | Default            | Since |
@@ -413,13 +394,11 @@ Required on Android, only when using <a href="#directory">`Directory.Documents`<
 | **`directory`** | <code><a href="#directory">Directory</a></code> | The <a href="#directory">`Directory`</a> to remove the directory from |                    | 1.0.0 |
 | **`recursive`** | <code>boolean</code>                            | Whether to recursively remove the contents of the directory           | <code>false</code> | 1.0.0 |
 
-
 #### ReaddirResult
 
 | Prop        | Type                    | Description                                        | Since |
 | ----------- | ----------------------- | -------------------------------------------------- | ----- |
 | **`files`** | <code>FileInfo[]</code> | List of files and directories inside the directory | 1.0.0 |
-
 
 #### FileInfo
 
@@ -432,7 +411,6 @@ Required on Android, only when using <a href="#directory">`Directory.Documents`<
 | **`mtime`** | <code>number</code>                | Time of last modification in milliseconds.                                           | 4.0.0 |
 | **`uri`**   | <code>string</code>                | The uri of the file.                                                                 | 4.0.0 |
 
-
 #### ReaddirOptions
 
 | Prop            | Type                                            | Description                                                 | Since |
@@ -440,13 +418,11 @@ Required on Android, only when using <a href="#directory">`Directory.Documents`<
 | **`path`**      | <code>string</code>                             | The path of the directory to read                           | 1.0.0 |
 | **`directory`** | <code><a href="#directory">Directory</a></code> | The <a href="#directory">`Directory`</a> to list files from | 1.0.0 |
 
-
 #### GetUriResult
 
 | Prop      | Type                | Description         | Since |
 | --------- | ------------------- | ------------------- | ----- |
 | **`uri`** | <code>string</code> | The uri of the file | 1.0.0 |
-
 
 #### GetUriOptions
 
@@ -454,7 +430,6 @@ Required on Android, only when using <a href="#directory">`Directory.Documents`<
 | --------------- | ----------------------------------------------- | -------------------------------------------------------------- | ----- |
 | **`path`**      | <code>string</code>                             | The path of the file to get the URI for                        | 1.0.0 |
 | **`directory`** | <code><a href="#directory">Directory</a></code> | The <a href="#directory">`Directory`</a> to get the file under | 1.0.0 |
-
 
 #### StatResult
 
@@ -466,14 +441,12 @@ Required on Android, only when using <a href="#directory">`Directory.Documents`<
 | **`mtime`** | <code>number</code>                | Time of last modification in milliseconds.                                           | 1.0.0 |
 | **`uri`**   | <code>string</code>                | The uri of the file                                                                  | 1.0.0 |
 
-
 #### StatOptions
 
 | Prop            | Type                                            | Description                                                    | Since |
 | --------------- | ----------------------------------------------- | -------------------------------------------------------------- | ----- |
 | **`path`**      | <code>string</code>                             | The path of the file to get data about                         | 1.0.0 |
 | **`directory`** | <code><a href="#directory">Directory</a></code> | The <a href="#directory">`Directory`</a> to get the file under | 1.0.0 |
-
 
 #### CopyOptions
 
@@ -484,13 +457,11 @@ Required on Android, only when using <a href="#directory">`Directory.Documents`<
 | **`directory`**   | <code><a href="#directory">Directory</a></code> | The <a href="#directory">`Directory`</a> containing the existing file or directory                                                                           | 1.0.0 |
 | **`toDirectory`** | <code><a href="#directory">Directory</a></code> | The <a href="#directory">`Directory`</a> containing the destination file or directory. If not supplied will use the 'directory' parameter as the destination | 1.0.0 |
 
-
 #### CopyResult
 
 | Prop      | Type                | Description                            | Since |
 | --------- | ------------------- | -------------------------------------- | ----- |
 | **`uri`** | <code>string</code> | The uri where the file was copied into | 4.0.0 |
-
 
 #### PermissionStatus
 
@@ -498,22 +469,17 @@ Required on Android, only when using <a href="#directory">`Directory.Documents`<
 | ------------------- | ----------------------------------------------------------- |
 | **`publicStorage`** | <code><a href="#permissionstate">PermissionState</a></code> |
 
-
 ### Type Aliases
-
 
 #### RenameOptions
 
 <code><a href="#copyoptions">CopyOptions</a></code>
 
-
 #### PermissionState
 
 <code>'prompt' | 'prompt-with-rationale' | 'granted' | 'denied'</code>
 
-
 ### Enums
-
 
 #### Directory
 
@@ -525,7 +491,6 @@ Required on Android, only when using <a href="#directory">`Directory.Documents`<
 | **`Cache`**           | <code>'CACHE'</code>            | The Cache directory Can be deleted in cases of low memory, so use this directory to write app-specific files that your app can re-create easily.                                                                                                                                                                                                                                                                                                  | 1.0.0 |
 | **`External`**        | <code>'EXTERNAL'</code>         | The external directory On iOS it will use the Documents directory On Android it's the directory on the primary shared/external storage device where the application can place persistent files it owns. These files are internal to the applications, and not typically visible to the user as media. Files will be deleted when the application is uninstalled.                                                                                  | 1.0.0 |
 | **`ExternalStorage`** | <code>'EXTERNAL_STORAGE'</code> | The external storage directory On iOS it will use the Documents directory On Android it's the primary shared/external storage directory. It's not accesible on Android 10 unless the app enables legacy External Storage by adding `android:requestLegacyExternalStorage="true"` in the `application` tag in the `AndroidManifest.xml`. It's not accesible on Android 11 or newer.                                                                | 1.0.0 |
-
 
 #### Encoding
 
