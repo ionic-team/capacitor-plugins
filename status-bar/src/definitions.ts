@@ -38,9 +38,9 @@ export interface AnimationOptions {
    * The type of status bar animation used when showing or hiding.
    *
    * This option is only supported on iOS.
-   * 
+   *
    * @default Animation.Fade
-   * 
+   *
    * @since 1.0.0
    */
   animation: Animation;
@@ -58,8 +58,8 @@ export enum Animation {
    * Slide animation during show/hide.
    * It doesn't work on iOS 15+.
    *
-   * @deprecated Use Animation.Fade or Animation.None instead. 
-   * 
+   * @deprecated Use Animation.Fade or Animation.None instead.
+   *
    * @since 1.0.0
    */
   Slide = 'SLIDE',
