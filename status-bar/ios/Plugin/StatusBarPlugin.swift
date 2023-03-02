@@ -44,7 +44,7 @@ public class StatusBarPlugin: CAPPlugin {
     func setAnimation(_ call: CAPPluginCall) {
         let animation = call.getString("animation", "FADE")
         if animation == "SLIDE" {
-            bridge?.statusBarAnimation = .SLIDE
+            bridge?.statusBarAnimation = .slide
         } else if animation == "NONE" {
             bridge?.statusBarAnimation = .none
         } else {
