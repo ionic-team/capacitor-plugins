@@ -38,8 +38,8 @@ Additionally, because the Camera API launches a separate Activity to handle taki
 
 This plugin will use the following project variables (defined in your app's `variables.gradle` file):
 
-- `$androidxExifInterfaceVersion`: version of `androidx.exifinterface:exifinterface` (default: `1.3.3`)
-- `$androidxMaterialVersion`: version of `com.google.android.material:material` (default: `1.6.1`)
+- `$androidxExifInterfaceVersion`: version of `androidx.exifinterface:exifinterface` (default: `1.3.6`)
+- `$androidxMaterialVersion`: version of `com.google.android.material:material` (default: `1.8.0`)
 
 ## PWA Notes
 
