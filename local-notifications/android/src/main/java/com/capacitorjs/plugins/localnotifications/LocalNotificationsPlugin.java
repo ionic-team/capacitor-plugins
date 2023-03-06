@@ -1,28 +1,37 @@
 package com.capacitorjs.plugins.localnotifications;
 
+import android.Manifest;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.service.notification.StatusBarNotification;
+
 import com.getcapacitor.Bridge;
 import com.getcapacitor.JSArray;
 import com.getcapacitor.JSObject;
+import com.getcapacitor.PermissionState;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginHandle;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
 import com.getcapacitor.annotation.Permission;
+import com.getcapacitor.annotation.PermissionCallback;
+
 import java.util.List;
 import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-@CapacitorPlugin(name = "LocalNotifications", permissions = @Permission(strings = {}, alias = "display"))
+@CapacitorPlugin(
+    name = "LocalNotifications",
+    permissions = @Permission(strings = {Manifest.permission.POST_NOTIFICATIONS}, alias = LocalNotificationsPlugin.LOCAL_NOTIFICATIONS)
+)
 public class LocalNotificationsPlugin extends Plugin {
+    static final String LOCAL_NOTIFICATIONS = "display";
 
     private static Bridge staticBridge = null;
     private LocalNotificationManager manager;
@@ -194,12 +203,25 @@ public class LocalNotificationsPlugin extends Plugin {
     @PluginMethod
     public void checkPermissions(PluginCall call) {
         JSObject permissionsResultJSON = new JSObject();
-        permissionsResultJSON.put("display", getNotificationPermissionText());
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            permissionsResultJSON.put("display", getPermissionState(LOCAL_NOTIFICATIONS).toString());
+        } else {
+            permissionsResultJSON.put("display", getNotificationPermissionText());
+        }
+
         call.resolve(permissionsResultJSON);
     }
 
     @PluginMethod
     public void requestPermissions(PluginCall call) {
+        if (Build.VERSION.SDK_INT  >= 33) {
+            if (getPermissionState(LOCAL_NOTIFICATIONS) != PermissionState.GRANTED) {
+                requestPermissionForAlias(LOCAL_NOTIFICATIONS, call, "permissionsCallback");
+                return;
+            }
+        }
+
         JSObject permissionsResultJSON = new JSObject();
         permissionsResultJSON.put("display", getNotificationPermissionText());
         call.resolve(permissionsResultJSON);
@@ -211,6 +233,13 @@ public class LocalNotificationsPlugin extends Plugin {
         } else {
             return "denied";
         }
+    }
+
+    @PermissionCallback
+    private void permissionsCallback(PluginCall call) {
+        JSObject permissionsResultJSON = new JSObject();
+        permissionsResultJSON.put("display", getNotificationPermissionText());
+        call.resolve(permissionsResultJSON);
     }
 
     public static void fireReceived(JSObject notification) {
