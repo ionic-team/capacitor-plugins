@@ -1,6 +1,7 @@
 package com.capacitorjs.plugins.localnotifications;
 
 import android.Manifest;
+import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;
@@ -25,6 +26,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+@TargetApi(Build.VERSION_CODES.TIRAMISU)
 @CapacitorPlugin(
     name = "LocalNotifications",
     permissions = @Permission(strings = { Manifest.permission.POST_NOTIFICATIONS }, alias = LocalNotificationsPlugin.LOCAL_NOTIFICATIONS)
