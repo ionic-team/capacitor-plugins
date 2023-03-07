@@ -10,9 +10,7 @@ npx cap sync
 ```
 
 ## Android
-Android 13 (API level 33) and higher supports a runtime permission for sending notifications POST_NOTIFICATIONS. You are required
-to call `checkPermissions()` and `requestPermissions()` accordingly, when targeting SDK 33, similarily to how iOS works.
-
+Android 13 requires a permission check in order to send notifications.  You are required to call `checkPermissions()` and `requestPermissions()` accordingly, when targeting SDK 33.
 
 Starting on Android 12, scheduled notifications won't be exact unless this permission is added to your `AndroidManifest.xml`:
 
