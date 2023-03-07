@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.service.notification.StatusBarNotification;
-import androidx.annotation.RequiresApi;
 import com.getcapacitor.Bridge;
 import com.getcapacitor.JSArray;
 import com.getcapacitor.JSObject;
