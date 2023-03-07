@@ -24,7 +24,6 @@ import org.json.JSONObject;
 
 @CapacitorPlugin(name = "PushNotifications", permissions = @Permission(strings = {}, alias = "receive"))
 public class PushNotificationsPlugin extends Plugin {
-
     public static Bridge staticBridge = null;
     public static RemoteMessage lastMessage = null;
     public NotificationManager notificationManager;
@@ -56,10 +55,9 @@ public class PushNotificationsPlugin extends Plugin {
             JSObject dataObject = new JSObject();
             for (String key : bundle.keySet()) {
                 if (key.equals("google.message_id")) {
-                    notificationJson.put("id", bundle.get(key));
+                    notificationJson.put("id", bundle.getString(key));
                 } else {
-                    Object value = bundle.get(key);
-                    String valueStr = (value != null) ? value.toString() : null;
+                    String valueStr = bundle.getString(key);
                     dataObject.put(key, valueStr);
                 }
             }
@@ -111,7 +109,7 @@ public class PushNotificationsPlugin extends Plugin {
                     JSObject extras = new JSObject();
 
                     for (String key : notification.extras.keySet()) {
-                        extras.put(key, notification.extras.get(key));
+                        extras.put(key, notification.extras.getString(key));
                     }
 
                     jsNotif.put("data", extras);
@@ -222,10 +220,17 @@ public class PushNotificationsPlugin extends Plugin {
                 if (Arrays.asList(presentation).contains("alert")) {
                     Bundle bundle = null;
                     try {
-                        ApplicationInfo applicationInfo = getContext()
-                            .getPackageManager()
-                            .getApplicationInfo(getContext().getPackageName(), PackageManager.GET_META_DATA);
-                        bundle = applicationInfo.metaData;
+                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+                            ApplicationInfo applicationInfo = getContext()
+                                    .getPackageManager()
+                                    .getApplicationInfo(getContext().getPackageName(), PackageManager.ApplicationInfoFlags.of(PackageManager.GET_META_DATA));
+                            bundle = applicationInfo.metaData;
+                        } else {
+                            ApplicationInfo applicationInfo = getContext()
+                                    .getPackageManager()
+                                    .getApplicationInfo(getContext().getPackageName(), PackageManager.GET_META_DATA);
+                            bundle = applicationInfo.metaData;
+                        }
                     } catch (PackageManager.NameNotFoundException e) {
                         e.printStackTrace();
                     }
