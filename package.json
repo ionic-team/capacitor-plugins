@@ -53,8 +53,6 @@
     "esm": "^3.2.25",
     "lerna": "^6.5.1",
     "nx": "^15.8.5",
-    "@nrwl/nx-darwin-x64": "^15.8.5",
-    "@nrwl/nx-linux-x64-gnu": "^15.8.5",
     "prettier": "~2.3.0",
     "prompts": "^2.3.2"
   },
