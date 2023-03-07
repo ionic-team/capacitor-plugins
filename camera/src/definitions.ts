@@ -32,6 +32,8 @@ export interface CameraPlugin {
 
   /**
    * iOS 14+ Only: Allows the user to update their limited photo library selection.
+   * On iOS 15+ returns all the limited photos after the picker dismissal.
+   * On iOS 14 or if the user gave full access to the photos it returns an empty array.
    *
    * @since 4.1.0
    */
@@ -137,7 +139,7 @@ export interface ImageOptions {
    * default is to use PWA Elements if installed and fall back to file input.
    * To always use file input, set this to `true`.
    *
-   * Learn more about PWA Elements: https://capacitorjs.com/docs/pwa-elements
+   * Learn more about PWA Elements: https://capacitorjs.com/docs/web/pwa-elements
    *
    * @since 1.0.0
    */
@@ -195,7 +197,7 @@ export interface Photo {
   dataUrl?: string;
   /**
    * If using CameraResultType.Uri, the path will contain a full,
-   * platform-specific file URL that can be read later using the Filsystem API.
+   * platform-specific file URL that can be read later using the Filesystem API.
    *
    * @since 1.0.0
    */
@@ -245,7 +247,7 @@ export interface GalleryPhotos {
 
 export interface GalleryPhoto {
   /**
-   * Full, platform-specific file URL that can be read later using the Filsystem API.
+   * Full, platform-specific file URL that can be read later using the Filesystem API.
    *
    * @since 1.2.0
    */

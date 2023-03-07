@@ -1,6 +1,6 @@
 {
   "name": "@capacitor/filesystem",
-  "version": "4.1.1",
+  "version": "4.1.4",
   "description": "The Filesystem API provides a NodeJS-like API for working with files on the device.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
@@ -47,7 +47,7 @@
   "devDependencies": {
     "@capacitor/android": "^4.0.0",
     "@capacitor/core": "^4.0.0",
-    "@capacitor/docgen": "0.0.18",
+    "@capacitor/docgen": "0.2.0",
     "@capacitor/ios": "^4.0.0",
     "@ionic/eslint-config": "^0.3.0",
     "@ionic/prettier-config": "~1.0.1",

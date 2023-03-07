@@ -3,6 +3,61 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.2.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/splash-screen@4.1.4...@capacitor/splash-screen@4.2.0) (2023-02-22)
+
+
+### Features
+
+* **splash-screen:** Add launchFadeOutDuration configuration option ([#1393](https://github.com/ionic-team/capacitor-plugins/issues/1393)) ([66929c2](https://github.com/ionic-team/capacitor-plugins/commit/66929c2177009f65758ccbacdc166ae95294ef37))
+
+
+
+
+
+## [4.1.4](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/splash-screen@4.1.3...@capacitor/splash-screen@4.1.4) (2023-02-03)
+
+**Note:** Version bump only for package @capacitor/splash-screen
+
+
+
+
+
+## [4.1.3](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/splash-screen@4.1.2...@capacitor/splash-screen@4.1.3) (2023-01-17)
+
+
+### Bug Fixes
+
+* **splash-screen:** Don't show if WebView is older than supported ([#1317](https://github.com/ionic-team/capacitor-plugins/issues/1317)) ([c884c38](https://github.com/ionic-team/capacitor-plugins/commit/c884c38cb2d24105e4667e32ffb6bbe59c97b9b4))
+
+
+
+
+
+## [4.1.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/splash-screen@4.1.1...@capacitor/splash-screen@4.1.2) (2022-11-16)
+
+
+### Bug Fixes
+
+* **splash-screen:** Remove extension from storyboard name ([#1281](https://github.com/ionic-team/capacitor-plugins/issues/1281)) ([86ecc4f](https://github.com/ionic-team/capacitor-plugins/commit/86ecc4f0c45799b2a5a02700c18a3d5f0de00615))
+
+
+
+
+
+## [4.1.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/splash-screen@4.1.0...@capacitor/splash-screen@4.1.1) (2022-10-21)
+
+**Note:** Version bump only for package @capacitor/splash-screen
+
+
+
+
+
+# [4.1.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/splash-screen@1.2.2...@capacitor/splash-screen@4.1.0) (2022-09-29)
+
+
+
+
+
 ## [4.0.1](https://github.com/ionic-team/capacitor-plugins/compare/4.0.0...4.0.1) (2022-07-28)
 
 **Note:** Version bump only for package @capacitor/splash-screen

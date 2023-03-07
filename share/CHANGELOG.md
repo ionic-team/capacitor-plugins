@@ -3,6 +3,62 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/share@4.1.0...@capacitor/share@4.1.1) (2023-02-03)
+
+
+### Bug Fixes
+
+* **share:** not sharing files on Android < 10 ([#1386](https://github.com/ionic-team/capacitor-plugins/issues/1386)) ([13673f5](https://github.com/ionic-team/capacitor-plugins/commit/13673f599a37f0553baa5b8e533fd7f163d9de69))
+
+
+
+
+
+# [4.1.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/share@1.1.2...@capacitor/share@4.1.0) (2022-11-16)
+
+
+### Features
+
+* **share:** Support for sharing multiple files ([#1267](https://github.com/ionic-team/capacitor-plugins/issues/1267)) ([b342061](https://github.com/ionic-team/capacitor-plugins/commit/b342061b41e26761f3d47b5dad06bd2e4f151216))
+
+
+
+## 4.0.1 (2022-07-28)
+
+
+
+# 4.0.0 (2022-07-27)
+
+
+### Bug Fixes
+
+* **share:** Prevent crash on no shareable files ([#1088](https://github.com/ionic-team/capacitor-plugins/issues/1088)) ([dc67e7b](https://github.com/ionic-team/capacitor-plugins/commit/dc67e7b96daa99e2d020b76005e37d93b610bbf2))
+
+
+
+# 4.0.0-beta.2 (2022-07-08)
+
+
+
+# 4.0.0-beta.0 (2022-06-27)
+
+
+### Bug Fixes
+
+* **share:** avoid crash when targeting SDK 31 ([#913](https://github.com/ionic-team/capacitor-plugins/issues/913)) ([275da5f](https://github.com/ionic-team/capacitor-plugins/commit/275da5fc23cf0ef173276d9027f8c5ffdb8a5432))
+
+
+### Features
+
+* set targetSDK default value to 31 ([#824](https://github.com/ionic-team/capacitor-plugins/issues/824)) ([3ee10de](https://github.com/ionic-team/capacitor-plugins/commit/3ee10de98067984c1a4e75295d001c5a895c47f4))
+* set targetSDK default value to 32 ([#970](https://github.com/ionic-team/capacitor-plugins/issues/970)) ([fa70d96](https://github.com/ionic-team/capacitor-plugins/commit/fa70d96f141af751aae53ceb5642c46b204f5958))
+* Upgrade gradle to 7.4 ([#826](https://github.com/ionic-team/capacitor-plugins/issues/826)) ([5db0906](https://github.com/ionic-team/capacitor-plugins/commit/5db0906f6264287c4f8e69dbaecf19d4d387824b))
+* Use java 11 ([#910](https://github.com/ionic-team/capacitor-plugins/issues/910)) ([5acb2a2](https://github.com/ionic-team/capacitor-plugins/commit/5acb2a288a413492b163e4e97da46a085d9e4be0))
+
+
+
+
+
 ## [4.0.1](https://github.com/ionic-team/capacitor-plugins/compare/4.0.0...4.0.1) (2022-07-28)
 
 **Note:** Version bump only for package @capacitor/share

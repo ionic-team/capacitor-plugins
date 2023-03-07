@@ -38,5 +38,10 @@ export class AppWeb extends WebPlugin implements AppPlugin {
     };
 
     this.notifyListeners('appStateChange', data);
+    if (document.hidden) {
+      this.notifyListeners('pause', null);
+    } else {
+      this.notifyListeners('resume', null);
+    }
   };
 }

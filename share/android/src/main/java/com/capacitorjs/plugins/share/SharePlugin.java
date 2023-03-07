@@ -8,6 +8,7 @@ import android.os.Build;
 import android.webkit.MimeTypeMap;
 import androidx.activity.result.ActivityResult;
 import androidx.core.content.FileProvider;
+import com.getcapacitor.JSArray;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
@@ -15,6 +16,9 @@ import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.ActivityCallback;
 import com.getcapacitor.annotation.CapacitorPlugin;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import org.json.JSONException;
 
 @CapacitorPlugin(name = "Share")
 public class SharePlugin extends Plugin {
@@ -61,10 +65,11 @@ public class SharePlugin extends Plugin {
             String title = call.getString("title", "");
             String text = call.getString("text");
             String url = call.getString("url");
+            JSArray files = call.getArray("files");
             String dialogTitle = call.getString("dialogTitle", "Share");
 
-            if (text == null && url == null) {
-                call.reject("Must provide a URL or Message");
+            if (text == null && url == null && (files == null || files.length() == 0)) {
+                call.reject("Must provide a URL or Message or files");
                 return;
             }
 
@@ -73,7 +78,7 @@ public class SharePlugin extends Plugin {
                 return;
             }
 
-            Intent intent = new Intent(Intent.ACTION_SEND);
+            Intent intent = new Intent(files != null && files.length() > 1 ? Intent.ACTION_SEND_MULTIPLE : Intent.ACTION_SEND);
 
             if (text != null) {
                 // If they supplied both fields, concat them
@@ -86,31 +91,17 @@ public class SharePlugin extends Plugin {
                 intent.putExtra(Intent.EXTRA_TEXT, url);
                 intent.setTypeAndNormalize("text/plain");
             } else if (url != null && isFileUrl(url)) {
-                String type = getMimeType(url);
-                if (type == null) {
-                    type = "*/*";
-                }
-                intent.setType(type);
-                try {
-                    Uri fileUrl = FileProvider.getUriForFile(
-                        getActivity(),
-                        getContext().getPackageName() + ".fileprovider",
-                        new File(Uri.parse(url).getPath())
-                    );
-                    intent.putExtra(Intent.EXTRA_STREAM, fileUrl);
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                        intent.setDataAndType(fileUrl, type);
-                    }
-                } catch (Exception ex) {
-                    call.reject(ex.getLocalizedMessage());
-                    return;
-                }
-
-                intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                JSArray filesArray = new JSArray();
+                filesArray.put(url);
+                shareFiles(filesArray, intent, call);
             }
 
             if (title != null) {
                 intent.putExtra(Intent.EXTRA_SUBJECT, title);
+            }
+
+            if (files != null && files.length() != 0) {
+                shareFiles(files, intent, call);
             }
             int flags = PendingIntent.FLAG_UPDATE_CURRENT;
             if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -127,6 +118,46 @@ public class SharePlugin extends Plugin {
             startActivityForResult(call, chooser, "activityResult");
         } else {
             call.reject("Can't share while sharing is in progress");
+        }
+    }
+
+    private void shareFiles(JSArray files, Intent intent, PluginCall call) {
+        List<Object> filesList;
+        ArrayList<Uri> fileUris = new ArrayList<>();
+        try {
+            filesList = files.toList();
+            for (int i = 0; i < filesList.size(); i++) {
+                String file = (String) filesList.get(i);
+                if (isFileUrl(file)) {
+                    String type = getMimeType(file);
+                    if (type == null || filesList.size() > 1) {
+                        type = "*/*";
+                    }
+                    intent.setType(type);
+
+                    Uri fileUrl = FileProvider.getUriForFile(
+                        getActivity(),
+                        getContext().getPackageName() + ".fileprovider",
+                        new File(Uri.parse(file).getPath())
+                    );
+                    fileUris.add(fileUrl);
+                } else {
+                    call.reject("only file urls are supported");
+                    return;
+                }
+            }
+            if (fileUris.size() > 1) {
+                intent.putExtra(Intent.EXTRA_STREAM, fileUris);
+            } else if (fileUris.size() == 1) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    intent.setClipData(ClipData.newRawUri("", fileUris.get(0)));
+                }
+                intent.putExtra(Intent.EXTRA_STREAM, fileUris.get(0));
+            }
+            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        } catch (Exception ex) {
+            call.reject(ex.getLocalizedMessage());
+            return;
         }
     }
 
