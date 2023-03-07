@@ -28,7 +28,14 @@ public class TimedNotificationPublisher extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        Notification notification = intent.getParcelableExtra(NOTIFICATION_KEY);
+
+        Notification notification;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            notification = intent.getParcelableExtra(NOTIFICATION_KEY, Notification.class);
+        } else {
+            notification = intent.getParcelableExtra(NOTIFICATION_KEY);
+        }
+
         notification.when = System.currentTimeMillis();
 
         int id = intent.getIntExtra(LocalNotificationManager.NOTIFICATION_INTENT_KEY, Integer.MIN_VALUE);
