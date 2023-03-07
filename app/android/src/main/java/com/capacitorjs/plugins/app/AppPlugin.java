@@ -75,7 +75,7 @@ public class AppPlugin extends Plugin {
         JSObject data = new JSObject();
         try {
             PackageInfo pinfo = null;
-            if (Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 pinfo =
                     getContext().getPackageManager().getPackageInfo(getContext().getPackageName(), PackageManager.PackageInfoFlags.of(0));
             } else {
