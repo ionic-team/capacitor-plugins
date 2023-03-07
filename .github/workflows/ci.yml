@@ -23,14 +23,17 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 18.x
-      - name: Restore Dependency Cache
-        id: cache-modules
-        uses: actions/cache@v3
+      - name: Get npm cache directory
+        id: npm-cache-dir
+        shell: bash
+        run: echo "dir=$(npm config get cache)" >> ${GITHUB_OUTPUT}
+      - uses: actions/cache@v3
+        id: npm-cache
         with:
-          path: |
-            node_modules
-            */node_modules
-          key: dependency-cache-${{ hashFiles('package.json', '*/package.json') }}
+          path: ${{ steps.npm-cache-dir.outputs.dir }}
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
       - run: npm install
       - id: files
         uses: imhoffd/get-changed-files@v2
@@ -50,14 +53,17 @@ jobs:
         with:
           node-version: 18.x
       - uses: actions/checkout@v2
-      - name: Restore Dependency Cache
-        id: cache-modules
-        uses: actions/cache@v3
+      - name: Get npm cache directory
+        id: npm-cache-dir
+        shell: bash
+        run: echo "dir=$(npm config get cache)" >> ${GITHUB_OUTPUT}
+      - uses: actions/cache@v3
+        id: npm-cache
         with:
-          path: |
-            node_modules
-            */node_modules
-          key: dependency-cache-${{ hashFiles('package.json', '*/package.json') }}
+          path: ${{ steps.npm-cache-dir.outputs.dir }}
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
       - run: npm install
       - run: npm run lint
   verify-ios:
@@ -78,14 +84,17 @@ jobs:
         with:
           node-version: 18.x
       - uses: actions/checkout@v3
-      - name: Restore Dependency Cache
-        id: cache-modules
-        uses: actions/cache@v3
+      - name: Get npm cache directory
+        id: npm-cache-dir
+        shell: bash
+        run: echo "dir=$(npm config get cache)" >> ${GITHUB_OUTPUT}
+      - uses: actions/cache@v3
+        id: npm-cache
         with:
-          path: |
-            node_modules
-            */node_modules
-          key: dependency-cache-${{ hashFiles('package.json', '*/package.json') }}
+          path: ${{ steps.npm-cache-dir.outputs.dir }}
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
       - run: npm install
       - run: npm run verify:ios
         working-directory: ${{ matrix.plugin }}
@@ -104,14 +113,17 @@ jobs:
         with:
           node-version: 18.x
       - uses: actions/checkout@v3
-      - name: Restore Dependency Cache
-        id: cache-modules
-        uses: actions/cache@v3
+      - name: Get npm cache directory
+        id: npm-cache-dir
+        shell: bash
+        run: echo "dir=$(npm config get cache)" >> ${GITHUB_OUTPUT}
+      - uses: actions/cache@v3
+        id: npm-cache
         with:
-          path: |
-            node_modules
-            */node_modules
-          key: dependency-cache-${{ hashFiles('package.json', '*/package.json') }}
+          path: ${{ steps.npm-cache-dir.outputs.dir }}
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
       - run: npm install
       - run: npm run verify:android
         working-directory: ${{ matrix.plugin }}
@@ -130,14 +142,17 @@ jobs:
         with:
           node-version: 18.x
       - uses: actions/checkout@v3
-      - name: Restore Dependency Cache
-        id: cache-modules
-        uses: actions/cache@v3
+      - name: Get npm cache directory
+        id: npm-cache-dir
+        shell: bash
+        run: echo "dir=$(npm config get cache)" >> ${GITHUB_OUTPUT}
+      - uses: actions/cache@v3
+        id: npm-cache
         with:
-          path: |
-            node_modules
-            */node_modules
-          key: dependency-cache-${{ hashFiles('package.json', '*/package.json') }}
+          path: ${{ steps.npm-cache-dir.outputs.dir }}
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
       - run: npm install
       - run: npm run verify:web
         working-directory: ${{ matrix.plugin }}
