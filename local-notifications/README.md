@@ -11,6 +11,12 @@ npx cap sync
 
 ## Android
 
+Android 13 requires a permission to be added to your `AndroidManifest.xml` to send [non-exempt](https://developer.android.com/develop/ui/views/notifications/notification-permission#exemptions) notifications from your app:
+
+```xml
+<uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+```
+
 Starting on Android 12, scheduled notifications won't be exact unless this permission is added to your `AndroidManifest.xml`:
 
 ```xml
