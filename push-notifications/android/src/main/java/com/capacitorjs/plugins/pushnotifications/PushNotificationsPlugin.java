@@ -1,5 +1,7 @@
 package com.capacitorjs.plugins.pushnotifications;
 
+import android.Manifest;
+import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;
@@ -14,16 +16,23 @@ import androidx.core.app.NotificationCompat;
 import com.getcapacitor.*;
 import com.getcapacitor.annotation.CapacitorPlugin;
 import com.getcapacitor.annotation.Permission;
+import com.getcapacitor.annotation.PermissionCallback;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.RemoteMessage;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-@CapacitorPlugin(name = "PushNotifications", permissions = @Permission(strings = {}, alias = "receive"))
+@TargetApi(Build.VERSION_CODES.TIRAMISU)
+@CapacitorPlugin(
+    name = "PushNotifications",
+    permissions = @Permission(
+            strings = { Manifest.permission.POST_NOTIFICATIONS },
+            alias = PushNotificationsPlugin.PUSH_NOTIFICATIONS
+    )
+)
 public class PushNotificationsPlugin extends Plugin {
+    static final String PUSH_NOTIFICATIONS = "receive";
 
     public static Bridge staticBridge = null;
     public static RemoteMessage lastMessage = null;
@@ -68,6 +77,30 @@ public class PushNotificationsPlugin extends Plugin {
             actionJson.put("actionId", "tap");
             actionJson.put("notification", notificationJson);
             notifyListeners("pushNotificationActionPerformed", actionJson, true);
+        }
+    }
+
+    @PluginMethod
+    public void checkPermissions(PluginCall call) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+            JSObject permissionsResultJSON = new JSObject();
+            permissionsResultJSON.put("receive", "granted");
+            call.resolve(permissionsResultJSON);
+        } else {
+            super.checkPermissions(call);
+        }
+    }
+
+    @PluginMethod
+    public void requestPermissions(PluginCall call) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+            JSObject permissionsResultJSON = new JSObject();
+            permissionsResultJSON.put("receive", "granted");
+            call.resolve(permissionsResultJSON);
+        } else {
+            if (getPermissionState(PUSH_NOTIFICATIONS) != PermissionState.GRANTED) {
+                requestPermissionForAlias(PUSH_NOTIFICATIONS, call, "permissionsCallback");
+            }
         }
     }
 
@@ -267,5 +300,10 @@ public class PushNotificationsPlugin extends Plugin {
             return (PushNotificationsPlugin) handle.getInstance();
         }
         return null;
+    }
+
+    @PermissionCallback
+    private void permissionsCallback(PluginCall call) {
+        this.checkPermissions(call);
     }
 }
