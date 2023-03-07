@@ -217,7 +217,7 @@ public class LocalNotificationsPlugin extends Plugin {
 
     @PluginMethod
     public void requestPermissions(PluginCall call) {
-        if (Build.VERSION.SDK_INT >= 33) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (getPermissionState(LOCAL_NOTIFICATIONS) != PermissionState.GRANTED) {
                 requestPermissionForAlias(LOCAL_NOTIFICATIONS, call, "permissionsCallback");
                 return;
