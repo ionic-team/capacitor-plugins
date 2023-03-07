@@ -1,3 +1,4 @@
+// swiftlint:disable identifier_name
 import Foundation
 import GoogleMaps
 import Capacitor
