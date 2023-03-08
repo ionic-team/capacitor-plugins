@@ -29,13 +29,7 @@ public class TimedNotificationPublisher extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        Notification notification;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            notification = intent.getParcelableExtra(NOTIFICATION_KEY, Notification.class);
-        } else {
-            notification = intent.getParcelableExtra(NOTIFICATION_KEY);
-        }
-
+        Notification notification = getNotification(intent, NOTIFICATION_KEY);
         notification.when = System.currentTimeMillis();
 
         int id = intent.getIntExtra(LocalNotificationManager.NOTIFICATION_INTENT_KEY, Integer.MIN_VALUE);
@@ -48,6 +42,15 @@ public class TimedNotificationPublisher extends BroadcastReceiver {
         notificationManager.notify(id, notification);
         if (!rescheduleNotificationIfNeeded(context, intent, id)) {
             storage.deleteNotification(Integer.toString(id));
+        }
+    }
+
+    @SuppressWarnings("deprecation")
+    private Notification getNotification(Intent intent, String string) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            return intent.getParcelableExtra(NOTIFICATION_KEY, Notification.class);
+        } else {
+            return intent.getParcelableExtra(NOTIFICATION_KEY);
         }
     }
 
