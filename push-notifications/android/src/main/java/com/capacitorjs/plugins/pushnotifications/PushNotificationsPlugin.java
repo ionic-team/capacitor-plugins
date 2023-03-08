@@ -16,9 +16,7 @@ import com.getcapacitor.annotation.CapacitorPlugin;
 import com.getcapacitor.annotation.Permission;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.RemoteMessage;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -220,17 +218,10 @@ public class PushNotificationsPlugin extends Plugin {
                 if (Arrays.asList(presentation).contains("alert")) {
                     Bundle bundle = null;
                     try {
-                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
-                            ApplicationInfo applicationInfo = getContext()
-                                    .getPackageManager()
-                                    .getApplicationInfo(getContext().getPackageName(), PackageManager.ApplicationInfoFlags.of(PackageManager.GET_META_DATA));
-                            bundle = applicationInfo.metaData;
-                        } else {
-                            ApplicationInfo applicationInfo = getContext()
-                                    .getPackageManager()
-                                    .getApplicationInfo(getContext().getPackageName(), PackageManager.GET_META_DATA);
-                            bundle = applicationInfo.metaData;
-                        }
+                        ApplicationInfo applicationInfo = getContext()
+                                .getPackageManager()
+                                .getApplicationInfo(getContext().getPackageName(), PackageManager.ApplicationInfoFlags.of(PackageManager.GET_META_DATA));
+                        bundle = applicationInfo.metaData;
                     } catch (PackageManager.NameNotFoundException e) {
                         e.printStackTrace();
                     }
