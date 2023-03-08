@@ -22,6 +22,7 @@ import org.json.JSONObject;
 
 @CapacitorPlugin(name = "PushNotifications", permissions = @Permission(strings = {}, alias = "receive"))
 public class PushNotificationsPlugin extends Plugin {
+
     public static Bridge staticBridge = null;
     public static RemoteMessage lastMessage = null;
     public NotificationManager notificationManager;
@@ -220,8 +221,11 @@ public class PushNotificationsPlugin extends Plugin {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                         try {
                             ApplicationInfo applicationInfo = getContext()
-                                    .getPackageManager()
-                                    .getApplicationInfo(getContext().getPackageName(), PackageManager.ApplicationInfoFlags.of(PackageManager.GET_META_DATA));
+                                .getPackageManager()
+                                .getApplicationInfo(
+                                    getContext().getPackageName(),
+                                    PackageManager.ApplicationInfoFlags.of(PackageManager.GET_META_DATA)
+                                );
                             bundle = applicationInfo.metaData;
                         } catch (PackageManager.NameNotFoundException e) {
                             e.printStackTrace();
