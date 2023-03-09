@@ -74,13 +74,11 @@ public class AppPlugin extends Plugin {
     public void getInfo(PluginCall call) {
         JSObject data = new JSObject();
         try {
-            PackageInfo pinfo = null;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                pinfo =
-                    getContext().getPackageManager().getPackageInfo(getContext().getPackageName(), PackageManager.PackageInfoFlags.of(0));
-            } else {
-                pinfo = getPackageInfoLegacy();
-            }
+            PackageInfo pinfo = InternalUtils.getPackageInfo(
+                getContext().getPackageManager(),
+                getContext().getPackageName(),
+                PackageManager.PackageInfoFlags.of(0)
+            );
             ApplicationInfo applicationInfo = getContext().getApplicationInfo();
             int stringId = applicationInfo.labelRes;
             String appName = stringId == 0 ? applicationInfo.nonLocalizedLabel.toString() : getContext().getString(stringId);
@@ -92,11 +90,6 @@ public class AppPlugin extends Plugin {
         } catch (Exception ex) {
             call.reject("Unable to get App Info");
         }
-    }
-
-    @SuppressWarnings("deprecation")
-    private PackageInfo getPackageInfoLegacy() throws PackageManager.NameNotFoundException {
-        return getContext().getPackageManager().getPackageInfo(getContext().getPackageName(), 0);
     }
 
     @PluginMethod
