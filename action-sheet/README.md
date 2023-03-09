@@ -13,7 +13,7 @@ npx cap sync
 
 This plugin will use the following project variables (defined in your app's `variables.gradle` file):
 
-- `$androidxMaterialVersion`: version of `com.google.android.material:material` (default: `1.6.1`)
+- `$androidxMaterialVersion`: version of `com.google.android.material:material` (default: `1.8.0`)
 
 ## PWA Notes
 

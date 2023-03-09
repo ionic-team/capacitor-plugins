@@ -1,5 +1,6 @@
 package com.capacitorjs.plugins.browser;
 
+import android.content.ActivityNotFoundException;
 import android.net.Uri;
 import com.getcapacitor.Logger;
 import com.getcapacitor.Plugin;
@@ -48,7 +49,13 @@ public class BrowserPlugin extends Plugin {
         }
 
         // open the browser and finish
-        implementation.open(url, toolbarColor);
+        try {
+            implementation.open(url, toolbarColor);
+        } catch (ActivityNotFoundException ex) {
+            Logger.error(getLogTag(), ex.getLocalizedMessage(), null);
+            call.reject("Unable to display URL");
+            return;
+        }
         call.resolve();
     }
 
