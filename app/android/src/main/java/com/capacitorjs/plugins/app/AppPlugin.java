@@ -6,13 +6,13 @@ import android.content.pm.PackageInfo;
 import android.net.Uri;
 import androidx.activity.OnBackPressedCallback;
 import androidx.core.content.pm.PackageInfoCompat;
-import com.getcapacitor.util.InternalUtils;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Logger;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
+import com.getcapacitor.util.InternalUtils;
 
 @CapacitorPlugin(name = "App")
 public class AppPlugin extends Plugin {
@@ -73,10 +73,7 @@ public class AppPlugin extends Plugin {
     public void getInfo(PluginCall call) {
         JSObject data = new JSObject();
         try {
-            PackageInfo pinfo = InternalUtils.getPackageInfo(
-                getContext().getPackageManager(),
-                getContext().getPackageName()
-            );
+            PackageInfo pinfo = InternalUtils.getPackageInfo(getContext().getPackageManager(), getContext().getPackageName());
             ApplicationInfo applicationInfo = getContext().getApplicationInfo();
             int stringId = applicationInfo.labelRes;
             String appName = stringId == 0 ? applicationInfo.nonLocalizedLabel.toString() : getContext().getString(stringId);
