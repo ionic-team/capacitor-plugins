@@ -22,7 +22,6 @@ import java.util.Arrays;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-
 @CapacitorPlugin(
     name = "PushNotifications",
     permissions = @Permission(strings = { Manifest.permission.POST_NOTIFICATIONS }, alias = PushNotificationsPlugin.PUSH_NOTIFICATIONS)
