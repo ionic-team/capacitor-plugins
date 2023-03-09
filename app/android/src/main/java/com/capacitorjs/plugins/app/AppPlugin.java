@@ -75,8 +75,7 @@ public class AppPlugin extends Plugin {
         try {
             PackageInfo pinfo = InternalUtils.getPackageInfo(
                 getContext().getPackageManager(),
-                getContext().getPackageName(),
-                PackageManager.PackageInfoFlags.of(0)
+                getContext().getPackageName()
             );
             ApplicationInfo applicationInfo = getContext().getApplicationInfo();
             int stringId = applicationInfo.labelRes;
