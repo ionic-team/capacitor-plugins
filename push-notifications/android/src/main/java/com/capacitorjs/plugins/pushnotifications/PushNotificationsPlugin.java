@@ -1,7 +1,6 @@
 package com.capacitorjs.plugins.pushnotifications;
 
 import android.Manifest;
-import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;
@@ -23,7 +22,7 @@ import java.util.Arrays;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-@TargetApi(Build.VERSION_CODES.TIRAMISU)
+
 @CapacitorPlugin(
     name = "PushNotifications",
     permissions = @Permission(strings = { Manifest.permission.POST_NOTIFICATIONS }, alias = PushNotificationsPlugin.PUSH_NOTIFICATIONS)
