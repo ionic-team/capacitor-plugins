@@ -339,6 +339,7 @@ public class CameraPlugin extends Plugin {
         processPickedImage(u, call);
     }
 
+    @SuppressWarnings("deprecation")
     @ActivityCallback
     public void processPickedImages(PluginCall call, ActivityResult result) {
         Intent data = result.getData();
@@ -372,7 +373,12 @@ public class CameraPlugin extends Plugin {
                     } else if (data.getExtras() != null) {
                         Bundle bundle = data.getExtras();
                         if (bundle.keySet().contains("selectedItems")) {
-                            ArrayList<Parcelable> fileUris = bundle.getParcelableArrayList("selectedItems");
+                            ArrayList<Parcelable> fileUris;
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                fileUris = bundle.getParcelableArrayList("selectedItems", Parcelable.class);
+                            } else {
+                                fileUris = bundle.getParcelableArrayList("selectedItems");
+                            }
                             if (fileUris != null) {
                                 for (Parcelable fileUri : fileUris) {
                                     if (fileUri instanceof Uri) {
@@ -788,6 +794,7 @@ public class CameraPlugin extends Plugin {
         }
     }
 
+    @SuppressWarnings("deprecation")
     private Intent createEditIntent(Uri origPhotoUri) {
         try {
             File editFile = new File(origPhotoUri.getPath());
@@ -798,9 +805,18 @@ public class CameraPlugin extends Plugin {
             int flags = Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION;
             editIntent.addFlags(flags);
             editIntent.putExtra(MediaStore.EXTRA_OUTPUT, editUri);
-            List<ResolveInfo> resInfoList = getContext()
-                .getPackageManager()
-                .queryIntentActivities(editIntent, PackageManager.MATCH_DEFAULT_ONLY);
+
+            List<ResolveInfo> resInfoList;
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                resInfoList =
+                    getContext()
+                        .getPackageManager()
+                        .queryIntentActivities(editIntent, PackageManager.ResolveInfoFlags.of(PackageManager.MATCH_DEFAULT_ONLY));
+            } else {
+                resInfoList = getContext().getPackageManager().queryIntentActivities(editIntent, PackageManager.MATCH_DEFAULT_ONLY);
+            }
+
             for (ResolveInfo resolveInfo : resInfoList) {
                 String packageName = resolveInfo.activityInfo.packageName;
                 getContext().grantUriPermission(packageName, editUri, flags);
