@@ -9,6 +9,28 @@ npm install @capacitor/splash-screen
 npx cap sync
 ```
 
+### Android 12 Splash Screen API
+
+_**This only affects the launch splash screen and is not used when utilizing the programmatic `show()` method.**_
+
+Capacitor 4 uses the **[Android 12 Splash Screen API](https://developer.android.com/guide/topics/ui/splash-screen)** and the `androidx.core:core-splashscreen` compatibility library to make it work on Android 11 and below.
+
+The compatibility library can be disabled by changing the parent of `AppTheme.NoActionBarLaunch` from `Theme.SplashScreen` to `AppTheme.NoActionBar` in `android/app/src/main/res/values/styles.xml`.
+The Android 12 Splash Screen API can't be disabled on Android 12+ as it's part of the Android OS.
+
+```xml
+<style name="AppTheme.NoActionBarLaunch" parent="AppTheme.NoActionBar">
+    <item name="android:background">@drawable/splash</item>
+</style>
+```
+
+**NOTE**: On Android 12 and Android 12L devices the Splash Screen image is not showing when launched from third party launchers such as Nova Launcher, MIUI, Realme Launcher, OPPO Launcher, etc., from app info in Settings App, or from IDEs such as Android Studio.
+**[Google Issue Tracker](https://issuetracker.google.com/issues/205021357)**
+**[Google Issue Tracker](https://issuetracker.google.com/issues/207386164)**
+Google have fixed those problems on Android 13 but they won't be backport the fixes to Android 12 and Android 12L.
+Launcher related issues might get fixed by a launcher update.
+If you still find issues related to the Splash Screen on Android 13, please, report them to [Google](https://issuetracker.google.com/).
+
 ## Example
 
 ```typescript
@@ -76,6 +98,7 @@ These config values are available:
 | ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- | ----- |
 | **`launchShowDuration`**        | <code>number</code>                                                                                                           | How long to show the launch splash screen when autoHide is enabled (in ms)                                                                                                                                                                              | <code>500</code>    | 1.0.0 |
 | **`launchAutoHide`**            | <code>boolean</code>                                                                                                          | Whether to auto hide the splash after launchShowDuration.                                                                                                                                                                                               | <code>true</code>   | 1.0.0 |
+| **`launchFadeOutDuration`**     | <code>number</code>                                                                                                           | Duration for the fade out animation of the launch splash screen (in ms) Only available for Android, when using the Android 12 Splash Screen API.                                                                                                        | <code>200</code>    | 4.2.0 |
 | **`backgroundColor`**           | <code>string</code>                                                                                                           | Color of the background of the Splash Screen in hex format, #RRGGBB or #RRGGBBAA. Doesn't work if `useDialog` is true or on launch when using the Android 12 API.                                                                                       |                     | 1.0.0 |
 | **`androidSplashResourceName`** | <code>string</code>                                                                                                           | Name of the resource to be used as Splash Screen. Doesn't work on launch when using the Android 12 API. Only available on Android.                                                                                                                      | <code>splash</code> | 1.0.0 |
 | **`androidScaleType`**          | <code>'CENTER' \| 'CENTER_CROP' \| 'CENTER_INSIDE' \| 'FIT_CENTER' \| 'FIT_END' \| 'FIT_START' \| 'FIT_XY' \| 'MATRIX'</code> | The [ImageView.ScaleType](https://developer.android.com/reference/android/widget/ImageView.ScaleType) used to scale the Splash Screen image. Doesn't work if `useDialog` is true or on launch when using the Android 12 API. Only available on Android. | <code>FIT_XY</code> | 1.0.0 |
@@ -98,6 +121,7 @@ In `capacitor.config.json`:
     "SplashScreen": {
       "launchShowDuration": 3000,
       "launchAutoHide": true,
+      "launchFadeOutDuration": 3000,
       "backgroundColor": "#ffffffff",
       "androidSplashResourceName": "splash",
       "androidScaleType": "CENTER_CROP",
@@ -126,6 +150,7 @@ const config: CapacitorConfig = {
     SplashScreen: {
       launchShowDuration: 3000,
       launchAutoHide: true,
+      launchFadeOutDuration: 3000,
       backgroundColor: "#ffffffff",
       androidSplashResourceName: "splash",
       androidScaleType: "CENTER_CROP",
@@ -156,35 +181,11 @@ To use splash screen images named something other than `splash.png`, set `androi
 </style>
 ```
 
-### Android 12 Splash Screen API
-
-_**This only affects the launch splash screen and is not used when utilizing the programmatic `show()` method.**_
-
-To enable the new recommended **[Android 12 Splash Screen API](https://developer.android.com/guide/topics/ui/splash-screen)** in SDK Versions 30 or below:
-
-_This is enabled by default and required for SDK version 31+._
-
-- Add `$coreSplashScreenVersion` to the `variables.gradle` file.
-  _See Variables Section for more information_
-
-- Add `implementation "androidx.core:core-splashscreen:$coreSplashScreenVersion"` in the dependencies section of `/android/app/build.gradle`.
-
-- In `android/app/src/main/res/values/styles.xml`, edit the theme `parent` attribute on the Applications's MainActivity Theme to `Theme.SplashScreen` and add desired options to the theme.
-
-```xml
-<style name="AppTheme.NoActionBarLaunch" parent="Theme.SplashScreen">
-    <item name="android:background">@drawable/splash</item>
-</style>
-```
-
-**NOTE**: Some issues may exist on SDK >= 31 when using the new API for the splash screen, which pertain to the splash screen only showing when launched from the launcher icon.
-**[Google Issue Tracker](https://issuetracker.google.com/issues/205021357)**
-
 ## Variables
 
 This plugin will use the following project variables (defined in your app's `variables.gradle` file):
 
-`$coreSplashScreenVersion` version of `androidx.core:core-splashscreen:$coreSplashScreenVersion` (default: `1.0.0-rc01`)
+`$coreSplashScreenVersion` version of `androidx.core:core-splashscreen:$coreSplashScreenVersion` (default: `1.0.0`)
 
 ## Example Guides
 
@@ -254,8 +255,8 @@ Hide the splash screen
 
 #### HideOptions
 
-| Prop                  | Type                | Description                   | Default          | Since |
-| --------------------- | ------------------- | ----------------------------- | ---------------- | ----- |
-| **`fadeOutDuration`** | <code>number</code> | How long (in ms) to fade out. | <code>200</code> | 1.0.0 |
+| Prop                  | Type                | Description                                                                                                                                                       | Default          | Since |
+| --------------------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- | ----- |
+| **`fadeOutDuration`** | <code>number</code> | How long (in ms) to fade out. On Android, if using the Android 12 Splash Screen API, it's not being used. Use launchFadeOutDuration configuration option instead. | <code>200</code> | 1.0.0 |
 
 </docgen-api>

@@ -199,9 +199,9 @@ This method is only supported on Android.
 
 #### AnimationOptions
 
-| Prop            | Type                                            | Description                                                                                         | Since |
-| --------------- | ----------------------------------------------- | --------------------------------------------------------------------------------------------------- | ----- |
-| **`animation`** | <code><a href="#animation">Animation</a></code> | The type of status bar animation used when showing or hiding. This option is only supported on iOS. | 1.0.0 |
+| Prop            | Type                                            | Description                                                                                         | Default                     | Since |
+| --------------- | ----------------------------------------------- | --------------------------------------------------------------------------------------------------- | --------------------------- | ----- |
+| **`animation`** | <code><a href="#animation">Animation</a></code> | The type of status bar animation used when showing or hiding. This option is only supported on iOS. | <code>Animation.Fade</code> | 1.0.0 |
 
 
 #### StatusBarInfo

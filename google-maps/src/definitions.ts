@@ -1,10 +1,32 @@
+import { CapacitorGoogleMaps } from './implementation';
+
 /**
  * An interface representing the viewports latitude and longitude bounds.
  */
-export interface LatLngBounds {
+export interface LatLngBoundsInterface {
   southwest: LatLng;
   center: LatLng;
   northeast: LatLng;
+}
+
+export class LatLngBounds {
+  southwest: LatLng;
+  center: LatLng;
+  northeast: LatLng;
+
+  constructor(bounds: LatLngBoundsInterface) {
+    this.southwest = bounds.southwest;
+    this.center = bounds.center;
+    this.northeast = bounds.northeast;
+  }
+
+  async contains(point: LatLng): Promise<boolean> {
+    const result = await CapacitorGoogleMaps.mapBoundsContains({
+      bounds: this,
+      point,
+    });
+    return result['contains'];
+  }
 }
 
 /**

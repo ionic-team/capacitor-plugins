@@ -21,6 +21,22 @@ extension GMSMapViewType {
             return .normal
         }
     }
+    static func toString(mapType: GMSMapViewType) -> String {
+        switch mapType {
+        case .normal:
+            return "Normal"
+        case .hybrid:
+            return "Hybrid"
+        case .satellite:
+            return "Satellite"
+        case .terrain:
+            return "Terrain"
+        case .none:
+            return "None"
+        default:
+            return "Normal"
+        }
+    }
 }
 
 extension CGRect {
@@ -275,6 +291,26 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
         }
     }
 
+    @objc func getMapType(_ call: CAPPluginCall) {
+        do {
+            guard let id = call.getString("id") else {
+                throw GoogleMapErrors.invalidMapId
+            }
+
+            guard let map = self.maps[id] else {
+                throw GoogleMapErrors.mapNotFound
+            }
+
+            let mapType = GMSMapViewType.toString(mapType: map.getMapType())
+
+            call.resolve([
+                "type": mapType
+            ])
+        } catch {
+            handleError(call, error: error)
+        }
+    }
+
     @objc func setMapType(_ call: CAPPluginCall) {
         do {
             guard let id = call.getString("id") else {
@@ -425,7 +461,9 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
                 throw GoogleMapErrors.mapNotFound
             }
 
-            map.enableClustering()
+            let minClusterSize = call.getInt("minClusterSize")
+
+            map.enableClustering(minClusterSize)
             call.resolve()
 
         } catch {
@@ -479,6 +517,54 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
         } catch {
             handleError(call, error: error)
         }
+    }
+
+    @objc func mapBoundsContains(_ call: CAPPluginCall) {
+        do {
+            guard let boundsObject = call.getObject("bounds") else {
+                throw GoogleMapErrors.invalidArguments("Invalid bounds provided")
+            }
+
+            guard let pointObject = call.getObject("point") else {
+                throw GoogleMapErrors.invalidArguments("Invalid point provided")
+            }
+
+            let bounds = try getGMSCoordinateBounds(boundsObject)
+            let point = try getCLLocationCoordinate(pointObject)
+
+            call.resolve([
+                "contains": bounds.contains(point)
+            ])
+        } catch {
+            handleError(call, error: error)
+        }
+    }
+
+    private func getGMSCoordinateBounds(_ bounds: JSObject) throws -> GMSCoordinateBounds {
+        guard let southwest = bounds["southwest"] as? JSObject else {
+            throw GoogleMapErrors.unhandledError("Bounds southwest property not formatted properly.")
+        }
+
+        guard let northeast = bounds["northeast"] as? JSObject else {
+            throw GoogleMapErrors.unhandledError("Bounds northeast property not formatted properly.")
+        }
+
+        return GMSCoordinateBounds(
+            coordinate: try getCLLocationCoordinate(southwest),
+            coordinate: try getCLLocationCoordinate(northeast)
+        )
+    }
+
+    private func getCLLocationCoordinate(_ point: JSObject) throws -> CLLocationCoordinate2D {
+        guard let lat = point["lat"] as? Double else {
+            throw GoogleMapErrors.unhandledError("Point lat property not formatted properly.")
+        }
+
+        guard let lng = point["lng"] as? Double else {
+            throw GoogleMapErrors.unhandledError("Point lng property not formatted properly.")
+        }
+
+        return CLLocationCoordinate2D(latitude: lat, longitude: lng)
     }
 
     private func formatMapBoundsForResponse(bounds: GMSCoordinateBounds?, cameraPosition: GMSCameraPosition) -> PluginCallResultData {
