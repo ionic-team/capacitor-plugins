@@ -2,6 +2,7 @@ package com.capacitorjs.plugins.pushnotifications;
 
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
@@ -239,12 +240,22 @@ public class PushNotificationsPlugin extends Plugin {
                     if (bundle != null && bundle.getInt("com.google.firebase.messaging.default_notification_icon") != 0) {
                         pushIcon = bundle.getInt("com.google.firebase.messaging.default_notification_icon");
                     }
+                    Intent intent = new Intent(getContext(), getActivity().getClass());
+                    intent.putExtras(remoteMessage.toIntent().getExtras());
+                    PendingIntent pendingIntent = PendingIntent.getActivity(
+                        getContext(),
+                        0,
+                        intent,
+                        PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE
+                    );
                     NotificationCompat.Builder builder = new NotificationCompat.Builder(
                         getContext(),
                         NotificationChannelManager.FOREGROUND_NOTIFICATION_CHANNEL_ID
                     )
                         .setSmallIcon(pushIcon)
                         .setContentTitle(title)
+                        .setAutoCancel(true)
+                        .setContentIntent(pendingIntent)
                         .setContentText(body)
                         .setPriority(NotificationCompat.PRIORITY_DEFAULT);
                     notificationManager.notify(0, builder.build());
