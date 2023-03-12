@@ -612,8 +612,8 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
           // Move item from the from directory to the to directory
           await this._copy(
             {
-              from: `${from}/${filename}`,
-              to: `${to}/${filename}`,
+              from: `${from}/${filename.name}`,
+              to: `${to}/${filename.name}`,
               directory: fromDirectory,
               toDirectory,
             },
