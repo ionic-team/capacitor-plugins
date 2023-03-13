@@ -257,10 +257,10 @@ export interface Photo {
    */
   thumbnailPath?: string;
   /**
-   * webThumbnailPath returns a path that can be used to set the src attribute of an image for efficient
+   * thumbnailWebPath returns a path that can be used to set the src attribute of an image for efficient
    * loading and rendering
    */
-  webThumbnailPath?: string;
+  thumbnailWebPath?: string;
 }
 
 export interface GalleryPhotos {

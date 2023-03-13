@@ -1,28 +1,7 @@
 {
   "packages": [
-    "action-sheet",
-    "app",
-    "app-launcher",
-    "browser",
     "camera",
-    "clipboard",
-    "device",
-    "dialog",
-    "filesystem",
-    "geolocation",
-    "haptics",
-    "keyboard",
-    "local-notifications",
-    "motion",
-    "network",
-    "push-notifications",
-    "screen-reader",
-    "share",
-    "splash-screen",
-    "status-bar",
-    "storage",
-    "text-zoom",
-    "toast"
+    "share"
   ],
   "command": {
     "bootstrap": {
