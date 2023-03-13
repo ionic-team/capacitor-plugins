@@ -138,7 +138,6 @@ public class LocalNotificationsPlugin extends Plugin {
                     for (String key : notification.extras.keySet()) {
                         extras.put(key, notification.extras.getString(key));
                     }
-                    }
 
                     jsNotif.put("data", extras);
                 }
