@@ -309,7 +309,7 @@ public class PushNotificationsPlugin extends Plugin {
     private void permissionsCallback(PluginCall call) {
         this.checkPermissions(call);
     }
-    
+
     @SuppressWarnings("deprecation")
     private Bundle getBundleLegacy() {
         try {
