@@ -61,10 +61,9 @@ public class PushNotificationsPlugin extends Plugin {
             JSObject dataObject = new JSObject();
             for (String key : bundle.keySet()) {
                 if (key.equals("google.message_id")) {
-                    notificationJson.put("id", bundle.get(key));
+                    notificationJson.put("id", bundle.getString(key));
                 } else {
-                    Object value = bundle.get(key);
-                    String valueStr = (value != null) ? value.toString() : null;
+                    String valueStr = bundle.getString(key);
                     dataObject.put(key, valueStr);
                 }
             }
@@ -140,7 +139,7 @@ public class PushNotificationsPlugin extends Plugin {
                     JSObject extras = new JSObject();
 
                     for (String key : notification.extras.keySet()) {
-                        extras.put(key, notification.extras.get(key));
+                        extras.put(key, notification.extras.getString(key));
                     }
 
                     jsNotif.put("data", extras);
@@ -250,14 +249,22 @@ public class PushNotificationsPlugin extends Plugin {
             if (presentation != null) {
                 if (Arrays.asList(presentation).contains("alert")) {
                     Bundle bundle = null;
-                    try {
-                        ApplicationInfo applicationInfo = getContext()
-                            .getPackageManager()
-                            .getApplicationInfo(getContext().getPackageName(), PackageManager.GET_META_DATA);
-                        bundle = applicationInfo.metaData;
-                    } catch (PackageManager.NameNotFoundException e) {
-                        e.printStackTrace();
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        try {
+                            ApplicationInfo applicationInfo = getContext()
+                                .getPackageManager()
+                                .getApplicationInfo(
+                                    getContext().getPackageName(),
+                                    PackageManager.ApplicationInfoFlags.of(PackageManager.GET_META_DATA)
+                                );
+                            bundle = applicationInfo.metaData;
+                        } catch (PackageManager.NameNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        bundle = getBundleLegacy();
                     }
+
                     int pushIcon = android.R.drawable.ic_dialog_info;
 
                     if (bundle != null && bundle.getInt("com.google.firebase.messaging.default_notification_icon") != 0) {
@@ -301,5 +308,18 @@ public class PushNotificationsPlugin extends Plugin {
     @PermissionCallback
     private void permissionsCallback(PluginCall call) {
         this.checkPermissions(call);
+    }
+    
+    @SuppressWarnings("deprecation")
+    private Bundle getBundleLegacy() {
+        try {
+            ApplicationInfo applicationInfo = getContext()
+                .getPackageManager()
+                .getApplicationInfo(getContext().getPackageName(), PackageManager.GET_META_DATA);
+            return applicationInfo.metaData;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }
