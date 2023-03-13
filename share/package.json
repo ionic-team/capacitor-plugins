@@ -1,5 +1,5 @@
 {
-  "name": "@capacitor/share",
+  "name": "@farmqa/share",
   "version": "1.1.1",
   "description": "The Share API provides methods for sharing content in any sharing-enabled apps the user may have installed.",
   "main": "dist/plugin.cjs.js",
@@ -11,7 +11,7 @@
     "android/build.gradle",
     "dist/",
     "ios/Plugin/",
-    "CapacitorShare.podspec"
+    "FarmqaCapacitorShare.podspec"
   ],
   "author": "Ionic <hi@ionicframework.com>",
   "license": "MIT",
