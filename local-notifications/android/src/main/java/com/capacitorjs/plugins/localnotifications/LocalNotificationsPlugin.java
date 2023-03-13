@@ -136,7 +136,11 @@ public class LocalNotificationsPlugin extends Plugin {
                     JSObject extras = new JSObject();
 
                     for (String key : notification.extras.keySet()) {
-                        extras.put(key, notification.extras.get(key));
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                            extras.put(key, notification.extras.getString(key));
+                        } else {
+                            extras.put(key, getBundleStringLegacy(notification, key));
+                        }
                     }
 
                     jsNotif.put("data", extras);
@@ -254,5 +258,10 @@ public class LocalNotificationsPlugin extends Plugin {
             return (LocalNotificationsPlugin) handle.getInstance();
         }
         return null;
+    }
+
+    @SuppressWarnings("deprecated")
+    private Object getBundleStringLegacy(Notification notification, String key) {
+        return notification.extras.get(key);
     }
 }
