@@ -746,9 +746,11 @@ public class CameraPlugin extends Plugin {
             // first, extract the permissions being requested
             JSArray providedPerms = call.getArray("permissions");
             List<String> permsList = null;
-            try {
-                permsList = providedPerms.toList();
-            } catch (JSONException e) {}
+            if (providedPerms != null) {
+                try {
+                    permsList = providedPerms.toList();
+                } catch (JSONException e) {}
+            }
 
             if (permsList != null && permsList.size() == 1 && permsList.contains(CAMERA)) {
                 // the only thing being asked for was the camera so we can just return the current state
