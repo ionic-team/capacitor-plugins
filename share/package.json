@@ -1,5 +1,5 @@
 {
-  "name": "@farmqa/share",
+  "name": "@farmqa/capacitor-share",
   "version": "1.1.1",
   "description": "The Share API provides methods for sharing content in any sharing-enabled apps the user may have installed.",
   "main": "dist/plugin.cjs.js",
