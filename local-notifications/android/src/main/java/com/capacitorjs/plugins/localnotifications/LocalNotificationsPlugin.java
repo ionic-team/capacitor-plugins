@@ -136,7 +136,7 @@ public class LocalNotificationsPlugin extends Plugin {
                     JSObject extras = new JSObject();
 
                     for (String key : notification.extras.keySet()) {
-                        extras.put(key, notification.extras.get(key));
+                        extras.put(key, notification.extras.getString(key));
                     }
 
                     jsNotif.put("data", extras);
