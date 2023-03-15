@@ -339,7 +339,6 @@ public class CameraPlugin extends Plugin {
         processPickedImage(u, call);
     }
 
-    @SuppressWarnings("deprecation")
     @ActivityCallback
     public void processPickedImages(PluginCall call, ActivityResult result) {
         Intent data = result.getData();
@@ -377,7 +376,7 @@ public class CameraPlugin extends Plugin {
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                                 fileUris = bundle.getParcelableArrayList("selectedItems", Parcelable.class);
                             } else {
-                                fileUris = bundle.getParcelableArrayList("selectedItems");
+                                fileUris = getLegacyParcelableArrayList(bundle, "selectedItems");
                             }
                             if (fileUris != null) {
                                 for (Parcelable fileUri : fileUris) {
@@ -406,6 +405,11 @@ public class CameraPlugin extends Plugin {
         } else {
             call.reject("No images picked");
         }
+    }
+
+    @SuppressWarnings("deprecation")
+    private ArrayList<Parcelable> getLegacyParcelableArrayList(Bundle bundle, String key) {
+        return bundle.getParcelableArrayList(key);
     }
 
     private void processPickedImage(Uri imageUri, PluginCall call) {
@@ -794,7 +798,6 @@ public class CameraPlugin extends Plugin {
         }
     }
 
-    @SuppressWarnings("deprecation")
     private Intent createEditIntent(Uri origPhotoUri) {
         try {
             File editFile = new File(origPhotoUri.getPath());
@@ -814,7 +817,7 @@ public class CameraPlugin extends Plugin {
                         .getPackageManager()
                         .queryIntentActivities(editIntent, PackageManager.ResolveInfoFlags.of(PackageManager.MATCH_DEFAULT_ONLY));
             } else {
-                resInfoList = getContext().getPackageManager().queryIntentActivities(editIntent, PackageManager.MATCH_DEFAULT_ONLY);
+                resInfoList = legacyQueryIntentActivities(editIntent);
             }
 
             for (ResolveInfo resolveInfo : resInfoList) {
@@ -825,6 +828,11 @@ public class CameraPlugin extends Plugin {
         } catch (Exception ex) {
             return null;
         }
+    }
+
+    @SuppressWarnings("deprecation")
+    private List<ResolveInfo> legacyQueryIntentActivities(Intent intent) {
+        return getContext().getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
     }
 
     @Override
