@@ -27,11 +27,8 @@ extension PHAuthorizationStatus: CameraAuthorizationState {
             return "denied"
         case .authorized:
             return "granted"
-        #if swift(>=5.3)
-        // poor proxy for Xcode 12/iOS 14, should be removed once building with Xcode 12 is required
         case .limited:
             return "limited"
-        #endif
         case .notDetermined:
             fallthrough
         @unknown default:
