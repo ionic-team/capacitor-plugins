@@ -393,6 +393,7 @@ public class Map {
         newMarker.isFlat = marker.isFlat ?? false
         newMarker.opacity = marker.opacity ?? 1
         newMarker.isDraggable = marker.draggable ?? false
+        newMarker.zIndex = marker.zIndex
         if let iconAnchor = marker.iconAnchor {
             newMarker.groundAnchor = iconAnchor
         }
