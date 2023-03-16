@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-alpha.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/motion@4.0.2...@capacitor/motion@5.0.0-alpha.1) (2023-03-16)
+
+**Note:** Version bump only for package @capacitor/motion
+
+
+
+
+
 ## [4.0.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/motion@1.0.5...@capacitor/motion@4.0.2) (2022-11-16)
 
 
