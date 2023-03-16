@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-alpha.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/google-maps@4.5.0...@capacitor/google-maps@5.0.0-alpha.1) (2023-03-16)
+
+
+### Features
+
+* **android:** Removing enableJetifier ([d66f9cb](https://github.com/ionic-team/capacitor-plugins/commit/d66f9cbd9da7e3b1d8c64ca6a5b45156867d4a04))
+* **google-maps:** add zIndex to markers ([53a0436](https://github.com/ionic-team/capacitor-plugins/commit/53a04366ad331ada081589aef9c726b4356688df))
+
+
+
+
+
 # [4.5.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/google-maps@4.4.0...@capacitor/google-maps@4.5.0) (2023-02-22)
 
 
