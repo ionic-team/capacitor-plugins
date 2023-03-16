@@ -3,12 +3,12 @@
   "version": "0.0.1",
   "private": true,
   "dependencies": {
-    "@capacitor/android": "^4.0.1",
+    "@capacitor/android": "next",
     "@capacitor/app": "4.0.1",
-    "@capacitor/core": "^4.0.1",
+    "@capacitor/core": "next",
     "@capacitor/google-maps": "file:../",
     "@capacitor/haptics": "4.0.1",
-    "@capacitor/ios": "^4.0.1",
+    "@capacitor/ios": "next",
     "@capacitor/keyboard": "4.0.1",
     "@capacitor/status-bar": "4.0.1",
     "@ionic/react": "^6.0.0",
@@ -77,7 +77,7 @@
     ]
   },
   "devDependencies": {
-    "@capacitor/cli": "^4.0.0",
+    "@capacitor/cli": "next",
     "@ionic/e2e": "0.2.0-next.6",
     "@ionic/e2e-components-ionic": "0.2.0-next.6",
     "appium": "^1.22.1"
