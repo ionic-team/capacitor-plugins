@@ -55,12 +55,14 @@ android {
 }
 
 repositories {
+    maven { url "https://salesforce-marketingcloud.github.io/MarketingCloudSDK-Android/repository" }
     google()
     mavenCentral()
 }
 
 
 dependencies {
+    implementation ("com.salesforce.marketingcloud:marketingcloudsdk:7.4.+")
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     if (System.getenv("CAP_PLUGIN_PUBLISH") == "true") {
