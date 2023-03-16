@@ -54,6 +54,13 @@ export interface URLOpenListenerEvent {
   url: string;
 
   /**
+   * If opened from browser, the URL the app was opened from.
+   * 
+   * @since 1.1.2
+   */
+   referrerUrl?: string;
+
+  /**
    * The source application opening the app (iOS only)
    * https://developer.apple.com/documentation/uikit/uiapplicationopenurloptionskey/1623128-sourceapplication
    *
