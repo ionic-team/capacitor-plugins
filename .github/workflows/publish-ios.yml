@@ -15,7 +15,7 @@ jobs:
       matrix:
         plugin: ${{ fromJson(github.event.inputs.plugins) }}
     steps:
-      - run: sudo xcode-select --switch /Applications/Xcode_13.3.1.app
+      - run: sudo xcode-select --switch /Applications/Xcode_14.2.app
       - uses: actions/setup-node@v3
         with:
           node-version: 16

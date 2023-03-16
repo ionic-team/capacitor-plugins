@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-alpha.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/local-notifications@4.1.5...@capacitor/local-notifications@5.0.0-alpha.1) (2023-03-16)
+
+
+### Features
+
+* **android:** Removing enableJetifier ([d66f9cb](https://github.com/ionic-team/capacitor-plugins/commit/d66f9cbd9da7e3b1d8c64ca6a5b45156867d4a04))
+* **local-notifications:** support Android 13+ permissions ([#1189](https://github.com/ionic-team/capacitor-plugins/issues/1189)) ([ace7d73](https://github.com/ionic-team/capacitor-plugins/commit/ace7d73c57a1a8ca780d91bd1dace70eb226b21e))
+
+
+
+
+
 ## [4.1.5](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/local-notifications@4.1.4...@capacitor/local-notifications@4.1.5) (2023-02-03)
 
 
