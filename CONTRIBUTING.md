@@ -78,32 +78,3 @@ To use:
 1. Make sure your staging area is clean, e.g. `git reset`
 1. Stage the changes from (and only from) your package, e.g. `git add -p -- text-zoom/`
 1. Run the script with `<package>` being the npm name of your package, e.g. `npm run apply-patches @capacitor/text-zoom`
-
-## Publishing Capacitor Plugins
-
-Capacitor packages are published using [Lerna](https://github.com/lerna/lerna) with independent versioning.
-
-During Capacitor 3 development, the following workflow is used to create dev releases:
-
-1. Make sure the `README.md` files are updated with the current API.
-    * Run the doc generator.
-
-      ```shell
-      npx lerna run docgen
-      ```
-
-    * Commit any changes.
-
-1. Create the next development version. The following command will:
-    * Create a release commit with a generated changelog
-    * Create a git tag
-    * Push to the `main` branch
-    * Create a GitHub release
-
-    <br>
-
-    ```shell
-    npx lerna version
-    ```
-
-1. Wait for CI to publish the new tagged version.

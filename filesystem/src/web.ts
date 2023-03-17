@@ -22,6 +22,7 @@ import type {
   WriteFileResult,
   Directory,
 } from './definitions';
+import { Encoding } from './definitions';
 
 function resolve(path: string): string {
   const posix = path.split('/').filter(item => item !== '.');
@@ -564,11 +565,17 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
           });
         }
 
+        let encoding;
+        if (!this.isBase64String(file.data)) {
+          encoding = Encoding.UTF8;
+        }
+
         // Write the file to the new location
         const writeResult = await this.writeFile({
           path: to,
           directory: toDirectory,
           data: file.data,
+          encoding: encoding,
         });
 
         // Copy the mtime/ctime of a renamed file
@@ -612,8 +619,8 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
           // Move item from the from directory to the to directory
           await this._copy(
             {
-              from: `${from}/${filename}`,
-              to: `${to}/${filename}`,
+              from: `${from}/${filename.name}`,
+              to: `${to}/${filename.name}`,
               directory: fromDirectory,
               toDirectory,
             },

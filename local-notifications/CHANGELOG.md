@@ -3,6 +3,56 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-alpha.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/local-notifications@4.1.5...@capacitor/local-notifications@5.0.0-alpha.1) (2023-03-16)
+
+
+### Features
+
+* **android:** Removing enableJetifier ([d66f9cb](https://github.com/ionic-team/capacitor-plugins/commit/d66f9cbd9da7e3b1d8c64ca6a5b45156867d4a04))
+* **local-notifications:** support Android 13+ permissions ([#1189](https://github.com/ionic-team/capacitor-plugins/issues/1189)) ([ace7d73](https://github.com/ionic-team/capacitor-plugins/commit/ace7d73c57a1a8ca780d91bd1dace70eb226b21e))
+
+
+
+
+
+## [4.1.5](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/local-notifications@4.1.4...@capacitor/local-notifications@4.1.5) (2023-02-03)
+
+
+### Bug Fixes
+
+* **local-notifications:** Use RTC_WAKEUP if schedule.allowWhileIdle is true ([#1362](https://github.com/ionic-team/capacitor-plugins/issues/1362)) ([1cd2259](https://github.com/ionic-team/capacitor-plugins/commit/1cd2259e33694d8aeb819f1713ccbc88600211b0))
+
+
+
+
+
+## [4.1.4](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/local-notifications@4.1.3...@capacitor/local-notifications@4.1.4) (2022-12-01)
+
+
+### Bug Fixes
+
+* **local-notifications:** error if notification id is bigger than allowed ([#1303](https://github.com/ionic-team/capacitor-plugins/issues/1303)) ([df7e2f5](https://github.com/ionic-team/capacitor-plugins/commit/df7e2f5a35879e618f0c3d50fe1a4b3ef4380b0e))
+
+
+
+
+
+## [4.1.3](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/local-notifications@4.1.2...@capacitor/local-notifications@4.1.3) (2022-11-16)
+
+**Note:** Version bump only for package @capacitor/local-notifications
+
+
+
+
+
+## [4.1.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/local-notifications@4.1.1...@capacitor/local-notifications@4.1.2) (2022-10-21)
+
+**Note:** Version bump only for package @capacitor/local-notifications
+
+
+
+
+
 ## [4.1.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/local-notifications@4.1.0...@capacitor/local-notifications@4.1.1) (2022-09-29)
 
 

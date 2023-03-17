@@ -3,6 +3,38 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-alpha.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@4.1.4...@capacitor/filesystem@5.0.0-alpha.1) (2023-03-16)
+
+
+### Bug Fixes
+
+* **filesystem:** copy and rename not working on web ([#1479](https://github.com/ionic-team/capacitor-plugins/issues/1479)) ([7349d01](https://github.com/ionic-team/capacitor-plugins/commit/7349d01350d8a435a00b53e98b43c055880f7aa7))
+
+
+### Features
+
+* **android:** Removing enableJetifier ([d66f9cb](https://github.com/ionic-team/capacitor-plugins/commit/d66f9cbd9da7e3b1d8c64ca6a5b45156867d4a04))
+
+
+
+
+
+## [4.1.4](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@4.1.3...@capacitor/filesystem@4.1.4) (2022-11-16)
+
+**Note:** Version bump only for package @capacitor/filesystem
+
+
+
+
+
+## [4.1.3](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@4.1.2...@capacitor/filesystem@4.1.3) (2022-10-21)
+
+**Note:** Version bump only for package @capacitor/filesystem
+
+
+
+
+
 ## [4.1.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@4.1.1...@capacitor/filesystem@4.1.2) (2022-09-29)
 
 

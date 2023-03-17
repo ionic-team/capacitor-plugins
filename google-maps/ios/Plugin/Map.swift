@@ -12,6 +12,7 @@ class GMViewController: UIViewController {
     var mapViewBounds: [String: Double]!
     var GMapView: GMSMapView!
     var cameraPosition: [String: Double]!
+    var minimumClusterSize: Int?
 
     private var clusterManager: GMUClusterManager?
 
@@ -28,11 +29,14 @@ class GMViewController: UIViewController {
         self.view = GMapView
     }
 
-    func initClusterManager() {
+    func initClusterManager(_ minClusterSize: Int?) {
         let iconGenerator = GMUDefaultClusterIconGenerator()
         let algorithm = GMUNonHierarchicalDistanceBasedAlgorithm()
         let renderer = GMUDefaultClusterRenderer(mapView: self.GMapView, clusterIconGenerator: iconGenerator)
-
+        self.minimumClusterSize = minClusterSize
+        if let minClusterSize = minClusterSize {
+            renderer.minimumClusterSize = UInt(minClusterSize)
+        }
         self.clusterManager = GMUClusterManager(map: self.GMapView, algorithm: algorithm, renderer: renderer)
     }
 
@@ -114,6 +118,14 @@ public class Map {
                     self.mapViewController.view.frame = target.bounds
                     target.addSubview(self.mapViewController.view)
                     self.mapViewController.GMapView.delegate = self.delegate
+                }
+
+                if let styles = self.config.styles {
+                    do {
+                        self.mapViewController.GMapView.mapStyle = try GMSMapStyle(jsonString: styles)
+                    } catch {
+                        CAPLog.print("Invalid Google Maps styles")
+                    }
                 }
 
                 self.delegate.notifyListeners("onMapReady", data: [
@@ -216,10 +228,10 @@ public class Map {
         return markerHashes
     }
 
-    func enableClustering() {
+    func enableClustering(_ minClusterSize: Int?) {
         if !self.mapViewController.clusteringEnabled {
             DispatchQueue.main.sync {
-                self.mapViewController.initClusterManager()
+                self.mapViewController.initClusterManager(minClusterSize)
 
                 // add existing markers to the cluster
                 if !self.markers.isEmpty {
@@ -232,6 +244,9 @@ public class Map {
                     self.mapViewController.addMarkersToCluster(markers: existingMarkers)
                 }
             }
+        } else if self.mapViewController.minimumClusterSize != minClusterSize {
+            self.mapViewController.destroyClusterManager()
+            enableClustering(minClusterSize)
         }
     }
 
@@ -286,6 +301,10 @@ public class Map {
             }
         }
 
+    }
+
+    func getMapType() -> GMSMapViewType {
+        return self.mapViewController.GMapView.mapType
     }
 
     func setMapType(mapType: GMSMapViewType) throws {
@@ -374,6 +393,7 @@ public class Map {
         newMarker.isFlat = marker.isFlat ?? false
         newMarker.opacity = marker.opacity ?? 1
         newMarker.isDraggable = marker.draggable ?? false
+        newMarker.zIndex = marker.zIndex
         if let iconAnchor = marker.iconAnchor {
             newMarker.groundAnchor = iconAnchor
         }
@@ -381,30 +401,18 @@ public class Map {
         // cache and reuse marker icon uiimages
         if let iconUrl = marker.iconUrl {
             if let iconImage = self.markerIcons[iconUrl] {
-                newMarker.icon = iconImage
+                newMarker.icon = getResizedIcon(iconImage, marker)
             } else {
                 if iconUrl.starts(with: "https:") {
                     DispatchQueue.main.async {
                         if let url = URL(string: iconUrl), let data = try? Data(contentsOf: url), let iconImage = UIImage(data: data) {
-                            if let iconSize = marker.iconSize {
-                                let resizedIconImage = iconImage.resizeImageTo(size: iconSize)
-                                self.markerIcons[iconUrl] = resizedIconImage
-                                newMarker.icon = resizedIconImage
-                            } else {
-                                self.markerIcons[iconUrl] = iconImage
-                                newMarker.icon = iconImage
-                            }
+                            self.markerIcons[iconUrl] = iconImage
+                            newMarker.icon = getResizedIcon(iconImage, marker)
                         }
                     }
                 } else if let iconImage = UIImage(named: "public/\(iconUrl)") {
-                    if let iconSize = marker.iconSize {
-                        let resizedIconImage = iconImage.resizeImageTo(size: iconSize)
-                        self.markerIcons[iconUrl] = resizedIconImage
-                        newMarker.icon = resizedIconImage
-                    } else {
-                        self.markerIcons[iconUrl] = iconImage
-                        newMarker.icon = iconImage
-                    }
+                    self.markerIcons[iconUrl] = iconImage
+                    newMarker.icon = getResizedIcon(iconImage, marker)
                 } else {
                     var detailedMessage = ""
 
@@ -422,6 +430,14 @@ public class Map {
         }
 
         return newMarker
+    }
+}
+
+private func getResizedIcon(_ iconImage: UIImage, _ marker: Marker) -> UIImage? {
+    if let iconSize = marker.iconSize {
+        return iconImage.resizeImageTo(size: iconSize)
+    } else {
+        return iconImage
     }
 }
 

@@ -5,7 +5,6 @@ import type {
   CameraConfig,
   Marker,
   MapPadding,
-  MapType,
   MapListenerCallback,
   MapReadyCallbackData,
   CameraIdleCallbackData,
@@ -14,8 +13,8 @@ import type {
   MapClickCallbackData,
   MarkerClickCallbackData,
   MyLocationButtonClickCallbackData,
-  LatLngBounds,
 } from './definitions';
+import { LatLngBounds, MapType } from './definitions';
 import type { CreateMapArgs } from './implementation';
 import { CapacitorGoogleMaps } from './implementation';
 
@@ -24,7 +23,12 @@ export interface GoogleMapInterface {
     options: CreateMapArgs,
     callback?: MapListenerCallback<MapReadyCallbackData>,
   ): Promise<GoogleMap>;
-  enableClustering(): Promise<void>;
+  enableClustering(
+    /**
+     * The minimum number of markers that can be clustered together. The default is 4 markers.
+     */
+    minClusterSize?: number,
+  ): Promise<void>;
   disableClustering(): Promise<void>;
   addMarker(marker: Marker): Promise<string>;
   addMarkers(markers: Marker[]): Promise<string[]>;
@@ -32,6 +36,10 @@ export interface GoogleMapInterface {
   removeMarkers(ids: string[]): Promise<void>;
   destroy(): Promise<void>;
   setCamera(config: CameraConfig): Promise<void>;
+  /**
+   * Get current map type
+   */
+  getMapType(): Promise<MapType>;
   setMapType(mapType: MapType): Promise<void>;
   enableIndoorMaps(enabled: boolean): Promise<void>;
   enableTrafficLayer(enabled: boolean): Promise<void>;
@@ -144,7 +152,7 @@ export class GoogleMap {
     newMap.element = options.element;
     newMap.element.dataset.internalId = options.id;
 
-    const elementBounds = options.element.getBoundingClientRect();
+    const elementBounds = await GoogleMap.getElementBounds(options.element);
     options.config.width = elementBounds.width;
     options.config.height = elementBounds.height;
     options.config.x = elementBounds.x;
@@ -176,14 +184,43 @@ export class GoogleMap {
     return newMap;
   }
 
+  private static async getElementBounds(
+    element: HTMLElement,
+  ): Promise<DOMRect> {
+    return new Promise(resolve => {
+      let elementBounds = element.getBoundingClientRect();
+      if (elementBounds.width == 0) {
+        let retries = 0;
+        const boundsInterval = setInterval(function () {
+          if (elementBounds.width == 0 && retries < 30) {
+            elementBounds = element.getBoundingClientRect();
+            retries++;
+          } else {
+            if (retries == 30) {
+              console.warn('Map size could not be determined');
+            }
+            clearInterval(boundsInterval);
+            resolve(elementBounds);
+          }
+        }, 100);
+      } else {
+        resolve(elementBounds);
+      }
+    });
+  }
+
   /**
    * Enable marker clustering
    *
+   * @param minClusterSize - The minimum number of markers that can be clustered together.
+   * @defaultValue 4
+   *
    * @returns void
    */
-  async enableClustering(): Promise<void> {
+  async enableClustering(minClusterSize?: number): Promise<void> {
     return CapacitorGoogleMaps.enableClustering({
       id: this.id,
+      minClusterSize,
     });
   }
 
@@ -282,6 +319,11 @@ export class GoogleMap {
     });
   }
 
+  async getMapType(): Promise<MapType> {
+    const { type } = await CapacitorGoogleMaps.getMapType({ id: this.id });
+    return MapType[type as keyof typeof MapType];
+  }
+
   /**
    * Sets the type of map tiles that should be displayed.
    *
@@ -368,9 +410,11 @@ export class GoogleMap {
    * @returns {LatLngBounds}
    */
   async getMapBounds(): Promise<LatLngBounds> {
-    return CapacitorGoogleMaps.getMapBounds({
-      id: this.id,
-    });
+    return new LatLngBounds(
+      await CapacitorGoogleMaps.getMapBounds({
+        id: this.id,
+      }),
+    );
   }
 
   initScrolling(): void {

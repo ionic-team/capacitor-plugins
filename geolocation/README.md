@@ -37,7 +37,7 @@ Read about [Setting Permissions](https://capacitorjs.com/docs/android/configurat
 
 This plugin will use the following project variables (defined in your app's `variables.gradle` file):
 
-- `$playServicesLocationVersion` version of `com.google.android.gms:play-services-location` (default: `20.0.0`)
+- `$playServicesLocationVersion` version of `com.google.android.gms:play-services-location` (default: `21.0.1`)
 
 ## Example
 

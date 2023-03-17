@@ -43,8 +43,8 @@ To use certain location features, the SDK requires the following permissions to 
 
 This plugin will use the following project variables (defined in your app's `variables.gradle` file):
 
-- `$googleMapsPlayServicesVersion`: version of `com.google.android.gms:play-services-maps` (default: `18.0.2`)
-- `$googleMapsUtilsVersion`: version of `com.google.maps.android:android-maps-utils` (default: `2.3.0`)
+- `$googleMapsPlayServicesVersion`: version of `com.google.android.gms:play-services-maps` (default: `18.1.0`)
+- `$googleMapsUtilsVersion`: version of `com.google.maps.android:android-maps-utils` (default: `3.4.0`)
 - `$googleMapsKtxVersion`: version of `com.google.maps.android:maps-ktx` (default: `3.4.0`)
 - `$googleMapsUtilsKtxVersion`: version of `com.google.maps.android:maps-utils-ktx` (default: `3.4.0`)
 - `$kotlinxCoroutinesVersion`: version of `org.jetbrains.kotlinx:kotlinx-coroutines-android` and `org.jetbrains.kotlinx:kotlinx-coroutines-core` (default: `1.6.3`)
@@ -270,7 +270,7 @@ export default MyMap;
 <docgen-index>
 
 * [`create(...)`](#create)
-* [`enableClustering()`](#enableclustering)
+* [`enableClustering(...)`](#enableclustering)
 * [`disableClustering()`](#disableclustering)
 * [`addMarker(...)`](#addmarker)
 * [`addMarkers(...)`](#addmarkers)
@@ -278,6 +278,7 @@ export default MyMap;
 * [`removeMarkers(...)`](#removemarkers)
 * [`destroy()`](#destroy)
 * [`setCamera(...)`](#setcamera)
+* [`getMapType()`](#getmaptype)
 * [`setMapType(...)`](#setmaptype)
 * [`enableIndoorMaps(...)`](#enableindoormaps)
 * [`enableTrafficLayer(...)`](#enabletrafficlayer)
@@ -322,11 +323,15 @@ create(options: CreateMapArgs, callback?: MapListenerCallback<MapReadyCallbackDa
 --------------------
 
 
-### enableClustering()
+### enableClustering(...)
 
 ```typescript
-enableClustering() => Promise<void>
+enableClustering(minClusterSize?: number | undefined) => Promise<void>
 ```
+
+| Param                | Type                | Description                                                                             |
+| -------------------- | ------------------- | --------------------------------------------------------------------------------------- |
+| **`minClusterSize`** | <code>number</code> | The minimum number of markers that can be clustered together. The default is 4 markers. |
 
 --------------------
 
@@ -414,6 +419,19 @@ setCamera(config: CameraConfig) => Promise<void>
 | Param        | Type                                                  |
 | ------------ | ----------------------------------------------------- |
 | **`config`** | <code><a href="#cameraconfig">CameraConfig</a></code> |
+
+--------------------
+
+
+### getMapType()
+
+```typescript
+getMapType() => Promise<MapType>
+```
+
+Get current map type
+
+**Returns:** <code>Promise&lt;<a href="#maptype">MapType</a>&gt;</code>
 
 --------------------
 
@@ -683,16 +701,21 @@ An interface containing the options used when creating a map.
 
 #### GoogleMapConfig
 
-| Prop                   | Type                                      | Description                                                    | Default            |
-| ---------------------- | ----------------------------------------- | -------------------------------------------------------------- | ------------------ |
-| **`width`**            | <code>number</code>                       | Override width for native map.                                 |                    |
-| **`height`**           | <code>number</code>                       | Override height for native map.                                |                    |
-| **`x`**                | <code>number</code>                       | Override absolute x coordinate position for native map.        |                    |
-| **`y`**                | <code>number</code>                       | Override absolute y coordinate position for native map.        |                    |
-| **`center`**           | <code><a href="#latlng">LatLng</a></code> | Default location on the Earth towards which the camera points. |                    |
-| **`zoom`**             | <code>number</code>                       | Sets the zoom of the map.                                      |                    |
-| **`androidLiteMode`**  | <code>boolean</code>                      | Enables image-based lite mode on Android.                      | <code>false</code> |
-| **`devicePixelRatio`** | <code>number</code>                       | Override pixel ratio for native map.                           |                    |
+For web, all the javascript Google Maps options are available as
+GoogleMapConfig extends google.maps.MapOptions.
+For iOS and Android only the config options declared on <a href="#googlemapconfig">GoogleMapConfig</a> are available.
+
+| Prop                   | Type                                      | Description                                                                                                                                               | Default            | Since |
+| ---------------------- | ----------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
+| **`width`**            | <code>number</code>                       | Override width for native map.                                                                                                                            |                    |       |
+| **`height`**           | <code>number</code>                       | Override height for native map.                                                                                                                           |                    |       |
+| **`x`**                | <code>number</code>                       | Override absolute x coordinate position for native map.                                                                                                   |                    |       |
+| **`y`**                | <code>number</code>                       | Override absolute y coordinate position for native map.                                                                                                   |                    |       |
+| **`center`**           | <code><a href="#latlng">LatLng</a></code> | Default location on the Earth towards which the camera points.                                                                                            |                    |       |
+| **`zoom`**             | <code>number</code>                       | Sets the zoom of the map.                                                                                                                                 |                    |       |
+| **`androidLiteMode`**  | <code>boolean</code>                      | Enables image-based lite mode on Android.                                                                                                                 | <code>false</code> |       |
+| **`devicePixelRatio`** | <code>number</code>                       | Override pixel ratio for native map.                                                                                                                      |                    |       |
+| **`styles`**           | <code>MapTypeStyle[] \| null</code>       | Styles to apply to each of the default map types. Note that for satellite, hybrid and terrain modes, these styles will only apply to labels and geometry. |                    | 4.3.0 |
 
 
 #### LatLng
@@ -729,6 +752,7 @@ A marker is an icon placed at a particular point on the map's surface.
 | **`iconAnchor`** | <code><a href="#point">Point</a></code>                      | The position at which to anchor an image in correspondence to the location of the marker on the map. By default, the anchor is located along the center point of the bottom of the image. |                    | 4.2.0 |
 | **`tintColor`**  | <code>{ r: number; g: number; b: number; a: number; }</code> | Customizes the color of the default marker image. Each value must be between 0 and 255. Only for iOS and Android.                                                                         |                    | 4.2.0 |
 | **`draggable`**  | <code>boolean</code>                                         | Controls whether this marker can be dragged interactively                                                                                                                                 | <code>false</code> |       |
+| **`zIndex`**     | <code>number</code>                                          | Specifies the stack order of this marker, relative to other markers on the map. A marker with a high z-index is drawn on top of markers with lower z-indexes                              | <code>0</code>     |       |
 
 
 #### Size
@@ -741,10 +765,13 @@ A marker is an icon placed at a particular point on the map's surface.
 
 #### Point
 
-| Prop    | Type                |
-| ------- | ------------------- |
-| **`x`** | <code>number</code> |
-| **`y`** | <code>number</code> |
+<a href="#point">Point</a> geometry object.
+https://tools.ietf.org/html/rfc7946#section-3.1.2
+
+| Prop              | Type                                          | Description                           |
+| ----------------- | --------------------------------------------- | ------------------------------------- |
+| **`type`**        | <code>'<a href="#point">Point</a>'</code>     | Specifies the type of GeoJSON object. |
+| **`coordinates`** | <code><a href="#position">Position</a></code> |                                       |
 
 
 #### CameraConfig
@@ -758,7 +785,7 @@ Configuration properties for a Google Map Camera
 | **`bearing`**           | <code>number</code>                       | Bearing of the camera, in degrees clockwise from true north.                                                           | <code>0</code>     |
 | **`angle`**             | <code>number</code>                       | The angle, in degrees, of the camera from the nadir (directly facing the Earth). The only allowed values are 0 and 45. | <code>0</code>     |
 | **`animate`**           | <code>boolean</code>                      | Animate the transition to the new Camera properties.                                                                   | <code>false</code> |
-| **`animationDuration`** | <code>number</code>                       |                                                                                                                        |                    |
+| **`animationDuration`** | <code>number</code>                       | This configuration option is not being used.                                                                           |                    |
 
 
 #### MapPadding
@@ -775,26 +802,15 @@ Controls for setting padding on the 'visible' region of the view.
 
 #### CameraIdleCallbackData
 
-| Prop            | Type                                                  |
-| --------------- | ----------------------------------------------------- |
-| **`mapId`**     | <code>string</code>                                   |
-| **`bounds`**    | <code><a href="#latlngbounds">LatLngBounds</a></code> |
-| **`bearing`**   | <code>number</code>                                   |
-| **`latitude`**  | <code>number</code>                                   |
-| **`longitude`** | <code>number</code>                                   |
-| **`tilt`**      | <code>number</code>                                   |
-| **`zoom`**      | <code>number</code>                                   |
-
-
-#### LatLngBounds
-
-An interface representing the viewports latitude and longitude bounds.
-
-| Prop            | Type                                      |
-| --------------- | ----------------------------------------- |
-| **`southwest`** | <code><a href="#latlng">LatLng</a></code> |
-| **`center`**    | <code><a href="#latlng">LatLng</a></code> |
-| **`northeast`** | <code><a href="#latlng">LatLng</a></code> |
+| Prop            | Type                      |
+| --------------- | ------------------------- |
+| **`mapId`**     | <code>string</code>       |
+| **`bounds`**    | <code>LatLngBounds</code> |
+| **`bearing`**   | <code>number</code>       |
+| **`latitude`**  | <code>number</code>       |
+| **`longitude`** | <code>number</code>       |
+| **`tilt`**      | <code>number</code>       |
+| **`zoom`**      | <code>number</code>       |
 
 
 #### CameraMoveStartedCallbackData
@@ -858,6 +874,17 @@ An interface representing the viewports latitude and longitude bounds.
 The callback function to be called when map events are emitted.
 
 <code>(data: T): void</code>
+
+
+#### Position
+
+A <a href="#position">Position</a> is an array of coordinates.
+https://tools.ietf.org/html/rfc7946#section-3.1.1
+Array should contain between two and three elements.
+The previous GeoJSON specification allowed more elements (e.g., which could be used to represent M values),
+but the current specification only allows X, Y, and (optionally) Z to be defined.
+
+<code>number[]</code>
 
 
 ### Enums

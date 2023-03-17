@@ -3,6 +3,41 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-alpha.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/preferences@4.0.2...@capacitor/preferences@5.0.0-alpha.1) (2023-03-16)
+
+
+### Features
+
+* **android:** Removing enableJetifier ([d66f9cb](https://github.com/ionic-team/capacitor-plugins/commit/d66f9cbd9da7e3b1d8c64ca6a5b45156867d4a04))
+
+
+
+
+
+## 4.0.2 (2022-11-16)
+
+
+
+## 4.0.1 (2022-07-28)
+
+
+
+# 4.0.0 (2022-07-27)
+
+
+
+# 4.0.0-beta.2 (2022-07-08)
+
+
+
+# 4.0.0-beta.0 (2022-06-27)
+
+**Note:** Version bump only for package @capacitor/preferences
+
+
+
+
+
 ## [4.0.1](https://github.com/ionic-team/capacitor-plugins/compare/4.0.0...4.0.1) (2022-07-28)
 
 **Note:** Version bump only for package @capacitor/preferences

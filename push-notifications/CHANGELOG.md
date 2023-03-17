@@ -3,6 +3,39 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-alpha.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/push-notifications@4.1.2...@capacitor/push-notifications@5.0.0-alpha.1) (2023-03-16)
+
+
+### Bug Fixes
+
+* **push-notifications:** fixing Android deprecations ([#1467](https://github.com/ionic-team/capacitor-plugins/issues/1467)) ([6558c5e](https://github.com/ionic-team/capacitor-plugins/commit/6558c5ede8649e272649f374229107b138ae6115))
+
+
+### Features
+
+* **android:** Removing enableJetifier ([d66f9cb](https://github.com/ionic-team/capacitor-plugins/commit/d66f9cbd9da7e3b1d8c64ca6a5b45156867d4a04))
+* **push-notifications:** support Android 13+ permissions ([#1463](https://github.com/ionic-team/capacitor-plugins/issues/1463)) ([b152c88](https://github.com/ionic-team/capacitor-plugins/commit/b152c885e40a88055c374e3b33ac6fa2c963e77a))
+
+
+
+
+
+## [4.1.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/push-notifications@4.1.1...@capacitor/push-notifications@4.1.2) (2022-11-16)
+
+**Note:** Version bump only for package @capacitor/push-notifications
+
+
+
+
+
+## [4.1.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/push-notifications@4.1.0...@capacitor/push-notifications@4.1.1) (2022-10-21)
+
+**Note:** Version bump only for package @capacitor/push-notifications
+
+
+
+
+
 # [4.1.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/push-notifications@1.0.9...@capacitor/push-notifications@4.1.0) (2022-09-12)
 
 
