@@ -372,7 +372,12 @@ public class CameraPlugin extends Plugin {
                     } else if (data.getExtras() != null) {
                         Bundle bundle = data.getExtras();
                         if (bundle.keySet().contains("selectedItems")) {
-                            ArrayList<Parcelable> fileUris = bundle.getParcelableArrayList("selectedItems");
+                            ArrayList<Parcelable> fileUris;
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                fileUris = bundle.getParcelableArrayList("selectedItems", Parcelable.class);
+                            } else {
+                                fileUris = getLegacyParcelableArrayList(bundle, "selectedItems");
+                            }
                             if (fileUris != null) {
                                 for (Parcelable fileUri : fileUris) {
                                     if (fileUri instanceof Uri) {
@@ -400,6 +405,11 @@ public class CameraPlugin extends Plugin {
         } else {
             call.reject("No images picked");
         }
+    }
+
+    @SuppressWarnings("deprecation")
+    private ArrayList<Parcelable> getLegacyParcelableArrayList(Bundle bundle, String key) {
+        return bundle.getParcelableArrayList(key);
     }
 
     private void processPickedImage(Uri imageUri, PluginCall call) {
@@ -798,9 +808,18 @@ public class CameraPlugin extends Plugin {
             int flags = Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION;
             editIntent.addFlags(flags);
             editIntent.putExtra(MediaStore.EXTRA_OUTPUT, editUri);
-            List<ResolveInfo> resInfoList = getContext()
-                .getPackageManager()
-                .queryIntentActivities(editIntent, PackageManager.MATCH_DEFAULT_ONLY);
+
+            List<ResolveInfo> resInfoList;
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                resInfoList =
+                    getContext()
+                        .getPackageManager()
+                        .queryIntentActivities(editIntent, PackageManager.ResolveInfoFlags.of(PackageManager.MATCH_DEFAULT_ONLY));
+            } else {
+                resInfoList = legacyQueryIntentActivities(editIntent);
+            }
+
             for (ResolveInfo resolveInfo : resInfoList) {
                 String packageName = resolveInfo.activityInfo.packageName;
                 getContext().grantUriPermission(packageName, editUri, flags);
@@ -809,6 +828,11 @@ public class CameraPlugin extends Plugin {
         } catch (Exception ex) {
             return null;
         }
+    }
+
+    @SuppressWarnings("deprecation")
+    private List<ResolveInfo> legacyQueryIntentActivities(Intent intent) {
+        return getContext().getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
     }
 
     @Override
