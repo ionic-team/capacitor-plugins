@@ -103,6 +103,20 @@ Get the device's current language locale code.
 
 --------------------
 
+### getRegionCode()
+
+```typescript
+getRegionCode() => Promise<GetRegionCodeResult>
+```
+
+Get the device's current language locale code.
+
+**Returns:** <code>Promise&lt;<a href="#getregioncoderesult">GetRegionCodeResult</a>&gt;</code>
+
+**Since:** 4.2.0
+
+--------------------
+
 
 ### getLanguageTag()
 
@@ -162,6 +176,12 @@ Get the device's current language locale tag.
 | ----------- | ------------------- | ---------------------------- | ----- |
 | **`value`** | <code>string</code> | Two character language code. | 1.0.0 |
 
+
+#### GetRegionCodeResult
+
+| Prop        | Type                | Description                       | Since |
+| ----------- | ------------------- | --------------------------------- | ----- |
+| **`value`** | <code>string</code> | Two character of the region code. | 4.2.0 |
 
 #### LanguageTag
 
