@@ -10,6 +10,9 @@ npx cap sync
 ```
 
 ## Android
+Android 13 requires a permission check in order to send notifications.  You are required to call `checkPermissions()` and `requestPermissions()` accordingly.
+
+On Android 12 and older it won't show a prompt and will just return as granted.
 
 Starting on Android 12, scheduled notifications won't be exact unless this permission is added to your `AndroidManifest.xml`:
 
