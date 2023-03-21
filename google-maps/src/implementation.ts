@@ -111,6 +111,8 @@ export interface MapBoundsContainsArgs {
   point: LatLng;
 }
 
+export type MapBoundsExtendArgs = MapBoundsContainsArgs;
+
 export interface EnableClusteringArgs {
   id: string;
   minClusterSize?: number;
@@ -139,6 +141,7 @@ export interface CapacitorGoogleMapsPlugin extends Plugin {
   mapBoundsContains(
     args: MapBoundsContainsArgs,
   ): Promise<{ contains: boolean }>;
+  mapBoundsExtend(args: MapBoundsExtendArgs): Promise<{ bounds: LatLngBounds }>;
 }
 
 const CapacitorGoogleMaps = registerPlugin<CapacitorGoogleMapsPlugin>(
