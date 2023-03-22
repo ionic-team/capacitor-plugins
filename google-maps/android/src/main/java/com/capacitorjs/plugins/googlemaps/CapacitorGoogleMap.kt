@@ -527,27 +527,6 @@ class CapacitorGoogleMap(
         return googleMap?.projection?.visibleRegion?.latLngBounds ?: throw BoundsNotFoundError()
     }
 
-    fun getLatLngBoundsJSObject(bounds: LatLngBounds): JSObject {
-        val data = JSObject()
-
-        val southwestJS = JSObject()
-        val centerJS = JSObject()
-        val northeastJS = JSObject()
-
-        southwestJS.put("lat", bounds.southwest.latitude)
-        southwestJS.put("lng", bounds.southwest.longitude)
-        centerJS.put("lat", bounds.center.latitude)
-        centerJS.put("lng", bounds.center.longitude)
-        northeastJS.put("lat", bounds.northeast.latitude)
-        northeastJS.put("lng", bounds.northeast.longitude)
-
-        data.put("southwest", southwestJS)
-        data.put("center", centerJS)
-        data.put("northeast", northeastJS)
-
-        return data
-    }
-
     private fun getScaledPixels(bridge: Bridge, pixels: Int): Int {
         // Get the screen's density scale
         val scale = bridge.activity.resources.displayMetrics.density
@@ -845,4 +824,25 @@ class CapacitorGoogleMap(
             clusterManager?.cluster()
         }
     }
+}
+
+fun getLatLngBoundsJSObject(bounds: LatLngBounds): JSObject {
+    val data = JSObject()
+
+    val southwestJS = JSObject()
+    val centerJS = JSObject()
+    val northeastJS = JSObject()
+
+    southwestJS.put("lat", bounds.southwest.latitude)
+    southwestJS.put("lng", bounds.southwest.longitude)
+    centerJS.put("lat", bounds.center.latitude)
+    centerJS.put("lng", bounds.center.longitude)
+    northeastJS.put("lat", bounds.northeast.latitude)
+    northeastJS.put("lng", bounds.northeast.longitude)
+
+    data.put("southwest", southwestJS)
+    data.put("center", centerJS)
+    data.put("northeast", northeastJS)
+
+    return data
 }
