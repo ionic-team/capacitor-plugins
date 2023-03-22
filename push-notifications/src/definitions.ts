@@ -45,7 +45,7 @@ export interface PushNotificationsPlugin {
    *
    * This will delete a firebase token on Android, and unregister APNS on iOS.
    *
-   * @since 1.0.0
+   * @since 5.0.0
    */
   unregister(): Promise<void>;
 

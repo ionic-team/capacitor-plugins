@@ -208,7 +208,7 @@ Unregister the app from push notifications.
 
 This will delete a firebase token on Android, and unregister APNS on iOS.
 
-**Since:** 1.0.0
+**Since:** 5.0.0
 
 --------------------
 
