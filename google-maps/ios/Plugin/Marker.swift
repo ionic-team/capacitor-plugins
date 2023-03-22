@@ -12,6 +12,7 @@ public struct Marker {
     let iconAnchor: CGPoint?
     let draggable: Bool?
     let color: UIColor?
+    let zIndex: Int32
 
     init(fromJSObject: JSObject) throws {
         guard let latLngObj = fromJSObject["coordinate"] as? JSObject else {
@@ -62,6 +63,7 @@ public struct Marker {
         self.iconSize = iconSize
         self.iconAnchor = iconAnchor
         self.color = tintColor
+        self.zIndex = Int32((fromJSObject["zIndex"] as? Int) ?? 0)
     }
 }
 

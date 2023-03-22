@@ -27,6 +27,17 @@ export class LatLngBounds {
     });
     return result['contains'];
   }
+
+  async extend(point: LatLng): Promise<LatLngBounds> {
+    const result = await CapacitorGoogleMaps.mapBoundsExtend({
+      bounds: this,
+      point,
+    });
+    this.southwest = result['bounds']['southwest'];
+    this.center = result['bounds']['center'];
+    this.northeast = result['bounds']['northeast'];
+    return this;
+  }
 }
 
 /**
@@ -262,6 +273,14 @@ export interface Marker {
    * @default false
    */
   draggable?: boolean;
+
+  /**
+   * Specifies the stack order of this marker, relative to other markers on the map.
+   * A marker with a high z-index is drawn on top of markers with lower z-indexes
+   *
+   * @default 0
+   */
+  zIndex?: number;
 }
 
 /**

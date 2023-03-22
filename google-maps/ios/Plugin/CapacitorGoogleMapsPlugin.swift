@@ -540,6 +540,30 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
         }
     }
 
+    @objc func mapBoundsExtend(_ call: CAPPluginCall) {
+        do {
+            guard let boundsObject = call.getObject("bounds") else {
+                throw GoogleMapErrors.invalidArguments("Invalid bounds provided")
+            }
+
+            guard let pointObject = call.getObject("point") else {
+                throw GoogleMapErrors.invalidArguments("Invalid point provided")
+            }
+
+            let bounds = try getGMSCoordinateBounds(boundsObject)
+            let point = try getCLLocationCoordinate(pointObject)
+
+            DispatchQueue.main.sync {
+                let newBounds = bounds.includingCoordinate(point)
+                call.resolve([
+                    "bounds": formatMapBoundsForResponse(newBounds)
+                ])
+            }
+        } catch {
+            handleError(call, error: error)
+        }
+    }
+
     private func getGMSCoordinateBounds(_ bounds: JSObject) throws -> GMSCoordinateBounds {
         guard let southwest = bounds["southwest"] as? JSObject else {
             throw GoogleMapErrors.unhandledError("Bounds southwest property not formatted properly.")
@@ -580,6 +604,26 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
             "northeast": [
                 "lat": bounds?.northEast.latitude,
                 "lng": bounds?.northEast.longitude
+            ]
+        ]
+    }
+
+    private func formatMapBoundsForResponse(_ bounds: GMSCoordinateBounds) -> PluginCallResultData {
+        let centerLatitude = (bounds.southWest.latitude + bounds.northEast.latitude) / 2.0
+        let centerLongitude = (bounds.southWest.longitude + bounds.northEast.longitude) / 2.0
+
+        return [
+            "southwest": [
+                "lat": bounds.southWest.latitude,
+                "lng": bounds.southWest.longitude
+            ],
+            "center": [
+                "lat": centerLatitude,
+                "lng": centerLongitude
+            ],
+            "northeast": [
+                "lat": bounds.northEast.latitude,
+                "lng": bounds.northEast.longitude
             ]
         ]
     }
