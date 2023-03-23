@@ -1,10 +1,43 @@
+import { CapacitorGoogleMaps } from './implementation';
+
 /**
  * An interface representing the viewports latitude and longitude bounds.
  */
-export interface LatLngBounds {
+export interface LatLngBoundsInterface {
   southwest: LatLng;
   center: LatLng;
   northeast: LatLng;
+}
+
+export class LatLngBounds {
+  southwest: LatLng;
+  center: LatLng;
+  northeast: LatLng;
+
+  constructor(bounds: LatLngBoundsInterface) {
+    this.southwest = bounds.southwest;
+    this.center = bounds.center;
+    this.northeast = bounds.northeast;
+  }
+
+  async contains(point: LatLng): Promise<boolean> {
+    const result = await CapacitorGoogleMaps.mapBoundsContains({
+      bounds: this,
+      point,
+    });
+    return result['contains'];
+  }
+
+  async extend(point: LatLng): Promise<LatLngBounds> {
+    const result = await CapacitorGoogleMaps.mapBoundsExtend({
+      bounds: this,
+      point,
+    });
+    this.southwest = result['bounds']['southwest'];
+    this.center = result['bounds']['center'];
+    this.northeast = result['bounds']['northeast'];
+    return this;
+  }
 }
 
 /**
@@ -240,6 +273,14 @@ export interface Marker {
    * @default false
    */
   draggable?: boolean;
+
+  /**
+   * Specifies the stack order of this marker, relative to other markers on the map.
+   * A marker with a high z-index is drawn on top of markers with lower z-indexes
+   *
+   * @default 0
+   */
+  zIndex?: number;
 }
 
 /**

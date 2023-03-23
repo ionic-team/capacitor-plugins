@@ -109,19 +109,20 @@ public class CameraPlugin: CAPPlugin {
                         options.deliveryMode = .highQualityFormat
 
                         let group = DispatchGroup()
+                        if assets.count > 0 {
+                            for index in 0...(assets.count - 1) {
+                                let asset = assets.object(at: index)
+                                let fullSize = CGSize(width: asset.pixelWidth, height: asset.pixelHeight)
 
-                        for index in 0...(assets.count - 1) {
-                            let asset = assets.object(at: index)
-                            let fullSize = CGSize(width: asset.pixelWidth, height: asset.pixelHeight)
-
-                            group.enter()
-                            imageManager.requestImage(for: asset, targetSize: fullSize, contentMode: .default, options: options) { image, _ in
-                                guard let image = image else {
+                                group.enter()
+                                imageManager.requestImage(for: asset, targetSize: fullSize, contentMode: .default, options: options) { image, _ in
+                                    guard let image = image else {
+                                        group.leave()
+                                        return
+                                    }
+                                    processedImages.append(self.processedImage(from: image, with: asset.imageData))
                                     group.leave()
-                                    return
                                 }
-                                processedImages.append(self.processedImage(from: image, with: asset.imageData))
-                                group.leave()
                             }
                         }
 

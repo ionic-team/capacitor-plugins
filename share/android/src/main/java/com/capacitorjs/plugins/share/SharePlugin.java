@@ -34,10 +34,19 @@ public class SharePlugin extends Plugin {
             new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
-                    chosenComponent = intent.getParcelableExtra(Intent.EXTRA_CHOSEN_COMPONENT);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        chosenComponent = intent.getParcelableExtra(Intent.EXTRA_CHOSEN_COMPONENT, ComponentName.class);
+                    } else {
+                        chosenComponent = getParcelableExtraLegacy(intent, Intent.EXTRA_CHOSEN_COMPONENT);
+                    }
                 }
             };
         getActivity().registerReceiver(broadcastReceiver, new IntentFilter(Intent.EXTRA_CHOSEN_COMPONENT));
+    }
+
+    @SuppressWarnings("deprecation")
+    private ComponentName getParcelableExtraLegacy(Intent intent, String string) {
+        return intent.getParcelableExtra(string);
     }
 
     @ActivityCallback
@@ -141,11 +150,6 @@ public class SharePlugin extends Plugin {
                         new File(Uri.parse(file).getPath())
                     );
                     fileUris.add(fileUrl);
-
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && filesList.size() == 1) {
-                        intent.setDataAndType(fileUrl, type);
-                        intent.putExtra(Intent.EXTRA_STREAM, fileUrl);
-                    }
                 } else {
                     call.reject("only file urls are supported");
                     return;
@@ -153,6 +157,11 @@ public class SharePlugin extends Plugin {
             }
             if (fileUris.size() > 1) {
                 intent.putExtra(Intent.EXTRA_STREAM, fileUris);
+            } else if (fileUris.size() == 1) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    intent.setClipData(ClipData.newRawUri("", fileUris.get(0)));
+                }
+                intent.putExtra(Intent.EXTRA_STREAM, fileUris.get(0));
             }
             intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         } catch (Exception ex) {

@@ -10,6 +10,8 @@ import com.getcapacitor.*
 import com.getcapacitor.annotation.CapacitorPlugin
 import com.getcapacitor.annotation.Permission
 import com.getcapacitor.annotation.PermissionCallback
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.LatLngBounds
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -239,16 +241,18 @@ class CapacitorGoogleMapsPlugin : Plugin() {
             val id = call.getString("id")
             id ?: throw InvalidMapIdError()
 
+            val minClusterSize = call.getInt("minClusterSize")
+
             val map = maps[id]
             map ?: throw MapNotFoundError()
 
-            map.enableClustering { err ->
+            map.enableClustering(minClusterSize,  { err ->
                 if (err != null) {
                     throw err
                 }
 
                 call.resolve()
-            }
+            })
         } catch (e: GoogleMapsError) {
             handleError(call, e)
         } catch (e: Exception) {
@@ -363,6 +367,31 @@ class CapacitorGoogleMapsPlugin : Plugin() {
                 }
 
                 call.resolve()
+            }
+        } catch (e: GoogleMapsError) {
+            handleError(call, e)
+        } catch (e: Exception) {
+            handleError(call, e)
+        }
+    }
+
+    @PluginMethod
+    fun getMapType(call: PluginCall) {
+        try {
+            val id = call.getString("id")
+            id ?: throw InvalidMapIdError()
+
+            val map = maps[id]
+            map ?: throw MapNotFoundError()
+
+            map.getMapType() { type, err ->
+
+                if (err != null) {
+                    throw err
+                }
+                val data = JSObject()
+                data.put("type", type)
+                call.resolve(data)
             }
         } catch (e: GoogleMapsError) {
             handleError(call, e)
@@ -538,17 +567,16 @@ class CapacitorGoogleMapsPlugin : Plugin() {
 
             val events = cachedTouchEvents[id]
             if (events != null) {
-                for (event in events) {
+                while(events.size > 0) {
+                    val event = events.first()
                     if (focus) {
                         map.dispatchTouchEvent(event)
                     } else {
-                        event.source = -1
-                        this.bridge.webView.dispatchTouchEvent(event)
+                        this.bridge.webView.onTouchEvent(event)
                     }
+                    events.removeFirst()
                 }
             }
-
-            cachedTouchEvents[id]?.clear()
 
             call.resolve()
         } catch (e: GoogleMapsError) {
@@ -569,7 +597,7 @@ class CapacitorGoogleMapsPlugin : Plugin() {
 
             CoroutineScope(Dispatchers.Main).launch {
                 val bounds = map.getLatLngBounds()
-                val data = map.getLatLngBoundsJSObject(bounds)
+                val data = getLatLngBoundsJSObject(bounds)
                 call.resolve(data)
             }
         } catch (e: GoogleMapsError) {
@@ -577,6 +605,65 @@ class CapacitorGoogleMapsPlugin : Plugin() {
         } catch (e: Exception) {
             handleError(call, e)
         }
+    }
+
+    @PluginMethod
+    fun mapBoundsContains(call: PluginCall) {
+        try {
+            val boundsObject = call.getObject("bounds")
+            val pointObject = call.getObject("point")
+
+            CoroutineScope(Dispatchers.Main).launch {
+                val bounds = createLatLngBounds(boundsObject)
+                val point = createLatLng(pointObject)
+                val contains = bounds.contains(point)
+                val data = JSObject()
+                data.put("contains", contains)
+                call.resolve(data)
+            }
+        } catch (e: GoogleMapsError) {
+            handleError(call, e)
+        } catch (e: Exception) {
+            handleError(call, e)
+        }
+    }
+
+    @PluginMethod
+    fun mapBoundsExtend(call: PluginCall) {
+        try {
+            val boundsObject = call.getObject("bounds")
+            val pointObject = call.getObject("point")
+
+            CoroutineScope(Dispatchers.Main).launch {
+                val bounds = createLatLngBounds(boundsObject)
+                val point = createLatLng(pointObject)
+                val newBounds = bounds.including(point)
+                val data = JSObject()
+                data.put("bounds", getLatLngBoundsJSObject(newBounds))
+                call.resolve(data)
+            }
+        } catch (e: GoogleMapsError) {
+            handleError(call, e)
+        } catch (e: Exception) {
+            handleError(call, e)
+        }
+    }
+
+    private fun createLatLng(point: JSObject): LatLng {
+        return LatLng(
+            point.getDouble("lat"),
+            point.getDouble("lng")
+        )
+    }
+
+    private fun createLatLngBounds(boundsObject: JSObject): LatLngBounds {
+        val southwestObject = boundsObject.getJSObject("southwest")!!
+        val southwestLatLng = createLatLng(southwestObject)
+
+        val northeastObject = boundsObject.getJSObject("northeast")!!
+        val northeastLatLng = createLatLng(northeastObject)
+
+        return LatLngBounds(southwestLatLng, northeastLatLng)
     }
 
     private fun internalEnableCurrentLocation(call: PluginCall) {

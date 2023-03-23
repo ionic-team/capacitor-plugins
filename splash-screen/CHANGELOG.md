@@ -3,6 +3,36 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-alpha.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/splash-screen@4.2.0...@capacitor/splash-screen@5.0.0-alpha.1) (2023-03-16)
+
+
+### Features
+
+* **android:** Removing enableJetifier ([d66f9cb](https://github.com/ionic-team/capacitor-plugins/commit/d66f9cbd9da7e3b1d8c64ca6a5b45156867d4a04))
+
+
+
+
+
+# [4.2.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/splash-screen@4.1.4...@capacitor/splash-screen@4.2.0) (2023-02-22)
+
+
+### Features
+
+* **splash-screen:** Add launchFadeOutDuration configuration option ([#1393](https://github.com/ionic-team/capacitor-plugins/issues/1393)) ([66929c2](https://github.com/ionic-team/capacitor-plugins/commit/66929c2177009f65758ccbacdc166ae95294ef37))
+
+
+
+
+
+## [4.1.4](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/splash-screen@4.1.3...@capacitor/splash-screen@4.1.4) (2023-02-03)
+
+**Note:** Version bump only for package @capacitor/splash-screen
+
+
+
+
+
 ## [4.1.3](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/splash-screen@4.1.2...@capacitor/splash-screen@4.1.3) (2023-01-17)
 
 

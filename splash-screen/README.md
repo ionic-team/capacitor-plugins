@@ -98,6 +98,7 @@ These config values are available:
 | ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- | ----- |
 | **`launchShowDuration`**        | <code>number</code>                                                                                                           | How long to show the launch splash screen when autoHide is enabled (in ms)                                                                                                                                                                              | <code>500</code>    | 1.0.0 |
 | **`launchAutoHide`**            | <code>boolean</code>                                                                                                          | Whether to auto hide the splash after launchShowDuration.                                                                                                                                                                                               | <code>true</code>   | 1.0.0 |
+| **`launchFadeOutDuration`**     | <code>number</code>                                                                                                           | Duration for the fade out animation of the launch splash screen (in ms) Only available for Android, when using the Android 12 Splash Screen API.                                                                                                        | <code>200</code>    | 4.2.0 |
 | **`backgroundColor`**           | <code>string</code>                                                                                                           | Color of the background of the Splash Screen in hex format, #RRGGBB or #RRGGBBAA. Doesn't work if `useDialog` is true or on launch when using the Android 12 API.                                                                                       |                     | 1.0.0 |
 | **`androidSplashResourceName`** | <code>string</code>                                                                                                           | Name of the resource to be used as Splash Screen. Doesn't work on launch when using the Android 12 API. Only available on Android.                                                                                                                      | <code>splash</code> | 1.0.0 |
 | **`androidScaleType`**          | <code>'CENTER' \| 'CENTER_CROP' \| 'CENTER_INSIDE' \| 'FIT_CENTER' \| 'FIT_END' \| 'FIT_START' \| 'FIT_XY' \| 'MATRIX'</code> | The [ImageView.ScaleType](https://developer.android.com/reference/android/widget/ImageView.ScaleType) used to scale the Splash Screen image. Doesn't work if `useDialog` is true or on launch when using the Android 12 API. Only available on Android. | <code>FIT_XY</code> | 1.0.0 |
@@ -120,6 +121,7 @@ In `capacitor.config.json`:
     "SplashScreen": {
       "launchShowDuration": 3000,
       "launchAutoHide": true,
+      "launchFadeOutDuration": 3000,
       "backgroundColor": "#ffffffff",
       "androidSplashResourceName": "splash",
       "androidScaleType": "CENTER_CROP",
@@ -148,6 +150,7 @@ const config: CapacitorConfig = {
     SplashScreen: {
       launchShowDuration: 3000,
       launchAutoHide: true,
+      launchFadeOutDuration: 3000,
       backgroundColor: "#ffffffff",
       androidSplashResourceName: "splash",
       androidScaleType: "CENTER_CROP",
@@ -182,7 +185,7 @@ To use splash screen images named something other than `splash.png`, set `androi
 
 This plugin will use the following project variables (defined in your app's `variables.gradle` file):
 
-`$coreSplashScreenVersion` version of `androidx.core:core-splashscreen:$coreSplashScreenVersion` (default: `1.0.0-rc01`)
+`$coreSplashScreenVersion` version of `androidx.core:core-splashscreen:$coreSplashScreenVersion` (default: `1.0.0`)
 
 ## Example Guides
 
@@ -252,8 +255,8 @@ Hide the splash screen
 
 #### HideOptions
 
-| Prop                  | Type                | Description                   | Default          | Since |
-| --------------------- | ------------------- | ----------------------------- | ---------------- | ----- |
-| **`fadeOutDuration`** | <code>number</code> | How long (in ms) to fade out. | <code>200</code> | 1.0.0 |
+| Prop                  | Type                | Description                                                                                                                                                       | Default          | Since |
+| --------------------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- | ----- |
+| **`fadeOutDuration`** | <code>number</code> | How long (in ms) to fade out. On Android, if using the Android 12 Splash Screen API, it's not being used. Use launchFadeOutDuration configuration option instead. | <code>200</code> | 1.0.0 |
 
 </docgen-api>
