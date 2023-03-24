@@ -53,8 +53,8 @@ public class PushNotificationsPlugin: CAPPlugin {
     @objc func unregister(_ call: CAPPluginCall) {
         DispatchQueue.main.async {
             UIApplication.shared.unregisterForRemoteNotifications()
+            call.resolve()
         }
-        call.resolve()
     }
 
     /**
