@@ -53,18 +53,18 @@ export interface DeviceInfo {
 
   /**
    * The iOS version number.
-   * 
+   *
    * Only available on iOS.
-   * 
+   *
    * @since 5.0.0
    */
   iOSVersion?: number;
 
   /**
    * The Android SDK version number.
-   * 
+   *
    * Only available on Android.
-   * 
+   *
    * @since 5.0.0
    */
   androidSDKVersion?: number;
