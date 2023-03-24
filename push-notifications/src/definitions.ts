@@ -41,6 +41,15 @@ export interface PushNotificationsPlugin {
   register(): Promise<void>;
 
   /**
+   * Unregister the app from push notifications.
+   *
+   * This will delete a firebase token on Android, and unregister APNS on iOS.
+   *
+   * @since 5.0.0
+   */
+  unregister(): Promise<void>;
+
+  /**
    * Get a list of notifications that are visible on the notifications screen.
    *
    * @since 1.0.0
