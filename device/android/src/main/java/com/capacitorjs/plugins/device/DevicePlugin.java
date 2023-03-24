@@ -1,5 +1,7 @@
 package com.capacitorjs.plugins.device;
 
+import android.os.Build;
+
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
@@ -38,6 +40,7 @@ public class DevicePlugin extends Plugin {
         r.put("model", android.os.Build.MODEL);
         r.put("operatingSystem", "android");
         r.put("osVersion", android.os.Build.VERSION.RELEASE);
+        r.put("androidSDKVersion", Build.VERSION.SDK_INT);
         r.put("platform", implementation.getPlatform());
         r.put("manufacturer", android.os.Build.MANUFACTURER);
         r.put("isVirtual", implementation.isVirtual());

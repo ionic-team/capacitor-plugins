@@ -52,6 +52,24 @@ export interface DeviceInfo {
   osVersion: string;
 
   /**
+   * The iOS version number.
+   * 
+   * Only available on iOS.
+   * 
+   * @since 5.0.0
+   */
+  iOSVersion?: number;
+
+  /**
+   * The Android SDK version number.
+   * 
+   * Only available on Android.
+   * 
+   * @since 5.0.0
+   */
+  androidSDKVersion?: number;
+
+  /**
    * The manufacturer of the device.
    *
    * @since 1.0.0

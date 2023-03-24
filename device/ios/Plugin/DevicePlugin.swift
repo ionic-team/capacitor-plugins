@@ -39,6 +39,7 @@ public class DevicePlugin: CAPPlugin {
             "model": modelName,
             "operatingSystem": "ios",
             "osVersion": UIDevice.current.systemVersion,
+            "iOSVersion": Double(UIDevice.current.systemVersion) ?? 0,
             "platform": "ios",
             "manufacturer": "Apple",
             "isVirtual": isSimulator,
