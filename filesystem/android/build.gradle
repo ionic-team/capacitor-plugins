@@ -29,6 +29,7 @@ if (System.getenv("CAP_PLUGIN_PUBLISH") == "true") {
 }
 
 android {
+    namespace "com.capacitorjs.plugins.filesystem"
     compileSdkVersion project.hasProperty('compileSdkVersion') ? rootProject.ext.compileSdkVersion : 33
     defaultConfig {
         minSdkVersion project.hasProperty('minSdkVersion') ? rootProject.ext.minSdkVersion : 22
