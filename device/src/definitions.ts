@@ -14,7 +14,7 @@ export interface DeviceId {
    *
    * @since 1.0.0
    */
-  uuid: string;
+  identifier: string;
 }
 
 export interface DeviceInfo {
