@@ -2,15 +2,19 @@ export type OperatingSystem = 'ios' | 'android' | 'windows' | 'mac' | 'unknown';
 
 export interface DeviceId {
   /**
-   * The UUID of the device as available to the app. This identifier may change
-   * on modern mobile platforms that only allow per-app install UUIDs.
+   * The identifier of the device as available to the app. This identifier may change
+   * on modern mobile platforms that only allow per-app install ids.
+   *
+   * On iOS, the identifier is a UUID that uniquely identifies a device to the app’s vendor ([read more](https://developer.apple.com/documentation/uikit/uidevice/1620059-identifierforvendor)).
+   *
+   * on Android 8+, __the identifier is a 64-bit number (expressed as a hexadecimal string)__, unique to each combination of app-signing key, user, and device ([read more](https://developer.android.com/reference/android/provider/Settings.Secure#ANDROID_ID)).
    *
    * On web, a random identifier is generated and stored on localStorage for subsequent calls.
    * If localStorage is not available a new random identifier will be generated on every call.
    *
    * @since 1.0.0
    */
-  uuid: string;
+  identifier: string;
 }
 
 export interface DeviceInfo {
