@@ -21,7 +21,7 @@ public class DevicePlugin extends Plugin {
     public void getId(PluginCall call) {
         JSObject r = new JSObject();
 
-        r.put("uuid", implementation.getUuid());
+        r.put("identifier", implementation.getUuid());
 
         call.resolve(r);
     }

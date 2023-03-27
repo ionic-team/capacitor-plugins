@@ -8,7 +8,7 @@ public class DevicePlugin: CAPPlugin {
     @objc func getId(_ call: CAPPluginCall) {
         if let uuid = UIDevice.current.identifierForVendor {
             call.resolve([
-                "uuid": uuid.uuidString
+                "identifier": uuid.uuidString
             ])
         } else {
             call.reject("Id not available")
