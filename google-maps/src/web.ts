@@ -136,7 +136,11 @@ export class CapacitorGoogleMapsWeb
   }
 
   async setMapType(_args: MapTypeArgs): Promise<void> {
-    this.maps[_args.id].map.setMapTypeId(_args.mapType);
+    let mapType = _args.mapType.toLowerCase();
+    if (mapType === MapType.Normal) {
+      mapType = 'roadmap';
+    }
+    this.maps[_args.id].map.setMapTypeId(mapType);
   }
 
   async enableIndoorMaps(_args: IndoorMapArgs): Promise<void> {
