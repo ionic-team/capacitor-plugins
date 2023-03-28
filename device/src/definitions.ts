@@ -59,7 +59,7 @@ export interface DeviceInfo {
    * The iOS version number.
    *
    * Only available on iOS.
-   * 
+   *
    * Multi-part version numbers are crushed down into an integer, ex: `"16.3.1"` -> `1631`
    *
    * @since 5.0.0
