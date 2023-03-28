@@ -138,7 +138,7 @@ export class CapacitorGoogleMapsWeb
   async setMapType(_args: MapTypeArgs): Promise<void> {
     let mapType = _args.mapType.toLowerCase();
     if (mapType === MapType.Normal) {
-      mapType = "roadmap";
+      mapType = 'roadmap';
     }
     this.maps[_args.id].map.setMapTypeId(mapType);
   }
