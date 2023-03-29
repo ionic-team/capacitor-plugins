@@ -1,4 +1,5 @@
 import Foundation
+import UIKit
 
 @objc public class Device: NSObject {
     /**
@@ -76,5 +77,13 @@ import Foundation
         var machine = [CChar](repeating: 0, count: size)
         sysctlbyname("hw.machine", &machine, &size, nil, 0)
         return String(cString: machine)
+    }
+
+    public func getSystemVersionInt() -> Int? {
+        let majorVersion = UIDevice.current.systemVersion.split(separator: ".")
+        let majorVersionBig = majorVersion.joined()
+        let majorVersionBigInt = Int(majorVersionBig)
+
+        return majorVersionBigInt
     }
 }
