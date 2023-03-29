@@ -1,6 +1,4 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.capacitorjs.plugins.pushnotifications">
-
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application>
         <service android:name="com.capacitorjs.plugins.pushnotifications.MessagingService" android:exported="false">
             <intent-filter>
