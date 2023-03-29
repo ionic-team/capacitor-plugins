@@ -23,6 +23,8 @@ export interface DeviceInfo {
    *
    * This is only supported on iOS and Android 7.1 or above.
    *
+   * On iOS 16+ this will return a generic device name without the appropriate [entitlements](https://developer.apple.com/documentation/bundleresources/entitlements/com_apple_developer_device-information_user-assigned-device-name).
+   *
    * @since 1.0.0
    */
   name?: string;
