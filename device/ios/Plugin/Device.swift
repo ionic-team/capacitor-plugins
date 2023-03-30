@@ -81,11 +81,11 @@ import UIKit
 
     public func getSystemVersionInt() -> Int? {
         let exploded = UIDevice.current.systemVersion.split(separator: ".")
-        
+
         var major = 0
         var minor = 0
         var patch = 0
-        
+
         for (index, numStr) in exploded.enumerated() {
             switch index {
             case 0:
@@ -98,12 +98,12 @@ import UIKit
                 break
             }
         }
-        
+
         var combined: [String] = []
         combined.append(String(format: "%02d", major))
         combined.append(String(format: "%02d", minor))
         combined.append(String(format: "%02d", patch))
-        
+
         return Int(combined.joined())
     }
 }
