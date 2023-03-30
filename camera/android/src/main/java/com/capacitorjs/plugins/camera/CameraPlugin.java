@@ -61,7 +61,15 @@ import org.json.JSONException;
         @Permission(strings = { Manifest.permission.CAMERA }, alias = CameraPlugin.CAMERA),
         @Permission(
             strings = { Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE },
-            alias = CameraPlugin.PHOTOS
+            alias = CameraPlugin.PHOTOS_12_DOWN
+        )
+        @Permission(
+            strings = {
+                "android.permission.READ_MEDIA_IMAGES",
+                "android.permission.READ_MEDIA_VIDEO",
+                "android.permission.READ_MEDIA_AUDIO"
+            },
+            alias = CameraPlugin.PHOTOS_13_UP
         )
     }
 )
@@ -69,7 +77,9 @@ public class CameraPlugin extends Plugin {
 
     // Permission alias constants
     static final String CAMERA = "camera";
-    static final String PHOTOS = "photos";
+    static final String PHOTOS_12_DOWN = "photos_12_down";
+    static final String PHOTOS_13_UP = "photos_13_up";
+    static final String PHOTOS = Build.VERSION.SDK_INT >= 32 ? PHOTOS_13_UP : PHOTOS_12_DOWN;
 
     // Message constants
     private static final String INVALID_RESULT_TYPE_ERROR = "Invalid resultType option";
