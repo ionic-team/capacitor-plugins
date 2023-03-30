@@ -111,6 +111,8 @@ export interface MapBoundsContainsArgs {
   point: LatLng;
 }
 
+export type MapBoundsExtendArgs = MapBoundsContainsArgs;
+
 export interface EnableClusteringArgs {
   id: string;
   minClusterSize?: number;
@@ -126,6 +128,7 @@ export interface CapacitorGoogleMapsPlugin extends Plugin {
   disableClustering(args: { id: string }): Promise<void>;
   destroy(args: DestroyMapArgs): Promise<void>;
   setCamera(args: CameraArgs): Promise<void>;
+  getMapType(args: { id: string }): Promise<{ type: string }>;
   setMapType(args: MapTypeArgs): Promise<void>;
   enableIndoorMaps(args: IndoorMapArgs): Promise<void>;
   enableTrafficLayer(args: TrafficLayerArgs): Promise<void>;
@@ -138,6 +141,7 @@ export interface CapacitorGoogleMapsPlugin extends Plugin {
   mapBoundsContains(
     args: MapBoundsContainsArgs,
   ): Promise<{ contains: boolean }>;
+  mapBoundsExtend(args: MapBoundsExtendArgs): Promise<{ bounds: LatLngBounds }>;
 }
 
 const CapacitorGoogleMaps = registerPlugin<CapacitorGoogleMapsPlugin>(

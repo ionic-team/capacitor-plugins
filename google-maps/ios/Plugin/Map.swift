@@ -303,6 +303,10 @@ public class Map {
 
     }
 
+    func getMapType() -> GMSMapViewType {
+        return self.mapViewController.GMapView.mapType
+    }
+
     func setMapType(mapType: GMSMapViewType) throws {
         DispatchQueue.main.sync {
             self.mapViewController.GMapView.mapType = mapType
@@ -389,6 +393,7 @@ public class Map {
         newMarker.isFlat = marker.isFlat ?? false
         newMarker.opacity = marker.opacity ?? 1
         newMarker.isDraggable = marker.draggable ?? false
+        newMarker.zIndex = marker.zIndex
         if let iconAnchor = marker.iconAnchor {
             newMarker.groundAnchor = iconAnchor
         }

@@ -29,11 +29,13 @@ func application(_ application: UIApplication, didFailToRegisterForRemoteNotific
 
 The Push Notification API uses [Firebase Cloud Messaging](https://firebase.google.com/docs/cloud-messaging) SDK for handling notifications.  See [Set up a Firebase Cloud Messaging client app on Android](https://firebase.google.com/docs/cloud-messaging/android/client) and follow the instructions for creating a Firebase project and registering your application.  There is no need to add the Firebase SDK to your app or edit your app manifest - the Push Notifications provides that for you.  All that is required is your Firebase project's `google-services.json` file added to the module (app-level) directory of your app.
 
+Android 13 requires a permission check in order to receive push notifications.  You are required to call `checkPermissions()` and `requestPermissions()` accordingly, when targeting SDK 33.
+
 ### Variables
 
 This plugin will use the following project variables (defined in your app's `variables.gradle` file):
 
-- `$firebaseMessagingVersion` version of `com.google.firebase:firebase-messaging` (default: `23.0.5`)
+- `$firebaseMessagingVersion` version of `com.google.firebase:firebase-messaging` (default: `23.1.2`)
 
 ---
 
@@ -157,6 +159,7 @@ const getDeliveredNotifications = async () => {
 <docgen-index>
 
 * [`register()`](#register)
+* [`unregister()`](#unregister)
 * [`getDeliveredNotifications()`](#getdeliverednotifications)
 * [`removeDeliveredNotifications(...)`](#removedeliverednotifications)
 * [`removeAllDeliveredNotifications()`](#removealldeliverednotifications)
@@ -191,6 +194,21 @@ This method will trigger the `'registration'` event with the push token or
 notification permissions, use `requestPermissions()` first.
 
 **Since:** 1.0.0
+
+--------------------
+
+
+### unregister()
+
+```typescript
+unregister() => Promise<void>
+```
+
+Unregister the app from push notifications.
+
+This will delete a firebase token on Android, and unregister APNS on iOS.
+
+**Since:** 5.0.0
 
 --------------------
 
@@ -303,7 +321,7 @@ checkPermissions() => Promise<PermissionStatus>
 
 Check permission to receive push notifications.
 
-On Android the status is always granted because you can always
+On Android 12 and below the status is always granted because you can always
 receive push notifications. If you need to check if the user allows
 to display notifications, use local-notifications plugin.
 
@@ -322,7 +340,7 @@ requestPermissions() => Promise<PermissionStatus>
 
 Request permission to receive push notifications.
 
-On Android it doesn't prompt for permission because you can always
+On Android 12 and below it doesn't prompt for permission because you can always
 receive push notifications.
 
 On iOS, the first time you use the function, it will prompt the user

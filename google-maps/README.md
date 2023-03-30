@@ -43,13 +43,13 @@ To use certain location features, the SDK requires the following permissions to 
 
 This plugin will use the following project variables (defined in your app's `variables.gradle` file):
 
-- `$googleMapsPlayServicesVersion`: version of `com.google.android.gms:play-services-maps` (default: `18.0.2`)
-- `$googleMapsUtilsVersion`: version of `com.google.maps.android:android-maps-utils` (default: `2.3.0`)
+- `$googleMapsPlayServicesVersion`: version of `com.google.android.gms:play-services-maps` (default: `18.1.0`)
+- `$googleMapsUtilsVersion`: version of `com.google.maps.android:android-maps-utils` (default: `3.4.0`)
 - `$googleMapsKtxVersion`: version of `com.google.maps.android:maps-ktx` (default: `3.4.0`)
 - `$googleMapsUtilsKtxVersion`: version of `com.google.maps.android:maps-utils-ktx` (default: `3.4.0`)
-- `$kotlinxCoroutinesVersion`: version of `org.jetbrains.kotlinx:kotlinx-coroutines-android` and `org.jetbrains.kotlinx:kotlinx-coroutines-core` (default: `1.6.3`)
-- `$androidxCoreKTXVersion`: version of `androidx.core:core-ktx` (default: `1.8.0`)
-- `$kotlin_version`: version of `org.jetbrains.kotlin:kotlin-stdlib-jdk7` (default: `1.7.0`)
+- `$kotlinxCoroutinesVersion`: version of `org.jetbrains.kotlinx:kotlinx-coroutines-android` and `org.jetbrains.kotlinx:kotlinx-coroutines-core` (default: `1.6.4`)
+- `$androidxCoreKTXVersion`: version of `androidx.core:core-ktx` (default: `1.9.0`)
+- `$kotlin_version`: version of `org.jetbrains.kotlin:kotlin-stdlib-jdk7` (default: `1.8.10`)
 
 
 ## Usage
@@ -278,6 +278,7 @@ export default MyMap;
 * [`removeMarkers(...)`](#removemarkers)
 * [`destroy()`](#destroy)
 * [`setCamera(...)`](#setcamera)
+* [`getMapType()`](#getmaptype)
 * [`setMapType(...)`](#setmaptype)
 * [`enableIndoorMaps(...)`](#enableindoormaps)
 * [`enableTrafficLayer(...)`](#enabletrafficlayer)
@@ -418,6 +419,19 @@ setCamera(config: CameraConfig) => Promise<void>
 | Param        | Type                                                  |
 | ------------ | ----------------------------------------------------- |
 | **`config`** | <code><a href="#cameraconfig">CameraConfig</a></code> |
+
+--------------------
+
+
+### getMapType()
+
+```typescript
+getMapType() => Promise<MapType>
+```
+
+Get current map type
+
+**Returns:** <code>Promise&lt;<a href="#maptype">MapType</a>&gt;</code>
 
 --------------------
 
@@ -738,6 +752,7 @@ A marker is an icon placed at a particular point on the map's surface.
 | **`iconAnchor`** | <code><a href="#point">Point</a></code>                      | The position at which to anchor an image in correspondence to the location of the marker on the map. By default, the anchor is located along the center point of the bottom of the image. |                    | 4.2.0 |
 | **`tintColor`**  | <code>{ r: number; g: number; b: number; a: number; }</code> | Customizes the color of the default marker image. Each value must be between 0 and 255. Only for iOS and Android.                                                                         |                    | 4.2.0 |
 | **`draggable`**  | <code>boolean</code>                                         | Controls whether this marker can be dragged interactively                                                                                                                                 | <code>false</code> |       |
+| **`zIndex`**     | <code>number</code>                                          | Specifies the stack order of this marker, relative to other markers on the map. A marker with a high z-index is drawn on top of markers with lower z-indexes                              | <code>0</code>     |       |
 
 
 #### Size

@@ -3,6 +3,35 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-alpha.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/google-maps@4.5.0...@capacitor/google-maps@5.0.0-alpha.1) (2023-03-16)
+
+
+### Features
+
+* **android:** Removing enableJetifier ([d66f9cb](https://github.com/ionic-team/capacitor-plugins/commit/d66f9cbd9da7e3b1d8c64ca6a5b45156867d4a04))
+* **google-maps:** add zIndex to markers ([53a0436](https://github.com/ionic-team/capacitor-plugins/commit/53a04366ad331ada081589aef9c726b4356688df))
+
+
+
+
+
+# [4.5.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/google-maps@4.4.0...@capacitor/google-maps@4.5.0) (2023-02-22)
+
+
+### Bug Fixes
+
+* **google-maps/android:** dispatch touch events to correct y position ([#1415](https://github.com/ionic-team/capacitor-plugins/issues/1415)) ([87e9a6e](https://github.com/ionic-team/capacitor-plugins/commit/87e9a6e97f843228c62245a80eeb6cb86d43500e))
+
+
+### Features
+
+* **google-maps:** add contains to LatLngBounds ([a6b9962](https://github.com/ionic-team/capacitor-plugins/commit/a6b9962f1b6d6c2f873dd8c373b7aa16a49eff6d))
+* **google-maps:** Add getMapType method ([#1420](https://github.com/ionic-team/capacitor-plugins/issues/1420)) ([c2fa96f](https://github.com/ionic-team/capacitor-plugins/commit/c2fa96fc709b59fa55a6f61ecb4d80be214982c5))
+
+
+
+
+
 # [4.4.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/google-maps@4.3.2...@capacitor/google-maps@4.4.0) (2023-02-03)
 
 

@@ -41,6 +41,15 @@ export interface PushNotificationsPlugin {
   register(): Promise<void>;
 
   /**
+   * Unregister the app from push notifications.
+   *
+   * This will delete a firebase token on Android, and unregister APNS on iOS.
+   *
+   * @since 5.0.0
+   */
+  unregister(): Promise<void>;
+
+  /**
    * Get a list of notifications that are visible on the notifications screen.
    *
    * @since 1.0.0
@@ -93,7 +102,7 @@ export interface PushNotificationsPlugin {
   /**
    * Check permission to receive push notifications.
    *
-   * On Android the status is always granted because you can always
+   * On Android 12 and below the status is always granted because you can always
    * receive push notifications. If you need to check if the user allows
    * to display notifications, use local-notifications plugin.
    *
@@ -104,7 +113,7 @@ export interface PushNotificationsPlugin {
   /**
    * Request permission to receive push notifications.
    *
-   * On Android it doesn't prompt for permission because you can always
+   * On Android 12 and below it doesn't prompt for permission because you can always
    * receive push notifications.
    *
    * On iOS, the first time you use the function, it will prompt the user

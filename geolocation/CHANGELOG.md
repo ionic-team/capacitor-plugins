@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-alpha.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/geolocation@4.1.0...@capacitor/geolocation@5.0.0-alpha.1) (2023-03-16)
+
+
+### Bug Fixes
+
+* **geolocation:** use LocationRequest builder instead of deprecated create ([#1483](https://github.com/ionic-team/capacitor-plugins/issues/1483)) ([7cfa12c](https://github.com/ionic-team/capacitor-plugins/commit/7cfa12c86807bd7434dbf907eb878f6796109fe9))
+
+
+### Features
+
+* **android:** Removing enableJetifier ([d66f9cb](https://github.com/ionic-team/capacitor-plugins/commit/d66f9cbd9da7e3b1d8c64ca6a5b45156867d4a04))
+
+
+
+
+
 # [4.1.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/geolocation@1.3.1...@capacitor/geolocation@4.1.0) (2022-11-16)
 
 

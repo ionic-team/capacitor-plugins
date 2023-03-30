@@ -82,6 +82,20 @@ const BoundsMapPage: React.FC = () => {
     }
   }
 
+  async function extendBounds() {
+    setCommandOutput('');
+    try {
+      const bounds = await map!.getMapBounds();
+      const newBounds = await bounds.extend({
+        lat,
+        lng,
+      });
+      setCommandOutput(JSON.stringify(newBounds));
+    } catch (err: any) {
+      setCommandOutput(err.message);
+    }
+  }
+
   return (
     <BaseTestingPage pageTitle="Bounds">
       <div>
@@ -121,11 +135,22 @@ const BoundsMapPage: React.FC = () => {
             >
               Bounds Contains Point
             </IonButton>
+            <IonButton
+              expand="block"
+              id="extendBoundsButton"
+              onClick={extendBounds}
+            >
+              Extend Bounds
+            </IonButton>
           </IonCol>
         </IonRow>
       </div>
       <div>
-        <IonTextarea id="commandOutput" value={commandOutput}></IonTextarea>
+        <IonTextarea
+          id="commandOutput"
+          value={commandOutput}
+          autoGrow={true}
+        ></IonTextarea>
       </div>
       <capacitor-google-map
         id="map"

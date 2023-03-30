@@ -416,6 +416,27 @@ class CapacitorGoogleMap(
         }
     }
 
+    fun getMapType(callback: (type: String, error: GoogleMapsError?) -> Unit) {
+        try {
+            googleMap ?: throw GoogleMapNotAvailable()
+            CoroutineScope(Dispatchers.Main).launch {
+                val mapType: String = when (googleMap?.mapType) {
+                    MAP_TYPE_NORMAL -> "Normal"
+                    MAP_TYPE_HYBRID -> "Hybrid"
+                    MAP_TYPE_SATELLITE -> "Satellite"
+                    MAP_TYPE_TERRAIN -> "Terrain"
+                    MAP_TYPE_NONE -> "None"
+                    else -> {
+                        "Normal"
+                    }
+                }
+                callback(mapType, null);
+            }
+        }  catch (e: GoogleMapsError) {
+            callback("", e)
+        }
+    }
+
     fun setMapType(mapType: String, callback: (error: GoogleMapsError?) -> Unit) {
         try {
             googleMap ?: throw GoogleMapNotAvailable()
@@ -504,27 +525,6 @@ class CapacitorGoogleMap(
 
     fun getLatLngBounds(): LatLngBounds {
         return googleMap?.projection?.visibleRegion?.latLngBounds ?: throw BoundsNotFoundError()
-    }
-
-    fun getLatLngBoundsJSObject(bounds: LatLngBounds): JSObject {
-        val data = JSObject()
-
-        val southwestJS = JSObject()
-        val centerJS = JSObject()
-        val northeastJS = JSObject()
-
-        southwestJS.put("lat", bounds.southwest.latitude)
-        southwestJS.put("lng", bounds.southwest.longitude)
-        centerJS.put("lat", bounds.center.latitude)
-        centerJS.put("lng", bounds.center.longitude)
-        northeastJS.put("lat", bounds.northeast.latitude)
-        northeastJS.put("lng", bounds.northeast.longitude)
-
-        data.put("southwest", southwestJS)
-        data.put("center", centerJS)
-        data.put("northeast", northeastJS)
-
-        return data
     }
 
     private fun getScaledPixels(bridge: Bridge, pixels: Int): Int {
@@ -824,4 +824,25 @@ class CapacitorGoogleMap(
             clusterManager?.cluster()
         }
     }
+}
+
+fun getLatLngBoundsJSObject(bounds: LatLngBounds): JSObject {
+    val data = JSObject()
+
+    val southwestJS = JSObject()
+    val centerJS = JSObject()
+    val northeastJS = JSObject()
+
+    southwestJS.put("lat", bounds.southwest.latitude)
+    southwestJS.put("lng", bounds.southwest.longitude)
+    centerJS.put("lat", bounds.center.latitude)
+    centerJS.put("lng", bounds.center.longitude)
+    northeastJS.put("lat", bounds.northeast.latitude)
+    northeastJS.put("lng", bounds.northeast.longitude)
+
+    data.put("southwest", southwestJS)
+    data.put("center", centerJS)
+    data.put("northeast", northeastJS)
+
+    return data
 }
