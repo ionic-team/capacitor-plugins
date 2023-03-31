@@ -1,6 +1,7 @@
 package com.capacitorjs.plugins.camera;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.ContentResolver;
@@ -18,6 +19,7 @@ import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.util.Base64;
 import androidx.activity.result.ActivityResult;
+import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
 import com.getcapacitor.FileUtils;
 import com.getcapacitor.JSArray;
@@ -55,14 +57,23 @@ import org.json.JSONException;
  *
  * Adapted from https://developer.android.com/training/camera/photobasics.html
  */
+@SuppressLint("InlinedApi")
 @CapacitorPlugin(
     name = "Camera",
     permissions = {
         @Permission(strings = { Manifest.permission.CAMERA }, alias = CameraPlugin.CAMERA),
+        // SDK VERSIONS 32 AND BELOW
         @Permission(
             strings = { Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE },
             alias = CameraPlugin.PHOTOS
-        )
+        ),
+        /*
+        SDK VERSIONS 33 AND ABOVE
+        This alias is a placeholder and the PHOTOS alias will be updated to use these permissions
+        so that the end user does not need to explicitly use separate aliases depending
+        on the SDK version.
+         */
+        @Permission(strings = { Manifest.permission.READ_MEDIA_IMAGES }, alias = CameraPlugin.MEDIA)
     }
 )
 public class CameraPlugin extends Plugin {
@@ -70,6 +81,7 @@ public class CameraPlugin extends Plugin {
     // Permission alias constants
     static final String CAMERA = "camera";
     static final String PHOTOS = "photos";
+    static final String MEDIA = "media";
 
     // Message constants
     private static final String INVALID_RESULT_TYPE_ERROR = "Invalid resultType option";
@@ -194,10 +206,16 @@ public class CameraPlugin extends Plugin {
     }
 
     private boolean checkPhotosPermissions(PluginCall call) {
-        if (getPermissionState(PHOTOS) != PermissionState.GRANTED) {
-            requestPermissionForAlias(PHOTOS, call, "cameraPermissionsCallback");
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+            if (getPermissionState(PHOTOS) != PermissionState.GRANTED) {
+                requestPermissionForAlias(PHOTOS, call, "cameraPermissionsCallback");
+                return false;
+            }
+        } else if (getPermissionState(MEDIA) != PermissionState.GRANTED) {
+            requestPermissionForAlias(MEDIA, call, "cameraPermissionsCallback");
             return false;
         }
+
         return true;
     }
 
@@ -216,13 +234,31 @@ public class CameraPlugin extends Plugin {
                 Logger.debug(getLogTag(), "User denied camera permission: " + getPermissionState(CAMERA).toString());
                 call.reject(PERMISSION_DENIED_ERROR_CAMERA);
                 return;
-            } else if (settings.getSource() == CameraSource.PHOTOS && getPermissionState(PHOTOS) != PermissionState.GRANTED) {
-                Logger.debug(getLogTag(), "User denied photos permission: " + getPermissionState(PHOTOS).toString());
-                call.reject(PERMISSION_DENIED_ERROR_PHOTOS);
-                return;
+            } else if (settings.getSource() == CameraSource.PHOTOS) {
+                PermissionState permissionState = (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU)
+                    ? getPermissionState(PHOTOS)
+                    : getPermissionState(MEDIA);
+                if (permissionState != PermissionState.GRANTED) {
+                    Logger.debug(getLogTag(), "User denied photos permission: " + permissionState.toString());
+                    call.reject(PERMISSION_DENIED_ERROR_PHOTOS);
+                    return;
+                }
             }
             doShow(call);
         }
+    }
+
+    @Override
+    protected void requestPermissionForAliases(@NonNull String[] aliases, @NonNull PluginCall call, @NonNull String callbackName) {
+        // If the SDK version is 33 or higher, use the MEDIA alias permissions instead.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            for (int i = 0; i < aliases.length; i++) {
+                if (aliases[i].equals(PHOTOS)) {
+                    aliases[i] = MEDIA;
+                }
+            }
+        }
+        super.requestPermissionForAliases(aliases, call, callbackName);
     }
 
     private CameraSettings getSettings(PluginCall call) {
@@ -779,6 +815,11 @@ public class CameraPlugin extends Plugin {
         // If Camera is not in the manifest and therefore not required, say the permission is granted
         if (!isPermissionDeclared(CAMERA)) {
             permissionStates.put(CAMERA, PermissionState.GRANTED);
+        }
+
+        // If the SDK version is 33 or higher, update the PHOTOS state to match the MEDIA state.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && permissionStates.containsKey(MEDIA)) {
+            permissionStates.put(PHOTOS, permissionStates.get(MEDIA));
         }
 
         return permissionStates;
