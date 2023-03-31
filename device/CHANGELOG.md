@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-beta.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/device@5.0.0-alpha.1...@capacitor/device@5.0.0-beta.0) (2023-03-31)
+
+
+### Bug Fixes
+
+* **device:** Improving iOSVersion consistency ([#1514](https://github.com/ionic-team/capacitor-plugins/issues/1514)) ([b697fee](https://github.com/ionic-team/capacitor-plugins/commit/b697feec4d1f5d0576c76e927e893100d0be5e30))
+
+
+### Features
+
+* **device:** Add numerical SDK / OS Version ([#1505](https://github.com/ionic-team/capacitor-plugins/issues/1505)) ([2ceb296](https://github.com/ionic-team/capacitor-plugins/commit/2ceb2965f3572068f22bad3e6d79c0902ec5c116))
+
+
+
+
+
 # [5.0.0-alpha.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/device@4.1.0...@capacitor/device@5.0.0-alpha.1) (2023-03-16)
 
 
