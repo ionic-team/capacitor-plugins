@@ -23,6 +23,8 @@ export interface DeviceInfo {
    *
    * This is only supported on iOS and Android 7.1 or above.
    *
+   * On iOS 16+ this will return a generic device name without the appropriate [entitlements](https://developer.apple.com/documentation/bundleresources/entitlements/com_apple_developer_device-information_user-assigned-device-name).
+   *
    * @since 1.0.0
    */
   name?: string;
@@ -54,6 +56,26 @@ export interface DeviceInfo {
    * @since 1.0.0
    */
   osVersion: string;
+
+  /**
+   * The iOS version number.
+   *
+   * Only available on iOS.
+   *
+   * Multi-part version numbers are crushed down into an integer padded to two-digits, ex: `"16.3.1"` -> `160301`
+   *
+   * @since 5.0.0
+   */
+  iOSVersion?: number;
+
+  /**
+   * The Android SDK version number.
+   *
+   * Only available on Android.
+   *
+   * @since 5.0.0
+   */
+  androidSDKVersion?: number;
 
   /**
    * The manufacturer of the device.
