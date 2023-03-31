@@ -82,7 +82,9 @@ public class ScreenOrientation: NSObject {
 
     private func fromOrientationTypeToMask(_ orientationType: String) -> UIInterfaceOrientationMask {
         switch orientationType {
-        case "landscape-primary":
+        case "any":
+            return UIInterfaceOrientationMask.all
+        case "landscape", "landscape-primary":
             return UIInterfaceOrientationMask.landscapeLeft
         case "landscape-secondary":
             return UIInterfaceOrientationMask.landscapeRight
@@ -96,7 +98,9 @@ public class ScreenOrientation: NSObject {
 
     private func fromOrientationTypeToInt(_ orientationType: String) -> Int {
         switch orientationType {
-        case "landscape-primary":
+        case "any":
+            return UIInterfaceOrientation.unknown.rawValue
+        case "landscape", "landscape-primary":
             return UIInterfaceOrientation.landscapeLeft.rawValue
         case "landscape-secondary":
             return UIInterfaceOrientation.landscapeRight.rawValue
