@@ -80,10 +80,30 @@ import UIKit
     }
 
     public func getSystemVersionInt() -> Int? {
-        let majorVersion = UIDevice.current.systemVersion.split(separator: ".")
-        let majorVersionBig = majorVersion.joined()
-        let majorVersionBigInt = Int(majorVersionBig)
+        let exploded = UIDevice.current.systemVersion.split(separator: ".")
 
-        return majorVersionBigInt
+        var major = 0
+        var minor = 0
+        var patch = 0
+
+        for (index, numStr) in exploded.enumerated() {
+            switch index {
+            case 0:
+                major = Int(numStr) ?? 0
+            case 1:
+                minor = Int(numStr) ?? 0
+            case 2:
+                patch = Int(numStr) ?? 0
+            default:
+                break
+            }
+        }
+
+        var combined: [String] = []
+        combined.append(String(format: "%02d", major))
+        combined.append(String(format: "%02d", minor))
+        combined.append(String(format: "%02d", patch))
+
+        return Int(combined.joined())
     }
 }
