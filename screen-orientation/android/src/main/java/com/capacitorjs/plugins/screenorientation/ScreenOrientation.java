@@ -57,6 +57,9 @@ public class ScreenOrientation {
 
     private int fromOrientationTypeToEnum(String orientationType) {
         switch (orientationType) {
+            case "any":
+                return ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
+            case "landscape":
             case "landscape-primary":
                 return ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
             case "landscape-secondary":
