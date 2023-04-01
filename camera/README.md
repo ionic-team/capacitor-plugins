@@ -24,6 +24,7 @@ Read about [Configuring `Info.plist`](https://capacitorjs.com/docs/ios/configura
 This API requires the following permissions be added to your `AndroidManifest.xml`:
 
 ```xml
+<uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
 <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 ```

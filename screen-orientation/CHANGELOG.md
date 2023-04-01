@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-beta.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/screen-orientation@5.0.0-alpha.1...@capacitor/screen-orientation@5.0.0-beta.0) (2023-03-31)
+
+
+### Bug Fixes
+
+* **screen-orientation:** Add native implementation for landscape and any ([#1517](https://github.com/ionic-team/capacitor-plugins/issues/1517)) ([d5d4584](https://github.com/ionic-team/capacitor-plugins/commit/d5d4584a2f2f17ea80fd6d6139991ecc6edbd4c8))
+
+
+
+
+
 # [5.0.0-alpha.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/screen-orientation@4.1.0...@capacitor/screen-orientation@5.0.0-alpha.1) (2023-03-16)
 
 

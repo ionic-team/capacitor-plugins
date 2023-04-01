@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-beta.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/google-maps@5.0.0-alpha.1...@capacitor/google-maps@5.0.0-beta.0) (2023-03-31)
+
+
+### Bug Fixes
+
+* **google-maps:** setMapType not working on web ([#1508](https://github.com/ionic-team/capacitor-plugins/issues/1508)) ([4efa7d7](https://github.com/ionic-team/capacitor-plugins/commit/4efa7d7ccc0a48f61131bb8f729de13ac7b00fb3))
+
+
+### Features
+
+* **google-maps:** add extend to LatLngBounds ([fb2dc0d](https://github.com/ionic-team/capacitor-plugins/commit/fb2dc0d42f9eaa928e9bdb38980ac9b84ae4c4b7))
+
+
+
+
+
 # [5.0.0-alpha.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/google-maps@4.5.0...@capacitor/google-maps@5.0.0-alpha.1) (2023-03-16)
 
 
