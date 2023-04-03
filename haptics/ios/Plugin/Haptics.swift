@@ -5,6 +5,7 @@ import CoreHaptics
 @objc public class Haptics: NSObject {
 
     var selectionFeedbackGenerator: UISelectionFeedbackGenerator?
+    var engine: CHHapticEngine!
 
     @objc public func impact(_ impactStyle: UIImpactFeedbackGenerator.FeedbackStyle) {
         let generator = UIImpactFeedbackGenerator(style: impactStyle)
@@ -39,11 +40,11 @@ import CoreHaptics
     @objc public func vibrate(_ duration: Double) {
         if CHHapticEngine.capabilitiesForHardware().supportsHaptics {
             do {
-                let engine = try CHHapticEngine()
-                try engine.start()
-                engine.resetHandler = { [] in
+                self.engine = try CHHapticEngine()
+                try self.engine.start()
+                self.engine.resetHandler = { [] in
                     do {
-                        try engine.start()
+                        try self.engine.start()
                     } catch {
                         self.vibrate()
                     }
@@ -56,7 +57,7 @@ import CoreHaptics
                                                     relativeTime: 0.0,
                                                     duration: duration)
                 let pattern = try CHHapticPattern(events: [continuousEvent], parameters: [])
-                let player = try engine.makePlayer(with: pattern)
+                let player = try self.engine.makePlayer(with: pattern)
 
                 try player.start(atTime: 0)
             } catch {
