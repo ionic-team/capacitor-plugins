@@ -9,6 +9,7 @@ export interface ClipboardPlugin {
   /**
    * Read a value from the clipboard (the "paste" action)
    *
+   *
    * @since 1.0.0
    */
   read(): Promise<ReadResult>;

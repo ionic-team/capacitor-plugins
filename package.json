@@ -13,7 +13,8 @@
     "set-capacitor-version": "node ./scripts/set-capacitor-version.mjs",
     "postinstall": "lerna bootstrap",
     "release": "lerna publish",
-    "publish:cocoapod": "lerna run publish:cocoapod --concurrency 1"
+    "publish:cocoapod": "lerna run publish:cocoapod --concurrency 1",
+    "ci:publish:latest": "lerna publish --conventional-graduate --conventional-commits --dist-tag latest-3 --force-publish --no-verify-access --yes"
   },
   "devDependencies": {
     "@actions/core": "^1.2.6",

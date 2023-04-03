@@ -11,6 +11,7 @@ export interface NetworkPlugin {
   /**
    * Listen for changes in the network connection.
    *
+   *
    * @since 1.0.0
    */
   addListener(

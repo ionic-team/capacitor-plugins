@@ -11,6 +11,7 @@ export interface PermissionStatus {
    *
    * On iOS and web it requests/checks location permission.
    *
+   *
    * @since 1.0.0
    */
   location: PermissionState;

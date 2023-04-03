@@ -9,6 +9,7 @@ export interface AlertOptions {
   /**
    * Message to show on the dialog.
    *
+   *
    * @since 1.0.0
    */
   message: string;

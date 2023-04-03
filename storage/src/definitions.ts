@@ -9,6 +9,7 @@ export interface ConfigureOptions {
    * WARNING: The `clear()` method can delete unintended values when using the
    * 'NativeStorage' group.
    *
+   *
    * @default CapacitorStorage
    * @since 1.0.0
    */

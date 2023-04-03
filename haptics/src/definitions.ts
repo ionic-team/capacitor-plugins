@@ -16,6 +16,7 @@ export interface HapticsPlugin {
   /**
    * Vibrate the device
    *
+   *
    * @since 1.0.0
    */
   vibrate(options?: VibrateOptions): Promise<void>;

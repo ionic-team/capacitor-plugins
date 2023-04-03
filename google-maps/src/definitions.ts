@@ -77,6 +77,7 @@ export interface CameraConfig {
   /**
    * Bearing of the camera, in degrees clockwise from true north.
    *
+   *
    * @default 0
    */
   bearing?: number;

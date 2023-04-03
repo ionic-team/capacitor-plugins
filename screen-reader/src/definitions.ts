@@ -4,6 +4,7 @@ export interface SpeakOptions {
   /**
    * The text to speak.
    *
+   *
    * @since 1.0.0
    */
   value: string;

@@ -4,6 +4,7 @@ export interface BrowserPlugin {
   /**
    * Open a page with the specified options.
    *
+   *
    * @since 1.0.0
    */
   open(options: OpenOptions): Promise<void>;

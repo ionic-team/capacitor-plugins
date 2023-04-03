@@ -2,6 +2,7 @@ export interface ShowActionsOptions {
   /**
    * The title of the Action Sheet.
    *
+   *
    * @since 1.0.0
    */
   title: string;
