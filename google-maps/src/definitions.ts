@@ -65,6 +65,8 @@ export interface Point {
   y: number;
 }
 
+export interface Polyline extends google.maps.PolylineOptions {}
+
 /**
  * For web, all the javascript Google Maps options are available as
  * GoogleMapConfig extends google.maps.MapOptions.

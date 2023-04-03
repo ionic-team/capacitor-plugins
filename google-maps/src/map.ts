@@ -13,6 +13,7 @@ import type {
   MapClickCallbackData,
   MarkerClickCallbackData,
   MyLocationButtonClickCallbackData,
+  Polyline,
 } from './definitions';
 import { LatLngBounds, MapType } from './definitions';
 import type { CreateMapArgs } from './implementation';
@@ -288,6 +289,22 @@ export class GoogleMap {
     return CapacitorGoogleMaps.removeMarkers({
       id: this.id,
       markerIds: ids,
+    });
+  }
+
+  async addPolylines(polylines: Polyline[]): Promise<string[]> {
+    const res = await CapacitorGoogleMaps.addPolylines({
+      id: this.id,
+      polylines,
+    });
+
+    return res.ids;
+  }
+
+  async removePolylines(ids: string[]): Promise<void> {
+    return CapacitorGoogleMaps.removePolylines({
+      id: this.id,
+      polylineIds: ids,
     });
   }
 

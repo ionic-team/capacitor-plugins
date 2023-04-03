@@ -29,6 +29,8 @@ import type {
   MapBoundsContainsArgs,
   EnableClusteringArgs,
   MapBoundsExtendArgs,
+  AddPolylinesArgs,
+  RemovePolylinesArgs,
 } from './implementation';
 
 export class CapacitorGoogleMapsWeb
@@ -43,11 +45,15 @@ export class CapacitorGoogleMapsWeb
       markers: {
         [id: string]: google.maps.Marker;
       };
+      polylines: {
+        [id: string]: google.maps.Polyline;
+      };
       markerClusterer?: MarkerClusterer;
       trafficLayer?: google.maps.TrafficLayer;
     };
   } = {};
   private currMarkerId = 0;
+  private currPolylineId = 0;
 
   private onClusterClickHandler: onClusterClickHandler = (
     _: google.maps.MapMouseEvent,
@@ -276,6 +282,35 @@ export class CapacitorGoogleMapsWeb
     delete this.maps[_args.id].markers[_args.markerId];
   }
 
+  async addPolylines(args: AddPolylinesArgs): Promise<{ ids: string[]; }> {
+    const lineIds: string[] = [];
+    const map = this.maps[args.id];
+
+    for (const polylineArgs of args.polylines) {
+      const polyline = new google.maps.Polyline(polylineArgs)
+      polyline.setMap(map.map);
+
+      const id = '' + this.currPolylineId;
+      this.maps[args.id].polylines[id] = polyline;
+
+      lineIds.push(id);
+      this.currPolylineId++;
+    }
+
+    return {
+      ids: lineIds,
+    }
+  }
+
+  async removePolylines(args: RemovePolylinesArgs): Promise<void> {
+    const map = this.maps[args.id];
+
+    for (const id of args.polylineIds) {
+      map.polylines[id].setMap(null);
+      delete map.polylines[id];
+    }
+  }
+
   async enableClustering(_args: EnableClusteringArgs): Promise<void> {
     const markers: google.maps.Marker[] = [];
 
@@ -309,6 +344,7 @@ export class CapacitorGoogleMapsWeb
       map: new window.google.maps.Map(_args.element, { ..._args.config }),
       element: _args.element,
       markers: {},
+      polylines: {},
     };
     this.setMapListeners(_args.id);
   }
