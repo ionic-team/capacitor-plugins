@@ -67,6 +67,7 @@ public class Map {
     var mapViewController: GMViewController
     var targetViewController: UIView?
     var markers = [Int: GMSMarker]()
+    var polylines = [Int: GMSPolyline]()
     var markerIcons = [String: UIImage]()
 
     // swiftlint:disable weak_delegate
@@ -227,6 +228,23 @@ public class Map {
 
         return markerHashes
     }
+    
+    func addPolylines(lines: [Polyline]) throws -> [Int] {
+        var polylineHashes: [Int] = []
+        
+        DispatchQueue.main.sync {
+            lines.forEach { line in
+                let newLine = self.buildPolyline(line: line)
+                newLine.map = self.mapViewController.GMapView
+                
+                self.polylines[newLine.hash.hashValue] = newLine
+                
+                polylineHashes.append(newLine.hash.hashValue)
+            }
+        }
+        
+        return polylineHashes
+    }
 
     func enableClustering(_ minClusterSize: Int?) {
         if !self.mapViewController.clusteringEnabled {
@@ -276,6 +294,18 @@ public class Map {
             }
         } else {
             throw GoogleMapErrors.markerNotFound
+        }
+    }
+    
+    
+    func removePolylines(ids: [Int]) throws {
+        DispatchQueue.main.sync {
+            ids.forEach { id in
+                if let line = self.polylines[id] {
+                    line.map = nil
+                    self.polylines.removeValue(forKey: id)
+                }
+            }
         }
     }
 
@@ -383,6 +413,23 @@ public class Map {
         }
 
         return intersections
+    }
+    
+    private func buildPolyline(line: Polyline) -> GMSPolyline {
+        let newPolyline = GMSPolyline()
+        newPolyline.title = line.title
+        newPolyline.strokeColor = line.strokeColor
+        newPolyline.strokeWidth = line.strokeWidth
+        newPolyline.isTappable = line.tappable ?? false
+        newPolyline.zIndex = line.zIndex
+        
+        let path = GMSMutablePath()
+        line.path.forEach { coord in
+            path.add(CLLocationCoordinate2D(latitude: coord.lat, longitude: coord.lng))
+        }
+        
+        newPolyline.path = path
+        return newPolyline
     }
 
     private func buildMarker(marker: Marker) -> GMSMarker {
