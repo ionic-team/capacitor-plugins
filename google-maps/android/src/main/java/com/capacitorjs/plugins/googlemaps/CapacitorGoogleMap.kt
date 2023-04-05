@@ -43,6 +43,7 @@ class CapacitorGoogleMap(
     private var mapView: MapView
     private var googleMap: GoogleMap? = null
     private val markers = HashMap<String, CapacitorGoogleMapMarker>()
+    private val polylines = HashMap<String, CapacitorGoogleMapPolyline>()
     private val markerIcons = HashMap<String, Bitmap>()
     private var clusterManager: ClusterManager<CapacitorGoogleMapMarker>? = null
 
@@ -231,6 +232,30 @@ class CapacitorGoogleMap(
         }
     }
 
+    fun addPolylines(newLines: Array<CapacitorGoogleMapPolyline>, callback: (ids: Result<List<String>>) -> Unit) {
+        try {
+            googleMap ?: throw GoogleMapNotAvailable()
+            val lineIds: MutableList<String> = mutableListOf()
+
+            CoroutineScope(Dispatchers.Main).launch {
+                newLines.forEach {
+                    val polylineOptions: Deferred<PolylineOptions> = CoroutineScope(Dispatchers.IO).async {
+                        this@CapacitorGoogleMap.buildPolyline(it)
+                    }
+                    val googleMapPolyline = googleMap?.addPolyline(polylineOptions.await())
+                    it.googleMapsPolyline = googleMapPolyline
+
+                    polylines[googleMapPolyline!!.id] = it
+                    lineIds.add(googleMapPolyline.id)
+                }
+
+                callback(Result.success(lineIds))
+            }
+        } catch (e: GoogleMapsError) {
+            callback(Result.failure(e))
+        }
+    }
+
     private fun setClusterManagerRenderer(minClusterSize: Int?) {
         clusterManager?.renderer =
             object :
@@ -356,6 +381,30 @@ class CapacitorGoogleMap(
                 if (clusterManager != null) {
                     clusterManager?.removeItems(deletedMarkers)
                     clusterManager?.cluster()
+                }
+
+                callback(null)
+            }
+        } catch (e: GoogleMapsError) {
+            callback(e)
+        }
+    }
+
+    fun removePolylines(ids: List<String>, callback: (error: GoogleMapsError?) -> Unit) {
+        try {
+            googleMap ?: throw GoogleMapNotAvailable()
+
+            CoroutineScope(Dispatchers.Main).launch {
+                val deletedPolylines: MutableList<CapacitorGoogleMapPolyline> = mutableListOf()
+
+                ids.forEach {
+                    val polyline = polylines[it]
+                    if (polyline != null) {
+                        polyline.googleMapsPolyline?.remove()
+                        polylines.remove(it)
+
+                        deletedPolylines.add(polyline)
+                    }
                 }
 
                 callback(null)
@@ -548,6 +597,20 @@ class CapacitorGoogleMap(
                 getScaledPixelsF(bridge, rectF.right),
                 getScaledPixelsF(bridge, rectF.bottom)
         )
+    }
+
+    private fun buildPolyline(line: CapacitorGoogleMapPolyline): PolylineOptions {
+        val polylineOptions = PolylineOptions()
+        polylineOptions.width(line.strokeWidth)
+        polylineOptions.color(line.strokeColor.toArgb())
+        polylineOptions.clickable(line.clickable)
+        polylineOptions.zIndex(line.zIndex)
+
+        line.path.forEach {
+            polylineOptions.add(it)
+        }
+
+        return polylineOptions
     }
 
     private fun buildMarker(marker: CapacitorGoogleMapMarker): MarkerOptions {
