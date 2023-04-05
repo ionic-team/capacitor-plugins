@@ -19,7 +19,6 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.*
 import com.google.maps.android.clustering.Cluster
 import com.google.maps.android.clustering.ClusterManager
-import com.google.maps.android.clustering.view.DefaultClusterRenderer
 import kotlinx.coroutines.*
 import java.io.InputStream
 import java.net.URL
@@ -232,19 +231,12 @@ class CapacitorGoogleMap(
     }
 
     private fun setClusterManagerRenderer(minClusterSize: Int?) {
-        clusterManager?.renderer =
-            object :
-                DefaultClusterRenderer<CapacitorGoogleMapMarker>(
-                    delegate.bridge.context,
-                    googleMap,
-                    clusterManager
-                ) {
-                init {
-                    if(minClusterSize != null && minClusterSize > 0) {
-                        super.setMinClusterSize(minClusterSize)
-                    }
-                }
-            }
+        clusterManager?.renderer = CapacitorClusterManagerRenderer(
+            delegate.bridge.context,
+            googleMap,
+            clusterManager,
+            minClusterSize
+        )
     }
 
     @SuppressLint("PotentialBehaviorOverride")
@@ -591,6 +583,8 @@ class CapacitorGoogleMap(
                 markerOptions.icon(BitmapDescriptorFactory.defaultMarker(marker.colorHue!!))
             }
         }
+
+        marker.markerOptions = markerOptions
 
         return markerOptions
     }
