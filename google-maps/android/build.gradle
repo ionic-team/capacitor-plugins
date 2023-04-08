@@ -68,6 +68,10 @@ android {
     }
 }
 
+kotlin {
+    jvmToolchain(11)
+}
+
 repositories {
     google()
     mavenCentral()
