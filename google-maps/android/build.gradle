@@ -89,6 +89,7 @@ dependencies {
     androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"
     implementation "androidx.core:core-ktx:$androidxCoreKTXVersion"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation platform("org.jetbrains.kotlin:kotlin-bom:$kotlin_version")
 
     implementation "com.google.maps.android:maps-ktx:$googleMapsKtxVersion"
     implementation "com.google.maps.android:maps-utils-ktx:$googleMapsUtilsKtxVersion"
