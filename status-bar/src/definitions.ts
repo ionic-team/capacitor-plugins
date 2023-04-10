@@ -40,7 +40,6 @@ export interface AnimationOptions {
    *
    * This option is only supported on iOS.
    *
-   *
    * @since 1.0.0
    */
   animation: Animation;

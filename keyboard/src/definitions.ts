@@ -13,7 +13,6 @@ declare module '@capacitor/cli' {
        *
        * Only available on iOS.
        *
-       *
        * @since 1.0.0
        * @default native
        * @example "body"

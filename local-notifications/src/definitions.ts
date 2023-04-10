@@ -17,7 +17,6 @@ declare module '@capacitor/cli' {
        *
        * Only available for Android.
        *
-       *
        * @since 1.0.0
        * @example "ic_stat_icon_config_sample"
        */

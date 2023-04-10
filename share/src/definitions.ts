@@ -10,7 +10,6 @@ export interface ShareOptions {
   /**
    * Set some text to share
    *
-   *
    * @since 1.0.0
    */
   text?: string;

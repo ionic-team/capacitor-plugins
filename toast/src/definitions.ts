@@ -11,7 +11,6 @@ export interface ShowOptions {
   /**
    * Text to display on the Toast
    *
-   *
    * @since 1.0.0
    */
   text: string;

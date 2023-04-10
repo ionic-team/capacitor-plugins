@@ -20,7 +20,6 @@ export interface SetOptions {
   /**
    * The new zoom level (represented as a decimal).
    *
-   *
    * @since 1.0.0
    */
   value: number;

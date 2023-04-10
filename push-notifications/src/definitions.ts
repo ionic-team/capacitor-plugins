@@ -20,7 +20,6 @@ declare module '@capacitor/cli' {
        *
        * Only available for iOS.
        *
-       *
        * @since 1.0.0
        * @example ["badge", "sound", "alert"]
        */

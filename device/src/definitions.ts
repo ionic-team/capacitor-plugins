@@ -7,7 +7,6 @@ export interface DeviceId {
    *
    * On web, a random identifier is generated and stored on localStorage for subsequent calls.
    *
-   *
    * @since 1.0.0
    */
   uuid: string;

@@ -14,7 +14,6 @@ export interface MotionPlugin {
   /**
    * Add a listener for device orientation change (compass heading, etc.)
    *
-   *
    * @since 1.0.0
    */
   addListener(

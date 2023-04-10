@@ -15,7 +15,6 @@ export enum Directory {
    * in the `AndroidManifest.xml`.
    * It's not accesible on Android 11 or newer.
    *
-   *
    * @since 1.0.0
    */
   Documents = 'DOCUMENTS',

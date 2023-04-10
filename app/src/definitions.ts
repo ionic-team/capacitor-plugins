@@ -4,7 +4,6 @@ export interface AppInfo {
   /**
    * The name of the app.
    *
-   *
    * @since 1.0.0
    */
   name: string;

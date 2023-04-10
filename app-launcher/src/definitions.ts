@@ -11,7 +11,6 @@ export interface AppLauncherPlugin {
    * appropriate app is installed. To learn more about the key, see
    * [LSApplicationQueriesSchemes](https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/LaunchServicesKeys.html#//apple_ref/doc/plist/info/LSApplicationQueriesSchemes).
    *
-   *
    * @since 1.0.0
    */
   canOpenUrl(options: CanOpenURLOptions): Promise<CanOpenURLResult>;
