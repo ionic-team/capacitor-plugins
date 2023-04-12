@@ -232,7 +232,7 @@ class CapacitorGoogleMap(
         }
     }
 
-    fun addPolylines(newLines: Array<CapacitorGoogleMapPolyline>, callback: (ids: Result<List<String>>) -> Unit) {
+    fun addPolylines(newLines: List<CapacitorGoogleMapPolyline>, callback: (ids: Result<List<String>>) -> Unit) {
         try {
             googleMap ?: throw GoogleMapNotAvailable()
             val lineIds: MutableList<String> = mutableListOf()

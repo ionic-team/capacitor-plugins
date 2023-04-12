@@ -11,7 +11,7 @@ class CapacitorGoogleMapPolyline(fromJSONObject: JSONObject) {
     var strokeWidth: Float = 1.0f
     var strokeColor: Color = Color.BLUE.toColor()
     var clickable: Boolean
-    var zIndex: Float = 0.00
+    var zIndex: Float = 0.00f
     var googleMapsPolyline: Polyline? = null
 
     init {
@@ -21,7 +21,7 @@ class CapacitorGoogleMapPolyline(fromJSONObject: JSONObject) {
 
         val pathArray = fromJSONObject.getJSONArray("path")
 
-        for (i in 1..pathArray.length()) {
+        for (i in 0 until pathArray.length()) {
             val obj = pathArray.getJSONObject(i)
             if (!obj.has("lat") || !obj.has("lng")) {
                 throw InvalidArgumentsError("LatLng object is missing the required 'lat' and/or 'lng' property")
@@ -34,9 +34,9 @@ class CapacitorGoogleMapPolyline(fromJSONObject: JSONObject) {
         }
 
         strokeColor = Color.parseColor(fromJSONObject.getString("strokeColor")).toColor()
-        strokeWidth = fromJSONObject.optDouble("strokeWidth", 1.0).toFloat()
-        clickable = fromJSONObject.optBoolean("tappable", false)
-        zIndex = fromJSONObject.optDouble("zIndex", 0.00).toFloat()
+        strokeWidth = fromJSONObject.optDouble("strokeWeight", 1.0).toFloat()
+        clickable = fromJSONObject.optBoolean("clickable", false)
+        zIndex = fromJSONObject.optDouble("strokeOpacity", 0.00).toFloat()
     }
 
 }

@@ -236,6 +236,49 @@ class CapacitorGoogleMapsPlugin : Plugin() {
     }
 
     @PluginMethod
+    fun addPolylines(call: PluginCall) {
+        try  {
+            val id = call.getString("id")
+            id ?: throw InvalidMapIdError()
+
+            val polylinesObjectArray = call.getArray("polylines", null)
+            polylinesObjectArray ?: throw InvalidArgumentsError("polylines array is missing")
+
+            if (polylinesObjectArray.length() == 0) {
+                throw InvalidArgumentsError("polylines requires at least one line")
+            }
+
+            val map = maps[id]
+            map ?: throw MapNotFoundError()
+
+            val polylines: MutableList<CapacitorGoogleMapPolyline> = mutableListOf()
+
+            for (i in 0 until polylinesObjectArray.length()) {
+                val polylineObj = polylinesObjectArray.getJSONObject(i)
+                val polyline = CapacitorGoogleMapPolyline(polylineObj)
+
+                polylines.add(polyline)
+            }
+
+            map.addPolylines(polylines) { result ->
+                val ids = result.getOrThrow()
+
+                val jsonIDs = JSONArray()
+                ids.forEach { jsonIDs.put(it) }
+
+                val res = JSObject()
+                res.put("ids", jsonIDs)
+                call.resolve(res)
+            }
+
+        } catch (e: GoogleMapsError) {
+            handleError(call, e)
+        } catch (e: Exception) {
+            handleError(call, e)
+        }
+    }
+
+    @PluginMethod
     fun enableClustering(call: PluginCall) {
         try {
             val id = call.getString("id")
@@ -333,6 +376,43 @@ class CapacitorGoogleMapsPlugin : Plugin() {
             }
 
             map.removeMarkers(markerIds) { err ->
+                if (err != null) {
+                    throw err
+                }
+
+                call.resolve()
+            }
+        } catch (e: GoogleMapsError) {
+            handleError(call, e)
+        } catch (e: Exception) {
+            handleError(call, e)
+        }
+    }
+
+    @PluginMethod
+    fun removePolylines(call: PluginCall) {
+        try {
+            val id = call.getString("id")
+            id ?: throw InvalidMapIdError()
+
+            val lineIdsArray = call.getArray("polylineIds")
+            lineIdsArray ?: throw InvalidArgumentsError("polylineIds are invalid or missing")
+
+            if (lineIdsArray.length() == 0) {
+                throw InvalidArgumentsError("polylineIds requires at least one line id")
+            }
+
+            val map = maps[id]
+            map ?: throw MapNotFoundError()
+
+            val lineIds: MutableList<String> = mutableListOf()
+
+            for (i in 0 until lineIdsArray.length()) {
+                val markerId = lineIdsArray.getString(i)
+                lineIds.add(markerId)
+            }
+
+            map.removePolylines(lineIds) { err ->
                 if (err != null) {
                     throw err
                 }
