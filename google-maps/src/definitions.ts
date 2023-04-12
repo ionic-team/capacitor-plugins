@@ -65,7 +65,19 @@ export interface Point {
   y: number;
 }
 
-export interface Polyline extends google.maps.PolylineOptions {}
+export interface Polyline extends google.maps.PolylineOptions {
+  strokeColor?: string;
+  strokeOpacity?: number;
+  strokeWeight?: number;
+  geodesic?: boolean;
+  clickable?: boolean;
+  styleSpans?: StyleSpan[];
+}
+
+export interface StyleSpan {
+  color: string;
+  segments?: number;
+}
 
 /**
  * For web, all the javascript Google Maps options are available as

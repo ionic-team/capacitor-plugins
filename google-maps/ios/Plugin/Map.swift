@@ -421,6 +421,7 @@ public class Map {
         newPolyline.strokeColor = line.strokeColor
         newPolyline.strokeWidth = line.strokeWidth
         newPolyline.isTappable = line.tappable ?? false
+        newPolyline.geodesic = line.geodesic ?? false
         newPolyline.zIndex = line.zIndex
         
         let path = GMSMutablePath()
@@ -429,6 +430,21 @@ public class Map {
         }
         
         newPolyline.path = path
+        
+        if (line.styleSpans.count > 0) {
+            var spans: [GMSStyleSpan] = []
+            
+            line.styleSpans.forEach { span in
+                if let segments = span.segments {
+                    spans.append(GMSStyleSpan(color: span.color, segments: segments))
+                } else {
+                    spans.append(GMSStyleSpan(color: span.color))
+                }
+            }
+            
+            newPolyline.spans = spans
+        }
+        
         return newPolyline
     }
 

@@ -61,15 +61,25 @@ const PolylineMapPage: React.FC = () => {
           { lat: -27.467, lng: 153.027 },
         ];
 
-        const createdIds = await map.addPolylines([{
-          path: sampleLines,
-          strokeColor: "#FF0000",
-          strokeOpacity: 1.0,
-          strokeWeight: 2,
-        }]);
+        const createdIds = await map.addPolylines([
+          {
+            path: sampleLines,
+            strokeColor: '#FF0000',
+            strokeOpacity: 1.0,
+            strokeWeight: 2,
+            geodesic: true,
+            clickable: true,
+            styleSpans: [
+              { color: '#85892D' },
+              { color: '#0000FF' },
+              { color: '#FFF700' },
+              { color: '#FF99CC' },
+            ],
+          },
+        ]);
 
         setIds(createdIds);
-        
+
         setCommandOutput('Polyline created');
       }
     } catch (err: any) {
@@ -81,8 +91,8 @@ const PolylineMapPage: React.FC = () => {
     setCommandOutput('');
     try {
       if (map) {
-       await map.removePolylines(ids);
-       setIds([]);
+        await map.removePolylines(ids);
+        setIds([]);
       }
     } catch (err: any) {
       setCommandOutput(err.message);
@@ -106,8 +116,6 @@ const PolylineMapPage: React.FC = () => {
         <IonButton expand="block" id="createMapButton" onClick={deletePolyline}>
           Delete Polyline
         </IonButton>
-
-
       </div>
       <div>
         <IonTextarea
