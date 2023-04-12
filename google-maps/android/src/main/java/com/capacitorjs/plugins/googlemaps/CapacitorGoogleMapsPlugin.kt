@@ -10,6 +10,7 @@ import com.getcapacitor.*
 import com.getcapacitor.annotation.CapacitorPlugin
 import com.getcapacitor.annotation.Permission
 import com.getcapacitor.annotation.PermissionCallback
+import com.google.android.gms.maps.MapsInitializer
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import kotlinx.coroutines.CoroutineScope
@@ -40,6 +41,8 @@ class CapacitorGoogleMapsPlugin : Plugin() {
     @SuppressLint("ClickableViewAccessibility")
     override fun load() {
         super.load()
+
+        MapsInitializer.initialize(this.context, MapsInitializer.Renderer.LATEST, null)
 
         this.bridge.webView.setOnTouchListener(
                 object : View.OnTouchListener {
