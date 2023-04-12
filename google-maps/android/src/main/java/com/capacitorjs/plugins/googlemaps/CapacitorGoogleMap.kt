@@ -11,19 +11,17 @@ import android.widget.FrameLayout
 import com.getcapacitor.Bridge
 import com.getcapacitor.JSArray
 import com.getcapacitor.JSObject
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.*
 import com.google.android.gms.maps.GoogleMap.*
-import com.google.android.gms.maps.MapView
-import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.*
 import com.google.maps.android.clustering.Cluster
 import com.google.maps.android.clustering.ClusterManager
 import com.google.maps.android.clustering.view.DefaultClusterRenderer
 import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.Channel
 import java.io.InputStream
 import java.net.URL
-import kotlinx.coroutines.channels.Channel
+
 
 class CapacitorGoogleMap(
         val id: String,
@@ -52,6 +50,7 @@ class CapacitorGoogleMap(
 
     init {
         val bridge = delegate.bridge
+
         mapView = MapView(bridge.context, config.googleMapOptions)
         initMap()
         setListeners()
@@ -601,13 +600,21 @@ class CapacitorGoogleMap(
 
     private fun buildPolyline(line: CapacitorGoogleMapPolyline): PolylineOptions {
         val polylineOptions = PolylineOptions()
-        polylineOptions.width(line.strokeWidth)
-        polylineOptions.color(line.strokeColor.toArgb())
+        polylineOptions.width(line.strokeWidth * this.config.devicePixelRatio)
+        polylineOptions.color(line.strokeColor)
         polylineOptions.clickable(line.clickable)
         polylineOptions.zIndex(line.zIndex)
-
+        polylineOptions.geodesic(line.geodesic)
         line.path.forEach {
             polylineOptions.add(it)
+        }
+
+        line.styleSpans.forEach {
+            if (it.segments != null) {
+                polylineOptions.addSpan(StyleSpan(it.color, it.segments))
+            } else {
+                polylineOptions.addSpan(StyleSpan(it.color))
+            }
         }
 
         return polylineOptions
