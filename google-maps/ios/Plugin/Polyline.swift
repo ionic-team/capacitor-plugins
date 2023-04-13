@@ -27,9 +27,13 @@ public struct Polyline {
             strokeWidth = CGFloat(width)
         }
         
+        let strokeOpacity = fromJSObject["strokeOpacity"] as? Double
+        
         if let hexColor = fromJSObject["strokeColor"] as? String {
             strokeColor = UIColor(hex: hexColor) ?? UIColor.blue
         }
+        
+        strokeColor = strokeColor.withAlphaComponent(strokeOpacity ?? 1.0)
         
         guard let pathJSArray = fromJSObject["path"] as? JSArray else {
             throw GoogleMapErrors.invalidArguments("Polyline object is missing the required 'path' property")
@@ -58,14 +62,12 @@ public struct Polyline {
             })
         }
         
-        
-        
         self.strokeColor = strokeColor
         self.strokeWidth = strokeWidth
         self.title = fromJSObject["title"] as? String
         self.tappable = fromJSObject["clickable"] as? Bool
         self.geodesic = fromJSObject["geodesic"] as? Bool
-        self.zIndex = Int32((fromJSObject["strokeOpacity"] as? Int) ?? 0)
+        self.zIndex = Int32((fromJSObject["zIndex"] as? Int) ?? 0)
         self.path = path
         self.styleSpans = styleSpans
     }
