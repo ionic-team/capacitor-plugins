@@ -65,6 +65,11 @@ export interface Point {
   y: number;
 }
 
+/**
+ * For web, all the javascript Polyline options are available as
+ * Polyline extends google.maps.PolylineOptions.
+ * For iOS and Android only the config options declared on Polyline are available.
+ */
 export interface Polyline extends google.maps.PolylineOptions {
   strokeColor?: string;
   strokeOpacity?: number;
@@ -72,11 +77,26 @@ export interface Polyline extends google.maps.PolylineOptions {
   geodesic?: boolean;
   clickable?: boolean;
   tag?: string;
+  /**
+   * Used to specify the color of one or more segments of a polyline. The styleSpans property is an array of StyleSpan objects. 
+   * Setting the spans property is the preferred way to change the color of a polyline.
+   * 
+   * Only on iOS and Android.
+   */
   styleSpans?: StyleSpan[];
 }
 
+/**
+ * Describes the style for some region of a polyline.
+ */
 export interface StyleSpan {
+  /**
+   * The stroke color. All CSS3 colors are supported except for extended named colors.
+   */
   color: string;
+  /**
+   * The length of this span in number of segments.
+   */
   segments?: number;
 }
 
@@ -315,7 +335,7 @@ export interface MarkerCallbackData {
   snippet: string;
 }
 
-export interface PolylineCallbackData{
+export interface PolylineCallbackData {
   polylineId: string;
   tag?: string;
 }

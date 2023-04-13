@@ -36,6 +36,8 @@ export interface GoogleMapInterface {
   addMarkers(markers: Marker[]): Promise<string[]>;
   removeMarker(id: string): Promise<void>;
   removeMarkers(ids: string[]): Promise<void>;
+  addPolylines(polylines: Polyline[]): Promise<string[]>;
+  removePolylines(ids: string[]): Promise<void>;
   destroy(): Promise<void>;
   setCamera(config: CameraConfig): Promise<void>;
   /**
