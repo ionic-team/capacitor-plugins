@@ -282,16 +282,18 @@ export class CapacitorGoogleMapsWeb
     delete this.maps[_args.id].markers[_args.markerId];
   }
 
-  async addPolylines(args: AddPolylinesArgs): Promise<{ ids: string[]; }> {
+  async addPolylines(args: AddPolylinesArgs): Promise<{ ids: string[] }> {
     const lineIds: string[] = [];
     const map = this.maps[args.id];
 
     for (const polylineArgs of args.polylines) {
-      const polyline = new google.maps.Polyline(polylineArgs)
+      const polyline = new google.maps.Polyline(polylineArgs);
+      polyline.set("tag", polylineArgs.tag);
       polyline.setMap(map.map);
 
       const id = '' + this.currPolylineId;
       this.maps[args.id].polylines[id] = polyline;
+      this.setPolylineListeners(args.id, id, polyline);
 
       lineIds.push(id);
       this.currPolylineId++;
@@ -299,7 +301,7 @@ export class CapacitorGoogleMapsWeb
 
     return {
       ids: lineIds,
-    }
+    };
   }
 
   async removePolylines(args: RemovePolylinesArgs): Promise<void> {
@@ -393,6 +395,20 @@ export class CapacitorGoogleMapsWeb
       new google.maps.LatLng(_args.southwest.lat, _args.southwest.lng),
       new google.maps.LatLng(_args.northeast.lat, _args.northeast.lng),
     );
+  }
+
+  async setPolylineListeners(
+    mapId: string,
+    polylineId: string,
+    polyline: google.maps.Polyline,
+  ): Promise<void> {
+    polyline.addListener("click", () => {
+      this.notifyListeners("onPolylineClick", {
+        mapId: mapId,
+        polylineId: polylineId,
+        tag: polyline.get("tag")
+      })
+    })
   }
 
   async setMarkerListeners(
