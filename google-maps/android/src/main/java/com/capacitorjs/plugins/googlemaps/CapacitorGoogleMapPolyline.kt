@@ -35,35 +35,42 @@ class CapacitorGoogleMapPolyline(fromJSONObject: JSONObject) {
             path.add(LatLng(lat, lng))
         }
 
-        val styleSpanArray = fromJSONObject.getJSONArray("styleSpans")
-        for (i in 0 until styleSpanArray.length()) {
-            val obj = styleSpanArray.getJSONObject(i)
+        if (fromJSONObject.has("styleSpans")) {
+            val styleSpanArray = fromJSONObject.getJSONArray("styleSpans")
+            for (i in 0 until styleSpanArray.length()) {
+                val obj = styleSpanArray.getJSONObject(i)
 
-            if (obj.has("color")) {
-                val color = obj.getString("color")
-                if (obj.has("segments")) {
-                    val segments = obj.getDouble("segments")
-                    styleSpans.add(CapacitorGoogleMapsStyleSpan(Color.parseColor(color), segments))
-                } else {
-                    styleSpans.add(CapacitorGoogleMapsStyleSpan(Color.parseColor(color), null))
+                if (obj.has("color")) {
+                    val color = obj.getString("color")
+
+                    if (obj.has("segments")) {
+                        val segments = obj.getDouble("segments")
+                        styleSpans.add(CapacitorGoogleMapsStyleSpan(Color.parseColor(color), segments))
+                    } else {
+                        styleSpans.add(CapacitorGoogleMapsStyleSpan(Color.parseColor(color), null))
+                    }
                 }
             }
         }
 
         val strokeOpacity = fromJSONObject.optDouble("strokeOpacity", 1.0)
 
-        val colorInt = Color.parseColor(fromJSONObject.getString("strokeColor"))
-
-        val alpha = (strokeOpacity * 255.0).toInt()
-        val red = android.graphics.Color.red(colorInt)
-        val green = android.graphics.Color.green(colorInt)
-        val blue = android.graphics.Color.blue(colorInt)
-
-        strokeColor = Color.argb(alpha, red, green, blue)
+        strokeColor = this.processColor(fromJSONObject.getString("strokeColor"), strokeOpacity)
         strokeWidth = fromJSONObject.optDouble("strokeWeight", 1.0).toFloat()
         clickable = fromJSONObject.optBoolean("clickable", false)
         geodesic = fromJSONObject.optBoolean("geodesic", false)
         zIndex = fromJSONObject.optDouble("zIndex", 1.0).toFloat()
+    }
+
+    private fun processColor(hex: String, opacity: Double): Int {
+        val colorInt = Color.parseColor(hex)
+
+        val alpha = (opacity * 255.0).toInt()
+        val red = android.graphics.Color.red(colorInt)
+        val green = android.graphics.Color.green(colorInt)
+        val blue = android.graphics.Color.blue(colorInt)
+
+        return Color.argb(alpha, red, green, blue)
     }
 
 }
