@@ -605,6 +605,7 @@ class CapacitorGoogleMap(
         polylineOptions.clickable(line.clickable)
         polylineOptions.zIndex(line.zIndex)
         polylineOptions.geodesic(line.geodesic)
+
         line.path.forEach {
             polylineOptions.add(it)
         }

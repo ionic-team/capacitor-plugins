@@ -50,7 +50,16 @@ class CapacitorGoogleMapPolyline(fromJSONObject: JSONObject) {
             }
         }
 
-        strokeColor = Color.parseColor(fromJSONObject.getString("strokeColor"))
+        val strokeOpacity = fromJSONObject.optDouble("strokeOpacity", 1.0)
+
+        val colorInt = Color.parseColor(fromJSONObject.getString("strokeColor"))
+
+        val alpha = (strokeOpacity * 255.0).toInt()
+        val red = android.graphics.Color.red(colorInt)
+        val green = android.graphics.Color.green(colorInt)
+        val blue = android.graphics.Color.blue(colorInt)
+
+        strokeColor = Color.argb(alpha, red, green, blue)
         strokeWidth = fromJSONObject.optDouble("strokeWeight", 1.0).toFloat()
         clickable = fromJSONObject.optBoolean("clickable", false)
         geodesic = fromJSONObject.optBoolean("geodesic", false)
