@@ -14,6 +14,7 @@ public struct Polyline {
     let tappable: Bool?
     let geodesic: Bool?
     let zIndex: Int32
+    let tag: String?
     let styleSpans: [StyleSpan]
     
     init(fromJSObject: JSObject) throws {
@@ -64,6 +65,7 @@ public struct Polyline {
         
         self.strokeColor = strokeColor
         self.strokeWidth = strokeWidth
+        self.tag = fromJSObject["tag"] as? String
         self.title = fromJSObject["title"] as? String
         self.tappable = fromJSObject["clickable"] as? Bool
         self.geodesic = fromJSObject["geodesic"] as? Bool

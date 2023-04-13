@@ -293,6 +293,7 @@ export default MyMap;
 * [`setOnInfoWindowClickListener(...)`](#setoninfowindowclicklistener)
 * [`setOnMapClickListener(...)`](#setonmapclicklistener)
 * [`setOnMarkerClickListener(...)`](#setonmarkerclicklistener)
+* [`setOnPolylineClickListener(...)`](#setonpolylineclicklistener)
 * [`setOnMarkerDragStartListener(...)`](#setonmarkerdragstartlistener)
 * [`setOnMarkerDragListener(...)`](#setonmarkerdraglistener)
 * [`setOnMarkerDragEndListener(...)`](#setonmarkerdragendlistener)
@@ -618,6 +619,19 @@ setOnMarkerClickListener(callback?: MapListenerCallback<MarkerClickCallbackData>
 --------------------
 
 
+### setOnPolylineClickListener(...)
+
+```typescript
+setOnPolylineClickListener(callback?: MapListenerCallback<PolylineCallbackData> | undefined) => Promise<void>
+```
+
+| Param          | Type                                                                                                                                |
+| -------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| **`callback`** | <code><a href="#maplistenercallback">MapListenerCallback</a>&lt;<a href="#polylinecallbackdata">PolylineCallbackData</a>&gt;</code> |
+
+--------------------
+
+
 ### setOnMarkerDragStartListener(...)
 
 ```typescript
@@ -857,6 +871,14 @@ Controls for setting padding on the 'visible' region of the view.
 | **`mapId`**     | <code>string</code> |
 | **`latitude`**  | <code>number</code> |
 | **`longitude`** | <code>number</code> |
+
+
+#### PolylineCallbackData
+
+| Prop             | Type                |
+| ---------------- | ------------------- |
+| **`polylineId`** | <code>string</code> |
+| **`tag`**        | <code>string</code> |
 
 
 #### MyLocationButtonClickCallbackData

@@ -71,6 +71,7 @@ export interface Polyline extends google.maps.PolylineOptions {
   strokeWeight?: number;
   geodesic?: boolean;
   clickable?: boolean;
+  tag?: string;
   styleSpans?: StyleSpan[];
 }
 
@@ -312,6 +313,11 @@ export interface MarkerCallbackData {
   longitude: number;
   title: string;
   snippet: string;
+}
+
+export interface PolylineCallbackData{
+  polylineId: string;
+  tag?: string;
 }
 
 export interface CameraIdleCallbackData {

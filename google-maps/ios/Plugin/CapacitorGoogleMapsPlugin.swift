@@ -753,6 +753,18 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
         ])
     }
 
+    
+    // onPolylineClick
+    public func mapView(_ mapView: GMSMapView, didTap overlay: GMSOverlay) {
+        if let polyline = overlay as? GMSPolyline {
+            self.notifyListeners("onPolylineClick", data: [
+                "mapId": self.findMapIdByMapView(mapView),
+                "polylineId": overlay.hash.hashValue,
+                "tag": polyline.userData as? String
+            ])
+        }
+    }
+
     // onClusterClick, onMarkerClick
     public func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
         if let cluster = marker.userData as? GMUCluster {

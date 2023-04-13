@@ -14,6 +14,7 @@ import type {
   MarkerClickCallbackData,
   MyLocationButtonClickCallbackData,
   Polyline,
+  PolylineCallbackData,
 } from './definitions';
 import { LatLngBounds, MapType } from './definitions';
 import type { CreateMapArgs } from './implementation';
@@ -71,6 +72,9 @@ export interface GoogleMapInterface {
   setOnMarkerClickListener(
     callback?: MapListenerCallback<MarkerClickCallbackData>,
   ): Promise<void>;
+  setOnPolylineClickListener(
+    callback?: MapListenerCallback<PolylineCallbackData>,
+  ): Promise<void>;
   setOnMarkerDragStartListener(
     callback?: MapListenerCallback<MarkerClickCallbackData>,
   ): Promise<void>;
@@ -119,6 +123,7 @@ export class GoogleMap {
   private onClusterInfoWindowClickListener?: PluginListenerHandle;
   private onInfoWindowClickListener?: PluginListenerHandle;
   private onMapClickListener?: PluginListenerHandle;
+  private onPolylineClickListener?: PluginListenerHandle;
   private onMarkerClickListener?: PluginListenerHandle;
   private onMarkerDragStartListener?: PluginListenerHandle;
   private onMarkerDragListener?: PluginListenerHandle;
@@ -292,6 +297,7 @@ export class GoogleMap {
     });
   }
 
+  
   async addPolylines(polylines: Polyline[]): Promise<string[]> {
     const res = await CapacitorGoogleMaps.addPolylines({
       id: this.id,
@@ -691,6 +697,27 @@ export class GoogleMap {
     } else {
       this.onMarkerClickListener = undefined;
     }
+  }
+/**
+   * Set the event listener on the map for 'onPolylineClick' events.
+   *
+   * @param callback
+   * @returns
+   */
+  async setOnPolylineClickListener(callback?: MapListenerCallback<PolylineCallbackData>): Promise<void> {
+    if(this.onPolylineClickListener) {
+      this.onPolylineClickListener.remove();
+    }
+
+    if (callback) {
+      this.onPolylineClickListener = await CapacitorGoogleMaps.addListener(
+        'onPolylineClick',
+        this.generateCallback(callback),
+      );
+    } else {
+      this.onPolylineClickListener = undefined;
+    }
+    
   }
 
   /**

@@ -423,6 +423,7 @@ public class Map {
         newPolyline.isTappable = line.tappable ?? false
         newPolyline.geodesic = line.geodesic ?? false
         newPolyline.zIndex = line.zIndex
+        newPolyline.userData = line.tag
         
         let path = GMSMutablePath()
         line.path.forEach { coord in

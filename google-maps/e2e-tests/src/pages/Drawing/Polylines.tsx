@@ -10,7 +10,15 @@ const PolylineMapPage: React.FC = () => {
 
   const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
 
-  async function createMap() {
+  const onPolylineClick = (data: any) => {
+    setCommandOutput(
+      `POLYLINE (${data.polylineId}) WAS CLICKED ON MAP (${
+        data.mapId
+      }) WITH TAG (${data.tag ?? ''})`,
+    );
+  };
+
+  const createMap = async () => {
     setCommandOutput('');
     setMap(null);
     try {
@@ -35,9 +43,9 @@ const PolylineMapPage: React.FC = () => {
     } catch (err: any) {
       setCommandOutput(err.message);
     }
-  }
+  };
 
-  async function destroyMap() {
+  const destroyMap = async () => {
     setCommandOutput('');
     try {
       if (map) {
@@ -48,9 +56,9 @@ const PolylineMapPage: React.FC = () => {
     } catch (err: any) {
       setCommandOutput(err.message);
     }
-  }
+  };
 
-  async function createPolyline() {
+  const createPolyline = async () => {
     setCommandOutput('');
     try {
       if (map) {
@@ -64,10 +72,11 @@ const PolylineMapPage: React.FC = () => {
         const createdIds = await map.addPolylines([
           {
             path: sampleLines,
-            strokeColor: '#FF0000',
+            strokeColor: '#ffdd00',
             strokeOpacity: 1.0,
             strokeWeight: 2,
             geodesic: true,
+            tag: 'my_polyline',
             clickable: true,
             styleSpans: [
               { color: '#85892D' },
@@ -85,9 +94,9 @@ const PolylineMapPage: React.FC = () => {
     } catch (err: any) {
       setCommandOutput(err.message);
     }
-  }
+  };
 
-  async function deletePolyline() {
+  const deletePolyline = async () => {
     setCommandOutput('');
     try {
       if (map) {
@@ -97,23 +106,45 @@ const PolylineMapPage: React.FC = () => {
     } catch (err: any) {
       setCommandOutput(err.message);
     }
-  }
+  };
+
+  const setOnPolylineClickButton = async () => {
+    map?.setOnPolylineClickListener(onPolylineClick);
+    setCommandOutput('Set On Polyline Click Listeners!');
+  };
+
+  const removeOnPolylineClickButton = async () => {
+    map?.setOnPolylineClickListener();
+    setCommandOutput('Removed On Polyline Click Listeners!');
+  };
 
   return (
     <BaseTestingPage pageTitle="Polylines">
       <div>
-        <IonButton expand="block" id="createMapButton" onClick={createMap}>
+        <IonButton id="createMapButton" onClick={createMap}>
           Create Map
         </IonButton>
-        <IonButton expand="block" id="destroyMapButton" onClick={destroyMap}>
+        <IonButton id="destroyMapButton" onClick={destroyMap}>
           Destroy Map
         </IonButton>
+        <IonButton
+          id="setOnPolylineClickButton"
+          onClick={setOnPolylineClickButton}
+        >
+          Set Click Listeners
+        </IonButton>
+        <IonButton
+          id="removeOnPolylineClickButton"
+          onClick={removeOnPolylineClickButton}
+        >
+          Remove Click Listeners
+        </IonButton>
 
-        <IonButton expand="block" id="createMapButton" onClick={createPolyline}>
+        <IonButton id="drawPolylineButton" onClick={createPolyline}>
           Draw Polyline
         </IonButton>
 
-        <IonButton expand="block" id="createMapButton" onClick={deletePolyline}>
+        <IonButton id="deletePolylineButton" onClick={deletePolyline}>
           Delete Polyline
         </IonButton>
       </div>

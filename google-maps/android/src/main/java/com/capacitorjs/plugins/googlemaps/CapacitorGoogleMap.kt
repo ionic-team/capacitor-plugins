@@ -37,7 +37,8 @@ class CapacitorGoogleMap(
         OnMapClickListener,
         OnMarkerClickListener,
         OnMarkerDragListener,
-        OnInfoWindowClickListener {
+        OnInfoWindowClickListener,
+        OnPolylineClickListener {
     private var mapView: MapView
     private var googleMap: GoogleMap? = null
     private val markers = HashMap<String, CapacitorGoogleMapMarker>()
@@ -242,6 +243,8 @@ class CapacitorGoogleMap(
                         this@CapacitorGoogleMap.buildPolyline(it)
                     }
                     val googleMapPolyline = googleMap?.addPolyline(polylineOptions.await())
+                    googleMapPolyline?.tag = it.tag
+                    
                     it.googleMapsPolyline = googleMapPolyline
 
                     polylines[googleMapPolyline!!.id] = it
@@ -732,6 +735,7 @@ class CapacitorGoogleMap(
             )
             this@CapacitorGoogleMap.googleMap?.setOnMyLocationClickListener(this@CapacitorGoogleMap)
             this@CapacitorGoogleMap.googleMap?.setOnInfoWindowClickListener(this@CapacitorGoogleMap)
+            this@CapacitorGoogleMap.googleMap?.setOnPolylineClickListener(this@CapacitorGoogleMap)
         }
     }
 
@@ -807,6 +811,14 @@ class CapacitorGoogleMap(
         data.put("snippet", marker.snippet)
         delegate.notify("onMarkerClick", data)
         return false
+    }
+
+    override fun onPolylineClick(polyline: Polyline) {
+        val data = JSObject()
+        data.put("mapId", this@CapacitorGoogleMap.id)
+        data.put("polylineId", polyline.id)
+        data.put("tag", polyline.tag)
+        delegate.notify("onPolylineClick", data)
     }
 
     override fun onMarkerDrag(marker: Marker) {
@@ -895,6 +907,7 @@ class CapacitorGoogleMap(
             clusterManager?.cluster()
         }
     }
+
 }
 
 fun getLatLngBoundsJSObject(bounds: LatLngBounds): JSObject {

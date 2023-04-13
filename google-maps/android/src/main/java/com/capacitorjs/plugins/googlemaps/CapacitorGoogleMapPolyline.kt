@@ -14,6 +14,7 @@ class CapacitorGoogleMapPolyline(fromJSONObject: JSONObject) {
     var clickable: Boolean
     var geodesic: Boolean
     var zIndex: Float = 0.00f
+    var tag: String = ""
     var googleMapsPolyline: Polyline? = null
 
     init {
@@ -60,6 +61,7 @@ class CapacitorGoogleMapPolyline(fromJSONObject: JSONObject) {
         clickable = fromJSONObject.optBoolean("clickable", false)
         geodesic = fromJSONObject.optBoolean("geodesic", false)
         zIndex = fromJSONObject.optDouble("zIndex", 1.0).toFloat()
+        tag = fromJSONObject.optString("tag", "")
     }
 
     private fun processColor(hex: String, opacity: Double): Int {
