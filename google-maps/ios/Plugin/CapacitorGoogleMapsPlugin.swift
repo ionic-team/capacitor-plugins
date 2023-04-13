@@ -266,7 +266,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
             handleError(call, error: error)
         }
     }
-    
+
     @objc func addPolylines(_ call: CAPPluginCall) {
         do {
             guard let id = call.getString("id") else {
@@ -284,14 +284,14 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
             guard let map = self.maps[id] else {
                 throw GoogleMapErrors.mapNotFound
             }
-            
+
             var lines: [Polyline] = []
 
             try lineObjs.forEach { lineObj in
                 let line = try Polyline(fromJSObject: lineObj)
                 lines.append(line)
             }
-            
+
             let ids = try map.addPolylines(lines: lines)
 
             call.resolve(["ids": ids.map({ id in
@@ -301,7 +301,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
             handleError(call, error: error)
         }
     }
-    
+
     @objc func removePolylines(_ call: CAPPluginCall) {
         do {
             guard let id = call.getString("id") else {
@@ -753,7 +753,6 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
         ])
     }
 
-    
     // onPolylineClick
     public func mapView(_ mapView: GMSMapView, didTap overlay: GMSOverlay) {
         if let polyline = overlay as? GMSPolyline {

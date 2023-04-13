@@ -2,7 +2,7 @@
 import { MapType, Marker, Polyline, StyleSpan } from './definitions';
 import { GoogleMap } from './map';
 
-export { GoogleMap, MapType, Marker, Polyline, StyleSpan};
+export { GoogleMap, MapType, Marker, Polyline, StyleSpan };
 
 declare global {
   export namespace JSX {

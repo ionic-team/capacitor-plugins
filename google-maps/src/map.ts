@@ -299,7 +299,6 @@ export class GoogleMap {
     });
   }
 
-  
   async addPolylines(polylines: Polyline[]): Promise<string[]> {
     const res = await CapacitorGoogleMaps.addPolylines({
       id: this.id,
@@ -700,14 +699,16 @@ export class GoogleMap {
       this.onMarkerClickListener = undefined;
     }
   }
-/**
+  /**
    * Set the event listener on the map for 'onPolylineClick' events.
    *
    * @param callback
    * @returns
    */
-  async setOnPolylineClickListener(callback?: MapListenerCallback<PolylineCallbackData>): Promise<void> {
-    if(this.onPolylineClickListener) {
+  async setOnPolylineClickListener(
+    callback?: MapListenerCallback<PolylineCallbackData>,
+  ): Promise<void> {
+    if (this.onPolylineClickListener) {
       this.onPolylineClickListener.remove();
     }
 
@@ -719,7 +720,6 @@ export class GoogleMap {
     } else {
       this.onPolylineClickListener = undefined;
     }
-    
   }
 
   /**

@@ -228,21 +228,21 @@ public class Map {
 
         return markerHashes
     }
-    
+
     func addPolylines(lines: [Polyline]) throws -> [Int] {
         var polylineHashes: [Int] = []
-        
+
         DispatchQueue.main.sync {
             lines.forEach { line in
                 let newLine = self.buildPolyline(line: line)
                 newLine.map = self.mapViewController.GMapView
-                
+
                 self.polylines[newLine.hash.hashValue] = newLine
-                
+
                 polylineHashes.append(newLine.hash.hashValue)
             }
         }
-        
+
         return polylineHashes
     }
 
@@ -296,8 +296,7 @@ public class Map {
             throw GoogleMapErrors.markerNotFound
         }
     }
-    
-    
+
     func removePolylines(ids: [Int]) throws {
         DispatchQueue.main.sync {
             ids.forEach { id in
@@ -414,7 +413,7 @@ public class Map {
 
         return intersections
     }
-    
+
     private func buildPolyline(line: Polyline) -> GMSPolyline {
         let newPolyline = GMSPolyline()
         newPolyline.title = line.title
@@ -424,17 +423,17 @@ public class Map {
         newPolyline.geodesic = line.geodesic ?? false
         newPolyline.zIndex = line.zIndex
         newPolyline.userData = line.tag
-        
+
         let path = GMSMutablePath()
         line.path.forEach { coord in
             path.add(CLLocationCoordinate2D(latitude: coord.lat, longitude: coord.lng))
         }
-        
+
         newPolyline.path = path
-        
-        if (line.styleSpans.count > 0) {
+
+        if line.styleSpans.count > 0 {
             var spans: [GMSStyleSpan] = []
-            
+
             line.styleSpans.forEach { span in
                 if let segments = span.segments {
                     spans.append(GMSStyleSpan(color: span.color, segments: segments))
@@ -442,10 +441,10 @@ public class Map {
                     spans.append(GMSStyleSpan(color: span.color))
                 }
             }
-            
+
             newPolyline.spans = spans
         }
-        
+
         return newPolyline
     }
 

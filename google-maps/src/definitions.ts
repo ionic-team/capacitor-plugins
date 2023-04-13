@@ -78,9 +78,9 @@ export interface Polyline extends google.maps.PolylineOptions {
   clickable?: boolean;
   tag?: string;
   /**
-   * Used to specify the color of one or more segments of a polyline. The styleSpans property is an array of StyleSpan objects. 
+   * Used to specify the color of one or more segments of a polyline. The styleSpans property is an array of StyleSpan objects.
    * Setting the spans property is the preferred way to change the color of a polyline.
-   * 
+   *
    * Only on iOS and Android.
    */
   styleSpans?: StyleSpan[];

@@ -288,7 +288,7 @@ export class CapacitorGoogleMapsWeb
 
     for (const polylineArgs of args.polylines) {
       const polyline = new google.maps.Polyline(polylineArgs);
-      polyline.set("tag", polylineArgs.tag);
+      polyline.set('tag', polylineArgs.tag);
       polyline.setMap(map.map);
 
       const id = '' + this.currPolylineId;
@@ -402,13 +402,13 @@ export class CapacitorGoogleMapsWeb
     polylineId: string,
     polyline: google.maps.Polyline,
   ): Promise<void> {
-    polyline.addListener("click", () => {
-      this.notifyListeners("onPolylineClick", {
+    polyline.addListener('click', () => {
+      this.notifyListeners('onPolylineClick', {
         mapId: mapId,
         polylineId: polylineId,
-        tag: polyline.get("tag")
-      })
-    })
+        tag: polyline.get('tag'),
+      });
+    });
   }
 
   async setMarkerListeners(
