@@ -43,14 +43,16 @@ public struct Polygon {
             throw GoogleMapErrors.invalidArguments("Polygon object is missing the required 'paths' property")
         }
         
-        try shapeJSArray.forEach({ obj in
-            if let shapeArr = obj as? JSArray {
-                try processedShapes.append(Polygon.processShape(shapeArr))
-            } else {
-                // is a single shape
-                try processedShapes.append(Polygon.processShape(shapeJSArray))
-            }
-        })
+        if let obj = shapeJSArray.first, obj as? JSArray != nil {
+            try shapeJSArray.forEach({ obj in
+                if let shapeArr = obj as? JSArray {
+                    try processedShapes.append(Polygon.processShape(shapeArr))
+                }
+            })
+        } else {
+            // is a single shape
+            try processedShapes.append(Polygon.processShape(shapeJSArray))
+        }
         
         self.shapes = processedShapes
         self.fillColor = fillColor

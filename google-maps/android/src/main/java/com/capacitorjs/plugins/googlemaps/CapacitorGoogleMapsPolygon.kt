@@ -29,6 +29,7 @@ class CapacitorGoogleMapsPolygon(fromJSONObject: JSONObject) {
                 // is a single shape
                 val shape = this.processShape(pathsArray)
                 this.shapes.add(shape)
+                break
             } else {
                 val shape = this.processShape(arr)
                 this.shapes.add(shape)

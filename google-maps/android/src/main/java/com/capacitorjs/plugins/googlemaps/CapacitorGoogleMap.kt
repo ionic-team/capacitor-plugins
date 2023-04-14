@@ -608,12 +608,19 @@ class CapacitorGoogleMap(
         polygonOptions.geodesic(polygon.geodesic)
         polygonOptions.clickable(polygon.clickable)
 
-        // adding outer shape
-        polygon.shapes.first().forEach {
-            polygonOptions.add(it)
-        }
+        var shapeCounter = 0
+        polygon.shapes.forEach {
+            if (shapeCounter == 0) {
+                // outer shape
+                it.forEach {
+                    polygonOptions.add(it)
+                }
+            } else {
+                polygonOptions.addHole(it)
+            }
 
-        // TODO: add holes
+            shapeCounter += 1
+        }
 
         return polygonOptions
     }

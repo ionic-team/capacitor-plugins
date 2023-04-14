@@ -425,15 +425,29 @@ public class Map {
         newPolygon.zIndex = polygon.zIndex
         newPolygon.userData = polygon.tag
         
-        // adding outer shape
-        if let outer = polygon.shapes.first {
-            let outerShape = GMSMutablePath()
-            outer.forEach { coord in
-                outerShape.add(CLLocationCoordinate2D(latitude: coord.lat, longitude: coord.lng))
+        var shapeIndex = 0
+        let outerShape = GMSMutablePath()
+        var holes: [GMSMutablePath] = []
+        
+        polygon.shapes.forEach { shape in
+            if (shapeIndex == 0) {
+                shape.forEach { coord in
+                    outerShape.add(CLLocationCoordinate2D(latitude: coord.lat, longitude: coord.lng))
+                }
+            } else {
+                let holeShape = GMSMutablePath()
+                shape.forEach { coord in
+                    holeShape.add(CLLocationCoordinate2D(latitude: coord.lat, longitude: coord.lng))
+                }
+                
+                holes.append(holeShape)
             }
             
-            newPolygon.path = outerShape
+            shapeIndex = shapeIndex+1
         }
+        
+        newPolygon.path = outerShape
+        newPolygon.holes = holes
         
         return newPolygon
     }
