@@ -66,7 +66,7 @@ export interface Point {
 }
 
 export interface Polygon extends google.maps.PolygonOptions {
-
+  tag?: string;
 }
 
 /**
@@ -335,6 +335,12 @@ export interface MapClickCallbackData {
 
 export interface MarkerClickCallbackData extends MarkerCallbackData {
   mapId: string;
+}
+
+export interface PolygonClickCallbackData {
+  mapId: string;
+  polygonId: string;
+  tag?: string;
 }
 
 export interface MyLocationButtonClickCallbackData {

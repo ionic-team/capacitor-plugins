@@ -292,7 +292,7 @@ export class CapacitorGoogleMapsWeb
 
       const id = '' + this.currPolygonId;
       this.maps[args.id].polygons[id] = polygon;
-      // TODO: add event listener
+      this.setPolygonListeners(args.id, id, polygon);
 
       polygonIds.push(id);
       this.currPolygonId++;
@@ -392,6 +392,20 @@ export class CapacitorGoogleMapsWeb
       new google.maps.LatLng(_args.southwest.lat, _args.southwest.lng),
       new google.maps.LatLng(_args.northeast.lat, _args.northeast.lng),
     );
+  }
+
+  async setPolygonListeners(
+    mapId: string,
+    polygonId: string,
+    polygon: google.maps.Polygon,
+  ): Promise<void> {
+    polygon.addListener("click", () => {
+      this.notifyListeners("onPolygonClick", {
+        mapId: mapId,
+        polygonId: polygonId,
+        tag: polygon.get("tag")
+      })
+    })
   }
 
   async setMarkerListeners(

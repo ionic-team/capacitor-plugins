@@ -276,6 +276,8 @@ export default MyMap;
 * [`addMarkers(...)`](#addmarkers)
 * [`removeMarker(...)`](#removemarker)
 * [`removeMarkers(...)`](#removemarkers)
+* [`addPolygons(...)`](#addpolygons)
+* [`removePolygons(...)`](#removepolygons)
 * [`destroy()`](#destroy)
 * [`setCamera(...)`](#setcamera)
 * [`getMapType()`](#getmaptype)
@@ -293,6 +295,7 @@ export default MyMap;
 * [`setOnInfoWindowClickListener(...)`](#setoninfowindowclicklistener)
 * [`setOnMapClickListener(...)`](#setonmapclicklistener)
 * [`setOnMarkerClickListener(...)`](#setonmarkerclicklistener)
+* [`setOnPolygonClickListener(...)`](#setonpolygonclicklistener)
 * [`setOnMarkerDragStartListener(...)`](#setonmarkerdragstartlistener)
 * [`setOnMarkerDragListener(...)`](#setonmarkerdraglistener)
 * [`setOnMarkerDragEndListener(...)`](#setonmarkerdragendlistener)
@@ -392,6 +395,34 @@ removeMarker(id: string) => Promise<void>
 
 ```typescript
 removeMarkers(ids: string[]) => Promise<void>
+```
+
+| Param     | Type                  |
+| --------- | --------------------- |
+| **`ids`** | <code>string[]</code> |
+
+--------------------
+
+
+### addPolygons(...)
+
+```typescript
+addPolygons(polygons: Polygon[]) => Promise<string[]>
+```
+
+| Param          | Type                   |
+| -------------- | ---------------------- |
+| **`polygons`** | <code>Polygon[]</code> |
+
+**Returns:** <code>Promise&lt;string[]&gt;</code>
+
+--------------------
+
+
+### removePolygons(...)
+
+```typescript
+removePolygons(ids: string[]) => Promise<void>
 ```
 
 | Param     | Type                  |
@@ -618,6 +649,19 @@ setOnMarkerClickListener(callback?: MapListenerCallback<MarkerClickCallbackData>
 --------------------
 
 
+### setOnPolygonClickListener(...)
+
+```typescript
+setOnPolygonClickListener(callback?: MapListenerCallback<PolygonClickCallbackData> | undefined) => Promise<void>
+```
+
+| Param          | Type                                                                                                                                        |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`callback`** | <code><a href="#maplistenercallback">MapListenerCallback</a>&lt;<a href="#polygonclickcallbackdata">PolygonClickCallbackData</a>&gt;</code> |
+
+--------------------
+
+
 ### setOnMarkerDragStartListener(...)
 
 ```typescript
@@ -774,6 +818,17 @@ https://tools.ietf.org/html/rfc7946#section-3.1.2
 | **`coordinates`** | <code><a href="#position">Position</a></code> |                                       |
 
 
+#### Polygon
+
+<a href="#polygon">Polygon</a> geometry object.
+https://tools.ietf.org/html/rfc7946#section-3.1.6
+
+| Prop              | Type                                          | Description                           |
+| ----------------- | --------------------------------------------- | ------------------------------------- |
+| **`type`**        | <code>'<a href="#polygon">Polygon</a>'</code> | Specifies the type of GeoJSON object. |
+| **`coordinates`** | <code>Position[][]</code>                     |                                       |
+
+
 #### CameraConfig
 
 Configuration properties for a Google Map Camera
@@ -857,6 +912,15 @@ Controls for setting padding on the 'visible' region of the view.
 | **`mapId`**     | <code>string</code> |
 | **`latitude`**  | <code>number</code> |
 | **`longitude`** | <code>number</code> |
+
+
+#### PolygonClickCallbackData
+
+| Prop            | Type                |
+| --------------- | ------------------- |
+| **`mapId`**     | <code>string</code> |
+| **`polygonId`** | <code>string</code> |
+| **`tag`**       | <code>string</code> |
 
 
 #### MyLocationButtonClickCallbackData

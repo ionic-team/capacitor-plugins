@@ -7,6 +7,7 @@ import AddAndRemoveMarkers from './pages/Markers/AddAndRemoveMarkers';
 import MarkerCustomizations from './pages/Markers/MarkerCustomizations';
 import MultipleMarkers from './pages/Markers/MultipleMarkers';
 import SimpleScrollingPage from './pages/Scrolling/SimpleScrolling';
+import PolygonMapPage from './pages/Drawing/Polygons';
 
 export type RouteDescription = {
   title: string;
@@ -78,6 +79,18 @@ const routesList: RouteGroup[] = [
         iosIcon: triangleOutline,
         mdIcon: triangleSharp,
         component: MarkerCustomizations,
+      }
+    ]
+  },
+  {
+    groupName: "Drawing",
+    pages: [
+      {
+        title: "Polygons",
+        url: "/drawing/polygons",
+        iosIcon: triangleOutline,
+        mdIcon: triangleSharp,
+        component: PolygonMapPage,
       }
     ]
   }

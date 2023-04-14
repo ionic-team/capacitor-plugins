@@ -14,6 +14,7 @@ import type {
   MarkerClickCallbackData,
   MyLocationButtonClickCallbackData,
   Polygon,
+  PolygonClickCallbackData,
 } from './definitions';
 import { LatLngBounds, MapType } from './definitions';
 import type { CreateMapArgs } from './implementation';
@@ -73,6 +74,9 @@ export interface GoogleMapInterface {
   setOnMarkerClickListener(
     callback?: MapListenerCallback<MarkerClickCallbackData>,
   ): Promise<void>;
+  setOnPolygonClickListener(
+    callback?: MapListenerCallback<PolygonClickCallbackData>,
+  ): Promise<void>;
   setOnMarkerDragStartListener(
     callback?: MapListenerCallback<MarkerClickCallbackData>,
   ): Promise<void>;
@@ -122,6 +126,7 @@ export class GoogleMap {
   private onInfoWindowClickListener?: PluginListenerHandle;
   private onMapClickListener?: PluginListenerHandle;
   private onMarkerClickListener?: PluginListenerHandle;
+  private onPolygonClickListener?: PluginListenerHandle;
   private onMarkerDragStartListener?: PluginListenerHandle;
   private onMarkerDragListener?: PluginListenerHandle;
   private onMarkerDragEndListener?: PluginListenerHandle;
@@ -298,7 +303,7 @@ export class GoogleMap {
     const res = await CapacitorGoogleMaps.addPolygons({
       id: this.id,
       polygons,
-    })
+    });
 
     return res.ids;
   }
@@ -307,7 +312,7 @@ export class GoogleMap {
     return CapacitorGoogleMaps.removePolygons({
       id: this.id,
       polygonIds: ids,
-    })
+    });
   }
 
   /**
@@ -669,6 +674,23 @@ export class GoogleMap {
       );
     } else {
       this.onMapClickListener = undefined;
+    }
+  }
+
+  async setOnPolygonClickListener(
+    callback?: MapListenerCallback<PolygonClickCallbackData>,
+  ): Promise<void> {
+    if (this.onPolygonClickListener) {
+      this.onPolygonClickListener.remove();
+    }
+
+    if (callback) {
+      this.onPolygonClickListener = await CapacitorGoogleMaps.addListener(
+        'onPolygonClick',
+        this.generateCallback(callback),
+      );
+    } else {
+      this.onPolygonClickListener = undefined;
     }
   }
 
