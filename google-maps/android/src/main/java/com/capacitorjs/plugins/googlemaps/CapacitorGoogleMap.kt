@@ -40,11 +40,13 @@ class CapacitorGoogleMap(
         OnMarkerClickListener,
         OnMarkerDragListener,
         OnInfoWindowClickListener,
-        OnPolygonClickListener {
+        OnPolygonClickListener,
+        OnCircleClickListener {
     private var mapView: MapView
     private var googleMap: GoogleMap? = null
     private val markers = HashMap<String, CapacitorGoogleMapMarker>()
     private val polygons = HashMap<String, CapacitorGoogleMapsPolygon>()
+    private val circles = HashMap<String, CapacitorGoogleMapsCircle>()
     private val markerIcons = HashMap<String, Bitmap>()
     private var clusterManager: ClusterManager<CapacitorGoogleMapMarker>? = null
 
@@ -260,6 +262,33 @@ class CapacitorGoogleMap(
         }
     }
 
+    fun addCircles(newCircles: List<CapacitorGoogleMapsCircle>,callback: (ids: Result<List<String>>) -> Unit) {
+        try {
+            googleMap ?: throw GoogleMapNotAvailable()
+            val circleIds: MutableList<String> = mutableListOf()
+
+            CoroutineScope(Dispatchers.Main).launch {
+                newCircles.forEach {
+                    var circleOptions: Deferred<CircleOptions> = CoroutineScope(Dispatchers.IO).async {
+                        this@CapacitorGoogleMap.buildCircle(it)
+                    }
+
+                    val googleMapsCircle = googleMap?.addCircle(circleOptions.await())
+                    googleMapsCircle?.tag = it.tag
+
+                    it.googleMapsCircle = googleMapsCircle
+
+                    circles[googleMapsCircle!!.id] = it
+                    circleIds.add(googleMapsCircle.id)
+                }
+
+                callback(Result.success(circleIds))
+            }
+        } catch (e: GoogleMapsError) {
+            callback(Result.failure(e))
+        }
+    }
+
     private fun setClusterManagerRenderer(minClusterSize: Int?) {
         clusterManager?.renderer =
             object :
@@ -405,6 +434,26 @@ class CapacitorGoogleMap(
                 if (clusterManager != null) {
                     clusterManager?.removeItems(deletedMarkers)
                     clusterManager?.cluster()
+                }
+
+                callback(null)
+            }
+        } catch (e: GoogleMapsError) {
+            callback(e)
+        }
+    }
+
+    fun removeCircles(ids: List<String>, callback: (error: GoogleMapsError?) -> Unit) {
+        try {
+            googleMap ?: throw GoogleMapNotAvailable()
+
+            CoroutineScope(Dispatchers.Main).launch {
+                ids.forEach {
+                    val circle = circles[it]
+                    if (circle != null) {
+                        circle.googleMapsCircle?.remove()
+                        markers.remove(it)
+                    }
                 }
 
                 callback(null)
@@ -599,6 +648,19 @@ class CapacitorGoogleMap(
         )
     }
 
+    private fun buildCircle(circle: CapacitorGoogleMapsCircle): CircleOptions {
+        val circleOptions = CircleOptions()
+        circleOptions.fillColor(circle.fillColor)
+        circleOptions.strokeColor(circle.strokeColor)
+        circleOptions.strokeWidth(circle.strokeWidth)
+        circleOptions.zIndex(circle.zIndex)
+        circleOptions.clickable(circle.clickable)
+        circleOptions.radius(circle.radius.toDouble())
+        circleOptions.center(circle.center)
+
+        return circleOptions
+    }
+
     private fun buildPolygon(polygon: CapacitorGoogleMapsPolygon): PolygonOptions {
         val polygonOptions = PolygonOptions()
         polygonOptions.fillColor(polygon.fillColor)
@@ -730,6 +792,7 @@ class CapacitorGoogleMap(
             this@CapacitorGoogleMap.googleMap?.setOnCameraMoveListener(this@CapacitorGoogleMap)
             this@CapacitorGoogleMap.googleMap?.setOnMarkerClickListener(this@CapacitorGoogleMap)
             this@CapacitorGoogleMap.googleMap?.setOnPolygonClickListener(this@CapacitorGoogleMap)
+            this@CapacitorGoogleMap.googleMap?.setOnCircleClickListener(this@CapacitorGoogleMap)
             this@CapacitorGoogleMap.googleMap?.setOnMarkerDragListener(this@CapacitorGoogleMap)
             this@CapacitorGoogleMap.googleMap?.setOnMapClickListener(this@CapacitorGoogleMap)
             this@CapacitorGoogleMap.googleMap?.setOnMyLocationButtonClickListener(
@@ -907,6 +970,18 @@ class CapacitorGoogleMap(
         data.put("polygonId", polygon.id)
         data.put("tag", polygon.tag)
         delegate.notify("onPolygonClick", data)
+    }
+
+    override fun onCircleClick(circle: Circle) {
+        val data = JSObject()
+        data.put("mapId", this@CapacitorGoogleMap.id)
+        data.put("circleId", circle.id)
+        data.put("tag", circle.tag)
+        data.put("latitude", circle.center.latitude)
+        data.put("longitude", circle.center.longitude)
+        data.put("radius", circle.radius)
+
+        delegate.notify("onCircleClick", data)
     }
 }
 

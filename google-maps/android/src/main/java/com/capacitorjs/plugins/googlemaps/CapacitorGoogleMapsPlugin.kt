@@ -316,6 +316,87 @@ class CapacitorGoogleMapsPlugin : Plugin() {
     }
 
     @PluginMethod
+    fun addCircles(call: PluginCall) {
+        try {
+            val id = call.getString("id")
+            id ?: throw InvalidMapIdError()
+
+            val circlesObjectArray = call.getArray("circles", null)
+            circlesObjectArray ?: throw InvalidArgumentsError("circles array is missing")
+
+            if (circlesObjectArray.length() == 0) {
+                throw InvalidArgumentsError("circles array requires at least one circle")
+            }
+
+            val map = maps[id]
+            map ?: throw MapNotFoundError()
+
+            val circles: MutableList<CapacitorGoogleMapsCircle> = mutableListOf()
+
+            for (i in 0 until circlesObjectArray.length()) {
+                val circleObj = circlesObjectArray.getJSONObject(i)
+                val circle = CapacitorGoogleMapsCircle(circleObj)
+
+                circles.add(circle)
+            }
+
+            map.addCircles(circles) { result ->
+                val ids = result.getOrThrow()
+
+                val jsonIDs = JSONArray()
+                ids.forEach { jsonIDs.put(it) }
+
+                val res = JSObject()
+                res.put("ids", jsonIDs)
+                call.resolve(res)
+            }
+
+        } catch (e: GoogleMapsError) {
+            handleError(call, e)
+        } catch (e: Exception) {
+            handleError(call, e)
+        }
+    }
+
+    @PluginMethod
+
+    fun removeCircles(call: PluginCall) {
+        try {
+            val id = call.getString("id")
+            id ?: throw InvalidMapIdError()
+
+            val circleIdsArray = call.getArray("circleIds")
+            circleIdsArray ?: throw InvalidArgumentsError("circleIds are invalid or missing")
+
+            if (circleIdsArray.length() == 0) {
+                throw InvalidArgumentsError("circleIds requires at least one circle id")
+            }
+
+            val map = maps[id]
+            map ?: throw MapNotFoundError()
+
+            val circleIds: MutableList<String> = mutableListOf()
+
+            for (i in 0 until circleIdsArray.length()) {
+                val circleId = circleIdsArray.getString(i)
+                circleIds.add(circleId)
+            }
+
+            map.removeCircles(circleIds) { err ->
+                if (err != null) {
+                    throw err
+                }
+
+                call.resolve()
+            }
+        } catch (e: GoogleMapsError) {
+            handleError(call, e)
+        } catch (e: Exception) {
+            handleError(call, e)
+        }
+    }
+
+    @PluginMethod
     fun enableClustering(call: PluginCall) {
         try {
             val id = call.getString("id")
