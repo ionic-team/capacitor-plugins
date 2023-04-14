@@ -246,21 +246,21 @@ public class Map {
 
         return polygonHashes
     }
-    
+
     func addCricles(circles: [Circle]) throws -> [Int] {
         var circleHasnes: [Int] = []
-        
+
         DispatchQueue.main.sync {
             circles.forEach { circle in
                 let newCircle = self.buildCircle(circle: circle)
                 newCircle.map = self.mapViewController.GMapView
-                
+
                 self.circles[newCircle.hash.hashValue] = newCircle
-                
+
                 circleHasnes.append(newCircle.hash.hashValue)
             }
         }
-        
+
         return circleHasnes
     }
 
@@ -325,7 +325,7 @@ public class Map {
             }
         }
     }
-    
+
     func removeCricles(ids: [Int]) throws {
         DispatchQueue.main.sync {
             ids.forEach { id in
@@ -442,7 +442,7 @@ public class Map {
 
         return intersections
     }
-    
+
     private func buildCircle(circle: Circle) -> GMSCircle {
         let newCircle = GMSCircle()
         newCircle.title = circle.title
@@ -454,7 +454,7 @@ public class Map {
         newCircle.isTappable = circle.tappable ?? false
         newCircle.zIndex = circle.zIndex
         newCircle.userData = circle.tag
-        
+
         return newCircle
     }
 

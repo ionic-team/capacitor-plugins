@@ -335,7 +335,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
             handleError(call, error: error)
         }
     }
-    
+
     @objc func addCircles(_ call: CAPPluginCall) {
         do {
             guard let id = call.getString("id") else {
@@ -370,7 +370,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
             handleError(call, error: error)
         }
     }
-    
+
     @objc func removeCircles(_ call: CAPPluginCall) {
         do {
             guard let id = call.getString("id") else {
@@ -831,7 +831,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
                 "tag": polygon.userData as? String
             ])
         }
-        
+
         if let circle = overlay as? GMSCircle {
             self.notifyListeners("onCircleClick", data: [
                 "mapId": self.findMapIdByMapView(mapView),
