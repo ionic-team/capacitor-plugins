@@ -758,7 +758,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
         if let polyline = overlay as? GMSPolyline {
             self.notifyListeners("onPolylineClick", data: [
                 "mapId": self.findMapIdByMapView(mapView),
-                "polylineId": overlay.hash.hashValue,
+                "polylineId": String(overlay.hash.hashValue),
                 "tag": polyline.userData as? String
             ])
         }
