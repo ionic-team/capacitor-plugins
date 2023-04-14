@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-namespace */
-import { MapType, Marker, Polygon } from './definitions';
+import { MapType, Marker, Polygon, Circle } from './definitions';
 import { GoogleMap } from './map';
 
-export { GoogleMap, MapType, Marker, Polygon };
+export { GoogleMap, MapType, Marker, Polygon, Circle };
 
 declare global {
   export namespace JSX {

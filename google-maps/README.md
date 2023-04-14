@@ -278,6 +278,8 @@ export default MyMap;
 * [`removeMarkers(...)`](#removemarkers)
 * [`addPolygons(...)`](#addpolygons)
 * [`removePolygons(...)`](#removepolygons)
+* [`addCircles(...)`](#addcircles)
+* [`removeCircles(...)`](#removecircles)
 * [`destroy()`](#destroy)
 * [`setCamera(...)`](#setcamera)
 * [`getMapType()`](#getmaptype)
@@ -296,6 +298,7 @@ export default MyMap;
 * [`setOnMapClickListener(...)`](#setonmapclicklistener)
 * [`setOnMarkerClickListener(...)`](#setonmarkerclicklistener)
 * [`setOnPolygonClickListener(...)`](#setonpolygonclicklistener)
+* [`setOnCircleClickListener(...)`](#setoncircleclicklistener)
 * [`setOnMarkerDragStartListener(...)`](#setonmarkerdragstartlistener)
 * [`setOnMarkerDragListener(...)`](#setonmarkerdraglistener)
 * [`setOnMarkerDragEndListener(...)`](#setonmarkerdragendlistener)
@@ -423,6 +426,34 @@ addPolygons(polygons: Polygon[]) => Promise<string[]>
 
 ```typescript
 removePolygons(ids: string[]) => Promise<void>
+```
+
+| Param     | Type                  |
+| --------- | --------------------- |
+| **`ids`** | <code>string[]</code> |
+
+--------------------
+
+
+### addCircles(...)
+
+```typescript
+addCircles(circles: Circle[]) => Promise<string[]>
+```
+
+| Param         | Type                  |
+| ------------- | --------------------- |
+| **`circles`** | <code>Circle[]</code> |
+
+**Returns:** <code>Promise&lt;string[]&gt;</code>
+
+--------------------
+
+
+### removeCircles(...)
+
+```typescript
+removeCircles(ids: string[]) => Promise<void>
 ```
 
 | Param     | Type                  |
@@ -662,6 +693,19 @@ setOnPolygonClickListener(callback?: MapListenerCallback<PolygonClickCallbackDat
 --------------------
 
 
+### setOnCircleClickListener(...)
+
+```typescript
+setOnCircleClickListener(callback?: MapListenerCallback<CircleClickCallbackData> | undefined) => Promise<void>
+```
+
+| Param          | Type                                                                                                                                      |
+| -------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| **`callback`** | <code><a href="#maplistenercallback">MapListenerCallback</a>&lt;<a href="#circleclickcallbackdata">CircleClickCallbackData</a>&gt;</code> |
+
+--------------------
+
+
 ### setOnMarkerDragStartListener(...)
 
 ```typescript
@@ -829,6 +873,14 @@ https://tools.ietf.org/html/rfc7946#section-3.1.6
 | **`coordinates`** | <code>Position[][]</code>                     |                                       |
 
 
+#### Circle
+
+| Prop        | Type                | Description                                                                                                                                                                            |
+| ----------- | ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`title`** | <code>string</code> | Title, a short description of the overlay. Some overlays, such as markers, will display the title on the map. The title is also the default accessibility text. Only available on iOS. |
+| **`tag`**   | <code>string</code> |                                                                                                                                                                                        |
+
+
 #### CameraConfig
 
 Configuration properties for a Google Map Camera
@@ -921,6 +973,15 @@ Controls for setting padding on the 'visible' region of the view.
 | **`mapId`**     | <code>string</code> |
 | **`polygonId`** | <code>string</code> |
 | **`tag`**       | <code>string</code> |
+
+
+#### CircleClickCallbackData
+
+| Prop           | Type                |
+| -------------- | ------------------- |
+| **`mapId`**    | <code>string</code> |
+| **`circleId`** | <code>string</code> |
+| **`tag`**      | <code>string</code> |
 
 
 #### MyLocationButtonClickCallbackData

@@ -87,6 +87,16 @@ export interface Polygon extends google.maps.PolygonOptions {
   tag?: string;
 }
 
+export interface Circle extends google.maps.CircleOptions {
+  /**
+   * Title, a short description of the overlay. Some overlays, such as markers, will display the title on the map. The title is also the default accessibility text.
+   *
+   * Only available on iOS.
+   */
+  title?: string;
+  tag?: string;
+}
+
 /**
  * For web, all the javascript Google Maps options are available as
  * GoogleMapConfig extends google.maps.MapOptions.
@@ -358,6 +368,12 @@ export interface MarkerClickCallbackData extends MarkerCallbackData {
 export interface PolygonClickCallbackData {
   mapId: string;
   polygonId: string;
+  tag?: string;
+}
+
+export interface CircleClickCallbackData {
+  mapId: string;
+  circleId: string;
   tag?: string;
 }
 

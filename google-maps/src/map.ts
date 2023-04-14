@@ -15,6 +15,8 @@ import type {
   MyLocationButtonClickCallbackData,
   Polygon,
   PolygonClickCallbackData,
+  Circle,
+  CircleClickCallbackData,
 } from './definitions';
 import { LatLngBounds, MapType } from './definitions';
 import type { CreateMapArgs } from './implementation';
@@ -38,6 +40,8 @@ export interface GoogleMapInterface {
   removeMarkers(ids: string[]): Promise<void>;
   addPolygons(polygons: Polygon[]): Promise<string[]>;
   removePolygons(ids: string[]): Promise<void>;
+  addCircles(circles: Circle[]): Promise<string[]>;
+  removeCircles(ids: string[]): Promise<void>;
   destroy(): Promise<void>;
   setCamera(config: CameraConfig): Promise<void>;
   /**
@@ -76,6 +80,9 @@ export interface GoogleMapInterface {
   ): Promise<void>;
   setOnPolygonClickListener(
     callback?: MapListenerCallback<PolygonClickCallbackData>,
+  ): Promise<void>;
+  setOnCircleClickListener(
+    callback?: MapListenerCallback<CircleClickCallbackData>,
   ): Promise<void>;
   setOnMarkerDragStartListener(
     callback?: MapListenerCallback<MarkerClickCallbackData>,
@@ -127,6 +134,7 @@ export class GoogleMap {
   private onMapClickListener?: PluginListenerHandle;
   private onMarkerClickListener?: PluginListenerHandle;
   private onPolygonClickListener?: PluginListenerHandle;
+  private onCircleClickListener?: PluginListenerHandle;
   private onMarkerDragStartListener?: PluginListenerHandle;
   private onMarkerDragListener?: PluginListenerHandle;
   private onMarkerDragEndListener?: PluginListenerHandle;
@@ -312,6 +320,22 @@ export class GoogleMap {
     return CapacitorGoogleMaps.removePolygons({
       id: this.id,
       polygonIds: ids,
+    });
+  }
+
+  async addCircles(circles: Circle[]): Promise<string[]> {
+    const res = await CapacitorGoogleMaps.addCircles({
+      id: this.id,
+      circles,
+    });
+
+    return res.ids;
+  }
+
+  async removeCircles(ids: string[]): Promise<void> {
+    return CapacitorGoogleMaps.removeCircles({
+      id: this.id,
+      circleIds: ids,
     });
   }
 
@@ -701,6 +725,27 @@ export class GoogleMap {
   }
 
   /**
+   * Set the event listener on the map for 'onCircleClick' events.
+   *
+   * @param callback
+   * @returns
+   */
+  async setOnCircleClickListener(
+    callback?: MapListenerCallback<CircleClickCallbackData>,
+  ): Promise<void> {
+    if (this.onCircleClickListener) [this.onCircleClickListener.remove()];
+
+    if (callback) {
+      this.onCircleClickListener = await CapacitorGoogleMaps.addListener(
+        'onCircleClick',
+        this.generateCallback(callback),
+      );
+    } else {
+      this.onCircleClickListener = undefined;
+    }
+  }
+
+  /**
    * Set the event listener on the map for 'onMarkerClick' events.
    *
    * @param callback
@@ -882,6 +927,11 @@ export class GoogleMap {
     if (this.onMarkerClickListener) {
       this.onMarkerClickListener.remove();
       this.onMarkerClickListener = undefined;
+    }
+
+    if (this.onCircleClickListener) {
+      this.onCircleClickListener.remove();
+      this.onCircleClickListener = undefined;
     }
 
     if (this.onMyLocationButtonClickListener) {
