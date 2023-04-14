@@ -67,6 +67,7 @@ public class Map {
     var mapViewController: GMViewController
     var targetViewController: UIView?
     var markers = [Int: GMSMarker]()
+    var polygons = [Int: GMSPolygon]()
     var markerIcons = [String: UIImage]()
 
     // swiftlint:disable weak_delegate
@@ -227,6 +228,23 @@ public class Map {
 
         return markerHashes
     }
+    
+    func addPolygons(polygons: [Polygon]) throws -> [Int] {
+        var polygonHashes: [Int] = []
+        
+        DispatchQueue.main.sync {
+            polygons.forEach { polygon in
+                let newPolygon = self.buildPolygon(polygon: polygon)
+                newPolygon.map = self.mapViewController.GMapView
+                
+                self.polygons[newPolygon.hash.hashValue] = newPolygon
+                
+                polygonHashes.append(newPolygon.hash.hashValue)
+            }
+        }
+        
+        return polygonHashes
+    }
 
     func enableClustering(_ minClusterSize: Int?) {
         if !self.mapViewController.clusteringEnabled {
@@ -276,6 +294,17 @@ public class Map {
             }
         } else {
             throw GoogleMapErrors.markerNotFound
+        }
+    }
+    
+    func removePolygons(ids: [Int]) throws {
+        DispatchQueue.main.sync {
+            ids.forEach { id in
+                if let polygon = self.polygons[id] {
+                    polygon.map = nil
+                    self.polygons.removeValue(forKey: id)
+                }
+            }
         }
     }
 
@@ -383,6 +412,30 @@ public class Map {
         }
 
         return intersections
+    }
+    
+    private func buildPolygon(polygon: Polygon) -> GMSPolygon {
+        let newPolygon = GMSPolygon()
+        newPolygon.title = polygon.title
+        newPolygon.strokeColor = polygon.strokeColor
+        newPolygon.strokeWidth = polygon.strokeWidth
+        newPolygon.fillColor = polygon.fillColor
+        newPolygon.isTappable = polygon.tappable ?? false
+        newPolygon.geodesic = polygon.geodesic ?? false
+        newPolygon.zIndex = polygon.zIndex
+        newPolygon.userData = polygon.tag
+        
+        // adding outer shape
+        if let outer = polygon.shapes.first {
+            let outerShape = GMSMutablePath()
+            outer.forEach { coord in
+                outerShape.add(CLLocationCoordinate2D(latitude: coord.lat, longitude: coord.lng))
+            }
+            
+            newPolygon.path = outerShape
+        }
+        
+        return newPolygon
     }
 
     private func buildMarker(marker: Marker) -> GMSMarker {

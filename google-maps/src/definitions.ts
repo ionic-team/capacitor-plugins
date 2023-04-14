@@ -73,6 +73,7 @@ export interface Polygon extends google.maps.PolygonOptions {
   fillOpacity?: number;
   geodesic?: boolean;
   clickable?: boolean;
+  title?: string;
   tag?: string;
 }
 
