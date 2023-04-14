@@ -647,7 +647,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
 
             for item in cluster.items {
                 items.append([
-                    "markerId": item.hash.hashValue,
+                    "markerId": String(item.hash.hashValue),
                     "latitude": item.position.latitude,
                     "longitude": item.position.longitude,
                     "title": item.title ?? "",
@@ -665,7 +665,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
         } else {
             self.notifyListeners("onMarkerClick", data: [
                 "mapId": self.findMapIdByMapView(mapView),
-                "markerId": marker.hash.hashValue,
+                "markerId": String(marker.hash.hashValue),
                 "latitude": marker.position.latitude,
                 "longitude": marker.position.longitude,
                 "title": marker.title ?? "",
@@ -679,7 +679,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
     public func mapView(_ mapView: GMSMapView, didBeginDragging marker: GMSMarker) {
         self.notifyListeners("onMarkerDragStart", data: [
             "mapId": self.findMapIdByMapView(mapView),
-            "markerId": marker.hash.hashValue,
+            "markerId": String(marker.hash.hashValue),
             "latitude": marker.position.latitude,
             "longitude": marker.position.longitude,
             "title": marker.title ?? "",
@@ -691,7 +691,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
     public func mapView(_ mapView: GMSMapView, didDrag marker: GMSMarker) {
         self.notifyListeners("onMarkerDrag", data: [
             "mapId": self.findMapIdByMapView(mapView),
-            "markerId": marker.hash.hashValue,
+            "markerId": String(marker.hash.hashValue),
             "latitude": marker.position.latitude,
             "longitude": marker.position.longitude,
             "title": marker.title ?? "",
@@ -703,7 +703,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
     public func mapView(_ mapView: GMSMapView, didEndDragging marker: GMSMarker) {
         self.notifyListeners("onMarkerDragEnd", data: [
             "mapId": self.findMapIdByMapView(mapView),
-            "markerId": marker.hash.hashValue,
+            "markerId": String(marker.hash.hashValue),
             "latitude": marker.position.latitude,
             "longitude": marker.position.longitude,
             "title": marker.title ?? "",
@@ -718,7 +718,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
 
             for item in cluster.items {
                 items.append([
-                    "markerId": item.hash.hashValue,
+                    "markerId": String(item.hash.hashValue),
                     "latitude": item.position.latitude,
                     "longitude": item.position.longitude,
                     "title": item.title ?? "",
@@ -736,7 +736,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
         } else {
             self.notifyListeners("onInfoWindowClick", data: [
                 "mapId": self.findMapIdByMapView(mapView),
-                "markerId": marker.hash.hashValue,
+                "markerId": String(marker.hash.hashValue),
                 "latitude": marker.position.latitude,
                 "longitude": marker.position.longitude,
                 "title": marker.title ?? "",
