@@ -65,6 +65,10 @@ export interface Point {
   y: number;
 }
 
+export interface Polygon extends google.maps.PolygonOptions {
+
+}
+
 /**
  * For web, all the javascript Google Maps options are available as
  * GoogleMapConfig extends google.maps.MapOptions.

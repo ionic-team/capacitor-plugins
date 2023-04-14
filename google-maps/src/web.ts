@@ -29,6 +29,8 @@ import type {
   MapBoundsContainsArgs,
   EnableClusteringArgs,
   MapBoundsExtendArgs,
+  AddPolygonsArgs,
+  RemovePolygonsArgs,
 } from './implementation';
 
 export class CapacitorGoogleMapsWeb
@@ -43,11 +45,15 @@ export class CapacitorGoogleMapsWeb
       markers: {
         [id: string]: google.maps.Marker;
       };
+      polygons: {
+        [id: string]: google.maps.Polygon;
+      };
       markerClusterer?: MarkerClusterer;
       trafficLayer?: google.maps.TrafficLayer;
     };
   } = {};
   private currMarkerId = 0;
+  private currPolygonId = 0;
 
   private onClusterClickHandler: onClusterClickHandler = (
     _: google.maps.MapMouseEvent,
@@ -276,6 +282,34 @@ export class CapacitorGoogleMapsWeb
     delete this.maps[_args.id].markers[_args.markerId];
   }
 
+  async addPolygons(args: AddPolygonsArgs): Promise<{ ids: string[] }> {
+    const polygonIds: string[] = [];
+    const map = this.maps[args.id];
+
+    for (const polygonArgs of args.polygons) {
+      const polygon = new google.maps.Polygon(polygonArgs);
+      polygon.setMap(map.map);
+
+      const id = '' + this.currPolygonId;
+      this.maps[args.id].polygons[id] = polygon;
+      // TODO: add event listener
+
+      polygonIds.push(id);
+      this.currPolygonId++;
+    }
+
+    return { ids: polygonIds };
+  }
+
+  async removePolygons(args: RemovePolygonsArgs): Promise<void> {
+    const map = this.maps[args.id];
+
+    for (const id of args.polygonIds) {
+      map.polygons[id].setMap(null);
+      delete map.polygons[id];
+    }
+  }
+
   async enableClustering(_args: EnableClusteringArgs): Promise<void> {
     const markers: google.maps.Marker[] = [];
 
@@ -309,6 +343,7 @@ export class CapacitorGoogleMapsWeb
       map: new window.google.maps.Map(_args.element, { ..._args.config }),
       element: _args.element,
       markers: {},
+      polygons: {},
     };
     this.setMapListeners(_args.id);
   }

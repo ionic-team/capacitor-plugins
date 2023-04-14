@@ -13,6 +13,7 @@ import type {
   MapClickCallbackData,
   MarkerClickCallbackData,
   MyLocationButtonClickCallbackData,
+  Polygon,
 } from './definitions';
 import { LatLngBounds, MapType } from './definitions';
 import type { CreateMapArgs } from './implementation';
@@ -34,6 +35,8 @@ export interface GoogleMapInterface {
   addMarkers(markers: Marker[]): Promise<string[]>;
   removeMarker(id: string): Promise<void>;
   removeMarkers(ids: string[]): Promise<void>;
+  addPolygons(polygons: Polygon[]): Promise<string[]>;
+  removePolygons(ids: string[]): Promise<void>;
   destroy(): Promise<void>;
   setCamera(config: CameraConfig): Promise<void>;
   /**
@@ -289,6 +292,22 @@ export class GoogleMap {
       id: this.id,
       markerIds: ids,
     });
+  }
+
+  async addPolygons(polygons: Polygon[]): Promise<string[]> {
+    const res = await CapacitorGoogleMaps.addPolygons({
+      id: this.id,
+      polygons,
+    })
+
+    return res.ids;
+  }
+
+  async removePolygons(ids: string[]): Promise<void> {
+    return CapacitorGoogleMaps.removePolygons({
+      id: this.id,
+      polygonIds: ids,
+    })
   }
 
   /**
