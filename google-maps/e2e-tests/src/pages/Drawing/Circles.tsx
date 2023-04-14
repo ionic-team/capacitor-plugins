@@ -96,6 +96,7 @@ const CircleMapPage: React.FC = () => {
             radius: Math.sqrt(citymap[city].population) * 100,
             tag: city,
             title: city,
+            clickable: true,
           });
         }
 

@@ -88,6 +88,12 @@ export interface Polygon extends google.maps.PolygonOptions {
 }
 
 export interface Circle extends google.maps.CircleOptions {
+  fillColor?: string;
+  fillOpacity?: number;
+  strokeColor?: string;
+  strokeWeight?: number;
+  geodesic?: boolean;
+  clickable?: boolean;
   /**
    * Title, a short description of the overlay. Some overlays, such as markers, will display the title on the map. The title is also the default accessibility text.
    *
