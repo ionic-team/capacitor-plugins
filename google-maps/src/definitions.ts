@@ -66,6 +66,13 @@ export interface Point {
 }
 
 export interface Polygon extends google.maps.PolygonOptions {
+  strokeColor?: string;
+  strokeOpacity?: number;
+  strokeWeight?: number;
+  fillColor?: string;
+  fillOpacity?: number;
+  geodesic?: boolean;
+  clickable?: boolean;
   tag?: string;
 }
 
