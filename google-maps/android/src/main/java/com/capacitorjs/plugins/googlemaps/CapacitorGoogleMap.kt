@@ -397,15 +397,11 @@ class CapacitorGoogleMap(
             googleMap ?: throw GoogleMapNotAvailable()
 
             CoroutineScope(Dispatchers.Main).launch {
-                val deletedPolylines: MutableList<CapacitorGoogleMapPolyline> = mutableListOf()
-
                 ids.forEach {
                     val polyline = polylines[it]
                     if (polyline != null) {
                         polyline.googleMapsPolyline?.remove()
                         polylines.remove(it)
-
-                        deletedPolylines.add(polyline)
                     }
                 }
 
