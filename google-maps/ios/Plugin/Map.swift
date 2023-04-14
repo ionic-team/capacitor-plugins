@@ -443,7 +443,7 @@ public class Map {
                 holes.append(holeShape)
             }
 
-            shapeIndex = shapeIndex+1
+            shapeIndex += 1
         }
 
         newPolygon.path = outerShape
