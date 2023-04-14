@@ -58,6 +58,47 @@ const PolygonMapPage: React.FC = () => {
     }
   };
 
+  const createHollowPolygon = async () => {
+    setCommandOutput('');
+
+    try {
+      if (map) {
+        // hollow polygon outer shape
+        const outerCoords = [
+          { lat: 25.774, lng: -80.19 },
+          { lat: 18.466, lng: -66.118 },
+          { lat: 32.321, lng: -64.757 },
+        ];
+
+        // polygon hole shape
+        const innerCoords = [
+          { lat: 28.745, lng: -70.579 },
+          { lat: 29.57, lng: -67.514 },
+          { lat: 27.339, lng: -66.668 },
+        ];
+
+        const createdIds = await map.addPolygons([
+          {
+            paths: [outerCoords, innerCoords],
+            strokeColor: '#FFC107',
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: '#FFC107',
+            fillOpacity: 0.35,
+            tag: 'my_test_hollow_polygon',
+            clickable: true,
+          },
+        ]);
+
+        const newIds = createdIds.concat(ids);
+
+        setIds(newIds);
+      }
+    } catch (err: any) {
+      setCommandOutput(err.message);
+    }
+  };
+
   const createPolygon = async () => {
     setCommandOutput('');
     try {
@@ -77,14 +118,15 @@ const PolygonMapPage: React.FC = () => {
             strokeWeight: 2,
             fillColor: '#FF0000',
             fillOpacity: 0.35,
-            tag: "my_test_polygon",
+            tag: 'my_test_polygon',
             clickable: true,
           },
         ]);
 
-        setIds(createdIds);
+        const newIds = createdIds.concat(ids);
+        setIds(newIds);
 
-        setCommandOutput('Polygon created');
+        setCommandOutput('Polygons created');
       }
     } catch (err: any) {
       setCommandOutput(err.message);
@@ -98,7 +140,7 @@ const PolygonMapPage: React.FC = () => {
         await map.removePolygons(ids);
         setIds([]);
 
-        setCommandOutput('Polygon removed');
+        setCommandOutput('Polygons removed');
       }
     } catch (err: any) {
       setCommandOutput(err.message);
@@ -141,8 +183,12 @@ const PolygonMapPage: React.FC = () => {
           Draw Polygon
         </IonButton>
 
+        <IonButton id="drawHollowPolygonButton" onClick={createHollowPolygon}>
+            Draw Hallow Polygon
+        </IonButton>
+
         <IonButton id="deletePolygonButton" onClick={deletePolygon}>
-          Delete Polygon
+          Delete Polygons
         </IonButton>
       </div>
       <div>
