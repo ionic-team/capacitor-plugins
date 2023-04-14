@@ -266,42 +266,42 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
             handleError(call, error: error)
         }
     }
-    
+
     @objc func addPolygons(_ call: CAPPluginCall) {
         do {
-             guard let id = call.getString("id") else {
-                 throw GoogleMapErrors.invalidMapId
-             }
+            guard let id = call.getString("id") else {
+                throw GoogleMapErrors.invalidMapId
+            }
 
-             guard let shapeObjs = call.getArray("polygons") as? [JSObject] else {
-                 throw GoogleMapErrors.invalidArguments("polygons array is missing")
-             }
+            guard let shapeObjs = call.getArray("polygons") as? [JSObject] else {
+                throw GoogleMapErrors.invalidArguments("polygons array is missing")
+            }
 
-             if shapeObjs.isEmpty {
-                 throw GoogleMapErrors.invalidArguments("polygons requires at least one shape")
-             }
+            if shapeObjs.isEmpty {
+                throw GoogleMapErrors.invalidArguments("polygons requires at least one shape")
+            }
 
-             guard let map = self.maps[id] else {
-                 throw GoogleMapErrors.mapNotFound
-             }
+            guard let map = self.maps[id] else {
+                throw GoogleMapErrors.mapNotFound
+            }
 
-             var shapes: [Polygon] = []
+            var shapes: [Polygon] = []
 
-             try shapeObjs.forEach { shapeObj in
-                 let polygon = try Polygon(fromJSObject: shapeObj)
-                 shapes.append(polygon)
-             }
+            try shapeObjs.forEach { shapeObj in
+                let polygon = try Polygon(fromJSObject: shapeObj)
+                shapes.append(polygon)
+            }
 
-             let ids = try map.addPolygons(polygons: shapes)
+            let ids = try map.addPolygons(polygons: shapes)
 
-             call.resolve(["ids": ids.map({ id in
-                 return String(id)
-             })])
+            call.resolve(["ids": ids.map({ id in
+                return String(id)
+            })])
         } catch {
             handleError(call, error: error)
         }
     }
-    
+
     @objc func removePolygons(_ call: CAPPluginCall) {
         do {
             guard let id = call.getString("id") else {
@@ -317,11 +317,11 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
             }
 
             let ids: [Int] = try polygonIdsStrings.map { idString in
-                 guard let polygonId = Int(idString) else {
-                     throw GoogleMapErrors.invalidArguments("polygonIds are invalid or missing")
-                 }
+                guard let polygonId = Int(idString) else {
+                    throw GoogleMapErrors.invalidArguments("polygonIds are invalid or missing")
+                }
 
-                 return polygonId
+                return polygonId
             }
 
             guard let map = self.maps[id] else {
@@ -335,7 +335,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
             handleError(call, error: error)
         }
     }
-    
+
     @objc func setCamera(_ call: CAPPluginCall) {
         do {
             guard let id = call.getString("id") else {
@@ -752,7 +752,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
             "longitude": coordinate.longitude
         ])
     }
-    
+
     // onPolygonClick
     public func mapView(_ mapView: GMSMapView, didTap overlay: GMSOverlay) {
         if let polygon = overlay as? GMSPolygon {

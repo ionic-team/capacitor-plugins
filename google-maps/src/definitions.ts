@@ -65,6 +65,11 @@ export interface Point {
   y: number;
 }
 
+/**
+ * For web, all the javascript Polygon options are available as
+ * Polygon extends google.maps.PolygonOptions.
+ * For iOS and Android only the config options declared on Polygon are available.
+ */
 export interface Polygon extends google.maps.PolygonOptions {
   strokeColor?: string;
   strokeOpacity?: number;
@@ -73,6 +78,11 @@ export interface Polygon extends google.maps.PolygonOptions {
   fillOpacity?: number;
   geodesic?: boolean;
   clickable?: boolean;
+  /**
+   * Title, a short description of the overlay. Some overlays, such as markers, will display the title on the map. The title is also the default accessibility text.
+   *
+   * Only available on iOS.
+   */
   title?: string;
   tag?: string;
 }

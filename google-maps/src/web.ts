@@ -399,13 +399,13 @@ export class CapacitorGoogleMapsWeb
     polygonId: string,
     polygon: google.maps.Polygon,
   ): Promise<void> {
-    polygon.addListener("click", () => {
-      this.notifyListeners("onPolygonClick", {
+    polygon.addListener('click', () => {
+      this.notifyListeners('onPolygonClick', {
         mapId: mapId,
         polygonId: polygonId,
-        tag: polygon.get("tag")
-      })
-    })
+        tag: polygon.get('tag'),
+      });
+    });
   }
 
   async setMarkerListeners(

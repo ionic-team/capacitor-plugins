@@ -677,6 +677,12 @@ export class GoogleMap {
     }
   }
 
+  /**
+   * Set the event listener on the map for 'onPolygonClick' events.
+   *
+   * @param callback
+   * @returns
+   */
   async setOnPolygonClickListener(
     callback?: MapListenerCallback<PolygonClickCallbackData>,
   ): Promise<void> {

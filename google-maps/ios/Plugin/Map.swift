@@ -228,21 +228,21 @@ public class Map {
 
         return markerHashes
     }
-    
+
     func addPolygons(polygons: [Polygon]) throws -> [Int] {
         var polygonHashes: [Int] = []
-        
+
         DispatchQueue.main.sync {
             polygons.forEach { polygon in
                 let newPolygon = self.buildPolygon(polygon: polygon)
                 newPolygon.map = self.mapViewController.GMapView
-                
+
                 self.polygons[newPolygon.hash.hashValue] = newPolygon
-                
+
                 polygonHashes.append(newPolygon.hash.hashValue)
             }
         }
-        
+
         return polygonHashes
     }
 
@@ -296,7 +296,7 @@ public class Map {
             throw GoogleMapErrors.markerNotFound
         }
     }
-    
+
     func removePolygons(ids: [Int]) throws {
         DispatchQueue.main.sync {
             ids.forEach { id in
@@ -413,7 +413,7 @@ public class Map {
 
         return intersections
     }
-    
+
     private func buildPolygon(polygon: Polygon) -> GMSPolygon {
         let newPolygon = GMSPolygon()
         newPolygon.title = polygon.title
@@ -424,13 +424,13 @@ public class Map {
         newPolygon.geodesic = polygon.geodesic ?? false
         newPolygon.zIndex = polygon.zIndex
         newPolygon.userData = polygon.tag
-        
+
         var shapeIndex = 0
         let outerShape = GMSMutablePath()
         var holes: [GMSMutablePath] = []
-        
+
         polygon.shapes.forEach { shape in
-            if (shapeIndex == 0) {
+            if shapeIndex == 0 {
                 shape.forEach { coord in
                     outerShape.add(CLLocationCoordinate2D(latitude: coord.lat, longitude: coord.lng))
                 }
@@ -439,16 +439,16 @@ public class Map {
                 shape.forEach { coord in
                     holeShape.add(CLLocationCoordinate2D(latitude: coord.lat, longitude: coord.lng))
                 }
-                
+
                 holes.append(holeShape)
             }
-            
+
             shapeIndex = shapeIndex+1
         }
-        
+
         newPolygon.path = outerShape
         newPolygon.holes = holes
-        
+
         return newPolygon
     }
 
