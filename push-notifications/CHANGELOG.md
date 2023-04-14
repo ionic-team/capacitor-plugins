@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-beta.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/push-notifications@5.0.0-alpha.1...@capacitor/push-notifications@5.0.0-beta.0) (2023-03-31)
+
+
+### Features
+
+* **push-notifications:** add unregister functions ([#1498](https://github.com/ionic-team/capacitor-plugins/issues/1498)) ([878e295](https://github.com/ionic-team/capacitor-plugins/commit/878e2950b4113af49d2856a11b6e02d01ba62bb6))
+
+
+
+
+
 # [5.0.0-alpha.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/push-notifications@4.1.2...@capacitor/push-notifications@5.0.0-alpha.1) (2023-03-16)
 
 

@@ -27,6 +27,17 @@ export class LatLngBounds {
     });
     return result['contains'];
   }
+
+  async extend(point: LatLng): Promise<LatLngBounds> {
+    const result = await CapacitorGoogleMaps.mapBoundsExtend({
+      bounds: this,
+      point,
+    });
+    this.southwest = result['bounds']['southwest'];
+    this.center = result['bounds']['center'];
+    this.northeast = result['bounds']['northeast'];
+    return this;
+  }
 }
 
 /**

@@ -28,6 +28,7 @@ import type {
   OnScrollArgs,
   MapBoundsContainsArgs,
   EnableClusteringArgs,
+  MapBoundsExtendArgs,
 } from './implementation';
 
 export class CapacitorGoogleMapsWeb
@@ -135,7 +136,11 @@ export class CapacitorGoogleMapsWeb
   }
 
   async setMapType(_args: MapTypeArgs): Promise<void> {
-    this.maps[_args.id].map.setMapTypeId(_args.mapType);
+    let mapType = _args.mapType.toLowerCase();
+    if (mapType === MapType.Normal) {
+      mapType = 'roadmap';
+    }
+    this.maps[_args.id].map.setMapTypeId(mapType);
   }
 
   async enableIndoorMaps(_args: IndoorMapArgs): Promise<void> {
@@ -322,6 +327,29 @@ export class CapacitorGoogleMapsWeb
     const bounds = this.getLatLngBounds(_args.bounds);
     const point = new google.maps.LatLng(_args.point.lat, _args.point.lng);
     return { contains: bounds.contains(point) };
+  }
+
+  async mapBoundsExtend(
+    _args: MapBoundsExtendArgs,
+  ): Promise<{ bounds: LatLngBounds }> {
+    const bounds = this.getLatLngBounds(_args.bounds);
+    const point = new google.maps.LatLng(_args.point.lat, _args.point.lng);
+    bounds.extend(point);
+    const result = new LatLngBounds({
+      southwest: {
+        lat: bounds.getSouthWest().lat(),
+        lng: bounds.getSouthWest().lng(),
+      },
+      center: {
+        lat: bounds.getCenter().lat(),
+        lng: bounds.getCenter().lng(),
+      },
+      northeast: {
+        lat: bounds.getNorthEast().lat(),
+        lng: bounds.getNorthEast().lng(),
+      },
+    });
+    return { bounds: result };
   }
 
   private getLatLngBounds(_args: LatLngBounds): google.maps.LatLngBounds {
