@@ -7,16 +7,17 @@ public class PreferencesPlugin: CAPPlugin {
 
     @objc func configure(_ call: CAPPluginCall) {
         let group = call.getString("group")
+        let suiteName = call.getString("iosSuiteName")
         let configuration: PreferencesConfiguration
 
         if let group = group {
             if group == "NativeStorage" {
-                configuration = PreferencesConfiguration(for: .cordovaNativeStorage)
+                configuration = PreferencesConfiguration(for: .cordovaNativeStorage, suiteName: suiteName)
             } else {
-                configuration = PreferencesConfiguration(for: .named(group))
+                configuration = PreferencesConfiguration(for: .named(group), suiteName: suiteName)
             }
         } else {
-            configuration = PreferencesConfiguration()
+            configuration = PreferencesConfiguration(suiteName: suiteName)
         }
 
         preferences = Preferences(with: configuration)
