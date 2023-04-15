@@ -38,15 +38,15 @@ public class StatusBar {
     @SuppressWarnings("deprecation")
     public void setBackgroundColor(int color) {
         Window window = activity.getWindow();
+        View view = window.getDecorView();
+
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.setStatusBarColor(color);
         window.setNavigationBarColor(color);
-        if (getStyle().equals("DARK")) {
-            View view = window.getDecorView();
-            WindowInsetsControllerCompat windowInsetsControllerCompat = WindowCompat.getInsetsController(window, view);
-            windowInsetsControllerCompat.setAppearanceLightNavigationBars(!getStyle().equals("DARK"));
-        }
+
+        WindowInsetsControllerCompat windowInsetsControllerCompat = WindowCompat.getInsetsController(window, view);
+        windowInsetsControllerCompat.setAppearanceLightNavigationBars(!getStyle().equals("DARK"));
         // update the local color field as well
         currentStatusBarColor = color;
     }
