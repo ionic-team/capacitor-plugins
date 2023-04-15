@@ -18,7 +18,7 @@ public class Preferences {
     private let configuration: PreferencesConfiguration
 
     private var defaults: UserDefaults {
-        return UserDefaults(suiteName: suiteName)!
+        return UserDefaults(suiteName: configuration.suiteName)!
     }
 
     private var prefix: String {
