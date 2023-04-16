@@ -330,6 +330,7 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
 
     const entry = (await this.dbRequest('get', [path])) as EntryObj;
     if (entry === undefined) throw Error('File does not exist.');
+    if (entry.type !== 'file') throw Error('Illegal operation on a directory.')
 
     let { content: data = '' } = entry;
 
