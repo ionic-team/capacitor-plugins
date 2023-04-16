@@ -54,6 +54,175 @@ function isPathParent(parent: string, children: string): boolean {
   );
 }
 
+function b64ToUint6(nChr: number) {
+  return nChr > 64 && nChr < 91
+    ? nChr - 65
+    : nChr > 96 && nChr < 123
+    ? nChr - 71
+    : nChr > 47 && nChr < 58
+    ? nChr + 4
+    : nChr === 43
+    ? 62
+    : nChr === 47
+    ? 63
+    : 0;
+}
+
+function base64ToUint8(sBase64: string, nBlocksSize?: number) {
+  const sB64Enc = sBase64.replace(/[^A-Za-z0-9+/]/g, ''); // Remove any non-base64 characters, such as trailing "=", whitespace, and more.
+  const nInLen = sB64Enc.length;
+  const nOutLen = nBlocksSize
+    ? Math.ceil(((nInLen * 3 + 1) >> 2) / nBlocksSize) * nBlocksSize
+    : (nInLen * 3 + 1) >> 2;
+  const taBytes = new Uint8Array(nOutLen);
+
+  let nMod3;
+  let nMod4;
+  let nUint24 = 0;
+  let nOutIdx = 0;
+  for (let nInIdx = 0; nInIdx < nInLen; nInIdx++) {
+    nMod4 = nInIdx & 3;
+    nUint24 |= b64ToUint6(sB64Enc.charCodeAt(nInIdx)) << (6 * (3 - nMod4));
+    if (nMod4 === 3 || nInLen - nInIdx === 1) {
+      nMod3 = 0;
+      while (nMod3 < 3 && nOutIdx < nOutLen) {
+        taBytes[nOutIdx] = (nUint24 >>> ((16 >>> nMod3) & 24)) & 255;
+        nMod3++;
+        nOutIdx++;
+      }
+      nUint24 = 0;
+    }
+  }
+
+  return taBytes;
+}
+
+/* Base64 string to array encoding */
+function uint6ToB64(nUint6: number) {
+  return nUint6 < 26
+    ? nUint6 + 65
+    : nUint6 < 52
+    ? nUint6 + 71
+    : nUint6 < 62
+    ? nUint6 - 4
+    : nUint6 === 62
+    ? 43
+    : nUint6 === 63
+    ? 47
+    : 65;
+}
+
+function uint8ToBase64(aBytes: Uint8Array) {
+  let nMod3 = 2;
+  let sB64Enc = '';
+
+  const nLen = aBytes.length;
+  let nUint24 = 0;
+  for (let nIdx = 0; nIdx < nLen; nIdx++) {
+    nMod3 = nIdx % 3;
+    // To break your base64 into several 80-character lines, add:
+    //   if (nIdx > 0 && ((nIdx * 4) / 3) % 76 === 0) {
+    //      sB64Enc += "\r\n";
+    //    }
+
+    nUint24 |= aBytes[nIdx] << ((16 >>> nMod3) & 24);
+    if (nMod3 === 2 || aBytes.length - nIdx === 1) {
+      sB64Enc += String.fromCodePoint(
+        uint6ToB64((nUint24 >>> 18) & 63),
+        uint6ToB64((nUint24 >>> 12) & 63),
+        uint6ToB64((nUint24 >>> 6) & 63),
+        uint6ToB64(nUint24 & 63),
+      );
+      nUint24 = 0;
+    }
+  }
+  return (
+    sB64Enc.substring(0, sB64Enc.length - 2 + nMod3) +
+    (nMod3 === 2 ? '' : nMod3 === 1 ? '=' : '==')
+  );
+}
+
+let decoderUtf8: TextDecoder | null = null;
+// eslint-disable-next-line @typescript-eslint/adjacent-overload-signatures
+function uint8ToUTF8(uint8: Uint8Array): string {
+  decoderUtf8 ??= new TextDecoder('utf-8');
+  return decoderUtf8.decode(uint8);
+}
+let encoderUtf8: TextEncoder | null = null;
+function utf8ToUint8(utf8: string): Uint8Array {
+  encoderUtf8 ??= new TextEncoder();
+  return encoderUtf8.encode(utf8);
+}
+
+const b64ch =
+  'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/='.split('');
+const toBase64 =
+  typeof btoa == 'function'
+    ? btoa
+    : (() => {
+        return function (bin: string) {
+          let u32,
+            c0,
+            c1,
+            c2,
+            asc = '';
+          const pad = bin.length % 3;
+          for (let i = 0; i < bin.length; ) {
+            if (
+              (c0 = bin.charCodeAt(i++)) > 255 ||
+              (c1 = bin.charCodeAt(i++)) > 255 ||
+              (c2 = bin.charCodeAt(i++)) > 255
+            )
+              throw new TypeError('invalid character found');
+            u32 = (c0 << 16) | (c1 << 8) | c2;
+            asc +=
+              b64ch[(u32 >> 18) & 63] +
+              b64ch[(u32 >> 12) & 63] +
+              b64ch[(u32 >> 6) & 63] +
+              b64ch[u32 & 63];
+          }
+          return pad ? asc.slice(0, pad - 3) + '==='.substring(pad) : asc;
+        };
+      })();
+const fromBase64 =
+  typeof atob == 'function'
+    ? atob
+    : (() => {
+        const b64tab = (a => {
+          const tab: Record<string, number> = {};
+          a.forEach((c, i) => (tab[c] = i));
+          return tab;
+        })(b64ch);
+        const b64re =
+          /^(?:[A-Za-z\d+/]{4})*?(?:[A-Za-z\d+/]{2}(?:==)?|[A-Za-z\d+/]{3}=?)?$/;
+        const _fromCC = String.fromCharCode.bind(String);
+
+        return function (asc: string) {
+          // console.log('polyfilled');
+          asc = asc.replace(/\s+/g, '');
+          if (!b64re.test(asc)) throw new TypeError('malformed base64.');
+          asc += '=='.slice(2 - (asc.length & 3));
+          let u24,
+            bin = '',
+            r1,
+            r2;
+          for (let i = 0; i < asc.length; ) {
+            u24 =
+              (b64tab[asc.charAt(i++)] << 18) |
+              (b64tab[asc.charAt(i++)] << 12) |
+              ((r1 = b64tab[asc.charAt(i++)]) << 6) |
+              (r2 = b64tab[asc.charAt(i++)]);
+            bin +=
+              r1 === 64
+                ? _fromCC((u24 >> 16) & 255)
+                : r2 === 64
+                ? _fromCC((u24 >> 16) & 255, (u24 >> 8) & 255)
+                : _fromCC((u24 >> 16) & 255, (u24 >> 8) & 255, u24 & 255);
+          }
+          return bin;
+        };
+      })();
+
 export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
   DB_VERSION = 1;
   DB_NAME = 'Disc';
