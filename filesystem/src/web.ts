@@ -180,13 +180,13 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
     if (occupiedEntry && occupiedEntry.type === 'directory')
       throw Error('The supplied path is a directory.');
 
-    const parentPath = path.substr(0, path.lastIndexOf('/'));
+    const parentPath = path.slice(0, path.lastIndexOf('/'));
 
     const parentEntry = (await this.dbRequest('get', [parentPath])) as EntryObj;
     if (parentEntry === undefined) {
       const subDirIndex = parentPath.indexOf('/', 1);
       if (subDirIndex !== -1) {
-        const parentArgPath = parentPath.substr(subDirIndex);
+        const parentArgPath = parentPath.slice(subDirIndex);
         await this.mkdir({
           path: parentArgPath,
           directory: options.directory,
@@ -226,7 +226,7 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
     const path: string = this.getPath(options.directory, options.path);
     let data = options.data;
     const encoding = options.encoding;
-    const parentPath = path.substr(0, path.lastIndexOf('/'));
+    const parentPath = path.slice(0, path.lastIndexOf('/'));
 
     const now = Date.now();
     let ctime = now;
@@ -239,7 +239,7 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
     if (parentEntry === undefined) {
       const subDirIndex = parentPath.indexOf('/', 1);
       if (subDirIndex !== -1) {
-        const parentArgPath = parentPath.substr(subDirIndex);
+        const parentArgPath = parentPath.slice(subDirIndex);
         await this.mkdir({
           path: parentArgPath,
           directory: options.directory,
@@ -297,7 +297,7 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
   async mkdir(options: MkdirOptions): Promise<void> {
     const path: string = this.getPath(options.directory, options.path);
     const doRecursive = options.recursive;
-    const parentPath = path.substr(0, path.lastIndexOf('/'));
+    const parentPath = path.slice(0, path.lastIndexOf('/'));
 
     const depth = (path.match(/\//g) || []).length;
     const parentEntry = (await this.dbRequest('get', [parentPath])) as EntryObj;
@@ -309,7 +309,7 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
       throw Error('Parent directory must exist');
 
     if (doRecursive && depth !== 2 && parentEntry === undefined) {
-      const parentArgPath = parentPath.substr(parentPath.indexOf('/', 1));
+      const parentArgPath = parentPath.slice(parentPath.indexOf('/', 1));
       await this.mkdir({
         path: parentArgPath,
         directory: options.directory,
