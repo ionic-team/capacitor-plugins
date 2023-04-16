@@ -353,7 +353,7 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
    */
   async writeFile(options: WriteFileOptions): Promise<WriteFileResult> {
     const path: string = this.getPath(options.directory, options.path);
-    let data = options.data;
+    let data: Uint8Array | string = options.data;
     const encoding = options.encoding;
     const doRecursive = options.recursive;
 
@@ -380,6 +380,8 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
       data = data.indexOf(',') >= 0 ? data.split(',')[1] : data;
       if (!this.isBase64String(data))
         throw Error('The supplied data is not valid base64 content.');
+
+      data = base64ToUint8(data);
     }
 
     const now = Date.now();
