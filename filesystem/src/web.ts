@@ -407,7 +407,7 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
    */
   async appendFile(options: AppendFileOptions): Promise<void> {
     const path: string = this.getPath(options.directory, options.path);
-    let data = options.data;
+    let data: Uint8Array | string = options.data;
     const encoding = options.encoding;
     const parentPath = path.slice(0, path.lastIndexOf('/'));
 
@@ -434,14 +434,40 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
     if (!encoding && !this.isBase64String(data))
       throw Error('The supplied data is not valid base64 content.');
 
-    if (occupiedEntry !== undefined) {
-      if (occupiedEntry.content !== undefined && !encoding) {
-        data = btoa(atob(occupiedEntry.content) + atob(data));
+    if (occupiedEntry) {
+      if (!encoding) {
+        // data is base64
+        if (typeof occupiedEntry.content === 'undefined')
+          data = base64ToUint8(data);
+        else if (typeof occupiedEntry.content === 'string')
+          data = occupiedEntry.content + fromBase64(data);
+        else {
+          const dataArr = base64ToUint8(data);
+          const _temp = new Uint8Array(
+            occupiedEntry.content.length + dataArr.length,
+          );
+          _temp.set(occupiedEntry.content, 0);
+          _temp.set(_temp.slice(occupiedEntry.content.length), dataArr.length);
+          data = _temp;
+        }
       } else {
+        // data is text
+        if (typeof occupiedEntry.content === 'string')
         data = occupiedEntry.content + data;
+        else if (typeof occupiedEntry.content !== 'undefined') {
+          const dataArr = utf8ToUint8(data);
+          const _temp = new Uint8Array(
+            occupiedEntry.content.length + dataArr.length,
+          );
+          _temp.set(occupiedEntry.content, 0);
+          _temp.set(_temp.slice(occupiedEntry.content.length), dataArr.length);
+          data = _temp;
       }
+      }
+
       ctime = occupiedEntry.ctime;
     }
+
     const pathObj: EntryObj = {
       path: path,
       folder: parentPath,
@@ -842,5 +868,5 @@ interface EntryObj {
   ctime: number;
   mtime: number;
   uri?: string;
-  content?: string;
+  content?: string | Uint8Array;
 }
