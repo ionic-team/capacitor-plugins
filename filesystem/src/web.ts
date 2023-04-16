@@ -22,7 +22,6 @@ import type {
   WriteFileResult,
   Directory,
 } from './definitions';
-import { Encoding } from './definitions';
 
 function resolve(path: string): string {
   const posix = path.split('/').filter(item => item !== '.');
@@ -453,7 +452,7 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
       } else {
         // data is text
         if (typeof occupiedEntry.content === 'string')
-        data = occupiedEntry.content + data;
+          data = occupiedEntry.content + data;
         else if (typeof occupiedEntry.content !== 'undefined') {
           const dataArr = utf8ToUint8(data);
           const _temp = new Uint8Array(
@@ -462,7 +461,7 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
           _temp.set(occupiedEntry.content, 0);
           _temp.set(_temp.slice(occupiedEntry.content.length), dataArr.length);
           data = _temp;
-      }
+        }
       }
 
       ctime = occupiedEntry.ctime;
