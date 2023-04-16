@@ -162,7 +162,19 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
 
     const entry = (await this.dbRequest('get', [path])) as EntryObj;
     if (entry === undefined) throw Error('File does not exist.');
-    return { data: entry.content ? entry.content : '' };
+
+    let { content: data = '' } = entry;
+
+    if (options.encoding) {
+      if (typeof data !== 'string') {
+        // is uint8array
+        data = uint8ToUTF8(data);
+      }
+    } else {
+      if (typeof data === 'string') data = toBase64(data);
+      else data = uint8ToBase64(data);
+    }
+    return { data };
   }
 
   /**
