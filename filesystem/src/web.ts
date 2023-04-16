@@ -446,7 +446,7 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
             occupiedEntry.content.length + dataArr.length,
           );
           _temp.set(occupiedEntry.content, 0);
-          _temp.set(_temp.slice(occupiedEntry.content.length), dataArr.length);
+          _temp.set(dataArr, occupiedEntry.content.length);
           data = _temp;
         }
       } else {
@@ -459,7 +459,7 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
             occupiedEntry.content.length + dataArr.length,
           );
           _temp.set(occupiedEntry.content, 0);
-          _temp.set(_temp.slice(occupiedEntry.content.length), dataArr.length);
+          _temp.set(dataArr, occupiedEntry.content.length);
           data = _temp;
         }
       }
