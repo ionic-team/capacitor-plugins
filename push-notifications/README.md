@@ -159,6 +159,7 @@ const getDeliveredNotifications = async () => {
 <docgen-index>
 
 * [`register()`](#register)
+* [`unregister()`](#unregister)
 * [`getDeliveredNotifications()`](#getdeliverednotifications)
 * [`removeDeliveredNotifications(...)`](#removedeliverednotifications)
 * [`removeAllDeliveredNotifications()`](#removealldeliverednotifications)
@@ -193,6 +194,21 @@ This method will trigger the `'registration'` event with the push token or
 notification permissions, use `requestPermissions()` first.
 
 **Since:** 1.0.0
+
+--------------------
+
+
+### unregister()
+
+```typescript
+unregister() => Promise<void>
+```
+
+Unregister the app from push notifications.
+
+This will delete a firebase token on Android, and unregister APNS on iOS.
+
+**Since:** 5.0.0
 
 --------------------
 

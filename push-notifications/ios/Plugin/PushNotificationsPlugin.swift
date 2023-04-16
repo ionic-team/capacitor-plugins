@@ -48,6 +48,16 @@ public class PushNotificationsPlugin: CAPPlugin {
     }
 
     /**
+     * Unregister for remote notifications
+     */
+    @objc func unregister(_ call: CAPPluginCall) {
+        DispatchQueue.main.async {
+            UIApplication.shared.unregisterForRemoteNotifications()
+            call.resolve()
+        }
+    }
+
+    /**
      * Request notification permission
      */
     @objc override public func requestPermissions(_ call: CAPPluginCall) {

@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-beta.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@5.0.0-alpha.1...@capacitor/camera@5.0.0-beta.0) (2023-03-31)
+
+
+### Bug Fixes
+
+* **camera:** add proper permissions for Android 13 ([#1509](https://github.com/ionic-team/capacitor-plugins/issues/1509)) ([0dcbe56](https://github.com/ionic-team/capacitor-plugins/commit/0dcbe56bc554b1919c3e26d2f6b7ff8e5b7a0f5e))
+* **camera:** prevent iOS crash with 0 limited images selected ([#1495](https://github.com/ionic-team/capacitor-plugins/issues/1495)) ([33f5c8e](https://github.com/ionic-team/capacitor-plugins/commit/33f5c8ebc7705c0e697caee4b2177ebc27d46311))
+
+
+
+
+
 # [5.0.0-alpha.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@4.1.4...@capacitor/camera@5.0.0-alpha.1) (2023-03-16)
 
 

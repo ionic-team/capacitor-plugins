@@ -119,6 +119,13 @@ public class PushNotificationsPlugin extends Plugin {
     }
 
     @PluginMethod
+    public void unregister(PluginCall call) {
+        FirebaseMessaging.getInstance().setAutoInitEnabled(false);
+        FirebaseMessaging.getInstance().deleteToken();
+        call.resolve();
+    }
+
+    @PluginMethod
     public void getDeliveredNotifications(PluginCall call) {
         JSArray notifications = new JSArray();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
