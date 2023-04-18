@@ -63,9 +63,6 @@ public class Keyboard {
 
                 @Override
                 public void onGlobalLayout() {
-                    if (resizeOnFullScreen) {
-                        possiblyResizeChildOfContent();
-                    }
                     Rect r = new Rect();
                     //r will be populated with the coordinates of your view that area still visible.
                     rootView.getWindowVisibleDisplayFrame(r);
@@ -92,22 +89,35 @@ public class Keyboard {
                     int heightDiff = screenHeight - resultBottom;
 
                     int pixelHeightDiff = (int) (heightDiff / density);
-                    if (keyboardEventListener != null) {
-                        if (pixelHeightDiff > 100 && pixelHeightDiff != previousHeightDiff) { // if more than 100 pixels, its probably a keyboard...
+
+                    if (pixelHeightDiff > 100 && pixelHeightDiff != previousHeightDiff) { // if more than 100 pixels, its probably a keyboard...
+                        if (resizeOnFullScreen) {
+                            possiblyResizeChildOfContent(true);
+                        }
+
+                        if (keyboardEventListener != null) {
                             keyboardEventListener.onKeyboardEvent(EVENT_KB_WILL_SHOW, pixelHeightDiff);
                             keyboardEventListener.onKeyboardEvent(EVENT_KB_DID_SHOW, pixelHeightDiff);
-                        } else if (pixelHeightDiff != previousHeightDiff && (previousHeightDiff - pixelHeightDiff) > 100) {
+                        } else {
+                            Logger.warn("Native Keyboard Event Listener not found");
+                        }
+                    } else if (pixelHeightDiff != previousHeightDiff && (previousHeightDiff - pixelHeightDiff) > 100) {
+                        if (resizeOnFullScreen) {
+                            possiblyResizeChildOfContent(false);
+                        }
+
+                        if (keyboardEventListener != null) {
                             keyboardEventListener.onKeyboardEvent(EVENT_KB_WILL_HIDE, 0);
                             keyboardEventListener.onKeyboardEvent(EVENT_KB_DID_HIDE, 0);
+                        } else {
+                            Logger.warn("Native Keyboard Event Listener not found");
                         }
-                    } else {
-                        Logger.warn("Native Keyboard Event Listener not found");
                     }
                     previousHeightDiff = pixelHeightDiff;
                 }
 
-                private void possiblyResizeChildOfContent() {
-                    int usableHeightNow = computeUsableHeight();
+                private void possiblyResizeChildOfContent(boolean keyboardShown) {
+                    int usableHeightNow = keyboardShown ? computeUsableHeight() : -1;
                     if (usableHeightPrevious != usableHeightNow) {
                         frameLayoutParams.height = usableHeightNow;
                         mChildOfContent.requestLayout();
