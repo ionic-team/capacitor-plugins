@@ -9,7 +9,7 @@ public class Clipboard {
         case image
     }
 
-    enum ClipboardError: LocalizedError {
+    public enum ClipboardError: LocalizedError {
         case invalidURL, invalidImage
 
         public var errorDescription: String? {
