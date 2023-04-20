@@ -21,6 +21,7 @@ class CapacitorGoogleMapMarker(fromJSONObject: JSONObject): ClusterItem {
     var draggable: Boolean = false
     var googleMapMarker: Marker? = null
     var colorHue: Float? = null
+    var markerOptions: MarkerOptions? = null
 
     init {
         if(!fromJSONObject.has("coordinate")) {
