@@ -24,6 +24,8 @@ Read about [Configuring `Info.plist`](https://capacitorjs.com/docs/ios/configura
 
 > The Google Maps SDK currently does not support running on simulators using the new M1-based Macbooks. This is a [known and acknowledged issue](https://developers.google.com/maps/faq#arm-based-macs) and requires a fix from Google. If you are developing on a M1 Macbook, building and running on physical devices is still supported and is the recommended approach.
 
+> A workaround if you want to use the simulator is adding the line `pod 'Google-Maps-iOS-Utils', :git => 'https://github.com/googlemaps/google-maps-ios-utils.git', :commit => '637954e5bcb2a879c11a6f2cead153a6bad5339f'` to your podfile in the `target 'App'` section.
+
 ## Android
 
 The Google Maps SDK for Android requires you to add your API key to the AndroidManifest.xml file in your project.
