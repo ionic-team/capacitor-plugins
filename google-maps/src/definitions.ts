@@ -66,6 +66,28 @@ export interface Point {
 }
 
 /**
+ * For web, all the javascript Polygon options are available as
+ * Polygon extends google.maps.PolygonOptions.
+ * For iOS and Android only the config options declared on Polygon are available.
+ */
+export interface Polygon extends google.maps.PolygonOptions {
+  strokeColor?: string;
+  strokeOpacity?: number;
+  strokeWeight?: number;
+  fillColor?: string;
+  fillOpacity?: number;
+  geodesic?: boolean;
+  clickable?: boolean;
+  /**
+   * Title, a short description of the overlay. Some overlays, such as markers, will display the title on the map. The title is also the default accessibility text.
+   *
+   * Only available on iOS.
+   */
+  title?: string;
+  tag?: string;
+}
+
+/**
  * For web, all the javascript Polyline options are available as
  * Polyline extends google.maps.PolylineOptions.
  * For iOS and Android only the config options declared on Polyline are available.
@@ -371,6 +393,12 @@ export interface MapClickCallbackData {
 
 export interface MarkerClickCallbackData extends MarkerCallbackData {
   mapId: string;
+}
+
+export interface PolygonClickCallbackData {
+  mapId: string;
+  polygonId: string;
+  tag?: string;
 }
 
 export interface MyLocationButtonClickCallbackData {

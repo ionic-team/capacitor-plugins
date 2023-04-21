@@ -239,6 +239,86 @@ class CapacitorGoogleMapsPlugin : Plugin() {
     }
 
     @PluginMethod
+    fun addPolygons(call: PluginCall) {
+        try {
+            val id = call.getString("id")
+            id ?: throw InvalidMapIdError()
+
+            val polygonsObjectArray = call.getArray("polygons", null)
+            polygonsObjectArray ?: throw InvalidArgumentsError("polygons array is missing")
+
+            if (polygonsObjectArray.length() == 0) {
+                throw InvalidArgumentsError("polygons requires at least one shape")
+            }
+
+            val map = maps[id]
+            map ?: throw MapNotFoundError()
+
+            val polygons: MutableList<CapacitorGoogleMapsPolygon> = mutableListOf()
+
+            for (i in 0 until polygonsObjectArray.length()) {
+                val polygonObj = polygonsObjectArray.getJSONObject(i)
+                val polygon = CapacitorGoogleMapsPolygon(polygonObj)
+
+                polygons.add(polygon)
+            }
+
+            map.addPolygons(polygons) { result ->
+                val ids = result.getOrThrow()
+
+                val jsonIDs = JSONArray()
+                ids.forEach { jsonIDs.put(it) }
+
+                val res = JSObject()
+                res.put("ids", jsonIDs)
+                call.resolve(res)
+            }
+
+        } catch (e: GoogleMapsError) {
+            handleError(call, e)
+        } catch (e: Exception) {
+            handleError(call, e)
+        }
+    }
+
+    @PluginMethod
+    fun removePolygons(call: PluginCall) {
+        try {
+            val id = call.getString("id")
+            id ?: throw InvalidMapIdError()
+
+            val shapeIdsArray = call.getArray("polygonIds")
+            shapeIdsArray ?: throw InvalidArgumentsError("polygonIds are invalid or missing")
+
+            if (shapeIdsArray.length() == 0) {
+                throw InvalidArgumentsError("polygonIds requires at least one shape id")
+            }
+
+            val map = maps[id]
+            map ?: throw MapNotFoundError()
+
+            val shapeIds: MutableList<String> = mutableListOf()
+
+            for (i in 0 until shapeIdsArray.length()) {
+                val shapeId = shapeIdsArray.getString(i)
+                shapeIds.add(shapeId)
+            }
+
+            map.removePolygons(shapeIds) { err ->
+                if (err != null) {
+                    throw err
+                }
+
+                call.resolve()
+            }
+        } catch (e: GoogleMapsError) {
+            handleError(call, e)
+        } catch (e: Exception) {
+            handleError(call, e)
+        }
+    }
+
+    @PluginMethod
     fun addPolylines(call: PluginCall) {
         try  {
             val id = call.getString("id")

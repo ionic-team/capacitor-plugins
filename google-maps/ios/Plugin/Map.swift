@@ -61,12 +61,14 @@ class GMViewController: UIViewController {
     }
 }
 
+// swiftlint:disable type_body_length
 public class Map {
     var id: String
     var config: GoogleMapConfig
     var mapViewController: GMViewController
     var targetViewController: UIView?
     var markers = [Int: GMSMarker]()
+    var polygons = [Int: GMSPolygon]()
     var polylines = [Int: GMSPolyline]()
     var markerIcons = [String: UIImage]()
 
@@ -229,6 +231,23 @@ public class Map {
         return markerHashes
     }
 
+    func addPolygons(polygons: [Polygon]) throws -> [Int] {
+        var polygonHashes: [Int] = []
+
+        DispatchQueue.main.sync {
+            polygons.forEach { polygon in
+                let newPolygon = self.buildPolygon(polygon: polygon)
+                newPolygon.map = self.mapViewController.GMapView
+
+                self.polygons[newPolygon.hash.hashValue] = newPolygon
+
+                polygonHashes.append(newPolygon.hash.hashValue)
+            }
+        }
+
+        return polygonHashes
+    }
+
     func addPolylines(lines: [Polyline]) throws -> [Int] {
         var polylineHashes: [Int] = []
 
@@ -294,6 +313,17 @@ public class Map {
             }
         } else {
             throw GoogleMapErrors.markerNotFound
+        }
+    }
+
+    func removePolygons(ids: [Int]) throws {
+        DispatchQueue.main.sync {
+            ids.forEach { id in
+                if let polygon = self.polygons[id] {
+                    polygon.map = nil
+                    self.polygons.removeValue(forKey: id)
+                }
+            }
         }
     }
 
@@ -412,6 +442,44 @@ public class Map {
         }
 
         return intersections
+    }
+
+    private func buildPolygon(polygon: Polygon) -> GMSPolygon {
+        let newPolygon = GMSPolygon()
+        newPolygon.title = polygon.title
+        newPolygon.strokeColor = polygon.strokeColor
+        newPolygon.strokeWidth = polygon.strokeWidth
+        newPolygon.fillColor = polygon.fillColor
+        newPolygon.isTappable = polygon.tappable ?? false
+        newPolygon.geodesic = polygon.geodesic ?? false
+        newPolygon.zIndex = polygon.zIndex
+        newPolygon.userData = polygon.tag
+
+        var shapeIndex = 0
+        let outerShape = GMSMutablePath()
+        var holes: [GMSMutablePath] = []
+
+        polygon.shapes.forEach { shape in
+            if shapeIndex == 0 {
+                shape.forEach { coord in
+                    outerShape.add(CLLocationCoordinate2D(latitude: coord.lat, longitude: coord.lng))
+                }
+            } else {
+                let holeShape = GMSMutablePath()
+                shape.forEach { coord in
+                    holeShape.add(CLLocationCoordinate2D(latitude: coord.lat, longitude: coord.lng))
+                }
+
+                holes.append(holeShape)
+            }
+
+            shapeIndex += 1
+        }
+
+        newPolygon.path = outerShape
+        newPolygon.holes = holes
+
+        return newPolygon
     }
 
     private func buildPolyline(line: Polyline) -> GMSPolyline {

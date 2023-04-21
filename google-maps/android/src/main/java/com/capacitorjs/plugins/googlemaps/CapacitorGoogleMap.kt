@@ -37,11 +37,13 @@ class CapacitorGoogleMap(
         OnMarkerClickListener,
         OnMarkerDragListener,
         OnInfoWindowClickListener,
-        OnPolylineClickListener {
+        OnPolylineClickListener,
+        OnPolygonClickListener {
     private var mapView: MapView
     private var googleMap: GoogleMap? = null
     private val markers = HashMap<String, CapacitorGoogleMapMarker>()
-    private val polylines = HashMap<String, CapacitorGoogleMapPolyline>()
+    private val polygons = HashMap<String, CapacitorGoogleMapsPolygon>()
+    private val polylines = HashMap<String, CapacitorGoogleMapPolyline>()        
     private val markerIcons = HashMap<String, Bitmap>()
     private var clusterManager: ClusterManager<CapacitorGoogleMapMarker>? = null
 
@@ -231,6 +233,33 @@ class CapacitorGoogleMap(
         }
     }
 
+    fun addPolygons(newPolygons: List<CapacitorGoogleMapsPolygon>, callback: (ids: Result<List<String>>) -> Unit) {
+        try {
+            googleMap ?: throw GoogleMapNotAvailable()
+            val shapeIds: MutableList<String> = mutableListOf()
+
+            CoroutineScope(Dispatchers.Main).launch {
+                newPolygons.forEach {
+                    val polygonOptions: Deferred<PolygonOptions> = CoroutineScope(Dispatchers.IO).async {
+                        this@CapacitorGoogleMap.buildPolygon(it)
+                    }
+
+                    val googleMapsPolygon = googleMap?.addPolygon(polygonOptions.await())
+                    googleMapsPolygon?.tag = it.tag
+
+                    it.googleMapsPolygon = googleMapsPolygon
+
+                    polygons[googleMapsPolygon!!.id] = it
+                    shapeIds.add(googleMapsPolygon.id)
+                }
+
+                callback(Result.success(shapeIds))
+            }
+        } catch (e: GoogleMapsError) {
+            callback(Result.failure(e))
+        }
+    }
+    
     fun addPolylines(newLines: List<CapacitorGoogleMapPolyline>, callback: (ids: Result<List<String>>) -> Unit) {
         try {
             googleMap ?: throw GoogleMapNotAvailable()
@@ -322,6 +351,26 @@ class CapacitorGoogleMap(
                                 }
                         val googleMapMarker = googleMap?.addMarker(markerOptions.await())
                         marker.googleMapMarker = googleMapMarker
+                    }
+                }
+
+                callback(null)
+            }
+        } catch (e: GoogleMapsError) {
+            callback(e)
+        }
+    }
+
+    fun removePolygons(ids: List<String>, callback: (error: GoogleMapsError?) -> Unit) {
+        try {
+            googleMap ?: throw GoogleMapNotAvailable()
+
+            CoroutineScope(Dispatchers.Main).launch {
+                ids.forEach {
+                    val polygon = polygons[it]
+                    if (polygon != null) {
+                        polygon.googleMapsPolygon?.remove()
+                        polygons.remove(it)
                     }
                 }
 
@@ -589,6 +638,32 @@ class CapacitorGoogleMap(
         )
     }
 
+    private fun buildPolygon(polygon: CapacitorGoogleMapsPolygon): PolygonOptions {
+        val polygonOptions = PolygonOptions()
+        polygonOptions.fillColor(polygon.fillColor)
+        polygonOptions.strokeColor(polygon.strokeColor)
+        polygonOptions.strokeWidth(polygon.strokeWidth)
+        polygonOptions.zIndex(polygon.zIndex)
+        polygonOptions.geodesic(polygon.geodesic)
+        polygonOptions.clickable(polygon.clickable)
+
+        var shapeCounter = 0
+        polygon.shapes.forEach {
+            if (shapeCounter == 0) {
+                // outer shape
+                it.forEach {
+                    polygonOptions.add(it)
+                }
+            } else {
+                polygonOptions.addHole(it)
+            }
+
+            shapeCounter += 1
+        }
+
+        return polygonOptions
+    }
+    
     private fun buildPolyline(line: CapacitorGoogleMapPolyline): PolylineOptions {
         val polylineOptions = PolylineOptions()
         polylineOptions.width(line.strokeWidth * this.config.devicePixelRatio)
@@ -718,6 +793,7 @@ class CapacitorGoogleMap(
             )
             this@CapacitorGoogleMap.googleMap?.setOnCameraMoveListener(this@CapacitorGoogleMap)
             this@CapacitorGoogleMap.googleMap?.setOnMarkerClickListener(this@CapacitorGoogleMap)
+            this@CapacitorGoogleMap.googleMap?.setOnPolygonClickListener(this@CapacitorGoogleMap)
             this@CapacitorGoogleMap.googleMap?.setOnMarkerDragListener(this@CapacitorGoogleMap)
             this@CapacitorGoogleMap.googleMap?.setOnMapClickListener(this@CapacitorGoogleMap)
             this@CapacitorGoogleMap.googleMap?.setOnMyLocationButtonClickListener(
@@ -898,6 +974,13 @@ class CapacitorGoogleMap(
         }
     }
 
+    override fun onPolygonClick(polygon: Polygon) {
+        val data = JSObject()
+        data.put("mapId", this@CapacitorGoogleMap.id)
+        data.put("polygonId", polygon.id)
+        data.put("tag", polygon.tag)
+        delegate.notify("onPolygonClick", data)
+    }
 }
 
 fun getLatLngBoundsJSObject(bounds: LatLngBounds): JSObject {
