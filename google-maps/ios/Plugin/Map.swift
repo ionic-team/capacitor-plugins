@@ -61,6 +61,7 @@ class GMViewController: UIViewController {
     }
 }
 
+// swiftlint:disable type_body_length
 public class Map {
     var id: String
     var config: GoogleMapConfig
