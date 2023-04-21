@@ -13,6 +13,10 @@ import type {
   MapClickCallbackData,
   MarkerClickCallbackData,
   MyLocationButtonClickCallbackData,
+  Polygon,
+  PolygonClickCallbackData,
+  Polyline,
+  PolylineCallbackData,
 } from './definitions';
 import { LatLngBounds, MapType } from './definitions';
 import type { CreateMapArgs } from './implementation';
@@ -34,6 +38,10 @@ export interface GoogleMapInterface {
   addMarkers(markers: Marker[]): Promise<string[]>;
   removeMarker(id: string): Promise<void>;
   removeMarkers(ids: string[]): Promise<void>;
+  addPolygons(polygons: Polygon[]): Promise<string[]>;
+  removePolygons(ids: string[]): Promise<void>;
+  addPolylines(polylines: Polyline[]): Promise<string[]>;
+  removePolylines(ids: string[]): Promise<void>;
   destroy(): Promise<void>;
   setCamera(config: CameraConfig): Promise<void>;
   /**
@@ -69,6 +77,12 @@ export interface GoogleMapInterface {
   ): Promise<void>;
   setOnMarkerClickListener(
     callback?: MapListenerCallback<MarkerClickCallbackData>,
+  ): Promise<void>;
+  setOnPolygonClickListener(
+    callback?: MapListenerCallback<PolygonClickCallbackData>,
+  ): Promise<void>;
+  setOnPolylineClickListener(
+    callback?: MapListenerCallback<PolylineCallbackData>,
   ): Promise<void>;
   setOnMarkerDragStartListener(
     callback?: MapListenerCallback<MarkerClickCallbackData>,
@@ -118,7 +132,9 @@ export class GoogleMap {
   private onClusterInfoWindowClickListener?: PluginListenerHandle;
   private onInfoWindowClickListener?: PluginListenerHandle;
   private onMapClickListener?: PluginListenerHandle;
+  private onPolylineClickListener?: PluginListenerHandle;
   private onMarkerClickListener?: PluginListenerHandle;
+  private onPolygonClickListener?: PluginListenerHandle;
   private onMarkerDragStartListener?: PluginListenerHandle;
   private onMarkerDragListener?: PluginListenerHandle;
   private onMarkerDragEndListener?: PluginListenerHandle;
@@ -288,6 +304,38 @@ export class GoogleMap {
     return CapacitorGoogleMaps.removeMarkers({
       id: this.id,
       markerIds: ids,
+    });
+  }
+
+  async addPolygons(polygons: Polygon[]): Promise<string[]> {
+    const res = await CapacitorGoogleMaps.addPolygons({
+      id: this.id,
+      polygons,
+    });
+
+    return res.ids;
+  }
+
+  async addPolylines(polylines: Polyline[]): Promise<string[]> {
+    const res = await CapacitorGoogleMaps.addPolylines({
+      id: this.id,
+      polylines,
+    });
+
+    return res.ids;
+  }
+
+  async removePolygons(ids: string[]): Promise<void> {
+    return CapacitorGoogleMaps.removePolygons({
+      id: this.id,
+      polygonIds: ids,
+    });
+  }
+
+  async removePolylines(ids: string[]): Promise<void> {
+    return CapacitorGoogleMaps.removePolylines({
+      id: this.id,
+      polylineIds: ids,
     });
   }
 
@@ -654,6 +702,29 @@ export class GoogleMap {
   }
 
   /**
+   * Set the event listener on the map for 'onPolygonClick' events.
+   *
+   * @param callback
+   * @returns
+   */
+  async setOnPolygonClickListener(
+    callback?: MapListenerCallback<PolygonClickCallbackData>,
+  ): Promise<void> {
+    if (this.onPolygonClickListener) {
+      this.onPolygonClickListener.remove();
+    }
+
+    if (callback) {
+      this.onPolygonClickListener = await CapacitorGoogleMaps.addListener(
+        'onPolygonClick',
+        this.generateCallback(callback),
+      );
+    } else {
+      this.onPolygonClickListener = undefined;
+    }
+  }
+
+  /**
    * Set the event listener on the map for 'onMarkerClick' events.
    *
    * @param callback
@@ -673,6 +744,28 @@ export class GoogleMap {
       );
     } else {
       this.onMarkerClickListener = undefined;
+    }
+  }
+  /**
+   * Set the event listener on the map for 'onPolylineClick' events.
+   *
+   * @param callback
+   * @returns
+   */
+  async setOnPolylineClickListener(
+    callback?: MapListenerCallback<PolylineCallbackData>,
+  ): Promise<void> {
+    if (this.onPolylineClickListener) {
+      this.onPolylineClickListener.remove();
+    }
+
+    if (callback) {
+      this.onPolylineClickListener = await CapacitorGoogleMaps.addListener(
+        'onPolylineClick',
+        this.generateCallback(callback),
+      );
+    } else {
+      this.onPolylineClickListener = undefined;
     }
   }
 

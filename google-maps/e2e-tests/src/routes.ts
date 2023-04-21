@@ -1,5 +1,6 @@
 import { triangleOutline, triangleSharp } from 'ionicons/icons';
 import React from 'react';
+import PolylineMapPage from './pages/Drawing/Polylines';
 import BoundsMapPage from './pages/Map/Bounds';
 import ConfigMapPage from './pages/Map/ConfigMap';
 import CreateAndDestroyMapPage from './pages/Map/CreateAndDestroyMap';
@@ -7,6 +8,7 @@ import AddAndRemoveMarkers from './pages/Markers/AddAndRemoveMarkers';
 import MarkerCustomizations from './pages/Markers/MarkerCustomizations';
 import MultipleMarkers from './pages/Markers/MultipleMarkers';
 import SimpleScrollingPage from './pages/Scrolling/SimpleScrolling';
+import PolygonMapPage from './pages/Drawing/Polygons';
 
 export type RouteDescription = {
   title: string;
@@ -31,7 +33,7 @@ const routesList: RouteGroup[] = [
         iosIcon: triangleOutline,
         mdIcon: triangleSharp,
         component: CreateAndDestroyMapPage,
-      },      
+      },
       {
         title: 'Config Maps',
         url: '/maps/config',
@@ -52,35 +54,54 @@ const routesList: RouteGroup[] = [
         iosIcon: triangleOutline,
         mdIcon: triangleSharp,
         component: SimpleScrollingPage,
-      }
+      },
     ],
   },
   {
-    groupName: "Markers",
+    groupName: 'Markers',
     pages: [
       {
-        title: "Add and Remove Marker",
-        url: "/markers/add-and-remove",
+        title: 'Add and Remove Marker',
+        url: '/markers/add-and-remove',
         iosIcon: triangleOutline,
         mdIcon: triangleSharp,
-        component: AddAndRemoveMarkers
+        component: AddAndRemoveMarkers,
       },
       {
-        title: "Multiple Markers",
-        url: "/markers/multiple-markers",
+        title: 'Multiple Markers',
+        url: '/markers/multiple-markers',
         iosIcon: triangleOutline,
         mdIcon: triangleSharp,
-        component: MultipleMarkers
+        component: MultipleMarkers,
       },
       {
-        title: "Marker Customization",
-        url: "/markers/customization",
+        title: 'Marker Customization',
+        url: '/markers/customization',
         iosIcon: triangleOutline,
         mdIcon: triangleSharp,
         component: MarkerCustomizations,
-      }
-    ]
-  }
+      },
+    ],
+  },
+  {
+    groupName: 'Drawing',
+    pages: [
+      {
+        title: 'Polygons',
+        url: '/drawing/polygons',
+        iosIcon: triangleOutline,
+        mdIcon: triangleSharp,
+        component: PolygonMapPage,
+      },
+      {
+        title: 'Polylines',
+        url: '/drawing/polylines',
+        iosIcon: triangleOutline,
+        mdIcon: triangleSharp,
+        component: PolylineMapPage,
+      },
+    ],
+  },
 ];
 
 export function getRouterSetup(): RouteDescription[] {

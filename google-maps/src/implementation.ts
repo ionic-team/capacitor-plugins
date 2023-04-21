@@ -9,6 +9,8 @@ import type {
   MapPadding,
   MapType,
   Marker,
+  Polygon,
+  Polyline,
 } from './definitions';
 
 /**
@@ -55,6 +57,26 @@ export interface RemoveMarkersArgs {
 export interface AddMarkerArgs {
   id: string;
   marker: Marker;
+}
+
+export interface AddPolygonsArgs {
+  id: string;
+  polygons: Polygon[];
+}
+
+export interface RemovePolygonsArgs {
+  id: string;
+  polygonIds: string[];
+}
+
+export interface AddPolylinesArgs {
+  id: string;
+  polylines: Polyline[];
+}
+
+export interface RemovePolylinesArgs {
+  id: string;
+  polylineIds: string[];
 }
 
 export interface CameraArgs {
@@ -124,6 +146,10 @@ export interface CapacitorGoogleMapsPlugin extends Plugin {
   addMarkers(args: AddMarkersArgs): Promise<{ ids: string[] }>;
   removeMarker(args: RemoveMarkerArgs): Promise<void>;
   removeMarkers(args: RemoveMarkersArgs): Promise<void>;
+  addPolygons(args: AddPolygonsArgs): Promise<{ ids: string[] }>;
+  removePolygons(args: RemovePolygonsArgs): Promise<void>;
+  addPolylines(args: AddPolylinesArgs): Promise<{ ids: string[] }>;
+  removePolylines(args: RemovePolylinesArgs): Promise<void>;
   enableClustering(args: EnableClusteringArgs): Promise<void>;
   disableClustering(args: { id: string }): Promise<void>;
   destroy(args: DestroyMapArgs): Promise<void>;
