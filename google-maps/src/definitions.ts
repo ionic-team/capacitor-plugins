@@ -88,6 +88,27 @@ export interface Polygon extends google.maps.PolygonOptions {
 }
 
 /**
+ * For web, all the javascript Circle options are available as
+ * Polygon extends google.maps.CircleOptions.
+ * For iOS and Android only the config options declared on Circle are available.
+ */
+export interface Circle extends google.maps.CircleOptions {
+  fillColor?: string;
+  fillOpacity?: number;
+  strokeColor?: string;
+  strokeWeight?: number;
+  geodesic?: boolean;
+  clickable?: boolean;
+  /**
+   * Title, a short description of the overlay. Some overlays, such as markers, will display the title on the map. The title is also the default accessibility text.
+   *
+   * Only available on iOS.
+   */
+  title?: string;
+  tag?: string;
+}
+
+/**
  * For web, all the javascript Polyline options are available as
  * Polyline extends google.maps.PolylineOptions.
  * For iOS and Android only the config options declared on Polyline are available.
@@ -398,6 +419,12 @@ export interface MarkerClickCallbackData extends MarkerCallbackData {
 export interface PolygonClickCallbackData {
   mapId: string;
   polygonId: string;
+  tag?: string;
+}
+
+export interface CircleClickCallbackData {
+  mapId: string;
+  circleId: string;
   tag?: string;
 }
 

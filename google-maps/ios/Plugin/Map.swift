@@ -69,6 +69,7 @@ public class Map {
     var targetViewController: UIView?
     var markers = [Int: GMSMarker]()
     var polygons = [Int: GMSPolygon]()
+    var circles = [Int: GMSCircle]()
     var polylines = [Int: GMSPolyline]()
     var markerIcons = [String: UIImage]()
 
@@ -248,6 +249,23 @@ public class Map {
         return polygonHashes
     }
 
+    func addCircles(circles: [Circle]) throws -> [Int] {
+        var circleHashes: [Int] = []
+
+        DispatchQueue.main.sync {
+            circles.forEach { circle in
+                let newCircle = self.buildCircle(circle: circle)
+                newCircle.map = self.mapViewController.GMapView
+
+                self.circles[newCircle.hash.hashValue] = newCircle
+
+                circleHashes.append(newCircle.hash.hashValue)
+            }
+        }
+
+        return circleHashes
+    }
+
     func addPolylines(lines: [Polyline]) throws -> [Int] {
         var polylineHashes: [Int] = []
 
@@ -322,6 +340,17 @@ public class Map {
                 if let polygon = self.polygons[id] {
                     polygon.map = nil
                     self.polygons.removeValue(forKey: id)
+                }
+            }
+        }
+    }
+
+    func removeCircles(ids: [Int]) throws {
+        DispatchQueue.main.sync {
+            ids.forEach { id in
+                if let circle = self.circles[id] {
+                    circle.map = nil
+                    self.circles.removeValue(forKey: id)
                 }
             }
         }
@@ -442,6 +471,21 @@ public class Map {
         }
 
         return intersections
+    }
+
+    private func buildCircle(circle: Circle) -> GMSCircle {
+        let newCircle = GMSCircle()
+        newCircle.title = circle.title
+        newCircle.strokeColor = circle.strokeColor
+        newCircle.strokeWidth = circle.strokeWidth
+        newCircle.fillColor = circle.fillColor
+        newCircle.position = CLLocationCoordinate2D(latitude: circle.center.lat, longitude: circle.center.lng)
+        newCircle.radius = CLLocationDistance(circle.radius)
+        newCircle.isTappable = circle.tappable ?? false
+        newCircle.zIndex = circle.zIndex
+        newCircle.userData = circle.tag
+
+        return newCircle
     }
 
     private func buildPolygon(polygon: Polygon) -> GMSPolygon {

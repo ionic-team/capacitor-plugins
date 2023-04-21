@@ -184,7 +184,7 @@ const PolygonMapPage: React.FC = () => {
         </IonButton>
 
         <IonButton id="drawHollowPolygonButton" onClick={createHollowPolygon}>
-            Draw Hallow Polygon
+            Draw Hollow Polygon
         </IonButton>
 
         <IonButton id="deletePolygonButton" onClick={deletePolygon}>

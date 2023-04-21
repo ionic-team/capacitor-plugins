@@ -372,6 +372,75 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
         }
     }
 
+    @objc func addCircles(_ call: CAPPluginCall) {
+        do {
+            guard let id = call.getString("id") else {
+                throw GoogleMapErrors.invalidMapId
+            }
+
+            guard let circleObjs = call.getArray("circles") as? [JSObject] else {
+                throw GoogleMapErrors.invalidArguments("circles array is missing")
+            }
+
+            if circleObjs.isEmpty {
+                throw GoogleMapErrors.invalidArguments("circles requires at least one circle")
+            }
+
+            guard let map = self.maps[id] else {
+                throw GoogleMapErrors.mapNotFound
+            }
+
+            var circles: [Circle] = []
+
+            try circleObjs.forEach { circleObj in
+                let circle = try Circle(from: circleObj)
+                circles.append(circle)
+            }
+
+            let ids = try map.addCircles(circles: circles)
+
+            call.resolve(["ids": ids.map({ id in
+                return String(id)
+            })])
+        } catch {
+            handleError(call, error: error)
+        }
+    }
+
+    @objc func removeCircles(_ call: CAPPluginCall) {
+        do {
+            guard let id = call.getString("id") else {
+                throw GoogleMapErrors.invalidMapId
+            }
+
+            guard let circleIdsStrings = call.getArray("circleIds") as? [String] else {
+                throw GoogleMapErrors.invalidArguments("circleIds are invalid or missing")
+            }
+
+            if circleIdsStrings.isEmpty {
+                throw GoogleMapErrors.invalidArguments("circleIds requires at least one cicle id")
+            }
+
+            let ids: [Int] = try circleIdsStrings.map { idString in
+                guard let circleId = Int(idString) else {
+                    throw GoogleMapErrors.invalidArguments("circleIds are invalid or missing")
+                }
+
+                return circleId
+            }
+
+            guard let map = self.maps[id] else {
+                throw GoogleMapErrors.mapNotFound
+            }
+
+            try map.removeCircles(ids: ids)
+
+            call.resolve()
+        } catch {
+            handleError(call, error: error)
+        }
+    }
+
     @objc func removePolylines(_ call: CAPPluginCall) {
         do {
             guard let id = call.getString("id") else {
@@ -823,13 +892,24 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
         ])
     }
 
-    // onPolygonClick, onPolylineClick
+    // onPolygonClick, onPolylineClick, onCircleClick
     public func mapView(_ mapView: GMSMapView, didTap overlay: GMSOverlay) {
         if let polygon = overlay as? GMSPolygon {
             self.notifyListeners("onPolygonClick", data: [
                 "mapId": self.findMapIdByMapView(mapView),
                 "polygonId": String(overlay.hash.hashValue),
                 "tag": polygon.userData as? String
+            ])
+        }
+
+        if let circle = overlay as? GMSCircle {
+            self.notifyListeners("onCircleClick", data: [
+                "mapId": self.findMapIdByMapView(mapView),
+                "circleId": String(overlay.hash.hashValue),
+                "tag": circle.userData as? String,
+                "latitude": circle.position.latitude,
+                "longitude": circle.position.longitude,
+                "radius": circle.radius
             ])
         }
 

@@ -3,6 +3,7 @@ import { registerPlugin } from '@capacitor/core';
 
 import type {
   CameraConfig,
+  Circle,
   GoogleMapConfig,
   LatLng,
   LatLngBounds,
@@ -69,6 +70,15 @@ export interface RemovePolygonsArgs {
   polygonIds: string[];
 }
 
+export interface AddCirclesArgs {
+  id: string;
+  circles: Circle[];
+}
+
+export interface RemoveCirclesArgs {
+  id: string;
+  circleIds: string[];
+}
 export interface AddPolylinesArgs {
   id: string;
   polylines: Polyline[];
@@ -148,6 +158,8 @@ export interface CapacitorGoogleMapsPlugin extends Plugin {
   removeMarkers(args: RemoveMarkersArgs): Promise<void>;
   addPolygons(args: AddPolygonsArgs): Promise<{ ids: string[] }>;
   removePolygons(args: RemovePolygonsArgs): Promise<void>;
+  addCircles(args: AddCirclesArgs): Promise<{ ids: string[] }>;
+  removeCircles(args: RemoveCirclesArgs): Promise<void>;
   addPolylines(args: AddPolylinesArgs): Promise<{ ids: string[] }>;
   removePolylines(args: RemovePolylinesArgs): Promise<void>;
   enableClustering(args: EnableClusteringArgs): Promise<void>;

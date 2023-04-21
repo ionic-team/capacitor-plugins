@@ -31,6 +31,8 @@ import type {
   MapBoundsExtendArgs,
   AddPolygonsArgs,
   RemovePolygonsArgs,
+  AddCirclesArgs,
+  RemoveCirclesArgs,
   AddPolylinesArgs,
   RemovePolylinesArgs,
 } from './implementation';
@@ -50,6 +52,9 @@ export class CapacitorGoogleMapsWeb
       polygons: {
         [id: string]: google.maps.Polygon;
       };
+      circles: {
+        [id: string]: google.maps.Circle;
+      };
       polylines: {
         [id: string]: google.maps.Polyline;
       };
@@ -59,6 +64,7 @@ export class CapacitorGoogleMapsWeb
   } = {};
   private currMarkerId = 0;
   private currPolygonId = 0;
+  private currCircleId = 0;
   private currPolylineId = 0;
 
   private onClusterClickHandler: onClusterClickHandler = (
@@ -316,6 +322,34 @@ export class CapacitorGoogleMapsWeb
     }
   }
 
+  async addCircles(args: AddCirclesArgs): Promise<{ ids: string[] }> {
+    const circleIds: string[] = [];
+    const map = this.maps[args.id];
+
+    for (const circleArgs of args.circles) {
+      const circle = new google.maps.Circle(circleArgs);
+      circle.setMap(map.map);
+
+      const id = '' + this.currCircleId;
+      this.maps[args.id].circles[id] = circle;
+      this.setCircleListeners(args.id, id, circle);
+
+      circleIds.push(id);
+      this.currCircleId++;
+    }
+
+    return { ids: circleIds };
+  }
+
+  async removeCircles(args: RemoveCirclesArgs): Promise<void> {
+    const map = this.maps[args.id];
+
+    for (const id of args.circleIds) {
+      map.circles[id].setMap(null);
+      delete map.circles[id];
+    }
+  }
+
   async addPolylines(args: AddPolylinesArgs): Promise<{ ids: string[] }> {
     const lineIds: string[] = [];
     const map = this.maps[args.id];
@@ -381,6 +415,7 @@ export class CapacitorGoogleMapsWeb
       element: _args.element,
       markers: {},
       polygons: {},
+      circles: {},
       polylines: {},
     };
     this.setMapListeners(_args.id);
@@ -430,6 +465,20 @@ export class CapacitorGoogleMapsWeb
       new google.maps.LatLng(_args.southwest.lat, _args.southwest.lng),
       new google.maps.LatLng(_args.northeast.lat, _args.northeast.lng),
     );
+  }
+
+  async setCircleListeners(
+    mapId: string,
+    circleId: string,
+    circle: google.maps.Circle,
+  ): Promise<void> {
+    circle.addListener('click', () => {
+      this.notifyListeners('onCircleClick', {
+        mapId: mapId,
+        circleId: circleId,
+        tag: circle.get('tag'),
+      });
+    });
   }
 
   async setPolygonListeners(
