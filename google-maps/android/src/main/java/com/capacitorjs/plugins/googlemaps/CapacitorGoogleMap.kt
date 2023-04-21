@@ -289,35 +289,6 @@ class CapacitorGoogleMap(
         }
     }
 
-    private fun setClusterManagerRenderer(minClusterSize: Int?) {
-        clusterManager?.renderer =
-            object :
-                DefaultClusterRenderer<CapacitorGoogleMapMarker>(
-                    delegate.bridge.context,
-                    googleMap,
-                    clusterManager
-                ) {
-                init {
-                    if(minClusterSize != null && minClusterSize > 0) {
-                        super.setMinClusterSize(minClusterSize)
-                    }
-
-                    val googleMapsPolygon = googleMap?.addPolygon(polygonOptions.await())
-                    googleMapsPolygon?.tag = it.tag
-
-                    it.googleMapsPolygon = googleMapsPolygon
-
-                    polygons[googleMapsPolygon!!.id] = it
-                    shapeIds.add(googleMapsPolygon.id)
-                }
-
-                callback(Result.success(shapeIds))
-            }
-        } catch (e: GoogleMapsError) {
-            callback(Result.failure(e))
-        }
-    }
-    
     fun addPolylines(newLines: List<CapacitorGoogleMapPolyline>, callback: (ids: Result<List<String>>) -> Unit) {
         try {
             googleMap ?: throw GoogleMapNotAvailable()
