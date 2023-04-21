@@ -393,7 +393,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
             var circles: [Circle] = []
 
             try circleObjs.forEach { circleObj in
-                let circle = try Circle(fromJSObject: circleObj)
+                let circle = try Circle(from: circleObj)
                 circles.append(circle)
             }
 

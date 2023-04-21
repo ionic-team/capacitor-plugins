@@ -12,12 +12,12 @@ public struct Circle {
     let zIndex: Int32
     let tag: String?
 
-    init(fromJSObject: JSObject) throws {
+    init(from jsObject: JSObject) throws {
         var strokeColor = UIColor.blue
         var strokeWidth: CGFloat = 1.0
         var fillColor = UIColor.blue
 
-        guard let centerLatLng = fromJSObject["center"] as? JSObject else {
+        guard let centerLatLng = jsObject["center"] as? JSObject else {
             throw GoogleMapErrors.invalidArguments("Circle object is missing the required 'center' property")
         }
 
@@ -25,25 +25,25 @@ public struct Circle {
             throw GoogleMapErrors.invalidArguments("LatLng object is missing the required 'lat' and/or 'lng' property")
         }
 
-        guard let radius = fromJSObject["radius"] as? Double else {
+        guard let radius = jsObject["radius"] as? Double else {
             throw GoogleMapErrors.invalidArguments("Circle object is missing the required 'radius' property")
         }
 
-        if let width = fromJSObject["strokeWeight"] as? Float {
+        if let width = jsObject["strokeWeight"] as? Float {
             strokeWidth = CGFloat(width)
         }
 
-        let strokeOpacity = fromJSObject["strokeOpacity"] as? Double
+        let strokeOpacity = jsObject["strokeOpacity"] as? Double
 
-        if let hexColor = fromJSObject["strokeColor"] as? String {
+        if let hexColor = jsObject["strokeColor"] as? String {
             strokeColor = UIColor(hex: hexColor) ?? UIColor.blue
         }
 
         strokeColor = strokeColor.withAlphaComponent(strokeOpacity ?? 1.0)
 
-        let fillOpacity = fromJSObject["fillOpacity"] as? Double
+        let fillOpacity = jsObject["fillOpacity"] as? Double
 
-        if let hexColor = fromJSObject["fillColor"] as? String {
+        if let hexColor = jsObject["fillColor"] as? String {
             fillColor = UIColor(hex: hexColor) ?? UIColor.blue
         }
 
@@ -54,9 +54,9 @@ public struct Circle {
         self.fillColor = fillColor
         self.strokeColor = strokeColor
         self.strokeWidth = strokeWidth
-        self.tag = fromJSObject["tag"] as? String
-        self.tappable = fromJSObject["clickable"] as? Bool
-        self.title = fromJSObject["title"] as? String
-        self.zIndex = Int32((fromJSObject["zIndex"] as? Int) ?? 0)
+        self.tag = jsObject["tag"] as? String
+        self.tappable = jsObject["clickable"] as? Bool
+        self.title = jsObject["title"] as? String
+        self.zIndex = Int32((jsObject["zIndex"] as? Int) ?? 0)
     }
 }
