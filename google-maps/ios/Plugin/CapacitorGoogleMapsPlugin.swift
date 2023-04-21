@@ -397,7 +397,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
                 circles.append(circle)
             }
 
-            let ids = try map.addCricles(circles: circles)
+            let ids = try map.addCircles(circles: circles)
 
             call.resolve(["ids": ids.map({ id in
                 return String(id)
@@ -433,7 +433,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
                 throw GoogleMapErrors.mapNotFound
             }
 
-            try map.removeCricles(ids: ids)
+            try map.removeCircles(ids: ids)
 
             call.resolve()
         } catch {
