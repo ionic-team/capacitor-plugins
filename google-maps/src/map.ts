@@ -80,7 +80,7 @@ export interface GoogleMapInterface {
   ): Promise<void>;
   setOnPolygonClickListener(
     callback?: MapListenerCallback<PolygonClickCallbackData>,
-    ): Promise<void>;
+  ): Promise<void>;
   setOnPolylineClickListener(
     callback?: MapListenerCallback<PolylineCallbackData>,
   ): Promise<void>;
@@ -315,7 +315,7 @@ export class GoogleMap {
 
     return res.ids;
   }
-  
+
   async addPolylines(polylines: Polyline[]): Promise<string[]> {
     const res = await CapacitorGoogleMaps.addPolylines({
       id: this.id,
@@ -331,7 +331,7 @@ export class GoogleMap {
       polygonIds: ids,
     });
   }
-  
+
   async removePolylines(ids: string[]): Promise<void> {
     return CapacitorGoogleMaps.removePolylines({
       id: this.id,

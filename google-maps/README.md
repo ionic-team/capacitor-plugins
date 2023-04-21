@@ -278,6 +278,8 @@ export default MyMap;
 * [`removeMarkers(...)`](#removemarkers)
 * [`addPolygons(...)`](#addpolygons)
 * [`removePolygons(...)`](#removepolygons)
+* [`addPolylines(...)`](#addpolylines)
+* [`removePolylines(...)`](#removepolylines)
 * [`destroy()`](#destroy)
 * [`setCamera(...)`](#setcamera)
 * [`getMapType()`](#getmaptype)
@@ -296,6 +298,7 @@ export default MyMap;
 * [`setOnMapClickListener(...)`](#setonmapclicklistener)
 * [`setOnMarkerClickListener(...)`](#setonmarkerclicklistener)
 * [`setOnPolygonClickListener(...)`](#setonpolygonclicklistener)
+* [`setOnPolylineClickListener(...)`](#setonpolylineclicklistener)
 * [`setOnMarkerDragStartListener(...)`](#setonmarkerdragstartlistener)
 * [`setOnMarkerDragListener(...)`](#setonmarkerdraglistener)
 * [`setOnMarkerDragEndListener(...)`](#setonmarkerdragendlistener)
@@ -423,6 +426,34 @@ addPolygons(polygons: Polygon[]) => Promise<string[]>
 
 ```typescript
 removePolygons(ids: string[]) => Promise<void>
+```
+
+| Param     | Type                  |
+| --------- | --------------------- |
+| **`ids`** | <code>string[]</code> |
+
+--------------------
+
+
+### addPolylines(...)
+
+```typescript
+addPolylines(polylines: Polyline[]) => Promise<string[]>
+```
+
+| Param           | Type                    |
+| --------------- | ----------------------- |
+| **`polylines`** | <code>Polyline[]</code> |
+
+**Returns:** <code>Promise&lt;string[]&gt;</code>
+
+--------------------
+
+
+### removePolylines(...)
+
+```typescript
+removePolylines(ids: string[]) => Promise<void>
 ```
 
 | Param     | Type                  |
@@ -662,6 +693,19 @@ setOnPolygonClickListener(callback?: MapListenerCallback<PolygonClickCallbackDat
 --------------------
 
 
+### setOnPolylineClickListener(...)
+
+```typescript
+setOnPolylineClickListener(callback?: MapListenerCallback<PolylineCallbackData> | undefined) => Promise<void>
+```
+
+| Param          | Type                                                                                                                                |
+| -------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| **`callback`** | <code><a href="#maplistenercallback">MapListenerCallback</a>&lt;<a href="#polylinecallbackdata">PolylineCallbackData</a>&gt;</code> |
+
+--------------------
+
+
 ### setOnMarkerDragStartListener(...)
 
 ```typescript
@@ -829,6 +873,33 @@ https://tools.ietf.org/html/rfc7946#section-3.1.6
 | **`coordinates`** | <code>Position[][]</code>                     |                                       |
 
 
+#### Polyline
+
+For web, all the javascript <a href="#polyline">Polyline</a> options are available as
+Polyline extends google.maps.PolylineOptions.
+For iOS and Android only the config options declared on <a href="#polyline">Polyline</a> are available.
+
+| Prop                | Type                     | Description                                                                                                                                                                                                                                                                                                                                                                                    |
+| ------------------- | ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`strokeColor`**   | <code>string</code>      | The stroke color. All CSS3 colors are supported except for extended named colors.                                                                                                                                                                                                                                                                                                              |
+| **`strokeOpacity`** | <code>number</code>      | The stroke opacity between 0.0 and 1.0.                                                                                                                                                                                                                                                                                                                                                        |
+| **`strokeWeight`**  | <code>number</code>      | The stroke width in pixels.                                                                                                                                                                                                                                                                                                                                                                    |
+| **`geodesic`**      | <code>boolean</code>     | When &lt;code&gt;true&lt;/code&gt;, edges of the polygon are interpreted as geodesic and will follow the curvature of the Earth. When &lt;code&gt;false&lt;/code&gt;, edges of the polygon are rendered as straight lines in screen space. Note that the shape of a geodesic polygon may appear to change when dragged, as the dimensions are maintained relative to the surface of the earth. |
+| **`clickable`**     | <code>boolean</code>     | Indicates whether this &lt;code&gt;<a href="#polyline">Polyline</a>&lt;/code&gt; handles mouse events.                                                                                                                                                                                                                                                                                         |
+| **`tag`**           | <code>string</code>      |                                                                                                                                                                                                                                                                                                                                                                                                |
+| **`styleSpans`**    | <code>StyleSpan[]</code> | Used to specify the color of one or more segments of a polyline. The styleSpans property is an array of <a href="#stylespan">StyleSpan</a> objects. Setting the spans property is the preferred way to change the color of a polyline. Only on iOS and Android.                                                                                                                                |
+
+
+#### StyleSpan
+
+Describes the style for some region of a polyline.
+
+| Prop           | Type                | Description                                                                       |
+| -------------- | ------------------- | --------------------------------------------------------------------------------- |
+| **`color`**    | <code>string</code> | The stroke color. All CSS3 colors are supported except for extended named colors. |
+| **`segments`** | <code>number</code> | The length of this span in number of segments.                                    |
+
+
 #### CameraConfig
 
 Configuration properties for a Google Map Camera
@@ -921,6 +992,14 @@ Controls for setting padding on the 'visible' region of the view.
 | **`mapId`**     | <code>string</code> |
 | **`polygonId`** | <code>string</code> |
 | **`tag`**       | <code>string</code> |
+
+
+#### PolylineCallbackData
+
+| Prop             | Type                |
+| ---------------- | ------------------- |
+| **`polylineId`** | <code>string</code> |
+| **`tag`**        | <code>string</code> |
 
 
 #### MyLocationButtonClickCallbackData

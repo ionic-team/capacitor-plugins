@@ -325,7 +325,7 @@ public class Map {
             }
         }
     }
-    
+
     func removePolylines(ids: [Int]) throws {
         DispatchQueue.main.sync {
             ids.forEach { id in
@@ -480,7 +480,7 @@ public class Map {
 
         return newPolygon
     }
-    
+
     private func buildPolyline(line: Polyline) -> GMSPolyline {
         let newPolyline = GMSPolyline()
         newPolyline.title = line.title
