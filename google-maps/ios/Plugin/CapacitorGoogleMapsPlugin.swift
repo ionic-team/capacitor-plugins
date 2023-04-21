@@ -267,6 +267,75 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
         }
     }
 
+    @objc func addPolylines(_ call: CAPPluginCall) {
+        do {
+            guard let id = call.getString("id") else {
+                throw GoogleMapErrors.invalidMapId
+            }
+
+            guard let lineObjs = call.getArray("polylines") as? [JSObject] else {
+                throw GoogleMapErrors.invalidArguments("polylines array is missing")
+            }
+
+            if lineObjs.isEmpty {
+                throw GoogleMapErrors.invalidArguments("polylines requires at least one line")
+            }
+
+            guard let map = self.maps[id] else {
+                throw GoogleMapErrors.mapNotFound
+            }
+
+            var lines: [Polyline] = []
+
+            try lineObjs.forEach { lineObj in
+                let line = try Polyline(fromJSObject: lineObj)
+                lines.append(line)
+            }
+
+            let ids = try map.addPolylines(lines: lines)
+
+            call.resolve(["ids": ids.map({ id in
+                return String(id)
+            })])
+        } catch {
+            handleError(call, error: error)
+        }
+    }
+
+    @objc func removePolylines(_ call: CAPPluginCall) {
+        do {
+            guard let id = call.getString("id") else {
+                throw GoogleMapErrors.invalidMapId
+            }
+
+            guard let polylineIdsStrings = call.getArray("polylineIds") as? [String] else {
+                throw GoogleMapErrors.invalidArguments("polylineIds are invalid or missing")
+            }
+
+            if polylineIdsStrings.isEmpty {
+                throw GoogleMapErrors.invalidArguments("polylineIds requires at least one polyline id")
+            }
+
+            let ids: [Int] = try polylineIdsStrings.map { idString in
+                guard let polylineId = Int(idString) else {
+                    throw GoogleMapErrors.invalidArguments("polylineIds are invalid or missing")
+                }
+
+                return polylineId
+            }
+
+            guard let map = self.maps[id] else {
+                throw GoogleMapErrors.mapNotFound
+            }
+
+            try map.removePolylines(ids: ids)
+
+            call.resolve()
+        } catch {
+            handleError(call, error: error)
+        }
+    }
+
     @objc func setCamera(_ call: CAPPluginCall) {
         do {
             guard let id = call.getString("id") else {
@@ -682,6 +751,17 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
             "latitude": coordinate.latitude,
             "longitude": coordinate.longitude
         ])
+    }
+
+    // onPolylineClick
+    public func mapView(_ mapView: GMSMapView, didTap overlay: GMSOverlay) {
+        if let polyline = overlay as? GMSPolyline {
+            self.notifyListeners("onPolylineClick", data: [
+                "mapId": self.findMapIdByMapView(mapView),
+                "polylineId": String(overlay.hash.hashValue),
+                "tag": polyline.userData as? String
+            ])
+        }
     }
 
     // onClusterClick, onMarkerClick

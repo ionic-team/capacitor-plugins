@@ -1,5 +1,6 @@
 import { triangleOutline, triangleSharp } from 'ionicons/icons';
 import React from 'react';
+import PolylineMapPage from './pages/Drawing/Polylines';
 import BoundsMapPage from './pages/Map/Bounds';
 import ConfigMapPage from './pages/Map/ConfigMap';
 import CreateAndDestroyMapPage from './pages/Map/CreateAndDestroyMap';
@@ -78,6 +79,18 @@ const routesList: RouteGroup[] = [
         iosIcon: triangleOutline,
         mdIcon: triangleSharp,
         component: MarkerCustomizations,
+      }
+    ]
+  },
+  {
+    groupName: "Drawing",
+    pages: [
+      {
+        title: "Polylines",
+        url: "/drawing/polylines",
+        iosIcon: triangleOutline,
+        mdIcon: triangleSharp,
+        component: PolylineMapPage,
       }
     ]
   }

@@ -7,8 +7,10 @@ CAP_PLUGIN(CapacitorGoogleMapsPlugin, "CapacitorGoogleMaps",
    CAP_PLUGIN_METHOD(create, CAPPluginReturnPromise);
    CAP_PLUGIN_METHOD(addMarker, CAPPluginReturnPromise);
    CAP_PLUGIN_METHOD(addMarkers, CAPPluginReturnPromise);
+   CAP_PLUGIN_METHOD(addPolylines, CAPPluginReturnPromise);
    CAP_PLUGIN_METHOD(removeMarker, CAPPluginReturnPromise);
    CAP_PLUGIN_METHOD(removeMarkers, CAPPluginReturnPromise);
+   CAP_PLUGIN_METHOD(removePolylines, CAPPluginReturnPromise);
    CAP_PLUGIN_METHOD(enableClustering, CAPPluginReturnPromise);
    CAP_PLUGIN_METHOD(disableClustering, CAPPluginReturnPromise);
    CAP_PLUGIN_METHOD(destroy, CAPPluginReturnPromise);
