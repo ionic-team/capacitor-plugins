@@ -87,6 +87,11 @@ export interface Polygon extends google.maps.PolygonOptions {
   tag?: string;
 }
 
+/**
+ * For web, all the javascript Circle options are available as
+ * Polygon extends google.maps.CircleOptions.
+ * For iOS and Android only the config options declared on Circle are available.
+ */
 export interface Circle extends google.maps.CircleOptions {
   fillColor?: string;
   fillOpacity?: number;

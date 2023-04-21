@@ -349,7 +349,7 @@ export class CapacitorGoogleMapsWeb
       delete map.circles[id];
     }
   }
-  
+
   async addPolylines(args: AddPolylinesArgs): Promise<{ ids: string[] }> {
     const lineIds: string[] = [];
     const map = this.maps[args.id];

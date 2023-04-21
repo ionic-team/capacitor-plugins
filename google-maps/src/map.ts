@@ -87,7 +87,7 @@ export interface GoogleMapInterface {
   ): Promise<void>;
   setOnCircleClickListener(
     callback?: MapListenerCallback<CircleClickCallbackData>,
-    ): Promise<void>;
+  ): Promise<void>;
   setOnPolylineClickListener(
     callback?: MapListenerCallback<PolylineCallbackData>,
   ): Promise<void>;
@@ -355,7 +355,7 @@ export class GoogleMap {
       circleIds: ids,
     });
   }
-  
+
   async removePolylines(ids: string[]): Promise<void> {
     return CapacitorGoogleMaps.removePolylines({
       id: this.id,

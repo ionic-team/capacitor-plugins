@@ -351,7 +351,7 @@ public class Map {
                 if let circle = self.circles[id] {
                     circle.map = nil
                     self.circles.removeValue(forKey: id)
-                    }
+                }
             }
         }
     }
