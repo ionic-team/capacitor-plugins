@@ -17,6 +17,8 @@ import type {
   PolygonClickCallbackData,
   Circle,
   CircleClickCallbackData,
+  Polyline,
+  PolylineCallbackData,
 } from './definitions';
 import { LatLngBounds, MapType } from './definitions';
 import type { CreateMapArgs } from './implementation';
@@ -42,6 +44,8 @@ export interface GoogleMapInterface {
   removePolygons(ids: string[]): Promise<void>;
   addCircles(circles: Circle[]): Promise<string[]>;
   removeCircles(ids: string[]): Promise<void>;
+  addPolylines(polylines: Polyline[]): Promise<string[]>;
+  removePolylines(ids: string[]): Promise<void>;
   destroy(): Promise<void>;
   setCamera(config: CameraConfig): Promise<void>;
   /**
@@ -83,6 +87,9 @@ export interface GoogleMapInterface {
   ): Promise<void>;
   setOnCircleClickListener(
     callback?: MapListenerCallback<CircleClickCallbackData>,
+    ): Promise<void>;
+  setOnPolylineClickListener(
+    callback?: MapListenerCallback<PolylineCallbackData>,
   ): Promise<void>;
   setOnMarkerDragStartListener(
     callback?: MapListenerCallback<MarkerClickCallbackData>,
@@ -132,6 +139,7 @@ export class GoogleMap {
   private onClusterInfoWindowClickListener?: PluginListenerHandle;
   private onInfoWindowClickListener?: PluginListenerHandle;
   private onMapClickListener?: PluginListenerHandle;
+  private onPolylineClickListener?: PluginListenerHandle;
   private onMarkerClickListener?: PluginListenerHandle;
   private onPolygonClickListener?: PluginListenerHandle;
   private onCircleClickListener?: PluginListenerHandle;
@@ -316,6 +324,15 @@ export class GoogleMap {
     return res.ids;
   }
 
+  async addPolylines(polylines: Polyline[]): Promise<string[]> {
+    const res = await CapacitorGoogleMaps.addPolylines({
+      id: this.id,
+      polylines,
+    });
+
+    return res.ids;
+  }
+
   async removePolygons(ids: string[]): Promise<void> {
     return CapacitorGoogleMaps.removePolygons({
       id: this.id,
@@ -336,6 +353,13 @@ export class GoogleMap {
     return CapacitorGoogleMaps.removeCircles({
       id: this.id,
       circleIds: ids,
+    });
+  }
+  
+  async removePolylines(ids: string[]): Promise<void> {
+    return CapacitorGoogleMaps.removePolylines({
+      id: this.id,
+      polylineIds: ids,
     });
   }
 
@@ -765,6 +789,28 @@ export class GoogleMap {
       );
     } else {
       this.onMarkerClickListener = undefined;
+    }
+  }
+  /**
+   * Set the event listener on the map for 'onPolylineClick' events.
+   *
+   * @param callback
+   * @returns
+   */
+  async setOnPolylineClickListener(
+    callback?: MapListenerCallback<PolylineCallbackData>,
+  ): Promise<void> {
+    if (this.onPolylineClickListener) {
+      this.onPolylineClickListener.remove();
+    }
+
+    if (callback) {
+      this.onPolylineClickListener = await CapacitorGoogleMaps.addListener(
+        'onPolylineClick',
+        this.generateCallback(callback),
+      );
+    } else {
+      this.onPolylineClickListener = undefined;
     }
   }
 

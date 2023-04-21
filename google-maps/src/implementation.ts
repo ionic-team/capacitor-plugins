@@ -11,6 +11,7 @@ import type {
   MapType,
   Marker,
   Polygon,
+  Polyline,
 } from './definitions';
 
 /**
@@ -77,6 +78,15 @@ export interface AddCirclesArgs {
 export interface RemoveCirclesArgs {
   id: string;
   circleIds: string[];
+}
+export interface AddPolylinesArgs {
+  id: string;
+  polylines: Polyline[];
+}
+
+export interface RemovePolylinesArgs {
+  id: string;
+  polylineIds: string[];
 }
 
 export interface CameraArgs {
@@ -150,6 +160,8 @@ export interface CapacitorGoogleMapsPlugin extends Plugin {
   removePolygons(args: RemovePolygonsArgs): Promise<void>;
   addCircles(args: AddCirclesArgs): Promise<{ ids: string[] }>;
   removeCircles(args: RemoveCirclesArgs): Promise<void>;
+  addPolylines(args: AddPolylinesArgs): Promise<{ ids: string[] }>;
+  removePolylines(args: RemovePolylinesArgs): Promise<void>;
   enableClustering(args: EnableClusteringArgs): Promise<void>;
   disableClustering(args: { id: string }): Promise<void>;
   destroy(args: DestroyMapArgs): Promise<void>;

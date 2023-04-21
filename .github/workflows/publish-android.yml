@@ -50,11 +50,11 @@ jobs:
       with:
         fetch-depth: 0
         token: ${{ secrets.CAP_GH_RELEASE_TOKEN }}
-    - name: set up JDK 11
-      uses: actions/setup-java@v2
+    - name: set up JDK 17
+      uses: actions/setup-java@v3
       with:
-        java-version: '11'
-        distribution: 'adopt'
+        java-version: '17'
+        distribution: 'zulu'
     - name: Grant execute permission for publishing script
       run: chmod +x ./scripts/publish-android.sh
     - name: Run publish script

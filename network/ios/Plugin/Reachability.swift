@@ -168,7 +168,7 @@ public extension Reachability {
     func startNotifier() throws {
         guard !notifierRunning else { return }
 
-        let callback: SCNetworkReachabilityCallBack = { (reachability, flags, info) in
+        let callback: SCNetworkReachabilityCallBack = { (_, flags, info) in
             guard let info = info else { return }
 
             // `weakifiedReachability` is guaranteed to exist by virtue of our
