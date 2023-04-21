@@ -31,6 +31,8 @@ import type {
   MapBoundsExtendArgs,
   AddPolygonsArgs,
   RemovePolygonsArgs,
+  AddPolylinesArgs,
+  RemovePolylinesArgs,
 } from './implementation';
 
 export class CapacitorGoogleMapsWeb
@@ -48,12 +50,16 @@ export class CapacitorGoogleMapsWeb
       polygons: {
         [id: string]: google.maps.Polygon;
       };
+      polylines: {
+        [id: string]: google.maps.Polyline;
+      };
       markerClusterer?: MarkerClusterer;
       trafficLayer?: google.maps.TrafficLayer;
     };
   } = {};
   private currMarkerId = 0;
   private currPolygonId = 0;
+  private currPolylineId = 0;
 
   private onClusterClickHandler: onClusterClickHandler = (
     _: google.maps.MapMouseEvent,
@@ -310,6 +316,37 @@ export class CapacitorGoogleMapsWeb
     }
   }
 
+  async addPolylines(args: AddPolylinesArgs): Promise<{ ids: string[] }> {
+    const lineIds: string[] = [];
+    const map = this.maps[args.id];
+
+    for (const polylineArgs of args.polylines) {
+      const polyline = new google.maps.Polyline(polylineArgs);
+      polyline.set('tag', polylineArgs.tag);
+      polyline.setMap(map.map);
+
+      const id = '' + this.currPolylineId;
+      this.maps[args.id].polylines[id] = polyline;
+      this.setPolylineListeners(args.id, id, polyline);
+
+      lineIds.push(id);
+      this.currPolylineId++;
+    }
+
+    return {
+      ids: lineIds,
+    };
+  }
+
+  async removePolylines(args: RemovePolylinesArgs): Promise<void> {
+    const map = this.maps[args.id];
+
+    for (const id of args.polylineIds) {
+      map.polylines[id].setMap(null);
+      delete map.polylines[id];
+    }
+  }
+
   async enableClustering(_args: EnableClusteringArgs): Promise<void> {
     const markers: google.maps.Marker[] = [];
 
@@ -344,6 +381,7 @@ export class CapacitorGoogleMapsWeb
       element: _args.element,
       markers: {},
       polygons: {},
+      polylines: {},
     };
     this.setMapListeners(_args.id);
   }
@@ -404,6 +442,20 @@ export class CapacitorGoogleMapsWeb
         mapId: mapId,
         polygonId: polygonId,
         tag: polygon.get('tag'),
+      });
+    });
+  }
+
+  async setPolylineListeners(
+    mapId: string,
+    polylineId: string,
+    polyline: google.maps.Polyline,
+  ): Promise<void> {
+    polyline.addListener('click', () => {
+      this.notifyListeners('onPolylineClick', {
+        mapId: mapId,
+        polylineId: polylineId,
+        tag: polyline.get('tag'),
       });
     });
   }
