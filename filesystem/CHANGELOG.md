@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.5](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@4.1.4...@capacitor/filesystem@4.1.5) (2023-04-26)
+
+
+### Bug Fixes
+
+* **filesystem:** copy and rename not working on web  ([#1491](https://github.com/ionic-team/capacitor-plugins/issues/1491)) ([dd2b1b9](https://github.com/ionic-team/capacitor-plugins/commit/dd2b1b955503dd9ae5c12c1bd291f7ff0fe2e06e))
+
+
+
+
+
 ## [4.1.4](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@4.1.3...@capacitor/filesystem@4.1.4) (2022-11-16)
 
 **Note:** Version bump only for package @capacitor/filesystem

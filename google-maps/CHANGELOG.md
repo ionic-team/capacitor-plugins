@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.5.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/google-maps@4.5.0...@capacitor/google-maps@4.5.1) (2023-04-26)
+
+
+### Bug Fixes
+
+* **google-maps:** Cast iOS marker id to string ([#1222](https://github.com/ionic-team/capacitor-plugins/issues/1222)) ([#1535](https://github.com/ionic-team/capacitor-plugins/issues/1535)) ([a7c6494](https://github.com/ionic-team/capacitor-plugins/commit/a7c649465ae460b6aaeac9e4c663d02c21ceb3a2))
+
+
+
+
+
 # [4.5.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/google-maps@4.4.0...@capacitor/google-maps@4.5.0) (2023-02-22)
 
 

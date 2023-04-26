@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.5](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@4.1.4...@capacitor/camera@4.1.5) (2023-04-26)
+
+
+### Bug Fixes
+
+* **camera:** prevent iOS crash with 0 limited images selected ([#1495](https://github.com/ionic-team/capacitor-plugins/issues/1495)) ([#1499](https://github.com/ionic-team/capacitor-plugins/issues/1499)) ([188b933](https://github.com/ionic-team/capacitor-plugins/commit/188b933050dd5660ba7893de6f4b96f95ee763c6))
+
+
+
+
+
 ## [4.1.4](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@4.1.3...@capacitor/camera@4.1.4) (2022-11-16)
 
 **Note:** Version bump only for package @capacitor/camera
