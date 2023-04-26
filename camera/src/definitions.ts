@@ -193,7 +193,7 @@ export interface Photo {
   /**
    * The url starting with 'data:image/jpeg;base64,' and the base64 encoded string representation of the image, if using CameraResultType.DataUrl.
    *
-   * Note: On web, the file format will change depending on the browser.
+   * Note: On web, the file format could change depending on the browser.
    * @since 1.0.0
    */
   dataUrl?: string;
