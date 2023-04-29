@@ -22,7 +22,7 @@ import { Share } from '@capacitor/share';
 
 await Share.share({
   title: 'See cool stuff',
-  text: 'Really awesome thing you need to see right meow',
+  text: 'Really awesome thing you need to see right now',
   url: 'http://ionicframework.com/',
   dialogTitle: 'Share with buddies',
 });
