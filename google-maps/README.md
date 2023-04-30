@@ -22,7 +22,13 @@ The Google Maps SDK supports the use of showing the users current location via `
 
 Read about [Configuring `Info.plist`](https://capacitorjs.com/docs/ios/configuration#configuring-infoplist) in the [iOS Guide](https://capacitorjs.com/docs/ios) for more information on setting iOS permissions in Xcode.
 
-> The Google Maps SDK currently does not support running on simulators using the new M1-based Macbooks. This is a [known and acknowledged issue](https://developers.google.com/maps/faq#arm-based-macs) and requires a fix from Google. If you are developing on a M1 Macbook, building and running on physical devices is still supported and is the recommended approach.
+> The main Google Maps SDK now supports running on simulators on Apple Silicon Macs, however, a dependency from Google called [Google-Maps-Utils-iOS](https://github.com/googlemaps/google-maps-ios-utils) does not yet support Apple Silicon. This is requires a new release of the library from Google. If you are developing on an Apple Silicon Mac, building and running on physical devices is still supported and is the recommended approach.
+
+> A workaround on Apple Silicon Macs if you want/need to use the simulator is adding the following line to your Podfile in the `target 'App'` section after the `# Add your Pods here` line:
+
+```
+pod 'Google-Maps-iOS-Utils', :git => 'https://github.com/googlemaps/google-maps-ios-utils.git', :commit => '637954e5bcb2a879c11a6f2cead153a6bad5339f'
+```
 
 ## Android
 
@@ -49,7 +55,7 @@ This plugin will use the following project variables (defined in your app's `var
 - `$googleMapsUtilsKtxVersion`: version of `com.google.maps.android:maps-utils-ktx` (default: `3.4.0`)
 - `$kotlinxCoroutinesVersion`: version of `org.jetbrains.kotlinx:kotlinx-coroutines-android` and `org.jetbrains.kotlinx:kotlinx-coroutines-core` (default: `1.6.4`)
 - `$androidxCoreKTXVersion`: version of `androidx.core:core-ktx` (default: `1.10.0`)
-- `$kotlin_version`: version of `org.jetbrains.kotlin:kotlin-stdlib` (default: `1.8.20`)
+- `$kotlin_version`: version of `org.jetbrains.kotlin:kotlin-stdlib-jdk7` (default: `1.8.20`)
 
 
 ## Usage
@@ -276,6 +282,12 @@ export default MyMap;
 * [`addMarkers(...)`](#addmarkers)
 * [`removeMarker(...)`](#removemarker)
 * [`removeMarkers(...)`](#removemarkers)
+* [`addPolygons(...)`](#addpolygons)
+* [`removePolygons(...)`](#removepolygons)
+* [`addCircles(...)`](#addcircles)
+* [`removeCircles(...)`](#removecircles)
+* [`addPolylines(...)`](#addpolylines)
+* [`removePolylines(...)`](#removepolylines)
 * [`destroy()`](#destroy)
 * [`setCamera(...)`](#setcamera)
 * [`getMapType()`](#getmaptype)
@@ -293,6 +305,9 @@ export default MyMap;
 * [`setOnInfoWindowClickListener(...)`](#setoninfowindowclicklistener)
 * [`setOnMapClickListener(...)`](#setonmapclicklistener)
 * [`setOnMarkerClickListener(...)`](#setonmarkerclicklistener)
+* [`setOnPolygonClickListener(...)`](#setonpolygonclicklistener)
+* [`setOnCircleClickListener(...)`](#setoncircleclicklistener)
+* [`setOnPolylineClickListener(...)`](#setonpolylineclicklistener)
 * [`setOnMarkerDragStartListener(...)`](#setonmarkerdragstartlistener)
 * [`setOnMarkerDragListener(...)`](#setonmarkerdraglistener)
 * [`setOnMarkerDragEndListener(...)`](#setonmarkerdragendlistener)
@@ -392,6 +407,90 @@ removeMarker(id: string) => Promise<void>
 
 ```typescript
 removeMarkers(ids: string[]) => Promise<void>
+```
+
+| Param     | Type                  |
+| --------- | --------------------- |
+| **`ids`** | <code>string[]</code> |
+
+--------------------
+
+
+### addPolygons(...)
+
+```typescript
+addPolygons(polygons: Polygon[]) => Promise<string[]>
+```
+
+| Param          | Type                   |
+| -------------- | ---------------------- |
+| **`polygons`** | <code>Polygon[]</code> |
+
+**Returns:** <code>Promise&lt;string[]&gt;</code>
+
+--------------------
+
+
+### removePolygons(...)
+
+```typescript
+removePolygons(ids: string[]) => Promise<void>
+```
+
+| Param     | Type                  |
+| --------- | --------------------- |
+| **`ids`** | <code>string[]</code> |
+
+--------------------
+
+
+### addCircles(...)
+
+```typescript
+addCircles(circles: Circle[]) => Promise<string[]>
+```
+
+| Param         | Type                  |
+| ------------- | --------------------- |
+| **`circles`** | <code>Circle[]</code> |
+
+**Returns:** <code>Promise&lt;string[]&gt;</code>
+
+--------------------
+
+
+### removeCircles(...)
+
+```typescript
+removeCircles(ids: string[]) => Promise<void>
+```
+
+| Param     | Type                  |
+| --------- | --------------------- |
+| **`ids`** | <code>string[]</code> |
+
+--------------------
+
+
+### addPolylines(...)
+
+```typescript
+addPolylines(polylines: Polyline[]) => Promise<string[]>
+```
+
+| Param           | Type                    |
+| --------------- | ----------------------- |
+| **`polylines`** | <code>Polyline[]</code> |
+
+**Returns:** <code>Promise&lt;string[]&gt;</code>
+
+--------------------
+
+
+### removePolylines(...)
+
+```typescript
+removePolylines(ids: string[]) => Promise<void>
 ```
 
 | Param     | Type                  |
@@ -618,6 +717,45 @@ setOnMarkerClickListener(callback?: MapListenerCallback<MarkerClickCallbackData>
 --------------------
 
 
+### setOnPolygonClickListener(...)
+
+```typescript
+setOnPolygonClickListener(callback?: MapListenerCallback<PolygonClickCallbackData> | undefined) => Promise<void>
+```
+
+| Param          | Type                                                                                                                                        |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`callback`** | <code><a href="#maplistenercallback">MapListenerCallback</a>&lt;<a href="#polygonclickcallbackdata">PolygonClickCallbackData</a>&gt;</code> |
+
+--------------------
+
+
+### setOnCircleClickListener(...)
+
+```typescript
+setOnCircleClickListener(callback?: MapListenerCallback<CircleClickCallbackData> | undefined) => Promise<void>
+```
+
+| Param          | Type                                                                                                                                      |
+| -------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| **`callback`** | <code><a href="#maplistenercallback">MapListenerCallback</a>&lt;<a href="#circleclickcallbackdata">CircleClickCallbackData</a>&gt;</code> |
+
+--------------------
+
+
+### setOnPolylineClickListener(...)
+
+```typescript
+setOnPolylineClickListener(callback?: MapListenerCallback<PolylineCallbackData> | undefined) => Promise<void>
+```
+
+| Param          | Type                                                                                                                                |
+| -------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| **`callback`** | <code><a href="#maplistenercallback">MapListenerCallback</a>&lt;<a href="#polylinecallbackdata">PolylineCallbackData</a>&gt;</code> |
+
+--------------------
+
+
 ### setOnMarkerDragStartListener(...)
 
 ```typescript
@@ -774,6 +912,62 @@ https://tools.ietf.org/html/rfc7946#section-3.1.2
 | **`coordinates`** | <code><a href="#position">Position</a></code> |                                       |
 
 
+#### Polygon
+
+<a href="#polygon">Polygon</a> geometry object.
+https://tools.ietf.org/html/rfc7946#section-3.1.6
+
+| Prop              | Type                                          | Description                           |
+| ----------------- | --------------------------------------------- | ------------------------------------- |
+| **`type`**        | <code>'<a href="#polygon">Polygon</a>'</code> | Specifies the type of GeoJSON object. |
+| **`coordinates`** | <code>Position[][]</code>                     |                                       |
+
+
+#### Circle
+
+For web, all the javascript <a href="#circle">Circle</a> options are available as
+Polygon extends google.maps.CircleOptions.
+For iOS and Android only the config options declared on <a href="#circle">Circle</a> are available.
+
+| Prop               | Type                 | Description                                                                                                                                                                            |
+| ------------------ | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`fillColor`**    | <code>string</code>  | The fill color. All CSS3 colors are supported except for extended named colors.                                                                                                        |
+| **`fillOpacity`**  | <code>number</code>  | The fill opacity between 0.0 and 1.0.                                                                                                                                                  |
+| **`strokeColor`**  | <code>string</code>  | The stroke color. All CSS3 colors are supported except for extended named colors.                                                                                                      |
+| **`strokeWeight`** | <code>number</code>  | The stroke width in pixels.                                                                                                                                                            |
+| **`geodesic`**     | <code>boolean</code> |                                                                                                                                                                                        |
+| **`clickable`**    | <code>boolean</code> | Indicates whether this &lt;code&gt;<a href="#circle">Circle</a>&lt;/code&gt; handles mouse events.                                                                                     |
+| **`title`**        | <code>string</code>  | Title, a short description of the overlay. Some overlays, such as markers, will display the title on the map. The title is also the default accessibility text. Only available on iOS. |
+| **`tag`**          | <code>string</code>  |                                                                                                                                                                                        |
+
+
+#### Polyline
+
+For web, all the javascript <a href="#polyline">Polyline</a> options are available as
+Polyline extends google.maps.PolylineOptions.
+For iOS and Android only the config options declared on <a href="#polyline">Polyline</a> are available.
+
+| Prop                | Type                     | Description                                                                                                                                                                                                                                                                                                                                                                                    |
+| ------------------- | ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`strokeColor`**   | <code>string</code>      | The stroke color. All CSS3 colors are supported except for extended named colors.                                                                                                                                                                                                                                                                                                              |
+| **`strokeOpacity`** | <code>number</code>      | The stroke opacity between 0.0 and 1.0.                                                                                                                                                                                                                                                                                                                                                        |
+| **`strokeWeight`**  | <code>number</code>      | The stroke width in pixels.                                                                                                                                                                                                                                                                                                                                                                    |
+| **`geodesic`**      | <code>boolean</code>     | When &lt;code&gt;true&lt;/code&gt;, edges of the polygon are interpreted as geodesic and will follow the curvature of the Earth. When &lt;code&gt;false&lt;/code&gt;, edges of the polygon are rendered as straight lines in screen space. Note that the shape of a geodesic polygon may appear to change when dragged, as the dimensions are maintained relative to the surface of the earth. |
+| **`clickable`**     | <code>boolean</code>     | Indicates whether this &lt;code&gt;<a href="#polyline">Polyline</a>&lt;/code&gt; handles mouse events.                                                                                                                                                                                                                                                                                         |
+| **`tag`**           | <code>string</code>      |                                                                                                                                                                                                                                                                                                                                                                                                |
+| **`styleSpans`**    | <code>StyleSpan[]</code> | Used to specify the color of one or more segments of a polyline. The styleSpans property is an array of <a href="#stylespan">StyleSpan</a> objects. Setting the spans property is the preferred way to change the color of a polyline. Only on iOS and Android.                                                                                                                                |
+
+
+#### StyleSpan
+
+Describes the style for some region of a polyline.
+
+| Prop           | Type                | Description                                                                       |
+| -------------- | ------------------- | --------------------------------------------------------------------------------- |
+| **`color`**    | <code>string</code> | The stroke color. All CSS3 colors are supported except for extended named colors. |
+| **`segments`** | <code>number</code> | The length of this span in number of segments.                                    |
+
+
 #### CameraConfig
 
 Configuration properties for a Google Map Camera
@@ -857,6 +1051,32 @@ Controls for setting padding on the 'visible' region of the view.
 | **`mapId`**     | <code>string</code> |
 | **`latitude`**  | <code>number</code> |
 | **`longitude`** | <code>number</code> |
+
+
+#### PolygonClickCallbackData
+
+| Prop            | Type                |
+| --------------- | ------------------- |
+| **`mapId`**     | <code>string</code> |
+| **`polygonId`** | <code>string</code> |
+| **`tag`**       | <code>string</code> |
+
+
+#### CircleClickCallbackData
+
+| Prop           | Type                |
+| -------------- | ------------------- |
+| **`mapId`**    | <code>string</code> |
+| **`circleId`** | <code>string</code> |
+| **`tag`**      | <code>string</code> |
+
+
+#### PolylineCallbackData
+
+| Prop             | Type                |
+| ---------------- | ------------------- |
+| **`polylineId`** | <code>string</code> |
+| **`tag`**        | <code>string</code> |
 
 
 #### MyLocationButtonClickCallbackData

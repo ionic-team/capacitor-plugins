@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-beta.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/dialog@5.0.0-beta.0...@capacitor/dialog@5.0.0-beta.1) (2023-04-21)
+
+
+### Features
+
+* Update gradle to 8.0.2 and gradle plugin to 8.0.0 ([#1542](https://github.com/ionic-team/capacitor-plugins/issues/1542)) ([e7210b4](https://github.com/ionic-team/capacitor-plugins/commit/e7210b47867644f5983e37acdbf0247214ec232d))
+
+
+
+
+
 # [5.0.0-beta.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/dialog@5.0.0-alpha.1...@capacitor/dialog@5.0.0-beta.0) (2023-03-31)
 
 **Note:** Version bump only for package @capacitor/dialog
