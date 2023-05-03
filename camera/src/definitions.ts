@@ -221,7 +221,8 @@ export interface Photo {
    * The format of the image, ex: jpeg, png, gif.
    *
    * iOS and Android only support jpeg.
-   * Web supports jpeg and png, but the exact availability may vary depending on the browser. gif is only supported if using file input.
+   * Web supports jpeg, png and gif, but the exact availability may vary depending on the browser.
+   * gif is only supported if `webUseInput` is set to `true` or if `source` is set to `Photos`.
    *
    * @since 1.0.0
    */
@@ -271,7 +272,7 @@ export interface GalleryPhoto {
    * The format of the image, ex: jpeg, png, gif.
    *
    * iOS and Android only support jpeg.
-   * Web supports jpeg, png and gif, but the exact availability may vary depending on the browser.
+   * Web supports jpeg, png and gif.
    *
    * @since 1.2.0
    */
