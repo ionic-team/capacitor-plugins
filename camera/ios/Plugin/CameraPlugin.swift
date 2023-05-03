@@ -435,14 +435,15 @@ private extension CameraPlugin {
     }
 
     func showPhotos() {
+        let exif = self.call?.getBool("exif") ?? true
         // check for permission
         let authStatus = PHPhotoLibrary.authorizationStatus()
-        if authStatus == .restricted || authStatus == .denied {
+        if exif && (authStatus == .restricted || authStatus == .denied) {
             call?.reject("User denied access to photos")
             return
         }
         // we either already have permission or can prompt
-        if authStatus == .authorized {
+        if !exif || authStatus == .authorized {
             presentSystemAppropriateImagePicker()
         } else {
             PHPhotoLibrary.requestAuthorization({ [weak self] (status) in

@@ -277,6 +277,17 @@ export interface GalleryPhoto {
 }
 export interface GalleryImageOptions {
   /**
+   * Whether to include the exif data in the response.
+   *
+   * If set to `true`, the `photos` permission is required.
+   *
+   * Only available on iOS.
+   *
+   * @default true
+   * @since 4.2.0
+   */
+  exif?: boolean;
+  /**
    * The quality of image to return as JPEG, from 0-100
    *
    * @since 1.2.0
