@@ -3,6 +3,34 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/google-maps@5.0.0-beta.1...@capacitor/google-maps@5.0.0) (2023-05-03)
+
+**Note:** Version bump only for package @capacitor/google-maps
+
+
+
+
+
+# [5.0.0-beta.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/google-maps@5.0.0-beta.0...@capacitor/google-maps@5.0.0-beta.1) (2023-04-21)
+
+
+### Bug Fixes
+
+* **google-maps:** Cast iOS marker id to string ([#1222](https://github.com/ionic-team/capacitor-plugins/issues/1222)) ([0ffb621](https://github.com/ionic-team/capacitor-plugins/commit/0ffb62159bbdb38cf3657ca15f7e69573d83a792))
+* **google-maps:** fix custom icon on marker when clustering is enabled ([#1522](https://github.com/ionic-team/capacitor-plugins/issues/1522)) ([12be06a](https://github.com/ionic-team/capacitor-plugins/commit/12be06a1de1adc2e961cdd6837f203c19343ad8d))
+
+
+### Features
+
+* **google-maps:** Circles support ([#1553](https://github.com/ionic-team/capacitor-plugins/issues/1553)) ([c39d84f](https://github.com/ionic-team/capacitor-plugins/commit/c39d84fbae464fc8984e26f970e85fd1862ff2ac))
+* **google-maps:** Polygons support ([#1534](https://github.com/ionic-team/capacitor-plugins/issues/1534)) ([e2fd153](https://github.com/ionic-team/capacitor-plugins/commit/e2fd15318d0ba9a07386d0389d985ec65071341e))
+* **google-maps:** Polylines support ([#1532](https://github.com/ionic-team/capacitor-plugins/issues/1532)) ([415f42b](https://github.com/ionic-team/capacitor-plugins/commit/415f42b351d4ac8fd555efc3d6b0dfa9b09a80b9))
+* Update gradle to 8.0.2 and gradle plugin to 8.0.0 ([#1542](https://github.com/ionic-team/capacitor-plugins/issues/1542)) ([e7210b4](https://github.com/ionic-team/capacitor-plugins/commit/e7210b47867644f5983e37acdbf0247214ec232d))
+
+
+
+
+
 # [5.0.0-beta.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/google-maps@5.0.0-alpha.1...@capacitor/google-maps@5.0.0-beta.0) (2023-03-31)
 
 
