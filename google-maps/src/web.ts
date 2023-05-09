@@ -118,7 +118,11 @@ export class CapacitorGoogleMapsWeb
     return '';
   }
 
-  private async importGoogleLib(apiKey: string, region?: string, language?: string) {
+  private async importGoogleLib(
+    apiKey: string,
+    region?: string,
+    language?: string,
+  ) {
     if (this.gMapsRef === undefined) {
       const lib = await import('@googlemaps/js-api-loader');
       const loader = new lib.Loader({
