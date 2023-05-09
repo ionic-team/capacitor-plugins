@@ -39,6 +39,19 @@ export interface CreateMapArgs {
    * @default false
    */
   forceCreate?: boolean;
+  /**
+   * The region parameter alters your application to serve different map tiles or bias the application (such as biasing geocoding results towards the region).
+   *
+   * Only available for web.
+   */
+  region?: string;
+
+  /**
+   * The language parameter affects the names of controls, copyright notices, driving directions, and control labels, as well as the responses to service requests.
+   *
+   * Only available for web.
+   */
+  language?: string;
 }
 
 export interface DestroyMapArgs {
