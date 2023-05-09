@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.1.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/google-maps@5.0.1...@capacitor/google-maps@5.1.0) (2023-05-09)
+
+
+### Bug Fixes
+
+* **google-maps:** Added null check to addMarkers method ([#1571](https://github.com/ionic-team/capacitor-plugins/issues/1571)) ([76e89a9](https://github.com/ionic-team/capacitor-plugins/commit/76e89a9a7ee4a7aa9aead02366a5ab7e16470cd4))
+
+
+### Features
+
+* **google-maps:**  Add ability to set language and region on map ([#1588](https://github.com/ionic-team/capacitor-plugins/issues/1588)) ([c4a296c](https://github.com/ionic-team/capacitor-plugins/commit/c4a296cb17746d454de7d805bd178362d6a5ae48))
+
+
+
+
+
 ## [5.0.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/google-maps@5.0.0...@capacitor/google-maps@5.0.1) (2023-05-05)
 
 
