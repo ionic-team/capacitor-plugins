@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/dialog@5.0.0...@capacitor/dialog@5.0.1) (2023-05-05)
+
+
+### Bug Fixes
+
+* Use Capacitor 5 final ([#1574](https://github.com/ionic-team/capacitor-plugins/issues/1574)) ([139c18b](https://github.com/ionic-team/capacitor-plugins/commit/139c18b86a11d31246e952d1a74335ff8ce5dbc2))
+
+
+
+
+
 # [5.0.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/dialog@5.0.0-beta.1...@capacitor/dialog@5.0.0) (2023-05-03)
 
 **Note:** Version bump only for package @capacitor/dialog
