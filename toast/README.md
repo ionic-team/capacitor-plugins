@@ -5,7 +5,7 @@ The Toast API provides a notification pop up for displaying important informatio
 ## Install
 
 ```bash
-npm install @capacitor/toast
+npm install @capacitor/toast@latest-4
 npx cap sync
 ```
 
