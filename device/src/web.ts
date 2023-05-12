@@ -6,6 +6,7 @@ import type {
   DeviceInfo,
   DevicePlugin,
   GetLanguageCodeResult,
+  GetRegionCodeResult,
   LanguageTag,
 } from './definitions';
 
@@ -70,6 +71,10 @@ export class DeviceWeb extends WebPlugin implements DevicePlugin {
     return {
       value: navigator.language.split('-')[0].toLowerCase(),
     };
+  }
+
+  async getRegionCode(): Promise<GetRegionCodeResult> {
+    throw this.unavailable('Region code not available in this browser');
   }
 
   async getLanguageTag(): Promise<LanguageTag> {

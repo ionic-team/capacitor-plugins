@@ -64,6 +64,13 @@ public class DevicePlugin: CAPPlugin {
         ])
     }
 
+    @objc func getRegionCode(_ call: CAPPluginCall) {
+        let code = implementation.getRegionCode()
+        call.resolve([
+            "value": code
+        ])
+    }
+
     @objc func getLanguageTag(_ call: CAPPluginCall) {
         let tag = implementation.getLanguageTag()
         call.resolve([

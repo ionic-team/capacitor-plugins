@@ -144,6 +144,15 @@ export interface GetLanguageCodeResult {
   value: string;
 }
 
+export interface GetRegionCodeResult {
+  /**
+   * Two character of the region code.
+   *
+   * @since 4.2.0
+   */
+  value: string;
+}
+
 export interface LanguageTag {
   /**
    * Returns a well-formed IETF BCP 47 language tag.

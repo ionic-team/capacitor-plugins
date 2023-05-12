@@ -65,6 +65,13 @@ public class DevicePlugin extends Plugin {
     }
 
     @PluginMethod
+    public void getRegionCode(PluginCall call) {
+        JSObject ret = new JSObject();
+        ret.put("value", Locale.getDefault().getCountry());
+        call.resolve(ret);
+    }
+
+    @PluginMethod
     public void getLanguageTag(PluginCall call) {
         JSObject ret = new JSObject();
         ret.put("value", Locale.getDefault().toLanguageTag());
