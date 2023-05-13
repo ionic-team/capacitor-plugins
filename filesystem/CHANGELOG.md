@@ -3,6 +3,34 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@5.0.1...@capacitor/filesystem@5.0.2) (2023-05-09)
+
+**Note:** Version bump only for package @capacitor/filesystem
+
+
+
+
+
+## [5.0.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@5.0.0...@capacitor/filesystem@5.0.1) (2023-05-05)
+
+
+### Bug Fixes
+
+* **android:** add appCompat libraries for maven releases ([#1577](https://github.com/ionic-team/capacitor-plugins/issues/1577)) ([8a2e0ea](https://github.com/ionic-team/capacitor-plugins/commit/8a2e0ea96538a46bde299a864dba760c6e2eba68))
+* Use Capacitor 5 final ([#1574](https://github.com/ionic-team/capacitor-plugins/issues/1574)) ([139c18b](https://github.com/ionic-team/capacitor-plugins/commit/139c18b86a11d31246e952d1a74335ff8ce5dbc2))
+
+
+
+
+
+# [5.0.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@5.0.0-beta.1...@capacitor/filesystem@5.0.0) (2023-05-03)
+
+**Note:** Version bump only for package @capacitor/filesystem
+
+
+
+
+
 # [5.0.0-beta.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@5.0.0-beta.0...@capacitor/filesystem@5.0.0-beta.1) (2023-04-21)
 
 
