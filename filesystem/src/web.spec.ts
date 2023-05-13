@@ -1,6 +1,7 @@
 import 'fake-indexeddb/auto';
 import { describe, beforeEach, expect, test } from 'vitest';
 
+import { toBase64 } from './base64';
 import { Directory, Encoding } from './definitions';
 import { FilesystemWeb } from './web';
 
@@ -26,37 +27,6 @@ async function cleanupFS() {
       }).catch(() => false);
   }
 }
-
-const b64ch =
-  'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/='.split('');
-const toBase64 =
-  typeof btoa == 'function'
-    ? btoa
-    : (() => {
-        return function (bin: string) {
-          let u32,
-            c0,
-            c1,
-            c2,
-            asc = '';
-          const pad = bin.length % 3;
-          for (let i = 0; i < bin.length; ) {
-            if (
-              (c0 = bin.charCodeAt(i++)) > 255 ||
-              (c1 = bin.charCodeAt(i++)) > 255 ||
-              (c2 = bin.charCodeAt(i++)) > 255
-            )
-              throw new TypeError('invalid character found');
-            u32 = (c0 << 16) | (c1 << 8) | c2;
-            asc +=
-              b64ch[(u32 >> 18) & 63] +
-              b64ch[(u32 >> 12) & 63] +
-              b64ch[(u32 >> 6) & 63] +
-              b64ch[u32 & 63];
-          }
-          return pad ? asc.slice(0, pad - 3) + '==='.substring(pad) : asc;
-        };
-      })();
 
 describe('web', () => {
   beforeEach(cleanupFS);
@@ -223,6 +193,26 @@ describe('web', () => {
           data: 'hello',
         }),
       ).rejects.toThrowError('The supplied data is not valid base64 content.');
+    });
+
+    test('should write text encoding Latin-1', async () => {
+      const text = `{"uid":10070,"private":false,"name":"huhoijojio","description":null,"total_files_size":420,"forked_from":null,"updated_at":"2023-05-13T13:05:21.000000Z","created_at":"2023-05-13T13:05:21.000000Z","forks_count":0,"user":{"uid":18,"email":"tachib.shin@gmail.com","username":"shin","name":"橘しん（tachib_shin）","picture":"https://lh3.googleusercontent.com/a/AGNmyxaMfjUwpkv9spE1HvqAS95eqMGAKX-t6wct41MW5w=s96-c","updated_at":"2023-05-02T07:30:39.000000Z","created_at":"2023-05-02T07:30:39.000000Z"}}`;
+
+      await Filesystem.writeFile({
+        path: 'test.json',
+        directory: Directory.External,
+        encoding: Encoding.UTF8,
+        data: text,
+      });
+
+      expect(
+        await Filesystem.readFile({
+          path: 'test.json',
+          directory: Directory.External,
+        }),
+      ).toEqual({
+        data: toBase64(text),
+      });
     });
   });
 
