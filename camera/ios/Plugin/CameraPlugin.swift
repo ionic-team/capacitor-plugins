@@ -78,13 +78,13 @@ public class CameraPlugin: CAPPlugin {
                         } else {
                             PHPhotoLibrary.shared().presentLimitedLibraryPicker(from: viewController)
                             call.resolve([
-                                "photos": []
+                                "photos": [] as NSArray
                             ])
                         }
                     }
                 } else {
                     call.resolve([
-                        "photos": []
+                        "photos": [] as NSArray
                     ])
                 }
             }
@@ -132,7 +132,7 @@ public class CameraPlugin: CAPPlugin {
                     }
                 } else {
                     call.resolve([
-                        "photos": []
+                        "photos": [] as NSArray
                     ])
                 }
             }
@@ -322,7 +322,7 @@ private extension CameraPlugin {
                         "exif": processedImage.exifData,
                         "webPath": webURL.absoluteString,
                         "format": "jpeg"
-                    ]]
+                    ]] as [String : Any]]
                 ])
                 return
             }
