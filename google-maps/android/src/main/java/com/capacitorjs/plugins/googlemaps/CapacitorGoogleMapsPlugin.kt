@@ -798,6 +798,36 @@ class CapacitorGoogleMapsPlugin : Plugin() {
     }
 
     @PluginMethod
+    fun onResize(call: PluginCall) {
+        try {
+            val id = call.getString("id")
+            id ?: throw InvalidMapIdError()
+
+            val map = maps[id]
+            map ?: throw MapNotFoundError()
+
+            val boundsObj =
+                    call.getObject("mapBounds")
+                            ?: throw InvalidArgumentsError("mapBounds object is missing")
+
+            val bounds = boundsObjectToRect(boundsObj)
+
+            map.updateRender(bounds)
+
+            call.resolve()
+        } catch (e: GoogleMapsError) {
+            handleError(call, e)
+        } catch (e: Exception) {
+            handleError(call, e)
+        }
+    }
+
+    @PluginMethod
+    fun onDisplay(call: PluginCall) {
+        call.unavailable("this call is not available on android")
+    }
+
+    @PluginMethod
     fun dispatchMapEvent(call: PluginCall) {
         try {
             val id = call.getString("id")

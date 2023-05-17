@@ -63,6 +63,7 @@
     "@ionic/eslint-config": "^0.3.0",
     "@ionic/prettier-config": "^1.0.1",
     "@ionic/swiftlint-config": "^1.1.2",
+    "@types/resize-observer-browser": "^0.1.7",
     "@types/supercluster": "^7.1.0",
     "downlevel-dts": "^0.7.0",
     "eslint": "^7.11.0",

@@ -137,6 +137,7 @@ customElements.define('capacitor-google-map', MapCustomElement);
 export class GoogleMap {
   private id: string;
   private element: HTMLElement | null = null;
+  private resizeObserver: ResizeObserver | null = null;
 
   private onBoundsChangedListener?: PluginListenerHandle;
   private onCameraIdleListener?: PluginListenerHandle;
@@ -195,6 +196,75 @@ export class GoogleMap {
 
     if (Capacitor.isNativePlatform()) {
       (options.element as any) = {};
+
+      const getMapBounds = () => {
+        const mapRect =
+          newMap.element?.getBoundingClientRect() ?? ({} as DOMRect);
+        return {
+          x: mapRect.x,
+          y: mapRect.y,
+          width: mapRect.width,
+          height: mapRect.height,
+        };
+      };
+
+      const onDisplay = () => {
+        CapacitorGoogleMaps.onDisplay({
+          id: newMap.id,
+          mapBounds: getMapBounds(),
+        });
+      };
+
+      const onResize = () => {
+        CapacitorGoogleMaps.onResize({
+          id: newMap.id,
+          mapBounds: getMapBounds(),
+        });
+      };
+
+      const ionicPage = newMap.element.closest('.ion-page');
+      if (Capacitor.getPlatform() === 'ios' && ionicPage) {
+        ionicPage.addEventListener('ionViewWillEnter', () => {
+          setTimeout(() => {
+            onDisplay();
+          }, 100);
+        });
+        ionicPage.addEventListener('ionViewDidEnter', () => {
+          setTimeout(() => {
+            onDisplay();
+          }, 100);
+        });
+      }
+
+      const lastState = {
+        width: elementBounds.width,
+        height: elementBounds.height,
+        isHidden: false,
+      };
+      newMap.resizeObserver = new ResizeObserver(() => {
+        if (newMap.element != null) {
+          const mapRect = newMap.element.getBoundingClientRect();
+
+          const isHidden = mapRect.width === 0 && mapRect.height === 0;
+          if (!isHidden) {
+            if (lastState.isHidden) {
+              if (Capacitor.getPlatform() === 'ios' && !ionicPage) {
+                onDisplay();
+              }
+            } else if (
+              lastState.width !== mapRect.width ||
+              lastState.height !== mapRect.height
+            ) {
+              onResize();
+            }
+          }
+
+          lastState.width = mapRect.width;
+          lastState.height = mapRect.height;
+          lastState.isHidden = isHidden;
+        }
+      });
+      newMap.resizeObserver.observe(newMap.element);
     }
 
     await CapacitorGoogleMaps.create(options);
@@ -375,6 +445,10 @@ export class GoogleMap {
   async destroy(): Promise<void> {
     if (Capacitor.getPlatform() == 'android') {
       this.disableScrolling();
+    }
+
+    if (Capacitor.isNativePlatform()) {
+      this.resizeObserver?.disconnect();
     }
 
     this.removeAllMapListeners();
