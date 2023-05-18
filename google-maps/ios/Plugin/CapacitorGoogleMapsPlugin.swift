@@ -146,6 +146,42 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
         }
     }
 
+    @objc func enableTouch(_ call: CAPPluginCall) {
+        do {
+            guard let id = call.getString("id") else {
+                throw GoogleMapErrors.invalidMapId
+            }
+
+            guard let map = self.maps[id] else {
+                throw GoogleMapErrors.mapNotFound
+            }
+
+            map.enableTouch()
+
+            call.resolve()
+        } catch {
+            handleError(call, error: error)
+        }
+    }
+
+    @objc func disableTouch(_ call: CAPPluginCall) {
+        do {
+            guard let id = call.getString("id") else {
+                throw GoogleMapErrors.invalidMapId
+            }
+
+            guard let map = self.maps[id] else {
+                throw GoogleMapErrors.mapNotFound
+            }
+
+            map.disableTouch()
+
+            call.resolve()
+        } catch {
+            handleError(call, error: error)
+        }
+    }
+
     @objc func addMarker(_ call: CAPPluginCall) {
         do {
             guard let id = call.getString("id") else {

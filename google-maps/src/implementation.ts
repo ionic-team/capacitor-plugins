@@ -171,6 +171,8 @@ export interface FitBoundsArgs {
 
 export interface CapacitorGoogleMapsPlugin extends Plugin {
   create(options: CreateMapArgs): Promise<void>;
+  enableTouch(args: { id: string }): Promise<void>;
+  disableTouch(args: { id: string }): Promise<void>;
   addMarker(args: AddMarkerArgs): Promise<{ id: string }>;
   addMarkers(args: AddMarkersArgs): Promise<{ ids: string[] }>;
   removeMarker(args: RemoveMarkerArgs): Promise<void>;

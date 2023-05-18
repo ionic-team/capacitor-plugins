@@ -139,6 +139,14 @@ export class CapacitorGoogleMapsWeb
     }
   }
 
+  async enableTouch(_args: { id: string }): Promise<void> {
+    throw new Error('Method not supported on web.');
+  }
+
+  async disableTouch(_args: { id: string }): Promise<void> {
+    throw new Error('Method not supported on web.');
+  }
+
   async setCamera(_args: CameraArgs): Promise<void> {
     // Animation not supported yet...
     this.maps[_args.id].map.moveCamera({
