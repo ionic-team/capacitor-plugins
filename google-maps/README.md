@@ -276,6 +276,7 @@ export default MyMap;
 <docgen-index>
 
 * [`create(...)`](#create)
+* [`restriction(...)`](#restriction)
 * [`enableClustering(...)`](#enableclustering)
 * [`disableClustering()`](#disableclustering)
 * [`addMarker(...)`](#addmarker)
@@ -334,6 +335,20 @@ create(options: CreateMapArgs, callback?: MapListenerCallback<MapReadyCallbackDa
 | **`callback`** | <code><a href="#maplistenercallback">MapListenerCallback</a>&lt;<a href="#mapreadycallbackdata">MapReadyCallbackData</a>&gt;</code> |
 
 **Returns:** <code>Promise&lt;GoogleMap&gt;</code>
+
+--------------------
+
+
+### restriction(...)
+
+```typescript
+restriction(bounds: LatLngBounds, strictBounds?: boolean | undefined) => Promise<void>
+```
+
+| Param              | Type                      |
+| ------------------ | ------------------------- |
+| **`bounds`**       | <code>LatLngBounds</code> |
+| **`strictBounds`** | <code>boolean</code>      |
 
 --------------------
 

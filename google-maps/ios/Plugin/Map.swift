@@ -184,6 +184,19 @@ public class Map {
         }
     }
 
+    func restriction(bounds: GMSCoordinateBounds?) {
+        DispatchQueue.main.sync {
+            if (bounds != nil) {
+                self.mapViewController.GMapView.moveCamera(GMSCameraUpdate.fit(bounds!))
+                self.mapViewController.GMapView.setMinZoom(self.mapViewController.GMapView.camera.zoom, maxZoom: kGMSMaxZoomLevel)
+                self.mapViewController.GMapView.cameraTargetBounds = bounds
+            } else {
+                self.mapViewController.GMapView.setMinZoom(kGMSMinZoomLevel, maxZoom: kGMSMaxZoomLevel)
+                self.mapViewController.GMapView.cameraTargetBounds = nil
+            }
+        }
+    }
+
     func addMarker(marker: Marker) throws -> Int {
         var markerHash = 0
 

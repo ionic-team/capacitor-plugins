@@ -170,6 +170,34 @@ class CapacitorGoogleMapsPlugin : Plugin() {
     }
 
     @PluginMethod
+    fun restriction(call: PluginCall) {
+        try {
+            val id = call.getString("id")
+            id ?: throw InvalidMapIdError()
+
+            val map = maps[id]
+            map ?: throw MapNotFoundError()
+
+            val latLngBounds = call.getObject("latLngBounds")
+            var bounds: LatLngBounds? = null
+            if (latLngBounds != null) {
+                bounds = createLatLngBounds(latLngBounds)
+            }
+            map.restriction(bounds) { err ->
+                if (err != null) {
+                    throw err
+                }
+
+                call.resolve()
+            }
+        } catch (e: GoogleMapsError) {
+            handleError(call, e)
+        } catch (e: Exception) {
+            handleError(call, e)
+        }
+    }
+
+    @PluginMethod
     fun addMarker(call: PluginCall) {
         try {
             val id = call.getString("id")

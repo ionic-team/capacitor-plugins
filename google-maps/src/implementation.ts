@@ -163,8 +163,15 @@ export interface EnableClusteringArgs {
   minClusterSize?: number;
 }
 
+export interface RestrictionArgs {
+  id: string;
+  latLngBounds?: LatLngBounds;
+  strictBounds?: boolean;
+}
+
 export interface CapacitorGoogleMapsPlugin extends Plugin {
   create(options: CreateMapArgs): Promise<void>;
+  restriction(args: RestrictionArgs): Promise<void>;
   addMarker(args: AddMarkerArgs): Promise<{ id: string }>;
   addMarkers(args: AddMarkersArgs): Promise<{ ids: string[] }>;
   removeMarker(args: RemoveMarkerArgs): Promise<void>;

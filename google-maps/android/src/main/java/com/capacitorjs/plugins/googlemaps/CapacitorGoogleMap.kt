@@ -166,6 +166,28 @@ class CapacitorGoogleMap(
         }
     }
 
+    fun restriction(bounds: LatLngBounds?, callback: (error: GoogleMapsError?) -> Unit) {
+        try {
+            googleMap ?: throw GoogleMapNotAvailable()
+
+            CoroutineScope(Dispatchers.Main).launch {
+                if (bounds != null) {
+                    googleMap?.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0))
+                    val zoom = googleMap?.cameraPosition?.zoom
+                    if (zoom != null) {
+                        googleMap?.setMinZoomPreference(zoom)
+                    }
+                } else {
+                    googleMap?.resetMinMaxZoomPreference()
+                }
+                googleMap?.setLatLngBoundsForCameraTarget(bounds)
+                callback(null)
+            }
+        } catch (e: GoogleMapsError) {
+            callback(e)
+        }
+    }
+
     fun addMarkers(
             newMarkers: List<CapacitorGoogleMapMarker>,
             callback: (ids: Result<List<String>>) -> Unit

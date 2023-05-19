@@ -146,6 +146,30 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
         }
     }
 
+    @objc func restriction(_ call: CAPPluginCall) {
+        do {
+            guard let id = call.getString("id") else {
+                throw GoogleMapErrors.invalidMapId
+            }
+
+            guard let map = self.maps[id] else {
+                throw GoogleMapErrors.mapNotFound
+            }
+
+            let boundsObject = call.getObject("latLngBounds")
+            var bounds: GMSCoordinateBounds? = nil
+            if boundsObject != nil {
+                bounds = try getGMSCoordinateBounds(boundsObject!)
+            }
+
+            map.restriction(bounds: bounds)
+
+            call.resolve()
+        } catch {
+            handleError(call, error: error)
+        }
+    }
+
     @objc func addMarker(_ call: CAPPluginCall) {
         do {
             guard let id = call.getString("id") else {

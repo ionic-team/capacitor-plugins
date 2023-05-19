@@ -35,6 +35,7 @@ import type {
   RemoveCirclesArgs,
   AddPolylinesArgs,
   RemovePolylinesArgs,
+  RestrictionArgs,
 } from './implementation';
 
 export class CapacitorGoogleMapsWeb
@@ -136,6 +137,18 @@ export class CapacitorGoogleMapsWeb
       this.gMapsRef = google.maps;
       console.log('Loaded google maps API');
     }
+  }
+
+  async restriction(_args: RestrictionArgs): Promise<void> {
+    this.maps[_args.id].map.set(
+      'restriction',
+      _args.latLngBounds
+        ? {
+            latLngBounds: this.getLatLngBounds(_args.latLngBounds),
+            strictBounds: _args.strictBounds ? _args.strictBounds : false,
+          }
+        : null,
+    );
   }
 
   async setCamera(_args: CameraArgs): Promise<void> {

@@ -29,6 +29,7 @@ export interface GoogleMapInterface {
     options: CreateMapArgs,
     callback?: MapListenerCallback<MapReadyCallbackData>,
   ): Promise<GoogleMap>;
+  restriction(bounds: LatLngBounds, strictBounds?: boolean): Promise<void>;
   enableClustering(
     /**
      * The minimum number of markers that can be clustered together. The default is 4 markers.
@@ -230,6 +231,22 @@ export class GoogleMap {
       } else {
         resolve(elementBounds);
       }
+    });
+  }
+
+  /**
+   * A restriction that can be applied to the Map. The map's viewport will not exceed these restrictions.
+   *
+   * @returns void
+   */
+  async restriction(
+    latLngBounds: LatLngBounds,
+    strictBounds?: boolean,
+  ): Promise<void> {
+    return CapacitorGoogleMaps.restriction({
+      id: this.id,
+      latLngBounds,
+      strictBounds,
     });
   }
 
