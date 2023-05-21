@@ -10,6 +10,7 @@ import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
+import com.getcapacitor.util.InternalUtils;
 
 @CapacitorPlugin(name = "AppLauncher")
 public class AppLauncherPlugin extends Plugin {
@@ -27,7 +28,7 @@ public class AppLauncherPlugin extends Plugin {
 
         JSObject ret = new JSObject();
         try {
-            pm.getPackageInfo(url, PackageManager.GET_ACTIVITIES);
+            InternalUtils.getPackageInfo(pm, url, PackageManager.GET_ACTIVITIES);
             ret.put("value", true);
             call.resolve(ret);
             return;

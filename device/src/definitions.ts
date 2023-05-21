@@ -2,15 +2,19 @@ export type OperatingSystem = 'ios' | 'android' | 'windows' | 'mac' | 'unknown';
 
 export interface DeviceId {
   /**
-   * The UUID of the device as available to the app. This identifier may change
-   * on modern mobile platforms that only allow per-app install UUIDs.
+   * The identifier of the device as available to the app. This identifier may change
+   * on modern mobile platforms that only allow per-app install ids.
+   *
+   * On iOS, the identifier is a UUID that uniquely identifies a device to the app’s vendor ([read more](https://developer.apple.com/documentation/uikit/uidevice/1620059-identifierforvendor)).
+   *
+   * on Android 8+, __the identifier is a 64-bit number (expressed as a hexadecimal string)__, unique to each combination of app-signing key, user, and device ([read more](https://developer.android.com/reference/android/provider/Settings.Secure#ANDROID_ID)).
    *
    * On web, a random identifier is generated and stored on localStorage for subsequent calls.
    * If localStorage is not available a new random identifier will be generated on every call.
    *
    * @since 1.0.0
    */
-  uuid: string;
+  identifier: string;
 }
 
 export interface DeviceInfo {
@@ -18,6 +22,8 @@ export interface DeviceInfo {
    * The name of the device. For example, "John's iPhone".
    *
    * This is only supported on iOS and Android 7.1 or above.
+   *
+   * On iOS 16+ this will return a generic device name without the appropriate [entitlements](https://developer.apple.com/documentation/bundleresources/entitlements/com_apple_developer_device-information_user-assigned-device-name).
    *
    * @since 1.0.0
    */
@@ -50,6 +56,26 @@ export interface DeviceInfo {
    * @since 1.0.0
    */
   osVersion: string;
+
+  /**
+   * The iOS version number.
+   *
+   * Only available on iOS.
+   *
+   * Multi-part version numbers are crushed down into an integer padded to two-digits, ex: `"16.3.1"` -> `160301`
+   *
+   * @since 5.0.0
+   */
+  iOSVersion?: number;
+
+  /**
+   * The Android SDK version number.
+   *
+   * Only available on Android.
+   *
+   * @since 5.0.0
+   */
+  androidSDKVersion?: number;
 
   /**
    * The manufacturer of the device.
