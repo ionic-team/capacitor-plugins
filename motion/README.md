@@ -16,7 +16,7 @@ permission before using this API. To request permission, prompt the user for
 permission on any user-initiated action (such as a button click):
 
 ```typescript
-import { PluginListenerHandle } from '@capacitor/core';
+import { Capacitor, PluginListenerHandle } from '@capacitor/core';
 import { Motion } from '@capacitor/motion';
 
 
@@ -24,7 +24,9 @@ let accelHandler: PluginListenerHandle;
 
 myButton.addEventListener('click', async () => {
   try {
-    await DeviceMotionEvent.requestPermission();
+    if (!Capacitor.isNativePlatform()) {
+       await (DeviceMotionEvent as any).requestPermission();
+    }
   } catch (e) {
     // Handle error
     return;
