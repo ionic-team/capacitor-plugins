@@ -16,7 +16,7 @@ permission before using this API. To request permission, prompt the user for
 permission on any user-initiated action (such as a button click):
 
 ```typescript
-import { Capacitor, PluginListenerHandle } from '@capacitor/core';
+import { PluginListenerHandle } from '@capacitor/core';
 import { Motion } from '@capacitor/motion';
 
 
@@ -24,11 +24,16 @@ let accelHandler: PluginListenerHandle;
 
 myButton.addEventListener('click', async () => {
   try {
-    if (!Capacitor.isNativePlatform()) {
-       await (DeviceMotionEvent as any).requestPermission();
+    // On Web and iOS we need to request permissions
+    if ((DeviceMotionEvent as any).requestPermission) {
+      const result = await (DeviceMotionEvent as any).requestPermission();
+      // This should return a result of 'granted'
+    } else {
+      // Chrome/Android does not have this API
     }
   } catch (e) {
     // Handle error
+    console.error(e);
     return;
   }
 
