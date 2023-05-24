@@ -25,7 +25,7 @@ declare global {
 export class DeviceWeb extends WebPlugin implements DevicePlugin {
   async getId(): Promise<DeviceId> {
     return {
-      uuid: this.getUid(),
+      identifier: this.getUid(),
     };
   }
 
