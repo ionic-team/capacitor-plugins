@@ -25,6 +25,7 @@
     "@actions/core": "^1.9.1",
     "@ionic/prettier-config": "^1.0.1",
     "@types/prompts": "^2.0.8",
+    "cross-spawn": "^7.0.3",
     "esm": "^3.2.25",
     "lerna": "^3.22.1",
     "prettier": "~2.3.0",
