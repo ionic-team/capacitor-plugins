@@ -103,7 +103,7 @@ public class Map {
 
                 for item in bridge.webView!.getAllSubViews() {
                     let isScrollView = item.isKind(of: NSClassFromString("WKChildScrollView")!) || item.isKind(of: NSClassFromString("WKScrollView")!)
-                    if isScrollView {
+                    if isScrollView && !item.isEqual(bridge.webView?.scrollView) {
                         (item as? UIScrollView)?.isScrollEnabled = true
 
                         let isWidthEqual = round(Double(item.bounds.width)) == self.config.width
