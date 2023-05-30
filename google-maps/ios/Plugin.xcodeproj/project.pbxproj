@@ -11,6 +11,9 @@
 		0238AED927C945840012930B /* GoogleMapPadding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0238AED827C945840012930B /* GoogleMapPadding.swift */; };
 		02404C8D279F408800CEF8C8 /* GoogleMapErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02404C8C279F408800CEF8C8 /* GoogleMapErrors.swift */; };
 		02404C8F279F43E900CEF8C8 /* GoogleMapConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02404C8E279F43E900CEF8C8 /* GoogleMapConfig.swift */; };
+		02B55EAC29E9AAAA00493664 /* Polygon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B55EAB29E9AAAA00493664 /* Polygon.swift */; };
+		02B55EAE29EA0CF000493664 /* Circle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B55EAD29EA0CF000493664 /* Circle.swift */; };
+		0244BF2C29DB68DF00A06018 /* Polyline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0244BF2B29DB68DF00A06018 /* Polyline.swift */; };
 		02C012C327A9D20200FAAE78 /* Marker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02C012C227A9D20200FAAE78 /* Marker.swift */; };
 		02C6EDF22798803E00D51BF6 /* Map.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02C6EDF12798803E00D51BF6 /* Map.swift */; };
 		03FC29A292ACC40490383A1F /* Pods_Plugin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B2A61DA5A1F2DD4F959604D /* Pods_Plugin.framework */; };
@@ -38,6 +41,9 @@
 		0238AED827C945840012930B /* GoogleMapPadding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleMapPadding.swift; sourceTree = "<group>"; };
 		02404C8C279F408800CEF8C8 /* GoogleMapErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleMapErrors.swift; sourceTree = "<group>"; };
 		02404C8E279F43E900CEF8C8 /* GoogleMapConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleMapConfig.swift; sourceTree = "<group>"; };
+		02B55EAB29E9AAAA00493664 /* Polygon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Polygon.swift; sourceTree = "<group>"; };
+		02B55EAD29EA0CF000493664 /* Circle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Circle.swift; sourceTree = "<group>"; };
+		0244BF2B29DB68DF00A06018 /* Polyline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Polyline.swift; sourceTree = "<group>"; };
 		02C012C227A9D20200FAAE78 /* Marker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Marker.swift; sourceTree = "<group>"; };
 		02C6EDF12798803E00D51BF6 /* Map.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Map.swift; sourceTree = "<group>"; };
 		3B2A61DA5A1F2DD4F959604D /* Pods_Plugin.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Plugin.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -112,6 +118,9 @@
 				02C012C227A9D20200FAAE78 /* Marker.swift */,
 				0238AED627C931A40012930B /* GoogleMapCameraConfig.swift */,
 				0238AED827C945840012930B /* GoogleMapPadding.swift */,
+				02B55EAB29E9AAAA00493664 /* Polygon.swift */,
+				02B55EAD29EA0CF000493664 /* Circle.swift */,
+				0244BF2B29DB68DF00A06018 /* Polyline.swift */,
 			);
 			path = Plugin;
 			sourceTree = "<group>";
@@ -285,7 +294,8 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Plugin/Pods-Plugin-resources.sh",
-				"${PODS_ROOT}/GoogleMaps/Maps/Frameworks/GoogleMaps.framework/Resources/GoogleMaps.bundle",
+				"${PODS_ROOT}/GoogleMaps/Maps/Frameworks/GoogleMaps.xcframework/ios-arm64/GoogleMaps.framework/Resources/GoogleMaps.bundle",
+				"${PODS_ROOT}/GoogleMaps/Maps/Frameworks/GoogleMaps.xcframework/ios-arm64_x86_64-simulator/GoogleMaps.framework/Resources/GoogleMaps.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
@@ -303,7 +313,8 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PluginTests/Pods-PluginTests-resources.sh",
-				"${PODS_ROOT}/GoogleMaps/Maps/Frameworks/GoogleMaps.framework/Resources/GoogleMaps.bundle",
+				"${PODS_ROOT}/GoogleMaps/Maps/Frameworks/GoogleMaps.xcframework/ios-arm64/GoogleMaps.framework/Resources/GoogleMaps.bundle",
+				"${PODS_ROOT}/GoogleMaps/Maps/Frameworks/GoogleMaps.xcframework/ios-arm64_x86_64-simulator/GoogleMaps.framework/Resources/GoogleMaps.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
@@ -359,11 +370,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0244BF2C29DB68DF00A06018 /* Polyline.swift in Sources */,
 				02404C8D279F408800CEF8C8 /* GoogleMapErrors.swift in Sources */,
 				50E1A94820377CB70090CE1A /* CapacitorGoogleMapsPlugin.swift in Sources */,
 				0238AED727C931A40012930B /* GoogleMapCameraConfig.swift in Sources */,
 				0238AED927C945840012930B /* GoogleMapPadding.swift in Sources */,
 				02404C8F279F43E900CEF8C8 /* GoogleMapConfig.swift in Sources */,
+				02B55EAE29EA0CF000493664 /* Circle.swift in Sources */,
+				02B55EAC29E9AAAA00493664 /* Polygon.swift in Sources */,
 				02C6EDF22798803E00D51BF6 /* Map.swift in Sources */,
 				50ADFFA82020EE4F00D50D53 /* CapacitorGoogleMapsPlugin.m in Sources */,
 				02C012C327A9D20200FAAE78 /* Marker.swift in Sources */,
