@@ -26,6 +26,7 @@ enum ResizePolicy: String {
     case resizeIonic = "ionic"
 }
 
+// swiftlint:disable type_body_length
 @objc(KeyboardPlugin)
 class KeyboardPlugin: CAPPlugin, UIScrollViewDelegate {
     private var hideTimer: Timer?
@@ -33,6 +34,10 @@ class KeyboardPlugin: CAPPlugin, UIScrollViewDelegate {
     private let wkClassString = ["WK", "Content", "View"].joined()
     private let uiTraitsClassString = ["UI", "Text", "Input", "Traits"].joined()
 
+    private var keyboardIsVisible = false
+    private var keyboardResizes: ResizePolicy = .resizeNative
+    private var keyboardStyle: String?
+    private var paddingBottom = Double.zero
     private var disableScroll = false {
         didSet {
             if disableScroll == oldValue {
@@ -59,12 +64,10 @@ class KeyboardPlugin: CAPPlugin, UIScrollViewDelegate {
                 return
             }
 
-            guard let uiMethod: Method = class_getInstanceMethod(NSClassFromString(uiClassString),
-                                                                 #selector(getter: UITextField.inputAccessoryView)) else {
-                return
-            }
-            guard let wkMethod: Method = class_getInstanceMethod(NSClassFromString(wkClassString),
-                                                                 #selector(getter: UITextField.inputAccessoryView)) else {
+            guard let uiMethod = class_getInstanceMethod(NSClassFromString(uiClassString),
+                                                         #selector(getter: UITextField.inputAccessoryView)),
+                  let wkMethod = class_getInstanceMethod(NSClassFromString(wkClassString),
+                                                         #selector(getter: UITextField.inputAccessoryView)) else {
                 return
             }
 
@@ -83,10 +86,6 @@ class KeyboardPlugin: CAPPlugin, UIScrollViewDelegate {
             }
         }
     }
-    private var keyboardIsVisible = false
-    private var keyboardResizes: ResizePolicy = .resizeNative
-    private var keyboardStyle: String?
-    private var paddingBottom = 0
 
     public override func load() {
         disableScroll = self.bridge?.config.scrollingEnabled != true
@@ -121,26 +120,33 @@ class KeyboardPlugin: CAPPlugin, UIScrollViewDelegate {
                                        object: nil)
 
         if let webView {
-            notificationCenter.removeObserver(webView, name: UIResponder.keyboardWillHideNotification, object: nil)
-            notificationCenter.removeObserver(webView, name: UIResponder.keyboardWillShowNotification, object: nil)
-            notificationCenter.removeObserver(webView, name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
-            notificationCenter.removeObserver(webView, name: UIResponder.keyboardDidChangeFrameNotification, object: nil)
+            notificationCenter.removeObserver(webView,
+                                              name: UIResponder.keyboardWillHideNotification,
+                                              object: nil)
+            notificationCenter.removeObserver(webView,
+                                              name: UIResponder.keyboardWillShowNotification,
+                                              object: nil)
+            notificationCenter.removeObserver(webView,
+                                              name: UIResponder.keyboardWillChangeFrameNotification,
+                                              object: nil)
+            notificationCenter.removeObserver(webView,
+                                              name: UIResponder.keyboardDidChangeFrameNotification,
+                                              object: nil)
         }
     }
-    
+
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
 
     // MARK: Keyboard events
 
-    private func resetScrollView() {
-        webView?.scrollView.contentInset = .zero
-    }
-
     @objc func onKeyboardWillHide(_ notification: Notification) {
-        setKeyboardHeight(height: 0, delay: TimeInterval(0.01))
-        resetScrollView()
+        guard let height = computeKeyboardHeight(from: notification) else {
+            return
+        }
+        updateKeyboardHeight(height, duration: .zero)
+
         let timer = Timer.scheduledTimer(withTimeInterval: .zero, repeats: false) { _ in
             self.bridge?.triggerWindowJSEvent(eventName: "keyboardWillHide")
             self.notifyListeners("keyboardWillHide", data: nil)
@@ -150,108 +156,165 @@ class KeyboardPlugin: CAPPlugin, UIScrollViewDelegate {
     }
 
     @objc func onKeyboardWillShow(_ notification: Notification) {
-        changeKeyboardStyle(style: keyboardStyle)
         hideTimer?.invalidate()
         hideTimer = nil
-        guard let rect = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else {
-            return
-        }
-        let webViewAbsolute = webView!.convert(webView!.frame, to: webView!.window!.screen.coordinateSpace)
-        var height = webViewAbsolute.size.height + webViewAbsolute.origin.y - (UIScreen.main.bounds.size.height - rect.size.height)
-        if height < 0 {
-            height = 0
-        }
-        
-        guard let durationValue = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? NSNumber else {
-            return
-        }
-        let duration = durationValue.doubleValue + 0.2
-        setKeyboardHeight(height: Int(height), delay: duration)
-        resetScrollView()
 
-        let data = "{ 'keyboardHeight': \(height) }"
-        bridge?.triggerWindowJSEvent(eventName: "keyboardWillShow", data: data)
-        let kbData = ["keyboardHeight": height]
-        notifyListeners("keyboardWillShow", data: kbData)
+        guard let keyboardHeight = computeKeyboardHeight(from: notification),
+              let duration = duration(from: notification) else {
+            return
+        }
+        updateKeyboardHeight(keyboardHeight, duration: duration + 0.2)
+        changeKeyboardStyle(style: keyboardStyle)
+
+        let jsonData = "{ 'keyboardHeight': \(keyboardHeight) }"
+        bridge?.triggerWindowJSEvent(eventName: "keyboardWillShow", data: jsonData)
+        let dictData = ["keyboardHeight": keyboardHeight]
+        notifyListeners("keyboardWillShow", data: dictData)
     }
 
     @objc func onKeyboardDidShow(_ notification: Notification) {
-        guard let rect = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else {
-            return
-        }
-        let height = rect.size.height
-
         resetScrollView()
 
-        let data = "{ 'keyboardHeight': \(height) }"
-        bridge?.triggerWindowJSEvent(eventName: "keyboardDidShow", data: data)
-        let kbData = ["keyboardHeight": height]
-        notifyListeners("keyboardDidShow", data: kbData)
+        guard let keyboardHeight = computeKeyboardHeight(from: notification) else {
+            return
+        }
+        let jsonData = "{ 'keyboardHeight': \(keyboardHeight) }"
+        bridge?.triggerWindowJSEvent(eventName: "keyboardDidShow", data: jsonData)
+        let dictData = ["keyboardHeight": keyboardHeight]
+        notifyListeners("keyboardDidShow", data: dictData)
     }
 
     @objc func onKeyboardDidHide(_ notification: Notification) {
+        resetScrollView()
+
         bridge?.triggerWindowJSEvent(eventName: "keyboardDidHide")
         notifyListeners("keyboardDidHide", data: nil)
-        resetScrollView()
     }
 
-    private func setKeyboardHeight(height: Int, delay: TimeInterval) {
-        if height == paddingBottom {
+    // MARK: Helpers
+
+    private func resetScrollView() {
+        webView?.scrollView.contentInset = .zero
+    }
+
+    @objc func resize() {
+        if keyboardResizes == .resizeNative {
+            resizeWebView()
+        }
+        resizeDocument()
+    }
+
+    private func resizeWebView() {
+        let bounds = computeWindowBounds()
+        guard let webViewFrame = webView?.frame else {
             return
         }
 
-        paddingBottom = height
-        Self.cancelPreviousPerformRequests(withTarget: self, selector: #selector(updateFrame), object: nil)
-        if delay == 0 {
-            updateFrame()
-        } else {
-            perform(#selector(updateFrame), with: nil, afterDelay: delay, inModes: [.common])
-        }
+        webView?.frame = CGRect(x: webViewFrame.origin.x,
+                                y: webViewFrame.origin.y,
+                                width: bounds.size.width - webViewFrame.origin.x,
+                                height: bounds.size.height - webViewFrame.origin.y - CGFloat(paddingBottom))
     }
 
+    private func resizeDocument() {
+        let bounds = computeWindowBounds()
+        switch keyboardResizes {
+        case .resizeBody:
+            resizeElement(element: "document.body",
+                          withPaddingBottom: paddingBottom,
+                          withScreenHeight: bounds.size.height)
+        case .resizeIonic:
+            resizeElement(element: "document.querySelector('ion-app')",
+                          withPaddingBottom: paddingBottom,
+                          withScreenHeight: bounds.size.height)
+        default:
+            break
+        }
+        resetScrollView()
+    }
+
+    // swiftlint:disable line_length
     private func resizeElement(element: String,
-                               withPaddingBottom paddingBottom: Int,
-                               withScreenHeight screenHeight: Int) {
-        var height = -1
+                               withPaddingBottom paddingBottom: Double,
+                               withScreenHeight screenHeight: Double) {
+        var height = Double(-1)
         if paddingBottom > 0 {
             height = screenHeight - paddingBottom
         }
 
         bridge?.eval(js: "(function() { var el = \(element); var height = \(height); if (el) { el.style.height = height > -1 ? height + 'px' : null; } })()")
     }
+    // swiftlint:enable line_length
 
-    @objc func updateFrame() {
-        var f = CGRect.zero
-        var wf = CGRect.zero
+    private func computeWindowBounds() -> CGRect {
         var window: UIWindow?
 
-        if let delegate = UIApplication.shared.delegate, delegate.responds(to: #selector(getter: UIApplicationDelegate.window)) {
+        if let delegate = UIApplication.shared.delegate,
+            delegate.responds(to: #selector(getter: UIApplicationDelegate.window)) {
             window = delegate.window!
         }
 
-        if window == nil {
-            if #available(iOS 13.0, *) {
-                let scene = UIApplication.shared.connectedScenes.first
-                window = (scene as? UIWindowScene)?.windows.first(where: { $0.isKeyWindow })
-            }
+        if window == nil, #available(iOS 13.0, *) {
+            let scene = UIApplication.shared.connectedScenes.first
+            window = (scene as? UIWindowScene)?.windows.first(where: { $0.isKeyWindow })
         }
         if let window {
-            f = window.bounds
+            return window.bounds
+        } else {
+            return CGRect.zero
         }
-        if let webView {
-            wf = webView.frame
+    }
+
+    private func computeKeyboardHeight(from notification: Notification) -> Double? {
+        guard let keyboardEndFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else {
+            return nil
         }
-        switch keyboardResizes {
-        case .resizeBody:
-            resizeElement(element: "document.body", withPaddingBottom: paddingBottom, withScreenHeight: Int(f.size.height))
-        case .resizeIonic:
-            resizeElement(element: "document.querySelector('ion-app')", withPaddingBottom: paddingBottom, withScreenHeight: Int(f.size.height))
-        case .resizeNative:
-            webView?.frame = CGRect(x: wf.origin.x, y: wf.origin.y, width: f.size.width - wf.origin.x, height: f.size.height - wf.origin.y - CGFloat(paddingBottom))
-        default:
-            break
+
+        guard let webView else {
+            return nil
         }
-        resetScrollView()
+        return webView.frame.origin.y + webView.frame.size.height - keyboardEndFrame.origin.y
+    }
+
+    private func duration(from notification: Notification) -> Double? {
+        let durationValue = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey]
+        guard let durationValueAsNumber = durationValue as? NSNumber else {
+            return nil
+        }
+        return durationValueAsNumber.doubleValue
+    }
+
+    private func updateKeyboardHeight(_ height: Double, duration: Double) {
+        if height == paddingBottom {
+            return
+        }
+        paddingBottom = height
+        Self.cancelPreviousPerformRequests(withTarget: self, selector: #selector(resize), object: nil)
+        perform(#selector(resize), with: nil, afterDelay: duration, inModes: [.common])
+    }
+
+    private func changeKeyboardStyle(style: String?) {
+        var appearance = UIKeyboardAppearance.default
+        if style == "DARK" {
+            appearance = .dark
+        } else if style == "LIGHT" {
+            appearance = .light
+        }
+
+        let block: @convention(block) (AnyObject) -> UIKeyboardAppearance = { (_: AnyObject) in
+            appearance
+        }
+        let newImp: IMP? = imp_implementationWithBlock(unsafeBitCast(block, to: AnyObject.self))
+        for classString in [wkClassString, uiTraitsClassString] {
+            let `class`: AnyClass? = NSClassFromString(classString)
+            let method = class_getInstanceMethod(`class`, #selector(getter: UITextField.keyboardAppearance))
+            if let method {
+                method_setImplementation(method, newImp!)
+            } else {
+                class_addMethod(`class`, #selector(getter: UITextField.keyboardAppearance), newImp!, "l@:")
+            }
+        }
+        keyboardStyle = style
     }
 
     // MARK: Plugin interface
@@ -296,28 +359,5 @@ class KeyboardPlugin: CAPPlugin, UIScrollViewDelegate {
         disableScroll = disabled
         call.resolve()
     }
-
-    private func changeKeyboardStyle(style: String?) {
-        var appearance = UIKeyboardAppearance.default
-        if style == "DARK" {
-            appearance = .dark
-        } else if style == "LIGHT" {
-            appearance = .light
-        }
-
-        let block: @convention(block) (AnyObject) -> UIKeyboardAppearance = { (_: AnyObject) in
-            appearance
-        }
-        let newImp: IMP? = imp_implementationWithBlock(unsafeBitCast(block, to: AnyObject.self))
-        for classString in [wkClassString, uiTraitsClassString] {
-            let c: AnyClass? = NSClassFromString(classString)
-            let m = class_getInstanceMethod(c, #selector(getter: UITextField.keyboardAppearance))
-            if let m {
-                method_setImplementation(m, newImp!)
-            } else {
-                class_addMethod(c, #selector(getter: UITextField.keyboardAppearance), newImp!, "l@:")
-            }
-        }
-        keyboardStyle = style
-    }
 }
+// swiftlint:enable type_body_length
