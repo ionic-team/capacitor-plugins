@@ -270,10 +270,12 @@ class KeyboardPlugin: CAPPlugin, UIScrollViewDelegate {
             return nil
         }
 
-        guard let webView else {
+        // assume containerView extends under safe area at bottom
+        guard let containerView = webView?.superview else {
             return nil
         }
-        return webView.frame.origin.y + webView.frame.size.height - keyboardEndFrame.origin.y
+        let containerViewEnd = containerView.frame.origin.y + containerView.frame.size.height
+        return containerViewEnd - keyboardEndFrame.origin.y
     }
 
     private func duration(from notification: Notification) -> Double? {
