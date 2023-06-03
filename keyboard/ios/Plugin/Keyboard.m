@@ -131,17 +131,15 @@ double stageManagerOffset;
     
   if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
     if (stageManagerOffset > 0) {
-        height = stageManagerOffset;
-    }
-    
-    CGRect webViewAbsolute = [self.webView convertRect:self.webView.frame toCoordinateSpace:self.webView.window.screen.coordinateSpace];
-    if (stageManagerOffset == 0) {
-        height = (webViewAbsolute.size.height + webViewAbsolute.origin.y) - (UIScreen.mainScreen.bounds.size.height - rect.size.height);
-        if (height < 0) {
-          height = 0;
-        }
+      height = stageManagerOffset;
+    } else {
+      CGRect webViewAbsolute = [self.webView convertRect:self.webView.frame toCoordinateSpace:self.webView.window.screen.coordinateSpace];
+      height = (webViewAbsolute.size.height + webViewAbsolute.origin.y) - (UIScreen.mainScreen.bounds.size.height - rect.size.height);
+      if (height < 0) {
+        height = 0;
+      }
         
-        stageManagerOffset = height;
+      stageManagerOffset = height;
     }
   }
 
