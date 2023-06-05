@@ -339,13 +339,13 @@ public class SplashScreen {
                     }
                     imageView.setScaleType(config.getScaleType());
                     imageView.setImageDrawable(splash);
+
+                    splashImage.setFitsSystemWindows(true);
+                    
+                    if (config.getBackgroundColor() != null) {
+                        splashImage.setBackgroundColor(config.getBackgroundColor());
+                    }
                 }
-            }
-
-            splashImage.setFitsSystemWindows(true);
-
-            if (config.getBackgroundColor() != null) {
-                splashImage.setBackgroundColor(config.getBackgroundColor());
             }
         }
 
