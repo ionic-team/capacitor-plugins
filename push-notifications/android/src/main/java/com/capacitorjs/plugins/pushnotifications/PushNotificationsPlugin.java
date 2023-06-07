@@ -285,7 +285,13 @@ public class PushNotificationsPlugin extends Plugin {
                         .setContentTitle(title)
                         .setContentText(body)
                         .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-                    notificationManager.notify(0, builder.build());
+
+                    String tag = notification.getTag();
+                    if (tag != null) {
+                        notificationManager.notify(tag, 0, builder.build());
+                    } else {
+                        notificationManager.notify(0, builder.build());
+                    }
                 }
             }
             remoteMessageData.put("title", title);
