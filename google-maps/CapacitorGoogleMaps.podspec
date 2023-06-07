@@ -14,7 +14,7 @@ Pod::Spec.new do |s|
   s.ios.deployment_target  = '13.0'
   s.dependency 'Capacitor'
   s.dependency 'GoogleMaps', '~> 7.3'
-  s.dependency 'Google-Maps-iOS-Utils', '~> 4.1'
+  s.dependency 'Google-Maps-iOS-Utils', '~> 4.2'
   s.swift_version = '5.1'
   s.static_framework = true
 end
