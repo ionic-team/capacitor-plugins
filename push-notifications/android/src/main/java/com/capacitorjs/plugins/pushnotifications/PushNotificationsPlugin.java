@@ -12,6 +12,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.service.notification.StatusBarNotification;
 import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
 import com.getcapacitor.*;
 import com.getcapacitor.annotation.CapacitorPlugin;
 import com.getcapacitor.annotation.Permission;
@@ -285,6 +286,11 @@ public class PushNotificationsPlugin extends Plugin {
                         .setContentTitle(title)
                         .setContentText(body)
                         .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+                    if (bundle != null && bundle.getInt("com.google.firebase.messaging.default_notification_color") != 0) {
+                        builder.setColor(ContextCompat.getColor(getContext(), bundle.getInt("com.google.firebase.messaging.default_notification_color")));
+                    }
+
                     notificationManager.notify(0, builder.build());
                 }
             }
