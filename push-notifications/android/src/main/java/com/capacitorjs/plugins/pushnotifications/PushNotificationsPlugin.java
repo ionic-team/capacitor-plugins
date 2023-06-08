@@ -3,6 +3,7 @@ package com.capacitorjs.plugins.pushnotifications;
 import android.Manifest;
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
@@ -11,6 +12,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.service.notification.StatusBarNotification;
+import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import com.getcapacitor.*;
 import com.getcapacitor.annotation.CapacitorPlugin;
@@ -237,6 +239,21 @@ public class PushNotificationsPlugin extends Plugin {
         }
     }
 
+    @NonNull
+    private Intent buildIntent() {
+        Intent intent;
+        if (getActivity() != null) {
+            intent = new Intent(getContext(), getActivity().getClass());
+        } else {
+            String packageName = getContext().getPackageName();
+            intent = getContext().getPackageManager().getLaunchIntentForPackage(packageName);
+        }
+        intent.setAction(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_LAUNCHER);
+        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        return intent;
+    }
+
     public void fireNotification(RemoteMessage remoteMessage) {
         JSObject remoteMessageData = new JSObject();
 
@@ -277,6 +294,15 @@ public class PushNotificationsPlugin extends Plugin {
                     if (bundle != null && bundle.getInt("com.google.firebase.messaging.default_notification_icon") != 0) {
                         pushIcon = bundle.getInt("com.google.firebase.messaging.default_notification_icon");
                     }
+
+                    Intent intent = buildIntent();
+                    intent.putExtras(remoteMessage.toIntent().getExtras());
+                    int flags = PendingIntent.FLAG_CANCEL_CURRENT;
+                    if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                        flags = flags | PendingIntent.FLAG_MUTABLE;
+                    }
+                    PendingIntent pendingIntent = PendingIntent.getActivity(getContext(), 0, intent, flags);
+
                     NotificationCompat.Builder builder = new NotificationCompat.Builder(
                         getContext(),
                         NotificationChannelManager.FOREGROUND_NOTIFICATION_CHANNEL_ID
@@ -284,6 +310,8 @@ public class PushNotificationsPlugin extends Plugin {
                         .setSmallIcon(pushIcon)
                         .setContentTitle(title)
                         .setContentText(body)
+                        .setAutoCancel(true)
+                        .setContentIntent(pendingIntent)
                         .setPriority(NotificationCompat.PRIORITY_DEFAULT);
                     notificationManager.notify(0, builder.build());
                 }
