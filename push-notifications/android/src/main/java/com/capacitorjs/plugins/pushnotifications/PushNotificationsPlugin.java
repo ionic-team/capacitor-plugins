@@ -288,7 +288,9 @@ public class PushNotificationsPlugin extends Plugin {
                         .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
                     if (bundle != null && bundle.getInt("com.google.firebase.messaging.default_notification_color") != 0) {
-                        builder.setColor(ContextCompat.getColor(getContext(), bundle.getInt("com.google.firebase.messaging.default_notification_color")));
+                        builder.setColor(
+                            ContextCompat.getColor(getContext(), bundle.getInt("com.google.firebase.messaging.default_notification_color"))
+                        );
                     }
 
                     notificationManager.notify(0, builder.build());
