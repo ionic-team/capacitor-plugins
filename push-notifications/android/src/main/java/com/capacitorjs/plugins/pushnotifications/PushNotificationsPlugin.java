@@ -245,7 +245,7 @@ public class PushNotificationsPlugin extends Plugin {
 
         if (channelId == null) {
             if (bundle != null && bundle.getInt("com.google.firebase.messaging.default_notification_channel_id") != 0) {
-                 channelId = bundle.getString("com.google.firebase.messaging.default_notification_channel_id");
+                channelId = bundle.getString("com.google.firebase.messaging.default_notification_channel_id");
             }
         }
 
@@ -295,9 +295,7 @@ public class PushNotificationsPlugin extends Plugin {
 
                     String notificationChannelId = getChannelId(notification, bundle);
 
-                    NotificationCompat.Builder builder = new NotificationCompat.Builder(
-                        getContext(), notificationChannelId
-                    )
+                    NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext(), notificationChannelId)
                         .setSmallIcon(pushIcon)
                         .setContentTitle(title)
                         .setContentText(body)
