@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.3](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/splash-screen@5.0.2...@capacitor/splash-screen@5.0.3) (2023-06-08)
+
+
+### Bug Fixes
+
+* **splash-screen:** Avoid crash when splash resources not found ([#1642](https://github.com/ionic-team/capacitor-plugins/issues/1642)) ([f94773c](https://github.com/ionic-team/capacitor-plugins/commit/f94773c914b5e7b2664f2c10a3ff1c4ac996b70e))
+
+
+
+
+
 ## [5.0.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/splash-screen@5.0.1...@capacitor/splash-screen@5.0.2) (2023-05-09)
 
 **Note:** Version bump only for package @capacitor/splash-screen
