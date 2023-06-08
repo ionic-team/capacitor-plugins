@@ -11,6 +11,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.service.notification.StatusBarNotification;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import com.getcapacitor.*;
 import com.getcapacitor.annotation.CapacitorPlugin;
@@ -237,6 +239,19 @@ public class PushNotificationsPlugin extends Plugin {
         }
     }
 
+    @NonNull
+    private String getChannelId(@NonNull RemoteMessage.Notification notification, @Nullable Bundle bundle) {
+        String channelId = notification.getChannelId();
+
+        if (channelId == null) {
+            if (bundle != null && bundle.getInt("com.google.firebase.messaging.default_notification_channel_id") != 0) {
+                 channelId = bundle.getString("com.google.firebase.messaging.default_notification_channel_id");
+            }
+        }
+
+        return channelId == null ? "fcm_fallback_notification_channel" : channelId;
+    }
+
     public void fireNotification(RemoteMessage remoteMessage) {
         JSObject remoteMessageData = new JSObject();
 
@@ -277,9 +292,11 @@ public class PushNotificationsPlugin extends Plugin {
                     if (bundle != null && bundle.getInt("com.google.firebase.messaging.default_notification_icon") != 0) {
                         pushIcon = bundle.getInt("com.google.firebase.messaging.default_notification_icon");
                     }
+
+                    String notificationChannelId = getChannelId(notification, bundle);
+
                     NotificationCompat.Builder builder = new NotificationCompat.Builder(
-                        getContext(),
-                        NotificationChannelManager.FOREGROUND_NOTIFICATION_CHANNEL_ID
+                        getContext(), notificationChannelId
                     )
                         .setSmallIcon(pushIcon)
                         .setContentTitle(title)
