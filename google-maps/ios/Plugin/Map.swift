@@ -13,6 +13,8 @@ class GMViewController: UIViewController {
     var GMapView: GMSMapView!
     var cameraPosition: [String: Double]!
     var minimumClusterSize: Int?
+    
+    public static let MAP_TAG = 99999
 
     private var clusterManager: GMUClusterManager?
 
@@ -100,24 +102,25 @@ public class Map {
                 "zoom": self.config.zoom
             ]
             if let bridge = self.delegate.bridge {
-
                 for item in bridge.webView!.getAllSubViews() {
                     let isScrollView = item.isKind(of: NSClassFromString("WKChildScrollView")!) || item.isKind(of: NSClassFromString("WKScrollView")!)
-                    if isScrollView && !item.isEqual(bridge.webView?.scrollView) {
+                    let isBridgeScrollView = item.isEqual(bridge.webView?.scrollView)
+                    
+                    if isScrollView && !isBridgeScrollView  {
                         (item as? UIScrollView)?.isScrollEnabled = true
-
+                        
                         let isWidthEqual = round(Double(item.bounds.width)) == self.config.width
                         let isHeightEqual = round(Double(item.bounds.height)) == self.config.height
 
-                        if isWidthEqual && isHeightEqual && (item as? UIView)?.tag == 0 {
+                        if isWidthEqual && isHeightEqual  && item.tag > self.targetViewController?.tag ?? -99 {
                             self.targetViewController = item
-                            break
                         }
                     }
                 }
+                
 
                 if let target = self.targetViewController {
-                    target.tag = 1
+                    target.tag = GMViewController.MAP_TAG
                     target.removeAllSubview()
                     self.mapViewController.view.frame = target.bounds
                     target.addSubview(self.mapViewController.view)
@@ -638,11 +641,22 @@ extension UIView {
     private static var allSubviews: [UIView] = []
 
     private func viewArray(root: UIView) -> [UIView] {
+        var index = root.tag
         for view in root.subviews {
+            if view.tag == GMViewController.MAP_TAG {
+                // view already in use as in map
+                continue
+            }
+            
+            // tag the index depth of the uiview
+            view.tag = index
+            
             if view.isKind(of: UIView.self) {
                 UIView.allSubviews.append(view)
             }
             _ = viewArray(root: view)
+            
+            index += 1
         }
         return UIView.allSubviews
     }
