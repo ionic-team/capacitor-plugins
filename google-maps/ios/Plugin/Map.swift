@@ -13,8 +13,6 @@ class GMViewController: UIViewController {
     var GMapView: GMSMapView!
     var cameraPosition: [String: Double]!
     var minimumClusterSize: Int?
-    
-    public static let MAP_TAG = 99999
 
     private var clusterManager: GMUClusterManager?
 
@@ -74,6 +72,8 @@ public class Map {
     var circles = [Int: GMSCircle]()
     var polylines = [Int: GMSPolyline]()
     var markerIcons = [String: UIImage]()
+    
+    public static let MAP_TAG = 99999
 
     // swiftlint:disable weak_delegate
     private var delegate: CapacitorGoogleMapsPlugin
@@ -101,6 +101,9 @@ public class Map {
                 "longitude": self.config.center.lng,
                 "zoom": self.config.zoom
             ]
+            
+            print("\(self.config.x), \(self.config.y)")
+            
             if let bridge = self.delegate.bridge {
                 for item in bridge.webView!.getAllSubViews() {
                     let isScrollView = item.isKind(of: NSClassFromString("WKChildScrollView")!) || item.isKind(of: NSClassFromString("WKScrollView")!)
@@ -109,18 +112,21 @@ public class Map {
                     if isScrollView && !isBridgeScrollView  {
                         (item as? UIScrollView)?.isScrollEnabled = true
                         
-                        let isWidthEqual = round(Double(item.bounds.width)) == self.config.width
-                        let isHeightEqual = round(Double(item.bounds.height)) == self.config.height
-
-                        if isWidthEqual && isHeightEqual  && item.tag > self.targetViewController?.tag ?? -99 {
+                        let width = Double((item as? UIScrollView)?.contentSize.width ?? 0)
+                        let height = Double((item as? UIScrollView)?.contentSize.height ?? 0)
+                        let rawHeight = Float(self.config.height * 2)
+                        
+                        let isWidthEqual = width == self.config.width
+                        let isHeightEqual = false 
+                        
+                        if isWidthEqual && isHeightEqual && item.tag < self.targetViewController?.tag ?? Map.MAP_TAG {
                             self.targetViewController = item
                         }
                     }
                 }
-                
 
                 if let target = self.targetViewController {
-                    target.tag = GMViewController.MAP_TAG
+                    target.tag = Map.MAP_TAG
                     target.removeAllSubview()
                     self.mapViewController.view.frame = target.bounds
                     target.addSubview(self.mapViewController.view)
@@ -643,7 +649,7 @@ extension UIView {
     private func viewArray(root: UIView) -> [UIView] {
         var index = root.tag
         for view in root.subviews {
-            if view.tag == GMViewController.MAP_TAG {
+            if view.tag == Map.MAP_TAG {
                 // view already in use as in map
                 continue
             }
@@ -663,7 +669,7 @@ extension UIView {
 
     fileprivate func getAllSubViews() -> [UIView] {
         UIView.allSubviews = []
-        return viewArray(root: self)
+        return viewArray(root: self).reversed()
     }
 
     fileprivate func removeAllSubview() {
