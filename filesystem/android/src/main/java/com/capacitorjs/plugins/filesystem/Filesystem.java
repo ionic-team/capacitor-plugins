@@ -7,10 +7,27 @@ import android.util.Base64;
 import com.capacitorjs.plugins.filesystem.exceptions.CopyFailedException;
 import com.capacitorjs.plugins.filesystem.exceptions.DirectoryExistsException;
 import com.capacitorjs.plugins.filesystem.exceptions.DirectoryNotFoundException;
-import java.io.*;
+import com.getcapacitor.Bridge;
+import com.getcapacitor.JSObject;
+import com.getcapacitor.PluginCall;
+import com.getcapacitor.plugin.util.CapacitorHttpUrlConnection;
+import com.getcapacitor.plugin.util.HttpRequestHandler;
+import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStreamWriter;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.Locale;
+import org.json.JSONException;
 
 public class Filesystem {
 
@@ -284,5 +301,83 @@ public class Filesystem {
         try (FileChannel source = new FileInputStream(src).getChannel(); FileChannel destination = new FileOutputStream(dst).getChannel()) {
             destination.transferFrom(source, 0, source.size());
         }
+    }
+
+    public JSObject downloadFile(PluginCall call, Bridge bridge, HttpRequestHandler.ProgressEmitter emitter)
+        throws IOException, URISyntaxException, JSONException {
+        String urlString = call.getString("url", "");
+        JSObject headers = call.getObject("headers", new JSObject());
+        JSObject params = call.getObject("params", new JSObject());
+        Integer connectTimeout = call.getInt("connectTimeout");
+        Integer readTimeout = call.getInt("readTimeout");
+        Boolean disableRedirects = call.getBoolean("disableRedirects");
+        Boolean shouldEncode = call.getBoolean("shouldEncodeUrlParams", true);
+        Boolean progress = call.getBoolean("progress", false);
+
+        String method = call.getString("method", "GET").toUpperCase(Locale.ROOT);
+        String path = call.getString("path");
+        String directory = call.getString("directory", Environment.DIRECTORY_DOWNLOADS);
+
+        final URL url = new URL(urlString);
+        final File file = getFileObject(path, directory);
+
+        HttpRequestHandler.HttpURLConnectionBuilder connectionBuilder = new HttpRequestHandler.HttpURLConnectionBuilder()
+            .setUrl(url)
+            .setMethod(method)
+            .setHeaders(headers)
+            .setUrlParams(params, shouldEncode)
+            .setConnectTimeout(connectTimeout)
+            .setReadTimeout(readTimeout)
+            .setDisableRedirects(disableRedirects)
+            .openConnection();
+
+        CapacitorHttpUrlConnection connection = connectionBuilder.build();
+
+        connection.setSSLSocketFactory(bridge);
+
+        InputStream connectionInputStream = connection.getInputStream();
+        FileOutputStream fileOutputStream = new FileOutputStream(file, false);
+
+        String contentLength = connection.getHeaderField("content-length");
+        int bytes = 0;
+        int maxBytes = 0;
+
+        try {
+            maxBytes = contentLength != null ? Integer.parseInt(contentLength) : 0;
+        } catch (NumberFormatException ignored) {}
+
+        byte[] buffer = new byte[1024];
+        int len;
+
+        // Throttle emitter to 100ms so it doesn't slow down app
+        long lastEmitTime = System.currentTimeMillis();
+        long minEmitIntervalMillis = 100;
+
+        while ((len = connectionInputStream.read(buffer)) > 0) {
+            fileOutputStream.write(buffer, 0, len);
+
+            bytes += len;
+
+            if (progress && null != emitter) {
+                long currentTime = System.currentTimeMillis();
+                if (currentTime - lastEmitTime > minEmitIntervalMillis) {
+                    emitter.emit(bytes, maxBytes);
+                    lastEmitTime = currentTime;
+                }
+            }
+        }
+
+        if (progress && null != emitter) {
+            emitter.emit(bytes, maxBytes);
+        }
+
+        connectionInputStream.close();
+        fileOutputStream.close();
+
+        return new JSObject() {
+            {
+                put("path", file.getAbsolutePath());
+            }
+        };
     }
 }
