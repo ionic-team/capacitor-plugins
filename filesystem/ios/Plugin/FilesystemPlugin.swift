@@ -357,8 +357,8 @@ public class FilesystemPlugin: CAPPlugin {
 
         do {
             try implementation.downloadFile(call: call, emitter: progressEmitter, config: bridge?.config)
-        } catch let e {
-            call.reject(e.localizedDescription)
+        } catch let error {
+            call.reject(error.localizedDescription)
         }
     }
 

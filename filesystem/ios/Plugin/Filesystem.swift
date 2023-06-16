@@ -229,8 +229,8 @@ import Capacitor
                     try fileManager.moveItem(at: location, to: dest)
                     CAPLog.print("Downloaded file successfully! \(dest.absoluteString)")
                     call.resolve(["path": dest.absoluteString])
-                } catch let e {
-                    call.reject("Unable to download file: \(e.localizedDescription)", "DOWNLOAD", e)
+                } catch let error {
+                    call.reject("Unable to download file: \(error.localizedDescription)", "DOWNLOAD", error)
                     return
                 }
             } else {
