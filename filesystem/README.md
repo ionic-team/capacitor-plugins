@@ -1,7 +1,6 @@
 # @capacitor/filesystem
 
 The Filesystem API provides a NodeJS-like API for working with files on the device.
-This fork is modified so that it is possible to access security scoped resources on iOS.
 
 ## Install
 
