@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.4](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/keyboard@5.0.3...@capacitor/keyboard@5.0.4) (2023-06-08)
+
+**Note:** Version bump only for package @capacitor/keyboard
+
+
+
+
+
+## [5.0.3](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/keyboard@5.0.2...@capacitor/keyboard@5.0.3) (2023-06-08)
+
+
+### Bug Fixes
+
+* **keyboard:** fixing webview resizing when keyboard visible ([#1637](https://github.com/ionic-team/capacitor-plugins/issues/1637)) ([32871f7](https://github.com/ionic-team/capacitor-plugins/commit/32871f700c734c6d590e7e93eed4755971d9e5bf))
+
+
+
+
+
 ## [5.0.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/keyboard@5.0.1...@capacitor/keyboard@5.0.2) (2023-05-09)
 
 **Note:** Version bump only for package @capacitor/keyboard
