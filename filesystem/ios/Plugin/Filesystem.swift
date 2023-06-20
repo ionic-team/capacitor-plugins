@@ -213,7 +213,7 @@ import Capacitor
                     let dest = dir!.appendingPathComponent(path)
                     CAPLog.print("Attempting to write to file destination: \(dest.absoluteString)")
 
-                    if !FileManager.default.fileExists(atPath: dest.deletingLastPathComponent.absoluteString) {
+                    if !FileManager.default.fileExists(atPath: dest.deletingLastPathComponent().absoluteString) {
                         try FileManager.default.createDirectory(at: dest.deletingLastPathComponent(), withIntermediateDirectories: true, attributes: nil)
                     }
 
