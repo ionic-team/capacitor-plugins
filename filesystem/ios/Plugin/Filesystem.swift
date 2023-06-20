@@ -180,6 +180,7 @@ import Capacitor
         }
     }
 
+    // swiftlint:disable function_body_length
     @objc public func downloadFile(call: CAPPluginCall, emitter: @escaping ProgressEmitter, config: InstanceConfiguration?) throws {
         let directory = call.getString("directory", "DOCUMENTS")
         guard let path = call.getString("path") else {
@@ -331,4 +332,5 @@ import Capacitor
 
         task.resume()
     }
+    // swiftlint:enable function_body_length
 }
