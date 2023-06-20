@@ -2,8 +2,12 @@ package com.capacitorjs.plugins.filesystem;
 
 import android.content.Context;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.util.Base64;
+
+import androidx.core.os.EnvironmentCompat;
+
 import com.capacitorjs.plugins.filesystem.exceptions.CopyFailedException;
 import com.capacitorjs.plugins.filesystem.exceptions.DirectoryExistsException;
 import com.capacitorjs.plugins.filesystem.exceptions.DirectoryNotFoundException;
@@ -11,6 +15,8 @@ import java.io.*;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Filesystem {
 
@@ -195,8 +201,74 @@ public class Filesystem {
                 return c.getExternalFilesDir(null);
             case "EXTERNAL_STORAGE":
                 return Environment.getExternalStorageDirectory();
+            case "PORTABLE_STORAGE":
+                return this.getPortableStorage();
         }
         return null;
+    }
+    
+    public boolean isPortableStorageAvailable() {
+        String[] storageDirectories = getFilteredStorageDirectories();
+        return storageDirectories.length > 0;
+    }
+
+    private File getPortableStorage() {
+        String[] storageDirectories = getFilteredStorageDirectories();
+
+        if(storageDirectories.length == 0){
+            return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
+        } else {
+            return new File(storageDirectories[0]);
+        }
+    }
+
+    private String[] getFilteredStorageDirectories() {
+        List<String> results = new ArrayList<String>();
+
+        Context c = this.context;
+
+        File[] externalDirs = c.getExternalFilesDirs(null);
+
+        // Get a list of external file systems and filter for removable storage only
+        for (File file : externalDirs) {
+            if(file == null){
+                continue;
+            }
+            String applicationPath = file.getPath();
+
+            boolean addPath = false;
+
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                addPath = Environment.isExternalStorageRemovable(file);
+            }
+            else{
+                addPath = Environment.MEDIA_MOUNTED.equals(EnvironmentCompat.getStorageState(file));
+            }
+
+            if(addPath){
+                results.add(applicationPath);
+            }
+        }
+
+        //Remove paths which may not be external SDCard, like OTG
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            for (int i = 0; i < results.size(); i++) {
+                if (!results.get(i).toLowerCase().matches(".*[0-9a-f]{4}[-][0-9a-f]{4}.*")) {
+                    results.remove(i--);
+                }
+            }
+        } else {
+            for (int i = 0; i < results.size(); i++) {
+                if (!results.get(i).toLowerCase().contains("ext") && !results.get(i).toLowerCase().contains("sdcard")) {
+                    results.remove(i--);
+                }
+            }
+        }
+
+        String[] storageDirectories = new String[results.size()];
+        for(int i=0; i<results.size(); ++i) storageDirectories[i] = results.get(i);
+
+        return storageDirectories;
     }
 
     public File getFileObject(String path, String directory) {

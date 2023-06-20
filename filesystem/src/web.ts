@@ -21,6 +21,7 @@ import type {
   WriteFileOptions,
   WriteFileResult,
   Directory,
+  isPortableStorageAvailableResult,
 } from './definitions';
 import { Encoding } from './definitions';
 
@@ -462,6 +463,10 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
 
   async checkPermissions(): Promise<PermissionStatus> {
     return { publicStorage: 'granted' };
+  }
+
+  async isPortableStorageAvailable(): Promise<isPortableStorageAvailableResult> {
+    return { available: false };
   }
 
   /**

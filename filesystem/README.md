@@ -99,6 +99,7 @@ const readFilePath = async () => {
 * [`stat(...)`](#stat)
 * [`rename(...)`](#rename)
 * [`copy(...)`](#copy)
+* [`isPortableStorageAvailable()`](#isportablestorageavailable)
 * [`checkPermissions()`](#checkpermissions)
 * [`requestPermissions()`](#requestpermissions)
 * [Interfaces](#interfaces)
@@ -309,6 +310,22 @@ Copy a file or directory
 --------------------
 
 
+### isPortableStorageAvailable()
+
+```typescript
+isPortableStorageAvailable() => Promise<isPortableStorageAvailableResult>
+```
+
+Check if portable storage is available (SD Card for Android)
+Only available on Android
+
+**Returns:** <code>Promise&lt;<a href="#isportablestorageavailableresult">isPortableStorageAvailableResult</a>&gt;</code>
+
+**Since:** 5.0.5
+
+--------------------
+
+
 ### checkPermissions()
 
 ```typescript
@@ -494,6 +511,13 @@ Required on Android, only when using <a href="#directory">`Directory.Documents`<
 | **`uri`** | <code>string</code> | The uri where the file was copied into | 4.0.0 |
 
 
+#### isPortableStorageAvailableResult
+
+| Prop            | Type                 | Description                                                       | Since |
+| --------------- | -------------------- | ----------------------------------------------------------------- | ----- |
+| **`available`** | <code>boolean</code> | Is portable storage available (SD Card) Only available on Android | 5.0.5 |
+
+
 #### PermissionStatus
 
 | Prop                | Type                                                        |
@@ -527,6 +551,7 @@ Required on Android, only when using <a href="#directory">`Directory.Documents`<
 | **`Cache`**           | <code>'CACHE'</code>            | The Cache directory Can be deleted in cases of low memory, so use this directory to write app-specific files that your app can re-create easily.                                                                                                                                                                                                                                                                                                  | 1.0.0 |
 | **`External`**        | <code>'EXTERNAL'</code>         | The external directory On iOS it will use the Documents directory On Android it's the directory on the primary shared/external storage device where the application can place persistent files it owns. These files are internal to the applications, and not typically visible to the user as media. Files will be deleted when the application is uninstalled.                                                                                  | 1.0.0 |
 | **`ExternalStorage`** | <code>'EXTERNAL_STORAGE'</code> | The external storage directory On iOS it will use the Documents directory On Android it's the primary shared/external storage directory. It's not accesible on Android 10 unless the app enables legacy External Storage by adding `android:requestLegacyExternalStorage="true"` in the `application` tag in the `AndroidManifest.xml`. It's not accesible on Android 11 or newer.                                                                | 1.0.0 |
+| **`PortableStorage`** | <code>'PORTABLE_STORAGE'</code> | SDCARD when configured as Portable Storage Points to application private storage on the SD Card when configured as Portable Storage. On iOS it will use the Documents directory                                                                                                                                                                                                                                                                   | 5.0.5 |
 
 
 #### Encoding
