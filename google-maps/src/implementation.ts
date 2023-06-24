@@ -3,12 +3,15 @@ import { registerPlugin } from '@capacitor/core';
 
 import type {
   CameraConfig,
+  Circle,
   GoogleMapConfig,
   LatLng,
   LatLngBounds,
   MapPadding,
   MapType,
   Marker,
+  Polygon,
+  Polyline,
 } from './definitions';
 
 /**
@@ -36,6 +39,19 @@ export interface CreateMapArgs {
    * @default false
    */
   forceCreate?: boolean;
+  /**
+   * The region parameter alters your application to serve different map tiles or bias the application (such as biasing geocoding results towards the region).
+   *
+   * Only available for web.
+   */
+  region?: string;
+
+  /**
+   * The language parameter affects the names of controls, copyright notices, driving directions, and control labels, as well as the responses to service requests.
+   *
+   * Only available for web.
+   */
+  language?: string;
 }
 
 export interface DestroyMapArgs {
@@ -55,6 +71,35 @@ export interface RemoveMarkersArgs {
 export interface AddMarkerArgs {
   id: string;
   marker: Marker;
+}
+
+export interface AddPolygonsArgs {
+  id: string;
+  polygons: Polygon[];
+}
+
+export interface RemovePolygonsArgs {
+  id: string;
+  polygonIds: string[];
+}
+
+export interface AddCirclesArgs {
+  id: string;
+  circles: Circle[];
+}
+
+export interface RemoveCirclesArgs {
+  id: string;
+  circleIds: string[];
+}
+export interface AddPolylinesArgs {
+  id: string;
+  polylines: Polyline[];
+}
+
+export interface RemovePolylinesArgs {
+  id: string;
+  polylineIds: string[];
 }
 
 export interface CameraArgs {
@@ -124,6 +169,12 @@ export interface CapacitorGoogleMapsPlugin extends Plugin {
   addMarkers(args: AddMarkersArgs): Promise<{ ids: string[] }>;
   removeMarker(args: RemoveMarkerArgs): Promise<void>;
   removeMarkers(args: RemoveMarkersArgs): Promise<void>;
+  addPolygons(args: AddPolygonsArgs): Promise<{ ids: string[] }>;
+  removePolygons(args: RemovePolygonsArgs): Promise<void>;
+  addCircles(args: AddCirclesArgs): Promise<{ ids: string[] }>;
+  removeCircles(args: RemoveCirclesArgs): Promise<void>;
+  addPolylines(args: AddPolylinesArgs): Promise<{ ids: string[] }>;
+  removePolylines(args: RemovePolylinesArgs): Promise<void>;
   enableClustering(args: EnableClusteringArgs): Promise<void>;
   disableClustering(args: { id: string }): Promise<void>;
   destroy(args: DestroyMapArgs): Promise<void>;
