@@ -3,6 +3,128 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.4](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/device@5.0.3...@capacitor/device@5.0.4) (2023-06-08)
+
+**Note:** Version bump only for package @capacitor/device
+
+
+
+
+
+## [5.0.3](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/device@5.0.2...@capacitor/device@5.0.3) (2023-06-08)
+
+
+### Bug Fixes
+
+* **device:** webViewVersion not working on Firefox > v108 ([#1419](https://github.com/ionic-team/capacitor-plugins/issues/1419)) ([85cd516](https://github.com/ionic-team/capacitor-plugins/commit/85cd516f06806012350a718b6cd053f9efe583c4))
+
+
+
+
+
+## [5.0.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/device@5.0.1...@capacitor/device@5.0.2) (2023-05-09)
+
+**Note:** Version bump only for package @capacitor/device
+
+
+
+
+
+## [5.0.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/device@5.0.0...@capacitor/device@5.0.1) (2023-05-05)
+
+
+### Bug Fixes
+
+* Use Capacitor 5 final ([#1574](https://github.com/ionic-team/capacitor-plugins/issues/1574)) ([139c18b](https://github.com/ionic-team/capacitor-plugins/commit/139c18b86a11d31246e952d1a74335ff8ce5dbc2))
+
+
+
+
+
+# [5.0.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/device@5.0.0-beta.1...@capacitor/device@5.0.0) (2023-05-03)
+
+**Note:** Version bump only for package @capacitor/device
+
+
+
+
+
+# [5.0.0-beta.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/device@5.0.0-beta.0...@capacitor/device@5.0.0-beta.1) (2023-04-21)
+
+
+### Features
+
+* Update gradle to 8.0.2 and gradle plugin to 8.0.0 ([#1542](https://github.com/ionic-team/capacitor-plugins/issues/1542)) ([e7210b4](https://github.com/ionic-team/capacitor-plugins/commit/e7210b47867644f5983e37acdbf0247214ec232d))
+
+
+
+
+
+# [5.0.0-beta.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/device@5.0.0-alpha.1...@capacitor/device@5.0.0-beta.0) (2023-03-31)
+
+
+### Bug Fixes
+
+* **device:** Improving iOSVersion consistency ([#1514](https://github.com/ionic-team/capacitor-plugins/issues/1514)) ([b697fee](https://github.com/ionic-team/capacitor-plugins/commit/b697feec4d1f5d0576c76e927e893100d0be5e30))
+
+
+### Features
+
+* **device:** Add numerical SDK / OS Version ([#1505](https://github.com/ionic-team/capacitor-plugins/issues/1505)) ([2ceb296](https://github.com/ionic-team/capacitor-plugins/commit/2ceb2965f3572068f22bad3e6d79c0902ec5c116))
+
+
+
+
+
+# [5.0.0-alpha.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/device@4.1.0...@capacitor/device@5.0.0-alpha.1) (2023-03-16)
+
+
+### Features
+
+* **android:** Removing enableJetifier ([d66f9cb](https://github.com/ionic-team/capacitor-plugins/commit/d66f9cbd9da7e3b1d8c64ca6a5b45156867d4a04))
+
+
+
+
+
+# [4.1.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/device@1.1.2...@capacitor/device@4.1.0) (2022-11-16)
+
+
+
+## 4.0.1 (2022-07-28)
+
+
+
+# 4.0.0 (2022-07-27)
+
+
+
+# 4.0.0-beta.2 (2022-07-08)
+
+
+
+# 4.0.0-beta.0 (2022-06-27)
+
+
+### Bug Fixes
+
+* **device:** handle case of no localStorage for getId ([#1059](https://github.com/ionic-team/capacitor-plugins/issues/1059)) ([5f77a7d](https://github.com/ionic-team/capacitor-plugins/commit/5f77a7da48fc7f0ce5250e7cba621731ac6b210a))
+* **device:** return short language code in web ([#893](https://github.com/ionic-team/capacitor-plugins/issues/893)) ([07f0887](https://github.com/ionic-team/capacitor-plugins/commit/07f0887f4f0c9a883e55fb24b506a47dc61f13f7))
+
+
+### Features
+
+* set targetSDK default value to 32 ([#970](https://github.com/ionic-team/capacitor-plugins/issues/970)) ([fa70d96](https://github.com/ionic-team/capacitor-plugins/commit/fa70d96f141af751aae53ceb5642c46b204f5958))
+* **device:** Add getLanguageTag function ([#939](https://github.com/ionic-team/capacitor-plugins/issues/939)) ([d268e4a](https://github.com/ionic-team/capacitor-plugins/commit/d268e4a3d5a0a0279bae6a971b0d6e65481f1899))
+* **device:** model now reflects exact model on iOS ([#929](https://github.com/ionic-team/capacitor-plugins/issues/929)) ([302d813](https://github.com/ionic-team/capacitor-plugins/commit/302d813991a755c89fbf57a6f5b2c3a2e1cd79aa))
+* set targetSDK default value to 31 ([#824](https://github.com/ionic-team/capacitor-plugins/issues/824)) ([3ee10de](https://github.com/ionic-team/capacitor-plugins/commit/3ee10de98067984c1a4e75295d001c5a895c47f4))
+* Upgrade gradle to 7.4 ([#826](https://github.com/ionic-team/capacitor-plugins/issues/826)) ([5db0906](https://github.com/ionic-team/capacitor-plugins/commit/5db0906f6264287c4f8e69dbaecf19d4d387824b))
+* Use java 11 ([#910](https://github.com/ionic-team/capacitor-plugins/issues/910)) ([5acb2a2](https://github.com/ionic-team/capacitor-plugins/commit/5acb2a288a413492b163e4e97da46a085d9e4be0))
+
+
+
+
+
 ## [4.0.1](https://github.com/ionic-team/capacitor-plugins/compare/4.0.0...4.0.1) (2022-07-28)
 
 **Note:** Version bump only for package @capacitor/device

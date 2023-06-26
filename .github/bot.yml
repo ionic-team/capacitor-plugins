@@ -26,14 +26,6 @@ tasks:
     config:
       label: 'needs reply'
       exclude-labeler: true
-  - name: add-label
-    on:
-      issues:
-        types: [opened]
-    condition: |-
-      !(await getTeamMembers('capacitor')).includes(payload.sender.login)
-    config:
-      label: 'triage'
   - name: add-platform-labels
     on:
       issues:

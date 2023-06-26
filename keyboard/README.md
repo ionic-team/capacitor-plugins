@@ -243,6 +243,8 @@ addListener(eventName: 'keyboardWillShow', listenerFunc: (info: KeyboardInfo) =>
 
 Listen for when the keyboard is about to be shown.
 
+On Android keyboardWillShow and keyboardDidShow fire almost at the same time.
+
 | Param              | Type                                                                     |
 | ------------------ | ------------------------------------------------------------------------ |
 | **`eventName`**    | <code>'keyboardWillShow'</code>                                          |
@@ -262,6 +264,8 @@ addListener(eventName: 'keyboardDidShow', listenerFunc: (info: KeyboardInfo) => 
 ```
 
 Listen for when the keyboard is shown.
+
+On Android keyboardWillShow and keyboardDidShow fire almost at the same time.
 
 | Param              | Type                                                                     |
 | ------------------ | ------------------------------------------------------------------------ |
@@ -283,6 +287,8 @@ addListener(eventName: 'keyboardWillHide', listenerFunc: () => void) => Promise<
 
 Listen for when the keyboard is about to be hidden.
 
+On Android keyboardWillHide and keyboardDidHide fire almost at the same time.
+
 | Param              | Type                            |
 | ------------------ | ------------------------------- |
 | **`eventName`**    | <code>'keyboardWillHide'</code> |
@@ -302,6 +308,8 @@ addListener(eventName: 'keyboardDidHide', listenerFunc: () => void) => Promise<P
 ```
 
 Listen for when the keyboard is hidden.
+
+On Android keyboardWillHide and keyboardDidHide fire almost at the same time.
 
 | Param              | Type                           |
 | ------------------ | ------------------------------ |

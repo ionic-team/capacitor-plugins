@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.net.Uri;
-import android.os.Build;
 import androidx.activity.OnBackPressedCallback;
 import androidx.core.content.pm.PackageInfoCompat;
 import com.getcapacitor.JSObject;
@@ -13,6 +12,7 @@ import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
+import com.getcapacitor.util.InternalUtils;
 
 @CapacitorPlugin(name = "App")
 public class AppPlugin extends Plugin {
@@ -21,6 +21,9 @@ public class AppPlugin extends Plugin {
     private static final String EVENT_URL_OPEN = "appUrlOpen";
     private static final String EVENT_STATE_CHANGE = "appStateChange";
     private static final String EVENT_RESTORED_RESULT = "appRestoredResult";
+    private static final String EVENT_PAUSE = "pause";
+    private static final String EVENT_RESUME = "resume";
+    private boolean hasPausedEver = false;
 
     public void load() {
         bridge
@@ -70,7 +73,7 @@ public class AppPlugin extends Plugin {
     public void getInfo(PluginCall call) {
         JSObject data = new JSObject();
         try {
-            PackageInfo pinfo = getContext().getPackageManager().getPackageInfo(getContext().getPackageName(), 0);
+            PackageInfo pinfo = InternalUtils.getPackageInfo(getContext().getPackageManager(), getContext().getPackageName());
             ApplicationInfo applicationInfo = getContext().getApplicationInfo();
             int stringId = applicationInfo.labelRes;
             String appName = stringId == 0 ? applicationInfo.nonLocalizedLabel.toString() : getContext().getString(stringId);
@@ -130,6 +133,21 @@ public class AppPlugin extends Plugin {
         JSObject ret = new JSObject();
         ret.put("url", url.toString());
         notifyListeners(EVENT_URL_OPEN, ret, true);
+    }
+
+    @Override
+    protected void handleOnPause() {
+        super.handleOnPause();
+        hasPausedEver = true;
+        notifyListeners(EVENT_PAUSE, null);
+    }
+
+    @Override
+    protected void handleOnResume() {
+        super.handleOnResume();
+        if (hasPausedEver) {
+            notifyListeners(EVENT_RESUME, null);
+        }
     }
 
     @Override

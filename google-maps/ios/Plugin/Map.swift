@@ -12,6 +12,7 @@ class GMViewController: UIViewController {
     var mapViewBounds: [String: Double]!
     var GMapView: GMSMapView!
     var cameraPosition: [String: Double]!
+    var minimumClusterSize: Int?
 
     private var clusterManager: GMUClusterManager?
 
@@ -28,11 +29,14 @@ class GMViewController: UIViewController {
         self.view = GMapView
     }
 
-    func initClusterManager() {
+    func initClusterManager(_ minClusterSize: Int?) {
         let iconGenerator = GMUDefaultClusterIconGenerator()
         let algorithm = GMUNonHierarchicalDistanceBasedAlgorithm()
         let renderer = GMUDefaultClusterRenderer(mapView: self.GMapView, clusterIconGenerator: iconGenerator)
-
+        self.minimumClusterSize = minClusterSize
+        if let minClusterSize = minClusterSize {
+            renderer.minimumClusterSize = UInt(minClusterSize)
+        }
         self.clusterManager = GMUClusterManager(map: self.GMapView, algorithm: algorithm, renderer: renderer)
     }
 
@@ -57,12 +61,19 @@ class GMViewController: UIViewController {
     }
 }
 
+// swiftlint:disable type_body_length
 public class Map {
     var id: String
     var config: GoogleMapConfig
     var mapViewController: GMViewController
     var targetViewController: UIView?
     var markers = [Int: GMSMarker]()
+    var polygons = [Int: GMSPolygon]()
+    var circles = [Int: GMSCircle]()
+    var polylines = [Int: GMSPolyline]()
+    var markerIcons = [String: UIImage]()
+
+    // swiftlint:disable weak_delegate
     private var delegate: CapacitorGoogleMapsPlugin
 
     init(id: String, config: GoogleMapConfig, delegate: CapacitorGoogleMapsPlugin) {
@@ -91,11 +102,12 @@ public class Map {
             if let bridge = self.delegate.bridge {
 
                 for item in bridge.webView!.getAllSubViews() {
-                    if let typeClass = NSClassFromString("WKChildScrollView"), item.isKind(of: typeClass) {
+                    let isScrollView = item.isKind(of: NSClassFromString("WKChildScrollView")!) || item.isKind(of: NSClassFromString("WKScrollView")!)
+                    if isScrollView {
                         (item as? UIScrollView)?.isScrollEnabled = true
 
-                        let isWidthEqual = Double(item.bounds.width) == self.config.width
-                        let isHeightEqual = Double(item.bounds.height) == self.config.height
+                        let isWidthEqual = round(Double(item.bounds.width)) == self.config.width
+                        let isHeightEqual = round(Double(item.bounds.height)) == self.config.height
 
                         if isWidthEqual && isHeightEqual && (item as? UIView)?.tag == 0 {
                             self.targetViewController = item
@@ -110,6 +122,14 @@ public class Map {
                     self.mapViewController.view.frame = target.bounds
                     target.addSubview(self.mapViewController.view)
                     self.mapViewController.GMapView.delegate = self.delegate
+                }
+
+                if let styles = self.config.styles {
+                    do {
+                        self.mapViewController.GMapView.mapStyle = try GMSMapStyle(jsonString: styles)
+                    } catch {
+                        CAPLog.print("Invalid Google Maps styles")
+                    }
                 }
 
                 self.delegate.notifyListeners("onMapReady", data: [
@@ -168,13 +188,7 @@ public class Map {
         var markerHash = 0
 
         DispatchQueue.main.sync {
-            let newMarker = GMSMarker()
-            newMarker.position = CLLocationCoordinate2D(latitude: marker.coordinate.lat, longitude: marker.coordinate.lng)
-            newMarker.title = marker.title
-            newMarker.snippet = marker.snippet
-            newMarker.isFlat = marker.isFlat ?? false
-            newMarker.opacity = marker.opacity ?? 1
-            newMarker.isDraggable = marker.draggable ?? false
+            let newMarker = self.buildMarker(marker: marker)
 
             if self.mapViewController.clusteringEnabled {
                 self.mapViewController.addMarkersToCluster(markers: [newMarker])
@@ -197,13 +211,7 @@ public class Map {
             var googleMapsMarkers: [GMSMarker] = []
 
             markers.forEach { marker in
-                let newMarker = GMSMarker()
-                newMarker.position = CLLocationCoordinate2D(latitude: marker.coordinate.lat, longitude: marker.coordinate.lng)
-                newMarker.title = marker.title
-                newMarker.snippet = marker.snippet
-                newMarker.isFlat = marker.isFlat ?? false
-                newMarker.opacity = marker.opacity ?? 1
-                newMarker.isDraggable = marker.draggable ?? false
+                let newMarker = self.buildMarker(marker: marker)
 
                 if self.mapViewController.clusteringEnabled {
                     googleMapsMarkers.append(newMarker)
@@ -224,10 +232,61 @@ public class Map {
         return markerHashes
     }
 
-    func enableClustering() {
+    func addPolygons(polygons: [Polygon]) throws -> [Int] {
+        var polygonHashes: [Int] = []
+
+        DispatchQueue.main.sync {
+            polygons.forEach { polygon in
+                let newPolygon = self.buildPolygon(polygon: polygon)
+                newPolygon.map = self.mapViewController.GMapView
+
+                self.polygons[newPolygon.hash.hashValue] = newPolygon
+
+                polygonHashes.append(newPolygon.hash.hashValue)
+            }
+        }
+
+        return polygonHashes
+    }
+
+    func addCircles(circles: [Circle]) throws -> [Int] {
+        var circleHashes: [Int] = []
+
+        DispatchQueue.main.sync {
+            circles.forEach { circle in
+                let newCircle = self.buildCircle(circle: circle)
+                newCircle.map = self.mapViewController.GMapView
+
+                self.circles[newCircle.hash.hashValue] = newCircle
+
+                circleHashes.append(newCircle.hash.hashValue)
+            }
+        }
+
+        return circleHashes
+    }
+
+    func addPolylines(lines: [Polyline]) throws -> [Int] {
+        var polylineHashes: [Int] = []
+
+        DispatchQueue.main.sync {
+            lines.forEach { line in
+                let newLine = self.buildPolyline(line: line)
+                newLine.map = self.mapViewController.GMapView
+
+                self.polylines[newLine.hash.hashValue] = newLine
+
+                polylineHashes.append(newLine.hash.hashValue)
+            }
+        }
+
+        return polylineHashes
+    }
+
+    func enableClustering(_ minClusterSize: Int?) {
         if !self.mapViewController.clusteringEnabled {
             DispatchQueue.main.sync {
-                self.mapViewController.initClusterManager()
+                self.mapViewController.initClusterManager(minClusterSize)
 
                 // add existing markers to the cluster
                 if !self.markers.isEmpty {
@@ -240,6 +299,9 @@ public class Map {
                     self.mapViewController.addMarkersToCluster(markers: existingMarkers)
                 }
             }
+        } else if self.mapViewController.minimumClusterSize != minClusterSize {
+            self.mapViewController.destroyClusterManager()
+            enableClustering(minClusterSize)
         }
     }
 
@@ -272,6 +334,39 @@ public class Map {
         }
     }
 
+    func removePolygons(ids: [Int]) throws {
+        DispatchQueue.main.sync {
+            ids.forEach { id in
+                if let polygon = self.polygons[id] {
+                    polygon.map = nil
+                    self.polygons.removeValue(forKey: id)
+                }
+            }
+        }
+    }
+
+    func removeCircles(ids: [Int]) throws {
+        DispatchQueue.main.sync {
+            ids.forEach { id in
+                if let circle = self.circles[id] {
+                    circle.map = nil
+                    self.circles.removeValue(forKey: id)
+                }
+            }
+        }
+    }
+
+    func removePolylines(ids: [Int]) throws {
+        DispatchQueue.main.sync {
+            ids.forEach { id in
+                if let line = self.polylines[id] {
+                    line.map = nil
+                    self.polylines.removeValue(forKey: id)
+                }
+            }
+        }
+    }
+
     func setCamera(config: GoogleMapCameraConfig) throws {
         let currentCamera = self.mapViewController.GMapView.camera
 
@@ -294,6 +389,10 @@ public class Map {
             }
         }
 
+    }
+
+    func getMapType() -> GMSMapViewType {
+        return self.mapViewController.GMapView.mapType
     }
 
     func setMapType(mapType: GMSMapViewType) throws {
@@ -373,6 +472,148 @@ public class Map {
 
         return intersections
     }
+
+    private func buildCircle(circle: Circle) -> GMSCircle {
+        let newCircle = GMSCircle()
+        newCircle.title = circle.title
+        newCircle.strokeColor = circle.strokeColor
+        newCircle.strokeWidth = circle.strokeWidth
+        newCircle.fillColor = circle.fillColor
+        newCircle.position = CLLocationCoordinate2D(latitude: circle.center.lat, longitude: circle.center.lng)
+        newCircle.radius = CLLocationDistance(circle.radius)
+        newCircle.isTappable = circle.tappable ?? false
+        newCircle.zIndex = circle.zIndex
+        newCircle.userData = circle.tag
+
+        return newCircle
+    }
+
+    private func buildPolygon(polygon: Polygon) -> GMSPolygon {
+        let newPolygon = GMSPolygon()
+        newPolygon.title = polygon.title
+        newPolygon.strokeColor = polygon.strokeColor
+        newPolygon.strokeWidth = polygon.strokeWidth
+        newPolygon.fillColor = polygon.fillColor
+        newPolygon.isTappable = polygon.tappable ?? false
+        newPolygon.geodesic = polygon.geodesic ?? false
+        newPolygon.zIndex = polygon.zIndex
+        newPolygon.userData = polygon.tag
+
+        var shapeIndex = 0
+        let outerShape = GMSMutablePath()
+        var holes: [GMSMutablePath] = []
+
+        polygon.shapes.forEach { shape in
+            if shapeIndex == 0 {
+                shape.forEach { coord in
+                    outerShape.add(CLLocationCoordinate2D(latitude: coord.lat, longitude: coord.lng))
+                }
+            } else {
+                let holeShape = GMSMutablePath()
+                shape.forEach { coord in
+                    holeShape.add(CLLocationCoordinate2D(latitude: coord.lat, longitude: coord.lng))
+                }
+
+                holes.append(holeShape)
+            }
+
+            shapeIndex += 1
+        }
+
+        newPolygon.path = outerShape
+        newPolygon.holes = holes
+
+        return newPolygon
+    }
+
+    private func buildPolyline(line: Polyline) -> GMSPolyline {
+        let newPolyline = GMSPolyline()
+        newPolyline.title = line.title
+        newPolyline.strokeColor = line.strokeColor
+        newPolyline.strokeWidth = line.strokeWidth
+        newPolyline.isTappable = line.tappable ?? false
+        newPolyline.geodesic = line.geodesic ?? false
+        newPolyline.zIndex = line.zIndex
+        newPolyline.userData = line.tag
+
+        let path = GMSMutablePath()
+        line.path.forEach { coord in
+            path.add(CLLocationCoordinate2D(latitude: coord.lat, longitude: coord.lng))
+        }
+
+        newPolyline.path = path
+
+        if line.styleSpans.count > 0 {
+            var spans: [GMSStyleSpan] = []
+
+            line.styleSpans.forEach { span in
+                if let segments = span.segments {
+                    spans.append(GMSStyleSpan(color: span.color, segments: segments))
+                } else {
+                    spans.append(GMSStyleSpan(color: span.color))
+                }
+            }
+
+            newPolyline.spans = spans
+        }
+
+        return newPolyline
+    }
+
+    private func buildMarker(marker: Marker) -> GMSMarker {
+        let newMarker = GMSMarker()
+        newMarker.position = CLLocationCoordinate2D(latitude: marker.coordinate.lat, longitude: marker.coordinate.lng)
+        newMarker.title = marker.title
+        newMarker.snippet = marker.snippet
+        newMarker.isFlat = marker.isFlat ?? false
+        newMarker.opacity = marker.opacity ?? 1
+        newMarker.isDraggable = marker.draggable ?? false
+        newMarker.zIndex = marker.zIndex
+        if let iconAnchor = marker.iconAnchor {
+            newMarker.groundAnchor = iconAnchor
+        }
+
+        // cache and reuse marker icon uiimages
+        if let iconUrl = marker.iconUrl {
+            if let iconImage = self.markerIcons[iconUrl] {
+                newMarker.icon = getResizedIcon(iconImage, marker)
+            } else {
+                if iconUrl.starts(with: "https:") {
+                    DispatchQueue.main.async {
+                        if let url = URL(string: iconUrl), let data = try? Data(contentsOf: url), let iconImage = UIImage(data: data) {
+                            self.markerIcons[iconUrl] = iconImage
+                            newMarker.icon = getResizedIcon(iconImage, marker)
+                        }
+                    }
+                } else if let iconImage = UIImage(named: "public/\(iconUrl)") {
+                    self.markerIcons[iconUrl] = iconImage
+                    newMarker.icon = getResizedIcon(iconImage, marker)
+                } else {
+                    var detailedMessage = ""
+
+                    if iconUrl.hasSuffix(".svg") {
+                        detailedMessage = "SVG not supported."
+                    }
+
+                    print("CapacitorGoogleMaps Warning: could not load image '\(iconUrl)'. \(detailedMessage)  Using default marker icon.")
+                }
+            }
+        } else {
+            if let color = marker.color {
+                newMarker.icon = GMSMarker.markerImage(with: color)
+            }
+        }
+
+        return newMarker
+    }
+}
+
+private func getResizedIcon(_ iconImage: UIImage, _ marker: Marker) -> UIImage? {
+    if let iconSize = marker.iconSize {
+        return iconImage.resizeImageTo(size: iconSize)
+    } else {
+        return iconImage
+    }
 }
 
 extension WKWebView {
@@ -415,5 +656,15 @@ extension UIView {
         subviews.forEach {
             $0.removeFromSuperview()
         }
+    }
+}
+
+extension UIImage {
+    func resizeImageTo(size: CGSize) -> UIImage? {
+        UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
+        self.draw(in: CGRect(origin: CGPoint.zero, size: size))
+        let resizedImage = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+        return resizedImage
     }
 }

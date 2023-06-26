@@ -18,6 +18,7 @@
     "network",
     "preferences",
     "push-notifications",
+    "screen-orientation",
     "screen-reader",
     "share",
     "splash-screen",
@@ -40,5 +41,5 @@
       "tagVersionPrefix": ""
     }
   },
-  "version": "4.0.1"
+  "version": "independent"
 }

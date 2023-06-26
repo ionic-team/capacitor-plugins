@@ -8,6 +8,7 @@ public struct GoogleMapConfig: Codable {
     let y: Double
     let center: LatLng
     let zoom: Double
+    let styles: String?
 
     init(fromJSObject: JSObject) throws {
         guard let width = fromJSObject["width"] as? Double else {
@@ -38,11 +39,16 @@ public struct GoogleMapConfig: Codable {
             throw GoogleMapErrors.invalidArguments("LatLng object is missing the required 'lat' and/or 'lng' property")
         }
 
-        self.width = width
-        self.height = height
+        self.width = round(width)
+        self.height = round(height)
         self.x = x
         self.y = y
         self.zoom = zoom
         self.center = LatLng(lat: lat, lng: lng)
+        if let stylesArray = fromJSObject["styles"] as? JSArray, let jsonData = try? JSONSerialization.data(withJSONObject: stylesArray, options: []) {
+            self.styles = String(data: jsonData, encoding: .utf8)
+        } else {
+            self.styles = nil
+        }
     }
 }

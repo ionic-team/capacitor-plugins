@@ -1,33 +1,67 @@
 name: Publish Native Android Libraries
 
 on:
+  workflow_call:
+    secrets:
+      ANDROID_OSSRH_USERNAME:
+        required: true
+      ANDROID_OSSRH_PASSWORD:
+        required: true
+      ANDROID_SIGNING_KEY_ID:
+        required: true
+      ANDROID_SIGNING_PASSWORD:
+        required: true
+      ANDROID_SIGNING_KEY:
+        required: true
+      ANDROID_SONATYPE_STAGING_PROFILE_ID:
+        required: true
+      CAP_GH_RELEASE_TOKEN:
+        required: true
+    inputs:
+      plugins:
+        description: 'Specify an optional subset of plugins to publish (space delimited)'
+        type: string
+        required: false
+        default: ''
+      capacitor-version:
+        description: 'Optional. Specify the version of Capacitor the plugins should depend on. Must be in mathematical notation, eg: [4.0,5.0) for 4.x versions only, or [4.0,) for 4.x versions and higher'
+        type: string
+        required: false
+        default: ''
   workflow_dispatch:
     inputs:
       plugins:
         description: 'Specify an optional subset of plugins to publish (space delimited)'
         required: false
         default: ''
+      capacitor-version:
+        description: 'Optional. Specify the version of Capacitor the plugins should depend on. Must be in mathematical notation, eg: [4.0,5.0) for 4.x versions only, or [4.0,) for 4.x versions and higher'
+        required: false
+        default: ''
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     permissions:
       contents: read
       packages: write
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
-        ref: native-publish
-    - name: set up JDK 11
-      uses: actions/setup-java@v2
+        fetch-depth: 0
+        token: ${{ secrets.CAP_GH_RELEASE_TOKEN }}
+    - name: set up JDK 17
+      uses: actions/setup-java@v3
       with:
-        java-version: '11'
-        distribution: 'adopt'
+        java-version: '17'
+        distribution: 'zulu'
     - name: Grant execute permission for publishing script
       run: chmod +x ./scripts/publish-android.sh
     - name: Run publish script
       working-directory: ./scripts
       env:
         GITHUB_PLUGINS: ${{ github.event.inputs.plugins }}
+        GITHUB_CAPACITOR_VERSION: ${{ github.event.inputs.capacitor-version }}
         ANDROID_OSSRH_USERNAME: ${{ secrets.ANDROID_OSSRH_USERNAME }}
         ANDROID_OSSRH_PASSWORD: ${{ secrets.ANDROID_OSSRH_PASSWORD }}
         ANDROID_SIGNING_KEY_ID: ${{ secrets.ANDROID_SIGNING_KEY_ID }}

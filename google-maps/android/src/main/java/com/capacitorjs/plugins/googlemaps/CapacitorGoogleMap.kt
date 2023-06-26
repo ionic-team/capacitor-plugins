@@ -1,9 +1,7 @@
 package com.capacitorjs.plugins.googlemaps
 
 import android.annotation.SuppressLint
-import android.graphics.Color
-import android.graphics.Rect
-import android.graphics.RectF
+import android.graphics.*
 import android.location.Location
 import android.util.Log
 import android.view.MotionEvent
@@ -13,22 +11,16 @@ import android.widget.FrameLayout
 import com.getcapacitor.Bridge
 import com.getcapacitor.JSArray
 import com.getcapacitor.JSObject
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.*
 import com.google.android.gms.maps.GoogleMap.*
-import com.google.android.gms.maps.MapView
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.model.CameraPosition
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.LatLngBounds
-import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.*
 import com.google.maps.android.clustering.Cluster
 import com.google.maps.android.clustering.ClusterManager
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import java.io.InputStream
+import java.net.URL
+
 
 class CapacitorGoogleMap(
         val id: String,
@@ -37,21 +29,32 @@ class CapacitorGoogleMap(
 ) :
         OnCameraIdleListener,
         OnCameraMoveStartedListener,
+        OnCameraMoveListener,
         OnMyLocationButtonClickListener,
         OnMyLocationClickListener,
         OnMapReadyCallback,
         OnMapClickListener,
         OnMarkerClickListener,
-        OnInfoWindowClickListener {
+        OnMarkerDragListener,
+        OnInfoWindowClickListener,
+        OnCircleClickListener,
+        OnPolylineClickListener,
+        OnPolygonClickListener {
     private var mapView: MapView
     private var googleMap: GoogleMap? = null
     private val markers = HashMap<String, CapacitorGoogleMapMarker>()
+    private val polygons = HashMap<String, CapacitorGoogleMapsPolygon>()
+    private val circles = HashMap<String, CapacitorGoogleMapsCircle>()
+    private val polylines = HashMap<String, CapacitorGoogleMapPolyline>()        
+    private val markerIcons = HashMap<String, Bitmap>()
     private var clusterManager: ClusterManager<CapacitorGoogleMapMarker>? = null
 
     private val isReadyChannel = Channel<Boolean>()
+    private var debounceJob: Job? = null
 
     init {
         val bridge = delegate.bridge
+
         mapView = MapView(bridge.context, config.googleMapOptions)
         initMap()
         setListeners()
@@ -65,7 +68,6 @@ class CapacitorGoogleMap(
                         mapView.onStart()
                         mapView.getMapAsync(this@CapacitorGoogleMap)
                         mapView.setWillNotDraw(false)
-
                         isReadyChannel.receive()
 
                         render()
@@ -100,6 +102,9 @@ class CapacitorGoogleMap(
 
                 bridge.webView.bringToFront()
                 bridge.webView.setBackgroundColor(Color.TRANSPARENT)
+                if (config.styles != null) {
+                    googleMap?.setMapStyle(MapStyleOptions(config.styles!!))
+                }
             }
         }
     }
@@ -171,15 +176,21 @@ class CapacitorGoogleMap(
 
             CoroutineScope(Dispatchers.Main).launch {
                 newMarkers.forEach {
-                    val googleMapMarker = googleMap?.addMarker(it.getMarkerOptions())
+                    val markerOptions: Deferred<MarkerOptions> =
+                            CoroutineScope(Dispatchers.IO).async {
+                                this@CapacitorGoogleMap.buildMarker(it)
+                            }
+                    val googleMapMarker = googleMap?.addMarker(markerOptions.await())
                     it.googleMapMarker = googleMapMarker
 
-                    if (clusterManager != null) {
-                        googleMapMarker?.remove()
-                    }
+                    if (googleMapMarker != null) {
+                        if (clusterManager != null) {
+                            googleMapMarker.remove()
+                        }
 
-                    markers[googleMapMarker!!.id] = it
-                    markerIds.add(googleMapMarker.id)
+                        markers[googleMapMarker.id] = it
+                        markerIds.add(googleMapMarker.id)
+                    }
                 }
 
                 if (clusterManager != null) {
@@ -201,11 +212,15 @@ class CapacitorGoogleMap(
             var markerId: String
 
             CoroutineScope(Dispatchers.Main).launch {
-                val googleMapMarker = googleMap?.addMarker(marker.getMarkerOptions())
+                val markerOptions: Deferred<MarkerOptions> =
+                        CoroutineScope(Dispatchers.IO).async {
+                            this@CapacitorGoogleMap.buildMarker(marker)
+                        }
+                val googleMapMarker = googleMap?.addMarker(markerOptions.await())
 
-                if (clusterManager == null) {
-                    marker.googleMapMarker = googleMapMarker
-                } else {
+                marker.googleMapMarker = googleMapMarker
+
+                if (clusterManager != null) {
                     googleMapMarker?.remove()
                     clusterManager?.addItem(marker)
                     clusterManager?.cluster()
@@ -222,26 +237,112 @@ class CapacitorGoogleMap(
         }
     }
 
+    fun addPolygons(newPolygons: List<CapacitorGoogleMapsPolygon>, callback: (ids: Result<List<String>>) -> Unit) {
+        try {
+            googleMap ?: throw GoogleMapNotAvailable()
+            val shapeIds: MutableList<String> = mutableListOf()
+
+            CoroutineScope(Dispatchers.Main).launch {
+                newPolygons.forEach {
+                    val polygonOptions: Deferred<PolygonOptions> = CoroutineScope(Dispatchers.IO).async {
+                        this@CapacitorGoogleMap.buildPolygon(it)
+                    }
+
+                    val googleMapsPolygon = googleMap?.addPolygon(polygonOptions.await())
+                    googleMapsPolygon?.tag = it.tag
+
+                    it.googleMapsPolygon = googleMapsPolygon
+
+                    polygons[googleMapsPolygon!!.id] = it
+                    shapeIds.add(googleMapsPolygon.id)
+                }
+
+                callback(Result.success(shapeIds))
+            }
+        } catch (e: GoogleMapsError) {
+            callback(Result.failure(e))
+        }
+    }
+
+    fun addCircles(newCircles: List<CapacitorGoogleMapsCircle>,callback: (ids: Result<List<String>>) -> Unit) {
+        try {
+            googleMap ?: throw GoogleMapNotAvailable()
+            val circleIds: MutableList<String> = mutableListOf()
+
+            CoroutineScope(Dispatchers.Main).launch {
+                newCircles.forEach {
+                    var circleOptions: Deferred<CircleOptions> = CoroutineScope(Dispatchers.IO).async {
+                        this@CapacitorGoogleMap.buildCircle(it)
+                    }
+
+                    val googleMapsCircle = googleMap?.addCircle(circleOptions.await())
+                    googleMapsCircle?.tag = it.tag
+
+                    it.googleMapsCircle = googleMapsCircle
+
+                    circles[googleMapsCircle!!.id] = it
+                    circleIds.add(googleMapsCircle.id)
+                }
+
+                callback(Result.success(circleIds))
+            }
+        } catch (e: GoogleMapsError) {
+            callback(Result.failure(e))
+        }
+    }
+
+    fun addPolylines(newLines: List<CapacitorGoogleMapPolyline>, callback: (ids: Result<List<String>>) -> Unit) {
+        try {
+            googleMap ?: throw GoogleMapNotAvailable()
+            val lineIds: MutableList<String> = mutableListOf()
+
+            CoroutineScope(Dispatchers.Main).launch {
+                newLines.forEach {
+                    val polylineOptions: Deferred<PolylineOptions> = CoroutineScope(Dispatchers.IO).async {
+                        this@CapacitorGoogleMap.buildPolyline(it)
+                    }
+                    val googleMapPolyline = googleMap?.addPolyline(polylineOptions.await())
+                    googleMapPolyline?.tag = it.tag
+                    
+                    it.googleMapsPolyline = googleMapPolyline
+
+                    polylines[googleMapPolyline!!.id] = it
+                    lineIds.add(googleMapPolyline.id)
+                }
+
+                callback(Result.success(lineIds))
+            }
+        } catch (e: GoogleMapsError) {
+            callback(Result.failure(e))
+        }
+    }
+
+    private fun setClusterManagerRenderer(minClusterSize: Int?) {
+        clusterManager?.renderer = CapacitorClusterManagerRenderer(
+            delegate.bridge.context,
+            googleMap,
+            clusterManager,
+            minClusterSize
+        )
+    }
+
     @SuppressLint("PotentialBehaviorOverride")
-    fun enableClustering(callback: (error: GoogleMapsError?) -> Unit) {
+    fun enableClustering(minClusterSize: Int?, callback: (error: GoogleMapsError?) -> Unit) {
         try {
             googleMap ?: throw GoogleMapNotAvailable()
 
-            if (clusterManager != null) {
-                callback(null)
-                return
-            }
-
             CoroutineScope(Dispatchers.Main).launch {
+                if (clusterManager != null) {
+                    setClusterManagerRenderer(minClusterSize)
+                    callback(null)
+                    return@launch
+                }
+
                 val bridge = delegate.bridge
                 clusterManager = ClusterManager(bridge.context, googleMap)
 
-                googleMap?.setOnCameraIdleListener(clusterManager)
-
+                setClusterManagerRenderer(minClusterSize)
                 setClusterListeners()
-
-                googleMap?.setOnMarkerClickListener(clusterManager)
-                googleMap?.setOnInfoWindowClickListener(clusterManager)
 
                 // add existing markers to the cluster
                 if (markers.isNotEmpty()) {
@@ -275,8 +376,32 @@ class CapacitorGoogleMap(
                 // add existing markers back to the map
                 if (markers.isNotEmpty()) {
                     for ((_, marker) in markers) {
-                        val googleMapMarker = googleMap?.addMarker(marker.getMarkerOptions())
+                        val markerOptions: Deferred<MarkerOptions> =
+                                CoroutineScope(Dispatchers.IO).async {
+                                    this@CapacitorGoogleMap.buildMarker(marker)
+                                }
+                        val googleMapMarker = googleMap?.addMarker(markerOptions.await())
                         marker.googleMapMarker = googleMapMarker
+                    }
+                }
+
+                callback(null)
+            }
+        } catch (e: GoogleMapsError) {
+            callback(e)
+        }
+    }
+
+    fun removePolygons(ids: List<String>, callback: (error: GoogleMapsError?) -> Unit) {
+        try {
+            googleMap ?: throw GoogleMapNotAvailable()
+
+            CoroutineScope(Dispatchers.Main).launch {
+                ids.forEach {
+                    val polygon = polygons[it]
+                    if (polygon != null) {
+                        polygon.googleMapsPolygon?.remove()
+                        polygons.remove(it)
                     }
                 }
 
@@ -339,6 +464,46 @@ class CapacitorGoogleMap(
         }
     }
 
+    fun removeCircles(ids: List<String>, callback: (error: GoogleMapsError?) -> Unit) {
+        try {
+            googleMap ?: throw GoogleMapNotAvailable()
+
+            CoroutineScope(Dispatchers.Main).launch {
+                ids.forEach {
+                    val circle = circles[it]
+                    if (circle != null) {
+                        circle.googleMapsCircle?.remove()
+                        markers.remove(it)
+                    }
+                }
+
+                callback(null)
+            }
+        } catch (e: GoogleMapsError) {
+            callback(e)
+        }
+    }
+
+    fun removePolylines(ids: List<String>, callback: (error: GoogleMapsError?) -> Unit) {
+        try {
+            googleMap ?: throw GoogleMapNotAvailable()
+
+            CoroutineScope(Dispatchers.Main).launch {
+                ids.forEach {
+                    val polyline = polylines[it]
+                    if (polyline != null) {
+                        polyline.googleMapsPolyline?.remove()
+                        polylines.remove(it)
+                    }
+                }
+
+                callback(null)
+            }
+        } catch (e: GoogleMapsError) {
+            callback(e)
+        }
+    }
+
     fun setCamera(config: GoogleMapCameraConfig, callback: (error: GoogleMapsError?) -> Unit) {
         try {
             googleMap ?: throw GoogleMapNotAvailable()
@@ -387,6 +552,27 @@ class CapacitorGoogleMap(
             }
         } catch (e: GoogleMapsError) {
             callback(e)
+        }
+    }
+
+    fun getMapType(callback: (type: String, error: GoogleMapsError?) -> Unit) {
+        try {
+            googleMap ?: throw GoogleMapNotAvailable()
+            CoroutineScope(Dispatchers.Main).launch {
+                val mapType: String = when (googleMap?.mapType) {
+                    MAP_TYPE_NORMAL -> "Normal"
+                    MAP_TYPE_HYBRID -> "Hybrid"
+                    MAP_TYPE_SATELLITE -> "Satellite"
+                    MAP_TYPE_TERRAIN -> "Terrain"
+                    MAP_TYPE_NONE -> "None"
+                    else -> {
+                        "Normal"
+                    }
+                }
+                callback(mapType, null);
+            }
+        }  catch (e: GoogleMapsError) {
+            callback("", e)
         }
     }
 
@@ -477,29 +663,7 @@ class CapacitorGoogleMap(
     }
 
     fun getLatLngBounds(): LatLngBounds {
-        return googleMap?.projection?.visibleRegion?.latLngBounds
-            ?: throw BoundsNotFoundError()
-    }
-
-    fun getLatLngBoundsJSObject(bounds: LatLngBounds): JSObject {
-        val data = JSObject()
-
-        val southwestJS = JSObject()
-        val centerJS = JSObject()
-        val northeastJS = JSObject()
-
-        southwestJS.put("lat", bounds.southwest.latitude)
-        southwestJS.put("lng", bounds.southwest.longitude)
-        centerJS.put("lat", bounds.center.latitude)
-        centerJS.put("lng", bounds.center.longitude)
-        northeastJS.put("lat", bounds.northeast.latitude)
-        northeastJS.put("lng", bounds.northeast.longitude)
-
-        data.put("southwest", southwestJS)
-        data.put("center", centerJS)
-        data.put("northeast", northeastJS)
-
-        return data
+        return googleMap?.projection?.visibleRegion?.latLngBounds ?: throw BoundsNotFoundError()
     }
 
     private fun getScaledPixels(bridge: Bridge, pixels: Int): Int {
@@ -523,6 +687,133 @@ class CapacitorGoogleMap(
                 getScaledPixelsF(bridge, rectF.right),
                 getScaledPixelsF(bridge, rectF.bottom)
         )
+    }
+
+    private fun buildCircle(circle: CapacitorGoogleMapsCircle): CircleOptions {
+        val circleOptions = CircleOptions()
+        circleOptions.fillColor(circle.fillColor)
+        circleOptions.strokeColor(circle.strokeColor)
+        circleOptions.strokeWidth(circle.strokeWidth)
+        circleOptions.zIndex(circle.zIndex)
+        circleOptions.clickable(circle.clickable)
+        circleOptions.radius(circle.radius.toDouble())
+        circleOptions.center(circle.center)
+
+        return circleOptions
+    }
+
+    private fun buildPolygon(polygon: CapacitorGoogleMapsPolygon): PolygonOptions {
+        val polygonOptions = PolygonOptions()
+        polygonOptions.fillColor(polygon.fillColor)
+        polygonOptions.strokeColor(polygon.strokeColor)
+        polygonOptions.strokeWidth(polygon.strokeWidth)
+        polygonOptions.zIndex(polygon.zIndex)
+        polygonOptions.geodesic(polygon.geodesic)
+        polygonOptions.clickable(polygon.clickable)
+
+        var shapeCounter = 0
+        polygon.shapes.forEach {
+            if (shapeCounter == 0) {
+                // outer shape
+                it.forEach {
+                    polygonOptions.add(it)
+                }
+            } else {
+                polygonOptions.addHole(it)
+            }
+
+            shapeCounter += 1
+        }
+
+        return polygonOptions
+    }
+    
+    private fun buildPolyline(line: CapacitorGoogleMapPolyline): PolylineOptions {
+        val polylineOptions = PolylineOptions()
+        polylineOptions.width(line.strokeWidth * this.config.devicePixelRatio)
+        polylineOptions.color(line.strokeColor)
+        polylineOptions.clickable(line.clickable)
+        polylineOptions.zIndex(line.zIndex)
+        polylineOptions.geodesic(line.geodesic)
+
+        line.path.forEach {
+            polylineOptions.add(it)
+        }
+
+        line.styleSpans.forEach {
+            if (it.segments != null) {
+                polylineOptions.addSpan(StyleSpan(it.color, it.segments))
+            } else {
+                polylineOptions.addSpan(StyleSpan(it.color))
+            }
+        }
+
+        return polylineOptions
+    }
+
+    private fun buildMarker(marker: CapacitorGoogleMapMarker): MarkerOptions {
+        val markerOptions = MarkerOptions()
+        markerOptions.position(marker.coordinate)
+        markerOptions.title(marker.title)
+        markerOptions.snippet(marker.snippet)
+        markerOptions.alpha(marker.opacity)
+        markerOptions.flat(marker.isFlat)
+        markerOptions.draggable(marker.draggable)
+        markerOptions.zIndex(marker.zIndex)
+
+        if (!marker.iconUrl.isNullOrEmpty()) {
+            if (this.markerIcons.contains(marker.iconUrl)) {
+                val cachedBitmap = this.markerIcons[marker.iconUrl]
+                markerOptions.icon(getResizedIcon(cachedBitmap!!, marker))
+            } else {
+                try {
+                    var stream: InputStream? = null
+                    if (marker.iconUrl!!.startsWith("https:")) {
+                        stream = URL(marker.iconUrl).openConnection().getInputStream()
+                    } else {
+                        stream = this.delegate.context.assets.open("public/${marker.iconUrl}")
+                    }
+                    var bitmap = BitmapFactory.decodeStream(stream)
+                    this.markerIcons[marker.iconUrl!!] = bitmap
+                    markerOptions.icon(getResizedIcon(bitmap, marker))
+                } catch (e: Exception) {
+                    var detailedMessage = "${e.javaClass} - ${e.localizedMessage}"
+                    if (marker.iconUrl!!.endsWith(".svg")) {
+                        detailedMessage = "SVG not supported"
+                    }
+
+                    Log.w(
+                            "CapacitorGoogleMaps",
+                            "Could not load image '${marker.iconUrl}': ${detailedMessage}. Using default marker icon."
+                    )
+                }
+            }
+        } else {
+            if (marker.colorHue != null) {
+                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(marker.colorHue!!))
+            }
+        }
+
+        marker.markerOptions = markerOptions
+
+        return markerOptions
+    }
+
+    private fun getResizedIcon(
+            _bitmap: Bitmap,
+            marker: CapacitorGoogleMapMarker
+    ): BitmapDescriptor {
+        var bitmap = _bitmap
+        if (marker.iconSize != null) {
+            bitmap =
+                    Bitmap.createScaledBitmap(
+                            bitmap,
+                            (marker.iconSize!!.width * this.config.devicePixelRatio).toInt(),
+                            (marker.iconSize!!.height * this.config.devicePixelRatio).toInt(),
+                            false
+                    )
+        }
+        return BitmapDescriptorFactory.fromBitmap(bitmap)
     }
 
     fun onStart() {
@@ -565,13 +856,18 @@ class CapacitorGoogleMap(
             this@CapacitorGoogleMap.googleMap?.setOnCameraMoveStartedListener(
                     this@CapacitorGoogleMap
             )
+            this@CapacitorGoogleMap.googleMap?.setOnCameraMoveListener(this@CapacitorGoogleMap)
             this@CapacitorGoogleMap.googleMap?.setOnMarkerClickListener(this@CapacitorGoogleMap)
+            this@CapacitorGoogleMap.googleMap?.setOnPolygonClickListener(this@CapacitorGoogleMap)
+            this@CapacitorGoogleMap.googleMap?.setOnCircleClickListener(this@CapacitorGoogleMap)
+            this@CapacitorGoogleMap.googleMap?.setOnMarkerDragListener(this@CapacitorGoogleMap)
             this@CapacitorGoogleMap.googleMap?.setOnMapClickListener(this@CapacitorGoogleMap)
             this@CapacitorGoogleMap.googleMap?.setOnMyLocationButtonClickListener(
                     this@CapacitorGoogleMap
             )
             this@CapacitorGoogleMap.googleMap?.setOnMyLocationClickListener(this@CapacitorGoogleMap)
             this@CapacitorGoogleMap.googleMap?.setOnInfoWindowClickListener(this@CapacitorGoogleMap)
+            this@CapacitorGoogleMap.googleMap?.setOnPolylineClickListener(this@CapacitorGoogleMap)
         }
     }
 
@@ -649,6 +945,47 @@ class CapacitorGoogleMap(
         return false
     }
 
+    override fun onPolylineClick(polyline: Polyline) {
+        val data = JSObject()
+        data.put("mapId", this@CapacitorGoogleMap.id)
+        data.put("polylineId", polyline.id)
+        data.put("tag", polyline.tag)
+        delegate.notify("onPolylineClick", data)
+    }
+
+    override fun onMarkerDrag(marker: Marker) {
+        val data = JSObject()
+        data.put("mapId", this@CapacitorGoogleMap.id)
+        data.put("markerId", marker.id)
+        data.put("latitude", marker.position.latitude)
+        data.put("longitude", marker.position.longitude)
+        data.put("title", marker.title)
+        data.put("snippet", marker.snippet)
+        delegate.notify("onMarkerDrag", data)
+    }
+
+    override fun onMarkerDragStart(marker: Marker) {
+        val data = JSObject()
+        data.put("mapId", this@CapacitorGoogleMap.id)
+        data.put("markerId", marker.id)
+        data.put("latitude", marker.position.latitude)
+        data.put("longitude", marker.position.longitude)
+        data.put("title", marker.title)
+        data.put("snippet", marker.snippet)
+        delegate.notify("onMarkerDragStart", data)
+    }
+
+    override fun onMarkerDragEnd(marker: Marker) {
+        val data = JSObject()
+        data.put("mapId", this@CapacitorGoogleMap.id)
+        data.put("markerId", marker.id)
+        data.put("latitude", marker.position.latitude)
+        data.put("longitude", marker.position.longitude)
+        data.put("title", marker.title)
+        data.put("snippet", marker.snippet)
+        delegate.notify("onMarkerDragEnd", data)
+    }
+
     override fun onMyLocationButtonClick(): Boolean {
         val data = JSObject()
         data.put("mapId", this@CapacitorGoogleMap.id)
@@ -694,4 +1031,53 @@ class CapacitorGoogleMap(
         data.put("snippet", marker.snippet)
         delegate.notify("onInfoWindowClick", data)
     }
+
+    override fun onCameraMove() {
+        debounceJob?.cancel()
+        debounceJob = CoroutineScope(Dispatchers.Main).launch {
+            delay(100)
+            clusterManager?.cluster()
+        }
+    }
+
+    override fun onPolygonClick(polygon: Polygon) {
+        val data = JSObject()
+        data.put("mapId", this@CapacitorGoogleMap.id)
+        data.put("polygonId", polygon.id)
+        data.put("tag", polygon.tag)
+        delegate.notify("onPolygonClick", data)
+    }
+
+    override fun onCircleClick(circle: Circle) {
+        val data = JSObject()
+        data.put("mapId", this@CapacitorGoogleMap.id)
+        data.put("circleId", circle.id)
+        data.put("tag", circle.tag)
+        data.put("latitude", circle.center.latitude)
+        data.put("longitude", circle.center.longitude)
+        data.put("radius", circle.radius)
+
+        delegate.notify("onCircleClick", data)
+    }
+}
+
+fun getLatLngBoundsJSObject(bounds: LatLngBounds): JSObject {
+    val data = JSObject()
+
+    val southwestJS = JSObject()
+    val centerJS = JSObject()
+    val northeastJS = JSObject()
+
+    southwestJS.put("lat", bounds.southwest.latitude)
+    southwestJS.put("lng", bounds.southwest.longitude)
+    centerJS.put("lat", bounds.center.latitude)
+    centerJS.put("lng", bounds.center.longitude)
+    northeastJS.put("lat", bounds.northeast.latitude)
+    northeastJS.put("lng", bounds.northeast.longitude)
+
+    data.put("southwest", southwestJS)
+    data.put("center", centerJS)
+    data.put("northeast", northeastJS)
+
+    return data
 }

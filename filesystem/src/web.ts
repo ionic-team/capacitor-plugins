@@ -22,6 +22,7 @@ import type {
   WriteFileResult,
   Directory,
 } from './definitions';
+import { Encoding } from './definitions';
 
 function resolve(path: string): string {
   const posix = path.split('/').filter(item => item !== '.');
@@ -348,7 +349,7 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
       throw Error('Folder is not empty');
 
     for (const entry of readDirResult.files) {
-      const entryPath = `${path}/${entry}`;
+      const entryPath = `${path}/${entry.name}`;
       const entryObj = await this.stat({ path: entryPath, directory });
       if (entryObj.type === 'file') {
         await this.deleteFile({ path: entryPath, directory });
@@ -564,11 +565,17 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
           });
         }
 
+        let encoding;
+        if (!this.isBase64String(file.data)) {
+          encoding = Encoding.UTF8;
+        }
+
         // Write the file to the new location
         const writeResult = await this.writeFile({
           path: to,
           directory: toDirectory,
           data: file.data,
+          encoding: encoding,
         });
 
         // Copy the mtime/ctime of a renamed file
@@ -612,8 +619,8 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
           // Move item from the from directory to the to directory
           await this._copy(
             {
-              from: `${from}/${filename}`,
-              to: `${to}/${filename}`,
+              from: `${from}/${filename.name}`,
+              to: `${to}/${filename.name}`,
               directory: fromDirectory,
               toDirectory,
             },
@@ -636,9 +643,11 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
   }
 
   private isBase64String(str: string): boolean {
-    const base64regex =
-      /^([0-9a-zA-Z+/]{4})*(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?$/;
-    return base64regex.test(str);
+    try {
+      return btoa(atob(str)) == str;
+    } catch (err) {
+      return false;
+    }
   }
 }
 

@@ -1,5 +1,4 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.capacitorjs.plugins.localnotifications">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application>
         <receiver android:name="com.capacitorjs.plugins.localnotifications.TimedNotificationPublisher" />
@@ -17,4 +16,5 @@
     </application>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 </manifest>

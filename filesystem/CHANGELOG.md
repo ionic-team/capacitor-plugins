@@ -3,6 +3,132 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.4](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@5.0.3...@capacitor/filesystem@5.0.4) (2023-06-08)
+
+**Note:** Version bump only for package @capacitor/filesystem
+
+
+
+
+
+## [5.0.3](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@5.0.2...@capacitor/filesystem@5.0.3) (2023-06-08)
+
+**Note:** Version bump only for package @capacitor/filesystem
+
+
+
+
+
+## [5.0.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@5.0.1...@capacitor/filesystem@5.0.2) (2023-05-09)
+
+**Note:** Version bump only for package @capacitor/filesystem
+
+
+
+
+
+## [5.0.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@5.0.0...@capacitor/filesystem@5.0.1) (2023-05-05)
+
+
+### Bug Fixes
+
+* **android:** add appCompat libraries for maven releases ([#1577](https://github.com/ionic-team/capacitor-plugins/issues/1577)) ([8a2e0ea](https://github.com/ionic-team/capacitor-plugins/commit/8a2e0ea96538a46bde299a864dba760c6e2eba68))
+* Use Capacitor 5 final ([#1574](https://github.com/ionic-team/capacitor-plugins/issues/1574)) ([139c18b](https://github.com/ionic-team/capacitor-plugins/commit/139c18b86a11d31246e952d1a74335ff8ce5dbc2))
+
+
+
+
+
+# [5.0.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@5.0.0-beta.1...@capacitor/filesystem@5.0.0) (2023-05-03)
+
+**Note:** Version bump only for package @capacitor/filesystem
+
+
+
+
+
+# [5.0.0-beta.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@5.0.0-beta.0...@capacitor/filesystem@5.0.0-beta.1) (2023-04-21)
+
+
+### Features
+
+* Update gradle to 8.0.2 and gradle plugin to 8.0.0 ([#1542](https://github.com/ionic-team/capacitor-plugins/issues/1542)) ([e7210b4](https://github.com/ionic-team/capacitor-plugins/commit/e7210b47867644f5983e37acdbf0247214ec232d))
+
+
+
+
+
+# [5.0.0-beta.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@5.0.0-alpha.1...@capacitor/filesystem@5.0.0-beta.0) (2023-03-31)
+
+**Note:** Version bump only for package @capacitor/filesystem
+
+
+
+
+
+# [5.0.0-alpha.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@4.1.4...@capacitor/filesystem@5.0.0-alpha.1) (2023-03-16)
+
+
+### Bug Fixes
+
+* **filesystem:** copy and rename not working on web ([#1479](https://github.com/ionic-team/capacitor-plugins/issues/1479)) ([7349d01](https://github.com/ionic-team/capacitor-plugins/commit/7349d01350d8a435a00b53e98b43c055880f7aa7))
+
+
+### Features
+
+* **android:** Removing enableJetifier ([d66f9cb](https://github.com/ionic-team/capacitor-plugins/commit/d66f9cbd9da7e3b1d8c64ca6a5b45156867d4a04))
+
+
+
+
+
+## [4.1.4](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@4.1.3...@capacitor/filesystem@4.1.4) (2022-11-16)
+
+**Note:** Version bump only for package @capacitor/filesystem
+
+
+
+
+
+## [4.1.3](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@4.1.2...@capacitor/filesystem@4.1.3) (2022-10-21)
+
+**Note:** Version bump only for package @capacitor/filesystem
+
+
+
+
+
+## [4.1.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@4.1.1...@capacitor/filesystem@4.1.2) (2022-09-29)
+
+
+### Bug Fixes
+
+* **filesystem:** Avoid max stack size exceeded on base64 check ([#1202](https://github.com/ionic-team/capacitor-plugins/issues/1202)) ([f4ba421](https://github.com/ionic-team/capacitor-plugins/commit/f4ba421b211e78bd205fa737955780a12e86e24f))
+
+
+
+
+
+## [4.1.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@4.1.0...@capacitor/filesystem@4.1.1) (2022-09-12)
+
+**Note:** Version bump only for package @capacitor/filesystem
+
+
+
+
+
+# [4.1.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@1.1.0...@capacitor/filesystem@4.1.0) (2022-08-24)
+
+
+### Bug Fixes
+
+* **filesystem:** failing to remove folder content on rmdir ([#1112](https://github.com/ionic-team/capacitor-plugins/issues/1112)) ([ae451aa](https://github.com/ionic-team/capacitor-plugins/commit/ae451aa08beb2138ecebdfcdd26101660aa00fde))
+* **filesystem:** make iOS return proper url on readdir ([#1142](https://github.com/ionic-team/capacitor-plugins/issues/1142)) ([77dc02f](https://github.com/ionic-team/capacitor-plugins/commit/77dc02fb829ad3479144368da16f9fff324f2706))
+
+
+
+
+
 ## [4.0.1](https://github.com/ionic-team/capacitor-plugins/compare/4.0.0...4.0.1) (2022-07-28)
 
 **Note:** Version bump only for package @capacitor/filesystem
