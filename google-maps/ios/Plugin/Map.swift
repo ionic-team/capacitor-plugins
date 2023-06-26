@@ -112,6 +112,7 @@ public class Map {
                     
                         let height = Double((item as? UIScrollView)?.contentSize.height ?? 0)
                         let width = Double((item as? UIScrollView)?.contentSize.width ?? 0)
+                        let actualHeight = round(height / 2)
                         
                         print("\(self.config.width) x \(self.config.height)")
                         print("")
@@ -123,7 +124,7 @@ public class Map {
                         print("")
                         
                         let isWidthEqual = width == self.config.width
-                        let isHeightEqual = Double(self.config.height * 2) == height
+                        let isHeightEqual = actualHeight == self.config.height
                         
                         if isWidthEqual && isHeightEqual && item.tag < self.targetViewController?.tag ?? Map.MAP_TAG {
                             self.targetViewController = item
