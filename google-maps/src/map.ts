@@ -193,7 +193,17 @@ export class GoogleMap {
       (options.element as any) = {};
     }
 
-    await CapacitorGoogleMaps.create(options);
+    // small delay to allow for iOS WKWebView to setup corresponding element sub-scroll views ???
+    await new Promise(((resolve, reject) => {
+      setTimeout(async() => {
+        try {
+          await CapacitorGoogleMaps.create(options);
+          resolve(undefined);
+        } catch (err) {
+          reject(err);
+        }
+      }, 200)
+    }))
 
     if (callback) {
       const onMapReadyListener = await CapacitorGoogleMaps.addListener(
