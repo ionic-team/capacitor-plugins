@@ -644,7 +644,7 @@ export class CapacitorGoogleMapsWeb
       title: marker.title,
       icon: iconImage,
       draggable: marker.draggable,
-      zIndex: marker.zIndex,
+      zIndex: marker.zIndex ?? 0,
     };
 
     return opts;

@@ -13,7 +13,7 @@ class CapacitorGoogleMapMarker(fromJSONObject: JSONObject): ClusterItem {
     var opacity: Float = 1.0f
     private var title: String
     private var snippet: String
-    private var zIndex: Float? = null
+    private var zIndex: Float = 0.0f
     var isFlat: Boolean = false
     var iconUrl: String? = null
     var iconSize: Size? = null
@@ -24,7 +24,7 @@ class CapacitorGoogleMapMarker(fromJSONObject: JSONObject): ClusterItem {
     var markerOptions: MarkerOptions? = null
 
     init {
-        if(!fromJSONObject.has("coordinate")) {
+        if (!fromJSONObject.has("coordinate")) {
             throw InvalidArgumentsError("Marker object is missing the required 'coordinate' property")
         }
 
@@ -49,7 +49,7 @@ class CapacitorGoogleMapMarker(fromJSONObject: JSONObject): ClusterItem {
             iconAnchor = this.buildIconAnchorPoint(inputAnchorPoint)
         }
 
-        if(fromJSONObject.has("tintColor")) {
+        if (fromJSONObject.has("tintColor")) {
             val tintColorObject = fromJSONObject.getJSONObject("tintColor")
 
             val r = MathUtils.clamp(tintColorObject.optDouble("r", 0.00), 0.00, 255.0)
@@ -78,7 +78,7 @@ class CapacitorGoogleMapMarker(fromJSONObject: JSONObject): ClusterItem {
         return snippet
     }
 
-    override fun getZIndex(): Float? {
+    override fun getZIndex(): Float {
         return zIndex
     }
 
