@@ -102,22 +102,28 @@ public class Map {
                 "zoom": self.config.zoom
             ]
             
-            print("\(self.config.x), \(self.config.y)")
-            
             if let bridge = self.delegate.bridge {
                 for item in bridge.webView!.getAllSubViews() {
                     let isScrollView = item.isKind(of: NSClassFromString("WKChildScrollView")!) || item.isKind(of: NSClassFromString("WKScrollView")!)
                     let isBridgeScrollView = item.isEqual(bridge.webView?.scrollView)
                     
-                    if isScrollView && !isBridgeScrollView  {
+                    if isScrollView && !isBridgeScrollView {
                         (item as? UIScrollView)?.isScrollEnabled = true
-                        
-                        let width = Double((item as? UIScrollView)?.contentSize.width ?? 0)
+                    
                         let height = Double((item as? UIScrollView)?.contentSize.height ?? 0)
-                        let rawHeight = Float(self.config.height * 2)
+                        let width = Double((item as? UIScrollView)?.contentSize.width ?? 0)
+                        
+                        print("\(self.config.width) x \(self.config.height)")
+                        print("")
+                        print("\(width) x \(height)")
+                        print("\(item.bounds.size.width) x \(item.bounds.size.height)")
+                        print("\(item.frame.size.width) x \(item.frame.size.height)")
+                        print("\(item.frame.width) x \(item.frame.height)")
+                        print("\(item.bounds.width) x \(item.bounds.height)")
+                        print("")
                         
                         let isWidthEqual = width == self.config.width
-                        let isHeightEqual = false 
+                        let isHeightEqual = Double(self.config.height * 2) == height
                         
                         if isWidthEqual && isHeightEqual && item.tag < self.targetViewController?.tag ?? Map.MAP_TAG {
                             self.targetViewController = item
@@ -187,6 +193,7 @@ public class Map {
 
     func destroy() {
         DispatchQueue.main.async {
+            self.mapViewController.GMapView = nil
             self.targetViewController?.tag = 0
             self.mapViewController.view = nil
 
