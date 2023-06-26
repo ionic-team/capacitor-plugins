@@ -1,6 +1,7 @@
 package com.capacitorjs.plugins.network;
 
 import android.os.Build;
+import android.util.Log;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
@@ -12,6 +13,7 @@ public class NetworkPlugin extends Plugin {
 
     private Network implementation;
     public static final String NETWORK_CHANGE_EVENT = "networkStatusChange";
+    private NetworkStatus prePauseNetworkStatus = null;
 
     /**
      * Monitor for network status changes and fire our event.
@@ -59,6 +61,19 @@ public class NetworkPlugin extends Plugin {
         } else {
             implementation.startMonitoring(getActivity());
         }
+        NetworkStatus afterPauseNetworkStatus = implementation.getNetworkStatus();
+        if (
+            prePauseNetworkStatus != null &&
+            !afterPauseNetworkStatus.connected &&
+            (prePauseNetworkStatus.connected || afterPauseNetworkStatus.connectionType != prePauseNetworkStatus.connectionType)
+        ) {
+            Log.d(
+                "Capacitor/NetworkPlugin",
+                "Detected pre-pause and after-pause network status mismatch. Updating network status and notifying listeners."
+            );
+            this.updateNetworkStatus();
+        }
+        this.prePauseNetworkStatus = null;
     }
 
     /**
@@ -66,6 +81,7 @@ public class NetworkPlugin extends Plugin {
      */
     @Override
     protected void handleOnPause() {
+        this.prePauseNetworkStatus = implementation.getNetworkStatus();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             implementation.stopMonitoring();
         } else {
