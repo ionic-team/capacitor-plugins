@@ -114,6 +114,8 @@ class MapCustomElement extends HTMLElement {
   }
 
   connectedCallback() {
+    this.innerHTML = "";
+
     if (Capacitor.getPlatform() == 'ios') {
       this.style.overflow = 'scroll';
       (this.style as any)['-webkit-overflow-scrolling'] = 'touch';
