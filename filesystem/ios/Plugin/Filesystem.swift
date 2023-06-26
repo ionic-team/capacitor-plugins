@@ -35,7 +35,7 @@ import Capacitor
     }
 
     public func writeFile(at fileUrl: URL, with data: String, recursive: Bool, with encoding: String?) throws -> String {
-        if !FileManager.default.fileExists(atPath: fileUrl.deletingLastPathComponent.path) {
+        if !FileManager.default.fileExists(atPath: fileUrl.deletingLastPathComponent().path) {
             if recursive {
                 try FileManager.default.createDirectory(at: fileUrl.deletingLastPathComponent(), withIntermediateDirectories: recursive, attributes: nil)
             } else {
