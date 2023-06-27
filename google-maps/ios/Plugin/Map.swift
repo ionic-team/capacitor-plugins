@@ -61,12 +61,16 @@ class GMViewController: UIViewController {
     }
 }
 
+// swiftlint:disable type_body_length
 public class Map {
     var id: String
     var config: GoogleMapConfig
     var mapViewController: GMViewController
     var targetViewController: UIView?
     var markers = [Int: GMSMarker]()
+    var polygons = [Int: GMSPolygon]()
+    var circles = [Int: GMSCircle]()
+    var polylines = [Int: GMSPolyline]()
     var markerIcons = [String: UIImage]()
 
     // swiftlint:disable weak_delegate
@@ -228,6 +232,57 @@ public class Map {
         return markerHashes
     }
 
+    func addPolygons(polygons: [Polygon]) throws -> [Int] {
+        var polygonHashes: [Int] = []
+
+        DispatchQueue.main.sync {
+            polygons.forEach { polygon in
+                let newPolygon = self.buildPolygon(polygon: polygon)
+                newPolygon.map = self.mapViewController.GMapView
+
+                self.polygons[newPolygon.hash.hashValue] = newPolygon
+
+                polygonHashes.append(newPolygon.hash.hashValue)
+            }
+        }
+
+        return polygonHashes
+    }
+
+    func addCircles(circles: [Circle]) throws -> [Int] {
+        var circleHashes: [Int] = []
+
+        DispatchQueue.main.sync {
+            circles.forEach { circle in
+                let newCircle = self.buildCircle(circle: circle)
+                newCircle.map = self.mapViewController.GMapView
+
+                self.circles[newCircle.hash.hashValue] = newCircle
+
+                circleHashes.append(newCircle.hash.hashValue)
+            }
+        }
+
+        return circleHashes
+    }
+
+    func addPolylines(lines: [Polyline]) throws -> [Int] {
+        var polylineHashes: [Int] = []
+
+        DispatchQueue.main.sync {
+            lines.forEach { line in
+                let newLine = self.buildPolyline(line: line)
+                newLine.map = self.mapViewController.GMapView
+
+                self.polylines[newLine.hash.hashValue] = newLine
+
+                polylineHashes.append(newLine.hash.hashValue)
+            }
+        }
+
+        return polylineHashes
+    }
+
     func enableClustering(_ minClusterSize: Int?) {
         if !self.mapViewController.clusteringEnabled {
             DispatchQueue.main.sync {
@@ -276,6 +331,39 @@ public class Map {
             }
         } else {
             throw GoogleMapErrors.markerNotFound
+        }
+    }
+
+    func removePolygons(ids: [Int]) throws {
+        DispatchQueue.main.sync {
+            ids.forEach { id in
+                if let polygon = self.polygons[id] {
+                    polygon.map = nil
+                    self.polygons.removeValue(forKey: id)
+                }
+            }
+        }
+    }
+
+    func removeCircles(ids: [Int]) throws {
+        DispatchQueue.main.sync {
+            ids.forEach { id in
+                if let circle = self.circles[id] {
+                    circle.map = nil
+                    self.circles.removeValue(forKey: id)
+                }
+            }
+        }
+    }
+
+    func removePolylines(ids: [Int]) throws {
+        DispatchQueue.main.sync {
+            ids.forEach { id in
+                if let line = self.polylines[id] {
+                    line.map = nil
+                    self.polylines.removeValue(forKey: id)
+                }
+            }
         }
     }
 
@@ -390,6 +478,93 @@ public class Map {
         }
 
         return intersections
+    }
+
+    private func buildCircle(circle: Circle) -> GMSCircle {
+        let newCircle = GMSCircle()
+        newCircle.title = circle.title
+        newCircle.strokeColor = circle.strokeColor
+        newCircle.strokeWidth = circle.strokeWidth
+        newCircle.fillColor = circle.fillColor
+        newCircle.position = CLLocationCoordinate2D(latitude: circle.center.lat, longitude: circle.center.lng)
+        newCircle.radius = CLLocationDistance(circle.radius)
+        newCircle.isTappable = circle.tappable ?? false
+        newCircle.zIndex = circle.zIndex
+        newCircle.userData = circle.tag
+
+        return newCircle
+    }
+
+    private func buildPolygon(polygon: Polygon) -> GMSPolygon {
+        let newPolygon = GMSPolygon()
+        newPolygon.title = polygon.title
+        newPolygon.strokeColor = polygon.strokeColor
+        newPolygon.strokeWidth = polygon.strokeWidth
+        newPolygon.fillColor = polygon.fillColor
+        newPolygon.isTappable = polygon.tappable ?? false
+        newPolygon.geodesic = polygon.geodesic ?? false
+        newPolygon.zIndex = polygon.zIndex
+        newPolygon.userData = polygon.tag
+
+        var shapeIndex = 0
+        let outerShape = GMSMutablePath()
+        var holes: [GMSMutablePath] = []
+
+        polygon.shapes.forEach { shape in
+            if shapeIndex == 0 {
+                shape.forEach { coord in
+                    outerShape.add(CLLocationCoordinate2D(latitude: coord.lat, longitude: coord.lng))
+                }
+            } else {
+                let holeShape = GMSMutablePath()
+                shape.forEach { coord in
+                    holeShape.add(CLLocationCoordinate2D(latitude: coord.lat, longitude: coord.lng))
+                }
+
+                holes.append(holeShape)
+            }
+
+            shapeIndex += 1
+        }
+
+        newPolygon.path = outerShape
+        newPolygon.holes = holes
+
+        return newPolygon
+    }
+
+    private func buildPolyline(line: Polyline) -> GMSPolyline {
+        let newPolyline = GMSPolyline()
+        newPolyline.title = line.title
+        newPolyline.strokeColor = line.strokeColor
+        newPolyline.strokeWidth = line.strokeWidth
+        newPolyline.isTappable = line.tappable ?? false
+        newPolyline.geodesic = line.geodesic ?? false
+        newPolyline.zIndex = line.zIndex
+        newPolyline.userData = line.tag
+
+        let path = GMSMutablePath()
+        line.path.forEach { coord in
+            path.add(CLLocationCoordinate2D(latitude: coord.lat, longitude: coord.lng))
+        }
+
+        newPolyline.path = path
+
+        if line.styleSpans.count > 0 {
+            var spans: [GMSStyleSpan] = []
+
+            line.styleSpans.forEach { span in
+                if let segments = span.segments {
+                    spans.append(GMSStyleSpan(color: span.color, segments: segments))
+                } else {
+                    spans.append(GMSStyleSpan(color: span.color))
+                }
+            }
+
+            newPolyline.spans = spans
+        }
+
+        return newPolyline
     }
 
     private func buildMarker(marker: Marker) -> GMSMarker {

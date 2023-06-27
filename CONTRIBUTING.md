@@ -25,6 +25,7 @@ Sometimes, it may be necessary to work on Capacitor in parellel with the plugin(
 5. Toggle each plugin to use your local copy of Capacitor.
 
     ```shell
+    npm install
     npm run toggle-local
     ```
 

@@ -33,6 +33,8 @@ Read about [Setting Permissions](https://capacitorjs.com/docs/android/configurat
 Note that <a href="#directory">`Directory.Documents`</a> and
 `Directory.ExternalStorage` are only available on Android 9 or older.
 
+Working with large files may require you to add `android:largeHeap="true"` to the `<application>` tag in `AndroidManifest.xml`.
+
 ## Understanding Directories and Files
 
 iOS and Android have additional layers of separation between files, such as special directories that are backed up to the Cloud, or ones for storing Documents. The Filesystem API offers a simple way to scope each operation to a specific special directory on the device.
@@ -47,7 +49,7 @@ import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
 const writeSecretFile = async () => {
   await Filesystem.writeFile({
     path: 'secrets/text.txt',
-    data: "This is a test",
+    data: 'This is a test',
     directory: Directory.Documents,
     encoding: Encoding.UTF8,
   });
@@ -75,7 +77,7 @@ const readFilePath = async () => {
   // read binary data (base64 encoded) from plugins that return File URIs, such as
   // the Camera.
   const contents = await Filesystem.readFile({
-    path: 'file:///var/mobile/Containers/Data/Application/22A433FD-D82D-4989-8BE6-9FC49DEA20BB/Documents/text.txt'
+    path: 'file:///var/mobile/Containers/Data/Application/22A433FD-D82D-4989-8BE6-9FC49DEA20BB/Documents/text.txt',
   });
 
   console.log('data:', contents);

@@ -3,6 +3,88 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.4](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@5.0.3...@capacitor/camera@5.0.4) (2023-06-08)
+
+**Note:** Version bump only for package @capacitor/camera
+
+
+
+
+
+## [5.0.3](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@5.0.2...@capacitor/camera@5.0.3) (2023-06-08)
+
+**Note:** Version bump only for package @capacitor/camera
+
+
+
+
+
+## [5.0.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@5.0.1...@capacitor/camera@5.0.2) (2023-05-09)
+
+**Note:** Version bump only for package @capacitor/camera
+
+
+
+
+
+## [5.0.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@5.0.0...@capacitor/camera@5.0.1) (2023-05-05)
+
+
+### Bug Fixes
+
+* Use Capacitor 5 final ([#1574](https://github.com/ionic-team/capacitor-plugins/issues/1574)) ([139c18b](https://github.com/ionic-team/capacitor-plugins/commit/139c18b86a11d31246e952d1a74335ff8ce5dbc2))
+
+
+
+
+
+# [5.0.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@5.0.0-beta.1...@capacitor/camera@5.0.0) (2023-05-03)
+
+**Note:** Version bump only for package @capacitor/camera
+
+
+
+
+
+# [5.0.0-beta.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@5.0.0-beta.0...@capacitor/camera@5.0.0-beta.1) (2023-04-21)
+
+
+### Features
+
+* Update gradle to 8.0.2 and gradle plugin to 8.0.0 ([#1542](https://github.com/ionic-team/capacitor-plugins/issues/1542)) ([e7210b4](https://github.com/ionic-team/capacitor-plugins/commit/e7210b47867644f5983e37acdbf0247214ec232d))
+
+
+
+
+
+# [5.0.0-beta.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@5.0.0-alpha.1...@capacitor/camera@5.0.0-beta.0) (2023-03-31)
+
+
+### Bug Fixes
+
+* **camera:** add proper permissions for Android 13 ([#1509](https://github.com/ionic-team/capacitor-plugins/issues/1509)) ([0dcbe56](https://github.com/ionic-team/capacitor-plugins/commit/0dcbe56bc554b1919c3e26d2f6b7ff8e5b7a0f5e))
+* **camera:** prevent iOS crash with 0 limited images selected ([#1495](https://github.com/ionic-team/capacitor-plugins/issues/1495)) ([33f5c8e](https://github.com/ionic-team/capacitor-plugins/commit/33f5c8ebc7705c0e697caee4b2177ebc27d46311))
+
+
+
+
+
+# [5.0.0-alpha.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@4.1.4...@capacitor/camera@5.0.0-alpha.1) (2023-03-16)
+
+
+### Bug Fixes
+
+* **camera:** Handle null permissions list ([#1457](https://github.com/ionic-team/capacitor-plugins/issues/1457)) ([fcd28e9](https://github.com/ionic-team/capacitor-plugins/commit/fcd28e95420207f0e194f9fecab12415c400cba5))
+
+
+### Features
+
+* **android:** Removing enableJetifier ([d66f9cb](https://github.com/ionic-team/capacitor-plugins/commit/d66f9cbd9da7e3b1d8c64ca6a5b45156867d4a04))
+
+
+
+
+
 ## [4.1.4](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@4.1.3...@capacitor/camera@4.1.4) (2022-11-16)
 
 **Note:** Version bump only for package @capacitor/camera

@@ -3,6 +3,105 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.1.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/google-maps@5.1.1...@capacitor/google-maps@5.1.2) (2023-06-08)
+
+**Note:** Version bump only for package @capacitor/google-maps
+
+
+
+
+
+## [5.1.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/google-maps@5.1.0...@capacitor/google-maps@5.1.1) (2023-06-08)
+
+**Note:** Version bump only for package @capacitor/google-maps
+
+
+
+
+
+# [5.1.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/google-maps@5.0.1...@capacitor/google-maps@5.1.0) (2023-05-09)
+
+
+### Bug Fixes
+
+* **google-maps:** Added null check to addMarkers method ([#1571](https://github.com/ionic-team/capacitor-plugins/issues/1571)) ([76e89a9](https://github.com/ionic-team/capacitor-plugins/commit/76e89a9a7ee4a7aa9aead02366a5ab7e16470cd4))
+
+
+### Features
+
+* **google-maps:**  Add ability to set language and region on map ([#1588](https://github.com/ionic-team/capacitor-plugins/issues/1588)) ([c4a296c](https://github.com/ionic-team/capacitor-plugins/commit/c4a296cb17746d454de7d805bd178362d6a5ae48))
+
+
+
+
+
+## [5.0.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/google-maps@5.0.0...@capacitor/google-maps@5.0.1) (2023-05-05)
+
+
+### Bug Fixes
+
+* Use Capacitor 5 final ([#1574](https://github.com/ionic-team/capacitor-plugins/issues/1574)) ([139c18b](https://github.com/ionic-team/capacitor-plugins/commit/139c18b86a11d31246e952d1a74335ff8ce5dbc2))
+
+
+
+
+
+# [5.0.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/google-maps@5.0.0-beta.1...@capacitor/google-maps@5.0.0) (2023-05-03)
+
+**Note:** Version bump only for package @capacitor/google-maps
+
+
+
+
+
+# [5.0.0-beta.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/google-maps@5.0.0-beta.0...@capacitor/google-maps@5.0.0-beta.1) (2023-04-21)
+
+
+### Bug Fixes
+
+* **google-maps:** Cast iOS marker id to string ([#1222](https://github.com/ionic-team/capacitor-plugins/issues/1222)) ([0ffb621](https://github.com/ionic-team/capacitor-plugins/commit/0ffb62159bbdb38cf3657ca15f7e69573d83a792))
+* **google-maps:** fix custom icon on marker when clustering is enabled ([#1522](https://github.com/ionic-team/capacitor-plugins/issues/1522)) ([12be06a](https://github.com/ionic-team/capacitor-plugins/commit/12be06a1de1adc2e961cdd6837f203c19343ad8d))
+
+
+### Features
+
+* **google-maps:** Circles support ([#1553](https://github.com/ionic-team/capacitor-plugins/issues/1553)) ([c39d84f](https://github.com/ionic-team/capacitor-plugins/commit/c39d84fbae464fc8984e26f970e85fd1862ff2ac))
+* **google-maps:** Polygons support ([#1534](https://github.com/ionic-team/capacitor-plugins/issues/1534)) ([e2fd153](https://github.com/ionic-team/capacitor-plugins/commit/e2fd15318d0ba9a07386d0389d985ec65071341e))
+* **google-maps:** Polylines support ([#1532](https://github.com/ionic-team/capacitor-plugins/issues/1532)) ([415f42b](https://github.com/ionic-team/capacitor-plugins/commit/415f42b351d4ac8fd555efc3d6b0dfa9b09a80b9))
+* Update gradle to 8.0.2 and gradle plugin to 8.0.0 ([#1542](https://github.com/ionic-team/capacitor-plugins/issues/1542)) ([e7210b4](https://github.com/ionic-team/capacitor-plugins/commit/e7210b47867644f5983e37acdbf0247214ec232d))
+
+
+
+
+
+# [5.0.0-beta.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/google-maps@5.0.0-alpha.1...@capacitor/google-maps@5.0.0-beta.0) (2023-03-31)
+
+
+### Bug Fixes
+
+* **google-maps:** setMapType not working on web ([#1508](https://github.com/ionic-team/capacitor-plugins/issues/1508)) ([4efa7d7](https://github.com/ionic-team/capacitor-plugins/commit/4efa7d7ccc0a48f61131bb8f729de13ac7b00fb3))
+
+
+### Features
+
+* **google-maps:** add extend to LatLngBounds ([fb2dc0d](https://github.com/ionic-team/capacitor-plugins/commit/fb2dc0d42f9eaa928e9bdb38980ac9b84ae4c4b7))
+
+
+
+
+
+# [5.0.0-alpha.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/google-maps@4.5.0...@capacitor/google-maps@5.0.0-alpha.1) (2023-03-16)
+
+
+### Features
+
+* **android:** Removing enableJetifier ([d66f9cb](https://github.com/ionic-team/capacitor-plugins/commit/d66f9cbd9da7e3b1d8c64ca6a5b45156867d4a04))
+* **google-maps:** add zIndex to markers ([53a0436](https://github.com/ionic-team/capacitor-plugins/commit/53a04366ad331ada081589aef9c726b4356688df))
+
+
+
+
+
 # [4.5.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/google-maps@4.4.0...@capacitor/google-maps@4.5.0) (2023-02-22)
 
 
