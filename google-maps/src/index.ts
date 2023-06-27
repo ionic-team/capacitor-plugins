@@ -10,7 +10,16 @@ import {
 } from './definitions';
 import { GoogleMap } from './map';
 
-export { GoogleMap, LatLngBounds, MapType, Marker, Polygon, Circle, Polyline, StyleSpan };
+export {
+  GoogleMap,
+  LatLngBounds,
+  MapType,
+  Marker,
+  Polygon,
+  Circle,
+  Polyline,
+  StyleSpan,
+};
 
 declare global {
   export namespace JSX {
