@@ -5,9 +5,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.util.Base64;
-
 import androidx.core.os.EnvironmentCompat;
-
 import com.capacitorjs.plugins.filesystem.exceptions.CopyFailedException;
 import com.capacitorjs.plugins.filesystem.exceptions.DirectoryExistsException;
 import com.capacitorjs.plugins.filesystem.exceptions.DirectoryNotFoundException;
@@ -206,7 +204,7 @@ public class Filesystem {
         }
         return null;
     }
-    
+
     public boolean isPortableStorageAvailable() {
         String[] storageDirectories = getFilteredStorageDirectories();
         return storageDirectories.length > 0;
@@ -215,7 +213,7 @@ public class Filesystem {
     private File getPortableStorage() {
         String[] storageDirectories = getFilteredStorageDirectories();
 
-        if(storageDirectories.length == 0){
+        if (storageDirectories.length == 0) {
             return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
         } else {
             return new File(storageDirectories[0]);
@@ -231,27 +229,26 @@ public class Filesystem {
 
         // Get a list of external file systems and filter for removable storage only
         for (File file : externalDirs) {
-            if(file == null){
+            if (file == null) {
                 continue;
             }
             String applicationPath = file.getPath();
 
             boolean addPath = false;
 
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 addPath = Environment.isExternalStorageRemovable(file);
-            }
-            else{
+            } else {
                 addPath = Environment.MEDIA_MOUNTED.equals(EnvironmentCompat.getStorageState(file));
             }
 
-            if(addPath){
+            if (addPath) {
                 results.add(applicationPath);
             }
         }
 
         //Remove paths which may not be external SDCard, like OTG
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             for (int i = 0; i < results.size(); i++) {
                 if (!results.get(i).toLowerCase().matches(".*[0-9a-f]{4}[-][0-9a-f]{4}.*")) {
                     results.remove(i--);
@@ -266,7 +263,7 @@ public class Filesystem {
         }
 
         String[] storageDirectories = new String[results.size()];
-        for(int i=0; i<results.size(); ++i) storageDirectories[i] = results.get(i);
+        for (int i = 0; i < results.size(); ++i) storageDirectories[i] = results.get(i);
 
         return storageDirectories;
     }

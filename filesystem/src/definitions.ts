@@ -494,7 +494,6 @@ export interface isPortableStorageAvailableResult {
   available: boolean;
 }
 
-
 export interface FilesystemPlugin {
   /**
    * Read a file from disk
