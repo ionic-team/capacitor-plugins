@@ -39,6 +39,7 @@ public class Browser {
     private BrowserEventListener browserEventListener;
 
     private Context context;
+    private static final String FALLBACK_CUSTOM_TAB_PACKAGE_NAME = "com.android.chrome";
     private CustomTabsClient customTabsClient;
     private CustomTabsSession browserSession;
     private boolean isInitialLoad = false;
@@ -116,6 +117,9 @@ public class Browser {
      */
     public boolean bindService() {
         String customTabPackageName = CustomTabsClient.getPackageName(context, null);
+        if (null == customTabPackageName) {
+            customTabPackageName = FALLBACK_CUSTOM_TAB_PACKAGE_NAME;
+        }
         boolean result = CustomTabsClient.bindCustomTabsService(context, customTabPackageName, connection);
         group.leave();
         return result;
