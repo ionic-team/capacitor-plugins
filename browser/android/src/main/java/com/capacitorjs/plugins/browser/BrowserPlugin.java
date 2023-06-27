@@ -1,9 +1,9 @@
 package com.capacitorjs.plugins.browser;
 
 import android.content.ActivityNotFoundException;
-import android.net.Uri;
-import android.content.Intent;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import com.getcapacitor.Logger;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
