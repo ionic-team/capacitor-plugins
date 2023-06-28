@@ -73,7 +73,9 @@ public class Map {
     var polylines = [Int: GMSPolyline]()
     var markerIcons = [String: UIImage]()
 
+    // swiftlint:disable identifier_name
     public static let MAP_TAG = 99999
+    // swiftlint:enable identifier_name
 
     // swiftlint:disable weak_delegate
     private var delegate: CapacitorGoogleMapsPlugin
