@@ -453,6 +453,13 @@ public class Map {
         return GMSCoordinateBounds(region: self.mapViewController.GMapView.projection.visibleRegion())
     }
 
+    func fitBounds(bounds: GMSCoordinateBounds, padding: CGFloat) {
+        DispatchQueue.main.sync {
+            let cameraUpdate = GMSCameraUpdate.fit(bounds, withPadding: padding)
+            self.mapViewController.GMapView.animate(with: cameraUpdate)
+        }
+    }
+
     private func getFrameOverflowBounds(frame: CGRect, mapBounds: CGRect) -> [CGRect] {
         var intersections: [CGRect] = []
 

@@ -163,6 +163,12 @@ export interface EnableClusteringArgs {
   minClusterSize?: number;
 }
 
+export interface FitBoundsArgs {
+  id: string;
+  bounds: LatLngBounds;
+  padding?: number;
+}
+
 export interface CapacitorGoogleMapsPlugin extends Plugin {
   create(options: CreateMapArgs): Promise<void>;
   addMarker(args: AddMarkerArgs): Promise<{ id: string }>;
@@ -189,6 +195,7 @@ export interface CapacitorGoogleMapsPlugin extends Plugin {
   onScroll(args: OnScrollArgs): Promise<void>;
   dispatchMapEvent(args: { id: string; focus: boolean }): Promise<void>;
   getMapBounds(args: { id: string }): Promise<LatLngBounds>;
+  fitBounds(args: FitBoundsArgs): Promise<void>;
   mapBoundsContains(
     args: MapBoundsContainsArgs,
   ): Promise<{ contains: boolean }>;
