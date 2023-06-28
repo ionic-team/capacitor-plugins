@@ -72,7 +72,7 @@ public class Map {
     var circles = [Int: GMSCircle]()
     var polylines = [Int: GMSPolyline]()
     var markerIcons = [String: UIImage]()
-    
+
     public static let MAP_TAG = 99999
 
     // swiftlint:disable weak_delegate
@@ -101,19 +101,19 @@ public class Map {
                 "longitude": self.config.center.lng,
                 "zoom": self.config.zoom
             ]
-            
+
             if let bridge = self.delegate.bridge {
                 for item in bridge.webView!.getAllSubViews() {
                     let isScrollView = item.isKind(of: NSClassFromString("WKChildScrollView")!) || item.isKind(of: NSClassFromString("WKScrollView")!)
                     let isBridgeScrollView = item.isEqual(bridge.webView?.scrollView)
-                    
+
                     if isScrollView && !isBridgeScrollView {
                         (item as? UIScrollView)?.isScrollEnabled = true
-                    
+
                         let height = Double((item as? UIScrollView)?.contentSize.height ?? 0)
                         let width = Double((item as? UIScrollView)?.contentSize.width ?? 0)
                         let actualHeight = round(height / 2)
-                        
+
                         print("\(self.config.width) x \(self.config.height)")
                         print("")
                         print("\(width) x \(height)")
@@ -122,10 +122,10 @@ public class Map {
                         print("\(item.frame.width) x \(item.frame.height)")
                         print("\(item.bounds.width) x \(item.bounds.height)")
                         print("")
-                        
+
                         let isWidthEqual = width == self.config.width
                         let isHeightEqual = actualHeight == self.config.height
-                        
+
                         if isWidthEqual && isHeightEqual && item.tag < self.targetViewController?.tag ?? Map.MAP_TAG {
                             self.targetViewController = item
                         }
@@ -661,15 +661,15 @@ extension UIView {
                 // view already in use as in map
                 continue
             }
-            
+
             // tag the index depth of the uiview
             view.tag = index
-            
+
             if view.isKind(of: UIView.self) {
                 UIView.allSubviews.append(view)
             }
             _ = viewArray(root: view)
-            
+
             index += 1
         }
         return UIView.allSubviews
