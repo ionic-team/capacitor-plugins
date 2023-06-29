@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.2.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/google-maps@5.1.2...@capacitor/google-maps@5.2.0) (2023-06-29)
+
+
+### Bug Fixes
+
+* **google-maps:** Apply zIndex for marker in Android and default to 0 ([#1645](https://github.com/ionic-team/capacitor-plugins/issues/1645)) ([fc91569](https://github.com/ionic-team/capacitor-plugins/commit/fc91569dbfe8bee15c405e50d0720c112e2b4979))
+
+
+### Features
+
+* **google-maps:** add fitBounds to Map object ([f4ae690](https://github.com/ionic-team/capacitor-plugins/commit/f4ae690fbddfc2bad9a931d4a987499eed63a09b))
+
+
+
+
+
 ## [5.1.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/google-maps@5.1.1...@capacitor/google-maps@5.1.2) (2023-06-08)
 
 **Note:** Version bump only for package @capacitor/google-maps
