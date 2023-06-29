@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.5](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/network@5.0.4...@capacitor/network@5.0.5) (2023-06-29)
+
+
+### Bug Fixes
+
+* **network:** fire networkStatusChanged if network lost while app is paused ([#1655](https://github.com/ionic-team/capacitor-plugins/issues/1655)) ([6784a92](https://github.com/ionic-team/capacitor-plugins/commit/6784a923b0499e173226836d2bab7c22cddf283b))
+
+
+
+
+
 ## [5.0.4](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/network@5.0.3...@capacitor/network@5.0.4) (2023-06-08)
 
 **Note:** Version bump only for package @capacitor/network
