@@ -51,6 +51,13 @@ If no icon is specified Android will use the application icon, but push icon sho
 
 Android Studio has an icon generator you can use to create your Push Notifications icon.
 
+The icon color can also be set through the `AndroidManifest.xml` file:
+
+```xml
+<meta-data android:name="com.google.firebase.messaging.default_notification_color" android:resource="@color/colorAccent" />
+```
+
+
 ## Push notifications appearance in foreground
 
 <docgen-config>
