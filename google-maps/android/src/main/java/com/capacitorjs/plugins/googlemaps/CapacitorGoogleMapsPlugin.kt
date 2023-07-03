@@ -872,6 +872,32 @@ class CapacitorGoogleMapsPlugin : Plugin() {
     }
 
     @PluginMethod
+    fun fitBounds(call: PluginCall) {
+        try {
+            val id = call.getString("id")
+            id ?: throw InvalidMapIdError()
+
+            val map = maps[id]
+            map ?: throw MapNotFoundError()
+
+            val boundsObject =
+                call.getObject("bounds") ?: throw InvalidArgumentsError("bounds is missing")
+
+            val padding = call.getInt("padding", 0)!!
+
+            CoroutineScope(Dispatchers.Main).launch {
+                val bounds = createLatLngBounds(boundsObject)
+                map.fitBounds(bounds, padding)
+                call.resolve()
+            }
+        } catch (e: GoogleMapsError) {
+            handleError(call, e)
+        } catch (e: Exception) {
+            handleError(call, e)
+        }
+    }
+
+    @PluginMethod
     fun mapBoundsExtend(call: PluginCall) {
         try {
             val boundsObject = call.getObject("bounds")
