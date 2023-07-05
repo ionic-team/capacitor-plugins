@@ -4,6 +4,9 @@ import android.Manifest;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
+
+import androidx.annotation.NonNull;
+
 import com.capacitorjs.plugins.filesystem.exceptions.CopyFailedException;
 import com.capacitorjs.plugins.filesystem.exceptions.DirectoryExistsException;
 import com.capacitorjs.plugins.filesystem.exceptions.DirectoryNotFoundException;
@@ -24,15 +27,31 @@ import java.nio.file.attribute.BasicFileAttributes;
 import org.json.JSONException;
 
 @CapacitorPlugin(
-    name = "Filesystem",
-    permissions = {
-        @Permission(
-            strings = { Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE },
-            alias = "publicStorage"
-        )
-    }
+        name = "Filesystem",
+        permissions = {
+                @Permission( // SDK VERSIONS 29 AND BELOW
+                        strings = { Manifest.permission.WRITE_EXTERNAL_STORAGE },
+                        alias = FilesystemPlugin.WRITE_EXTERNAL_STORAGE
+                ),
+                @Permission( // SDK VERSIONS 32 AND BELOW
+                        strings = { Manifest.permission.READ_EXTERNAL_STORAGE },
+                        alias = FilesystemPlugin.READ_EXTERNAL_STORAGE
+                ),
+                @Permission( // SDK VERSIONS 33 AND ABOVE
+                        strings = { Manifest.permission.READ_MEDIA_IMAGES },
+                        alias = FilesystemPlugin.READ_MEDIA_IMAGES
+                )
+        }
 )
 public class FilesystemPlugin extends Plugin {
+
+    static final String WRITE_EXTERNAL_STORAGE = "writeExternalStorage";
+    static final String READ_EXTERNAL_STORAGE = "readExternalStorage";
+    static final String READ_MEDIA_IMAGES = "readMediaImages";
+
+    static final int MAXIMUM_SDK_VERSION_FOR_WRITE_EXTERNAL_STORAGE = Build.VERSION_CODES.Q; //SDK 29, Android 10
+    static final int MAXIMUM_SDK_VERSION_FOR_READ_EXTERNAL_STORAGE = Build.VERSION_CODES.S_V2; // SDK 32, Android 12L
+    static final int MINIMUM_SDK_VERSION_FOR_READ_MEDIA_IMAGES = Build.VERSION_CODES.TIRAMISU; // SDK 33, Android 13
 
     private Filesystem implementation;
 
@@ -127,9 +146,9 @@ public class FilesystemPlugin extends Plugin {
                     requestAllPermissions(call, "permissionCallback");
                 } else {
                     if (
-                        fileObject.getParentFile() == null ||
-                        fileObject.getParentFile().exists() ||
-                        (recursive && fileObject.getParentFile().mkdirs())
+                            fileObject.getParentFile() == null ||
+                                    fileObject.getParentFile().exists() ||
+                                    (recursive && fileObject.getParentFile().mkdirs())
                     ) {
                         saveFile(call, fileObject, data);
                     } else {
@@ -164,9 +183,9 @@ public class FilesystemPlugin extends Plugin {
             call.resolve(result);
         } catch (IOException ex) {
             Logger.error(
-                getLogTag(),
-                "Creating file '" + file.getPath() + "' with charset '" + charset + "' failed. Error: " + ex.getMessage(),
-                ex
+                    getLogTag(),
+                    "Creating file '" + file.getPath() + "' with charset '" + charset + "' failed. Error: " + ex.getMessage(),
+                    ex
             );
             call.reject("FILE_NOTCREATED");
         } catch (IllegalArgumentException ex) {
@@ -456,7 +475,21 @@ public class FilesystemPlugin extends Plugin {
      * @return Returns true if the permission is granted and false if it is denied.
      */
     private boolean isStoragePermissionGranted() {
-        return getPermissionState("publicStorage") == PermissionState.GRANTED;
+        // This method checks different SDK versions because different permissions are required to use the filesystem on different Android versions
+
+        if (Build.VERSION.SDK_INT <= MAXIMUM_SDK_VERSION_FOR_WRITE_EXTERNAL_STORAGE) {
+            return getPermissionState(WRITE_EXTERNAL_STORAGE) == PermissionState.GRANTED;
+        }
+
+        if (Build.VERSION.SDK_INT <= MAXIMUM_SDK_VERSION_FOR_READ_EXTERNAL_STORAGE) {
+            return getPermissionState(READ_EXTERNAL_STORAGE) == PermissionState.GRANTED;
+        }
+
+        if (Build.VERSION.SDK_INT >= MINIMUM_SDK_VERSION_FOR_READ_MEDIA_IMAGES) {
+            return getPermissionState(READ_MEDIA_IMAGES) == PermissionState.GRANTED;
+        }
+
+        return false;
     }
 
     /**
@@ -473,5 +506,19 @@ public class FilesystemPlugin extends Plugin {
      */
     private boolean isPublicDirectory(String directory) {
         return "DOCUMENTS".equals(directory) || "EXTERNAL_STORAGE".equals(directory);
+    }
+
+    @Override
+    protected void requestAllPermissions(@NonNull PluginCall call, @NonNull String callbackName) {
+        if (Build.VERSION.SDK_INT <= MAXIMUM_SDK_VERSION_FOR_WRITE_EXTERNAL_STORAGE) {
+            super.requestPermissionForAlias(WRITE_EXTERNAL_STORAGE, call, callbackName);
+        } else if (Build.VERSION.SDK_INT <= MAXIMUM_SDK_VERSION_FOR_READ_EXTERNAL_STORAGE) {
+            super.getPermissionStates().put(WRITE_EXTERNAL_STORAGE, PermissionState.GRANTED);
+            super.requestPermissionForAlias(READ_EXTERNAL_STORAGE, call, callbackName);
+        }
+
+        if (Build.VERSION.SDK_INT >= MINIMUM_SDK_VERSION_FOR_READ_MEDIA_IMAGES) {
+            super.requestPermissionForAlias(READ_MEDIA_IMAGES, call, callbackName);
+        }
     }
 }
