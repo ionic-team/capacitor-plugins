@@ -27,21 +27,21 @@ import java.nio.file.attribute.BasicFileAttributes;
 import org.json.JSONException;
 
 @CapacitorPlugin(
-        name = "Filesystem",
-        permissions = {
-                @Permission( // SDK VERSIONS 29 AND BELOW
-                        strings = { Manifest.permission.WRITE_EXTERNAL_STORAGE },
-                        alias = FilesystemPlugin.WRITE_EXTERNAL_STORAGE
-                ),
-                @Permission( // SDK VERSIONS 32 AND BELOW
-                        strings = { Manifest.permission.READ_EXTERNAL_STORAGE },
-                        alias = FilesystemPlugin.READ_EXTERNAL_STORAGE
-                ),
-                @Permission( // SDK VERSIONS 33 AND ABOVE
-                        strings = { Manifest.permission.READ_MEDIA_IMAGES },
-                        alias = FilesystemPlugin.READ_MEDIA_IMAGES
-                )
-        }
+    name = "Filesystem",
+    permissions = {
+        @Permission( // SDK VERSIONS 29 AND BELOW
+            strings = { Manifest.permission.WRITE_EXTERNAL_STORAGE },
+            alias = FilesystemPlugin.WRITE_EXTERNAL_STORAGE
+        ),
+        @Permission( // SDK VERSIONS 32 AND BELOW
+            strings = { Manifest.permission.READ_EXTERNAL_STORAGE },
+            alias = FilesystemPlugin.READ_EXTERNAL_STORAGE
+        ),
+        @Permission( // SDK VERSIONS 33 AND ABOVE
+            strings = { Manifest.permission.READ_MEDIA_IMAGES },
+            alias = FilesystemPlugin.READ_MEDIA_IMAGES
+        )
+    }
 )
 public class FilesystemPlugin extends Plugin {
 
@@ -146,9 +146,9 @@ public class FilesystemPlugin extends Plugin {
                     requestAllPermissions(call, "permissionCallback");
                 } else {
                     if (
-                            fileObject.getParentFile() == null ||
-                                    fileObject.getParentFile().exists() ||
-                                    (recursive && fileObject.getParentFile().mkdirs())
+                        fileObject.getParentFile() == null ||
+                        fileObject.getParentFile().exists() ||
+                        (recursive && fileObject.getParentFile().mkdirs())
                     ) {
                         saveFile(call, fileObject, data);
                     } else {
@@ -183,9 +183,9 @@ public class FilesystemPlugin extends Plugin {
             call.resolve(result);
         } catch (IOException ex) {
             Logger.error(
-                    getLogTag(),
-                    "Creating file '" + file.getPath() + "' with charset '" + charset + "' failed. Error: " + ex.getMessage(),
-                    ex
+                getLogTag(),
+                "Creating file '" + file.getPath() + "' with charset '" + charset + "' failed. Error: " + ex.getMessage(),
+                ex
             );
             call.reject("FILE_NOTCREATED");
         } catch (IllegalArgumentException ex) {

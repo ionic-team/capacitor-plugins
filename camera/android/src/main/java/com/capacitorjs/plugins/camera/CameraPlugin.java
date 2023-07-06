@@ -59,27 +59,27 @@ import org.json.JSONException;
  */
 @SuppressLint("InlinedApi")
 @CapacitorPlugin(
-        name = "Camera",
-        permissions = {
-                @Permission(strings = { Manifest.permission.CAMERA }, alias = CameraPlugin.CAMERA),
-                // SDK VERSIONS 29 AND BELOW
-                @Permission(
-                        strings = { Manifest.permission.WRITE_EXTERNAL_STORAGE },
-                        alias = CameraPlugin.WRITE_EXTERNAL_STORAGE
-                ),
-                // SDK VERSIONS 32 AND BELOW
-                @Permission(
-                        strings = { Manifest.permission.READ_EXTERNAL_STORAGE },
-                        alias = CameraPlugin.READ_EXTERNAL_STORAGE
-                ),
+    name = "Camera",
+    permissions = {
+        @Permission(strings = { Manifest.permission.CAMERA }, alias = CameraPlugin.CAMERA),
+        // SDK VERSIONS 29 AND BELOW
+        @Permission(
+            strings = { Manifest.permission.WRITE_EXTERNAL_STORAGE },
+            alias = CameraPlugin.WRITE_EXTERNAL_STORAGE
+        ),
+        // SDK VERSIONS 32 AND BELOW
+        @Permission(
+            strings = { Manifest.permission.READ_EXTERNAL_STORAGE },
+            alias = CameraPlugin.READ_EXTERNAL_STORAGE
+        ),
         /*
         SDK VERSIONS 33 AND ABOVE
         This alias is a placeholder and the PHOTOS alias will be updated to use these permissions
         so that the end user does not need to explicitly use separate aliases depending
         on the SDK version.
          */
-                @Permission(strings = { Manifest.permission.READ_MEDIA_IMAGES }, alias = CameraPlugin.MEDIA)
-        }
+        @Permission(strings = { Manifest.permission.READ_MEDIA_IMAGES }, alias = CameraPlugin.MEDIA)
+    }
 )
 public class CameraPlugin extends Plugin {
 
@@ -162,17 +162,17 @@ public class CameraPlugin extends Plugin {
         final CameraBottomSheetDialogFragment fragment = new CameraBottomSheetDialogFragment();
         fragment.setTitle(call.getString("promptLabelHeader", "Photo"));
         fragment.setOptions(
-                options,
-                index -> {
-                    if (index == 0) {
-                        settings.setSource(CameraSource.PHOTOS);
-                        openPhotos(call);
-                    } else if (index == 1) {
-                        settings.setSource(CameraSource.CAMERA);
-                        openCamera(call);
-                    }
-                },
-                () -> call.reject("User cancelled photos app")
+            options,
+            index -> {
+                if (index == 0) {
+                    settings.setSource(CameraSource.PHOTOS);
+                    openPhotos(call);
+                } else if (index == 1) {
+                    settings.setSource(CameraSource.CAMERA);
+                    openCamera(call);
+                }
+            },
+            () -> call.reject("User cancelled photos app")
         );
         fragment.show(getActivity().getSupportFragmentManager(), "capacitorModalsActionSheet");
     }
@@ -196,7 +196,7 @@ public class CameraPlugin extends Plugin {
         boolean hasPhotoPerms;
         if (Build.VERSION.SDK_INT <= MAXIMUM_SDK_VERSION_FOR_WRITE_EXTERNAL_STORAGE) {
             hasPhotoPerms = getPermissionState(WRITE_EXTERNAL_STORAGE) == PermissionState.GRANTED
-                    && getPermissionState(READ_EXTERNAL_STORAGE) == PermissionState.GRANTED;
+                && getPermissionState(READ_EXTERNAL_STORAGE) == PermissionState.GRANTED;
         } else {
             hasPhotoPerms = getPermissionState(READ_EXTERNAL_STORAGE) == PermissionState.GRANTED;
         }
@@ -414,23 +414,13 @@ public class CameraPlugin extends Plugin {
         if (data != null) {
             Executor executor = Executors.newSingleThreadExecutor();
             executor.execute(
-                    () -> {
-                        JSObject ret = new JSObject();
-                        JSArray photos = new JSArray();
-                        if (data.getClipData() != null) {
-                            int count = data.getClipData().getItemCount();
-                            for (int i = 0; i < count; i++) {
-                                Uri imageUri = data.getClipData().getItemAt(i).getUri();
-                                JSObject processResult = processPickedImages(imageUri);
-                                if (processResult.getString("error") != null && !processResult.getString("error").isEmpty()) {
-                                    call.reject(processResult.getString("error"));
-                                    return;
-                                } else {
-                                    photos.put(processResult);
-                                }
-                            }
-                        } else if (data.getData() != null) {
-                            Uri imageUri = data.getData();
+                () -> {
+                    JSObject ret = new JSObject();
+                    JSArray photos = new JSArray();
+                    if (data.getClipData() != null) {
+                        int count = data.getClipData().getItemCount();
+                        for (int i = 0; i < count; i++) {
+                            Uri imageUri = data.getClipData().getItemAt(i).getUri();
                             JSObject processResult = processPickedImages(imageUri);
                             if (processResult.getString("error") != null && !processResult.getString("error").isEmpty()) {
                                 call.reject(processResult.getString("error"));
@@ -438,38 +428,48 @@ public class CameraPlugin extends Plugin {
                             } else {
                                 photos.put(processResult);
                             }
-                        } else if (data.getExtras() != null) {
-                            Bundle bundle = data.getExtras();
-                            if (bundle.keySet().contains("selectedItems")) {
-                                ArrayList<Parcelable> fileUris;
-                                if (Build.VERSION.SDK_INT >= MINIMUM_SDK_VERSION_FOR_MEDIA) {
-                                    fileUris = bundle.getParcelableArrayList("selectedItems", Parcelable.class);
-                                } else {
-                                    fileUris = getLegacyParcelableArrayList(bundle, "selectedItems");
-                                }
-                                if (fileUris != null) {
-                                    for (Parcelable fileUri : fileUris) {
-                                        if (fileUri instanceof Uri) {
-                                            Uri imageUri = (Uri) fileUri;
-                                            try {
-                                                JSObject processResult = processPickedImages(imageUri);
-                                                if (processResult.getString("error") != null && !processResult.getString("error").isEmpty()) {
-                                                    call.reject(processResult.getString("error"));
-                                                    return;
-                                                } else {
-                                                    photos.put(processResult);
-                                                }
-                                            } catch (SecurityException ex) {
-                                                call.reject("SecurityException");
+                        }
+                    } else if (data.getData() != null) {
+                        Uri imageUri = data.getData();
+                        JSObject processResult = processPickedImages(imageUri);
+                        if (processResult.getString("error") != null && !processResult.getString("error").isEmpty()) {
+                            call.reject(processResult.getString("error"));
+                            return;
+                        } else {
+                            photos.put(processResult);
+                        }
+                    } else if (data.getExtras() != null) {
+                        Bundle bundle = data.getExtras();
+                        if (bundle.keySet().contains("selectedItems")) {
+                            ArrayList<Parcelable> fileUris;
+                            if (Build.VERSION.SDK_INT >= MINIMUM_SDK_VERSION_FOR_MEDIA) {
+                                fileUris = bundle.getParcelableArrayList("selectedItems", Parcelable.class);
+                            } else {
+                                fileUris = getLegacyParcelableArrayList(bundle, "selectedItems");
+                            }
+                            if (fileUris != null) {
+                                for (Parcelable fileUri : fileUris) {
+                                    if (fileUri instanceof Uri) {
+                                        Uri imageUri = (Uri) fileUri;
+                                        try {
+                                            JSObject processResult = processPickedImages(imageUri);
+                                            if (processResult.getString("error") != null && !processResult.getString("error").isEmpty()) {
+                                                call.reject(processResult.getString("error"));
+                                                return;
+                                            } else {
+                                                photos.put(processResult);
                                             }
+                                        } catch (SecurityException ex) {
+                                            call.reject("SecurityException");
                                         }
                                     }
                                 }
                             }
                         }
-                        ret.put("photos", photos);
-                        call.resolve(ret);
                     }
+                    ret.put("photos", photos);
+                    call.resolve(ret);
+                }
             );
         } else {
             call.reject("No images picked");
@@ -678,10 +678,10 @@ public class CameraPlugin extends Plugin {
                     }
                 } else {
                     String inserted = MediaStore.Images.Media.insertImage(
-                            getContext().getContentResolver(),
-                            fileToSavePath,
-                            fileToSave.getName(),
-                            ""
+                        getContext().getContentResolver(),
+                        fileToSavePath,
+                        fileToSave.getName(),
+                        ""
                     );
 
                     if (inserted == null) {
@@ -897,9 +897,9 @@ public class CameraPlugin extends Plugin {
 
             if (Build.VERSION.SDK_INT >= MINIMUM_SDK_VERSION_FOR_MEDIA) {
                 resInfoList =
-                        getContext()
-                                .getPackageManager()
-                                .queryIntentActivities(editIntent, PackageManager.ResolveInfoFlags.of(PackageManager.MATCH_DEFAULT_ONLY));
+                    getContext()
+                        .getPackageManager()
+                        .queryIntentActivities(editIntent, PackageManager.ResolveInfoFlags.of(PackageManager.MATCH_DEFAULT_ONLY));
             } else {
                 resInfoList = legacyQueryIntentActivities(editIntent);
             }
