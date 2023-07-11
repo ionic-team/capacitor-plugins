@@ -289,6 +289,7 @@ export default MyMap;
 * [`enableAccessibilityElements(...)`](#enableaccessibilityelements)
 * [`enableCurrentLocation(...)`](#enablecurrentlocation)
 * [`setPadding(...)`](#setpadding)
+* [`fitBounds(...)`](#fitbounds)
 * [`setOnBoundsChangedListener(...)`](#setonboundschangedlistener)
 * [`setOnCameraIdleListener(...)`](#setoncameraidlelistener)
 * [`setOnCameraMoveStartedListener(...)`](#setoncameramovestartedlistener)
@@ -601,6 +602,22 @@ setPadding(padding: MapPadding) => Promise<void>
 | Param         | Type                                              |
 | ------------- | ------------------------------------------------- |
 | **`padding`** | <code><a href="#mappadding">MapPadding</a></code> |
+
+--------------------
+
+
+### fitBounds(...)
+
+```typescript
+fitBounds(bounds: LatLngBounds, padding?: number | undefined) => Promise<void>
+```
+
+Sets the map viewport to contain the given bounds.
+
+| Param         | Type                      | Description                                                                                                               |
+| ------------- | ------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| **`bounds`**  | <code>LatLngBounds</code> | The bounds to fit in the viewport.                                                                                        |
+| **`padding`** | <code>number</code>       | Optional padding to apply in pixels. The bounds will be fit in the part of the map that remains after padding is removed. |
 
 --------------------
 
