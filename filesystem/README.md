@@ -101,6 +101,8 @@ const readFilePath = async () => {
 * [`copy(...)`](#copy)
 * [`checkPermissions()`](#checkpermissions)
 * [`requestPermissions()`](#requestpermissions)
+* [`downloadFile(...)`](#downloadfile)
+* [`addListener('progress', ...)`](#addlistenerprogress)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
 * [Enums](#enums)
@@ -343,6 +345,45 @@ Required on Android, only when using <a href="#directory">`Directory.Documents`<
 --------------------
 
 
+### downloadFile(...)
+
+```typescript
+downloadFile(options: DownloadFileOptions) => Promise<DownloadFileResult>
+```
+
+Perform a http request to a server and download the file to the specified destination.
+
+| Param         | Type                                                                |
+| ------------- | ------------------------------------------------------------------- |
+| **`options`** | <code><a href="#downloadfileoptions">DownloadFileOptions</a></code> |
+
+**Returns:** <code>Promise&lt;<a href="#downloadfileresult">DownloadFileResult</a>&gt;</code>
+
+**Since:** 5.1.0
+
+--------------------
+
+
+### addListener('progress', ...)
+
+```typescript
+addListener(eventName: 'progress', listenerFunc: ProgressListener) => Promise<PluginListenerHandle> & PluginListenerHandle
+```
+
+Add a listener to file download progress events.
+
+| Param              | Type                                                          |
+| ------------------ | ------------------------------------------------------------- |
+| **`eventName`**    | <code>'progress'</code>                                       |
+| **`listenerFunc`** | <code><a href="#progresslistener">ProgressListener</a></code> |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt; & <a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
+
+**Since:** 5.1.0
+
+--------------------
+
+
 ### Interfaces
 
 
@@ -501,6 +542,39 @@ Required on Android, only when using <a href="#directory">`Directory.Documents`<
 | **`publicStorage`** | <code><a href="#permissionstate">PermissionState</a></code> |
 
 
+#### DownloadFileResult
+
+| Prop       | Type                | Description                                                          | Since |
+| ---------- | ------------------- | -------------------------------------------------------------------- | ----- |
+| **`path`** | <code>string</code> | The path the file was downloaded to.                                 | 5.1.0 |
+| **`blob`** | <code>Blob</code>   | The blob data of the downloaded file. This is only available on web. | 5.1.0 |
+
+
+#### DownloadFileOptions
+
+| Prop            | Type                                            | Description                                                                                                                                                                                                                      | Since |
+| --------------- | ----------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`path`**      | <code>string</code>                             | The path the downloaded file should be moved to.                                                                                                                                                                                 | 5.1.0 |
+| **`directory`** | <code><a href="#directory">Directory</a></code> | The directory to write the file to. If this option is used, filePath can be a relative path rather than absolute. The default is the `DATA` directory.                                                                           | 5.1.0 |
+| **`progress`**  | <code>boolean</code>                            | An optional listener function to receive downloaded progress events. If this option is used, progress event should be dispatched on every chunk received. Chunks are throttled to every 100ms on Android/iOS to avoid slowdowns. | 5.1.0 |
+
+
+#### PluginListenerHandle
+
+| Prop         | Type                                      |
+| ------------ | ----------------------------------------- |
+| **`remove`** | <code>() =&gt; Promise&lt;void&gt;</code> |
+
+
+#### ProgressStatus
+
+| Prop                | Type                | Description                                          | Since |
+| ------------------- | ------------------- | ---------------------------------------------------- | ----- |
+| **`url`**           | <code>string</code> | The url of the file being downloaded.                | 5.1.0 |
+| **`bytes`**         | <code>number</code> | The number of bytes downloaded so far.               | 5.1.0 |
+| **`contentLength`** | <code>number</code> | The total number of bytes to download for this file. | 5.1.0 |
+
+
 ### Type Aliases
 
 
@@ -512,6 +586,13 @@ Required on Android, only when using <a href="#directory">`Directory.Documents`<
 #### PermissionState
 
 <code>'prompt' | 'prompt-with-rationale' | 'granted' | 'denied'</code>
+
+
+#### ProgressListener
+
+A listener function that receives progress events.
+
+<code>(progress: <a href="#progressstatus">ProgressStatus</a>): void</code>
 
 
 ### Enums
