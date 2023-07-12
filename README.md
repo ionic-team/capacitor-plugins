@@ -38,6 +38,22 @@ This repository contains the official Capacitor plugins maintained by the Capaci
 | [`@capacitor/text-zoom`](https://capacitorjs.com/docs/apis/text-zoom) | [`./text-zoom`](./text-zoom) | [![npm badge](https://img.shields.io/npm/v/@capacitor/text-zoom?style=flat-square)](https://www.npmjs.com/package/@capacitor/text-zoom)
 | [`@capacitor/toast`](https://capacitorjs.com/docs/apis/toast) | [`./toast`](./toast) | [![npm badge](https://img.shields.io/npm/v/@capacitor/toast?style=flat-square)](https://www.npmjs.com/package/@capacitor/toast)
 
+## Independent Plugins
+
+These are official Capacitor plugins that are not contained in this repository.
+
+| GitHub | Package | Source | Version | note |
+| --- | --- | --- | --- | --- |
+| [Background Runner](https://github.com/ionic-team/CapacitorBackgroundRunner) | [`@capacitor/backgroundrunner`](https://capacitorjs.com/docs/apis/backgroundrunner) | [`./backgroundrunner`](./backgroundrunner) | [![npm badge](https://img.shields.io/npm/v/@capacitor/backgroundrunner?style=flat-square)](https://www.npmjs.com/package/@capacitor/backgroundrunner) | PLACEHOLDER
+
+## Capacitor Labs
+
+These are experimental plugins. Use at your own risk.
+
+| GitHub | Package | Source | Version | note |
+| --- | --- | --- | --- | --- |
+| [Watch](https://github.com/ionic-team/CapacitorWatch) | [`@capacitor/watch`](https://capacitorjs.com/docs/apis/watch) | [`./watch`](./watch) | [![npm badge](https://img.shields.io/npm/v/@capacitor/watch?style=flat-square)](https://www.npmjs.com/package/@capacitor/watch) | PLACEHOLDER
+
 ## Contributing
 
 See [`CONTRIBUTING.md`](./CONTRIBUTING.md).
