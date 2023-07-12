@@ -984,14 +984,39 @@ export class GoogleMap {
       this.onMapClickListener = undefined;
     }
 
+    if (this.onPolylineClickListener) {
+      this.onPolylineClickListener.remove();
+      this.onPolylineClickListener = undefined;
+    }
+
     if (this.onMarkerClickListener) {
       this.onMarkerClickListener.remove();
       this.onMarkerClickListener = undefined;
     }
 
+    if (this.onPolygonClickListener) {
+      this.onPolygonClickListener.remove();
+      this.onPolygonClickListener = undefined;
+    }
+
     if (this.onCircleClickListener) {
       this.onCircleClickListener.remove();
       this.onCircleClickListener = undefined;
+    }
+
+    if (this.onMarkerDragStartListener) {
+      this.onMarkerDragStartListener.remove();
+      this.onMarkerDragStartListener = undefined;
+    }
+
+    if (this.onMarkerDragListener) {
+      this.onMarkerDragListener.remove();
+      this.onMarkerDragListener = undefined;
+    }
+
+    if (this.onMarkerDragEndListener) {
+      this.onMarkerDragEndListener.remove();
+      this.onMarkerDragEndListener = undefined;
     }
 
     if (this.onMyLocationButtonClickListener) {
