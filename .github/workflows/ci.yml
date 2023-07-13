@@ -43,7 +43,7 @@ jobs:
         with:
           json: true
           write_output_files: true
-      - id: cat changed
+      - name: Testing CAT
         run: |
           cat .github/outputs/all_changed_files.json
       - id: packages
