@@ -37,7 +37,7 @@ jobs:
             node_modules
             */node_modules
           key: ${{ runner.os }}-dependency-cache-${{ hashFiles('package.json', '*/package.json') }}
-      - run: npm install
+      - run: npm install --install-strategy=nested
       - id: files
         uses: tj-actions/changed-files@v37
         with:
@@ -70,7 +70,7 @@ jobs:
             node_modules
             */node_modules
           key: ${{ runner.os }}-dependency-cache-${{ hashFiles('package.json', '*/package.json') }}
-      - run: npm install
+      - run: npm install --install-strategy=nested
       - run: npm run lint
   verify-ios:
     runs-on: macos-12
@@ -100,7 +100,7 @@ jobs:
             node_modules
             */node_modules
           key: ${{ runner.os }}-dependency-cache-${{ hashFiles('package.json', '*/package.json') }}
-      - run: npm install
+      - run: npm install --install-strategy=nested
       - run: npm run verify:ios
         working-directory: ${{ matrix.plugin }}
   verify-android:
@@ -133,7 +133,7 @@ jobs:
             node_modules
             */node_modules
           key: ${{ runner.os }}-dependency-cache-${{ hashFiles('package.json', '*/package.json') }}
-      - run: npm install
+      - run: npm install --install-strategy=nested
       - run: npm run verify:android
         working-directory: ${{ matrix.plugin }}
   verify-web:
@@ -161,7 +161,7 @@ jobs:
             node_modules
             */node_modules
           key: ${{ runner.os }}-dependency-cache-${{ hashFiles('package.json', '*/package.json') }}
-      - run: npm install
+      - run: npm install --install-strategy=nested
       - run: npm run verify:web
         working-directory: ${{ matrix.plugin }}
 # deploy:
