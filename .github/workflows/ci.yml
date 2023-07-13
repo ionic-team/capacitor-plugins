@@ -71,6 +71,7 @@ jobs:
             */node_modules
           key: dependency-caches-${{ hashFiles('package.json', '*/package.json') }}
       - run: npm install
+      - run: npm install -g @nx/nx-darwin-x64@^16.13.1
       - run: npm run lint
   verify-ios:
     runs-on: macos-12
