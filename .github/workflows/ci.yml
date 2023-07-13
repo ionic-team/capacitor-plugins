@@ -39,13 +39,14 @@ jobs:
           key: dependency-cache-${{ hashFiles('package.json', '*/package.json') }}
       - run: npm install
       - id: files
-        uses: imhoffd/get-changed-files@main
+        uses: tj-actions/changed-files@v37
         with:
-          format: 'json'
+          json: true
+          write_output_files: true
       - id: packages
         uses: ./.github/actions/changed-packages
         with:
-          files: ${{ steps.files.outputs.all }}
+          files: .github/outputs/all_changed_files.json
   lint:
     runs-on: macos-12
     timeout-minutes: 30
