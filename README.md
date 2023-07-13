@@ -42,17 +42,17 @@ This repository contains the official Capacitor plugins maintained by the Capaci
 
 These are official Capacitor plugins that are not contained in this repository.
 
-| GitHub | Package | Source | Version | note |
-| --- | --- | --- | --- | --- |
-| [Background Runner](https://github.com/ionic-team/CapacitorBackgroundRunner) | [`@capacitor/backgroundrunner`](https://capacitorjs.com/docs/apis/backgroundrunner) | [`./backgroundrunner`](./backgroundrunner) | [![npm badge](https://img.shields.io/npm/v/@capacitor/backgroundrunner?style=flat-square)](https://www.npmjs.com/package/@capacitor/backgroundrunner) | PLACEHOLDER
+| GitHub | Package | Version | note |
+| --- | --- | --- | --- |
+| [Background Runner](https://github.com/ionic-team/CapacitorBackgroundRunner) | [`@capacitor/backgroundrunner`](https://capacitorjs.com/docs/apis/backgroundrunner) | [![npm badge](https://img.shields.io/npm/v/@capacitor/backgroundrunner?style=flat-square)](https://www.npmjs.com/package/@capacitor/backgroundrunner) | PLACEHOLDER
 
 ## Capacitor Labs
 
 These are experimental plugins. Use at your own risk.
 
-| GitHub | Package | Source | Version | note |
-| --- | --- | --- | --- | --- |
-| [Watch](https://github.com/ionic-team/CapacitorWatch) | [`@capacitor/watch`](https://capacitorjs.com/docs/apis/watch) | [`./watch`](./watch) | [![npm badge](https://img.shields.io/npm/v/@capacitor/watch?style=flat-square)](https://www.npmjs.com/package/@capacitor/watch) | PLACEHOLDER
+| GitHub | Package | Version | note |
+| --- | --- | --- | --- |
+| [Watch](https://github.com/ionic-team/CapacitorWatch) | [`@capacitor/watch`](https://capacitorjs.com/docs/apis/watch) | [![npm badge](https://img.shields.io/npm/v/@capacitor/watch?style=flat-square)](https://www.npmjs.com/package/@capacitor/watch) | PLACEHOLDER
 
 ## Contributing
 
