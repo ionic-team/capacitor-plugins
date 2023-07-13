@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.2.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/google-maps@5.2.0...@capacitor/google-maps@5.2.1) (2023-07-12)
+
+
+### Bug Fixes
+
+* **google-maps:** Add missing listeners to removeAllMapListeners ([#1672](https://github.com/ionic-team/capacitor-plugins/issues/1672)) ([7e1911d](https://github.com/ionic-team/capacitor-plugins/commit/7e1911d6cd192a023938bf30d0ca9f573d6076e6))
+
+
+
+
+
 # [5.2.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/google-maps@5.1.2...@capacitor/google-maps@5.2.0) (2023-06-29)
 
 

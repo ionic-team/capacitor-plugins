@@ -31,5 +31,10 @@
     "prettier": "~2.3.0",
     "prompts": "^2.3.2"
   },
-  "prettier": "@ionic/prettier-config"
+  "prettier": "@ionic/prettier-config",
+  "swiftlint": {
+    "identifier_name": {
+      "min_length": 1
+    }
+  }
 }
