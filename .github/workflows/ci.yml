@@ -43,13 +43,13 @@ jobs:
         with:
           json: true
           write_output_files: true
-      - name: Testing CAT
+      - id: catjson
         run: |
-          cat .github/outputs/all_changed_files.json
+          echo "FILES_JSON=$(cat .github/outputs/all_changed_files.json)" >> $GITHUB_OUTPUT
       - id: packages
         uses: ./.github/actions/changed-packages
         with:
-          files: .github/outputs/all_changed_files.json
+          files: ${{ steps.catjson.outputs.FILES_JSON }}
   lint:
     runs-on: macos-12
     timeout-minutes: 30
