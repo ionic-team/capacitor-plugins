@@ -43,6 +43,9 @@ jobs:
         with:
           json: true
           write_output_files: true
+      - id: cat changed
+        run: |
+          cat .github/outputs/all_changed_files.json
       - id: packages
         uses: ./.github/actions/changed-packages
         with:
