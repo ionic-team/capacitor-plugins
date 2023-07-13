@@ -36,7 +36,7 @@ jobs:
           path: |
             node_modules
             */node_modules
-          key: dependency-cache-${{ hashFiles('package.json', '*/package.json') }}
+          key: dependency-caches-${{ hashFiles('package.json', '*/package.json') }}
       - run: npm install
       - id: files
         uses: tj-actions/changed-files@v37
@@ -69,7 +69,7 @@ jobs:
           path: |
             node_modules
             */node_modules
-          key: dependency-cache-${{ hashFiles('package.json', '*/package.json') }}
+          key: dependency-caches-${{ hashFiles('package.json', '*/package.json') }}
       - run: npm install
       - run: npm run lint
   verify-ios:
@@ -99,7 +99,7 @@ jobs:
           path: |
             node_modules
             */node_modules
-          key: dependency-cache-${{ hashFiles('package.json', '*/package.json') }}
+          key: dependency-caches-${{ hashFiles('package.json', '*/package.json') }}
       - run: npm install
       - run: npm run verify:ios
         working-directory: ${{ matrix.plugin }}
@@ -132,7 +132,7 @@ jobs:
           path: |
             node_modules
             */node_modules
-          key: dependency-cache-${{ hashFiles('package.json', '*/package.json') }}
+          key: dependency-caches-${{ hashFiles('package.json', '*/package.json') }}
       - run: npm install
       - run: npm run verify:android
         working-directory: ${{ matrix.plugin }}
@@ -160,7 +160,7 @@ jobs:
           path: |
             node_modules
             */node_modules
-          key: dependency-cache-${{ hashFiles('package.json', '*/package.json') }}
+          key: dependency-caches-${{ hashFiles('package.json', '*/package.json') }}
       - run: npm install
       - run: npm run verify:web
         working-directory: ${{ matrix.plugin }}
