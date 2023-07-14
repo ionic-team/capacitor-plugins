@@ -135,6 +135,7 @@ jobs:
             */node_modules
           key: ${{ runner.os }}-dependency-caching-${{ hashFiles('package.json', '*/package.json') }}
       - run: npm install
+      - run: npm run set-settings-gradle-for-monorepo
       - run: npm run verify:android
         working-directory: ${{ matrix.plugin }}
   verify-web:

@@ -11,6 +11,7 @@
     "toggle-local": "node ./scripts/toggle-local.mjs",
     "update-all": "node ./scripts/update-all.mjs",
     "set-capacitor-version": "node ./scripts/set-capacitor-version.mjs",
+    "set-settings-gradle-for-monorepo": "node ./scripts/androidMonorepo.mjs",
     "set-podfiles-for-monorepo": "node ./scripts/iosMonorepo.mjs",
     "publish:cocoapod": "lerna run publish:cocoapod --concurrency 1",
     "ci:publish:nightly": "lerna version prerelease --conventional-commits --conventional-prerelease --preid nightly-$(date +\"%Y%m%dT%H%M%S\") --force-publish --no-changelog --no-git-tag-version --no-push --yes && lerna exec -- npm publish --tag nightly --provenance",
