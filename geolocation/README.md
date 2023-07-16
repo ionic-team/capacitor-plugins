@@ -101,7 +101,7 @@ can consume a large amount of energy. Be smart about listening only when you nee
 | **`options`**  | <code><a href="#positionoptions">PositionOptions</a></code>             |
 | **`callback`** | <code><a href="#watchpositioncallback">WatchPositionCallback</a></code> |
 
-**Returns:** <code>Promise&lt;string&gt;</code>
+**Returns:** <code>Promise&lt;<a href="#callbackid">CallbackID</a>&gt;</code>
 
 **Since:** 1.0.0
 
