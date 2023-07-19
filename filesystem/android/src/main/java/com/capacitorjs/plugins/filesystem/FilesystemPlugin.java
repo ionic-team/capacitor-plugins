@@ -38,6 +38,7 @@ import org.json.JSONException;
 )
 public class FilesystemPlugin extends Plugin {
 
+    static final String PUBLIC_STORAGE = "publicStorage";
     private Filesystem implementation;
 
     @Override
@@ -437,6 +438,28 @@ public class FilesystemPlugin extends Plugin {
         }
     }
 
+    @PluginMethod
+    public void checkPermissions(PluginCall call) {
+        if (isStoragePermissionGranted()) {
+            JSObject permissionsResultJSON = new JSObject();
+            permissionsResultJSON.put(PUBLIC_STORAGE, "granted");
+            call.resolve(permissionsResultJSON);
+        } else {
+            super.checkPermissions(call);
+        }
+    }
+
+    @PluginMethod
+    public void requestPermissions(PluginCall call) {
+        if (isStoragePermissionGranted()) {
+            JSObject permissionsResultJSON = new JSObject();
+            permissionsResultJSON.put(PUBLIC_STORAGE, "granted");
+            call.resolve(permissionsResultJSON);
+        } else {
+            requestPermissionForAlias(PUBLIC_STORAGE, call, "permissionCallback");
+        }
+    }
+
     @PermissionCallback
     private void permissionCallback(PluginCall call) {
         if (!isStoragePermissionGranted()) {
@@ -485,10 +508,11 @@ public class FilesystemPlugin extends Plugin {
 
     /**
      * Checks the the given permission is granted or not
-     * @return Returns true if the permission is granted and false if it is denied.
+     * @return Returns true if the app is running on Android 30 or newer or if the permission is already granted
+     * or false if it is denied.
      */
     private boolean isStoragePermissionGranted() {
-        return getPermissionState("publicStorage") == PermissionState.GRANTED;
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.R || getPermissionState(PUBLIC_STORAGE) == PermissionState.GRANTED;
     }
 
     /**
