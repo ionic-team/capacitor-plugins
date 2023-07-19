@@ -1,6 +1,6 @@
 import { WebPlugin } from '@capacitor/core';
 
-import type { AppInfo, AppPlugin, AppLaunchUrl, AppState } from './definitions';
+import type { AppInfo, AppPlugin, AppLaunchUrl, AppState, GetLanguageCodeResult, LanguageTag } from './definitions';
 
 export class AppWeb extends WebPlugin implements AppPlugin {
   constructor() {
@@ -44,4 +44,16 @@ export class AppWeb extends WebPlugin implements AppPlugin {
       this.notifyListeners('resume', null);
     }
   };
+
+  async getAppLanguageCode(): Promise<GetLanguageCodeResult> {
+    return {
+      value: navigator.language.split('-')[0].toLowerCase(),
+    };
+  }
+
+  async getAppLanguageTag(): Promise<LanguageTag> {
+    return {
+      value: navigator.language,
+    };
+  }
 }
