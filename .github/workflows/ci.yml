@@ -1,5 +1,4 @@
 name: CI
-
 on:
   push:
     branches:
@@ -10,7 +9,10 @@ on:
 
 jobs:
   setup:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-12]
     timeout-minutes: 30
     outputs:
       plugins: ${{ steps.packages.outputs.paths }}
@@ -33,16 +35,21 @@ jobs:
           path: |
             node_modules
             */node_modules
-          key: dependency-cache-${{ hashFiles('package.json', '*/package.json') }}
+          key: ${{ runner.os }}-dependency-caching-${{ hashFiles('package.json', '*/package.json') }}
       - run: npm install
       - id: files
-        uses: imhoffd/get-changed-files@v2
+        uses: tj-actions/changed-files@v37
         with:
-          format: 'json'
+          json: true
+          write_output_files: true
+      - id: catjson
+        run: |
+          echo "FILES_JSON=$(cat .github/outputs/all_changed_files.json)" >> $GITHUB_OUTPUT
       - id: packages
         uses: ./.github/actions/changed-packages
         with:
-          files: ${{ steps.files.outputs.all }}
+         files: ${{ steps.catjson.outputs.FILES_JSON }}
+
   lint:
     runs-on: macos-12
     timeout-minutes: 30
@@ -62,9 +69,10 @@ jobs:
           path: |
             node_modules
             */node_modules
-          key: dependency-cache-${{ hashFiles('package.json', '*/package.json') }}
+          key: ${{ runner.os }}-dependency-caching-${{ hashFiles('package.json', '*/package.json') }}
       - run: npm install
       - run: npm run lint
+
   verify-ios:
     runs-on: macos-12
     if: needs.setup.outputs.plugins != '[]'
@@ -75,7 +83,7 @@ jobs:
     strategy:
       matrix:
         xcode:
-          - /Applications/Xcode_14.2.app
+        - /Applications/Xcode_14.2.app
         plugin: ${{ fromJson(needs.setup.outputs.plugins) }}
     steps:
       - run: sudo xcode-select --switch ${{ matrix.xcode }}
@@ -92,10 +100,12 @@ jobs:
           path: |
             node_modules
             */node_modules
-          key: dependency-cache-${{ hashFiles('package.json', '*/package.json') }}
+          key: ${{ runner.os }}-dependency-caching-${{ hashFiles('package.json', '*/package.json') }}
       - run: npm install
+      - run: npm run set-podfiles-for-monorepo
       - run: npm run verify:ios
         working-directory: ${{ matrix.plugin }}
+
   verify-android:
     runs-on: ubuntu-latest
     if: needs.setup.outputs.plugins != '[]'
@@ -125,10 +135,12 @@ jobs:
           path: |
             node_modules
             */node_modules
-          key: dependency-cache-${{ hashFiles('package.json', '*/package.json') }}
+          key: ${{ runner.os }}-dependency-caching-${{ hashFiles('package.json', '*/package.json') }}
       - run: npm install
+      - run: npm run set-settings-gradle-for-monorepo
       - run: npm run verify:android
         working-directory: ${{ matrix.plugin }}
+
   verify-web:
     runs-on: ubuntu-latest
     if: needs.setup.outputs.plugins != '[]'
@@ -153,10 +165,11 @@ jobs:
           path: |
             node_modules
             */node_modules
-          key: dependency-cache-${{ hashFiles('package.json', '*/package.json') }}
+          key: ${{ runner.os }}-dependency-caching-${{ hashFiles('package.json', '*/package.json') }}
       - run: npm install
       - run: npm run verify:web
         working-directory: ${{ matrix.plugin }}
+
 # deploy:
 #   runs-on: macos-latest
 #   if: github.event_name == 'push' && github.ref == 'refs/heads/main'

@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.6](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/action-sheet@5.0.5...@capacitor/action-sheet@5.0.6) (2023-07-12)
+
+**Note:** Version bump only for package @capacitor/action-sheet
+
+
+
+
+
 ## [5.0.5](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/action-sheet@5.0.4...@capacitor/action-sheet@5.0.5) (2023-06-29)
 
 **Note:** Version bump only for package @capacitor/action-sheet
