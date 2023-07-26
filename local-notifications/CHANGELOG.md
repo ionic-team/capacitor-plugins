@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.6](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/local-notifications@5.0.5...@capacitor/local-notifications@5.0.6) (2023-07-12)
+
+
+### Bug Fixes
+
+* **local-notifications:** make requestPermissions resolve if granted ([#1678](https://github.com/ionic-team/capacitor-plugins/issues/1678)) ([4872589](https://github.com/ionic-team/capacitor-plugins/commit/487258940e0d1c27deeaa6326760095fc2549715))
+
+
+
+
+
 ## [5.0.5](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/local-notifications@5.0.4...@capacitor/local-notifications@5.0.5) (2023-06-29)
 
 **Note:** Version bump only for package @capacitor/local-notifications
