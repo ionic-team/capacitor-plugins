@@ -116,15 +116,6 @@ public class Map {
                         let width = Double((item as? UIScrollView)?.contentSize.width ?? 0)
                         let actualHeight = round(height / 2)
 
-                        print("\(self.config.width) x \(self.config.height)")
-                        print("")
-                        print("\(width) x \(height)")
-                        print("\(item.bounds.size.width) x \(item.bounds.size.height)")
-                        print("\(item.frame.size.width) x \(item.frame.size.height)")
-                        print("\(item.frame.width) x \(item.frame.height)")
-                        print("\(item.bounds.width) x \(item.bounds.height)")
-                        print("")
-
                         let isWidthEqual = width == self.config.width
                         let isHeightEqual = actualHeight == self.config.height
 
