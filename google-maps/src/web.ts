@@ -140,11 +140,11 @@ export class CapacitorGoogleMapsWeb
   }
 
   async enableTouch(_args: { id: string }): Promise<void> {
-    throw new Error('Method not supported on web.');
+    this.maps[_args.id].map.setOptions({gestureHandling: "auto"});
   }
 
   async disableTouch(_args: { id: string }): Promise<void> {
-    throw new Error('Method not supported on web.');
+    this.maps[_args.id].map.setOptions({gestureHandling: "none"});
   }
 
   async setCamera(_args: CameraArgs): Promise<void> {
