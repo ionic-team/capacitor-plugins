@@ -58,6 +58,12 @@ export interface GoogleMapInterface {
   enableAccessibilityElements(enabled: boolean): Promise<void>;
   enableCurrentLocation(enabled: boolean): Promise<void>;
   setPadding(padding: MapPadding): Promise<void>;
+  /**
+   * Sets the map viewport to contain the given bounds.
+   * @param bounds The bounds to fit in the viewport.
+   * @param padding Optional padding to apply in pixels. The bounds will be fit in the part of the map that remains after padding is removed.
+   */
+  fitBounds(bounds: LatLngBounds, padding?: number): Promise<void>;
   setOnBoundsChangedListener(
     callback?: MapListenerCallback<CameraIdleCallbackData>,
   ): Promise<void>;
@@ -487,6 +493,14 @@ export class GoogleMap {
         id: this.id,
       }),
     );
+  }
+
+  async fitBounds(bounds: LatLngBounds, padding?: number): Promise<void> {
+    return CapacitorGoogleMaps.fitBounds({
+      id: this.id,
+      bounds,
+      padding,
+    });
   }
 
   initScrolling(): void {
@@ -970,14 +984,39 @@ export class GoogleMap {
       this.onMapClickListener = undefined;
     }
 
+    if (this.onPolylineClickListener) {
+      this.onPolylineClickListener.remove();
+      this.onPolylineClickListener = undefined;
+    }
+
     if (this.onMarkerClickListener) {
       this.onMarkerClickListener.remove();
       this.onMarkerClickListener = undefined;
     }
 
+    if (this.onPolygonClickListener) {
+      this.onPolygonClickListener.remove();
+      this.onPolygonClickListener = undefined;
+    }
+
     if (this.onCircleClickListener) {
       this.onCircleClickListener.remove();
       this.onCircleClickListener = undefined;
+    }
+
+    if (this.onMarkerDragStartListener) {
+      this.onMarkerDragStartListener.remove();
+      this.onMarkerDragStartListener = undefined;
+    }
+
+    if (this.onMarkerDragListener) {
+      this.onMarkerDragListener.remove();
+      this.onMarkerDragListener = undefined;
+    }
+
+    if (this.onMarkerDragEndListener) {
+      this.onMarkerDragEndListener.remove();
+      this.onMarkerDragEndListener = undefined;
     }
 
     if (this.onMyLocationButtonClickListener) {
