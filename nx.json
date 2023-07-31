@@ -1,0 +1,49 @@
+{
+  "tasksRunnerOptions": {
+    "default": {
+      "runner": "nx/tasks-runners/default",
+      "options": {
+        "cacheableOperations": ["build"],
+        "parallel": 1
+      }
+    }
+  },
+  "targetDefaults": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": [
+        "{projectRoot}/action-sheet/dist",
+        "{projectRoot}/app/dist",
+        "{projectRoot}/app-launcher/dist",
+        "{projectRoot}/browser/dist",
+        "{projectRoot}/camera/dist",
+        "{projectRoot}/clipboard/dist",
+        "{projectRoot}/device/dist",
+        "{projectRoot}/dialog/dist",
+        "{projectRoot}/filesystem/dist",
+        "{projectRoot}/geolocation/dist",
+        "{projectRoot}/google-maps/dist",
+        "{projectRoot}/haptics/dist",
+        "{projectRoot}/keyboard/dist",
+        "{projectRoot}/local-notifications/dist",
+        "{projectRoot}/motion/dist",
+        "{projectRoot}/network/dist",
+        "{projectRoot}/preferences/dist",
+        "{projectRoot}/push-notifications/dist",
+        "{projectRoot}/screen-orientation/dist",
+        "{projectRoot}/screen-reader/dist",
+        "{projectRoot}/share/dist",
+        "{projectRoot}/splash-screen/dist",
+        "{projectRoot}/status-bar/dist",
+        "{projectRoot}/text-zoom/dist",
+        "{projectRoot}/toast/dist"
+      ]
+    }
+  },
+  "$schema": "./node_modules/nx/schemas/nx-schema.json",
+  "namedInputs": {
+    "default": ["{projectRoot}/**/*", "sharedGlobals"],
+    "sharedGlobals": [],
+    "production": ["default"]
+  }
+}

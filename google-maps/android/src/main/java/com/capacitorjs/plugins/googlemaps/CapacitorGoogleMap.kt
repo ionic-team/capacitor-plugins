@@ -666,6 +666,11 @@ class CapacitorGoogleMap(
         return googleMap?.projection?.visibleRegion?.latLngBounds ?: throw BoundsNotFoundError()
     }
 
+    fun fitBounds(bounds: LatLngBounds, padding: Int) {
+        val cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, padding)
+        googleMap?.animateCamera(cameraUpdate)
+    }
+
     private fun getScaledPixels(bridge: Bridge, pixels: Int): Int {
         // Get the screen's density scale
         val scale = bridge.activity.resources.displayMetrics.density
@@ -759,6 +764,7 @@ class CapacitorGoogleMap(
         markerOptions.alpha(marker.opacity)
         markerOptions.flat(marker.isFlat)
         markerOptions.draggable(marker.draggable)
+        markerOptions.zIndex(marker.zIndex)
 
         if (!marker.iconUrl.isNullOrEmpty()) {
             if (this.markerIcons.contains(marker.iconUrl)) {

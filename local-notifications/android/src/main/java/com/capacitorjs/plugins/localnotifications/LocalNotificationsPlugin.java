@@ -212,14 +212,12 @@ public class LocalNotificationsPlugin extends Plugin {
 
     @PluginMethod
     public void requestPermissions(PluginCall call) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU || getPermissionState(LOCAL_NOTIFICATIONS) == PermissionState.GRANTED) {
             JSObject permissionsResultJSON = new JSObject();
             permissionsResultJSON.put("display", getNotificationPermissionText());
             call.resolve(permissionsResultJSON);
         } else {
-            if (getPermissionState(LOCAL_NOTIFICATIONS) != PermissionState.GRANTED) {
-                requestPermissionForAlias(LOCAL_NOTIFICATIONS, call, "permissionsCallback");
-            }
+            requestPermissionForAlias(LOCAL_NOTIFICATIONS, call, "permissionsCallback");
         }
     }
 
