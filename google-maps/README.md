@@ -22,7 +22,7 @@ The Google Maps SDK supports the use of showing the users current location via `
 
 Read about [Configuring `Info.plist`](https://capacitorjs.com/docs/ios/configuration#configuring-infoplist) in the [iOS Guide](https://capacitorjs.com/docs/ios) for more information on setting iOS permissions in Xcode.
 
-> The main Google Maps SDK now supports running on simulators on Apple Silicon Macs, but make sure you are getting latest version of [Google-Maps-iOS-Utils](https://github.com/googlemaps/google-maps-ios-utils) by running `pod update Google-Maps-iOS-Utils` from `ios/App/` folder:
+> The main Google Maps SDK now supports running on simulators on Apple Silicon Macs, but make sure you have the latest version of [Google-Maps-iOS-Utils](https://github.com/googlemaps/google-maps-ios-utils) installed by running `pod update Google-Maps-iOS-Utils` from the `ios/App/` folder:
 
 ```
 cd ios/App
