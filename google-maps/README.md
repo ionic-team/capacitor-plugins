@@ -24,7 +24,7 @@ Read about [Configuring `Info.plist`](https://capacitorjs.com/docs/ios/configura
 
 > The main Google Maps SDK now supports running on simulators on Apple Silicon Macs, but make sure you have the latest version of [Google-Maps-iOS-Utils](https://github.com/googlemaps/google-maps-ios-utils) installed.
 
-If you added the previous workaround you getting the unreleased version, you can delete it now by removing this line from `ios/App/Podfile`:
+If you added the previous workaround for getting the unreleased version, you can delete it now by removing this line from `ios/App/Podfile`:
 
 ```
 pod 'Google-Maps-iOS-Utils', :git => 'https://github.com/googlemaps/google-maps-ios-utils.git', :commit => '637954e5bcb2a879c11a6f2cead153a6bad5339f'
