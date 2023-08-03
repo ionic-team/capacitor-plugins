@@ -399,6 +399,10 @@ public class FilesystemPlugin extends Plugin {
                 };
 
                 JSObject response = implementation.downloadFile(call, bridge, emitter);
+                // update mediaStore index only if file was written to external storage
+                if (isPublicDirectory(directory)) {
+                    MediaScannerConnection.scanFile(getContext(), new String[] { response.getString("path") }, null, null);
+                }
                 call.resolve(response);
             }
         } catch (Exception ex) {
