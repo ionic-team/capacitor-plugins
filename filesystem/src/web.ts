@@ -1,5 +1,6 @@
 import { WebPlugin, buildRequestInit } from '@capacitor/core';
 
+import { fromBase64, toBase64 } from './base64';
 import type {
   AppendFileOptions,
   CopyOptions,
@@ -25,7 +26,6 @@ import type {
   DownloadFileResult,
   ProgressStatus,
 } from './definitions';
-import { Encoding } from './definitions';
 
 function resolve(path: string): string {
   const posix = path.split('/').filter(item => item !== '.');
@@ -57,6 +57,105 @@ function isPathParent(parent: string, children: string): boolean {
   );
 }
 
+function b64ToUint6(nChr: number) {
+  return nChr > 64 && nChr < 91
+    ? nChr - 65
+    : nChr > 96 && nChr < 123
+    ? nChr - 71
+    : nChr > 47 && nChr < 58
+    ? nChr + 4
+    : nChr === 43
+    ? 62
+    : nChr === 47
+    ? 63
+    : 0;
+}
+
+function base64ToUint8(sBase64: string, nBlocksSize?: number) {
+  const sB64Enc = sBase64.replace(/[^A-Za-z0-9+/]/g, ''); // Remove any non-base64 characters, such as trailing "=", whitespace, and more.
+  const nInLen = sB64Enc.length;
+  const nOutLen = nBlocksSize
+    ? Math.ceil(((nInLen * 3 + 1) >> 2) / nBlocksSize) * nBlocksSize
+    : (nInLen * 3 + 1) >> 2;
+  const taBytes = new Uint8Array(nOutLen);
+
+  let nMod3;
+  let nMod4;
+  let nUint24 = 0;
+  let nOutIdx = 0;
+  for (let nInIdx = 0; nInIdx < nInLen; nInIdx++) {
+    nMod4 = nInIdx & 3;
+    nUint24 |= b64ToUint6(sB64Enc.charCodeAt(nInIdx)) << (6 * (3 - nMod4));
+    if (nMod4 === 3 || nInLen - nInIdx === 1) {
+      nMod3 = 0;
+      while (nMod3 < 3 && nOutIdx < nOutLen) {
+        taBytes[nOutIdx] = (nUint24 >>> ((16 >>> nMod3) & 24)) & 255;
+        nMod3++;
+        nOutIdx++;
+      }
+      nUint24 = 0;
+    }
+  }
+
+  return taBytes;
+}
+
+/* Base64 string to array encoding */
+function uint6ToB64(nUint6: number) {
+  return nUint6 < 26
+    ? nUint6 + 65
+    : nUint6 < 52
+    ? nUint6 + 71
+    : nUint6 < 62
+    ? nUint6 - 4
+    : nUint6 === 62
+    ? 43
+    : nUint6 === 63
+    ? 47
+    : 65;
+}
+
+function uint8ToBase64(aBytes: Uint8Array) {
+  let nMod3 = 2;
+  let sB64Enc = '';
+
+  const nLen = aBytes.length;
+  let nUint24 = 0;
+  for (let nIdx = 0; nIdx < nLen; nIdx++) {
+    nMod3 = nIdx % 3;
+    // To break your base64 into several 80-character lines, add:
+    //   if (nIdx > 0 && ((nIdx * 4) / 3) % 76 === 0) {
+    //      sB64Enc += "\r\n";
+    //    }
+
+    nUint24 |= aBytes[nIdx] << ((16 >>> nMod3) & 24);
+    if (nMod3 === 2 || aBytes.length - nIdx === 1) {
+      sB64Enc += String.fromCodePoint(
+        uint6ToB64((nUint24 >>> 18) & 63),
+        uint6ToB64((nUint24 >>> 12) & 63),
+        uint6ToB64((nUint24 >>> 6) & 63),
+        uint6ToB64(nUint24 & 63),
+      );
+      nUint24 = 0;
+    }
+  }
+  return (
+    sB64Enc.substring(0, sB64Enc.length - 2 + nMod3) +
+    (nMod3 === 2 ? '' : nMod3 === 1 ? '=' : '==')
+  );
+}
+
+let decoderUtf8: TextDecoder | null = null;
+// eslint-disable-next-line @typescript-eslint/adjacent-overload-signatures
+function uint8ToUTF8(uint8: Uint8Array): string {
+  decoderUtf8 ??= new TextDecoder('utf-8');
+  return decoderUtf8.decode(uint8);
+}
+let encoderUtf8: TextEncoder | null = null;
+function utf8ToUint8(utf8: string): Uint8Array {
+  encoderUtf8 ??= new TextEncoder();
+  return encoderUtf8.encode(utf8);
+}
 export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
   DB_VERSION = 1;
   DB_NAME = 'Disc';
@@ -165,7 +264,20 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
 
     const entry = (await this.dbRequest('get', [path])) as EntryObj;
     if (entry === undefined) throw Error('File does not exist.');
-    return { data: entry.content ? entry.content : '' };
+    if (entry.type !== 'file') throw Error('Illegal operation on a directory.');
+
+    let { content: data = '' } = entry;
+
+    if (options.encoding) {
+      if (typeof data !== 'string') {
+        // is uint8array
+        data = uint8ToUTF8(data);
+      }
+    } else {
+      if (typeof data === 'string') data = toBase64(data);
+      else data = uint8ToBase64(data);
+    }
+    return { data };
   }
 
   /**
@@ -175,7 +287,7 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
    */
   async writeFile(options: WriteFileOptions): Promise<WriteFileResult> {
     const path: string = this.getPath(options.directory, options.path);
-    let data = options.data;
+    let data: Uint8Array | string = options.data;
     const encoding = options.encoding;
     const doRecursive = options.recursive;
 
@@ -183,13 +295,13 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
     if (occupiedEntry && occupiedEntry.type === 'directory')
       throw Error('The supplied path is a directory.');
 
-    const parentPath = path.substr(0, path.lastIndexOf('/'));
+    const parentPath = path.slice(0, path.lastIndexOf('/'));
 
     const parentEntry = (await this.dbRequest('get', [parentPath])) as EntryObj;
     if (parentEntry === undefined) {
       const subDirIndex = parentPath.indexOf('/', 1);
       if (subDirIndex !== -1) {
-        const parentArgPath = parentPath.substr(subDirIndex);
+        const parentArgPath = parentPath.slice(subDirIndex);
         await this.mkdir({
           path: parentArgPath,
           directory: options.directory,
@@ -202,6 +314,8 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
       data = data.indexOf(',') >= 0 ? data.split(',')[1] : data;
       if (!this.isBase64String(data))
         throw Error('The supplied data is not valid base64 content.');
+
+      data = base64ToUint8(data);
     }
 
     const now = Date.now();
@@ -227,9 +341,9 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
    */
   async appendFile(options: AppendFileOptions): Promise<void> {
     const path: string = this.getPath(options.directory, options.path);
-    let data = options.data;
+    let data: Uint8Array | string = options.data;
     const encoding = options.encoding;
-    const parentPath = path.substr(0, path.lastIndexOf('/'));
+    const parentPath = path.slice(0, path.lastIndexOf('/'));
 
     const now = Date.now();
     let ctime = now;
@@ -242,7 +356,7 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
     if (parentEntry === undefined) {
       const subDirIndex = parentPath.indexOf('/', 1);
       if (subDirIndex !== -1) {
-        const parentArgPath = parentPath.substr(subDirIndex);
+        const parentArgPath = parentPath.slice(subDirIndex);
         await this.mkdir({
           path: parentArgPath,
           directory: options.directory,
@@ -254,14 +368,40 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
     if (!encoding && !this.isBase64String(data))
       throw Error('The supplied data is not valid base64 content.');
 
-    if (occupiedEntry !== undefined) {
-      if (occupiedEntry.content !== undefined && !encoding) {
-        data = btoa(atob(occupiedEntry.content) + atob(data));
+    if (occupiedEntry) {
+      if (!encoding) {
+        // data is base64
+        if (typeof occupiedEntry.content === 'undefined')
+          data = base64ToUint8(data);
+        else if (typeof occupiedEntry.content === 'string')
+          data = occupiedEntry.content + fromBase64(data);
+        else {
+          const dataArr = base64ToUint8(data);
+          const _temp = new Uint8Array(
+            occupiedEntry.content.length + dataArr.length,
+          );
+          _temp.set(occupiedEntry.content, 0);
+          _temp.set(dataArr, occupiedEntry.content.length);
+          data = _temp;
+        }
       } else {
-        data = occupiedEntry.content + data;
+        // data is text
+        if (typeof occupiedEntry.content === 'string')
+          data = occupiedEntry.content + data;
+        else if (typeof occupiedEntry.content !== 'undefined') {
+          const dataArr = utf8ToUint8(data);
+          const _temp = new Uint8Array(
+            occupiedEntry.content.length + dataArr.length,
+          );
+          _temp.set(occupiedEntry.content, 0);
+          _temp.set(dataArr, occupiedEntry.content.length);
+          data = _temp;
+        }
       }
+
       ctime = occupiedEntry.ctime;
     }
+
     const pathObj: EntryObj = {
       path: path,
       folder: parentPath,
@@ -300,7 +440,7 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
   async mkdir(options: MkdirOptions): Promise<void> {
     const path: string = this.getPath(options.directory, options.path);
     const doRecursive = options.recursive;
-    const parentPath = path.substr(0, path.lastIndexOf('/'));
+    const parentPath = path.slice(0, path.lastIndexOf('/'));
 
     const depth = (path.match(/\//g) || []).length;
     const parentEntry = (await this.dbRequest('get', [parentPath])) as EntryObj;
@@ -312,7 +452,7 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
       throw Error('Parent directory must exist');
 
     if (doRecursive && depth !== 2 && parentEntry === undefined) {
-      const parentArgPath = parentPath.substr(parentPath.indexOf('/', 1));
+      const parentArgPath = parentPath.slice(parentPath.indexOf('/', 1));
       await this.mkdir({
         path: parentArgPath,
         directory: options.directory,
@@ -568,17 +708,11 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
           });
         }
 
-        let encoding;
-        if (!this.isBase64String(file.data)) {
-          encoding = Encoding.UTF8;
-        }
-
         // Write the file to the new location
         const writeResult = await this.writeFile({
           path: to,
           directory: toDirectory,
-          data: file.data,
-          encoding: encoding,
+          data: file.data, // is always base64 encoded
         });
 
         // Copy the mtime/ctime of a renamed file
@@ -732,5 +866,5 @@ interface EntryObj {
   ctime: number;
   mtime: number;
   uri?: string;
-  content?: string;
+  content?: string | Uint8Array;
 }

@@ -41,6 +41,8 @@
     "build": "npm run clean && npm run docgen && tsc && rollup -c rollup.config.js",
     "clean": "rimraf ./dist",
     "watch": "tsc --watch",
+    "test": "vitest --run",
+    "test:watch": "vitest",
     "prepublishOnly": "npm run build",
     "publish:cocoapod": "pod trunk push ./CapacitorFilesystem.podspec --allow-warnings"
   },
@@ -53,12 +55,15 @@
     "@ionic/prettier-config": "~1.0.1",
     "@ionic/swiftlint-config": "^1.1.2",
     "eslint": "^7.11.0",
+    "fake-indexeddb": "^4.0.1",
+    "happy-dom": "^9.7.1",
     "prettier": "~2.3.0",
     "prettier-plugin-java": "~1.0.2",
     "rimraf": "^3.0.0",
     "rollup": "^2.29.0",
     "swiftlint": "^1.0.1",
-    "typescript": "~4.1.5"
+    "typescript": "~4.1.5",
+    "vitest": "^0.30.1"
   },
   "peerDependencies": {
     "@capacitor/core": "^5.1.1"
