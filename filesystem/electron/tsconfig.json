@@ -1,0 +1,19 @@
+{
+	"compilerOptions": {
+		"allowSyntheticDefaultImports": true,
+		"declaration": true,
+		"experimentalDecorators": true,
+		"noEmitHelpers": true,
+		"importHelpers": true,
+		"lib": ["dom", "esnext"],
+		"module": "commonjs",
+		"noImplicitAny": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"outDir": "build",
+		"sourceMap": true,
+		"strict": false,
+		"target": "ES2019"
+	},
+	"include": ["src/**/*"]
+}
