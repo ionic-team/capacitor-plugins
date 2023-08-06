@@ -11,7 +11,7 @@
     "android/build.gradle",
     "dist/",
     "ios/Plugin/",
-    "CapacitorFilesystem.podspec"
+    "CapacitorFilesystem.podspec",
     "electron/"
   ],
   "author": "Ionic <hi@ionicframework.com>",
