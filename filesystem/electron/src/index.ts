@@ -260,7 +260,7 @@ export class Filesystem implements FilesystemPlugin {
 
     return join(
       directoryToNative(directory),
-      normalize(path).replaceAll(`..${sep}`, ''),
+      normalize(path).split(`..${sep}`).join(''),
     );
   }
 }

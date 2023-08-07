@@ -5,7 +5,7 @@
 		"experimentalDecorators": true,
 		"noEmitHelpers": true,
 		"importHelpers": true,
-		"lib": ["dom", "esnext"],
+		"lib": ["dom", "es2020"],
 		"module": "commonjs",
 		"noImplicitAny": true,
 		"noUnusedLocals": true,
@@ -13,7 +13,7 @@
 		"outDir": "build",
 		"sourceMap": true,
 		"strict": false,
-		"target": "ES2019"
+		"target": "ES2017"
 	},
 	"include": ["src/**/*"]
 }
