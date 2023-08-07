@@ -542,10 +542,41 @@ Add a listener to file download progress events.
 
 #### DownloadFileResult
 
-| Prop       | Type                | Description                                                          | Since |
-| ---------- | ------------------- | -------------------------------------------------------------------- | ----- |
-| **`path`** | <code>string</code> | The path the file was downloaded to.                                 | 5.1.0 |
-| **`blob`** | <code>Blob</code>   | The blob data of the downloaded file. This is only available on web. | 5.1.0 |
+| Prop       | Type                                  | Description                                                          | Since |
+| ---------- | ------------------------------------- | -------------------------------------------------------------------- | ----- |
+| **`path`** | <code>string</code>                   | The path the file was downloaded to.                                 | 5.1.0 |
+| **`blob`** | <code><a href="#blob">Blob</a></code> | The blob data of the downloaded file. This is only available on web. | 5.1.0 |
+
+
+#### Blob
+
+| Prop       | Type                |
+| ---------- | ------------------- |
+| **`size`** | <code>number</code> |
+| **`type`** | <code>string</code> |
+
+| Method          | Signature                                                                                                                  |
+| --------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| **arrayBuffer** | () =&gt; Promise&lt;<a href="#arraybuffer">ArrayBuffer</a>&gt;                                                             |
+| **slice**       | (start?: number \| undefined, end?: number \| undefined, contentType?: string \| undefined) =&gt; <a href="#blob">Blob</a> |
+| **stream**      | () =&gt; NodeJS.ReadableStream                                                                                             |
+| **text**        | () =&gt; Promise&lt;string&gt;                                                                                             |
+
+
+#### ArrayBuffer
+
+Represents a raw buffer of binary data, which is used to store data for the
+different typed arrays. ArrayBuffers cannot be read from or written to directly,
+but can be passed to a typed array or DataView Object to interpret the raw
+buffer as needed.
+
+| Prop             | Type                | Description                                                                     |
+| ---------------- | ------------------- | ------------------------------------------------------------------------------- |
+| **`byteLength`** | <code>number</code> | Read-only. The length of the <a href="#arraybuffer">ArrayBuffer</a> (in bytes). |
+
+| Method    | Signature                                                                               | Description                                                     |
+| --------- | --------------------------------------------------------------------------------------- | --------------------------------------------------------------- |
+| **slice** | (begin: number, end?: number \| undefined) =&gt; <a href="#arraybuffer">ArrayBuffer</a> | Returns a section of an <a href="#arraybuffer">ArrayBuffer</a>. |
 
 
 #### DownloadFileOptions
