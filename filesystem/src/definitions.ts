@@ -116,7 +116,7 @@ export interface WriteFileOptions {
 
   /**
    * The data to write
-   * 
+   *
    * Note: Blob data is only supported on Web.
    *
    * @since 1.0.0
@@ -356,7 +356,7 @@ export type RenameOptions = CopyOptions;
 export interface ReadFileResult {
   /**
    * The representation of the data contained in the file
-   * 
+   *
    * Note: Blob is only available on Web. On native, the data is returned as a string.
    *
    * @since 1.0.0

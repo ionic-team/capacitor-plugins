@@ -35,7 +35,7 @@ import Capacitor
     }
 
     public func writeFile(at fileUrl: URL, with data: String, recursive: Bool, with encoding: String?) throws -> String {
-        if !FileManager.default.fileExists(atPath: fileUrl.deletingLastPathComponent().path) {
+        if !FileManager.default.fileExists(atPath: fileUrl.deletingLastPathComponent.path) {
             if recursive {
                 try FileManager.default.createDirectory(at: fileUrl.deletingLastPathComponent(), withIntermediateDirectories: recursive, attributes: nil)
             } else {
@@ -213,7 +213,7 @@ import Capacitor
                     let dest = dir!.appendingPathComponent(path)
                     CAPLog.print("Attempting to write to file destination: \(dest.absoluteString)")
 
-                    if !FileManager.default.fileExists(atPath: dest.deletingLastPathComponent().absoluteString) {
+                    if !FileManager.default.fileExists(atPath: dest.deletingLastPathComponent.absoluteString) {
                         try FileManager.default.createDirectory(at: dest.deletingLastPathComponent(), withIntermediateDirectories: true, attributes: nil)
                     }
 

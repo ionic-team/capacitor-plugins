@@ -209,7 +209,7 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
       path: path,
       folder: parentPath,
       type: 'file',
-      size: (data instanceof Blob) ? data.size : data.length,
+      size: data instanceof Blob ? data.size : data.length,
       ctime: now,
       mtime: now,
       content: data,
@@ -256,7 +256,9 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
 
     if (occupiedEntry !== undefined) {
       if (occupiedEntry.content instanceof Blob) {
-        throw Error('The occupied entry contains a Blob object which cannot be appended to.')
+        throw Error(
+          'The occupied entry contains a Blob object which cannot be appended to.',
+        );
       }
 
       if (occupiedEntry.content !== undefined && !encoding) {
@@ -710,7 +712,7 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
       directory: options.directory ?? undefined,
       recursive: options.recursive ?? false,
       data: blob,
-    })
+    });
 
     return { path: result.uri, blob };
   };
