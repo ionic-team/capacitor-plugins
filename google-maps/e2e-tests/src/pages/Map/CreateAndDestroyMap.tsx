@@ -115,6 +115,34 @@ const CreateAndDestroyMapPage: React.FC = () => {
     }
   }
 
+  async function disableMapTouchEvents() {
+    setCommandOutput('');
+
+    try {
+      if (maps) {
+        for (let map of maps) {
+          map.disableTouch();
+        }
+      }
+    } catch (err: any) {
+      setCommandOutput(err.message);
+    }
+  }
+
+  async function enableMapTouchEvents() {
+    setCommandOutput('');
+
+    try {
+      if (maps) {
+        for (let map of maps) {
+          map.enableTouch();
+        }
+      }
+    } catch (err: any) {
+      setCommandOutput(err.message);
+    }
+  }
+
   async function destroyMaps() {
     setCommandOutput('');
     try {
@@ -169,6 +197,12 @@ const CreateAndDestroyMapPage: React.FC = () => {
           onClick={removeOnMapClickListeners}
         >
           Remove On Map Click Listeners
+        </IonButton>
+        <IonButton expand='block' id="enableTouchEvents" onClick={enableMapTouchEvents}>
+          Enable Touch Events
+        </IonButton>
+        <IonButton expand='block' id="disableTouchEvents" onClick={disableMapTouchEvents}>
+          Disable Touch Events
         </IonButton>
         <IonButton expand="block" id="destroyMapButton" onClick={destroyMaps}>
           Destroy Maps
