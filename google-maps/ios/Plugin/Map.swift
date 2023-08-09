@@ -179,9 +179,25 @@ public class Map {
 
     func destroy() {
         DispatchQueue.main.async {
+            self.enableTouch()
             self.targetViewController?.tag = 0
             self.mapViewController.view = nil
+        }
+    }
 
+    func enableTouch() {
+        DispatchQueue.main.async {
+            if let target = self.targetViewController, let itemIndex = WKWebView.disabledTargets.firstIndex(of: target) {
+                WKWebView.disabledTargets.remove(at: itemIndex)
+            }
+        }
+    }
+
+    func disableTouch() {
+        DispatchQueue.main.async {
+            if let target = self.targetViewController, !WKWebView.disabledTargets.contains(target) {
+                WKWebView.disabledTargets.append(target)
+            }
         }
     }
 
@@ -625,8 +641,14 @@ private func getResizedIcon(_ iconImage: UIImage, _ marker: Marker) -> UIImage? 
 }
 
 extension WKWebView {
+    static var disabledTargets: [UIView] = []
+
     override open func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         var hitView = super.hitTest(point, with: event)
+
+        if let tempHitView = hitView, WKWebView.disabledTargets.contains(tempHitView) {
+            return nil
+        }
 
         if let typeClass = NSClassFromString("WKChildScrollView"), let tempHitView = hitView, tempHitView.isKind(of: typeClass) {
             for item in tempHitView.subviews.reversed() {

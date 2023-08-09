@@ -5,6 +5,8 @@
 // each method the plugin supports using the CAP_PLUGIN_METHOD macro.
 CAP_PLUGIN(CapacitorGoogleMapsPlugin, "CapacitorGoogleMaps",
    CAP_PLUGIN_METHOD(create, CAPPluginReturnPromise);
+   CAP_PLUGIN_METHOD(enableTouch, CAPPluginReturnPromise);
+   CAP_PLUGIN_METHOD(disableTouch, CAPPluginReturnPromise);
    CAP_PLUGIN_METHOD(addMarker, CAPPluginReturnPromise);
    CAP_PLUGIN_METHOD(addMarkers, CAPPluginReturnPromise);
    CAP_PLUGIN_METHOD(addPolygons, CAPPluginReturnPromise);

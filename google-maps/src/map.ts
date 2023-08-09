@@ -29,6 +29,8 @@ export interface GoogleMapInterface {
     options: CreateMapArgs,
     callback?: MapListenerCallback<MapReadyCallbackData>,
   ): Promise<GoogleMap>;
+  enableTouch(): Promise<void>;
+  disableTouch(): Promise<void>;
   enableClustering(
     /**
      * The minimum number of markers that can be clustered together. The default is 4 markers.
@@ -306,6 +308,28 @@ export class GoogleMap {
       } else {
         resolve(elementBounds);
       }
+    });
+  }
+
+  /**
+   * Enable touch events on native map
+   *
+   * @returns void
+   */
+  async enableTouch(): Promise<void> {
+    return CapacitorGoogleMaps.enableTouch({
+      id: this.id,
+    });
+  }
+
+  /**
+   * Disable touch events on native map
+   *
+   * @returns void
+   */
+  async disableTouch(): Promise<void> {
+    return CapacitorGoogleMaps.disableTouch({
+      id: this.id,
     });
   }
 
