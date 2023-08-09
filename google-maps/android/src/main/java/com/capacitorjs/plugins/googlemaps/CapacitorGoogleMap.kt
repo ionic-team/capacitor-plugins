@@ -117,9 +117,16 @@ class CapacitorGoogleMap(
 
         runBlocking {
             CoroutineScope(Dispatchers.Main).launch {
-                val mapRect = getScaledRect(delegate.bridge, updatedBounds)
-                this@CapacitorGoogleMap.mapView.x = mapRect.left
-                this@CapacitorGoogleMap.mapView.y = mapRect.top
+                val bridge = delegate.bridge
+                val mapRect = getScaledRect(bridge, updatedBounds)
+                val mapView = this@CapacitorGoogleMap.mapView;
+                mapView.x = mapRect.left
+                mapView.y = mapRect.top
+                if (mapView.layoutParams.width != config.width || mapView.layoutParams.height != config.height) {
+                    mapView.layoutParams.width = getScaledPixels(bridge, config.width)
+                    mapView.layoutParams.height = getScaledPixels(bridge, config.height)
+                    mapView.requestLayout()
+                }
             }
         }
     }

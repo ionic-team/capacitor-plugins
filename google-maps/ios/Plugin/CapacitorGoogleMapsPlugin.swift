@@ -700,6 +700,54 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
         call.unavailable("not supported on iOS")
     }
 
+    @objc func onResize(_ call: CAPPluginCall) {
+        do {
+            guard let id = call.getString("id") else {
+                throw GoogleMapErrors.invalidMapId
+            }
+
+            guard let map = self.maps[id] else {
+                throw GoogleMapErrors.mapNotFound
+            }
+
+            guard let mapBoundsObj = call.getObject("mapBounds") else {
+                throw GoogleMapErrors.invalidArguments("map bounds not set")
+            }
+
+            let mapBounds = try CGRect.fromJSObject(mapBoundsObj)
+
+            map.updateRender(mapBounds: mapBounds)
+            
+            call.resolve()
+        } catch {
+            handleError(call, error: error)
+        }
+    }
+
+    @objc func onDisplay(_ call: CAPPluginCall) {
+        do {
+            guard let id = call.getString("id") else {
+                throw GoogleMapErrors.invalidMapId
+            }
+
+            guard let map = self.maps[id] else {
+                throw GoogleMapErrors.mapNotFound
+            }
+
+            guard let mapBoundsObj = call.getObject("mapBounds") else {
+                throw GoogleMapErrors.invalidArguments("map bounds not set")
+            }
+
+            let mapBounds = try CGRect.fromJSObject(mapBoundsObj)
+
+            map.rebindTargetContainer(mapBounds: mapBounds)
+
+            call.resolve()
+        } catch {
+            handleError(call, error: error)
+        }
+    }
+
     @objc func getMapBounds(_ call: CAPPluginCall) {
         do {
             guard let id = call.getString("id") else {
