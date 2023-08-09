@@ -11,6 +11,7 @@ import MultipleMarkers from './pages/Markers/MultipleMarkers';
 import SimpleScrollingPage from './pages/Scrolling/SimpleScrolling';
 import PolygonMapPage from './pages/Drawing/Polygons';
 import CircleMapPage from './pages/Drawing/Circles';
+import ResizeMapPage from './pages/Map/ResizeMap';
 
 export type RouteDescription = {
   title: string;
@@ -63,6 +64,13 @@ const routesList: RouteGroup[] = [
         iosIcon: triangleOutline,
         mdIcon: triangleSharp,
         component: SimpleScrollingPage,
+      },
+      {
+        title: 'Resize Map',
+        url: '/maps/resize',
+        iosIcon: triangleOutline,
+        mdIcon: triangleSharp,
+        component: ResizeMapPage,
       },
     ],
   },
