@@ -22,12 +22,19 @@ The Google Maps SDK supports the use of showing the users current location via `
 
 Read about [Configuring `Info.plist`](https://capacitorjs.com/docs/ios/configuration#configuring-infoplist) in the [iOS Guide](https://capacitorjs.com/docs/ios) for more information on setting iOS permissions in Xcode.
 
-> The main Google Maps SDK now supports running on simulators on Apple Silicon Macs, however, a dependency from Google called [Google-Maps-iOS-Utils](https://github.com/googlemaps/google-maps-ios-utils) does not yet support Apple Silicon. This is requires a new release of the library from Google. If you are developing on an Apple Silicon Mac, building and running on physical devices is still supported and is the recommended approach.
+> The main Google Maps SDK now supports running on simulators on Apple Silicon Macs, but make sure you have the latest version of [Google-Maps-iOS-Utils](https://github.com/googlemaps/google-maps-ios-utils) installed.
 
-> A workaround on Apple Silicon Macs if you want/need to use the simulator is adding the following line to your Podfile in the `target 'App'` section after the `# Add your Pods here` line:
+If you added the previous workaround for getting the unreleased version, you can delete it now by removing this line from `ios/App/Podfile`:
 
 ```
 pod 'Google-Maps-iOS-Utils', :git => 'https://github.com/googlemaps/google-maps-ios-utils.git', :commit => '637954e5bcb2a879c11a6f2cead153a6bad5339f'
+```
+
+Then run `pod update Google-Maps-iOS-Utils` from the `ios/App/` folder:
+
+```
+cd ios/App
+pod update Google-Maps-iOS-Utils
 ```
 
 ## Android
