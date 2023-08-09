@@ -11,6 +11,10 @@ public class HapticsPlugin: CAPPlugin {
                 impactStyle = UIImpactFeedbackGenerator.FeedbackStyle.medium
             } else if style == "LIGHT" {
                 impactStyle = UIImpactFeedbackGenerator.FeedbackStyle.light
+            } else if style == "SOFT" {
+                impactStyle = UIImpactFeedbackGenerator.FeedbackStyle.soft
+            } else if style == "RIGID" {
+                impactStyle = UIImpactFeedbackGenerator.FeedbackStyle.rigid
             }
         }
         DispatchQueue.main.async {
