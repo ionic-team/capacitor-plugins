@@ -283,6 +283,8 @@ export default MyMap;
 <docgen-index>
 
 * [`create(...)`](#create)
+* [`enableTouch()`](#enabletouch)
+* [`disableTouch()`](#disabletouch)
 * [`enableClustering(...)`](#enableclustering)
 * [`disableClustering()`](#disableclustering)
 * [`addMarker(...)`](#addmarker)
@@ -342,6 +344,24 @@ create(options: CreateMapArgs, callback?: MapListenerCallback<MapReadyCallbackDa
 | **`callback`** | <code><a href="#maplistenercallback">MapListenerCallback</a>&lt;<a href="#mapreadycallbackdata">MapReadyCallbackData</a>&gt;</code> |
 
 **Returns:** <code>Promise&lt;GoogleMap&gt;</code>
+
+--------------------
+
+
+### enableTouch()
+
+```typescript
+enableTouch() => Promise<void>
+```
+
+--------------------
+
+
+### disableTouch()
+
+```typescript
+disableTouch() => Promise<void>
+```
 
 --------------------
 

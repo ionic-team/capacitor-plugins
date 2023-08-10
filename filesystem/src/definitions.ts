@@ -117,9 +117,11 @@ export interface WriteFileOptions {
   /**
    * The data to write
    *
+   * Note: Blob data is only supported on Web.
+   *
    * @since 1.0.0
    */
-  data: string;
+  data: string | Blob;
 
   /**
    * The `Directory` to store the file in
@@ -353,11 +355,13 @@ export type RenameOptions = CopyOptions;
 
 export interface ReadFileResult {
   /**
-   * The string representation of the data contained in the file
+   * The representation of the data contained in the file
+   *
+   * Note: Blob is only available on Web. On native, the data is returned as a string.
    *
    * @since 1.0.0
    */
-  data: string;
+  data: string | Blob;
 }
 
 export interface WriteFileResult {
@@ -501,6 +505,13 @@ export interface DownloadFileOptions extends HttpOptions {
    * @since 5.1.0
    */
   progress?: boolean;
+  /**
+   * Whether to create any missing parent directories.
+   *
+   * @default false
+   * @since 5.1.2
+   */
+  recursive?: boolean;
 }
 
 export interface DownloadFileResult {

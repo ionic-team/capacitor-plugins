@@ -198,7 +198,7 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
       }
     }
 
-    if (!encoding) {
+    if (!encoding && !(data instanceof Blob)) {
       data = data.indexOf(',') >= 0 ? data.split(',')[1] : data;
       if (!this.isBase64String(data))
         throw Error('The supplied data is not valid base64 content.');
@@ -209,7 +209,7 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
       path: path,
       folder: parentPath,
       type: 'file',
-      size: data.length,
+      size: data instanceof Blob ? data.size : data.length,
       ctime: now,
       mtime: now,
       content: data,
@@ -255,6 +255,12 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
       throw Error('The supplied data is not valid base64 content.');
 
     if (occupiedEntry !== undefined) {
+      if (occupiedEntry.content instanceof Blob) {
+        throw Error(
+          'The occupied entry contains a Blob object which cannot be appended to.',
+        );
+      }
+
       if (occupiedEntry.content !== undefined && !encoding) {
         data = btoa(atob(occupiedEntry.content) + atob(data));
       } else {
@@ -569,7 +575,7 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
         }
 
         let encoding;
-        if (!this.isBase64String(file.data)) {
+        if (!(file.data instanceof Blob) && !this.isBase64String(file.data)) {
           encoding = Encoding.UTF8;
         }
 
@@ -658,7 +664,7 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
     const response = await fetch(options.url, requestInit);
     let blob: Blob;
 
-    if (!options?.progress) blob = await response.blob();
+    if (!options.progress) blob = await response.blob();
     else if (!response?.body) blob = new Blob();
     else {
       const reader = response.body.getReader();
@@ -701,18 +707,14 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
       blob = new Blob([allChunks.buffer], { type: contentType || undefined });
     }
 
-    const blobUrl = URL.createObjectURL(blob);
-    const tempAnchor = document.createElement('a');
-    document.body.appendChild(tempAnchor);
+    const result = await this.writeFile({
+      path: options.path,
+      directory: options.directory ?? undefined,
+      recursive: options.recursive ?? false,
+      data: blob,
+    });
 
-    tempAnchor.href = blobUrl;
-    tempAnchor.download = options.path; // This should be a filename, not a path
-    tempAnchor.click();
-
-    URL.revokeObjectURL(blobUrl);
-    document.body.removeChild(tempAnchor);
-
-    return { path: options.path, blob };
+    return { path: result.uri, blob };
   };
 
   private isBase64String(str: string): boolean {
@@ -732,5 +734,5 @@ interface EntryObj {
   ctime: number;
   mtime: number;
   uri?: string;
-  content?: string;
+  content?: string | Blob;
 }
