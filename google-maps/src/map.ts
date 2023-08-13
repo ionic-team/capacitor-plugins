@@ -29,6 +29,8 @@ export interface GoogleMapInterface {
     options: CreateMapArgs,
     callback?: MapListenerCallback<MapReadyCallbackData>,
   ): Promise<GoogleMap>;
+  enableTouch(): Promise<void>;
+  disableTouch(): Promise<void>;
   enableClustering(
     /**
      * The minimum number of markers that can be clustered together. The default is 4 markers.
@@ -58,6 +60,12 @@ export interface GoogleMapInterface {
   enableAccessibilityElements(enabled: boolean): Promise<void>;
   enableCurrentLocation(enabled: boolean): Promise<void>;
   setPadding(padding: MapPadding): Promise<void>;
+  /**
+   * Sets the map viewport to contain the given bounds.
+   * @param bounds The bounds to fit in the viewport.
+   * @param padding Optional padding to apply in pixels. The bounds will be fit in the part of the map that remains after padding is removed.
+   */
+  fitBounds(bounds: LatLngBounds, padding?: number): Promise<void>;
   setOnBoundsChangedListener(
     callback?: MapListenerCallback<CameraIdleCallbackData>,
   ): Promise<void>;
@@ -131,6 +139,7 @@ customElements.define('capacitor-google-map', MapCustomElement);
 export class GoogleMap {
   private id: string;
   private element: HTMLElement | null = null;
+  private resizeObserver: ResizeObserver | null = null;
 
   private onBoundsChangedListener?: PluginListenerHandle;
   private onCameraIdleListener?: PluginListenerHandle;
@@ -189,6 +198,75 @@ export class GoogleMap {
 
     if (Capacitor.isNativePlatform()) {
       (options.element as any) = {};
+
+      const getMapBounds = () => {
+        const mapRect =
+          newMap.element?.getBoundingClientRect() ?? ({} as DOMRect);
+        return {
+          x: mapRect.x,
+          y: mapRect.y,
+          width: mapRect.width,
+          height: mapRect.height,
+        };
+      };
+
+      const onDisplay = () => {
+        CapacitorGoogleMaps.onDisplay({
+          id: newMap.id,
+          mapBounds: getMapBounds(),
+        });
+      };
+
+      const onResize = () => {
+        CapacitorGoogleMaps.onResize({
+          id: newMap.id,
+          mapBounds: getMapBounds(),
+        });
+      };
+
+      const ionicPage = newMap.element.closest('.ion-page');
+      if (Capacitor.getPlatform() === 'ios' && ionicPage) {
+        ionicPage.addEventListener('ionViewWillEnter', () => {
+          setTimeout(() => {
+            onDisplay();
+          }, 100);
+        });
+        ionicPage.addEventListener('ionViewDidEnter', () => {
+          setTimeout(() => {
+            onDisplay();
+          }, 100);
+        });
+      }
+
+      const lastState = {
+        width: elementBounds.width,
+        height: elementBounds.height,
+        isHidden: false,
+      };
+      newMap.resizeObserver = new ResizeObserver(() => {
+        if (newMap.element != null) {
+          const mapRect = newMap.element.getBoundingClientRect();
+
+          const isHidden = mapRect.width === 0 && mapRect.height === 0;
+          if (!isHidden) {
+            if (lastState.isHidden) {
+              if (Capacitor.getPlatform() === 'ios' && !ionicPage) {
+                onDisplay();
+              }
+            } else if (
+              lastState.width !== mapRect.width ||
+              lastState.height !== mapRect.height
+            ) {
+              onResize();
+            }
+          }
+
+          lastState.width = mapRect.width;
+          lastState.height = mapRect.height;
+          lastState.isHidden = isHidden;
+        }
+      });
+      newMap.resizeObserver.observe(newMap.element);
     }
 
     await CapacitorGoogleMaps.create(options);
@@ -230,6 +308,28 @@ export class GoogleMap {
       } else {
         resolve(elementBounds);
       }
+    });
+  }
+
+  /**
+   * Enable touch events on native map
+   *
+   * @returns void
+   */
+  async enableTouch(): Promise<void> {
+    return CapacitorGoogleMaps.enableTouch({
+      id: this.id,
+    });
+  }
+
+  /**
+   * Disable touch events on native map
+   *
+   * @returns void
+   */
+  async disableTouch(): Promise<void> {
+    return CapacitorGoogleMaps.disableTouch({
+      id: this.id,
     });
   }
 
@@ -371,6 +471,10 @@ export class GoogleMap {
       this.disableScrolling();
     }
 
+    if (Capacitor.isNativePlatform()) {
+      this.resizeObserver?.disconnect();
+    }
+
     this.removeAllMapListeners();
 
     return CapacitorGoogleMaps.destroy({
@@ -487,6 +591,14 @@ export class GoogleMap {
         id: this.id,
       }),
     );
+  }
+
+  async fitBounds(bounds: LatLngBounds, padding?: number): Promise<void> {
+    return CapacitorGoogleMaps.fitBounds({
+      id: this.id,
+      bounds,
+      padding,
+    });
   }
 
   initScrolling(): void {
@@ -970,14 +1082,39 @@ export class GoogleMap {
       this.onMapClickListener = undefined;
     }
 
+    if (this.onPolylineClickListener) {
+      this.onPolylineClickListener.remove();
+      this.onPolylineClickListener = undefined;
+    }
+
     if (this.onMarkerClickListener) {
       this.onMarkerClickListener.remove();
       this.onMarkerClickListener = undefined;
     }
 
+    if (this.onPolygonClickListener) {
+      this.onPolygonClickListener.remove();
+      this.onPolygonClickListener = undefined;
+    }
+
     if (this.onCircleClickListener) {
       this.onCircleClickListener.remove();
       this.onCircleClickListener = undefined;
+    }
+
+    if (this.onMarkerDragStartListener) {
+      this.onMarkerDragStartListener.remove();
+      this.onMarkerDragStartListener = undefined;
+    }
+
+    if (this.onMarkerDragListener) {
+      this.onMarkerDragListener.remove();
+      this.onMarkerDragListener = undefined;
+    }
+
+    if (this.onMarkerDragEndListener) {
+      this.onMarkerDragEndListener.remove();
+      this.onMarkerDragEndListener = undefined;
     }
 
     if (this.onMyLocationButtonClickListener) {

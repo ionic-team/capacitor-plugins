@@ -339,6 +339,8 @@ public class SplashScreen {
                     }
                     imageView.setScaleType(config.getScaleType());
                     imageView.setImageDrawable(splash);
+                } else {
+                    return;
                 }
             }
 

@@ -62,11 +62,18 @@ import org.json.JSONException;
     name = "Camera",
     permissions = {
         @Permission(strings = { Manifest.permission.CAMERA }, alias = CameraPlugin.CAMERA),
-        // SDK VERSIONS 32 AND BELOW
+        // SDK VERSIONS 29 AND BELOW
         @Permission(
             strings = { Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE },
             alias = CameraPlugin.PHOTOS
         ),
+        /*
+        SDK VERSIONS 30-32
+        This alias is a placeholder and the PHOTOS alias will be updated to use this permission
+        so that the end user does not need to explicitly use separate aliases depending
+        on the SDK version.
+         */
+        @Permission(strings = { Manifest.permission.READ_EXTERNAL_STORAGE }, alias = CameraPlugin.READ_EXTERNAL_STORAGE),
         /*
         SDK VERSIONS 33 AND ABOVE
         This alias is a placeholder and the PHOTOS alias will be updated to use these permissions
@@ -82,6 +89,7 @@ public class CameraPlugin extends Plugin {
     static final String CAMERA = "camera";
     static final String PHOTOS = "photos";
     static final String MEDIA = "media";
+    static final String READ_EXTERNAL_STORAGE = "readExternalStorage";
 
     // Message constants
     private static final String INVALID_RESULT_TYPE_ERROR = "Invalid resultType option";
@@ -206,9 +214,14 @@ public class CameraPlugin extends Plugin {
     }
 
     private boolean checkPhotosPermissions(PluginCall call) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
             if (getPermissionState(PHOTOS) != PermissionState.GRANTED) {
                 requestPermissionForAlias(PHOTOS, call, "cameraPermissionsCallback");
+                return false;
+            }
+        } else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+            if (getPermissionState(READ_EXTERNAL_STORAGE) != PermissionState.GRANTED) {
+                requestPermissionForAlias(READ_EXTERNAL_STORAGE, call, "cameraPermissionsCallback");
                 return false;
             }
         } else if (getPermissionState(MEDIA) != PermissionState.GRANTED) {
@@ -235,9 +248,13 @@ public class CameraPlugin extends Plugin {
                 call.reject(PERMISSION_DENIED_ERROR_CAMERA);
                 return;
             } else if (settings.getSource() == CameraSource.PHOTOS) {
-                PermissionState permissionState = (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU)
-                    ? getPermissionState(PHOTOS)
-                    : getPermissionState(MEDIA);
+                String alias = MEDIA;
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+                    alias = PHOTOS;
+                } else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+                    alias = READ_EXTERNAL_STORAGE;
+                }
+                PermissionState permissionState = getPermissionState(alias);
                 if (permissionState != PermissionState.GRANTED) {
                     Logger.debug(getLogTag(), "User denied photos permission: " + permissionState.toString());
                     call.reject(PERMISSION_DENIED_ERROR_PHOTOS);
@@ -255,6 +272,12 @@ public class CameraPlugin extends Plugin {
             for (int i = 0; i < aliases.length; i++) {
                 if (aliases[i].equals(PHOTOS)) {
                     aliases[i] = MEDIA;
+                }
+            }
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            for (int i = 0; i < aliases.length; i++) {
+                if (aliases[i].equals(PHOTOS)) {
+                    aliases[i] = READ_EXTERNAL_STORAGE;
                 }
             }
         }
@@ -817,9 +840,15 @@ public class CameraPlugin extends Plugin {
             permissionStates.put(CAMERA, PermissionState.GRANTED);
         }
 
-        // If the SDK version is 33 or higher, update the PHOTOS state to match the MEDIA state.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && permissionStates.containsKey(MEDIA)) {
-            permissionStates.put(PHOTOS, permissionStates.get(MEDIA));
+        // If the SDK version is 30 or higher, update the PHOTOS state to match the MEDIA or READ_EXTERNAL_STORAGE states.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            String alias = READ_EXTERNAL_STORAGE;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                alias = MEDIA;
+            }
+            if (permissionStates.containsKey(alias)) {
+                permissionStates.put(PHOTOS, permissionStates.get(alias));
+            }
         }
 
         return permissionStates;
