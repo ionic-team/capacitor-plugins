@@ -27,11 +27,8 @@ extension PHAuthorizationStatus: CameraAuthorizationState {
             return "denied"
         case .authorized:
             return "granted"
-        #if swift(>=5.3)
-        // poor proxy for Xcode 12/iOS 14, should be removed once building with Xcode 12 is required
         case .limited:
             return "limited"
-        #endif
         case .notDetermined:
             fallthrough
         @unknown default:
@@ -52,7 +49,7 @@ internal extension PHAsset {
         options.version = .current
 
         var result: [String: Any] = [:]
-        _ = PHCachingImageManager().requestImageData(for: self, options: options) { (data, _, _, _) in
+        _ = PHCachingImageManager().requestImageDataAndOrientation(for: self, options: options) { (data, _, _, _) in
             if let data = data as NSData? {
                 let options = [kCGImageSourceShouldCache as String: kCFBooleanFalse] as CFDictionary
                 if let imgSrc = CGImageSourceCreateWithData(data, options),

@@ -46,14 +46,14 @@ public struct CameraSettings {
     var shouldCorrectOrientation = true
     var saveToGallery = false
     var presentationStyle = UIModalPresentationStyle.fullScreen
-    // FarmQA begin
+    // Begin FarmQA
     var saveToDataDirectory = false
     var resultFilename: String = ""
     var createThumbnail = false
     var thumbnailFilename: String = ""
     var thumbnailWidth: CGFloat = 70
     var thumbnailHeight: CGFloat = 70
-    // FarmQA end
+    // End FarmQA
 }
 
 public struct CameraResult {

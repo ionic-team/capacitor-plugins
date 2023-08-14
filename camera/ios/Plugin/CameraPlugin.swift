@@ -66,6 +66,81 @@ public class CameraPlugin: CAPPlugin {
         }
     }
 
+    @objc func pickLimitedLibraryPhotos(_ call: CAPPluginCall) {
+        if #available(iOS 14, *) {
+            PHPhotoLibrary.requestAuthorization(for: .readWrite) { (granted) in
+                if granted == .limited {
+                    if let viewController = self.bridge?.viewController {
+                        if #available(iOS 15, *) {
+                            PHPhotoLibrary.shared().presentLimitedLibraryPicker(from: viewController) { _ in
+                                self.getLimitedLibraryPhotos(call)
+                            }
+                        } else {
+                            PHPhotoLibrary.shared().presentLimitedLibraryPicker(from: viewController)
+                            call.resolve([
+                                "photos": []
+                            ])
+                        }
+                    }
+                } else {
+                    call.resolve([
+                        "photos": []
+                    ])
+                }
+            }
+        } else {
+            call.unavailable("Not available on iOS 13")
+        }
+    }
+
+    @objc func getLimitedLibraryPhotos(_ call: CAPPluginCall) {
+        if #available(iOS 14, *) {
+            PHPhotoLibrary.requestAuthorization(for: .readWrite) { (granted) in
+                if granted == .limited {
+
+                    self.call = call
+
+                    DispatchQueue.global(qos: .utility).async {
+                        let assets = PHAsset.fetchAssets(with: .image, options: nil)
+                        var processedImages: [ProcessedImage] = []
+
+                        let imageManager = PHImageManager.default()
+                        let options = PHImageRequestOptions()
+                        options.deliveryMode = .highQualityFormat
+
+                        let group = DispatchGroup()
+                        if assets.count > 0 {
+                            for index in 0...(assets.count - 1) {
+                                let asset = assets.object(at: index)
+                                let fullSize = CGSize(width: asset.pixelWidth, height: asset.pixelHeight)
+
+                                group.enter()
+                                imageManager.requestImage(for: asset, targetSize: fullSize, contentMode: .default, options: options) { image, _ in
+                                    guard let image = image else {
+                                        group.leave()
+                                        return
+                                    }
+                                    processedImages.append(self.processedImage(from: image, with: asset.imageData))
+                                    group.leave()
+                                }
+                            }
+                        }
+
+                        group.notify(queue: .global(qos: .utility)) { [weak self] in
+                            self?.returnImages(processedImages)
+                        }
+                    }
+                } else {
+                    call.resolve([
+                        "photos": []
+                    ])
+                }
+            }
+        } else {
+            call.unavailable("Not available on iOS 13")
+        }
+    }
+
     @objc func getPhoto(_ call: CAPPluginCall) {
         self.multiple = false
         self.call = call
@@ -75,7 +150,6 @@ public class CameraPlugin: CAPPlugin {
         if let missingUsageDescription = checkUsageDescriptions() {
             CAPLog.print("⚡️ ", self.pluginId, "-", missingUsageDescription)
             call.reject(missingUsageDescription)
-            bridge?.alert("Camera Error", "Missing required usage description. See console for more information")
             return
         }
 
@@ -139,14 +213,14 @@ public class CameraPlugin: CAPPlugin {
             settings.presentationStyle = .fullScreen
         }
 
-        // FarmQA
+        // Begin FarmQA
         settings.createThumbnail = call.getBool("createThumbnail") ?? false
         settings.thumbnailHeight = CGFloat(call.getInt("thumbnailHeight") ?? 70)
         settings.thumbnailWidth = CGFloat(call.getInt("thumbnailWidth") ?? 70)
         settings.saveToDataDirectory = call.getBool("saveToDataDirectory") ?? false
         settings.resultFilename = call.getString("resultFilename") ?? "JPEG_\(defaultFileUUID).jpg"
         settings.thumbnailFilename = call.getString("thumbnailFilename") ?? "JPEG_\(defaultFileUUID)_tn.jpg"
-        // FarmQA
+        // End FarmQA
         
         return settings
     }
@@ -168,11 +242,12 @@ extension CameraPlugin: UIImagePickerControllerDelegate, UINavigationControllerD
     }
 
     public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
-        picker.dismiss(animated: true, completion: nil)
-        if let processedImage = processImage(from: info) {
-            returnProcessedImage(processedImage)
-        } else {
-            self.call?.reject("Error processing image")
+        picker.dismiss(animated: true) {
+            if let processedImage = self.processImage(from: info) {
+                self.returnProcessedImage(processedImage)
+            } else {
+                self.call?.reject("Error processing image")
+            }
         }
     }
 }
@@ -234,7 +309,6 @@ extension CameraPlugin: PHPickerViewControllerDelegate {
                 self?.call?.reject("Error loading image")
             }
         }
-
     }
 }
 
@@ -269,7 +343,9 @@ private extension CameraPlugin {
                 "format": "jpeg",
                 "saved": isSaved
             ])
-        } else if settings.saveToDataDirectory {
+        }
+        // Begin FARMQA
+        else if settings.saveToDataDirectory {
             do {
                 let documentDirectory = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
                 let imageFilename = documentDirectory.appendingPathComponent(settings.resultFilename)
@@ -312,6 +388,7 @@ private extension CameraPlugin {
                 "saved": isSaved
             ])
         }
+        // End FARMQA
     }
 
     func returnImages(_ processedImages: [ProcessedImage]) {
@@ -377,7 +454,6 @@ private extension CameraPlugin {
         // check if we have a camera
         if (bridge?.isSimEnvironment ?? false) || !UIImagePickerController.isSourceTypeAvailable(UIImagePickerController.SourceType.camera) {
             CAPLog.print("⚡️ ", self.pluginId, "-", "Camera not available in simulator")
-            bridge?.alert("Camera Error", "Camera not available in Simulator")
             call?.reject("Camera not available while running in Simulator")
             return
         }

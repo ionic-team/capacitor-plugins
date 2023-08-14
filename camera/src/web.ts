@@ -82,7 +82,7 @@ export class CameraWeb extends WebPlugin implements CameraPlugin {
       }
     } else {
       console.error(
-        `Unable to load PWA Element 'pwa-camera-modal'. See the docs: https://capacitorjs.com/docs/pwa-elements.`,
+        `Unable to load PWA Element 'pwa-camera-modal'. See the docs: https://capacitorjs.com/docs/web/pwa-elements.`,
       );
       this.fileInputExperience(options, resolve);
     }
@@ -267,6 +267,14 @@ export class CameraWeb extends WebPlugin implements CameraPlugin {
 
   async requestPermissions(): Promise<PermissionStatus> {
     throw this.unimplemented('Not implemented on web.');
+  }
+
+  async pickLimitedLibraryPhotos(): Promise<GalleryPhotos> {
+    throw this.unavailable('Not implemented on web.');
+  }
+
+  async getLimitedLibraryPhotos(): Promise<GalleryPhotos> {
+    throw this.unavailable('Not implemented on web.');
   }
 }
 

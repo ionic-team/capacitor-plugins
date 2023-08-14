@@ -1,6 +1,6 @@
 {
   "name": "@farmqa/capacitor-camera",
-  "version": "1.3.0",
+  "version": "5.0.7",
   "description": "The Camera API provides the ability to take a photo with the camera or choose an existing one from the photo album.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
@@ -29,7 +29,7 @@
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",
-    "verify:ios": "cd ios && pod install && xcodebuild -workspace Plugin.xcworkspace -scheme Plugin && cd ..",
+    "verify:ios": "cd ios && pod install && xcodebuild -workspace Plugin.xcworkspace -scheme Plugin -destination generic/platform=iOS && cd ..",
     "verify:android": "cd android && ./gradlew clean build test && cd ..",
     "verify:web": "npm run build",
     "lint": "npm run eslint && npm run prettier -- --check && npm run swiftlint -- lint",
@@ -45,10 +45,10 @@
     "publish:cocoapod": "pod trunk push ./CapacitorCamera.podspec --allow-warnings"
   },
   "devDependencies": {
-    "@capacitor/android": "^3.0.0",
-    "@capacitor/core": "^3.0.0",
-    "@capacitor/docgen": "0.0.18",
-    "@capacitor/ios": "^3.0.0",
+    "@capacitor/android": "^5.0.0",
+    "@capacitor/core": "^5.0.0",
+    "@capacitor/docgen": "0.2.0",
+    "@capacitor/ios": "^5.0.0",
     "@ionic/eslint-config": "^0.3.0",
     "@ionic/prettier-config": "~1.0.1",
     "@ionic/swiftlint-config": "^1.1.2",
@@ -61,7 +61,7 @@
     "typescript": "~4.1.5"
   },
   "peerDependencies": {
-    "@capacitor/core": "^3.0.0"
+    "@capacitor/core": "^5.0.0"
   },
   "prettier": "@ionic/prettier-config",
   "swiftlint": "@ionic/swiftlint-config",
