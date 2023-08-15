@@ -14,6 +14,8 @@ public class Haptics {
     private boolean selectionStarted = false;
     private final Vibrator vibrator;
 
+    private int MINIMUM_VIBRATION_TIME = 40;
+
     Haptics(Context context) {
         this.context = context;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -63,9 +65,26 @@ public class Haptics {
 
     public void performHaptics(HapticsVibrationType type) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            vibrator.vibrate(VibrationEffect.createWaveform(type.getTimings(), type.getAmplitudes(), -1));
+            long[] timings = type.getTimings();
+            int[] amplitudes = type.getAmplitudes();
+
+            if (vibrator.hasAmplitudeControl() && amplitudes != null) {
+                vibrator.vibrate(VibrationEffect.createWaveform(timings, amplitudes, -1));
+            } else {
+                if (timings != null) {
+                    for (int i = 0; i < timings.length; i++) {
+                        if (timings[i] < MINIMUM_VIBRATION_TIME && timings[i] > 0) {
+                            timings[i] = MINIMUM_VIBRATION_TIME;
+                        }
+                    }
+                    vibrator.vibrate(VibrationEffect.createWaveform(timings, amplitudes, -1));
+                }
+            }
         } else {
             vibratePre26(type.getOldSDKPattern(), -1);
         }
     }
+
+
+
 }
