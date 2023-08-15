@@ -63,9 +63,7 @@ public class Haptics {
 
     public void performHaptics(HapticsVibrationType type) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && vibrator.hasAmplitudeControl()) {
-            long[] timings = type.getTimings();
-            int[] amplitudes = type.getAmplitudes();
-            vibrator.vibrate(VibrationEffect.createWaveform(timings, amplitudes, -1));
+            vibrator.vibrate(VibrationEffect.createWaveform(type.getTimings(), type.getAmplitudes(), -1));
         } else {
             vibratePre26(type.getOldSDKPattern(), -1);
         }
