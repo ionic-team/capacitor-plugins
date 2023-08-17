@@ -19,7 +19,7 @@ See [`CONTRIBUTING.md`](https://github.com/ionic-team/capacitor/blob/HEAD/CONTRI
     brew install swiftlint
     ```
 
-Sometimes, it may be necessary to work on Capacitor in parellel with the plugin(s). In this case, a few extra steps are necessary:
+Sometimes, it may be necessary to work on Capacitor in parallel with the plugin(s). In this case, a few extra steps are necessary:
 
 4. Follow the Capacitor repo's [local setup instructions](https://github.com/ionic-team/capacitor/blob/HEAD/CONTRIBUTING.md#local-setup).
 5. Toggle each plugin to use your local copy of Capacitor.

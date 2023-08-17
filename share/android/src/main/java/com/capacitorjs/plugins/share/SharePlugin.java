@@ -1,5 +1,6 @@
 package com.capacitorjs.plugins.share;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.*;
@@ -20,6 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONException;
 
+import static android.content.Context.RECEIVER_NOT_EXPORTED;
+
 @CapacitorPlugin(name = "Share")
 public class SharePlugin extends Plugin {
 
@@ -29,6 +32,7 @@ public class SharePlugin extends Plugin {
     private ComponentName chosenComponent;
 
     @Override
+    @SuppressLint("UnspecifiedRegisterReceiverFlag")
     public void load() {
         broadcastReceiver =
             new BroadcastReceiver() {
@@ -41,7 +45,13 @@ public class SharePlugin extends Plugin {
                     }
                 }
             };
-        getActivity().registerReceiver(broadcastReceiver, new IntentFilter(Intent.EXTRA_CHOSEN_COMPONENT));
+
+        IntentFilter filter = new IntentFilter(Intent.EXTRA_CHOSEN_COMPONENT);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            getActivity().registerReceiver(broadcastReceiver, filter, RECEIVER_NOT_EXPORTED);
+        } else {
+            getActivity().registerReceiver(broadcastReceiver, filter);
+        }
     }
 
     @SuppressWarnings("deprecation")

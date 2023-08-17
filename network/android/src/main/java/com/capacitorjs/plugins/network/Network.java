@@ -14,6 +14,8 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import static android.content.Context.RECEIVER_NOT_EXPORTED;
+
 public class Network {
 
     /**
@@ -141,7 +143,11 @@ public class Network {
     @TargetApi(Build.VERSION_CODES.M)
     public void startMonitoring(AppCompatActivity activity) {
         IntentFilter filter = new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE");
-        activity.registerReceiver(receiver, filter);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            activity.registerReceiver(receiver, filter, RECEIVER_NOT_EXPORTED);
+        } else {
+            activity.registerReceiver(receiver, filter);
+        }
     }
 
     /**
