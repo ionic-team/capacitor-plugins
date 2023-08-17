@@ -189,7 +189,7 @@ Check camera and photo album permissions
 requestPermissions(permissions?: CameraPluginPermissions | undefined) => Promise<PermissionStatus>
 ```
 
-Request camera and photo album permissions
+Request camera and/or photo album permissions. By default, with an empty parameter, only camera permission is requested.
 
 | Param             | Type                                                                        |
 | ----------------- | --------------------------------------------------------------------------- |
