@@ -58,6 +58,20 @@ export interface DestroyMapArgs {
   id: string;
 }
 
+export interface AddTileOverlayArgs {
+  id: string;
+  getTile?: {
+    x: number;
+    y: number;
+    zoom?: number;
+    image: string;
+  };
+  opacity?: number;
+  debug?: boolean;
+  visible?: string;
+  zIndex?: number;
+}
+
 export interface RemoveMarkerArgs {
   id: string;
   markerId: string;
@@ -173,6 +187,7 @@ export interface CapacitorGoogleMapsPlugin extends Plugin {
   create(options: CreateMapArgs): Promise<void>;
   enableTouch(args: { id: string }): Promise<void>;
   disableTouch(args: { id: string }): Promise<void>;
+  addTileOverlay(args: AddTileOverlayArgs): Promise<void>;
   addMarker(args: AddMarkerArgs): Promise<{ id: string }>;
   addMarkers(args: AddMarkersArgs): Promise<{ ids: string[] }>;
   removeMarker(args: RemoveMarkerArgs): Promise<void>;

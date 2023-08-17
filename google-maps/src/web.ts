@@ -11,6 +11,7 @@ import {
 import type { Marker } from './definitions';
 import { MapType, LatLngBounds } from './definitions';
 import type {
+  AddTileOverlayArgs,
   AddMarkerArgs,
   CameraArgs,
   AddMarkersArgs,
@@ -34,6 +35,46 @@ import type {
   AddPolylinesArgs,
   RemovePolylinesArgs,
 } from './implementation';
+
+
+class CoordMapType implements google.maps.MapType {
+  tileSize: google.maps.Size;
+  alt: string | null = null;
+  maxZoom: number = 17;
+  minZoom: number = 0;
+  name: string | null = null;
+  projection: google.maps.Projection | null = null;
+  radius: number = 6378137;
+
+  opacity: number = 1;
+  zIndex: number = 0;
+  visible: boolean = true;
+
+  constructor(tileSize: google.maps.Size) {
+    this.tileSize = tileSize;
+  }
+  getTile(
+    coord: google.maps.Point,
+    zoom: number,
+    ownerDocument: Document
+  ): HTMLElement {
+    const div = ownerDocument.createElement("div");
+    div.setAttribute('data-zoom', '' + zoom);
+    div.innerHTML = String(coord);
+    div.className = "";
+    div.style.width = this.tileSize.width + "px";
+    div.style.height = this.tileSize.height + "px";
+    div.style.fontSize = "10";
+    div.style.borderStyle = "solid";
+    div.style.borderWidth = "1px";
+    div.style.borderColor = "#AAAAAA";
+    div.style.opacity = '' + this.opacity;
+    div.style.zIndex = '' + this.zIndex;
+    div.style.display = this.visible ? 'block' : 'none';
+    return div;
+  }
+  releaseTile(): void { }
+}
 
 export class CapacitorGoogleMapsWeb
   extends WebPlugin
@@ -258,6 +299,25 @@ export class CapacitorGoogleMapsWeb
     const map = this.maps[_args.id].map;
     const bounds = this.getLatLngBounds(_args.bounds);
     map.fitBounds(bounds, _args.padding);
+  }
+
+  async addTileOverlay(_args: AddTileOverlayArgs): Promise<void> {
+    const map = this.maps[_args.id].map;
+
+    const tileSize = new google.maps.Size(256, 256); // Create a google.maps.Size instance
+    const coordMapType = new CoordMapType(tileSize);
+
+    if (typeof _args.opacity === 'number') {
+      coordMapType.opacity = _args.opacity;
+    }
+    if (typeof _args.zIndex === 'number') {
+      coordMapType.zIndex = _args.zIndex;
+    }
+    if (typeof _args.visible === 'boolean') {
+      coordMapType.visible = _args.visible;
+    }
+
+    map.overlayMapTypes.insertAt(0, coordMapType);
   }
 
   async addMarkers(_args: AddMarkersArgs): Promise<{ ids: string[] }> {
