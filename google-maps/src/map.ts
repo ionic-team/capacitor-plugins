@@ -122,6 +122,8 @@ class MapCustomElement extends HTMLElement {
   }
 
   connectedCallback() {
+    this.innerHTML = '';
+
     if (Capacitor.getPlatform() == 'ios') {
       this.style.overflow = 'scroll';
       (this.style as any)['-webkit-overflow-scrolling'] = 'touch';
@@ -269,7 +271,17 @@ export class GoogleMap {
       newMap.resizeObserver.observe(newMap.element);
     }
 
-    await CapacitorGoogleMaps.create(options);
+    // small delay to allow for iOS WKWebView to setup corresponding element sub-scroll views ???
+    await new Promise((resolve, reject) => {
+      setTimeout(async () => {
+        try {
+          await CapacitorGoogleMaps.create(options);
+          resolve(undefined);
+        } catch (err) {
+          reject(err);
+        }
+      }, 200);
+    });
 
     if (callback) {
       const onMapReadyListener = await CapacitorGoogleMaps.addListener(

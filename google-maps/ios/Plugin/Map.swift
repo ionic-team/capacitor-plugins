@@ -73,6 +73,10 @@ public class Map {
     var polylines = [Int: GMSPolyline]()
     var markerIcons = [String: UIImage]()
 
+    // swiftlint:disable identifier_name
+    public static let MAP_TAG = 99999
+    // swiftlint:enable identifier_name
+
     // swiftlint:disable weak_delegate
     private var delegate: CapacitorGoogleMapsPlugin
 
@@ -103,7 +107,7 @@ public class Map {
             self.targetViewController = self.getTargetContainer(refWidth: self.config.width, refHeight: self.config.height)
 
             if let target = self.targetViewController {
-                target.tag = 1
+                target.tag = Map.MAP_TAG
                 target.removeAllSubview()
                 self.mapViewController.view.frame = target.bounds
                 target.addSubview(self.mapViewController.view)
@@ -145,7 +149,7 @@ public class Map {
         DispatchQueue.main.sync {
             if let target = self.getTargetContainer(refWidth: round(Double(mapBounds.width)), refHeight: round(Double(mapBounds.height))) {
                 self.targetViewController = target
-                target.tag = 1
+                target.tag = Map.MAP_TAG
                 target.removeAllSubview()
                 CATransaction.begin()
                 CATransaction.setDisableActions(true)
@@ -157,18 +161,24 @@ public class Map {
         }
     }
 
-    private func getTargetContainer(refWidth: Double, refHeight: Double) -> UIScrollView? {
+    private func getTargetContainer(refWidth: Double, refHeight: Double) -> UIView? {
         if let bridge = self.delegate.bridge {
             for item in bridge.webView!.getAllSubViews() {
                 let isScrollView = item.isKind(of: NSClassFromString("WKChildScrollView")!) || item.isKind(of: NSClassFromString("WKScrollView")!)
-                if isScrollView {
+                let isBridgeScrollView = item.isEqual(bridge.webView?.scrollView)
+
+                if isScrollView && !isBridgeScrollView {
                     (item as? UIScrollView)?.isScrollEnabled = true
 
-                    let isWidthEqual = round(Double(item.bounds.width)) == refWidth
-                    let isHeightEqual = round(Double(item.bounds.height)) == refHeight
+                    let height = Double((item as? UIScrollView)?.contentSize.height ?? 0)
+                    let width = Double((item as? UIScrollView)?.contentSize.width ?? 0)
+                    let actualHeight = round(height / 2)
 
-                    if isWidthEqual && isHeightEqual && (item as? UIView)?.tag == 0 {
-                        return (item as? UIScrollView)
+                    let isWidthEqual = width == self.config.width
+                    let isHeightEqual = actualHeight == self.config.height
+
+                    if isWidthEqual && isHeightEqual && item.tag < self.targetViewController?.tag ?? Map.MAP_TAG {
+                        return item
                     }
                 }
             }
@@ -179,9 +189,10 @@ public class Map {
 
     func destroy() {
         DispatchQueue.main.async {
-            self.enableTouch()
+            self.mapViewController.GMapView = nil            
             self.targetViewController?.tag = 0
             self.mapViewController.view = nil
+            self.enableTouch()
         }
     }
 
@@ -668,18 +679,29 @@ extension UIView {
     private static var allSubviews: [UIView] = []
 
     private func viewArray(root: UIView) -> [UIView] {
+        var index = root.tag
         for view in root.subviews {
+            if view.tag == Map.MAP_TAG {
+                // view already in use as in map
+                continue
+            }
+
+            // tag the index depth of the uiview
+            view.tag = index
+
             if view.isKind(of: UIView.self) {
                 UIView.allSubviews.append(view)
             }
             _ = viewArray(root: view)
+
+            index += 1
         }
         return UIView.allSubviews
     }
 
     fileprivate func getAllSubViews() -> [UIView] {
         UIView.allSubviews = []
-        return viewArray(root: self)
+        return viewArray(root: self).reversed()
     }
 
     fileprivate func removeAllSubview() {
