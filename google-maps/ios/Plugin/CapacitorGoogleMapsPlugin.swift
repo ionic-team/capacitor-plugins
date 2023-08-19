@@ -753,7 +753,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
             let mapBounds = try CGRect.fromJSObject(mapBoundsObj)
 
             map.updateRender(mapBounds: mapBounds)
-            
+
             call.resolve()
         } catch {
             handleError(call, error: error)

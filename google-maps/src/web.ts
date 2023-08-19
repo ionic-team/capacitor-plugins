@@ -160,14 +160,14 @@ export class CapacitorGoogleMapsWeb
       if (type === 'roadmap') {
         type = MapType.Normal;
       }
-      return { type };
+      return { type: `${type.charAt(0).toUpperCase()}${type.slice(1)}` };
     }
     throw new Error('Map type is undefined');
   }
 
   async setMapType(_args: MapTypeArgs): Promise<void> {
     let mapType = _args.mapType.toLowerCase();
-    if (mapType === MapType.Normal) {
+    if (_args.mapType === MapType.Normal) {
       mapType = 'roadmap';
     }
     this.maps[_args.id].map.setMapTypeId(mapType);
