@@ -6,9 +6,9 @@ export default {
     {
       file: 'electron/dist/plugin.js',
       format: 'cjs',
-      sourcemap: true
+      sourcemap: true,
     },
   ],
   external: ['@capacitor/core'],
-  plugins: [commonjs()]
+  plugins: [commonjs()],
 };
