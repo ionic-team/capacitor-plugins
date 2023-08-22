@@ -51,7 +51,7 @@ public struct GoogleMapConfig: Codable {
         } else {
             self.styles = nil
         }
-        
+
         self.mapId = fromJSObject["mapId"] as? String
     }
 }

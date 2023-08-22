@@ -191,12 +191,12 @@ export interface GoogleMapConfig extends google.maps.MapOptions {
    * @since 4.3.0
    */
   styles?: google.maps.MapTypeStyle[] | null;
-    /**
+  /**
    * A map id associated with a specific map style or feature.
-   * 
+   *
    * [Use Map IDs](https://developers.google.com/maps/documentation/get-map-id)
    */
-    mapId?: string;
+  mapId?: string;
 }
 
 /**

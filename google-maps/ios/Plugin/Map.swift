@@ -32,7 +32,7 @@ class GMViewController: UIViewController {
         } else {
             self.GMapView = GMSMapView(frame: frame, camera: camera)
         }
-        
+
         self.view = GMapView
     }
 
@@ -197,7 +197,7 @@ public class Map {
 
     func destroy() {
         DispatchQueue.main.async {
-            self.mapViewController.GMapView = nil            
+            self.mapViewController.GMapView = nil
             self.targetViewController?.tag = 0
             self.mapViewController.view = nil
             self.enableTouch()
