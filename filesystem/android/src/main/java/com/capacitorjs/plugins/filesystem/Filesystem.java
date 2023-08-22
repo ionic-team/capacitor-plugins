@@ -151,6 +151,10 @@ public class Filesystem {
     }
 
     public InputStream getInputStream(String path, String directory) throws IOException {
+        if (path == null) {
+            throw new IllegalArgumentException("Path cannot be null");
+        }
+
         if (directory == null) {
             Uri u = Uri.parse(path);
             if (u.getScheme().equals("content")) {
