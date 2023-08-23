@@ -130,7 +130,7 @@ export type URLOpenListener = (event: URLOpenListenerEvent) => void;
 export type RestoredListener = (event: RestoredListenerEvent) => void;
 export type BackButtonListener = (event: BackButtonListenerEvent) => void;
 
-export interface GetLanguageCodeResult {
+export interface AppLanguageCode {
   /**
    * Two character language code.
    *
@@ -139,7 +139,7 @@ export interface GetLanguageCodeResult {
   value: string;
 }
 
-export interface LanguageTag {
+export interface AppLanguageTag {
   /**
    * Returns a well-formed IETF BCP 47 language tag.
    *
@@ -194,14 +194,14 @@ export interface AppPlugin {
    *
    * @since 5.1.0
    */
-  getAppLanguageCode(): Promise<GetLanguageCodeResult>;
+  getAppLanguageCode(): Promise<AppLanguageCode>;
 
   /**
    * Get the app specific language locale tag.
    *
    * @since 5.1.0
    */
-  getAppLanguageTag(): Promise<LanguageTag>;
+  getAppLanguageTag(): Promise<AppLanguageTag>;
 
   /**
    * Listen for changes in the app or the activity states.

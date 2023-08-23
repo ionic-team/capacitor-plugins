@@ -13,7 +13,6 @@ import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
 import com.getcapacitor.util.InternalUtils;
-
 import java.util.Locale;
 
 @CapacitorPlugin(name = "App")

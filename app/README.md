@@ -76,6 +76,8 @@ const checkAppLaunchUrl = async () => {
 * [`getState()`](#getstate)
 * [`getLaunchUrl()`](#getlaunchurl)
 * [`minimizeApp()`](#minimizeapp)
+* [`getAppLanguageCode()`](#getapplanguagecode)
+* [`getAppLanguageTag()`](#getapplanguagetag)
 * [`addListener('appStateChange', ...)`](#addlistenerappstatechange)
 * [`addListener('pause', ...)`](#addlistenerpause)
 * [`addListener('resume', ...)`](#addlistenerresume)
@@ -163,6 +165,36 @@ Minimizes the application.
 Only available for Android.
 
 **Since:** 1.1.0
+
+--------------------
+
+
+### getAppLanguageCode()
+
+```typescript
+getAppLanguageCode() => Promise<AppLanguageCode>
+```
+
+Get the app specific language locale code.
+
+**Returns:** <code>Promise&lt;<a href="#applanguagecode">AppLanguageCode</a>&gt;</code>
+
+**Since:** 5.1.0
+
+--------------------
+
+
+### getAppLanguageTag()
+
+```typescript
+getAppLanguageTag() => Promise<AppLanguageTag>
+```
+
+Get the app specific language locale tag.
+
+**Returns:** <code>Promise&lt;<a href="#applanguagetag">AppLanguageTag</a>&gt;</code>
+
+**Since:** 5.1.0
 
 --------------------
 
@@ -362,6 +394,20 @@ Remove all native listeners for this plugin
 | Prop      | Type                | Description                   | Since |
 | --------- | ------------------- | ----------------------------- | ----- |
 | **`url`** | <code>string</code> | The url used to open the app. | 1.0.0 |
+
+
+#### AppLanguageCode
+
+| Prop        | Type                | Description                  | Since |
+| ----------- | ------------------- | ---------------------------- | ----- |
+| **`value`** | <code>string</code> | Two character language code. | 5.1.0 |
+
+
+#### AppLanguageTag
+
+| Prop        | Type                | Description                                     | Since |
+| ----------- | ------------------- | ----------------------------------------------- | ----- |
+| **`value`** | <code>string</code> | Returns a well-formed IETF BCP 47 language tag. | 5.1.0 |
 
 
 #### PluginListenerHandle
