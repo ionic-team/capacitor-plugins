@@ -73,6 +73,10 @@ public class Map {
     var polylines = [Int: GMSPolyline]()
     var markerIcons = [String: UIImage]()
 
+    // swiftlint:disable identifier_name
+    public static let MAP_TAG = 99999
+    // swiftlint:enable identifier_name
+
     // swiftlint:disable weak_delegate
     private var delegate: CapacitorGoogleMapsPlugin
 
@@ -99,88 +103,112 @@ public class Map {
                 "longitude": self.config.center.lng,
                 "zoom": self.config.zoom
             ]
-            if let bridge = self.delegate.bridge {
 
-                for item in bridge.webView!.getAllSubViews() {
-                    let isScrollView = item.isKind(of: NSClassFromString("WKChildScrollView")!) || item.isKind(of: NSClassFromString("WKScrollView")!)
-                    if isScrollView {
-                        (item as? UIScrollView)?.isScrollEnabled = true
+            self.targetViewController = self.getTargetContainer(refWidth: self.config.width, refHeight: self.config.height)
 
-                        let isWidthEqual = round(Double(item.bounds.width)) == self.config.width
-                        let isHeightEqual = round(Double(item.bounds.height)) == self.config.height
+            if let target = self.targetViewController {
+                target.tag = Map.MAP_TAG
+                target.removeAllSubview()
+                self.mapViewController.view.frame = target.bounds
+                target.addSubview(self.mapViewController.view)
+                self.mapViewController.GMapView.delegate = self.delegate
+            }
 
-                        if isWidthEqual && isHeightEqual && (item as? UIView)?.tag == 0 {
-                            self.targetViewController = item
-                            break
-                        }
-                    }
+            if let styles = self.config.styles {
+                do {
+                    self.mapViewController.GMapView.mapStyle = try GMSMapStyle(jsonString: styles)
+                } catch {
+                    CAPLog.print("Invalid Google Maps styles")
                 }
+            }
 
-                if let target = self.targetViewController {
-                    target.tag = 1
-                    target.removeAllSubview()
-                    self.mapViewController.view.frame = target.bounds
-                    target.addSubview(self.mapViewController.view)
-                    self.mapViewController.GMapView.delegate = self.delegate
-                }
+            self.delegate.notifyListeners("onMapReady", data: [
+                "mapId": self.id
+            ])
+        }
+    }
 
-                if let styles = self.config.styles {
-                    do {
-                        self.mapViewController.GMapView.mapStyle = try GMSMapStyle(jsonString: styles)
-                    } catch {
-                        CAPLog.print("Invalid Google Maps styles")
-                    }
-                }
+    func updateRender(mapBounds: CGRect) {
+        DispatchQueue.main.sync {
+            let newWidth = round(Double(mapBounds.width))
+            let newHeight = round(Double(mapBounds.height))
+            let isWidthEqual = round(Double(self.mapViewController.view.bounds.width)) == newWidth
+            let isHeightEqual = round(Double(self.mapViewController.view.bounds.height)) == newHeight
 
-                self.delegate.notifyListeners("onMapReady", data: [
-                    "mapId": self.id
-                ])
+            if !isWidthEqual || !isHeightEqual {
+                CATransaction.begin()
+                CATransaction.setDisableActions(true)
+                self.mapViewController.view.frame.size.width = newWidth
+                self.mapViewController.view.frame.size.height = newHeight
+                CATransaction.commit()
             }
         }
     }
 
-    func updateRender(frame: CGRect, mapBounds: CGRect) {
-        DispatchQueue.main.async {
-            self.mapViewController.view.layer.mask = nil
-
-            var updatedFrame = self.mapViewController.view.frame
-            updatedFrame.origin.x = mapBounds.origin.x
-            updatedFrame.origin.y = mapBounds.origin.y
-
-            self.mapViewController.view.frame = updatedFrame
-
-            var maskBounds: [CGRect] = []
-
-            if !frame.contains(mapBounds) {
-                maskBounds.append(contentsOf: self.getFrameOverflowBounds(frame: frame, mapBounds: mapBounds))
+    func rebindTargetContainer(mapBounds: CGRect) {
+        DispatchQueue.main.sync {
+            if let target = self.getTargetContainer(refWidth: round(Double(mapBounds.width)), refHeight: round(Double(mapBounds.height))) {
+                self.targetViewController = target
+                target.tag = Map.MAP_TAG
+                target.removeAllSubview()
+                CATransaction.begin()
+                CATransaction.setDisableActions(true)
+                self.mapViewController.view.frame.size.width = mapBounds.width
+                self.mapViewController.view.frame.size.height = mapBounds.height
+                CATransaction.commit()
+                target.addSubview(self.mapViewController.view)
             }
+        }
+    }
 
-            if maskBounds.count > 0 {
-                let maskLayer = CAShapeLayer()
-                let path = CGMutablePath()
+    private func getTargetContainer(refWidth: Double, refHeight: Double) -> UIView? {
+        if let bridge = self.delegate.bridge {
+            for item in bridge.webView!.getAllSubViews() {
+                let isScrollView = item.isKind(of: NSClassFromString("WKChildScrollView")!) || item.isKind(of: NSClassFromString("WKScrollView")!)
+                let isBridgeScrollView = item.isEqual(bridge.webView?.scrollView)
 
-                path.addRect(self.mapViewController.view.bounds)
-                maskBounds.forEach { b in
-                    path.addRect(b)
+                if isScrollView && !isBridgeScrollView {
+                    (item as? UIScrollView)?.isScrollEnabled = true
+
+                    let height = Double((item as? UIScrollView)?.contentSize.height ?? 0)
+                    let width = Double((item as? UIScrollView)?.contentSize.width ?? 0)
+                    let actualHeight = round(height / 2)
+
+                    let isWidthEqual = width == self.config.width
+                    let isHeightEqual = actualHeight == self.config.height
+
+                    if isWidthEqual && isHeightEqual && item.tag < self.targetViewController?.tag ?? Map.MAP_TAG {
+                        return item
+                    }
                 }
-
-                maskLayer.path = path
-                maskLayer.fillRule = .evenOdd
-
-                self.mapViewController.view.layer.mask = maskLayer
-
             }
-
-            self.mapViewController.view.layoutIfNeeded()
         }
 
+        return nil
     }
 
     func destroy() {
         DispatchQueue.main.async {
+            self.mapViewController.GMapView = nil            
             self.targetViewController?.tag = 0
             self.mapViewController.view = nil
+            self.enableTouch()
+        }
+    }
 
+    func enableTouch() {
+        DispatchQueue.main.async {
+            if let target = self.targetViewController, let itemIndex = WKWebView.disabledTargets.firstIndex(of: target) {
+                WKWebView.disabledTargets.remove(at: itemIndex)
+            }
+        }
+    }
+
+    func disableTouch() {
+        DispatchQueue.main.async {
+            if let target = self.targetViewController, !WKWebView.disabledTargets.contains(target) {
+                WKWebView.disabledTargets.append(target)
+            }
         }
     }
 
@@ -624,8 +652,14 @@ private func getResizedIcon(_ iconImage: UIImage, _ marker: Marker) -> UIImage? 
 }
 
 extension WKWebView {
+    static var disabledTargets: [UIView] = []
+
     override open func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         var hitView = super.hitTest(point, with: event)
+
+        if let tempHitView = hitView, WKWebView.disabledTargets.contains(tempHitView) {
+            return nil
+        }
 
         if let typeClass = NSClassFromString("WKChildScrollView"), let tempHitView = hitView, tempHitView.isKind(of: typeClass) {
             for item in tempHitView.subviews.reversed() {
@@ -645,18 +679,29 @@ extension UIView {
     private static var allSubviews: [UIView] = []
 
     private func viewArray(root: UIView) -> [UIView] {
+        var index = root.tag
         for view in root.subviews {
+            if view.tag == Map.MAP_TAG {
+                // view already in use as in map
+                continue
+            }
+
+            // tag the index depth of the uiview
+            view.tag = index
+
             if view.isKind(of: UIView.self) {
                 UIView.allSubviews.append(view)
             }
             _ = viewArray(root: view)
+
+            index += 1
         }
         return UIView.allSubviews
     }
 
     fileprivate func getAllSubViews() -> [UIView] {
         UIView.allSubviews = []
-        return viewArray(root: self)
+        return viewArray(root: self).reversed()
     }
 
     fileprivate func removeAllSubview() {
