@@ -187,6 +187,7 @@ import Capacitor
             call.reject("Invalid file path")
             return
         }
+        guard var urlString = call.getString("url") else { throw URLError(.badURL) }
 
         func handleDownload(downloadLocation: URL?, response: URLResponse?, error: Error?) {
             if let error = error {
@@ -196,6 +197,11 @@ import Capacitor
             }
 
             if let httpResponse = response as? HTTPURLResponse {
+                if !(200...299).contains(httpResponse.statusCode) {
+                    CAPLog.print("Error downloading file:", urlString, httpResponse)
+                    call.reject("Error downloading file: \(urlString)", "DOWNLOAD")
+                    return
+                }
                 HttpRequestHandler.setCookiesFromResponse(httpResponse, config)
             }
 
@@ -239,7 +245,6 @@ import Capacitor
             }
         }
 
-        guard var urlString = call.getString("url") else { throw URLError(.badURL) }
         let method = call.getString("method", "GET")
 
         let headers = (call.getObject("headers") ?? [:]) as [String: Any]

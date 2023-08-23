@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.3.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/google-maps@5.2.2...@capacitor/google-maps@5.3.0) (2023-08-09)
+
+### Features
+
+- **google-maps:** Added feature to disable touch events on map ([#1601](https://github.com/ionic-team/capacitor-plugins/issues/1601)) ([c4e3871](https://github.com/ionic-team/capacitor-plugins/commit/c4e387102b42f403970c10fbf82409c8a55bd361))
+- **google-maps:** Update map size in updateRender method if it has changed ([#1595](https://github.com/ionic-team/capacitor-plugins/issues/1595)) ([318fc40](https://github.com/ionic-team/capacitor-plugins/commit/318fc40b9b117a46e51fe910e4e02ef9c8e85c92))
+
 ## [5.2.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/google-maps@5.2.1...@capacitor/google-maps@5.2.2) (2023-07-19)
 
 **Note:** Version bump only for package @capacitor/google-maps
