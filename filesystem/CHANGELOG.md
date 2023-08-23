@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.1.3](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@5.1.2...@capacitor/filesystem@5.1.3) (2023-08-23)
+
+### Bug Fixes
+
+- **filesystem:** catch http errors on downloadFile ([#1742](https://github.com/ionic-team/capacitor-plugins/issues/1742)) ([5ed01d3](https://github.com/ionic-team/capacitor-plugins/commit/5ed01d303686fdab727b0d40a1cf903ba82c0f43))
+
 ## [5.1.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@5.1.1...@capacitor/filesystem@5.1.2) (2023-08-09)
 
 ### Bug Fixes
