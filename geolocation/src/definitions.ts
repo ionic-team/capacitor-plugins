@@ -182,7 +182,16 @@ export interface PositionOptions {
   maximumAge?: number;
 
   /**
-   * The minumum update interval for location updates.
+   * The desired update interval for location updates.
+   *
+   * This parameter is only available for Android. It has no effect on iOS or Web platforms.
+   *
+   * @default 10000
+   */
+  interval?: number;
+
+  /**
+   * The minimum update interval for location updates.
    *
    * If location updates are available faster than this interval then an update
    * will only occur if the minimum update interval has expired since the last location update.
