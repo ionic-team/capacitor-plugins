@@ -68,7 +68,7 @@ public class Geolocation {
     }
 
     @SuppressWarnings("MissingPermission")
-    public void requestLocationUpdates(boolean enableHighAccuracy, int timeout, final LocationResultCallback resultCallback) {
+    public void requestLocationUpdates(boolean enableHighAccuracy, long timeout, long interval, long minInterval, final LocationResultCallback resultCallback) {
         int resultCode = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(context);
         if (resultCode == ConnectionResult.SUCCESS) {
             clearLocationUpdates();
@@ -85,9 +85,9 @@ public class Geolocation {
                 int lowPriority = networkEnabled ? Priority.PRIORITY_BALANCED_POWER_ACCURACY : Priority.PRIORITY_LOW_POWER;
                 int priority = enableHighAccuracy ? Priority.PRIORITY_HIGH_ACCURACY : lowPriority;
 
-                LocationRequest locationRequest = new LocationRequest.Builder(10000)
+                LocationRequest locationRequest = new LocationRequest.Builder(interval)
                     .setMaxUpdateDelayMillis(timeout)
-                    .setMinUpdateIntervalMillis(5000)
+                    .setMinUpdateIntervalMillis(minInterval)
                     .setPriority(priority)
                     .build();
 
