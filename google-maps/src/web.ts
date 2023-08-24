@@ -33,6 +33,7 @@ import type {
   RemoveCirclesArgs,
   AddPolylinesArgs,
   RemovePolylinesArgs,
+  RawGoogleMapInstanceArgs,
 } from './implementation';
 
 export class CapacitorGoogleMapsWeb
@@ -173,8 +174,8 @@ export class CapacitorGoogleMapsWeb
     this.maps[_args.id].map.setMapTypeId(mapType);
   }
 
-  public getRawGoogleMapInstance(id: string): google.maps.Map {
-    return this.maps[id].map;
+  public getRawGoogleMapInstance(_args: RawGoogleMapInstanceArgs): google.maps.Map {
+    return this.maps[_args.id].map;
   }
 
   async enableIndoorMaps(): Promise<void> {
