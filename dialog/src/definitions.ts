@@ -1,16 +1,10 @@
-declare module '@capacitor/core' {
-  interface PluginRegistry {
-    Dialog: DialogPlugin;
-  }
-}
-
 export interface AlertOptions {
   /**
    * Title of the dialog.
    *
    * @since 1.0.0
    */
-  title: string;
+  title?: string;
 
   /**
    * Message to show on the dialog.
@@ -34,7 +28,7 @@ export interface PromptOptions {
    *
    * @since 1.0.0
    */
-  title: string;
+  title?: string;
 
   /**
    * Message to show on the dialog.
@@ -80,7 +74,7 @@ export interface ConfirmOptions {
    *
    * @since 1.0.0
    */
-  title: string;
+  title?: string;
 
   /**
    * Message to show on the dialog.

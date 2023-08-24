@@ -1,16 +1,16 @@
 import { WebPlugin } from '@capacitor/core';
 
-import type { BrowserPlugin, BrowserOpenOptions } from './definitions';
+import type { BrowserPlugin, OpenOptions } from './definitions';
 
 export class BrowserWeb extends WebPlugin implements BrowserPlugin {
   _lastWindow: Window | null;
 
   constructor() {
-    super({ name: 'Browser' });
+    super();
     this._lastWindow = null;
   }
 
-  async open(options: BrowserOpenOptions): Promise<void> {
+  async open(options: OpenOptions): Promise<void> {
     this._lastWindow = window.open(options.url, options.windowName || '_blank');
   }
 

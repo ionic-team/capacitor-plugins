@@ -1,18 +1,12 @@
 import type { PluginListenerHandle } from '@capacitor/core';
 
-declare module '@capacitor/core' {
-  interface PluginRegistry {
-    Browser: BrowserPlugin;
-  }
-}
-
 export interface BrowserPlugin {
   /**
    * Open a page with the specified options.
    *
    * @since 1.0.0
    */
-  open(options: BrowserOpenOptions): Promise<void>;
+  open(options: OpenOptions): Promise<void>;
 
   /**
    * Web & iOS only: Close an open browser window.
@@ -24,31 +18,34 @@ export interface BrowserPlugin {
   close(): Promise<void>;
 
   /**
-   * Android & iOS only: Listen for the loading finished event.
+   * Android & iOS only: Listen for the browser finished event.
+   * It fires when the Browser is closed by the user.
    *
    * @since 1.0.0
    */
   addListener(
     eventName: 'browserFinished',
     listenerFunc: () => void,
-  ): PluginListenerHandle;
+  ): Promise<PluginListenerHandle> & PluginListenerHandle;
 
   /**
    * Android & iOS only: Listen for the page loaded event.
+   * It's only fired when the URL passed to open method finish loading.
+   * It is not invoked for any subsequent page loads.
    *
    * @since 1.0.0
    */
   addListener(
     eventName: 'browserPageLoaded',
     listenerFunc: () => void,
-  ): PluginListenerHandle;
+  ): Promise<PluginListenerHandle> & PluginListenerHandle;
 
   /**
    * Remove all native listeners for this plugin.
    *
    * @since 1.0.0
    */
-  removeAllListeners(): void;
+  removeAllListeners(): Promise<void>;
 }
 
 /**
@@ -56,7 +53,7 @@ export interface BrowserPlugin {
  *
  * @since 1.0.0
  */
-export interface BrowserOpenOptions {
+export interface OpenOptions {
   /**
    * The URL to which the browser is opened.
    *
@@ -90,4 +87,28 @@ export interface BrowserOpenOptions {
    * @since 1.0.0
    */
   presentationStyle?: 'fullscreen' | 'popover';
+
+  /**
+   * iOS only: The width the browser when using presentationStyle 'popover' on iPads.
+   *
+   * Ignored on other platforms.
+   *
+   * @since 4.0.0
+   */
+  width?: number;
+
+  /**
+   * iOS only: The height the browser when using presentationStyle 'popover' on iPads.
+   *
+   * Ignored on other platforms.
+   *
+   * @since 4.0.0
+   */
+  height?: number;
 }
+
+/**
+ * @deprecated Use `OpenOptions`.
+ * @since 1.0.0
+ */
+export type BrowserOpenOptions = OpenOptions;

@@ -3,10 +3,14 @@ package com.capacitorjs.plugins.device;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.BatteryManager;
+import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
 import android.provider.Settings;
+import android.webkit.WebView;
 
 public class Device {
 
@@ -29,6 +33,16 @@ public class Device {
 
     public long getDiskTotal() {
         StatFs statFs = new StatFs(Environment.getRootDirectory().getAbsolutePath());
+        return statFs.getBlockCountLong() * statFs.getBlockSizeLong();
+    }
+
+    public long getRealDiskFree() {
+        StatFs statFs = new StatFs(Environment.getDataDirectory().getAbsolutePath());
+        return statFs.getAvailableBlocksLong() * statFs.getBlockSizeLong();
+    }
+
+    public long getRealDiskTotal() {
+        StatFs statFs = new StatFs(Environment.getDataDirectory().getAbsolutePath());
         return statFs.getBlockCountLong() * statFs.getBlockSizeLong();
     }
 
@@ -68,5 +82,41 @@ public class Device {
 
     public boolean isVirtual() {
         return android.os.Build.FINGERPRINT.contains("generic") || android.os.Build.PRODUCT.contains("sdk");
+    }
+
+    public String getName() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+            return Settings.Global.getString(this.context.getContentResolver(), Settings.Global.DEVICE_NAME);
+        }
+
+        return null;
+    }
+
+    public String getWebViewVersion() {
+        PackageInfo info = null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            info = WebView.getCurrentWebViewPackage();
+        } else {
+            try {
+                info = getWebViewVersionSubAndroid26();
+            } catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+        if (info != null) {
+            return info.versionName;
+        }
+
+        return android.os.Build.VERSION.RELEASE;
+    }
+
+    @SuppressWarnings("deprecation")
+    private PackageInfo getWebViewVersionSubAndroid26() throws PackageManager.NameNotFoundException {
+        String webViewPackage = "com.google.android.webview";
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            webViewPackage = "com.android.chrome";
+        }
+        PackageManager pm = this.context.getPackageManager();
+        return pm.getPackageInfo(webViewPackage, 0);
     }
 }

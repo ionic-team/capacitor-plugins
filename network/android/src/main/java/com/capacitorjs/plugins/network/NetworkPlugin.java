@@ -1,29 +1,37 @@
 package com.capacitorjs.plugins.network;
 
-import android.Manifest;
-import android.net.NetworkInfo;
+import android.os.Build;
+import android.util.Log;
 import com.getcapacitor.JSObject;
-import com.getcapacitor.Logger;
-import com.getcapacitor.NativePlugin;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
+import com.getcapacitor.annotation.CapacitorPlugin;
 
-@NativePlugin(name = "Network", permissions = { Manifest.permission.ACCESS_NETWORK_STATE })
+@CapacitorPlugin(name = "Network")
 public class NetworkPlugin extends Plugin {
 
     private Network implementation;
     public static final String NETWORK_CHANGE_EVENT = "networkStatusChange";
-    private static final String PERMISSION_NOT_SET = Manifest.permission.ACCESS_NETWORK_STATE + " not set in AndroidManifest.xml";
+    private NetworkStatus prePauseNetworkStatus = null;
 
     /**
      * Monitor for network status changes and fire our event.
      */
     @Override
-    @SuppressWarnings("MissingPermission")
     public void load() {
         implementation = new Network(getContext());
-        implementation.setStatusChangeListener(this::updateNetworkStatus);
+        Network.NetworkStatusChangeListener listener = wasLostEvent -> {
+            if (wasLostEvent) {
+                JSObject jsObject = new JSObject();
+                jsObject.put("connected", false);
+                jsObject.put("connectionType", "none");
+                notifyListeners(NETWORK_CHANGE_EVENT, jsObject);
+            } else {
+                updateNetworkStatus();
+            }
+        };
+        implementation.setStatusChangeListener(listener);
     }
 
     /**
@@ -38,14 +46,9 @@ public class NetworkPlugin extends Plugin {
      * Get current network status information.
      * @param call
      */
-    @SuppressWarnings("MissingPermission")
     @PluginMethod
     public void getStatus(PluginCall call) {
-        if (hasRequiredPermissions()) {
-            call.resolve(getStatusJSObject(implementation.getNetworkStatus()));
-        } else {
-            call.reject(PERMISSION_NOT_SET);
-        }
+        call.resolve(parseNetworkStatus(implementation.getNetworkStatus()));
     }
 
     /**
@@ -53,7 +56,24 @@ public class NetworkPlugin extends Plugin {
      */
     @Override
     protected void handleOnResume() {
-        implementation.startMonitoring(getActivity());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            implementation.startMonitoring();
+        } else {
+            implementation.startMonitoring(getActivity());
+        }
+        NetworkStatus afterPauseNetworkStatus = implementation.getNetworkStatus();
+        if (
+            prePauseNetworkStatus != null &&
+            !afterPauseNetworkStatus.connected &&
+            (prePauseNetworkStatus.connected || afterPauseNetworkStatus.connectionType != prePauseNetworkStatus.connectionType)
+        ) {
+            Log.d(
+                "Capacitor/NetworkPlugin",
+                "Detected pre-pause and after-pause network status mismatch. Updating network status and notifying listeners."
+            );
+            this.updateNetworkStatus();
+        }
+        this.prePauseNetworkStatus = null;
     }
 
     /**
@@ -61,48 +81,22 @@ public class NetworkPlugin extends Plugin {
      */
     @Override
     protected void handleOnPause() {
-        implementation.stopMonitoring(getActivity());
+        this.prePauseNetworkStatus = implementation.getNetworkStatus();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            implementation.stopMonitoring();
+        } else {
+            implementation.stopMonitoring(getActivity());
+        }
     }
 
-    @SuppressWarnings("MissingPermission")
     private void updateNetworkStatus() {
-        if (hasRequiredPermissions()) {
-            notifyListeners(NETWORK_CHANGE_EVENT, getStatusJSObject(implementation.getNetworkStatus()));
-        } else {
-            Logger.error(getLogTag(), PERMISSION_NOT_SET, null);
-        }
+        notifyListeners(NETWORK_CHANGE_EVENT, parseNetworkStatus(implementation.getNetworkStatus()));
     }
 
-    /**
-     * Transform a NetworkInfo object into our JSObject for returning to client
-     * @param info
-     * @return
-     */
-    private JSObject getStatusJSObject(NetworkInfo info) {
-        JSObject ret = new JSObject();
-        if (info == null) {
-            ret.put("connected", false);
-            ret.put("connectionType", "none");
-        } else {
-            ret.put("connected", info.isConnected());
-            ret.put("connectionType", getNormalizedTypeName(info));
-        }
-        return ret;
-    }
-
-    /**
-     * Convert the Android-specific naming for network types into our cross-platform type
-     * @param info
-     * @return
-     */
-    private String getNormalizedTypeName(NetworkInfo info) {
-        String typeName = info.getTypeName();
-        if (typeName.equals("WIFI")) {
-            return "wifi";
-        }
-        if (typeName.equals("MOBILE")) {
-            return "cellular";
-        }
-        return "none";
+    private JSObject parseNetworkStatus(NetworkStatus networkStatus) {
+        JSObject jsObject = new JSObject();
+        jsObject.put("connected", networkStatus.connected);
+        jsObject.put("connectionType", networkStatus.connectionType.getConnectionType());
+        return jsObject;
     }
 }

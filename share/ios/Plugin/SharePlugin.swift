@@ -4,6 +4,12 @@ import Capacitor
 @objc(SharePlugin)
 public class SharePlugin: CAPPlugin {
 
+    @objc func canShare(_ call: CAPPluginCall) {
+        call.resolve([
+            "value": true
+        ])
+    }
+
     @objc func share(_ call: CAPPluginCall) {
         var items = [Any]()
 
@@ -17,8 +23,16 @@ public class SharePlugin: CAPPlugin {
 
         let title = call.getString("title")
 
+        if let files = call.getArray("files") {
+            files.forEach { file in
+                if let url = file as? String, let fileUrl = URL(string: url) {
+                    items.append(fileUrl)
+                }
+            }
+        }
+
         if items.count == 0 {
-            call.reject("Must provide at least url or text")
+            call.reject("Must provide at least url, text or files")
             return
         }
 
@@ -44,10 +58,12 @@ public class SharePlugin: CAPPlugin {
                 }
 
             }
-
+            if self?.bridge?.viewController?.presentedViewController != nil {
+                call.reject("Can't share while sharing is in progress")
+                return
+            }
             self?.setCenteredPopover(actionController)
             self?.bridge?.viewController?.present(actionController, animated: true, completion: nil)
         }
-
     }
 }

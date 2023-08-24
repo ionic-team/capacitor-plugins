@@ -1,10 +1,9 @@
-import type { PluginListenerHandle } from '@capacitor/core';
-import { UnsupportedBrowserException, WebPlugin } from '@capacitor/core';
+import { WebPlugin } from '@capacitor/core';
 
 import type {
+  ConnectionStatus,
+  ConnectionType,
   NetworkPlugin,
-  NetworkStatus,
-  NetworkStatusConnectionType,
 } from './definitions';
 
 declare global {
@@ -15,12 +14,12 @@ declare global {
   }
 }
 
-function translatedConnection(): NetworkStatusConnectionType {
+function translatedConnection(): ConnectionType {
   const connection =
     window.navigator.connection ||
     window.navigator.mozConnection ||
     window.navigator.webkitConnection;
-  let result: NetworkStatusConnectionType = 'unknown';
+  let result: ConnectionType = 'unknown';
   const type = connection ? connection.type || connection.effectiveType : null;
   if (type && typeof type === 'string') {
     switch (type) {
@@ -59,12 +58,16 @@ function translatedConnection(): NetworkStatusConnectionType {
 
 export class NetworkWeb extends WebPlugin implements NetworkPlugin {
   constructor() {
-    super({ name: 'Network' });
+    super();
+    if (typeof window !== 'undefined') {
+      window.addEventListener('online', this.handleOnline);
+      window.addEventListener('offline', this.handleOffline);
+    }
   }
 
-  async getStatus(): Promise<NetworkStatus> {
+  async getStatus(): Promise<ConnectionStatus> {
     if (!window.navigator) {
-      throw new UnsupportedBrowserException(
+      throw this.unavailable(
         'Browser does not support the Network Information API',
       );
     }
@@ -72,47 +75,33 @@ export class NetworkWeb extends WebPlugin implements NetworkPlugin {
     const connected = window.navigator.onLine;
     const connectionType = translatedConnection();
 
-    const status: NetworkStatus = {
-      connected: connected,
+    const status: ConnectionStatus = {
+      connected,
       connectionType: connected ? connectionType : 'none',
     };
 
     return status;
   }
 
-  addListener(
-    eventName: 'networkStatusChange',
-    listenerFunc: (status: NetworkStatus) => void,
-  ): PluginListenerHandle {
-    const thisRef = this;
+  private handleOnline = () => {
     const connectionType = translatedConnection();
 
-    const onlineBindFunc = listenerFunc.bind(thisRef, {
+    const status: ConnectionStatus = {
       connected: true,
       connectionType: connectionType,
-    });
-    const offlineBindFunc = listenerFunc.bind(thisRef, {
+    };
+
+    this.notifyListeners('networkStatusChange', status);
+  };
+
+  private handleOffline = () => {
+    const status: ConnectionStatus = {
       connected: false,
       connectionType: 'none',
-    });
+    };
 
-    if (eventName.localeCompare('networkStatusChange') === 0) {
-      window.addEventListener('online', onlineBindFunc);
-      window.addEventListener('offline', offlineBindFunc);
-      return {
-        remove: () => {
-          window.removeEventListener('online', onlineBindFunc);
-          window.removeEventListener('offline', offlineBindFunc);
-        },
-      };
-    } else {
-      return {
-        remove: () => {
-          /* do nothing */
-        },
-      };
-    }
-  }
+    this.notifyListeners('networkStatusChange', status);
+  };
 }
 
 const Network = new NetworkWeb();

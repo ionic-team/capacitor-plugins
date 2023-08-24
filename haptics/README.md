@@ -2,6 +2,47 @@
 
 The Haptics API provides physical feedback to the user through touch or vibration.
 
+On devices that don't have Taptic Engine or Vibrator, the API calls will resolve without performing any action.
+
+## Install
+
+```bash
+npm install @capacitor/haptics
+npx cap sync
+```
+
+## Example
+
+```typescript
+import { Haptics, ImpactStyle } from '@capacitor/haptics';
+
+const hapticsImpactMedium = async () => {
+  await Haptics.impact({ style: ImpactStyle.Medium });
+};
+
+const hapticsImpactLight = async () => {
+  await Haptics.impact({ style: ImpactStyle.Light });
+};
+
+const hapticsVibrate = async () => {
+  await Haptics.vibrate();
+};
+
+const hapticsSelectionStart = async () => {
+  await Haptics.selectionStart();
+};
+
+const hapticsSelectionChanged = async () => {
+  await Haptics.selectionChanged();
+};
+
+const hapticsSelectionEnd = async () => {
+  await Haptics.selectionEnd();
+};
+```
+
+## API
+
 <docgen-index>
 
 * [`impact(...)`](#impact)
@@ -18,19 +59,17 @@ The Haptics API provides physical feedback to the user through touch or vibratio
 <docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
 
-## API
-
 ### impact(...)
 
 ```typescript
-impact(options?: HapticsImpactOptions | undefined) => Promise<void>
+impact(options?: ImpactOptions | undefined) => Promise<void>
 ```
 
 Trigger a haptics "impact" feedback
 
-| Param         | Type                                                                  |
-| ------------- | --------------------------------------------------------------------- |
-| **`options`** | <code><a href="#hapticsimpactoptions">HapticsImpactOptions</a></code> |
+| Param         | Type                                                    |
+| ------------- | ------------------------------------------------------- |
+| **`options`** | <code><a href="#impactoptions">ImpactOptions</a></code> |
 
 **Since:** 1.0.0
 
@@ -40,14 +79,14 @@ Trigger a haptics "impact" feedback
 ### notification(...)
 
 ```typescript
-notification(options?: HapticsNotificationOptions | undefined) => Promise<void>
+notification(options?: NotificationOptions | undefined) => Promise<void>
 ```
 
 Trigger a haptics "notification" feedback
 
-| Param         | Type                                                                              |
-| ------------- | --------------------------------------------------------------------------------- |
-| **`options`** | <code><a href="#hapticsnotificationoptions">HapticsNotificationOptions</a></code> |
+| Param         | Type                                                                |
+| ------------- | ------------------------------------------------------------------- |
+| **`options`** | <code><a href="#notificationoptions">NotificationOptions</a></code> |
 
 **Since:** 1.0.0
 
@@ -116,40 +155,40 @@ For example, call this when a user has lifted their finger from a control
 ### Interfaces
 
 
-#### HapticsImpactOptions
+#### ImpactOptions
 
-| Prop        | Type                                                              | Description                                                                                                                                                                              | Default                               | Since |
-| ----------- | ----------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------- | ----- |
-| **`style`** | <code><a href="#hapticsimpactstyle">HapticsImpactStyle</a></code> | Impact Feedback Style The mass of the objects in the collision simulated by a [UIImpactFeedbackGenerator](https://developer.apple.com/documentation/uikit/uiimpactfeedbackstyle) object. | <code>HapticsImpactStyle.Heavy</code> | 1.0.0 |
+| Prop        | Type                                                | Description                                                                                                                                                                              | Default                        | Since |
+| ----------- | --------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------ | ----- |
+| **`style`** | <code><a href="#impactstyle">ImpactStyle</a></code> | Impact Feedback Style The mass of the objects in the collision simulated by a [UIImpactFeedbackGenerator](https://developer.apple.com/documentation/uikit/uiimpactfeedbackstyle) object. | <code>ImpactStyle.Heavy</code> | 1.0.0 |
 
 
-#### HapticsNotificationOptions
+#### NotificationOptions
 
-| Prop       | Type                                                                        | Description                                                                                                                                                                                       | Default                                      | Since |
-| ---------- | --------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------- | ----- |
-| **`type`** | <code><a href="#hapticsnotificationtype">HapticsNotificationType</a></code> | Notification Feedback Type The type of notification feedback generated by a [UINotificationFeedbackGenerator](https://developer.apple.com/documentation/uikit/uinotificationfeedbacktype) object. | <code>HapticsNotificationType.SUCCESS</code> | 1.0.0 |
+| Prop       | Type                                                          | Description                                                                                                                                                                                       | Default                               | Since |
+| ---------- | ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------- | ----- |
+| **`type`** | <code><a href="#notificationtype">NotificationType</a></code> | Notification Feedback Type The type of notification feedback generated by a [UINotificationFeedbackGenerator](https://developer.apple.com/documentation/uikit/uinotificationfeedbacktype) object. | <code>NotificationType.SUCCESS</code> | 1.0.0 |
 
 
 #### VibrateOptions
 
-| Prop           | Type                | Description                                                      | Default          | Since |
-| -------------- | ------------------- | ---------------------------------------------------------------- | ---------------- | ----- |
-| **`duration`** | <code>number</code> | Duration of the vibration in milliseconds. Not supported in iOS. | <code>300</code> | 1.0.0 |
+| Prop           | Type                | Description                                | Default          | Since |
+| -------------- | ------------------- | ------------------------------------------ | ---------------- | ----- |
+| **`duration`** | <code>number</code> | Duration of the vibration in milliseconds. | <code>300</code> | 1.0.0 |
 
 
 ### Enums
 
 
-#### HapticsImpactStyle
+#### ImpactStyle
 
 | Members      | Value                 | Description                                                  | Since |
 | ------------ | --------------------- | ------------------------------------------------------------ | ----- |
-| **`Heavy`**  | <code>'HEAVY'</code>  | A collision between small, light user interface elements     | 1.0.0 |
+| **`Heavy`**  | <code>'HEAVY'</code>  | A collision between large, heavy user interface elements     | 1.0.0 |
 | **`Medium`** | <code>'MEDIUM'</code> | A collision between moderately sized user interface elements | 1.0.0 |
 | **`Light`**  | <code>'LIGHT'</code>  | A collision between small, light user interface elements     | 1.0.0 |
 
 
-#### HapticsNotificationType
+#### NotificationType
 
 | Members       | Value                  | Description                                                                    | Since |
 | ------------- | ---------------------- | ------------------------------------------------------------------------------ | ----- |

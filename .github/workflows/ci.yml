@@ -1,50 +1,114 @@
 name: CI
-
 on:
   push:
     branches:
-      - '**'
+      - main
   pull_request:
     branches:
       - '**'
 
 jobs:
   setup:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-12]
     timeout-minutes: 30
     outputs:
-      plugins: ${{ steps['set-plugins'].outputs.plugins }}
-      changed-directories: ${{ steps['set-changed-directories'].outputs['changed-directories'] }}
+      plugins: ${{ steps.packages.outputs.paths }}
     steps:
-      - uses: actions/checkout@v2
-      - id: files
-        uses: jitterbit/get-changed-files@b17fbb00bdc0c0f63fcf166580804b4d2cdc2a42
-        if: ${{ github.event_name != 'push' || github.event.before != '0000000000000000000000000000000000000000' }}
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@ce177499ccf9fd2aded3b0426c97e5434c2e8a73
         with:
-          format: 'json'
-      - id: set-plugins
-        run: echo "::set-output name=plugins::$(jq -cM .packages lerna.json)"
-      - id: set-changed-directories
-        run: echo "::set-output name=changed-directories::$(echo ${{ toJson(steps.files.outputs.all) }} | jq -cM 'map(split("/")) | map(.[0])')"
-        if: ${{ steps.files.outputs.all }}
-  lint:
-    runs-on: macos-latest
-    timeout-minutes: 30
-    steps:
-      - run: brew install swiftlint
-      - uses: actions/setup-node@v1
+          access_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Get Latest
+        uses: actions/setup-node@v3
         with:
-          node-version: 14.x
-      - uses: actions/checkout@v2
+          node-version: 18.x
+      - name: NPM ^9.5.0
+        run: npm i -g npm@^9.5.0 --registry=https://registry.npmjs.org
+      - uses: actions/checkout@v3
       - name: Restore Dependency Cache
-        uses: actions/cache@v1
+        id: cache-modules
+        uses: actions/cache@v3
         with:
-          path: ~/.npm
-          key: ${{ runner.OS }}-dependency-cache-${{ hashFiles('**/package.json') }}
+          path: |
+            node_modules
+            */node_modules
+          key: ${{ runner.os }}-dependency-caching-${{ hashFiles('package.json', '*/package.json') }}
+      - run: npm install
+      - id: files
+        uses: tj-actions/changed-files@v37
+        with:
+          json: true
+          write_output_files: true
+      - id: catjson
+        run: |
+          echo "FILES_JSON=$(cat .github/outputs/all_changed_files.json)" >> $GITHUB_OUTPUT
+      - id: packages
+        uses: ./.github/actions/changed-packages
+        with:
+         files: ${{ steps.catjson.outputs.FILES_JSON }}
+
+  lint:
+    runs-on: macos-12
+    timeout-minutes: 30
+    needs:
+      - setup
+    steps:
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+      - name: NPM ^9.5.0
+        run: npm i -g npm@^9.5.0 --registry=https://registry.npmjs.org
+      - uses: actions/checkout@v3
+      - name: Restore Dependency Cache
+        id: cache-modules
+        uses: actions/cache@v3
+        with:
+          path: |
+            node_modules
+            */node_modules
+          key: ${{ runner.os }}-dependency-caching-${{ hashFiles('package.json', '*/package.json') }}
       - run: npm install
       - run: npm run lint
-  verify:
-    runs-on: macos-latest
+
+  verify-ios:
+    runs-on: macos-12
+    if: needs.setup.outputs.plugins != '[]'
+    timeout-minutes: 30
+    needs:
+      - setup
+      - lint
+    strategy:
+      matrix:
+        xcode:
+        - /Applications/Xcode_14.2.app
+        plugin: ${{ fromJson(needs.setup.outputs.plugins) }}
+    steps:
+      - run: sudo xcode-select --switch ${{ matrix.xcode }}
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+      - name: NPM ^9.5.0
+        run: npm i -g npm@^9.5.0 --registry=https://registry.npmjs.org
+      - uses: actions/checkout@v3
+      - name: Restore Dependency Cache
+        id: cache-modules
+        uses: actions/cache@v3
+        with:
+          path: |
+            node_modules
+            */node_modules
+          key: ${{ runner.os }}-dependency-caching-${{ hashFiles('package.json', '*/package.json') }}
+      - run: npm install
+      - run: npm run set-podfiles-for-monorepo
+      - run: npm run verify:ios
+        working-directory: ${{ matrix.plugin }}
+
+  verify-android:
+    runs-on: ubuntu-latest
+    if: needs.setup.outputs.plugins != '[]'
     timeout-minutes: 30
     needs:
       - setup
@@ -53,38 +117,84 @@ jobs:
       matrix:
         plugin: ${{ fromJson(needs.setup.outputs.plugins) }}
     steps:
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@v3
         with:
-          node-version: 14.x
-      - uses: actions/checkout@v2
+          node-version: 18.x
+      - name: set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'zulu'
+      - name: NPM ^9.5.0
+        run: npm i -g npm@^9.5.0 --registry=https://registry.npmjs.org
+      - uses: actions/checkout@v3
       - name: Restore Dependency Cache
-        uses: actions/cache@v1
+        id: cache-modules
+        uses: actions/cache@v3
         with:
-          path: ~/.npm
-          key: ${{ runner.OS }}-dependency-cache-${{ hashFiles('**/package.json') }}
+          path: |
+            node_modules
+            */node_modules
+          key: ${{ runner.os }}-dependency-caching-${{ hashFiles('package.json', '*/package.json') }}
       - run: npm install
-      - run: npm run verify
+      - run: npm run set-settings-gradle-for-monorepo
+      - run: npm run verify:android
         working-directory: ${{ matrix.plugin }}
-        if: ${{ needs.setup.outputs['changed-directories'] && contains(needs.setup.outputs['changed-directories'], matrix.plugin) }}
-  deploy:
-    runs-on: macos-latest
-    if: ${{ github.ref == 'refs/heads/main' }}
+
+  verify-web:
+    runs-on: ubuntu-latest
+    if: needs.setup.outputs.plugins != '[]'
     timeout-minutes: 30
     needs:
+      - setup
       - lint
-      - verify
+    strategy:
+      matrix:
+        plugin: ${{ fromJson(needs.setup.outputs.plugins) }}
     steps:
-      - run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >> ~/.npmrc
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@v3
         with:
-          node-version: 14.x
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
+          node-version: 18.x
+      - name: NPM ^9.5.0
+        run: npm i -g npm@^9.5.0 --registry=https://registry.npmjs.org
+      - uses: actions/checkout@v3
       - name: Restore Dependency Cache
-        uses: actions/cache@v1
+        id: cache-modules
+        uses: actions/cache@v3
         with:
-          path: ~/.npm
-          key: ${{ runner.OS }}-dependency-cache-${{ hashFiles('**/package.json') }}
+          path: |
+            node_modules
+            */node_modules
+          key: ${{ runner.os }}-dependency-caching-${{ hashFiles('package.json', '*/package.json') }}
       - run: npm install
-      - run: npx lerna publish from-git --yes
+      - run: npm run verify:web
+        working-directory: ${{ matrix.plugin }}
+
+# deploy:
+#   runs-on: macos-latest
+#   if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+#   timeout-minutes: 30
+#   needs:
+#     - setup
+#     - lint
+#     - verify-ios
+#     - verify-android
+#     - verify-web
+#   steps:
+#     - uses: actions/setup-node@v1
+#       with:
+#         node-version: 14.x
+#     - uses: actions/checkout@v2
+#       with:
+#         fetch-depth: 0
+#     - name: Restore Dependency Cache
+#       id: cache-modules
+#       uses: actions/cache@v2
+#       with:
+#         path: |
+#           node_modules
+#           */node_modules
+#         key: dependency-cache-${{ hashFiles('package.json', '*/package.json') }}
+#     - run: npm install
+#     - run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >> .npmrc
+#     - run: npx lerna publish from-git --yes

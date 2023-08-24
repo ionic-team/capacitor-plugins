@@ -2,6 +2,25 @@
 
 The Text Zoom API provides the ability to change Web View text size for visual accessibility.
 
+**Note:** text-zoom plugin won't work on iPads unless `preferredContentMode` configuration is set to `mobile` in your [Capacitor configuration file](https://capacitorjs.com/docs/config).
+
+```json
+{
+  "ios": {
+    "preferredContentMode": "mobile"
+  }
+}
+```
+
+## Install
+
+```bash
+npm install @capacitor/text-zoom
+npx cap sync
+```
+
+## API
+
 <docgen-index>
 
 * [`get()`](#get)
@@ -14,19 +33,17 @@ The Text Zoom API provides the ability to change Web View text size for visual a
 <docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
 
-## API
-
 ### get()
 
 ```typescript
-get() => Promise<GetResponse>
+get() => Promise<GetResult>
 ```
 
 Get the current zoom level.
 
 Zoom levels are represented as a decimal (e.g. 1.2 is 120%).
 
-**Returns:** <code>Promise&lt;<a href="#getresponse">GetResponse</a>&gt;</code>
+**Returns:** <code>Promise&lt;<a href="#getresult">GetResult</a>&gt;</code>
 
 **Since:** 1.0.0
 
@@ -36,14 +53,14 @@ Zoom levels are represented as a decimal (e.g. 1.2 is 120%).
 ### getPreferred()
 
 ```typescript
-getPreferred() => Promise<GetPreferredResponse>
+getPreferred() => Promise<GetPreferredResult>
 ```
 
 Get the preferred zoom level.
 
 Zoom levels are represented as a decimal (e.g. 1.2 is 120%).
 
-**Returns:** <code>Promise&lt;<a href="#getpreferredresponse">GetPreferredResponse</a>&gt;</code>
+**Returns:** <code>Promise&lt;<a href="#getpreferredresult">GetPreferredResult</a>&gt;</code>
 
 **Since:** 1.0.0
 
@@ -72,14 +89,14 @@ Zoom levels are represented as a decimal (e.g. 1.2 is 120%).
 ### Interfaces
 
 
-#### GetResponse
+#### GetResult
 
 | Prop        | Type                | Description                                        | Since |
 | ----------- | ------------------- | -------------------------------------------------- | ----- |
 | **`value`** | <code>number</code> | The current zoom level (represented as a decimal). | 1.0.0 |
 
 
-#### GetPreferredResponse
+#### GetPreferredResult
 
 | Prop        | Type                | Description                                          | Since |
 | ----------- | ------------------- | ---------------------------------------------------- | ----- |

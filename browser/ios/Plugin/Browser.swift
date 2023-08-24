@@ -6,7 +6,7 @@ import SafariServices
     case finished
 }
 
-@objc public class Browser: NSObject, SFSafariViewControllerDelegate {
+@objc public class Browser: NSObject, SFSafariViewControllerDelegate, UIPopoverPresentationControllerDelegate {
     private var safariViewController: SFSafariViewController?
     public typealias BrowserEventCallback = (BrowserEvent) -> Void
 
@@ -23,6 +23,11 @@ import SafariServices
                 safariVC.preferredBarTintColor = color
             }
             safariVC.modalPresentationStyle = style
+            if style == .popover {
+                DispatchQueue.main.async {
+                    safariVC.popoverPresentationController?.delegate = self
+                }
+            }
             safariViewController = safariVC
             return true
         }
@@ -40,5 +45,15 @@ import SafariServices
 
     public func safariViewController(_ controller: SFSafariViewController, didCompleteInitialLoad didLoadSuccessfully: Bool) {
         browserEventDidOccur?(.loaded)
+    }
+
+    public func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        browserEventDidOccur?(.finished)
+        safariViewController = nil
+    }
+
+    public func popoverPresentationControllerDidDismissPopover(_ popoverPresentationController: UIPopoverPresentationController) {
+        browserEventDidOccur?(.finished)
+        safariViewController = nil
     }
 }

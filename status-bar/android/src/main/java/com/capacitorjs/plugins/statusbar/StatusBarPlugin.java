@@ -1,13 +1,14 @@
 package com.capacitorjs.plugins.statusbar;
 
-import android.graphics.Color;
 import com.getcapacitor.JSObject;
-import com.getcapacitor.NativePlugin;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
+import com.getcapacitor.annotation.CapacitorPlugin;
+import com.getcapacitor.util.WebColor;
+import java.util.Locale;
 
-@NativePlugin(name = "StatusBar")
+@CapacitorPlugin(name = "StatusBar")
 public class StatusBarPlugin extends Plugin {
 
     private StatusBar implementation;
@@ -46,7 +47,7 @@ public class StatusBarPlugin extends Plugin {
             .executeOnMainThread(
                 () -> {
                     try {
-                        final int parsedColor = Color.parseColor(color.toUpperCase());
+                        final int parsedColor = WebColor.parseColor(color.toUpperCase(Locale.ROOT));
                         implementation.setBackgroundColor(parsedColor);
                         call.resolve();
                     } catch (IllegalArgumentException ex) {

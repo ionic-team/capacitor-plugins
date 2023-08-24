@@ -1,24 +1,8 @@
 {
-  "packages": [
-    "action-sheet",
-    "browser",
-    "clipboard",
-    "device",
-    "dialog",
-    "haptics",
-    "keyboard",
-    "motion",
-    "network",
-    "screen-reader",
-    "share",
-    "status-bar",
-    "storage",
-    "text-zoom",
-    "toast"
-  ],
   "command": {
     "bootstrap": {
-      "ci": false
+      "ci": false,
+      "npmClientArgs": ["--no-package-lock"]
     },
     "version": {
       "allowBranch": "main",
@@ -28,5 +12,6 @@
       "tagVersionPrefix": ""
     }
   },
-  "version": "independent"
+  "version": "independent",
+  "$schema": "node_modules/lerna/schemas/lerna-schema.json"
 }

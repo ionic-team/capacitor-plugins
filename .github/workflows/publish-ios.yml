@@ -1,0 +1,32 @@
+name: Publish Native iOS Libraries
+
+on:
+  workflow_dispatch:
+    inputs:
+      plugins:
+        description: 'Specify a set of plugins to publish (as a JSON array, ex: [\"camera\", \"browser\"])'
+        required: true
+jobs:
+  publish-ios:
+    runs-on: macos-12
+    if: github.event.inputs.plugins != '[]'
+    timeout-minutes: 30
+    strategy:
+      matrix:
+        plugin: ${{ fromJson(github.event.inputs.plugins) }}
+    steps:
+      - run: sudo xcode-select --switch /Applications/Xcode_14.2.app
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - uses: actions/checkout@v3
+      - name: Install Cocoapods
+        run: | 
+          gem install cocoapods
+      - name: Deploy to Cocoapods
+        run: |
+          set -eo pipefail
+          npm run publish:cocoapod
+        env:
+          COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
+        working-directory: ${{ matrix.plugin }}

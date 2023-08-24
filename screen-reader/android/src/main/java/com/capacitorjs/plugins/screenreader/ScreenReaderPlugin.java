@@ -1,15 +1,15 @@
 package com.capacitorjs.plugins.screenreader;
 
 import com.getcapacitor.JSObject;
-import com.getcapacitor.NativePlugin;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
+import com.getcapacitor.annotation.CapacitorPlugin;
 
-@NativePlugin(name = "ScreenReader")
+@CapacitorPlugin(name = "ScreenReader")
 public class ScreenReaderPlugin extends Plugin {
 
-    public static final String EVENT_SCREEN_READER_STATE_CHANGE = "screenReaderStateChange";
+    public static final String EVENT_STATE_CHANGE = "stateChange";
     private ScreenReader screenReader;
 
     @Override
@@ -19,7 +19,7 @@ public class ScreenReaderPlugin extends Plugin {
             enabled -> {
                 JSObject ret = new JSObject();
                 ret.put("value", enabled);
-                notifyListeners(EVENT_SCREEN_READER_STATE_CHANGE, ret);
+                notifyListeners(EVENT_STATE_CHANGE, ret);
             }
         );
     }

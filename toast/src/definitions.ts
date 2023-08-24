@@ -1,10 +1,13 @@
-declare module '@capacitor/core' {
-  interface PluginRegistry {
-    Toast: ToastPlugin;
-  }
+export interface ToastPlugin {
+  /**
+   * Shows a Toast on the screen
+   *
+   * @since 1.0.0
+   */
+  show(options: ShowOptions): Promise<void>;
 }
 
-export interface ToastShowOptions {
+export interface ShowOptions {
   /**
    * Text to display on the Toast
    *
@@ -21,7 +24,9 @@ export interface ToastShowOptions {
   duration?: 'short' | 'long';
 
   /**
-   * Postion of the Toast
+   * Position of the Toast.
+   *
+   * On Android 12 and newer all toasts are shown at the bottom.
    *
    * @default 'bottom'
    * @since 1.0.0
@@ -29,11 +34,8 @@ export interface ToastShowOptions {
   position?: 'top' | 'center' | 'bottom';
 }
 
-export interface ToastPlugin {
-  /**
-   * Shows a Toast on the screen
-   *
-   * @since 1.0.0
-   */
-  show(options: ToastShowOptions): Promise<void>;
-}
+/**
+ * @deprecated Use `ToastShowOptions`.
+ * @since 1.0.0
+ */
+export type ToastShowOptions = ShowOptions;

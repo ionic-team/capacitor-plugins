@@ -1,0 +1,8 @@
+# Temp dir used for publish script log output
+tmp
+
+# Local configuration file (sdk path, etc) for Android plugins publishing
+local.properties
+
+# Gradle cache
+.gradle/

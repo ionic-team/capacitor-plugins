@@ -1,13 +1,14 @@
 package com.capacitorjs.plugins.keyboard;
 
 import android.os.Handler;
+import android.os.Looper;
 import com.getcapacitor.JSObject;
-import com.getcapacitor.NativePlugin;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
+import com.getcapacitor.annotation.CapacitorPlugin;
 
-@NativePlugin(name = "Keyboard")
+@CapacitorPlugin(name = "Keyboard")
 public class KeyboardPlugin extends Plugin {
 
     private Keyboard implementation;
@@ -16,7 +17,8 @@ public class KeyboardPlugin extends Plugin {
     public void load() {
         execute(
             () -> {
-                implementation = new Keyboard(getActivity());
+                boolean resizeOnFullScreen = getConfig().getBoolean("resizeOnFullScreen", false);
+                implementation = new Keyboard(getActivity(), resizeOnFullScreen);
                 implementation.setKeyboardEventListener(this::onKeyboardEvent);
             }
         );
@@ -26,8 +28,8 @@ public class KeyboardPlugin extends Plugin {
     public void show(final PluginCall call) {
         execute(
             () ->
-                new Handler()
-                .postDelayed(
+                new Handler(Looper.getMainLooper())
+                    .postDelayed(
                         () -> {
                             implementation.show();
                             call.resolve();
@@ -62,6 +64,11 @@ public class KeyboardPlugin extends Plugin {
 
     @PluginMethod
     public void setResizeMode(PluginCall call) {
+        call.unimplemented();
+    }
+
+    @PluginMethod
+    public void getResizeMode(PluginCall call) {
         call.unimplemented();
     }
 

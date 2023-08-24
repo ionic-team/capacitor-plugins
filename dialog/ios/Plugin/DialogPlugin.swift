@@ -8,11 +8,11 @@ import Capacitor
 public class DialogPlugin: CAPPlugin {
 
     @objc public func alert(_ call: CAPPluginCall) {
-        guard let title = call.options["title"] as? String else {
-            call.reject("title must be provided")
+        let title = call.options["title"] as? String
+        guard let message = call.options["message"] as? String else {
+            call.reject("Please provide a message for the dialog")
             return
         }
-        let message = call.options["message"] as? String
         let buttonTitle = call.options["buttonTitle"] as? String ?? "OK"
 
         DispatchQueue.main.async { [weak self] in
@@ -25,24 +25,24 @@ public class DialogPlugin: CAPPlugin {
     }
 
     @objc public func confirm(_ call: CAPPluginCall) {
-        guard let title = call.options["title"] as? String else {
-            call.reject("title must be provided")
+        let title = call.options["title"] as? String
+        guard let message = call.options["message"] as? String else {
+            call.reject("Please provide a message for the dialog")
             return
         }
-        let message = call.options["message"] as? String ?? ""
         let okButtonTitle = call.options["okButtonTitle"] as? String ?? "OK"
         let cancelButtonTitle = call.options["cancelButtonTitle"] as? String ?? "Cancel"
 
         DispatchQueue.main.async { [weak self] in
             let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertController.Style.alert)
-            alert.addAction(UIAlertAction(title: okButtonTitle, style: UIAlertAction.Style.default, handler: { (_) -> Void in
-                call.resolve([
-                    "value": true
-                ])
-            }))
             alert.addAction(UIAlertAction(title: cancelButtonTitle, style: UIAlertAction.Style.default, handler: { (_) -> Void in
                 call.resolve([
                     "value": false
+                ])
+            }))
+            alert.addAction(UIAlertAction(title: okButtonTitle, style: UIAlertAction.Style.default, handler: { (_) -> Void in
+                call.resolve([
+                    "value": true
                 ])
             }))
             self?.bridge?.viewController?.present(alert, animated: true, completion: nil)
@@ -50,11 +50,11 @@ public class DialogPlugin: CAPPlugin {
     }
 
     @objc public func prompt (_ call: CAPPluginCall) {
-        guard let title = call.options["title"] as? String else {
-            call.reject("title must be provided")
+        let title = call.options["title"] as? String
+        guard let message = call.options["message"] as? String else {
+            call.reject("Please provide a message for the dialog")
             return
         }
-        let message = call.options["message"] as? String ?? ""
         let okButtonTitle = call.options["okButtonTitle"] as? String ?? "OK"
         let cancelButtonTitle = call.options["cancelButtonTitle"] as? String ?? "Cancel"
         let inputPlaceholder = call.options["inputPlaceholder"] as? String ?? ""
@@ -68,17 +68,17 @@ public class DialogPlugin: CAPPlugin {
                 textField.text = inputText
             }
 
+            alert.addAction(UIAlertAction(title: cancelButtonTitle, style: UIAlertAction.Style.default, handler: { (_) -> Void in
+                call.resolve([
+                    "value": "",
+                    "cancelled": true
+                ])
+            }))
             alert.addAction(UIAlertAction(title: okButtonTitle, style: UIAlertAction.Style.default, handler: { (_) -> Void in
                 let textField = alert.textFields?[0]
                 call.resolve([
                     "value": textField?.text ?? "",
                     "cancelled": false
-                ])
-            }))
-            alert.addAction(UIAlertAction(title: cancelButtonTitle, style: UIAlertAction.Style.default, handler: { (_) -> Void in
-                call.resolve([
-                    "value": "",
-                    "cancelled": true
                 ])
             }))
 

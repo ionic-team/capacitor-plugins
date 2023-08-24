@@ -1,18 +1,14 @@
 import { WebPlugin } from '@capacitor/core';
 
 import type {
-  ActionSheetOptions,
   ActionSheetPlugin,
-  ActionSheetResult,
+  ShowActionsResult,
+  ShowActionsOptions,
 } from './definitions';
 
 export class ActionSheetWeb extends WebPlugin implements ActionSheetPlugin {
-  constructor() {
-    super({ name: 'ActionSheet' });
-  }
-
-  async showActions(options: ActionSheetOptions): Promise<ActionSheetResult> {
-    return new Promise<ActionSheetResult>((resolve, _reject) => {
+  async showActions(options: ShowActionsOptions): Promise<ShowActionsResult> {
+    return new Promise<ShowActionsResult>((resolve, _reject) => {
       let actionSheet: any = document.querySelector('pwa-action-sheet');
       if (!actionSheet) {
         actionSheet = document.createElement('pwa-action-sheet');

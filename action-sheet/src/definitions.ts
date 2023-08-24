@@ -1,16 +1,10 @@
-declare module '@capacitor/core' {
-  interface PluginRegistry {
-    ActionSheet: ActionSheetPlugin;
-  }
-}
-
-export interface ActionSheetOptions {
+export interface ShowActionsOptions {
   /**
    * The title of the Action Sheet.
    *
    * @since 1.0.0
    */
-  title: string;
+  title?: string;
 
   /**
    * A message to show under the title.
@@ -26,10 +20,10 @@ export interface ActionSheetOptions {
    *
    * @since 1.0.0
    */
-  options: ActionSheetOption[];
+  options: ActionSheetButton[];
 }
 
-export enum ActionSheetOptionStyle {
+export enum ActionSheetButtonStyle {
   /**
    * Default style of the option.
    *
@@ -53,7 +47,7 @@ export enum ActionSheetOptionStyle {
   Cancel = 'CANCEL',
 }
 
-export interface ActionSheetOption {
+export interface ActionSheetButton {
   /**
    * The title of the option
    *
@@ -68,7 +62,7 @@ export interface ActionSheetOption {
    *
    * @since 1.0.0
    */
-  style?: ActionSheetOptionStyle;
+  style?: ActionSheetButtonStyle;
 
   /**
    * Icon for the option (ionicon naming convention)
@@ -80,7 +74,7 @@ export interface ActionSheetOption {
   icon?: string;
 }
 
-export interface ActionSheetResult {
+export interface ShowActionsResult {
   /**
    * The index of the clicked option (Zero-based)
    *
@@ -96,5 +90,29 @@ export interface ActionSheetPlugin {
    *
    * @since 1.0.0
    */
-  showActions(options: ActionSheetOptions): Promise<ActionSheetResult>;
+  showActions(options: ShowActionsOptions): Promise<ShowActionsResult>;
 }
+
+/**
+ * @deprecated Use `ShowActionsOptions`.
+ * @since 1.0.0
+ */
+export type ActionSheetOptions = ShowActionsOptions;
+
+/**
+ * @deprecated Use `ShowActionsResult`.
+ * @since 1.0.0
+ */
+export type ActionSheetResult = ShowActionsResult;
+
+/**
+ * @deprecated Use `ActionSheetButton`.
+ * @since 1.0.0
+ */
+export type ActionSheetOption = ActionSheetButton;
+
+/**
+ * @deprecated Use `ActionSheetButtonStyle`.
+ * @since 1.0.0
+ */
+export const ActionSheetOptionStyle = ActionSheetButtonStyle;

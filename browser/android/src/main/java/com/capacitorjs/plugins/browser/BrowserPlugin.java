@@ -1,20 +1,19 @@
 package com.capacitorjs.plugins.browser;
 
-import android.graphics.Color;
+import android.content.ActivityNotFoundException;
 import android.net.Uri;
 import com.getcapacitor.Logger;
-import com.getcapacitor.NativePlugin;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
-import com.getcapacitor.PluginRequestCodes;
+import com.getcapacitor.annotation.CapacitorPlugin;
+import com.getcapacitor.util.WebColor;
 
-@NativePlugin(name = "Browser", requestCodes = { PluginRequestCodes.BROWSER_OPEN_CHROME_TAB })
+@CapacitorPlugin(name = "Browser")
 public class BrowserPlugin extends Plugin {
 
     private Browser implementation;
 
-    @PluginMethod
     public void load() {
         implementation = new Browser(getContext());
         implementation.setBrowserEventListener(this::onBrowserEvent);
@@ -44,13 +43,19 @@ public class BrowserPlugin extends Plugin {
         String colorString = call.getString("toolbarColor");
         Integer toolbarColor = null;
         if (colorString != null) try {
-            toolbarColor = Color.parseColor(colorString);
+            toolbarColor = WebColor.parseColor(colorString);
         } catch (IllegalArgumentException ex) {
             Logger.error(getLogTag(), "Invalid color provided for toolbarColor. Using default", null);
         }
 
         // open the browser and finish
-        implementation.open(url, toolbarColor);
+        try {
+            implementation.open(url, toolbarColor);
+        } catch (ActivityNotFoundException ex) {
+            Logger.error(getLogTag(), ex.getLocalizedMessage(), null);
+            call.reject("Unable to display URL");
+            return;
+        }
         call.resolve();
     }
 

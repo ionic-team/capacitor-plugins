@@ -1,21 +1,22 @@
-import nodeResolve from '@rollup/plugin-node-resolve';
-
 export default {
   input: 'dist/esm/index.js',
-  output: {
-    file: 'dist/plugin.js',
-    format: 'iife',
-    name: 'capacitorDevice',
-    globals: {
-      '@capacitor/core': 'capacitorExports',
+  output: [
+    {
+      file: 'dist/plugin.js',
+      format: 'iife',
+      name: 'capacitorDevice',
+      globals: {
+        '@capacitor/core': 'capacitorExports',
+      },
+      sourcemap: true,
+      inlineDynamicImports: true,
     },
-    sourcemap: true,
-  },
-  plugins: [
-    nodeResolve({
-      // allowlist of dependencies to bundle in
-      // @see https://github.com/rollup/plugins/tree/HEAD/packages/node-resolve#resolveonly
-      resolveOnly: ['lodash'],
-    }),
+    {
+      file: 'dist/plugin.cjs.js',
+      format: 'cjs',
+      sourcemap: true,
+      inlineDynamicImports: true,
+    },
   ],
+  external: ['@capacitor/core'],
 };

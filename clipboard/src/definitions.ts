@@ -1,23 +1,17 @@
-declare module '@capacitor/core' {
-  interface PluginRegistry {
-    Clipboard: ClipboardPlugin;
-  }
-}
-
 export interface ClipboardPlugin {
   /**
    * Write a value to the clipboard (the "copy" action)
    *
    * @since 1.0.0
    */
-  write(options: ClipboardWriteOptions): Promise<void>;
+  write(options: WriteOptions): Promise<void>;
 
   /**
    * Read a value from the clipboard (the "paste" action)
    *
    * @since 1.0.0
    */
-  read(): Promise<ClipboardReadResult>;
+  read(): Promise<ReadResult>;
 }
 
 /**
@@ -25,7 +19,7 @@ export interface ClipboardPlugin {
  *
  * @since 1.0.0
  */
-export interface ClipboardWriteOptions {
+export interface WriteOptions {
   /**
    * Text value to copy.
    *
@@ -60,7 +54,7 @@ export interface ClipboardWriteOptions {
  *
  * @since 1.0.0
  */
-export interface ClipboardReadResult {
+export interface ReadResult {
   /**
    * Data read from the clipboard.
    *
@@ -75,3 +69,15 @@ export interface ClipboardReadResult {
    */
   type: string;
 }
+
+/**
+ * @deprecated Use `WriteOptions`.
+ * @since 1.0.0
+ */
+export type ClipboardWrite = WriteOptions;
+
+/**
+ * @deprecated Use `ReadResult`.
+ * @since 1.0.0
+ */
+export type ClipboardReadResult = ReadResult;

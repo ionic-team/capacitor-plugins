@@ -2,6 +2,95 @@
 
 The Keyboard API provides keyboard display and visibility control, along with event tracking when the keyboard shows and hides.
 
+## Install
+
+```bash
+npm install @capacitor/keyboard
+npx cap sync
+```
+
+## Example
+
+```typescript
+import { Keyboard } from '@capacitor/keyboard';
+
+Keyboard.addListener('keyboardWillShow', info => {
+  console.log('keyboard will show with height:', info.keyboardHeight);
+});
+
+Keyboard.addListener('keyboardDidShow', info => {
+  console.log('keyboard did show with height:', info.keyboardHeight);
+});
+
+Keyboard.addListener('keyboardWillHide', () => {
+  console.log('keyboard will hide');
+});
+
+Keyboard.addListener('keyboardDidHide', () => {
+  console.log('keyboard did hide');
+});
+```
+
+## Configuration
+
+On iOS, the keyboard can be configured with the following options:
+
+| Prop                     | Type                                                      | Description                                                                                                                                                                                                                                                                                                       | Default             | Since |
+| ------------------------ | --------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- | ----- |
+| **`resize`**             | <code><a href="#keyboardresize">KeyboardResize</a></code> | Configure the way the app is resized when the Keyboard appears. Only available on iOS.                                                                                                                                                                                                                            | <code>native</code> | 1.0.0 |
+| **`style`**              | <code><a href="#keyboardstyle">KeyboardStyle</a></code>   | Override the keyboard style if your app doesn't support dark/light theme changes. If not set, the keyboard style will depend on the device appearance. Only available on iOS.                                                                                                                                     |                     | 1.0.0 |
+| **`resizeOnFullScreen`** | <code>boolean</code>                                      | There is an Android bug that prevents the keyboard from resizing the WebView when the app is in full screen (i.e. if StatusBar plugin is used to overlay the status bar). This setting, if set to true, add a workaround that resizes the WebView even when the app is in full screen. Only available for Android |                     | 1.1.0 |
+
+### Examples
+
+In `capacitor.config.json`:
+
+```json
+{
+  "plugins": {
+    "Keyboard": {
+      "resize": "body",
+      "style": "DARK",
+      "resizeOnFullScreen": true
+    }
+  }
+}
+```
+
+In `capacitor.config.ts`:
+
+```ts
+/// <reference types="@capacitor/keyboard" />
+
+import { CapacitorConfig } from '@capacitor/cli';
+import { KeyboardResize, KeyboardStyle } from '@capacitor/keyboard';
+
+const config: CapacitorConfig = {
+  plugins: {
+    Keyboard: {
+      resize: KeyboardResize.Body,
+      style: KeyboardStyle.Dark,
+      resizeOnFullScreen: true,
+    },
+  },
+};
+
+export default config;
+```
+
+## Compatibility with `cordova-plugin-ionic-keyboard`
+
+To maintain compatibility with
+[`cordova-plugin-ionic-keyboard`](https://github.com/ionic-team/cordova-plugin-ionic-keyboard),
+the following events also work with `window.addEventListener`:
+
+- `keyboardWillShow`
+- `keyboardDidShow`
+- `keyboardWillHide`
+- `keyboardDidHide`
+
+## API
+
 <docgen-index>
 
 * [`show()`](#show)
@@ -10,10 +99,11 @@ The Keyboard API provides keyboard display and visibility control, along with ev
 * [`setScroll(...)`](#setscroll)
 * [`setStyle(...)`](#setstyle)
 * [`setResizeMode(...)`](#setresizemode)
-* [`addListener(...)`](#addlistener)
-* [`addListener(...)`](#addlistener)
-* [`addListener(...)`](#addlistener)
-* [`addListener(...)`](#addlistener)
+* [`getResizeMode()`](#getresizemode)
+* [`addListener('keyboardWillShow', ...)`](#addlistenerkeyboardwillshow)
+* [`addListener('keyboardDidShow', ...)`](#addlistenerkeyboarddidshow)
+* [`addListener('keyboardWillHide', ...)`](#addlistenerkeyboardwillhide)
+* [`addListener('keyboardDidHide', ...)`](#addlistenerkeyboarddidhide)
 * [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
 * [Enums](#enums)
@@ -22,8 +112,6 @@ The Keyboard API provides keyboard display and visibility control, along with ev
 
 <docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
-
-## API
 
 ### show()
 
@@ -130,80 +218,105 @@ This method is only supported on iOS.
 --------------------
 
 
-### addListener(...)
+### getResizeMode()
 
 ```typescript
-addListener(eventName: 'keyboardWillShow', listenerFunc: (info: KeyboardInfo) => void) => PluginListenerHandle
+getResizeMode() => Promise<KeyboardResizeOptions>
+```
+
+Get the currently set resize mode.
+
+This method is only supported on iOS.
+
+**Returns:** <code>Promise&lt;<a href="#keyboardresizeoptions">KeyboardResizeOptions</a>&gt;</code>
+
+**Since:** 4.0.0
+
+--------------------
+
+
+### addListener('keyboardWillShow', ...)
+
+```typescript
+addListener(eventName: 'keyboardWillShow', listenerFunc: (info: KeyboardInfo) => void) => Promise<PluginListenerHandle> & PluginListenerHandle
 ```
 
 Listen for when the keyboard is about to be shown.
 
-| Param              | Type                                      |
-| ------------------ | ----------------------------------------- |
-| **`eventName`**    | <code>"keyboardWillShow"</code>           |
-| **`listenerFunc`** | <code>(info: KeyboardInfo) => void</code> |
+On Android keyboardWillShow and keyboardDidShow fire almost at the same time.
 
-**Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
+| Param              | Type                                                                     |
+| ------------------ | ------------------------------------------------------------------------ |
+| **`eventName`**    | <code>'keyboardWillShow'</code>                                          |
+| **`listenerFunc`** | <code>(info: <a href="#keyboardinfo">KeyboardInfo</a>) =&gt; void</code> |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt; & <a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
 **Since:** 1.0.0
 
 --------------------
 
 
-### addListener(...)
+### addListener('keyboardDidShow', ...)
 
 ```typescript
-addListener(eventName: 'keyboardDidShow', listenerFunc: (info: KeyboardInfo) => void) => PluginListenerHandle
+addListener(eventName: 'keyboardDidShow', listenerFunc: (info: KeyboardInfo) => void) => Promise<PluginListenerHandle> & PluginListenerHandle
 ```
 
 Listen for when the keyboard is shown.
 
-| Param              | Type                                      |
-| ------------------ | ----------------------------------------- |
-| **`eventName`**    | <code>"keyboardDidShow"</code>            |
-| **`listenerFunc`** | <code>(info: KeyboardInfo) => void</code> |
+On Android keyboardWillShow and keyboardDidShow fire almost at the same time.
 
-**Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
+| Param              | Type                                                                     |
+| ------------------ | ------------------------------------------------------------------------ |
+| **`eventName`**    | <code>'keyboardDidShow'</code>                                           |
+| **`listenerFunc`** | <code>(info: <a href="#keyboardinfo">KeyboardInfo</a>) =&gt; void</code> |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt; & <a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
 **Since:** 1.0.0
 
 --------------------
 
 
-### addListener(...)
+### addListener('keyboardWillHide', ...)
 
 ```typescript
-addListener(eventName: 'keyboardWillHide', listenerFunc: () => void) => PluginListenerHandle
+addListener(eventName: 'keyboardWillHide', listenerFunc: () => void) => Promise<PluginListenerHandle> & PluginListenerHandle
 ```
 
 Listen for when the keyboard is about to be hidden.
 
+On Android keyboardWillHide and keyboardDidHide fire almost at the same time.
+
 | Param              | Type                            |
 | ------------------ | ------------------------------- |
-| **`eventName`**    | <code>"keyboardWillHide"</code> |
-| **`listenerFunc`** | <code>() => void</code>         |
+| **`eventName`**    | <code>'keyboardWillHide'</code> |
+| **`listenerFunc`** | <code>() =&gt; void</code>      |
 
-**Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt; & <a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
 **Since:** 1.0.0
 
 --------------------
 
 
-### addListener(...)
+### addListener('keyboardDidHide', ...)
 
 ```typescript
-addListener(eventName: 'keyboardDidHide', listenerFunc: () => void) => PluginListenerHandle
+addListener(eventName: 'keyboardDidHide', listenerFunc: () => void) => Promise<PluginListenerHandle> & PluginListenerHandle
 ```
 
 Listen for when the keyboard is hidden.
 
+On Android keyboardWillHide and keyboardDidHide fire almost at the same time.
+
 | Param              | Type                           |
 | ------------------ | ------------------------------ |
-| **`eventName`**    | <code>"keyboardDidHide"</code> |
-| **`listenerFunc`** | <code>() => void</code>        |
+| **`eventName`**    | <code>'keyboardDidHide'</code> |
+| **`listenerFunc`** | <code>() =&gt; void</code>     |
 
-**Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt; & <a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
 **Since:** 1.0.0
 
@@ -213,7 +326,7 @@ Listen for when the keyboard is hidden.
 ### removeAllListeners()
 
 ```typescript
-removeAllListeners() => void
+removeAllListeners() => Promise<void>
 ```
 
 Remove all native listeners for this plugin.
@@ -228,9 +341,9 @@ Remove all native listeners for this plugin.
 
 #### KeyboardStyleOptions
 
-| Prop        | Type                                                    | Description            | Since |
-| ----------- | ------------------------------------------------------- | ---------------------- | ----- |
-| **`style`** | <code><a href="#keyboardstyle">KeyboardStyle</a></code> | Style of the keyboard. | 1.0.0 |
+| Prop        | Type                                                    | Description            | Default                            | Since |
+| ----------- | ------------------------------------------------------- | ---------------------- | ---------------------------------- | ----- |
+| **`style`** | <code><a href="#keyboardstyle">KeyboardStyle</a></code> | Style of the keyboard. | <code>KeyboardStyle.Default</code> | 1.0.0 |
 
 
 #### KeyboardResizeOptions
@@ -242,9 +355,9 @@ Remove all native listeners for this plugin.
 
 #### PluginListenerHandle
 
-| Prop         | Type                    |
-| ------------ | ----------------------- |
-| **`remove`** | <code>() => void</code> |
+| Prop         | Type                                      |
+| ------------ | ----------------------------------------- |
+| **`remove`** | <code>() =&gt; Promise&lt;void&gt;</code> |
 
 
 #### KeyboardInfo
@@ -259,19 +372,20 @@ Remove all native listeners for this plugin.
 
 #### KeyboardStyle
 
-| Members     | Value                | Description     | Since |
-| ----------- | -------------------- | --------------- | ----- |
-| **`Dark`**  | <code>'DARK'</code>  | Dark keyboard.  | 1.0.0 |
-| **`Light`** | <code>'LIGHT'</code> | Light keyboard. | 1.0.0 |
+| Members       | Value                  | Description                                                                                                                                                                                                                                 | Since |
+| ------------- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`Dark`**    | <code>'DARK'</code>    | Dark keyboard.                                                                                                                                                                                                                              | 1.0.0 |
+| **`Light`**   | <code>'LIGHT'</code>   | Light keyboard.                                                                                                                                                                                                                             | 1.0.0 |
+| **`Default`** | <code>'DEFAULT'</code> | On iOS 13 and newer the keyboard style is based on the device appearance. If the device is using Dark mode, the keyboard will be dark. If the device is using Light mode, the keyboard will be light. On iOS 12 the keyboard will be light. | 1.0.0 |
 
 
 #### KeyboardResize
 
-| Members      | Value                 | Description            | Since |
-| ------------ | --------------------- | ---------------------- | ----- |
-| **`Body`**   | <code>'body'</code>   | Resizes the html body. | 1.0.0 |
-| **`Ionic`**  | <code>'ionic'</code>  | Resizes Ionic app      | 1.0.0 |
-| **`Native`** | <code>'native'</code> | Resizes the WebView.   | 1.0.0 |
-| **`None`**   | <code>'none'</code>   | Don't resize anything. | 1.0.0 |
+| Members      | Value                 | Description                                                                                                          | Since |
+| ------------ | --------------------- | -------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`Body`**   | <code>'body'</code>   | Only the `body` HTML element will be resized. Relative units are not affected, because the viewport does not change. | 1.0.0 |
+| **`Ionic`**  | <code>'ionic'</code>  | Only the `ion-app` HTML element will be resized. Use it only for Ionic Framework apps.                               | 1.0.0 |
+| **`Native`** | <code>'native'</code> | The whole native Web View will be resized when the keyboard shows/hides. This affects the `vh` relative unit.        | 1.0.0 |
+| **`None`**   | <code>'none'</code>   | Neither the app nor the Web View are resized.                                                                        | 1.0.0 |
 
 </docgen-api>
