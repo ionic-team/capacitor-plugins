@@ -173,6 +173,10 @@ export class CapacitorGoogleMapsWeb
     this.maps[_args.id].map.setMapTypeId(mapType);
   }
 
+  public getRawGoogleMapInstance(id: string): google.maps.Map {
+    return this.maps[id].map;
+  }
+
   async enableIndoorMaps(): Promise<void> {
     throw new Error('Method not supported on web.');
   }

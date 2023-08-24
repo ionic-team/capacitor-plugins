@@ -55,6 +55,7 @@ export interface GoogleMapInterface {
    */
   getMapType(): Promise<MapType>;
   setMapType(mapType: MapType): Promise<void>;
+  getRawGoogleMapInstance(): Promise<google.maps.Map>;
   enableIndoorMaps(enabled: boolean): Promise<void>;
   enableTrafficLayer(enabled: boolean): Promise<void>;
   enableAccessibilityElements(enabled: boolean): Promise<void>;
@@ -523,6 +524,10 @@ export class GoogleMap {
       id: this.id,
       mapType,
     });
+  }
+
+  public async getRawGoogleMapInstance(): Promise<google.maps.Map> {
+    return await CapacitorGoogleMaps.getRawGoogleMapInstance(this.id);
   }
 
   /**

@@ -189,6 +189,7 @@ export interface CapacitorGoogleMapsPlugin extends Plugin {
   setCamera(args: CameraArgs): Promise<void>;
   getMapType(args: { id: string }): Promise<{ type: string }>;
   setMapType(args: MapTypeArgs): Promise<void>;
+  getRawGoogleMapInstance(id: string): google.maps.Map;
   enableIndoorMaps(args: IndoorMapArgs): Promise<void>;
   enableTrafficLayer(args: TrafficLayerArgs): Promise<void>;
   enableAccessibilityElements(args: AccElementsArgs): Promise<void>;
