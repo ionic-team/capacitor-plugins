@@ -11,7 +11,6 @@ import {
 import type { Marker } from './definitions';
 import { MapType, LatLngBounds } from './definitions';
 import type {
-  AccElementsArgs,
   AddMarkerArgs,
   CameraArgs,
   AddMarkersArgs,
@@ -19,15 +18,14 @@ import type {
   CreateMapArgs,
   CurrentLocArgs,
   DestroyMapArgs,
-  IndoorMapArgs,
   MapTypeArgs,
   PaddingArgs,
   RemoveMarkerArgs,
   TrafficLayerArgs,
   RemoveMarkersArgs,
-  OnScrollArgs,
   MapBoundsContainsArgs,
   EnableClusteringArgs,
+  FitBoundsArgs,
   MapBoundsExtendArgs,
   AddPolygonsArgs,
   RemovePolygonsArgs,
@@ -138,6 +136,14 @@ export class CapacitorGoogleMapsWeb
     }
   }
 
+  async enableTouch(_args: { id: string }): Promise<void> {
+    this.maps[_args.id].map.setOptions({ gestureHandling: 'auto' });
+  }
+
+  async disableTouch(_args: { id: string }): Promise<void> {
+    this.maps[_args.id].map.setOptions({ gestureHandling: 'none' });
+  }
+
   async setCamera(_args: CameraArgs): Promise<void> {
     // Animation not supported yet...
     this.maps[_args.id].map.moveCamera({
@@ -154,20 +160,20 @@ export class CapacitorGoogleMapsWeb
       if (type === 'roadmap') {
         type = MapType.Normal;
       }
-      return { type };
+      return { type: `${type.charAt(0).toUpperCase()}${type.slice(1)}` };
     }
     throw new Error('Map type is undefined');
   }
 
   async setMapType(_args: MapTypeArgs): Promise<void> {
     let mapType = _args.mapType.toLowerCase();
-    if (mapType === MapType.Normal) {
+    if (_args.mapType === MapType.Normal) {
       mapType = 'roadmap';
     }
     this.maps[_args.id].map.setMapTypeId(mapType);
   }
 
-  async enableIndoorMaps(_args: IndoorMapArgs): Promise<void> {
+  async enableIndoorMaps(): Promise<void> {
     throw new Error('Method not supported on web.');
   }
 
@@ -184,11 +190,11 @@ export class CapacitorGoogleMapsWeb
     }
   }
 
-  async enableAccessibilityElements(_args: AccElementsArgs): Promise<void> {
+  async enableAccessibilityElements(): Promise<void> {
     throw new Error('Method not supported on web.');
   }
 
-  dispatchMapEvent(_args: { id: string }): Promise<void> {
+  dispatchMapEvent(): Promise<void> {
     throw new Error('Method not supported on web.');
   }
 
@@ -246,6 +252,12 @@ export class CapacitorGoogleMapsWeb
         lng: bounds.getNorthEast().lng(),
       },
     });
+  }
+
+  async fitBounds(_args: FitBoundsArgs): Promise<void> {
+    const map = this.maps[_args.id].map;
+    const bounds = this.getLatLngBounds(_args.bounds);
+    map.fitBounds(bounds, _args.padding);
   }
 
   async addMarkers(_args: AddMarkersArgs): Promise<{ ids: string[] }> {
@@ -409,7 +421,15 @@ export class CapacitorGoogleMapsWeb
     this.maps[_args.id].markerClusterer = undefined;
   }
 
-  async onScroll(_args: OnScrollArgs): Promise<void> {
+  async onScroll(): Promise<void> {
+    throw new Error('Method not supported on web.');
+  }
+
+  async onResize(): Promise<void> {
+    throw new Error('Method not supported on web.');
+  }
+
+  async onDisplay(): Promise<void> {
     throw new Error('Method not supported on web.');
   }
 

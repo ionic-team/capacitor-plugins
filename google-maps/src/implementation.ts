@@ -141,7 +141,7 @@ export interface AddMarkersArgs {
   markers: Marker[];
 }
 
-export interface OnScrollArgs {
+export interface MapBoundsArgs {
   id: string;
   mapBounds: {
     x: number;
@@ -163,8 +163,16 @@ export interface EnableClusteringArgs {
   minClusterSize?: number;
 }
 
+export interface FitBoundsArgs {
+  id: string;
+  bounds: LatLngBounds;
+  padding?: number;
+}
+
 export interface CapacitorGoogleMapsPlugin extends Plugin {
   create(options: CreateMapArgs): Promise<void>;
+  enableTouch(args: { id: string }): Promise<void>;
+  disableTouch(args: { id: string }): Promise<void>;
   addMarker(args: AddMarkerArgs): Promise<{ id: string }>;
   addMarkers(args: AddMarkersArgs): Promise<{ ids: string[] }>;
   removeMarker(args: RemoveMarkerArgs): Promise<void>;
@@ -186,9 +194,12 @@ export interface CapacitorGoogleMapsPlugin extends Plugin {
   enableAccessibilityElements(args: AccElementsArgs): Promise<void>;
   enableCurrentLocation(args: CurrentLocArgs): Promise<void>;
   setPadding(args: PaddingArgs): Promise<void>;
-  onScroll(args: OnScrollArgs): Promise<void>;
+  onScroll(args: MapBoundsArgs): Promise<void>;
+  onResize(args: MapBoundsArgs): Promise<void>;
+  onDisplay(args: MapBoundsArgs): Promise<void>;
   dispatchMapEvent(args: { id: string; focus: boolean }): Promise<void>;
   getMapBounds(args: { id: string }): Promise<LatLngBounds>;
+  fitBounds(args: FitBoundsArgs): Promise<void>;
   mapBoundsContains(
     args: MapBoundsContainsArgs,
   ): Promise<{ contains: boolean }>;
