@@ -214,6 +214,9 @@ public class LocalNotificationsPlugin: CAPPlugin {
         content.title = NSString.localizedUserNotificationString(forKey: title, arguments: nil)
         content.body = NSString.localizedUserNotificationString(forKey: body,
                                                                 arguments: nil)
+        if let subtitle = notification["subtitle"] as? String {
+            content.subtitle = NSString.localizedUserNotificationString(forKey: subtitle, arguments: nil)
+        }
 
         content.userInfo = [
             "cap_extra": extra,

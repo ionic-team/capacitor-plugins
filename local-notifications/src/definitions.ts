@@ -520,6 +520,13 @@ export interface LocalNotificationSchema {
   title: string;
 
   /**
+   * The subtitle of the notification.
+   *
+   * @since 4.0.0
+   */
+  subtitle?: string;
+
+  /**
    * The body of the notification, shown below the title.
    *
    * @since 1.0.0
