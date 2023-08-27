@@ -59,10 +59,27 @@ import org.json.JSONException;
     name = "Camera",
     permissions = {
         @Permission(strings = { Manifest.permission.CAMERA }, alias = CameraPlugin.CAMERA),
+        // SDK VERSIONS 29 AND BELOW
         @Permission(
             strings = { Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE },
             alias = CameraPlugin.PHOTOS
-        )
+        ),
+        /*
+        SDK VERSIONS 30-32
+        This alias is a placeholder and the PHOTOS alias will be updated to use this permission
+        so that the end user does not need to explicitly use separate aliases depending
+        on the SDK version.
+         */
+        @Permission(strings = { Manifest.permission.READ_EXTERNAL_STORAGE }, alias = CameraPlugin.READ_EXTERNAL_STORAGE),
+
+        /*
+        SDK VERSIONS 33 AND ABOVE
+        This alias is a placeholder and the PHOTOS alias will be updated to use these permissions
+        so that the end user does not need to explicitly use separate aliases depending
+        on the SDK version.
+         */
+        @Permission(strings = { Manifest.permission.READ_MEDIA_IMAGES }, alias = CameraPlugin.MEDIA)
+
     }
 )
 public class CameraPlugin extends Plugin {
@@ -70,6 +87,8 @@ public class CameraPlugin extends Plugin {
     // Permission alias constants
     static final String CAMERA = "camera";
     static final String PHOTOS = "photos";
+    static final String MEDIA = "media";
+    static final String READ_EXTERNAL_STORAGE = "readExternalStorage";
 
     // Message constants
     private static final String INVALID_RESULT_TYPE_ERROR = "Invalid resultType option";
@@ -193,9 +212,19 @@ public class CameraPlugin extends Plugin {
         return true;
     }
 
-    private boolean checkPhotosPermissions(PluginCall call) {
-        if (getPermissionState(PHOTOS) != PermissionState.GRANTED) {
-            requestPermissionForAlias(PHOTOS, call, "cameraPermissionsCallback");
+     private boolean checkPhotosPermissions(PluginCall call) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+            if (getPermissionState(PHOTOS) != PermissionState.GRANTED) {
+                requestPermissionForAlias(PHOTOS, call, "cameraPermissionsCallback");
+                return false;
+            }
+        } else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+            if (getPermissionState(READ_EXTERNAL_STORAGE) != PermissionState.GRANTED) {
+                requestPermissionForAlias(READ_EXTERNAL_STORAGE, call, "cameraPermissionsCallback");
+                return false;
+            }
+        } else if (getPermissionState(MEDIA) != PermissionState.GRANTED) {
+            requestPermissionForAlias(MEDIA, call, "cameraPermissionsCallback");
             return false;
         }
         return true;
@@ -216,13 +245,41 @@ public class CameraPlugin extends Plugin {
                 Logger.debug(getLogTag(), "User denied camera permission: " + getPermissionState(CAMERA).toString());
                 call.reject(PERMISSION_DENIED_ERROR_CAMERA);
                 return;
-            } else if (settings.getSource() == CameraSource.PHOTOS && getPermissionState(PHOTOS) != PermissionState.GRANTED) {
-                Logger.debug(getLogTag(), "User denied photos permission: " + getPermissionState(PHOTOS).toString());
-                call.reject(PERMISSION_DENIED_ERROR_PHOTOS);
-                return;
+            } else if (settings.getSource() == CameraSource.PHOTOS) {
+                String alias = MEDIA;
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+                    alias = PHOTOS;
+                } else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+                    alias = READ_EXTERNAL_STORAGE;
+                }
+                PermissionState permissionState = getPermissionState(alias);
+                if (permissionState != PermissionState.GRANTED) {
+                    Logger.debug(getLogTag(), "User denied photos permission: " + permissionState.toString());
+                    call.reject(PERMISSION_DENIED_ERROR_PHOTOS);
+                    return;
+                }
             }
             doShow(call);
         }
+    }
+
+    @Override
+    protected void requestPermissionForAliases(@NonNull String[] aliases, @NonNull PluginCall call, @NonNull String callbackName) {
+        // If the SDK version is 33 or higher, use the MEDIA alias permissions instead.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            for (int i = 0; i < aliases.length; i++) {
+                if (aliases[i].equals(PHOTOS)) {
+                    aliases[i] = MEDIA;
+                }
+            }
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            for (int i = 0; i < aliases.length; i++) {
+                if (aliases[i].equals(PHOTOS)) {
+                    aliases[i] = READ_EXTERNAL_STORAGE;
+                }
+            }
+        }
+        super.requestPermissionForAliases(aliases, call, callbackName);
     }
 
     private CameraSettings getSettings(PluginCall call) {
@@ -763,10 +820,20 @@ public class CameraPlugin extends Plugin {
     @Override
     public Map<String, PermissionState> getPermissionStates() {
         Map<String, PermissionState> permissionStates = super.getPermissionStates();
-
         // If Camera is not in the manifest and therefore not required, say the permission is granted
         if (!isPermissionDeclared(CAMERA)) {
             permissionStates.put(CAMERA, PermissionState.GRANTED);
+        }
+
+        // If the SDK version is 30 or higher, update the PHOTOS state to match the MEDIA or READ_EXTERNAL_STORAGE states.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            String alias = READ_EXTERNAL_STORAGE;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                alias = MEDIA;
+            }
+            if (permissionStates.containsKey(alias)) {
+                permissionStates.put(PHOTOS, permissionStates.get(alias));
+            }
         }
 
         return permissionStates;
