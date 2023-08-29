@@ -117,6 +117,7 @@ double stageManagerOffset;
     [self notifyListeners:@"keyboardWillHide" data:nil];
   }];
   [[NSRunLoop currentRunLoop] addTimer:hideTimer forMode:NSRunLoopCommonModes];
+  _keyboardIsVisible = false;
 }
 
 - (void)onKeyboardWillShow:(NSNotification *)notification
@@ -148,9 +149,14 @@ double stageManagerOffset;
   [self resetScrollView];
 
   NSString * data = [NSString stringWithFormat:@"{ 'keyboardHeight': %d }", (int)height];
-  [self.bridge triggerWindowJSEventWithEventName:@"keyboardWillShow" data:data];
-  NSDictionary * kbData = @{@"keyboardHeight": [NSNumber numberWithDouble:height]};
-  [self notifyListeners:@"keyboardWillShow" data:kbData];
+  
+  if (!_keyboardIsVisible) {
+    [self.bridge triggerWindowJSEventWithEventName:@"keyboardWillShow" data:data];
+    NSDictionary * kbData = @{@"keyboardHeight": [NSNumber numberWithDouble:height]};
+    [self notifyListeners:@"keyboardWillShow" data:kbData];
+  }
+  
+  _keyboardIsVisible = true;
 }
 
 - (void)onKeyboardDidShow:(NSNotification *)notification
@@ -161,9 +167,13 @@ double stageManagerOffset;
   [self resetScrollView];
 
   NSString * data = [NSString stringWithFormat:@"{ 'keyboardHeight': %d }", (int)height];
-  [self.bridge triggerWindowJSEventWithEventName:@"keyboardDidShow" data:data];
-  NSDictionary * kbData = @{@"keyboardHeight": [NSNumber numberWithDouble:height]};
-  [self notifyListeners:@"keyboardDidShow" data:kbData];
+  
+  if (!_keyboardIsVisible) {
+    [self.bridge triggerWindowJSEventWithEventName:@"keyboardDidShow" data:data];
+    NSDictionary * kbData = @{@"keyboardHeight": [NSNumber numberWithDouble:height]};
+    [self notifyListeners:@"keyboardDidShow" data:kbData];
+  }
+
 }
 
 - (void)onKeyboardDidHide:(NSNotification *)notification
