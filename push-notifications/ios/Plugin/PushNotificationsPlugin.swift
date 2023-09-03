@@ -194,4 +194,23 @@ public class PushNotificationsPlugin: CAPPlugin {
             "error": error.localizedDescription
         ])
     }
+
+    @objc func openSettings(_ call: CAPPluginCall) {
+        var urlString = UIApplication.openSettingsURLString
+
+        if #available(iOS 16.0, *) {
+            urlString = UIApplication.openNotificationSettingsURLString
+        }
+
+        guard let url = URL(string: urlString) else {
+            call.reject("Can't open settings")
+            return
+        }
+
+        DispatchQueue.main.async {
+            UIApplication.shared.open(url, completionHandler: { success in
+                call.resolve(["success": success])
+            })
+        }
+    }
 }

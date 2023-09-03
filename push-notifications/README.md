@@ -173,6 +173,7 @@ const getDeliveredNotifications = async () => {
 * [`addListener('pushNotificationReceived', ...)`](#addlistenerpushnotificationreceived)
 * [`addListener('pushNotificationActionPerformed', ...)`](#addlistenerpushnotificationactionperformed)
 * [`removeAllListeners()`](#removealllisteners)
+* [`openSettings()`](#opensettings)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
 
@@ -448,6 +449,18 @@ removeAllListeners() => Promise<void>
 Remove all native listeners for this plugin.
 
 **Since:** 1.0.0
+
+--------------------
+
+### openSettings()
+
+```typescript
+openSettings() => Promise<{success: boolean}>
+```
+
+Open native notification settings.
+
+**Since:** 5.0.0
 
 --------------------
 
