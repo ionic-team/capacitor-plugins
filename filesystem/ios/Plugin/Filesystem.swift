@@ -25,11 +25,14 @@ import Capacitor
     public typealias ProgressEmitter = (_ bytes: Int64, _ contentLength: Int64) -> Void
 
     public func readFile(at fileUrl: URL, with encoding: String?) throws -> String {
+        fileUrl.startAccessingSecurityScopedResource()
         if encoding != nil {
             let data = try String(contentsOf: fileUrl, encoding: .utf8)
+            fileUrl.stopAccessingSecurityScopedResource()
             return data
         } else {
             let data = try Data(contentsOf: fileUrl)
+            fileUrl.stopAccessingSecurityScopedResource()
             return data.base64EncodedString()
         }
     }
@@ -187,6 +190,7 @@ import Capacitor
             call.reject("Invalid file path")
             return
         }
+        guard var urlString = call.getString("url") else { throw URLError(.badURL) }
 
         func handleDownload(downloadLocation: URL?, response: URLResponse?, error: Error?) {
             if let error = error {
@@ -196,6 +200,11 @@ import Capacitor
             }
 
             if let httpResponse = response as? HTTPURLResponse {
+                if !(200...299).contains(httpResponse.statusCode) {
+                    CAPLog.print("Error downloading file:", urlString, httpResponse)
+                    call.reject("Error downloading file: \(urlString)", "DOWNLOAD")
+                    return
+                }
                 HttpRequestHandler.setCookiesFromResponse(httpResponse, config)
             }
 
@@ -239,7 +248,6 @@ import Capacitor
             }
         }
 
-        guard var urlString = call.getString("url") else { throw URLError(.badURL) }
         let method = call.getString("method", "GET")
 
         let headers = (call.getObject("headers") ?? [:]) as [String: Any]
