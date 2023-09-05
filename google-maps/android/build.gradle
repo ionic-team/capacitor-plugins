@@ -4,7 +4,7 @@ ext {
     androidxAppCompatVersion = project.hasProperty('androidxAppCompatVersion') ? rootProject.ext.androidxAppCompatVersion : '1.6.1'
     androidxJunitVersion = project.hasProperty('androidxJunitVersion') ? rootProject.ext.androidxJunitVersion : '1.1.5'
     androidxEspressoCoreVersion = project.hasProperty('androidxEspressoCoreVersion') ? rootProject.ext.androidxEspressoCoreVersion : '3.5.1'
-    androidxCoreKTXVersion = project.hasProperty('androidxCoreKTXVersion') ? rootProject.ext.androidxCoreKTXVersion : '1.10.0'
+    androidxCoreKTXVersion = project.hasProperty('androidxCoreKTXVersion') ? rootProject.ext.androidxCoreKTXVersion : '1.10.1'
     googleMapsPlayServicesVersion = project.hasProperty('googleMapsPlayServicesVersion') ? rootProject.ext.googleMapsPlayServicesVersion : '18.1.0'
     googleMapsUtilsVersion = project.hasProperty('googleMapsUtilsVersion') ? rootProject.ext.googleMapsUtilsVersion : '3.4.0'
     googleMapsKtxVersion = project.hasProperty('googleMapsKtxVersion') ? rootProject.ext.googleMapsKtxVersion : '3.4.0'
@@ -13,7 +13,7 @@ ext {
 }
 
 buildscript {
-    ext.kotlin_version = project.hasProperty("kotlin_version") ? rootProject.ext.kotlin_version : '1.8.20'
+    ext.kotlin_version = project.hasProperty("kotlin_version") ? rootProject.ext.kotlin_version : '1.9.10'
     repositories {
         google()
         mavenCentral()
