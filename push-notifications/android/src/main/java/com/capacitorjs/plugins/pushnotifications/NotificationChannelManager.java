@@ -16,8 +16,6 @@ import java.util.List;
 
 public class NotificationChannelManager {
 
-    public static final String FOREGROUND_NOTIFICATION_CHANNEL_ID = "PushDefaultForeground";
-
     private Context context;
     private NotificationManager notificationManager;
     private PluginConfig config;
@@ -26,7 +24,6 @@ public class NotificationChannelManager {
         this.context = context;
         this.notificationManager = manager;
         this.config = config;
-        createForegroundNotificationChannel();
     }
 
     private static String CHANNEL_ID = "id";
@@ -138,37 +135,6 @@ public class NotificationChannelManager {
             call.resolve(result);
         } else {
             call.unavailable();
-        }
-    }
-
-    /**
-     * Create notification channel
-     */
-    public void createForegroundNotificationChannel() {
-        // Create the NotificationChannel only if presentationOptions is defined
-        // Because the channel can't be changed after creation
-        String[] presentation = config.getArray("presentationOptions");
-        if (presentation != null) {
-            // And only on API 26+ because the NotificationChannel class
-            // is new and not in the support library
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                CharSequence name = "Push Notifications Foreground";
-                String description = "Push notifications in foreground";
-                int importance = NotificationManager.IMPORTANCE_HIGH;
-                NotificationChannel channel = new NotificationChannel(FOREGROUND_NOTIFICATION_CHANNEL_ID, name, importance);
-                channel.setDescription(description);
-                if (Arrays.asList(presentation).contains("sound")) {
-                    AudioAttributes audioAttributes = new AudioAttributes.Builder()
-                        .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                        .setUsage(AudioAttributes.USAGE_ALARM)
-                        .build();
-                    channel.setSound(Settings.System.DEFAULT_NOTIFICATION_URI, audioAttributes);
-                }
-                // Register the channel with the system; you can't change the importance
-                // or other notification behaviors after this
-                android.app.NotificationManager notificationManager = context.getSystemService(android.app.NotificationManager.class);
-                notificationManager.createNotificationChannel(channel);
-            }
         }
     }
 }
