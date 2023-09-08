@@ -51,6 +51,27 @@ If no icon is specified Android will use the application icon, but push icon sho
 
 Android Studio has an icon generator you can use to create your Push Notifications icon.
 
+## Push Notification channel
+
+From Android 8.0 (API level 26) and higher, notification channels are supported and recommended. The SDK will derive the `channelId` for incoming push notifications in the following order:
+
+1. **Firstly it will check if the incoming notification has a `channelId` set.**
+   When sending a push notification from either the FCM dashboard, or through their API, it's possible to specify a `channelId`.
+2. **Then it will check for a possible given value in the `AndroidManifest.xml`.**
+   If you prefer to create and use your own default channel, set `default_notification_channel_id` to the ID of your notification channel object as shown; FCM will use this value whenever incoming messages do not explicitly set a notification channel.
+
+```xml
+<meta-data
+    android:name="com.google.firebase.messaging.default_notification_channel_id"
+    android:value="@string/default_notification_channel_id" />
+```
+
+3. **Lastly it will use the fallback `channelId` that the Firebase SDK provides for us.**
+   FCM provides a default notification channel with basic settings out of the box. This channel will be created by the Firebase SDK upon receiving the first push message.
+
+> **Warning**
+> When using option 1 or 2, you are still required to create a notification channel in code with an ID that matches the one used the chosen option. You can use [`createChannel(...)`](#createchannel) for this. If you don't do this, the SDK will fallback to option 3.
+
 ## Push notifications appearance in foreground
 
 <docgen-config>
