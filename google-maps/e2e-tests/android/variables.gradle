@@ -11,6 +11,6 @@ ext {
     androidxJunitVersion = '1.1.5'
     androidxEspressoCoreVersion = '3.5.1'
     cordovaAndroidVersion = '10.1.1'
-    coreSplashScreenVersion = '1.0.1'
+    coreSplashScreenVersion = '1.0.0'
     junitVersion = '4.13.2'
 }
