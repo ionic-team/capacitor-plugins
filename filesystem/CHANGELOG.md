@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.1.4](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@5.1.3...@capacitor/filesystem@5.1.4) (2023-09-14)
+
+**Note:** Version bump only for package @capacitor/filesystem
+
 ## [5.1.3](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@5.1.2...@capacitor/filesystem@5.1.3) (2023-08-23)
 
 ### Bug Fixes
