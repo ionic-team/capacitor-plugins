@@ -3,6 +3,60 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.6](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/push-notifications@5.0.5...@capacitor/push-notifications@5.0.6) (2023-07-12)
+
+
+### Bug Fixes
+
+* **push-notifications:** make requestPermissions resolve if granted ([#1677](https://github.com/ionic-team/capacitor-plugins/issues/1677)) ([798f788](https://github.com/ionic-team/capacitor-plugins/commit/798f788452f1f21e868cbab32743db3875d930e9))
+
+
+
+
+
+## [5.0.5](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/push-notifications@5.0.4...@capacitor/push-notifications@5.0.5) (2023-06-29)
+
+**Note:** Version bump only for package @capacitor/push-notifications
+
+
+
+
+
+## [5.0.4](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/push-notifications@5.0.3...@capacitor/push-notifications@5.0.4) (2023-06-08)
+
+**Note:** Version bump only for package @capacitor/push-notifications
+
+
+
+
+
+## [5.0.3](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/push-notifications@5.0.2...@capacitor/push-notifications@5.0.3) (2023-06-08)
+
+**Note:** Version bump only for package @capacitor/push-notifications
+
+
+
+
+
+## [5.0.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/push-notifications@5.0.1...@capacitor/push-notifications@5.0.2) (2023-05-09)
+
+**Note:** Version bump only for package @capacitor/push-notifications
+
+
+
+
+
+## [5.0.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/push-notifications@5.0.0...@capacitor/push-notifications@5.0.1) (2023-05-05)
+
+
+### Bug Fixes
+
+* Use Capacitor 5 final ([#1574](https://github.com/ionic-team/capacitor-plugins/issues/1574)) ([139c18b](https://github.com/ionic-team/capacitor-plugins/commit/139c18b86a11d31246e952d1a74335ff8ce5dbc2))
+
+
+
+
+
 # [5.0.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/push-notifications@5.0.0-beta.1...@capacitor/push-notifications@5.0.0) (2023-05-03)
 
 **Note:** Version bump only for package @capacitor/push-notifications

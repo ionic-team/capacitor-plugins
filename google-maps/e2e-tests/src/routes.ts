@@ -4,12 +4,14 @@ import PolylineMapPage from './pages/Drawing/Polylines';
 import BoundsMapPage from './pages/Map/Bounds';
 import ConfigMapPage from './pages/Map/ConfigMap';
 import CreateAndDestroyMapPage from './pages/Map/CreateAndDestroyMap';
+import LocalizationPage from './pages/Map/Localization';
 import AddAndRemoveMarkers from './pages/Markers/AddAndRemoveMarkers';
 import MarkerCustomizations from './pages/Markers/MarkerCustomizations';
 import MultipleMarkers from './pages/Markers/MultipleMarkers';
 import SimpleScrollingPage from './pages/Scrolling/SimpleScrolling';
 import PolygonMapPage from './pages/Drawing/Polygons';
 import CircleMapPage from './pages/Drawing/Circles';
+import ResizeMapPage from './pages/Map/ResizeMap';
 
 export type RouteDescription = {
   title: string;
@@ -36,6 +38,13 @@ const routesList: RouteGroup[] = [
         component: CreateAndDestroyMapPage,
       },
       {
+        title: 'Map Localization',
+        url: '/maps/localization',
+        iosIcon: triangleOutline,
+        mdIcon: triangleSharp,
+        component: LocalizationPage,
+      },
+      {
         title: 'Config Maps',
         url: '/maps/config',
         iosIcon: triangleOutline,
@@ -55,6 +64,13 @@ const routesList: RouteGroup[] = [
         iosIcon: triangleOutline,
         mdIcon: triangleSharp,
         component: SimpleScrollingPage,
+      },
+      {
+        title: 'Resize Map',
+        url: '/maps/resize',
+        iosIcon: triangleOutline,
+        mdIcon: triangleSharp,
+        component: ResizeMapPage,
       },
     ],
   },
@@ -81,34 +97,35 @@ const routesList: RouteGroup[] = [
         iosIcon: triangleOutline,
         mdIcon: triangleSharp,
         component: MarkerCustomizations,
-      }
-    ]
+      },
+    ],
   },
   {
-    groupName: "Drawing",
+    groupName: 'Drawing',
     pages: [
       {
-        title: "Polygons",
-        url: "/drawing/polygons",
+        title: 'Polygons',
+        url: '/drawing/polygons',
         iosIcon: triangleOutline,
         mdIcon: triangleSharp,
         component: PolygonMapPage,
       },
       {
-        title: "Circles",
-        url: "/drawing/circles",
+        title: 'Circles',
+        url: '/drawing/circles',
         iosIcon: triangleOutline,
         mdIcon: triangleSharp,
         component: CircleMapPage,
-      }, {
+      },
+      {
         title: 'Polylines',
         url: '/drawing/polylines',
         iosIcon: triangleOutline,
         mdIcon: triangleSharp,
         component: PolylineMapPage,
-      }
-    ]
-  }
+      },
+    ],
+  },
 ];
 
 export function getRouterSetup(): RouteDescription[] {

@@ -11,7 +11,6 @@ import {
 import type { Marker } from './definitions';
 import { MapType, LatLngBounds } from './definitions';
 import type {
-  AccElementsArgs,
   AddMarkerArgs,
   CameraArgs,
   AddMarkersArgs,
@@ -19,15 +18,14 @@ import type {
   CreateMapArgs,
   CurrentLocArgs,
   DestroyMapArgs,
-  IndoorMapArgs,
   MapTypeArgs,
   PaddingArgs,
   RemoveMarkerArgs,
   TrafficLayerArgs,
   RemoveMarkersArgs,
-  OnScrollArgs,
   MapBoundsContainsArgs,
   EnableClusteringArgs,
+  FitBoundsArgs,
   MapBoundsExtendArgs,
   AddPolygonsArgs,
   RemovePolygonsArgs,
@@ -118,18 +116,32 @@ export class CapacitorGoogleMapsWeb
     return '';
   }
 
-  private async importGoogleLib(apiKey: string) {
+  private async importGoogleLib(
+    apiKey: string,
+    region?: string,
+    language?: string,
+  ) {
     if (this.gMapsRef === undefined) {
       const lib = await import('@googlemaps/js-api-loader');
       const loader = new lib.Loader({
         apiKey: apiKey ?? '',
         version: 'weekly',
         libraries: ['places'],
+        language,
+        region,
       });
       const google = await loader.load();
       this.gMapsRef = google.maps;
       console.log('Loaded google maps API');
     }
+  }
+
+  async enableTouch(_args: { id: string }): Promise<void> {
+    this.maps[_args.id].map.setOptions({ gestureHandling: 'auto' });
+  }
+
+  async disableTouch(_args: { id: string }): Promise<void> {
+    this.maps[_args.id].map.setOptions({ gestureHandling: 'none' });
   }
 
   async setCamera(_args: CameraArgs): Promise<void> {
@@ -148,20 +160,20 @@ export class CapacitorGoogleMapsWeb
       if (type === 'roadmap') {
         type = MapType.Normal;
       }
-      return { type };
+      return { type: `${type.charAt(0).toUpperCase()}${type.slice(1)}` };
     }
     throw new Error('Map type is undefined');
   }
 
   async setMapType(_args: MapTypeArgs): Promise<void> {
     let mapType = _args.mapType.toLowerCase();
-    if (mapType === MapType.Normal) {
+    if (_args.mapType === MapType.Normal) {
       mapType = 'roadmap';
     }
     this.maps[_args.id].map.setMapTypeId(mapType);
   }
 
-  async enableIndoorMaps(_args: IndoorMapArgs): Promise<void> {
+  async enableIndoorMaps(): Promise<void> {
     throw new Error('Method not supported on web.');
   }
 
@@ -178,11 +190,11 @@ export class CapacitorGoogleMapsWeb
     }
   }
 
-  async enableAccessibilityElements(_args: AccElementsArgs): Promise<void> {
+  async enableAccessibilityElements(): Promise<void> {
     throw new Error('Method not supported on web.');
   }
 
-  dispatchMapEvent(_args: { id: string }): Promise<void> {
+  dispatchMapEvent(): Promise<void> {
     throw new Error('Method not supported on web.');
   }
 
@@ -240,6 +252,12 @@ export class CapacitorGoogleMapsWeb
         lng: bounds.getNorthEast().lng(),
       },
     });
+  }
+
+  async fitBounds(_args: FitBoundsArgs): Promise<void> {
+    const map = this.maps[_args.id].map;
+    const bounds = this.getLatLngBounds(_args.bounds);
+    map.fitBounds(bounds, _args.padding);
   }
 
   async addMarkers(_args: AddMarkersArgs): Promise<{ ids: string[] }> {
@@ -403,13 +421,21 @@ export class CapacitorGoogleMapsWeb
     this.maps[_args.id].markerClusterer = undefined;
   }
 
-  async onScroll(_args: OnScrollArgs): Promise<void> {
+  async onScroll(): Promise<void> {
+    throw new Error('Method not supported on web.');
+  }
+
+  async onResize(): Promise<void> {
+    throw new Error('Method not supported on web.');
+  }
+
+  async onDisplay(): Promise<void> {
     throw new Error('Method not supported on web.');
   }
 
   async create(_args: CreateMapArgs): Promise<void> {
     console.log(`Create map: ${_args.id}`);
-    await this.importGoogleLib(_args.apiKey);
+    await this.importGoogleLib(_args.apiKey, _args.region, _args.language);
     this.maps[_args.id] = {
       map: new window.google.maps.Map(_args.element, { ..._args.config }),
       element: _args.element,
@@ -638,7 +664,7 @@ export class CapacitorGoogleMapsWeb
       title: marker.title,
       icon: iconImage,
       draggable: marker.draggable,
-      zIndex: marker.zIndex,
+      zIndex: marker.zIndex ?? 0,
     };
 
     return opts;

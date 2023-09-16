@@ -29,6 +29,14 @@ This API requires the following permissions be added to your `AndroidManifest.xm
 <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 ```
 
+You can also specify those permissions only for the Android versions where they will be requested:
+
+```xml
+<uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
+<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32"/>
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="29"/>
+```
+
 The storage permissions are for reading/saving photo files.
 
 Read about [Setting Permissions](https://capacitorjs.com/docs/android/configuration#setting-permissions) in the [Android Guide](https://capacitorjs.com/docs/android) for more information on setting Android permissions.
@@ -40,7 +48,7 @@ Additionally, because the Camera API launches a separate Activity to handle taki
 This plugin will use the following project variables (defined in your app's `variables.gradle` file):
 
 - `androidxExifInterfaceVersion`: version of `androidx.exifinterface:exifinterface` (default: `1.3.6`)
-- `androidxMaterialVersion`: version of `com.google.android.material:material` (default: `1.8.0`)
+- `androidxMaterialVersion`: version of `com.google.android.material:material` (default: `1.9.0`)
 
 ## PWA Notes
 

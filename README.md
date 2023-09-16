@@ -2,11 +2,12 @@
 
 This repository contains the official Capacitor plugins maintained by the Capacitor team. You can find more plugins in the [Capacitor Community](https://github.com/capacitor-community/).
 
-> ### :rotating_light: These plugins are for Capacitor 4 :rotating_light:
+> ### :rotating_light: These plugins are for Capacitor 5 :rotating_light:
 >
 > Capacitor 2 core plugins are bundled with Capacitor itself.
 >
 > For Capacitor 3, use the 1.x version of the plugins.
+> For Capacitor 4, use the 4.x version of the plugins.
 
 ## Plugins
 
@@ -30,12 +31,29 @@ This repository contains the official Capacitor plugins maintained by the Capaci
 | [`@capacitor/network`](https://capacitorjs.com/docs/apis/network) | [`./network`](./network) | [![npm badge](https://img.shields.io/npm/v/@capacitor/network?style=flat-square)](https://www.npmjs.com/package/@capacitor/network)
 | [`@capacitor/preferences`](https://capacitorjs.com/docs/apis/preferences) | [`./preferences`](./preferences) | [![npm badge](https://img.shields.io/npm/v/@capacitor/preferences?style=flat-square)](https://www.npmjs.com/package/@capacitor/preferences)
 | [`@capacitor/push-notifications`](https://capacitorjs.com/docs/apis/push-notifications) | [`./push-notifications`](./push-notifications) | [![npm badge](https://img.shields.io/npm/v/@capacitor/push-notifications?style=flat-square)](https://www.npmjs.com/package/@capacitor/push-notifications)
+| [`@capacitor/screen-orientation`](https://capacitorjs.com/docs/apis/screen-orientation) | [`./screen-orientation`](./screen-orientation) | [![npm badge](https://img.shields.io/npm/v/@capacitor/screen-orientation?style=flat-square)](https://www.npmjs.com/package/@capacitor/screen-orientation)
 | [`@capacitor/screen-reader`](https://capacitorjs.com/docs/apis/screen-reader) | [`./screen-reader`](./screen-reader) | [![npm badge](https://img.shields.io/npm/v/@capacitor/screen-reader?style=flat-square)](https://www.npmjs.com/package/@capacitor/screen-reader)
 | [`@capacitor/share`](https://capacitorjs.com/docs/apis/share) | [`./share`](./share) | [![npm badge](https://img.shields.io/npm/v/@capacitor/share?style=flat-square)](https://www.npmjs.com/package/@capacitor/share)
 | [`@capacitor/splash-screen`](https://capacitorjs.com/docs/apis/splash-screen) | [`./splash-screen`](./splash-screen) | [![npm badge](https://img.shields.io/npm/v/@capacitor/splash-screen?style=flat-square)](https://www.npmjs.com/package/@capacitor/splash-screen)
 | [`@capacitor/status-bar`](https://capacitorjs.com/docs/apis/status-bar) | [`./status-bar`](./status-bar) | [![npm badge](https://img.shields.io/npm/v/@capacitor/status-bar?style=flat-square)](https://www.npmjs.com/package/@capacitor/status-bar)
 | [`@capacitor/text-zoom`](https://capacitorjs.com/docs/apis/text-zoom) | [`./text-zoom`](./text-zoom) | [![npm badge](https://img.shields.io/npm/v/@capacitor/text-zoom?style=flat-square)](https://www.npmjs.com/package/@capacitor/text-zoom)
 | [`@capacitor/toast`](https://capacitorjs.com/docs/apis/toast) | [`./toast`](./toast) | [![npm badge](https://img.shields.io/npm/v/@capacitor/toast?style=flat-square)](https://www.npmjs.com/package/@capacitor/toast)
+
+## Independent Plugins
+
+These are official Capacitor plugins that are not contained in this repository.
+
+| GitHub | Package | Version |
+| --- | --- | --- |
+| [Background Runner](https://github.com/ionic-team/capacitor-background-runner) | [`@capacitor/background-runner`](https://capacitorjs.com/docs/apis/background-runner) | [![npm badge](https://img.shields.io/npm/v/@capacitor/background-runner?style=flat-square)](https://www.npmjs.com/package/@capacitor/background-runner) |
+
+## Capacitor Labs
+
+These are experimental plugins. Use at your own risk.
+
+| GitHub | Package | Version |
+| --- | --- | --- |
+| [Watch](https://github.com/ionic-team/CapacitorWatch) | [`@capacitor/watch`](https://capacitorjs.com/docs/apis/watch) | [![npm badge](https://img.shields.io/npm/v/@capacitor/watch?style=flat-square)](https://www.npmjs.com/package/@capacitor/watch) |
 
 ## Contributing
 

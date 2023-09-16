@@ -26,6 +26,28 @@ await Share.share({
   url: 'http://ionicframework.com/',
   dialogTitle: 'Share with buddies',
 });
+
+// Share text only
+await Share.share({
+  text: 'Really awesome thing you need to see right meow',
+});
+
+// Share url only
+await Share.share({
+  url: 'http://ionicframework.com/',
+});
+
+// Share local file using url parameter
+const photo = await Camera.getPhoto(options);
+await Share.share({
+  url: photo.path,
+});
+
+// Share multiple files using files parameter
+const { photos } = await Camera.pickImages(options);
+await Share.share({
+  files: photos.map(photo => photo.path!),
+});
 ```
 
 Each platform uses a different set of fields, but you should supply them all.
