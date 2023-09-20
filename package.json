@@ -18,8 +18,8 @@
     "ci:publish:alpha": "lerna version prerelease --conventional-commits --conventional-prerelease --preid alpha --force-publish --yes && lerna exec -- npm publish --tag next --provenance",
     "ci:publish:beta": "lerna version prerelease --conventional-commits --conventional-prerelease --preid beta --force-publish --yes && lerna exec -- npm publish --tag next --provenance",
     "ci:publish:rc": "lerna version prerelease --conventional-commits --conventional-prerelease --preid rc --force-publish --yes && lerna exec -- npm publish --tag next --provenance",
-    "ci:publish:latest": "lerna version --conventional-commits --yes && lerna exec -- npm publish --tag latest --provenance",
-    "ci:publish:latest-from-pre": "lerna version --conventional-graduate --conventional-commits --force-publish --yes && lerna exec -- npm publish --tag latest --provenance",
+    "ci:publish:latest": "lerna publish --conventional-commits --dist-tag latest --no-verify-access --yes",
+    "ci:publish:latest-from-pre": "lerna publish --conventional-graduate --conventional-commits --dist-tag latest --no-verify-access --force-publish --yes",
     "ci:publish:dev": "lerna version prerelease --conventional-commits --conventional-prerelease --preid dev-$(date +\"%Y%m%dT%H%M%S\") --force-publish --no-changelog --no-git-tag-version --no-push --yes && lerna exec -- npm publish --tag dev --provenance"
   },
   "devDependencies": {
