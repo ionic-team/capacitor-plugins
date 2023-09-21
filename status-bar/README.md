@@ -192,9 +192,9 @@ This method is only supported on Android.
 
 #### BackgroundColorOptions
 
-| Prop        | Type                | Description                                                                                 | Since |
-| ----------- | ------------------- | ------------------------------------------------------------------------------------------- | ----- |
-| **`color`** | <code>string</code> | A hex color to which the status bar color is set. This option is only supported on Android. | 1.0.0 |
+| Prop        | Type                | Description                                                                                 | Example              | Since |
+| ----------- | ------------------- | ------------------------------------------------------------------------------------------- | -------------------- | ----- |
+| **`color`** | <code>string</code> | A hex color to which the status bar color is set. This option is only supported on Android. | <code>#ffffff</code> | 1.0.0 |
 
 
 #### AnimationOptions
