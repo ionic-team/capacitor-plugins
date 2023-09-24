@@ -21,4 +21,7 @@ public class NetworkStatus {
 
     public boolean connected = false;
     public ConnectionType connectionType = ConnectionType.NONE;
+    public int upstreamInKbps;
+    public int downstreamInKbps;
+    public int signalStrength;
 }
