@@ -769,6 +769,7 @@ class CapacitorGoogleMap(
         markerOptions.title(marker.title)
         markerOptions.snippet(marker.snippet)
         markerOptions.alpha(marker.opacity)
+        markerOptions.rotation(marker.rotation)
         markerOptions.flat(marker.isFlat)
         markerOptions.draggable(marker.draggable)
         markerOptions.zIndex(marker.zIndex)
