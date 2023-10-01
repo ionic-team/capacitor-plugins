@@ -85,14 +85,14 @@ double stageManagerOffset;
   }
 
   self.hideFormAccessoryBar = YES;
-  
+
   NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
-  
+
   [nc addObserver:self selector:@selector(onKeyboardDidHide:) name:UIKeyboardDidHideNotification object:nil];
   [nc addObserver:self selector:@selector(onKeyboardDidShow:) name:UIKeyboardDidShowNotification object:nil];
   [nc addObserver:self selector:@selector(onKeyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
   [nc addObserver:self selector:@selector(onKeyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
-  
+
   [nc removeObserver:self.webView name:UIKeyboardWillHideNotification object:nil];
   [nc removeObserver:self.webView name:UIKeyboardWillShowNotification object:nil];
   [nc removeObserver:self.webView name:UIKeyboardWillChangeFrameNotification object:nil];
@@ -110,11 +110,20 @@ double stageManagerOffset;
 
 - (void)onKeyboardWillHide:(NSNotification *)notification
 {
-  [self setKeyboardHeight:0 delay:0.01];
+CGRect rect = [[notification.userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+  CGRect webViewAbsolute = [self.webView convertRect:self.webView.frame toCoordinateSpace:self.webView.window.screen.coordinateSpace];
+  double height = (webViewAbsolute.size.height + webViewAbsolute.origin.y) - ( UIScreen.mainScreen.bounds.size.height - rect.size.height);
+  if (height < 0) {
+    height = 0;
+  }
+  double duration = [[notification.userInfo valueForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue]+0.2;
+  [self setKeyboardHeight:height delay:duration];
   [self resetScrollView];
   hideTimer = [NSTimer scheduledTimerWithTimeInterval:0 repeats:NO block:^(NSTimer * _Nonnull timer) {
-    [self.bridge triggerWindowJSEventWithEventName:@"keyboardWillHide"];
-    [self notifyListeners:@"keyboardWillHide" data:nil];
+    NSString * data = [NSString stringWithFormat:@"{ 'keyboardHeight': %d, 'keyboardAnimationDuration': %f}", (int)height, (double)duration];
+    [self.bridge triggerWindowJSEventWithEventName:@"keyboardWillHide" data:data];
+    NSDictionary * kbData = @{@"keyboardHeight": [NSNumber numberWithDouble:height], @"keyboardAnimationDuration": [NSNumber numberWithDouble:duration]};
+    [self notifyListeners:@"keyboardWillHide" data:kbData];
   }];
   [[NSRunLoop currentRunLoop] addTimer:hideTimer forMode:NSRunLoopCommonModes];
 }
@@ -147,9 +156,9 @@ double stageManagerOffset;
   [self setKeyboardHeight:height delay:duration];
   [self resetScrollView];
 
-  NSString * data = [NSString stringWithFormat:@"{ 'keyboardHeight': %d }", (int)height];
+  NSString * data = [NSString stringWithFormat:@"{ 'keyboardHeight': %d, 'keyboardAnimationDuration': %f}", (int)height, (double)duration];
   [self.bridge triggerWindowJSEventWithEventName:@"keyboardWillShow" data:data];
-  NSDictionary * kbData = @{@"keyboardHeight": [NSNumber numberWithDouble:height]};
+  NSDictionary * kbData = @{@"keyboardHeight": [NSNumber numberWithDouble:height], @"keyboardAnimationDuration": [NSNumber numberWithDouble:duration]};
   [self notifyListeners:@"keyboardWillShow" data:kbData];
 }
 
@@ -158,17 +167,30 @@ double stageManagerOffset;
   CGRect rect = [[notification.userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
   double height = rect.size.height;
 
+  double duration = [[notification.userInfo valueForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue]+0.2;
+
   [self resetScrollView];
 
-  NSString * data = [NSString stringWithFormat:@"{ 'keyboardHeight': %d }", (int)height];
+  NSString * data = [NSString stringWithFormat:@"{ 'keyboardHeight': %d, 'keyboardAnimationDuration': %f}", (int)height, (double)duration];
+
   [self.bridge triggerWindowJSEventWithEventName:@"keyboardDidShow" data:data];
-  NSDictionary * kbData = @{@"keyboardHeight": [NSNumber numberWithDouble:height]};
+  NSDictionary * kbData = @{@"keyboardHeight": [NSNumber numberWithDouble:height], @"keyboardAnimationDuration": [NSNumber numberWithDouble:duration]};
+
   [self notifyListeners:@"keyboardDidShow" data:kbData];
 }
 
 - (void)onKeyboardDidHide:(NSNotification *)notification
 {
+  CGRect rect = [[notification.userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+  double height = rect.size.height;
+
+  double duration = [[notification.userInfo valueForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue]+0.2;
+
+  NSString * data = [NSString stringWithFormat:@"{ 'keyboardHeight': %d, 'keyboardAnimationDuration': %f}", (int)height, (double)duration];
+
   [self.bridge triggerWindowJSEventWithEventName:@"keyboardDidHide"];
+  NSDictionary * kbData = @{@"keyboardHeight": [NSNumber numberWithDouble:height], @"keyboardAnimationDuration": [NSNumber numberWithDouble:duration]};
+
   [self notifyListeners:@"keyboardDidHide" data:nil];
   [self resetScrollView];
 
@@ -199,7 +221,7 @@ double stageManagerOffset;
     if (paddingBottom > 0) {
         height = screenHeight - paddingBottom;
     }
-    
+
     [self.bridge evalWithJs: [NSString stringWithFormat:@"(function() { var el = %@; var height = %d; if (el) { el.style.height = height > -1 ? height + 'px' : null; } })()", element, height]];
 }
 
@@ -207,11 +229,11 @@ double stageManagerOffset;
 {
   CGRect f, wf = CGRectZero;
   UIWindow * window = nil;
-    
+
   if ([[[UIApplication sharedApplication] delegate] respondsToSelector:@selector(window)]) {
     window = [[[UIApplication sharedApplication] delegate] window];
   }
-  
+
   if (!window) {
     if (@available(iOS 13.0, *)) {
       UIScene *scene = [UIApplication sharedApplication].connectedScenes.allObjects.firstObject;
@@ -345,7 +367,7 @@ static IMP WKOriginalImp;
 - (void)getResizeMode:(CAPPluginCall *)call
 {
     NSString *mode;
-    
+
     if (self.keyboardResizes == ResizeIonic) {
         mode = @"ionic";
     } else if(self.keyboardResizes == ResizeBody) {
@@ -355,7 +377,7 @@ static IMP WKOriginalImp;
     } else {
         mode = @"none";
     }
-    
+
     NSDictionary *response = [NSDictionary dictionaryWithObject:mode forKey:@"mode"];
     [call resolve: response];
 }
