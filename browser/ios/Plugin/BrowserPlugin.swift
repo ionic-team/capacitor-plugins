@@ -16,9 +16,13 @@ public class CAPBrowserPlugin: CAPPlugin {
         if let toolbarColor = call.getString("toolbarColor") {
             color = UIColor.capacitor.color(fromHex: toolbarColor)
         }
+        var controlsColor: UIColor?
+        if let controlsColorStr = call.getString("controlsColor") {
+            controlsColor = UIColor.capacitor.color(fromHex: controlsColorStr)
+        }
         let style = self.presentationStyle(for: call.getString("presentationStyle"))
         // prepare for display
-        guard implementation.prepare(for: url, withTint: color, modalPresentation: style), let viewController = implementation.viewController else {
+        guard implementation.prepare(for: url, withBarTint: color, withControlsTint: controlsColor, modalPresentation: style), let viewController = implementation.viewController else {
             call.reject("Unable to display URL")
             return
         }
