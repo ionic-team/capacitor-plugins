@@ -51,6 +51,8 @@ jobs:
   release-dev-of-plugins:
     runs-on: macos-12
     timeout-minutes: 30
+    permissions:
+      pull-requests: write
     needs:
       - setup
     strategy:
@@ -74,3 +76,12 @@ jobs:
           npm version prerelease --no-git-tag-version -f --preid dev-$()-$(date +\"%Y%m%dT%H%M%S\")
           npm publish --tag dev --dry-run
         working-directory: ${{ matrix.plugin }}
+      - name: get-npm-version
+        id: package-version
+        uses: martinbeentjes/npm-get-version-action@v1.3.1
+        with:
+          path: ${{ matrix.plugin }}
+      - uses: mshick/add-pr-comment@v2
+        with:
+          message: |
+            Released dev build of ${{ matrix.plugin }} with dev version: ${{ steps.package-version.outputs.current-version }}
