@@ -21,10 +21,9 @@ Read about [Configuring `Info.plist`](https://capacitorjs.com/docs/ios/configura
 
 ## Android
 
-This API requires the following permissions be added to your `AndroidManifest.xml`:
+This API requires no permission, unless using `saveToGallery: true`, in that case the following permissions should be added to your `AndroidManifest.xml`:
 
 ```xml
-<uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
 <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 ```
@@ -32,7 +31,6 @@ This API requires the following permissions be added to your `AndroidManifest.xm
 You can also specify those permissions only for the Android versions where they will be requested:
 
 ```xml
-<uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
 <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32"/>
 <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="29"/>
 ```
