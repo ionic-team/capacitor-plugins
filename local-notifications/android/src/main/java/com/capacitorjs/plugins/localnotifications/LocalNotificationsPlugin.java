@@ -26,7 +26,10 @@ import org.json.JSONObject;
 
 @CapacitorPlugin(
     name = "LocalNotifications",
-    permissions = @Permission(strings = { Manifest.permission.POST_NOTIFICATIONS }, alias = LocalNotificationsPlugin.LOCAL_NOTIFICATIONS)
+    permissions = @Permission(
+            strings = { Manifest.permission.POST_NOTIFICATIONS, Manifest.permission.SCHEDULE_EXACT_ALARM },
+            alias = LocalNotificationsPlugin.LOCAL_NOTIFICATIONS
+    )
 )
 public class LocalNotificationsPlugin extends Plugin {
 

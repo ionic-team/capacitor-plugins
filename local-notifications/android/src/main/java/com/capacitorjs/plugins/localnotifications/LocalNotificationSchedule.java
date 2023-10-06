@@ -22,6 +22,8 @@ public class LocalNotificationSchedule {
 
     private JSObject scheduleObj;
 
+    private  Boolean inExact;
+
     public LocalNotificationSchedule(JSObject schedule) throws ParseException {
         this.scheduleObj = schedule;
         // Every specific unit of time (always constant)
@@ -35,6 +37,9 @@ public class LocalNotificationSchedule {
 
         // Schedule this notification to fire even if app is idled (Doze)
         this.whileIdle = schedule.getBoolean("allowWhileIdle", false);
+
+        // Do not schedule this notification with an exact alarm
+        this.inExact = schedule.getBoolean("inExact", false);
     }
 
     public LocalNotificationSchedule() {}
