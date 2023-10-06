@@ -21,6 +21,7 @@ public class TimedNotificationPublisher extends BroadcastReceiver {
 
     public static String NOTIFICATION_KEY = "NotificationPublisher.notification";
     public static String CRON_KEY = "NotificationPublisher.cron";
+    public static String INEXACT_KEY = "NotificationPublisher.inExact";
 
     /**
      * Restore and present notification
@@ -59,6 +60,8 @@ public class TimedNotificationPublisher extends BroadcastReceiver {
 
     private boolean rescheduleNotificationIfNeeded(Context context, Intent intent, int id) {
         String dateString = intent.getStringExtra(CRON_KEY);
+        Boolean inExact = intent.getBooleanExtra(INEXACT_KEY, false);
+
         if (dateString != null) {
             DateMatch date = DateMatch.fromMatchString(dateString);
             AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
@@ -69,7 +72,7 @@ public class TimedNotificationPublisher extends BroadcastReceiver {
                 flags = flags | PendingIntent.FLAG_MUTABLE;
             }
             PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, clone, flags);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms()) {
+            if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms()) || inExact) {
                 alarmManager.set(AlarmManager.RTC, trigger, pendingIntent);
             } else {
                 alarmManager.setExact(AlarmManager.RTC, trigger, pendingIntent);
