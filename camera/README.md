@@ -21,7 +21,7 @@ Read about [Configuring `Info.plist`](https://capacitorjs.com/docs/ios/configura
 
 ## Android
 
-This API requires no permission, unless using `saveToGallery: true`, in that case the following permissions should be added to your `AndroidManifest.xml`:
+This API requires no permissions, unless using `saveToGallery: true`, in that case the following permissions should be added to your `AndroidManifest.xml`:
 
 ```xml
 <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
