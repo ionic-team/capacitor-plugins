@@ -189,7 +189,7 @@ public class Map {
 
     func destroy() {
         DispatchQueue.main.async {
-            self.mapViewController.GMapView = nil            
+            self.mapViewController.GMapView = nil
             self.targetViewController?.tag = 0
             self.mapViewController.view = nil
             self.enableTouch()
@@ -614,11 +614,15 @@ public class Map {
                 newMarker.icon = getResizedIcon(iconImage, marker)
             } else {
                 if iconUrl.starts(with: "https:") {
-                    DispatchQueue.main.async {
-                        if let url = URL(string: iconUrl), let data = try? Data(contentsOf: url), let iconImage = UIImage(data: data) {
-                            self.markerIcons[iconUrl] = iconImage
-                            newMarker.icon = getResizedIcon(iconImage, marker)
-                        }
+                    if let url = URL(string: iconUrl) {
+                        URLSession.shared.dataTask(with: url) { (data, _, _) in
+                            DispatchQueue.main.async {
+                                if let data = data, let iconImage = UIImage(data: data) {
+                                    self.markerIcons[iconUrl] = iconImage
+                                    newMarker.icon = getResizedIcon(iconImage, marker)
+                                }
+                            }
+                        }.resume()
                     }
                 } else if let iconImage = UIImage(named: "public/\(iconUrl)") {
                     self.markerIcons[iconUrl] = iconImage
