@@ -377,7 +377,7 @@ public class LocalNotificationManager {
         long trigger,
         PendingIntent pendingIntent
     ) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms()) {
+        if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms()) || schedule.inExact()) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && schedule.allowWhileIdle()) {
                 alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, trigger, pendingIntent);
             } else {
