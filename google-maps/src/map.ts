@@ -5,7 +5,6 @@ import type {
   CameraConfig,
   Marker,
   MapPadding,
-  MapType,
   MapListenerCallback,
   MapReadyCallbackData,
   CameraIdleCallbackData,
@@ -14,8 +13,14 @@ import type {
   MapClickCallbackData,
   MarkerClickCallbackData,
   MyLocationButtonClickCallbackData,
-  LatLngBounds,
+  Polygon,
+  PolygonClickCallbackData,
+  Circle,
+  CircleClickCallbackData,
+  Polyline,
+  PolylineCallbackData,
 } from './definitions';
+import { LatLngBounds, MapType } from './definitions';
 import type { CreateMapArgs } from './implementation';
 import { CapacitorGoogleMaps } from './implementation';
 
@@ -24,20 +29,43 @@ export interface GoogleMapInterface {
     options: CreateMapArgs,
     callback?: MapListenerCallback<MapReadyCallbackData>,
   ): Promise<GoogleMap>;
-  enableClustering(): Promise<void>;
+  enableTouch(): Promise<void>;
+  disableTouch(): Promise<void>;
+  enableClustering(
+    /**
+     * The minimum number of markers that can be clustered together. The default is 4 markers.
+     */
+    minClusterSize?: number,
+  ): Promise<void>;
   disableClustering(): Promise<void>;
   addMarker(marker: Marker): Promise<string>;
   addMarkers(markers: Marker[]): Promise<string[]>;
   removeMarker(id: string): Promise<void>;
   removeMarkers(ids: string[]): Promise<void>;
+  addPolygons(polygons: Polygon[]): Promise<string[]>;
+  removePolygons(ids: string[]): Promise<void>;
+  addCircles(circles: Circle[]): Promise<string[]>;
+  removeCircles(ids: string[]): Promise<void>;
+  addPolylines(polylines: Polyline[]): Promise<string[]>;
+  removePolylines(ids: string[]): Promise<void>;
   destroy(): Promise<void>;
   setCamera(config: CameraConfig): Promise<void>;
+  /**
+   * Get current map type
+   */
+  getMapType(): Promise<MapType>;
   setMapType(mapType: MapType): Promise<void>;
   enableIndoorMaps(enabled: boolean): Promise<void>;
   enableTrafficLayer(enabled: boolean): Promise<void>;
   enableAccessibilityElements(enabled: boolean): Promise<void>;
   enableCurrentLocation(enabled: boolean): Promise<void>;
   setPadding(padding: MapPadding): Promise<void>;
+  /**
+   * Sets the map viewport to contain the given bounds.
+   * @param bounds The bounds to fit in the viewport.
+   * @param padding Optional padding to apply in pixels. The bounds will be fit in the part of the map that remains after padding is removed.
+   */
+  fitBounds(bounds: LatLngBounds, padding?: number): Promise<void>;
   setOnBoundsChangedListener(
     callback?: MapListenerCallback<CameraIdleCallbackData>,
   ): Promise<void>;
@@ -62,6 +90,15 @@ export interface GoogleMapInterface {
   setOnMarkerClickListener(
     callback?: MapListenerCallback<MarkerClickCallbackData>,
   ): Promise<void>;
+  setOnPolygonClickListener(
+    callback?: MapListenerCallback<PolygonClickCallbackData>,
+  ): Promise<void>;
+  setOnCircleClickListener(
+    callback?: MapListenerCallback<CircleClickCallbackData>,
+  ): Promise<void>;
+  setOnPolylineClickListener(
+    callback?: MapListenerCallback<PolylineCallbackData>,
+  ): Promise<void>;
   setOnMarkerDragStartListener(
     callback?: MapListenerCallback<MarkerClickCallbackData>,
   ): Promise<void>;
@@ -85,6 +122,8 @@ class MapCustomElement extends HTMLElement {
   }
 
   connectedCallback() {
+    this.innerHTML = '';
+
     if (Capacitor.getPlatform() == 'ios') {
       this.style.overflow = 'scroll';
       (this.style as any)['-webkit-overflow-scrolling'] = 'touch';
@@ -102,6 +141,7 @@ customElements.define('capacitor-google-map', MapCustomElement);
 export class GoogleMap {
   private id: string;
   private element: HTMLElement | null = null;
+  private resizeObserver: ResizeObserver | null = null;
 
   private onBoundsChangedListener?: PluginListenerHandle;
   private onCameraIdleListener?: PluginListenerHandle;
@@ -110,7 +150,10 @@ export class GoogleMap {
   private onClusterInfoWindowClickListener?: PluginListenerHandle;
   private onInfoWindowClickListener?: PluginListenerHandle;
   private onMapClickListener?: PluginListenerHandle;
+  private onPolylineClickListener?: PluginListenerHandle;
   private onMarkerClickListener?: PluginListenerHandle;
+  private onPolygonClickListener?: PluginListenerHandle;
+  private onCircleClickListener?: PluginListenerHandle;
   private onMarkerDragStartListener?: PluginListenerHandle;
   private onMarkerDragListener?: PluginListenerHandle;
   private onMarkerDragEndListener?: PluginListenerHandle;
@@ -157,9 +200,88 @@ export class GoogleMap {
 
     if (Capacitor.isNativePlatform()) {
       (options.element as any) = {};
+
+      const getMapBounds = () => {
+        const mapRect =
+          newMap.element?.getBoundingClientRect() ?? ({} as DOMRect);
+        return {
+          x: mapRect.x,
+          y: mapRect.y,
+          width: mapRect.width,
+          height: mapRect.height,
+        };
+      };
+
+      const onDisplay = () => {
+        CapacitorGoogleMaps.onDisplay({
+          id: newMap.id,
+          mapBounds: getMapBounds(),
+        });
+      };
+
+      const onResize = () => {
+        CapacitorGoogleMaps.onResize({
+          id: newMap.id,
+          mapBounds: getMapBounds(),
+        });
+      };
+
+      const ionicPage = newMap.element.closest('.ion-page');
+      if (Capacitor.getPlatform() === 'ios' && ionicPage) {
+        ionicPage.addEventListener('ionViewWillEnter', () => {
+          setTimeout(() => {
+            onDisplay();
+          }, 100);
+        });
+        ionicPage.addEventListener('ionViewDidEnter', () => {
+          setTimeout(() => {
+            onDisplay();
+          }, 100);
+        });
+      }
+
+      const lastState = {
+        width: elementBounds.width,
+        height: elementBounds.height,
+        isHidden: false,
+      };
+      newMap.resizeObserver = new ResizeObserver(() => {
+        if (newMap.element != null) {
+          const mapRect = newMap.element.getBoundingClientRect();
+
+          const isHidden = mapRect.width === 0 && mapRect.height === 0;
+          if (!isHidden) {
+            if (lastState.isHidden) {
+              if (Capacitor.getPlatform() === 'ios' && !ionicPage) {
+                onDisplay();
+              }
+            } else if (
+              lastState.width !== mapRect.width ||
+              lastState.height !== mapRect.height
+            ) {
+              onResize();
+            }
+          }
+
+          lastState.width = mapRect.width;
+          lastState.height = mapRect.height;
+          lastState.isHidden = isHidden;
+        }
+      });
+      newMap.resizeObserver.observe(newMap.element);
     }
 
-    await CapacitorGoogleMaps.create(options);
+    // small delay to allow for iOS WKWebView to setup corresponding element sub-scroll views ???
+    await new Promise((resolve, reject) => {
+      setTimeout(async () => {
+        try {
+          await CapacitorGoogleMaps.create(options);
+          resolve(undefined);
+        } catch (err) {
+          reject(err);
+        }
+      }, 200);
+    });
 
     if (callback) {
       const onMapReadyListener = await CapacitorGoogleMaps.addListener(
@@ -202,13 +324,39 @@ export class GoogleMap {
   }
 
   /**
-   * Enable marker clustering
+   * Enable touch events on native map
    *
    * @returns void
    */
-  async enableClustering(): Promise<void> {
+  async enableTouch(): Promise<void> {
+    return CapacitorGoogleMaps.enableTouch({
+      id: this.id,
+    });
+  }
+
+  /**
+   * Disable touch events on native map
+   *
+   * @returns void
+   */
+  async disableTouch(): Promise<void> {
+    return CapacitorGoogleMaps.disableTouch({
+      id: this.id,
+    });
+  }
+
+  /**
+   * Enable marker clustering
+   *
+   * @param minClusterSize - The minimum number of markers that can be clustered together.
+   * @defaultValue 4
+   *
+   * @returns void
+   */
+  async enableClustering(minClusterSize?: number): Promise<void> {
     return CapacitorGoogleMaps.enableClustering({
       id: this.id,
+      minClusterSize,
     });
   }
 
@@ -279,12 +427,64 @@ export class GoogleMap {
     });
   }
 
+  async addPolygons(polygons: Polygon[]): Promise<string[]> {
+    const res = await CapacitorGoogleMaps.addPolygons({
+      id: this.id,
+      polygons,
+    });
+
+    return res.ids;
+  }
+
+  async addPolylines(polylines: Polyline[]): Promise<string[]> {
+    const res = await CapacitorGoogleMaps.addPolylines({
+      id: this.id,
+      polylines,
+    });
+
+    return res.ids;
+  }
+
+  async removePolygons(ids: string[]): Promise<void> {
+    return CapacitorGoogleMaps.removePolygons({
+      id: this.id,
+      polygonIds: ids,
+    });
+  }
+
+  async addCircles(circles: Circle[]): Promise<string[]> {
+    const res = await CapacitorGoogleMaps.addCircles({
+      id: this.id,
+      circles,
+    });
+
+    return res.ids;
+  }
+
+  async removeCircles(ids: string[]): Promise<void> {
+    return CapacitorGoogleMaps.removeCircles({
+      id: this.id,
+      circleIds: ids,
+    });
+  }
+
+  async removePolylines(ids: string[]): Promise<void> {
+    return CapacitorGoogleMaps.removePolylines({
+      id: this.id,
+      polylineIds: ids,
+    });
+  }
+
   /**
    * Destroy the current instance of the map
    */
   async destroy(): Promise<void> {
     if (Capacitor.getPlatform() == 'android') {
       this.disableScrolling();
+    }
+
+    if (Capacitor.isNativePlatform()) {
+      this.resizeObserver?.disconnect();
     }
 
     this.removeAllMapListeners();
@@ -305,6 +505,11 @@ export class GoogleMap {
       id: this.id,
       config,
     });
+  }
+
+  async getMapType(): Promise<MapType> {
+    const { type } = await CapacitorGoogleMaps.getMapType({ id: this.id });
+    return MapType[type as keyof typeof MapType];
   }
 
   /**
@@ -393,8 +598,18 @@ export class GoogleMap {
    * @returns {LatLngBounds}
    */
   async getMapBounds(): Promise<LatLngBounds> {
-    return CapacitorGoogleMaps.getMapBounds({
+    return new LatLngBounds(
+      await CapacitorGoogleMaps.getMapBounds({
+        id: this.id,
+      }),
+    );
+  }
+
+  async fitBounds(bounds: LatLngBounds, padding?: number): Promise<void> {
+    return CapacitorGoogleMaps.fitBounds({
       id: this.id,
+      bounds,
+      padding,
     });
   }
 
@@ -635,6 +850,50 @@ export class GoogleMap {
   }
 
   /**
+   * Set the event listener on the map for 'onPolygonClick' events.
+   *
+   * @param callback
+   * @returns
+   */
+  async setOnPolygonClickListener(
+    callback?: MapListenerCallback<PolygonClickCallbackData>,
+  ): Promise<void> {
+    if (this.onPolygonClickListener) {
+      this.onPolygonClickListener.remove();
+    }
+
+    if (callback) {
+      this.onPolygonClickListener = await CapacitorGoogleMaps.addListener(
+        'onPolygonClick',
+        this.generateCallback(callback),
+      );
+    } else {
+      this.onPolygonClickListener = undefined;
+    }
+  }
+
+  /**
+   * Set the event listener on the map for 'onCircleClick' events.
+   *
+   * @param callback
+   * @returns
+   */
+  async setOnCircleClickListener(
+    callback?: MapListenerCallback<CircleClickCallbackData>,
+  ): Promise<void> {
+    if (this.onCircleClickListener) [this.onCircleClickListener.remove()];
+
+    if (callback) {
+      this.onCircleClickListener = await CapacitorGoogleMaps.addListener(
+        'onCircleClick',
+        this.generateCallback(callback),
+      );
+    } else {
+      this.onCircleClickListener = undefined;
+    }
+  }
+
+  /**
    * Set the event listener on the map for 'onMarkerClick' events.
    *
    * @param callback
@@ -654,6 +913,28 @@ export class GoogleMap {
       );
     } else {
       this.onMarkerClickListener = undefined;
+    }
+  }
+  /**
+   * Set the event listener on the map for 'onPolylineClick' events.
+   *
+   * @param callback
+   * @returns
+   */
+  async setOnPolylineClickListener(
+    callback?: MapListenerCallback<PolylineCallbackData>,
+  ): Promise<void> {
+    if (this.onPolylineClickListener) {
+      this.onPolylineClickListener.remove();
+    }
+
+    if (callback) {
+      this.onPolylineClickListener = await CapacitorGoogleMaps.addListener(
+        'onPolylineClick',
+        this.generateCallback(callback),
+      );
+    } else {
+      this.onPolylineClickListener = undefined;
     }
   }
 
@@ -813,9 +1094,39 @@ export class GoogleMap {
       this.onMapClickListener = undefined;
     }
 
+    if (this.onPolylineClickListener) {
+      this.onPolylineClickListener.remove();
+      this.onPolylineClickListener = undefined;
+    }
+
     if (this.onMarkerClickListener) {
       this.onMarkerClickListener.remove();
       this.onMarkerClickListener = undefined;
+    }
+
+    if (this.onPolygonClickListener) {
+      this.onPolygonClickListener.remove();
+      this.onPolygonClickListener = undefined;
+    }
+
+    if (this.onCircleClickListener) {
+      this.onCircleClickListener.remove();
+      this.onCircleClickListener = undefined;
+    }
+
+    if (this.onMarkerDragStartListener) {
+      this.onMarkerDragStartListener.remove();
+      this.onMarkerDragStartListener = undefined;
+    }
+
+    if (this.onMarkerDragListener) {
+      this.onMarkerDragListener.remove();
+      this.onMarkerDragListener = undefined;
+    }
+
+    if (this.onMarkerDragEndListener) {
+      this.onMarkerDragEndListener.remove();
+      this.onMarkerDragEndListener = undefined;
     }
 
     if (this.onMyLocationButtonClickListener) {

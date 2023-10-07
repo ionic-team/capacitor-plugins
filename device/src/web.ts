@@ -25,7 +25,7 @@ declare global {
 export class DeviceWeb extends WebPlugin implements DevicePlugin {
   async getId(): Promise<DeviceId> {
     return {
-      uuid: this.getUid(),
+      identifier: this.getUid(),
     };
   }
 
@@ -127,9 +127,9 @@ export class DeviceWeb extends WebPlugin implements DevicePlugin {
     }
 
     // Check for browsers based on non-standard javascript apis, only not user agent
-    const isFirefox = !!window.InstallTrigger;
     const isSafari = !!window.ApplePaySession;
     const isChrome = !!window.chrome;
+    const isFirefox = /Firefox/.test(ua);
     const isEdge = /Edg/.test(ua);
     const isFirefoxIOS = /FxiOS/.test(ua);
     const isChromeIOS = /CriOS/.test(ua);

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # The default Capacitor version(s) the plugin should depend on. Latest published in a range will be pulled by the user
-DEFAULT_CAPACITOR_VERSION="[4.0,5.0)"
+DEFAULT_CAPACITOR_VERSION="[5.0,6.0)"
 
 publish_plugin () {
     PLUGIN_PATH=$1
@@ -37,7 +37,7 @@ publish_plugin () {
                 export CAP_PLUGIN_PUBLISH=true
 
                 # Build and publish
-                "$ANDROID_PATH"/gradlew clean build publishReleasePublicationToSonatypeRepository closeAndReleaseSonatypeStagingRepository --no-daemon --max-workers 1 -b "$ANDROID_PATH"/build.gradle -Pandroid.useAndroidX=true -Pandroid.enableJetifier=true > $LOG_OUTPUT 2>&1
+                "$ANDROID_PATH"/gradlew clean build publishReleasePublicationToSonatypeRepository closeAndReleaseSonatypeStagingRepository --no-daemon --max-workers 1 -b "$ANDROID_PATH"/build.gradle -Pandroid.useAndroidX=true > $LOG_OUTPUT 2>&1
 
                 if grep --quiet "BUILD SUCCESSFUL" $LOG_OUTPUT; then
                     printf %"s\n\n" "Success: $PLUGIN_NAME published to MavenCentral."

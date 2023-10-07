@@ -198,6 +198,8 @@ export interface KeyboardPlugin {
   /**
    * Listen for when the keyboard is about to be shown.
    *
+   * On Android keyboardWillShow and keyboardDidShow fire almost at the same time.
+   *
    * @since 1.0.0
    */
   addListener(
@@ -207,6 +209,8 @@ export interface KeyboardPlugin {
 
   /**
    * Listen for when the keyboard is shown.
+   *
+   * On Android keyboardWillShow and keyboardDidShow fire almost at the same time.
    *
    * @since 1.0.0
    */
@@ -218,6 +222,8 @@ export interface KeyboardPlugin {
   /**
    * Listen for when the keyboard is about to be hidden.
    *
+   * On Android keyboardWillHide and keyboardDidHide fire almost at the same time.
+   *
    * @since 1.0.0
    */
   addListener(
@@ -227,6 +233,8 @@ export interface KeyboardPlugin {
 
   /**
    * Listen for when the keyboard is hidden.
+   *
+   * On Android keyboardWillHide and keyboardDidHide fire almost at the same time.
    *
    * @since 1.0.0
    */

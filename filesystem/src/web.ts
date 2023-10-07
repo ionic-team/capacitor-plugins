@@ -1,4 +1,4 @@
-import { WebPlugin } from '@capacitor/core';
+import { WebPlugin, buildRequestInit } from '@capacitor/core';
 
 import type {
   AppendFileOptions,
@@ -21,7 +21,11 @@ import type {
   WriteFileOptions,
   WriteFileResult,
   Directory,
+  DownloadFileOptions,
+  DownloadFileResult,
+  ProgressStatus,
 } from './definitions';
+import { Encoding } from './definitions';
 
 function resolve(path: string): string {
   const posix = path.split('/').filter(item => item !== '.');
@@ -194,7 +198,7 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
       }
     }
 
-    if (!encoding) {
+    if (!encoding && !(data instanceof Blob)) {
       data = data.indexOf(',') >= 0 ? data.split(',')[1] : data;
       if (!this.isBase64String(data))
         throw Error('The supplied data is not valid base64 content.');
@@ -205,7 +209,7 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
       path: path,
       folder: parentPath,
       type: 'file',
-      size: data.length,
+      size: data instanceof Blob ? data.size : data.length,
       ctime: now,
       mtime: now,
       content: data,
@@ -251,6 +255,12 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
       throw Error('The supplied data is not valid base64 content.');
 
     if (occupiedEntry !== undefined) {
+      if (occupiedEntry.content instanceof Blob) {
+        throw Error(
+          'The occupied entry contains a Blob object which cannot be appended to.',
+        );
+      }
+
       if (occupiedEntry.content !== undefined && !encoding) {
         data = btoa(atob(occupiedEntry.content) + atob(data));
       } else {
@@ -564,11 +574,17 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
           });
         }
 
+        let encoding;
+        if (!(file.data instanceof Blob) && !this.isBase64String(file.data)) {
+          encoding = Encoding.UTF8;
+        }
+
         // Write the file to the new location
         const writeResult = await this.writeFile({
           path: to,
           directory: toDirectory,
           data: file.data,
+          encoding: encoding,
         });
 
         // Copy the mtime/ctime of a renamed file
@@ -612,8 +628,8 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
           // Move item from the from directory to the to directory
           await this._copy(
             {
-              from: `${from}/${filename}`,
-              to: `${to}/${filename}`,
+              from: `${from}/${filename.name}`,
+              to: `${to}/${filename.name}`,
               directory: fromDirectory,
               toDirectory,
             },
@@ -635,6 +651,72 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
     };
   }
 
+  /**
+   * Function that performs a http request to a server and downloads the file to the specified destination
+   *
+   * @param options the options for the download operation
+   * @returns a promise that resolves with the download file result
+   */
+  public downloadFile = async (
+    options: DownloadFileOptions,
+  ): Promise<DownloadFileResult> => {
+    const requestInit = buildRequestInit(options, options.webFetchExtra);
+    const response = await fetch(options.url, requestInit);
+    let blob: Blob;
+
+    if (!options.progress) blob = await response.blob();
+    else if (!response?.body) blob = new Blob();
+    else {
+      const reader = response.body.getReader();
+
+      let bytes = 0;
+      const chunks: (Uint8Array | undefined)[] = [];
+
+      const contentType: string | null = response.headers.get('content-type');
+      const contentLength: number = parseInt(
+        response.headers.get('content-length') || '0',
+        10,
+      );
+
+      while (true) {
+        const { done, value } = await reader.read();
+
+        if (done) break;
+
+        chunks.push(value);
+        bytes += value?.length || 0;
+
+        const status: ProgressStatus = {
+          url: options.url,
+          bytes,
+          contentLength,
+        };
+
+        this.notifyListeners('progress', status);
+      }
+
+      const allChunks = new Uint8Array(bytes);
+      let position = 0;
+      for (const chunk of chunks) {
+        if (typeof chunk === 'undefined') continue;
+
+        allChunks.set(chunk, position);
+        position += chunk.length;
+      }
+
+      blob = new Blob([allChunks.buffer], { type: contentType || undefined });
+    }
+
+    const result = await this.writeFile({
+      path: options.path,
+      directory: options.directory ?? undefined,
+      recursive: options.recursive ?? false,
+      data: blob,
+    });
+
+    return { path: result.uri, blob };
+  };
+
   private isBase64String(str: string): boolean {
     try {
       return btoa(atob(str)) == str;
@@ -652,5 +734,5 @@ interface EntryObj {
   ctime: number;
   mtime: number;
   uri?: string;
-  content?: string;
+  content?: string | Blob;
 }

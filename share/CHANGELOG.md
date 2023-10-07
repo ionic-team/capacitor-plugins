@@ -3,6 +3,106 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.6](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/share@5.0.5...@capacitor/share@5.0.6) (2023-07-12)
+
+**Note:** Version bump only for package @capacitor/share
+
+
+
+
+
+## [5.0.5](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/share@5.0.4...@capacitor/share@5.0.5) (2023-06-29)
+
+**Note:** Version bump only for package @capacitor/share
+
+
+
+
+
+## [5.0.4](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/share@5.0.3...@capacitor/share@5.0.4) (2023-06-08)
+
+**Note:** Version bump only for package @capacitor/share
+
+
+
+
+
+## [5.0.3](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/share@5.0.2...@capacitor/share@5.0.3) (2023-06-08)
+
+**Note:** Version bump only for package @capacitor/share
+
+
+
+
+
+## [5.0.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/share@5.0.1...@capacitor/share@5.0.2) (2023-05-09)
+
+**Note:** Version bump only for package @capacitor/share
+
+
+
+
+
+## [5.0.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/share@5.0.0...@capacitor/share@5.0.1) (2023-05-05)
+
+
+### Bug Fixes
+
+* Use Capacitor 5 final ([#1574](https://github.com/ionic-team/capacitor-plugins/issues/1574)) ([139c18b](https://github.com/ionic-team/capacitor-plugins/commit/139c18b86a11d31246e952d1a74335ff8ce5dbc2))
+
+
+
+
+
+# [5.0.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/share@5.0.0-beta.1...@capacitor/share@5.0.0) (2023-05-03)
+
+**Note:** Version bump only for package @capacitor/share
+
+
+
+
+
+# [5.0.0-beta.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/share@5.0.0-beta.0...@capacitor/share@5.0.0-beta.1) (2023-04-21)
+
+
+### Features
+
+* Update gradle to 8.0.2 and gradle plugin to 8.0.0 ([#1542](https://github.com/ionic-team/capacitor-plugins/issues/1542)) ([e7210b4](https://github.com/ionic-team/capacitor-plugins/commit/e7210b47867644f5983e37acdbf0247214ec232d))
+
+
+
+
+
+# [5.0.0-beta.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/share@5.0.0-alpha.1...@capacitor/share@5.0.0-beta.0) (2023-03-31)
+
+**Note:** Version bump only for package @capacitor/share
+
+
+
+
+
+# [5.0.0-alpha.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/share@4.1.1...@capacitor/share@5.0.0-alpha.1) (2023-03-16)
+
+
+### Features
+
+* **android:** Removing enableJetifier ([d66f9cb](https://github.com/ionic-team/capacitor-plugins/commit/d66f9cbd9da7e3b1d8c64ca6a5b45156867d4a04))
+
+
+
+
+
+## [4.1.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/share@4.1.0...@capacitor/share@4.1.1) (2023-02-03)
+
+
+### Bug Fixes
+
+* **share:** not sharing files on Android < 10 ([#1386](https://github.com/ionic-team/capacitor-plugins/issues/1386)) ([13673f5](https://github.com/ionic-team/capacitor-plugins/commit/13673f599a37f0553baa5b8e533fd7f163d9de69))
+
+
+
+
+
 # [4.1.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/share@1.1.2...@capacitor/share@4.1.0) (2022-11-16)
 
 

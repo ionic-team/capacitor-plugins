@@ -3,6 +3,110 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.6](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/local-notifications@5.0.5...@capacitor/local-notifications@5.0.6) (2023-07-12)
+
+
+### Bug Fixes
+
+* **local-notifications:** make requestPermissions resolve if granted ([#1678](https://github.com/ionic-team/capacitor-plugins/issues/1678)) ([4872589](https://github.com/ionic-team/capacitor-plugins/commit/487258940e0d1c27deeaa6326760095fc2549715))
+
+
+
+
+
+## [5.0.5](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/local-notifications@5.0.4...@capacitor/local-notifications@5.0.5) (2023-06-29)
+
+**Note:** Version bump only for package @capacitor/local-notifications
+
+
+
+
+
+## [5.0.4](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/local-notifications@5.0.3...@capacitor/local-notifications@5.0.4) (2023-06-08)
+
+**Note:** Version bump only for package @capacitor/local-notifications
+
+
+
+
+
+## [5.0.3](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/local-notifications@5.0.2...@capacitor/local-notifications@5.0.3) (2023-06-08)
+
+**Note:** Version bump only for package @capacitor/local-notifications
+
+
+
+
+
+## [5.0.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/local-notifications@5.0.1...@capacitor/local-notifications@5.0.2) (2023-05-09)
+
+**Note:** Version bump only for package @capacitor/local-notifications
+
+
+
+
+
+## [5.0.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/local-notifications@5.0.0...@capacitor/local-notifications@5.0.1) (2023-05-05)
+
+
+### Bug Fixes
+
+* Use Capacitor 5 final ([#1574](https://github.com/ionic-team/capacitor-plugins/issues/1574)) ([139c18b](https://github.com/ionic-team/capacitor-plugins/commit/139c18b86a11d31246e952d1a74335ff8ce5dbc2))
+
+
+
+
+
+# [5.0.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/local-notifications@5.0.0-beta.1...@capacitor/local-notifications@5.0.0) (2023-05-03)
+
+**Note:** Version bump only for package @capacitor/local-notifications
+
+
+
+
+
+# [5.0.0-beta.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/local-notifications@5.0.0-beta.0...@capacitor/local-notifications@5.0.0-beta.1) (2023-04-21)
+
+
+### Features
+
+* Update gradle to 8.0.2 and gradle plugin to 8.0.0 ([#1542](https://github.com/ionic-team/capacitor-plugins/issues/1542)) ([e7210b4](https://github.com/ionic-team/capacitor-plugins/commit/e7210b47867644f5983e37acdbf0247214ec232d))
+
+
+
+
+
+# [5.0.0-beta.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/local-notifications@5.0.0-alpha.1...@capacitor/local-notifications@5.0.0-beta.0) (2023-03-31)
+
+**Note:** Version bump only for package @capacitor/local-notifications
+
+
+
+
+
+# [5.0.0-alpha.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/local-notifications@4.1.5...@capacitor/local-notifications@5.0.0-alpha.1) (2023-03-16)
+
+
+### Features
+
+* **android:** Removing enableJetifier ([d66f9cb](https://github.com/ionic-team/capacitor-plugins/commit/d66f9cbd9da7e3b1d8c64ca6a5b45156867d4a04))
+* **local-notifications:** support Android 13+ permissions ([#1189](https://github.com/ionic-team/capacitor-plugins/issues/1189)) ([ace7d73](https://github.com/ionic-team/capacitor-plugins/commit/ace7d73c57a1a8ca780d91bd1dace70eb226b21e))
+
+
+
+
+
+## [4.1.5](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/local-notifications@4.1.4...@capacitor/local-notifications@4.1.5) (2023-02-03)
+
+
+### Bug Fixes
+
+* **local-notifications:** Use RTC_WAKEUP if schedule.allowWhileIdle is true ([#1362](https://github.com/ionic-team/capacitor-plugins/issues/1362)) ([1cd2259](https://github.com/ionic-team/capacitor-plugins/commit/1cd2259e33694d8aeb819f1713ccbc88600211b0))
+
+
+
+
+
 ## [4.1.4](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/local-notifications@4.1.3...@capacitor/local-notifications@4.1.4) (2022-12-01)
 
 
