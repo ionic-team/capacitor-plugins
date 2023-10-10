@@ -805,7 +805,7 @@ export interface Schedule {
    */
   count?: number;
 
-  inExact?: boolean;
+  exact?: boolean;
 }
 
 export interface ScheduleOn {

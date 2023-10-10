@@ -22,7 +22,7 @@ public class LocalNotificationSchedule {
 
     private JSObject scheduleObj;
 
-    private  Boolean inExact;
+    private Boolean exact;
 
     public LocalNotificationSchedule(JSObject schedule) throws ParseException {
         this.scheduleObj = schedule;
@@ -38,8 +38,8 @@ public class LocalNotificationSchedule {
         // Schedule this notification to fire even if app is idled (Doze)
         this.whileIdle = schedule.getBoolean("allowWhileIdle", false);
 
-        // Do not schedule this notification with an exact alarm
-        this.inExact = schedule.getBoolean("inExact", false);
+        // Schedule this notification with an exact alarm
+        this.exact = schedule.getBoolean("exact", false);
     }
 
     public LocalNotificationSchedule() {}
@@ -125,7 +125,7 @@ public class LocalNotificationSchedule {
         return this.whileIdle;
     }
 
-    public boolean inExact() { return this.inExact; }
+    public boolean exact() { return this.exact; }
 
     public boolean isRepeating() {
         return Boolean.TRUE.equals(this.repeats);

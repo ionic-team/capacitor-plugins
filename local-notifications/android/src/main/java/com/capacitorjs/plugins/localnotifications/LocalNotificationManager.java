@@ -326,7 +326,7 @@ public class LocalNotificationManager {
         Intent notificationIntent = new Intent(context, TimedNotificationPublisher.class);
         notificationIntent.putExtra(NOTIFICATION_INTENT_KEY, request.getId());
         notificationIntent.putExtra(TimedNotificationPublisher.NOTIFICATION_KEY, notification);
-        notificationIntent.putExtra(TimedNotificationPublisher.INEXACT_KEY, schedule.inExact());
+        notificationIntent.putExtra(TimedNotificationPublisher.EXACT_KEY, schedule.exact());
         int flags = PendingIntent.FLAG_CANCEL_CURRENT;
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             flags = flags | PendingIntent.FLAG_MUTABLE;
@@ -378,7 +378,13 @@ public class LocalNotificationManager {
         long trigger,
         PendingIntent pendingIntent
     ) {
-        if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms()) || schedule.inExact()) {
+        Boolean exact = schedule.exact();
+
+        if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms()) && exact) {
+            exact = false;
+        }
+
+        if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms()) || !exact) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && schedule.allowWhileIdle()) {
                 alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, trigger, pendingIntent);
             } else {
