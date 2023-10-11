@@ -106,6 +106,10 @@ export class LocalNotificationsWeb
     };
   }
 
+  requestExactAlarmSpecialPermission(): Promise<PermissionStatus> {
+    return this.requestPermissions();
+  }
+
   async requestPermissions(): Promise<PermissionStatus> {
     if (!this.hasNotificationSupport()) {
       throw this.unavailable('Notifications not supported in this browser.');
@@ -115,11 +119,7 @@ export class LocalNotificationsWeb
       await Notification.requestPermission(),
     );
 
-    return { display };
-  }
-
-  async requestExactAlarmSpecialPermission(): Promise<void> {
-    throw new Error('Method not implemented.');
+    return { display, exact_alarm: "granted" };
   }
 
   async checkPermissions(): Promise<PermissionStatus> {
@@ -131,7 +131,7 @@ export class LocalNotificationsWeb
       Notification.permission,
     );
 
-    return { display };
+    return { display, exact_alarm: "granted" };
   }
 
   protected hasNotificationSupport = (): boolean => {

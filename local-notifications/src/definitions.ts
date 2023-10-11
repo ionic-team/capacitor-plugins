@@ -155,7 +155,14 @@ export interface LocalNotificationsPlugin {
    */
   requestPermissions(): Promise<PermissionStatus>;
 
-  requestExactAlarmSpecialPermission(): Promise<void>;
+  /**
+   * Request special permission to use exact alarms.
+   * 
+   * Only available on Android.
+   * 
+   * @since 6.0.0
+   */
+  requestExactAlarmSpecialPermission(): Promise<PermissionStatus>;
 
   /**
    * Listen for when notifications are displayed.
@@ -807,6 +814,19 @@ export interface Schedule {
    */
   count?: number;
 
+  /**
+   * Schedule notifications using alarms with exact precision.  If false, 
+   * notifications will be delivered *around* the specified time, as determined
+   * by Android.
+   * 
+   * On Android 14+, users will need to provide permissions to allow the use
+   * of exact alarms.  Use `checkPermissions` and `requestExactAlarmSpecialPermission` 
+   * to check and request permission, respectively.
+   * 
+   * Only available on Android.
+   * 
+   * @since 6.0.0
+   */
   exact?: boolean;
 }
 
@@ -846,6 +866,13 @@ export interface PermissionStatus {
    * @since 1.0.0
    */
   display: PermissionState;
+
+  /**
+   * Permission state of using exact alarms.
+   * 
+   * @since 6.0.0
+   */
+  exact_alarm: PermissionState;
 }
 
 export interface ActionPerformed {

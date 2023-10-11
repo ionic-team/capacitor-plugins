@@ -325,8 +325,16 @@ Request permission to display local notifications.
 ### requestExactAlarmSpecialPermission()
 
 ```typescript
-requestExactAlarmSpecialPermission() => Promise<void>
+requestExactAlarmSpecialPermission() => Promise<PermissionStatus>
 ```
+
+Request special permission to use exact alarms.
+
+Only available on Android.
+
+**Returns:** <code>Promise&lt;<a href="#permissionstatus">PermissionStatus</a>&gt;</code>
+
+**Since:** 6.0.0
 
 --------------------
 
@@ -443,15 +451,15 @@ Represents a schedule for a notification.
 
 Use either `at`, `on`, or `every` to schedule notifications.
 
-| Prop                 | Type                                                    | Description                                                                                                                                                                                                                                                                                                                             | Since |
-| -------------------- | ------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`at`**             | <code><a href="#date">Date</a></code>                   | <a href="#schedule">Schedule</a> a notification at a specific date and time.                                                                                                                                                                                                                                                            | 1.0.0 |
-| **`repeats`**        | <code>boolean</code>                                    | Repeat delivery of this notification at the date and time specified by `at`. Only available for iOS and Android.                                                                                                                                                                                                                        | 1.0.0 |
-| **`allowWhileIdle`** | <code>boolean</code>                                    | Allow this notification to fire while in [Doze](https://developer.android.com/training/monitoring-device-state/doze-standby) Only available for Android 23+. Note that these notifications can only fire [once per 9 minutes, per app](https://developer.android.com/training/monitoring-device-state/doze-standby#assessing_your_app). | 1.0.0 |
-| **`on`**             | <code><a href="#scheduleon">ScheduleOn</a></code>       | <a href="#schedule">Schedule</a> a notification on particular interval(s). This is similar to scheduling [cron](https://en.wikipedia.org/wiki/Cron) jobs. Only available for iOS and Android.                                                                                                                                           | 1.0.0 |
-| **`every`**          | <code><a href="#scheduleevery">ScheduleEvery</a></code> | <a href="#schedule">Schedule</a> a notification on a particular interval.                                                                                                                                                                                                                                                               | 1.0.0 |
-| **`count`**          | <code>number</code>                                     | Limit the number times a notification is delivered by the interval specified by `every`.                                                                                                                                                                                                                                                | 1.0.0 |
-| **`exact`**          | <code>boolean</code>                                    |                                                                                                                                                                                                                                                                                                                                         |       |
+| Prop                 | Type                                                    | Description                                                                                                                                                                                                                                                                                                                                                                                                           | Since |
+| -------------------- | ------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`at`**             | <code><a href="#date">Date</a></code>                   | <a href="#schedule">Schedule</a> a notification at a specific date and time.                                                                                                                                                                                                                                                                                                                                          | 1.0.0 |
+| **`repeats`**        | <code>boolean</code>                                    | Repeat delivery of this notification at the date and time specified by `at`. Only available for iOS and Android.                                                                                                                                                                                                                                                                                                      | 1.0.0 |
+| **`allowWhileIdle`** | <code>boolean</code>                                    | Allow this notification to fire while in [Doze](https://developer.android.com/training/monitoring-device-state/doze-standby) Only available for Android 23+. Note that these notifications can only fire [once per 9 minutes, per app](https://developer.android.com/training/monitoring-device-state/doze-standby#assessing_your_app).                                                                               | 1.0.0 |
+| **`on`**             | <code><a href="#scheduleon">ScheduleOn</a></code>       | <a href="#schedule">Schedule</a> a notification on particular interval(s). This is similar to scheduling [cron](https://en.wikipedia.org/wiki/Cron) jobs. Only available for iOS and Android.                                                                                                                                                                                                                         | 1.0.0 |
+| **`every`**          | <code><a href="#scheduleevery">ScheduleEvery</a></code> | <a href="#schedule">Schedule</a> a notification on a particular interval.                                                                                                                                                                                                                                                                                                                                             | 1.0.0 |
+| **`count`**          | <code>number</code>                                     | Limit the number times a notification is delivered by the interval specified by `every`.                                                                                                                                                                                                                                                                                                                              | 1.0.0 |
+| **`exact`**          | <code>boolean</code>                                    | <a href="#schedule">Schedule</a> notifications using alarms with exact precision. If false, notifications will be delivered *around* the specified time, as determined by Android. On Android 14+, users will need to provide permissions to allow the use of exact alarms. Use `checkPermissions` and `requestExactAlarmSpecialPermission` to check and request permission, respectively. Only available on Android. | 6.0.0 |
 
 
 #### Date
@@ -658,9 +666,10 @@ An action that can be taken when a notification is displayed.
 
 #### PermissionStatus
 
-| Prop          | Type                                                        | Description                                   | Since |
-| ------------- | ----------------------------------------------------------- | --------------------------------------------- | ----- |
-| **`display`** | <code><a href="#permissionstate">PermissionState</a></code> | Permission state of displaying notifications. | 1.0.0 |
+| Prop              | Type                                                        | Description                                   | Since |
+| ----------------- | ----------------------------------------------------------- | --------------------------------------------- | ----- |
+| **`display`**     | <code><a href="#permissionstate">PermissionState</a></code> | Permission state of displaying notifications. | 1.0.0 |
+| **`exact_alarm`** | <code><a href="#permissionstate">PermissionState</a></code> | Permission state of using exact alarms.       | 6.0.0 |
 
 
 #### PluginListenerHandle
