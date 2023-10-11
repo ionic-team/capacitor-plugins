@@ -5,6 +5,8 @@ CAP_PLUGIN(LocalNotificationsPlugin, "LocalNotifications",
     CAP_PLUGIN_METHOD(schedule, CAPPluginReturnPromise);
     CAP_PLUGIN_METHOD(requestPermissions, CAPPluginReturnPromise);
     CAP_PLUGIN_METHOD(checkPermissions, CAPPluginReturnPromise);
+    CAP_PLUGIN_METHOD(checkExactAlarmSpecialPermission, CAPPluginReturnPromise);
+    CAP_PLUGIN_METHOD(requestExactAlarmSpecialPermission, CAPPluginReturnPromise);
     CAP_PLUGIN_METHOD(cancel, CAPPluginReturnPromise);
     CAP_PLUGIN_METHOD(getPending, CAPPluginReturnPromise);
     CAP_PLUGIN_METHOD(registerActionTypes, CAPPluginReturnPromise);
