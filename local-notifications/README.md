@@ -95,6 +95,7 @@ If the device has entered [Doze](https://developer.android.com/training/monitori
 * [`checkPermissions()`](#checkpermissions)
 * [`requestPermissions()`](#requestpermissions)
 * [`requestExactAlarmSpecialPermission()`](#requestexactalarmspecialpermission)
+* [`checkExactAlarmSpecialPermission()`](#checkexactalarmspecialpermission)
 * [`addListener('localNotificationReceived', ...)`](#addlistenerlocalnotificationreceived)
 * [`addListener('localNotificationActionPerformed', ...)`](#addlistenerlocalnotificationactionperformed)
 * [`removeAllListeners()`](#removealllisteners)
@@ -325,14 +326,31 @@ Request permission to display local notifications.
 ### requestExactAlarmSpecialPermission()
 
 ```typescript
-requestExactAlarmSpecialPermission() => Promise<PermissionStatus>
+requestExactAlarmSpecialPermission() => Promise<SettingsPermissionStatus>
 ```
 
 Request special permission to use exact alarms.
 
 Only available on Android.
 
-**Returns:** <code>Promise&lt;<a href="#permissionstatus">PermissionStatus</a>&gt;</code>
+**Returns:** <code>Promise&lt;<a href="#settingspermissionstatus">SettingsPermissionStatus</a>&gt;</code>
+
+**Since:** 6.0.0
+
+--------------------
+
+
+### checkExactAlarmSpecialPermission()
+
+```typescript
+checkExactAlarmSpecialPermission() => Promise<SettingsPermissionStatus>
+```
+
+Check special permission to use exact alarms.
+
+Only available on Android.
+
+**Returns:** <code>Promise&lt;<a href="#settingspermissionstatus">SettingsPermissionStatus</a>&gt;</code>
 
 **Since:** 6.0.0
 
@@ -666,10 +684,16 @@ An action that can be taken when a notification is displayed.
 
 #### PermissionStatus
 
-| Prop              | Type                                                        | Description                                   | Since |
-| ----------------- | ----------------------------------------------------------- | --------------------------------------------- | ----- |
-| **`display`**     | <code><a href="#permissionstate">PermissionState</a></code> | Permission state of displaying notifications. | 1.0.0 |
-| **`exact_alarm`** | <code><a href="#permissionstate">PermissionState</a></code> | Permission state of using exact alarms.       | 6.0.0 |
+| Prop          | Type                                                        | Description                                   | Since |
+| ------------- | ----------------------------------------------------------- | --------------------------------------------- | ----- |
+| **`display`** | <code><a href="#permissionstate">PermissionState</a></code> | Permission state of displaying notifications. | 1.0.0 |
+
+
+#### SettingsPermissionStatus
+
+| Prop              | Type                                                        | Description                             | Since |
+| ----------------- | ----------------------------------------------------------- | --------------------------------------- | ----- |
+| **`exact_alarm`** | <code><a href="#permissionstate">PermissionState</a></code> | Permission state of using exact alarms. | 6.0.0 |
 
 
 #### PluginListenerHandle

@@ -11,6 +11,7 @@ import type {
   PermissionStatus,
   ScheduleOptions,
   ScheduleResult,
+  SettingsPermissionStatus,
 } from './definitions';
 
 export class LocalNotificationsWeb
@@ -106,8 +107,14 @@ export class LocalNotificationsWeb
     };
   }
 
-  requestExactAlarmSpecialPermission(): Promise<PermissionStatus> {
-    return this.requestPermissions();
+  async requestExactAlarmSpecialPermission(): Promise<SettingsPermissionStatus> {
+    return this.checkExactAlarmSpecialPermission();
+  }
+
+  async checkExactAlarmSpecialPermission(): Promise<SettingsPermissionStatus> {
+    return {
+      exact_alarm: "granted",
+    }
   }
 
   async requestPermissions(): Promise<PermissionStatus> {
@@ -119,7 +126,7 @@ export class LocalNotificationsWeb
       await Notification.requestPermission(),
     );
 
-    return { display, exact_alarm: "granted" };
+    return { display };
   }
 
   async checkPermissions(): Promise<PermissionStatus> {
@@ -131,7 +138,7 @@ export class LocalNotificationsWeb
       Notification.permission,
     );
 
-    return { display, exact_alarm: "granted" };
+    return { display };
   }
 
   protected hasNotificationSupport = (): boolean => {

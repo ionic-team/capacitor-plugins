@@ -42,7 +42,6 @@ import org.json.JSONObject;
 public class LocalNotificationsPlugin extends Plugin {
 
     static final String LOCAL_NOTIFICATIONS = "display";
-    static final String EXACT_ALARM = "exact_alarm";
 
     private static Bridge staticBridge = null;
     private LocalNotificationManager manager;
@@ -216,7 +215,6 @@ public class LocalNotificationsPlugin extends Plugin {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
             JSObject permissionsResultJSON = new JSObject();
             permissionsResultJSON.put("display", getNotificationPermissionText());
-            permissionsResultJSON.put("exact_alarm", getExactAlarmPermissionText());
             call.resolve(permissionsResultJSON);
         } else {
             super.checkPermissions(call);
@@ -228,7 +226,6 @@ public class LocalNotificationsPlugin extends Plugin {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU || getPermissionState(LOCAL_NOTIFICATIONS) == PermissionState.GRANTED) {
             JSObject permissionsResultJSON = new JSObject();
             permissionsResultJSON.put("display", getNotificationPermissionText());
-            permissionsResultJSON.put("exact_alarm", getExactAlarmPermissionText());
             call.resolve(permissionsResultJSON);
         } else {
             requestPermissionForAlias(LOCAL_NOTIFICATIONS, call, "permissionsCallback");
@@ -242,17 +239,25 @@ public class LocalNotificationsPlugin extends Plugin {
         }
     }
 
+    @PluginMethod
+    public void checkExactAlarmSpecialPermission(PluginCall call) {
+        JSObject permissionsResultJSON = new JSObject();
+        permissionsResultJSON.put("exact_alarm", getExactAlarmPermissionText());
+
+        call.resolve(permissionsResultJSON);
+    }
+
     @PermissionCallback
     private void permissionsCallback(PluginCall call) {
         JSObject permissionsResultJSON = new JSObject();
         permissionsResultJSON.put("display", getNotificationPermissionText());
-        permissionsResultJSON.put("exact_alarm", getExactAlarmPermissionText());
+
         call.resolve(permissionsResultJSON);
     }
 
     @ActivityCallback
     private void alarmPermissionsCallback(PluginCall call, ActivityResult result) {
-        permissionsCallback(call);
+        checkExactAlarmSpecialPermission(call);
     }
 
     private String getNotificationPermissionText() {
