@@ -94,6 +94,7 @@ If the device has entered [Doze](https://developer.android.com/training/monitori
 * [`listChannels()`](#listchannels)
 * [`checkPermissions()`](#checkpermissions)
 * [`requestPermissions()`](#requestpermissions)
+* [`requestExactAlarmSpecialPermission()`](#requestexactalarmspecialpermission)
 * [`addListener('localNotificationReceived', ...)`](#addlistenerlocalnotificationreceived)
 * [`addListener('localNotificationActionPerformed', ...)`](#addlistenerlocalnotificationactionperformed)
 * [`removeAllListeners()`](#removealllisteners)
@@ -317,6 +318,15 @@ Request permission to display local notifications.
 **Returns:** <code>Promise&lt;<a href="#permissionstatus">PermissionStatus</a>&gt;</code>
 
 **Since:** 1.0.0
+
+--------------------
+
+
+### requestExactAlarmSpecialPermission()
+
+```typescript
+requestExactAlarmSpecialPermission() => Promise<void>
+```
 
 --------------------
 

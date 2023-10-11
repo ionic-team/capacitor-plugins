@@ -118,6 +118,10 @@ export class LocalNotificationsWeb
     return { display };
   }
 
+  async requestExactAlarmSpecialPermission(): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
+
   async checkPermissions(): Promise<PermissionStatus> {
     if (!this.hasNotificationSupport()) {
       throw this.unavailable('Notifications not supported in this browser.');

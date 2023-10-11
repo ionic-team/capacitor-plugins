@@ -155,6 +155,8 @@ export interface LocalNotificationsPlugin {
    */
   requestPermissions(): Promise<PermissionStatus>;
 
+  requestExactAlarmSpecialPermission(): Promise<void>;
+
   /**
    * Listen for when notifications are displayed.
    *
