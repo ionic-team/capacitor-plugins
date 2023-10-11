@@ -10,10 +10,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.service.notification.StatusBarNotification;
-
 import androidx.activity.result.ActivityResult;
 import androidx.core.app.AlarmManagerCompat;
-
 import com.getcapacitor.Bridge;
 import com.getcapacitor.JSArray;
 import com.getcapacitor.JSObject;
@@ -35,8 +33,8 @@ import org.json.JSONObject;
 @CapacitorPlugin(
     name = "LocalNotifications",
     permissions = @Permission(
-            strings = { Manifest.permission.POST_NOTIFICATIONS, Manifest.permission.SCHEDULE_EXACT_ALARM },
-            alias = LocalNotificationsPlugin.LOCAL_NOTIFICATIONS
+        strings = { Manifest.permission.POST_NOTIFICATIONS, Manifest.permission.SCHEDULE_EXACT_ALARM },
+        alias = LocalNotificationsPlugin.LOCAL_NOTIFICATIONS
     )
 )
 public class LocalNotificationsPlugin extends Plugin {

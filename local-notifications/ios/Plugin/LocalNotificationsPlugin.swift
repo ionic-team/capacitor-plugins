@@ -129,11 +129,11 @@ public class LocalNotificationsPlugin: CAPPlugin {
             call.resolve(["display": permission])
         }
     }
-    
+
     @objc public func requestExactAlarmSpecialPermission(_ call: CAPPluginCall) {
         checkExactAlarmSpecialPermission(call)
     }
-    
+
     @objc public func checkExactAlarmSpecialPermission(_ call: CAPPluginCall) {
         call.resolve(["exact_alarm": "granted"])
     }

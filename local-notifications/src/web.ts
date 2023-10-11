@@ -113,8 +113,8 @@ export class LocalNotificationsWeb
 
   async checkExactAlarmSpecialPermission(): Promise<SettingsPermissionStatus> {
     return {
-      exact_alarm: "granted",
-    }
+      exact_alarm: 'granted',
+    };
   }
 
   async requestPermissions(): Promise<PermissionStatus> {

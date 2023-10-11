@@ -125,7 +125,9 @@ public class LocalNotificationSchedule {
         return this.whileIdle;
     }
 
-    public boolean exact() { return this.exact; }
+    public boolean exact() {
+        return this.exact;
+    }
 
     public boolean isRepeating() {
         return Boolean.TRUE.equals(this.repeats);
