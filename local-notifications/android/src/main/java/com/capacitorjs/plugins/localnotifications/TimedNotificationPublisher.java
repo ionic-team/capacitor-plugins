@@ -8,7 +8,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.util.Log;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Logger;
 import java.text.SimpleDateFormat;
@@ -68,10 +67,7 @@ public class TimedNotificationPublisher extends BroadcastReceiver {
             AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
             if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms()) && exact) {
-                Log.w(
-                    "Capacitor/LocalNotif",
-                    "A notification was configured using exact alarms without the required user permission.  Exact will be set to false."
-                );
+                Logger.warn("Capacitor/LocalNotification", "A notification was configured using exact alarms without the required user permission.  Exact will be set to false.");
                 exact = false;
             }
 

@@ -13,7 +13,6 @@ import android.media.AudioAttributes;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
@@ -382,10 +381,7 @@ public class LocalNotificationManager {
         Boolean exact = schedule.exact();
 
         if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms()) && exact) {
-            Log.w(
-                "Capacitor/LocalNotif",
-                "A notification was configured using exact alarms without the required user permission.  Exact will be set to false."
-            );
+            Logger.warn("Capacitor/LocalNotification", "A notification was configured using exact alarms without the required user permission.  Exact will be set to false.");
             exact = false;
         }
 
