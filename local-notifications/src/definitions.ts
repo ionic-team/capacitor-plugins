@@ -156,22 +156,22 @@ export interface LocalNotificationsPlugin {
   requestPermissions(): Promise<PermissionStatus>;
 
   /**
-   * Request special permission to use exact alarms.
+   * Direct user to the application settings screen to configure exact alarms.
    *
    * Only available on Android.
    *
    * @since 6.0.0
    */
-  requestExactAlarmSpecialPermission(): Promise<SettingsPermissionStatus>;
+  changeExactNotificationSetting(): Promise<SettingsPermissionStatus>;
 
   /**
-   * Check special permission to use exact alarms.
+   * Check application setting for using exact alarms.
    *
    * Only available on Android.
    *
    * @since 6.0.0
    */
-  checkExactAlarmSpecialPermission(): Promise<SettingsPermissionStatus>;
+  checkExactNotificationSetting(): Promise<SettingsPermissionStatus>;
 
   /**
    * Listen for when notifications are displayed.

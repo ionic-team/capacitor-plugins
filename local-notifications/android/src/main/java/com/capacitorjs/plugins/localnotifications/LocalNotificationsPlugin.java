@@ -231,14 +231,14 @@ public class LocalNotificationsPlugin extends Plugin {
     }
 
     @PluginMethod
-    public void requestExactAlarmSpecialPermission(PluginCall call) {
+    public void changeExactNotificationSetting(PluginCall call) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             startActivityForResult(call, new Intent(ACTION_REQUEST_SCHEDULE_EXACT_ALARM), "alarmPermissionsCallback");
         }
     }
 
     @PluginMethod
-    public void checkExactAlarmSpecialPermission(PluginCall call) {
+    public void checkExactNotificationSetting(PluginCall call) {
         JSObject permissionsResultJSON = new JSObject();
         permissionsResultJSON.put("exact_alarm", getExactAlarmPermissionText());
 
@@ -255,7 +255,7 @@ public class LocalNotificationsPlugin extends Plugin {
 
     @ActivityCallback
     private void alarmPermissionsCallback(PluginCall call, ActivityResult result) {
-        checkExactAlarmSpecialPermission(call);
+        checkExactNotificationSetting(call);
     }
 
     private String getNotificationPermissionText() {
