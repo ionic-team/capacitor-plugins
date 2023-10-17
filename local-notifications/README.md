@@ -94,8 +94,8 @@ If the device has entered [Doze](https://developer.android.com/training/monitori
 * [`listChannels()`](#listchannels)
 * [`checkPermissions()`](#checkpermissions)
 * [`requestPermissions()`](#requestpermissions)
-* [`requestExactAlarmSpecialPermission()`](#requestexactalarmspecialpermission)
-* [`checkExactAlarmSpecialPermission()`](#checkexactalarmspecialpermission)
+* [`changeExactNotificationSetting()`](#changeexactnotificationsetting)
+* [`checkExactNotificationSetting()`](#checkexactnotificationsetting)
 * [`addListener('localNotificationReceived', ...)`](#addlistenerlocalnotificationreceived)
 * [`addListener('localNotificationActionPerformed', ...)`](#addlistenerlocalnotificationactionperformed)
 * [`removeAllListeners()`](#removealllisteners)
@@ -323,13 +323,13 @@ Request permission to display local notifications.
 --------------------
 
 
-### requestExactAlarmSpecialPermission()
+### changeExactNotificationSetting()
 
 ```typescript
-requestExactAlarmSpecialPermission() => Promise<SettingsPermissionStatus>
+changeExactNotificationSetting() => Promise<SettingsPermissionStatus>
 ```
 
-Request special permission to use exact alarms.
+Direct user to the application settings screen to configure exact alarms.
 
 Only available on Android.
 
@@ -340,13 +340,13 @@ Only available on Android.
 --------------------
 
 
-### checkExactAlarmSpecialPermission()
+### checkExactNotificationSetting()
 
 ```typescript
-checkExactAlarmSpecialPermission() => Promise<SettingsPermissionStatus>
+checkExactNotificationSetting() => Promise<SettingsPermissionStatus>
 ```
 
-Check special permission to use exact alarms.
+Check application setting for using exact alarms.
 
 Only available on Android.
 

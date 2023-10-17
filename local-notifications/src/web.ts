@@ -107,11 +107,11 @@ export class LocalNotificationsWeb
     };
   }
 
-  async requestExactAlarmSpecialPermission(): Promise<SettingsPermissionStatus> {
-    return this.checkExactAlarmSpecialPermission();
+  async changeExactNotificationSetting(): Promise<SettingsPermissionStatus> {
+    return this.checkExactNotificationSetting();
   }
 
-  async checkExactAlarmSpecialPermission(): Promise<SettingsPermissionStatus> {
+  async checkExactNotificationSetting(): Promise<SettingsPermissionStatus> {
     return {
       exact_alarm: 'granted',
     };
