@@ -21,7 +21,6 @@ public class TimedNotificationPublisher extends BroadcastReceiver {
 
     public static String NOTIFICATION_KEY = "NotificationPublisher.notification";
     public static String CRON_KEY = "NotificationPublisher.cron";
-    public static String EXACT_KEY = "NotificationPublisher.inExact";
 
     /**
      * Restore and present notification
@@ -60,16 +59,10 @@ public class TimedNotificationPublisher extends BroadcastReceiver {
 
     private boolean rescheduleNotificationIfNeeded(Context context, Intent intent, int id) {
         String dateString = intent.getStringExtra(CRON_KEY);
-        Boolean exact = intent.getBooleanExtra(EXACT_KEY, false);
 
         if (dateString != null) {
             DateMatch date = DateMatch.fromMatchString(dateString);
             AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-
-            if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms()) && exact) {
-                Logger.warn("Capacitor/LocalNotification", "A notification was configured using exact alarms without the required user permission.  Exact will be set to false.");
-                exact = false;
-            }
 
             long trigger = date.nextTrigger(new Date());
             Intent clone = (Intent) intent.clone();
@@ -78,7 +71,8 @@ public class TimedNotificationPublisher extends BroadcastReceiver {
                 flags = flags | PendingIntent.FLAG_MUTABLE;
             }
             PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, clone, flags);
-            if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms()) || !exact) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms()) {
+                Logger.warn("Capacitor/LocalNotification", "Exact alarms not allowed in user settings.  Notification scheduled with non-exact alarm.");
                 alarmManager.set(AlarmManager.RTC, trigger, pendingIntent);
             } else {
                 alarmManager.setExact(AlarmManager.RTC, trigger, pendingIntent);

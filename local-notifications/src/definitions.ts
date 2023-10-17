@@ -822,21 +822,6 @@ export interface Schedule {
    * @since 1.0.0
    */
   count?: number;
-
-  /**
-   * Schedule notifications using alarms with exact precision.  If false,
-   * notifications will be delivered *around* the specified time, as determined
-   * by Android.
-   *
-   * On Android 14+, users will need to provide permissions to allow the use
-   * of exact alarms.  Use `checkPermissions` and `requestExactAlarmSpecialPermission`
-   * to check and request permission, respectively.
-   *
-   * Only available on Android.
-   *
-   * @since 6.0.0
-   */
-  exact?: boolean;
 }
 
 export interface ScheduleOn {
