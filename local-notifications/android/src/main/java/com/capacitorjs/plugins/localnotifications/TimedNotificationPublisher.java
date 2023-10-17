@@ -72,7 +72,10 @@ public class TimedNotificationPublisher extends BroadcastReceiver {
             }
             PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, clone, flags);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms()) {
-                Logger.warn("Capacitor/LocalNotification", "Exact alarms not allowed in user settings.  Notification scheduled with non-exact alarm.");
+                Logger.warn(
+                    "Capacitor/LocalNotification",
+                    "Exact alarms not allowed in user settings.  Notification scheduled with non-exact alarm."
+                );
                 alarmManager.set(AlarmManager.RTC, trigger, pendingIntent);
             } else {
                 alarmManager.setExact(AlarmManager.RTC, trigger, pendingIntent);
