@@ -6,6 +6,7 @@ import { unlink, readJSON, writeJSON } from './lib/fs.mjs';
 import { root } from './lib/repo.mjs';
 import { bootstrap, ls } from './lib/lerna.mjs';
 import { setPackageJsonDependencies } from './lib/version.mjs';
+import * as cp from './lib/subprocess.mjs';
 
 const readMarkerFile = async p => {
   try {
@@ -58,7 +59,8 @@ execute(async () => {
     ),
   );
 
-  await bootstrap();
+  // await bootstrap();
+  await cp.run('npm', ['install'], { cwd: root, stdio: 'inherit' });
 
   if (markerFile) {
     await unlink(markerFilePath);
