@@ -147,9 +147,9 @@ double stageManagerOffset;
   [self setKeyboardHeight:height delay:duration];
   [self resetScrollView];
 
-  NSString * data = [NSString stringWithFormat:@"{ 'keyboardHeight': %d }", (int)height];
+  NSString * data = [NSString stringWithFormat:@"{ 'keyboardHeight': %d, 'keyboardAnimationDuration': %f}", (int)height, (double)duration];
   [self.bridge triggerWindowJSEventWithEventName:@"keyboardWillShow" data:data];
-  NSDictionary * kbData = @{@"keyboardHeight": [NSNumber numberWithDouble:height]};
+  NSDictionary * kbData = @{@"keyboardHeight": [NSNumber numberWithDouble:height], @"keyboardAnimationDuration": [NSNumber numberWithDouble:duration]};
   [self notifyListeners:@"keyboardWillShow" data:kbData];
 }
 
@@ -158,11 +158,15 @@ double stageManagerOffset;
   CGRect rect = [[notification.userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
   double height = rect.size.height;
 
+  double duration = [[notification.userInfo valueForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue]+0.2;
+
   [self resetScrollView];
 
-  NSString * data = [NSString stringWithFormat:@"{ 'keyboardHeight': %d }", (int)height];
+  NSString * data = [NSString stringWithFormat:@"{ 'keyboardHeight': %d, 'keyboardAnimationDuration': %f}", (int)height, (double)duration];
+
   [self.bridge triggerWindowJSEventWithEventName:@"keyboardDidShow" data:data];
-  NSDictionary * kbData = @{@"keyboardHeight": [NSNumber numberWithDouble:height]};
+  NSDictionary * kbData = @{@"keyboardHeight": [NSNumber numberWithDouble:height], @"keyboardAnimationDuration": [NSNumber numberWithDouble:duration]};
+
   [self notifyListeners:@"keyboardDidShow" data:kbData];
 }
 
