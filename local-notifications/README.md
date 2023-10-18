@@ -22,6 +22,8 @@ Starting on Android 12, scheduled notifications won't be exact unless this permi
 
 Note that even if the permission is present, users can still disable exact notifications from the app settings.
 
+On Android 14, there is a new permission called `USE_EXACT_ALARM`.  Use this permission to use exact alarms without needing to request permission from the user.  This should only be used if the use of exact alarms is central to your app's functionality.  Read more about the implications of using this permission [here](https://developer.android.com/reference/android/Manifest.permission#USE_EXACT_ALARM).
+
 ## Configuration
 
 <docgen-config>
