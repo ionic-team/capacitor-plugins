@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.3.3](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/google-maps@5.3.2...@capacitor/google-maps@5.3.3) (2023-10-04)
+
+### Bug Fixes
+
+- **google-maps:** Apply iconAnchor value to Marker anchor on Android ([#1822](https://github.com/ionic-team/capacitor-plugins/issues/1822)) ([ef65656](https://github.com/ionic-team/capacitor-plugins/commit/ef656564518d03624d5d74a3ca173a53594ec4ba))
+- **google-maps:** correctly apply CapacitorGoogleMapsPoint y value ([#1815](https://github.com/ionic-team/capacitor-plugins/issues/1815)) ([3c7e531](https://github.com/ionic-team/capacitor-plugins/commit/3c7e531dc1e49fa2a3267cdae3dda2379e62c005))
+- **google-maps:** use URLSession for remote iconUrl on iOS ([#1818](https://github.com/ionic-team/capacitor-plugins/issues/1818)) ([#1824](https://github.com/ionic-team/capacitor-plugins/issues/1824)) ([73ad64b](https://github.com/ionic-team/capacitor-plugins/commit/73ad64b665406d028cf2e171da89801a0ea9cf78))
+
+## [5.3.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/google-maps@5.3.1...@capacitor/google-maps@5.3.2) (2023-09-14)
+
+**Note:** Version bump only for package @capacitor/google-maps
+
+## [5.3.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/google-maps@5.3.0...@capacitor/google-maps@5.3.1) (2023-08-23)
+
+### Bug Fixes
+
+- **google-maps:** attach native map view to correct scroll view ([#1638](https://github.com/ionic-team/capacitor-plugins/issues/1638)) ([dfe6043](https://github.com/ionic-team/capacitor-plugins/commit/dfe6043e8cbeb9aeabe847f62341dcaae674951a))
+- **google-maps:** problems on get/setMapType on web ([#1738](https://github.com/ionic-team/capacitor-plugins/issues/1738)) ([a23202f](https://github.com/ionic-team/capacitor-plugins/commit/a23202fce338899e4ffa23b948ddd7394af127e0))
+
 # [5.3.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/google-maps@5.2.2...@capacitor/google-maps@5.3.0) (2023-08-09)
 
 ### Features

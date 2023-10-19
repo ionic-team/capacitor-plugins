@@ -772,6 +772,10 @@ class CapacitorGoogleMap(
         markerOptions.flat(marker.isFlat)
         markerOptions.draggable(marker.draggable)
         markerOptions.zIndex(marker.zIndex)
+        if (marker.iconAnchor != null) {
+            markerOptions.anchor(marker.iconAnchor!!.x, marker.iconAnchor!!.y)
+        }
+
 
         if (!marker.iconUrl.isNullOrEmpty()) {
             if (this.markerIcons.contains(marker.iconUrl)) {
