@@ -254,20 +254,9 @@ extension CameraPlugin: PHPickerViewControllerDelegate {
             var images: [ProcessedImage] = []
             var processedCount = 0
             for img in results {
-                guard img.itemProvider.canLoadObject(ofClass: UIImage.self) else {
-                    self.call?.reject("Error loading image")
-                    return
-                }
-                // extract the image
-                img.itemProvider.loadObject(ofClass: UIImage.self) { [weak self] (reading, _) in
-                    if let image = reading as? UIImage {
-                        var asset: PHAsset?
-                        if let assetId = img.assetIdentifier {
-                            asset = PHAsset.fetchAssets(withLocalIdentifiers: [assetId], options: nil).firstObject
-                        }
-                        if let processedImage = self?.processedImage(from: image, with: asset?.imageData) {
-                            images.append(processedImage)
-                        }
+                extractProcessedImage(from: img) { [weak self] processedImage in
+                    if let image = processedImage {
+                        images.append(image)
                         processedCount += 1
                         if processedCount == results.count {
                             self?.returnImages(images)
@@ -279,11 +268,19 @@ extension CameraPlugin: PHPickerViewControllerDelegate {
             }
 
         } else {
-            guard result.itemProvider.canLoadObject(ofClass: UIImage.self) else {
-                self.call?.reject("Error loading image")
-                return
+            extractProcessedImage(from: result) { [weak self] processedImage in
+                if let image = processedImage {
+                    self?.returnProcessedImage(image)
+                } else {
+                    self?.call?.reject("Error loading image")
+                }
             }
-            // extract the image
+        }
+    }
+    
+    private func extractProcessedImage(from result: PHPickerResult, callback: @escaping (ProcessedImage?) -> Void) {
+        if result.itemProvider.canLoadObject(ofClass: UIImage.self) {
+            // extract the image as UIImage
             result.itemProvider.loadObject(ofClass: UIImage.self) { [weak self] (reading, _) in
                 if let image = reading as? UIImage {
                     var asset: PHAsset?
@@ -292,11 +289,34 @@ extension CameraPlugin: PHPickerViewControllerDelegate {
                     }
                     if var processedImage = self?.processedImage(from: image, with: asset?.imageData) {
                         processedImage.flags = .gallery
-                        self?.returnProcessedImage(processedImage)
+                        callback(processedImage)
                         return
                     }
                 }
-                self?.call?.reject("Error loading image")
+                callback(nil)
+            }
+        } else {
+            // extract the image as data to support images like Apple ProRaw
+            result.itemProvider.loadFileRepresentation(forTypeIdentifier: "public.image") { [weak self] url, _ in
+                guard let url = url,
+                      let data = NSData(contentsOf: url),
+                      let source = CGImageSourceCreateWithData(data, nil),
+                      let cgImage = CGImageSourceCreateImageAtIndex(source, 0, nil) else {
+                    callback(nil)
+                    return
+                }
+                
+                var asset: PHAsset?
+                if let assetId = result.assetIdentifier {
+                    asset = PHAsset.fetchAssets(withLocalIdentifiers: [assetId], options: nil).firstObject
+                }
+                
+                if var processedImage = self?.processedImage(from: UIImage(cgImage: cgImage), with: asset?.imageData) {
+                    processedImage.flags = .gallery
+                    callback(processedImage)
+                } else {
+                    callback(nil)
+                }
             }
         }
     }
