@@ -13,6 +13,14 @@ export interface ConfigureOptions {
    * @since 1.0.0
    */
   group?: string;
+
+  /**
+   * Set the iOS App Group for UserDefaults.
+   *
+   * Specifically, this is the value passed to
+   * https://developer.apple.com/documentation/foundation/userdefaults/1409957-init
+   */
+  iosSuiteName?: string;
 }
 
 export interface GetOptions {
