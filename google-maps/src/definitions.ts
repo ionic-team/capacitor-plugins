@@ -195,8 +195,32 @@ export interface GoogleMapConfig extends google.maps.MapOptions {
    * A map id associated with a specific map style or feature.
    *
    * [Use Map IDs](https://developers.google.com/maps/documentation/get-map-id)
+   * 
+   * Only for Web.
+   *
+   * @since 6.0.0
    */
   mapId?: string;
+  /**
+   * A map id associated with a specific map style or feature.
+   *
+   * [Use Map IDs](https://developers.google.com/maps/documentation/get-map-id)
+   *
+   * Only for Android.
+   *
+   * @since 6.0.0
+   */
+  androidMapId?: string;
+  /**
+   * A map id associated with a specific map style or feature.
+   *
+   * [Use Map IDs](https://developers.google.com/maps/documentation/get-map-id)
+   *
+   * Only for iOS.
+   *
+   * @since 6.0.0
+   */
+  iOSMapId?: string;
 }
 
 /**

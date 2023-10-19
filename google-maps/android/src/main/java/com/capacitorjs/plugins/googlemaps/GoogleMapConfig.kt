@@ -85,7 +85,7 @@ class GoogleMapConfig(fromJSONObject: JSONObject) {
 
         styles = fromJSONObject.getString("styles")
 
-        mapId = fromJSONObject.getString("mapId")
+        mapId = fromJSONObject.getString("androidMapId")
 
         googleMapOptions = GoogleMapOptions().camera(cameraPosition).liteMode(liteMode)
         if (mapId != null) {
