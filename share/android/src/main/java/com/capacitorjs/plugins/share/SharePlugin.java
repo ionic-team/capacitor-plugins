@@ -1,5 +1,7 @@
 package com.capacitorjs.plugins.share;
 
+import static android.content.Context.RECEIVER_NOT_EXPORTED;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.PendingIntent;
@@ -20,8 +22,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONException;
-
-import static android.content.Context.RECEIVER_NOT_EXPORTED;
 
 @CapacitorPlugin(name = "Share")
 public class SharePlugin extends Plugin {

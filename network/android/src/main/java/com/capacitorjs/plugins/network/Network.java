@@ -1,5 +1,7 @@
 package com.capacitorjs.plugins.network;
 
+import static android.content.Context.RECEIVER_NOT_EXPORTED;
+
 import android.annotation.TargetApi;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -13,8 +15,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-
-import static android.content.Context.RECEIVER_NOT_EXPORTED;
 
 public class Network {
 
