@@ -42,7 +42,12 @@ public class SharePlugin extends Plugin {
                     }
                 }
             };
-        ContextCompat.registerReceiver(getContext(), broadcastReceiver, new IntentFilter(Intent.EXTRA_CHOSEN_COMPONENT), ContextCompat.RECEIVER_EXPORTED);
+        ContextCompat.registerReceiver(
+            getContext(),
+            broadcastReceiver,
+            new IntentFilter(Intent.EXTRA_CHOSEN_COMPONENT),
+            ContextCompat.RECEIVER_EXPORTED
+        );
     }
 
     @SuppressWarnings("deprecation")
