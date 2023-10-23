@@ -902,6 +902,9 @@ For iOS and Android only the config options declared on <a href="#googlemapconfi
 | **`androidLiteMode`**  | <code>boolean</code>                      | Enables image-based lite mode on Android.                                                                                                                 | <code>false</code> |       |
 | **`devicePixelRatio`** | <code>number</code>                       | Override pixel ratio for native map.                                                                                                                      |                    |       |
 | **`styles`**           | <code>MapTypeStyle[] \| null</code>       | Styles to apply to each of the default map types. Note that for satellite, hybrid and terrain modes, these styles will only apply to labels and geometry. |                    | 4.3.0 |
+| **`mapId`**            | <code>string</code>                       | A map id associated with a specific map style or feature. [Use Map IDs](https://developers.google.com/maps/documentation/get-map-id) Only for Web.        |                    | 6.0.0 |
+| **`androidMapId`**     | <code>string</code>                       | A map id associated with a specific map style or feature. [Use Map IDs](https://developers.google.com/maps/documentation/get-map-id) Only for Android.    |                    | 6.0.0 |
+| **`iOSMapId`**         | <code>string</code>                       | A map id associated with a specific map style or feature. [Use Map IDs](https://developers.google.com/maps/documentation/get-map-id) Only for iOS.        |                    | 6.0.0 |
 
 
 #### LatLng
