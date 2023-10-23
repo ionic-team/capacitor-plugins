@@ -94,8 +94,8 @@ class CapacitorGoogleMapsPlugin : Plugin(), OnMapsSdkInitializedCallback {
 
     override fun onMapsSdkInitialized(renderer: MapsInitializer.Renderer) {
         when (renderer) {
-            MapsInitializer.Renderer.LATEST -> Log.d("Capacitor Google Maps", "Latest Google Maps renderer enabled")
-            MapsInitializer.Renderer.LEGACY -> Log.d("Capacitor Google Maps", "Legacy Google Maps renderer enabled - Cloud based map styling and advanced drawing not available")
+            MapsInitializer.Renderer.LATEST -> Logger.debug("Capacitor Google Maps", "Latest Google Maps renderer enabled")
+            MapsInitializer.Renderer.LEGACY -> Logger.debug("Capacitor Google Maps", "Legacy Google Maps renderer enabled - Cloud based map styling and advanced drawing not available")
         }
     }
 
