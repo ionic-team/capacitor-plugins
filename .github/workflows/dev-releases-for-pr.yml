@@ -75,7 +75,7 @@ jobs:
       - env: 
           PR_NUMBER: ${{ github.event.pull_request.number }}
         run: | 
-          npm version prerelease --no-git-tag-version -f --preid dev-$PR_NUMBER-$(date +\"%Y%m%dT%H%M%S\")
+          npm version prerelease --no-git-tag-version -f --preid dev-$PR_NUMBER-$(date + %Y%m%dT%H%M%S)
           npm publish --tag dev --dry-run
         working-directory: ${{ matrix.plugin }}
       - name: get-npm-version
