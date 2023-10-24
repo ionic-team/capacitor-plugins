@@ -11,6 +11,7 @@ import com.getcapacitor.annotation.CapacitorPlugin
 import com.getcapacitor.annotation.Permission
 import com.getcapacitor.annotation.PermissionCallback
 import com.google.android.gms.maps.MapsInitializer
+import com.google.android.gms.maps.OnMapsSdkInitializedCallback
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import kotlinx.coroutines.CoroutineScope
@@ -29,7 +30,7 @@ import org.json.JSONObject
                         ),
                 ],
 )
-class CapacitorGoogleMapsPlugin : Plugin() {
+class CapacitorGoogleMapsPlugin : Plugin(), OnMapsSdkInitializedCallback {
     private var maps: HashMap<String, CapacitorGoogleMap> = HashMap()
     private var cachedTouchEvents: HashMap<String, MutableList<MotionEvent>> = HashMap()
     private val tag: String = "CAP-GOOGLE-MAPS"
@@ -43,7 +44,8 @@ class CapacitorGoogleMapsPlugin : Plugin() {
     override fun load() {
         super.load()
 
-        MapsInitializer.initialize(this.context, MapsInitializer.Renderer.LATEST, null)
+        MapsInitializer.initialize(this.context, MapsInitializer.Renderer.LATEST, this)
+
 
         this.bridge.webView.setOnTouchListener(
                 object : View.OnTouchListener {
@@ -88,6 +90,13 @@ class CapacitorGoogleMapsPlugin : Plugin() {
                     }
                 }
         )
+    }
+
+    override fun onMapsSdkInitialized(renderer: MapsInitializer.Renderer) {
+        when (renderer) {
+            MapsInitializer.Renderer.LATEST -> Logger.debug("Capacitor Google Maps", "Latest Google Maps renderer enabled")
+            MapsInitializer.Renderer.LEGACY -> Logger.debug("Capacitor Google Maps", "Legacy Google Maps renderer enabled - Cloud based map styling and advanced drawing not available")
+        }
     }
 
     override fun handleOnStart() {
