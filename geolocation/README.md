@@ -13,10 +13,7 @@ npx cap sync
 
 Apple requires privacy descriptions to be specified in `Info.plist` for location information:
 
-- `NSLocationAlwaysAndWhenInUseUsageDescription` (`Privacy - Location Always and When In Use Usage Description`)
 - `NSLocationWhenInUseUsageDescription` (`Privacy - Location When In Use Usage Description`)
-
-> `NSLocationAlwaysUsageDescription` is deprecated on iOS 11+.
 
 Read about [Configuring `Info.plist`](https://capacitorjs.com/docs/ios/configuration#configuring-infoplist) in the [iOS Guide](https://capacitorjs.com/docs/ios) for more information on setting iOS permissions in Xcode
 
