@@ -668,7 +668,7 @@ export interface FilesystemPlugin {
   addListener(
     eventName: 'progress',
     listenerFunc: ProgressListener,
-  ): Promise<PluginListenerHandle> & PluginListenerHandle;
+  ): Promise<PluginListenerHandle>;
 }
 
 /**
