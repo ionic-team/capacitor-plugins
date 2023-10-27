@@ -365,7 +365,7 @@ Perform a http request to a server and download the file to the specified destin
 ### addListener('progress', ...)
 
 ```typescript
-addListener(eventName: 'progress', listenerFunc: ProgressListener) => Promise<PluginListenerHandle> & PluginListenerHandle
+addListener(eventName: 'progress', listenerFunc: ProgressListener) => Promise<PluginListenerHandle>
 ```
 
 Add a listener to file download progress events.
@@ -375,7 +375,7 @@ Add a listener to file download progress events.
 | **`eventName`**    | <code>'progress'</code>                                       |
 | **`listenerFunc`** | <code><a href="#progresslistener">ProgressListener</a></code> |
 
-**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt; & <a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
 
 **Since:** 5.1.0
 
