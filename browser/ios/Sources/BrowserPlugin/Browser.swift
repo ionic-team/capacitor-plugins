@@ -15,9 +15,12 @@ import SafariServices
         return safariViewController
     }
 
-    @objc public func prepare(for url: URL, withTint tint: UIColor? = nil, modalPresentation style: UIModalPresentationStyle = .fullScreen) -> Bool {
+    @objc public func prepare(for url: URL, withTint tint: UIColor? = nil, modalPresentation style: UIModalPresentationStyle = .fullScreen, entersReaderIfAvailable: Bool = false) -> Bool {
         if safariViewController == nil, let scheme = url.scheme?.lowercased(), ["http", "https"].contains(scheme) {
-            let safariVC = SFSafariViewController(url: url)
+            let config = SFSafariViewController.Configuration()
+            config.entersReaderIfAvailable = entersReaderIfAvailable
+
+            let safariVC = SFSafariViewController(url: url, configuration: config)
             safariVC.delegate = self
             if let color = tint {
                 safariVC.preferredBarTintColor = color

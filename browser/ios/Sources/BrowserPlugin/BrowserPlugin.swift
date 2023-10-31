@@ -23,8 +23,9 @@ public class CAPBrowserPlugin: CAPPlugin, CAPBridgedPlugin {
             color = UIColor.capacitor.color(fromHex: toolbarColor)
         }
         let style = self.presentationStyle(for: call.getString("presentationStyle"))
+        let entersReaderIfAvailable = call.getBool("entersReaderIfAvailable") ?? false
         // prepare for display
-        guard implementation.prepare(for: url, withTint: color, modalPresentation: style), let viewController = implementation.viewController else {
+        guard implementation.prepare(for: url, withTint: color, modalPresentation: style, entersReaderIfAvailable: entersReaderIfAvailable), let viewController = implementation.viewController else {
             call.reject("Unable to display URL")
             return
         }
