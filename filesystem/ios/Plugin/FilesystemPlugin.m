@@ -18,5 +18,4 @@ CAP_PLUGIN(FilesystemPlugin, "Filesystem",
            CAP_PLUGIN_METHOD(checkPermissions, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(requestPermissions, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(downloadFile, CAPPluginReturnPromise);
-           CAP_PLUGIN_METHOD(removeAllListeners, CAPPluginReturnNone);
 )
