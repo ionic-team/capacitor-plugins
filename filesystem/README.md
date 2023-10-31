@@ -101,6 +101,7 @@ const readFilePath = async () => {
 * [`requestPermissions()`](#requestpermissions)
 * [`downloadFile(...)`](#downloadfile)
 * [`addListener('progress', ...)`](#addlistenerprogress)
+* [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
 * [Enums](#enums)
@@ -378,6 +379,19 @@ Add a listener to file download progress events.
 **Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
 
 **Since:** 5.1.0
+
+--------------------
+
+
+### removeAllListeners()
+
+```typescript
+removeAllListeners() => Promise<void>
+```
+
+Remove all listeners for this plugin.
+
+**Since:** 5.2.0
 
 --------------------
 
