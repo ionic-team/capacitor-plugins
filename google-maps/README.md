@@ -17,7 +17,6 @@ To use the Google Maps SDK on any platform, API keys associated with an account 
 
 The Google Maps SDK supports the use of showing the users current location via `enableCurrentLocation(bool)`. To use this, Apple requires privacy descriptions to be specified in `Info.plist`:
 
-- `NSLocationAlwaysUsageDescription` (`Privacy - Location Always Usage Description`)
 - `NSLocationWhenInUseUsageDescription` (`Privacy - Location When In Use Usage Description`)
 
 Read about [Configuring `Info.plist`](https://capacitorjs.com/docs/ios/configuration#configuring-infoplist) in the [iOS Guide](https://capacitorjs.com/docs/ios) for more information on setting iOS permissions in Xcode.
