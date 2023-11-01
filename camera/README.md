@@ -216,6 +216,7 @@ Request camera and photo album permissions
 | **`exif`**         | <code>any</code>     | Exif data, if any, retrieved from the image                                                                                                                                                                                                                              | 1.0.0 |
 | **`format`**       | <code>string</code>  | The format of the image, ex: jpeg, png, gif. iOS and Android only support jpeg. Web supports jpeg, png and gif, but the exact availability may vary depending on the browser. gif is only supported if `webUseInput` is set to `true` or if `source` is set to `Photos`. | 1.0.0 |
 | **`saved`**        | <code>boolean</code> | Whether if the image was saved to the gallery or not. On Android and iOS, saving to the gallery can fail if the user didn't grant the required permissions. On Web there is no gallery, so always returns false.                                                         | 1.1.0 |
+| **`size`**        | <code>number</code> | The size of the imagefile in bytes                                                         | 5.?.0 |
 
 
 #### ImageOptions
@@ -254,6 +255,7 @@ Request camera and photo album permissions
 | **`webPath`** | <code>string</code> | webPath returns a path that can be used to set the src attribute of an image for efficient loading and rendering. | 1.2.0 |
 | **`exif`**    | <code>any</code>    | Exif data, if any, retrieved from the image                                                                       | 1.2.0 |
 | **`format`**  | <code>string</code> | The format of the image, ex: jpeg, png, gif. iOS and Android only support jpeg. Web supports jpeg, png and gif.   | 1.2.0 |
+| **`size`**    | <code>number</code> | The size of the imagefile in bytes                                                                                | 5.?.0 |
 
 
 #### GalleryImageOptions
