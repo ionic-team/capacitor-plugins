@@ -6,7 +6,7 @@ import { unlink, readJSON, writeJSON } from './lib/fs.mjs';
 import { root } from './lib/repo.mjs';
 import { ls } from './lib/lerna.mjs';
 import { setPackageJsonDependencies } from './lib/version.mjs';
-import * as cp from './lib/subprocess.mjs';
+import { run } from './lib/subprocess.mjs';
 
 const readMarkerFile = async p => {
   try {
