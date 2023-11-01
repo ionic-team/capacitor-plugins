@@ -4,8 +4,9 @@ import { PROJECTS } from './lib/capacitor.mjs';
 import { execute } from './lib/cli.mjs';
 import { unlink, readJSON, writeJSON } from './lib/fs.mjs';
 import { root } from './lib/repo.mjs';
-import { bootstrap, ls } from './lib/lerna.mjs';
+import { ls } from './lib/lerna.mjs';
 import { setPackageJsonDependencies } from './lib/version.mjs';
+import { run } from './lib/subprocess.mjs';
 
 const readMarkerFile = async p => {
   try {
@@ -58,7 +59,7 @@ execute(async () => {
     ),
   );
 
-  await bootstrap();
+  await run('npm', ['install'], { cwd: root, stdio: 'inherit' });
 
   if (markerFile) {
     await unlink(markerFilePath);
