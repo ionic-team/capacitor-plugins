@@ -1,7 +1,8 @@
 import { PROJECTS, PEERPROJECTS } from './lib/capacitor.mjs';
 import { execute } from './lib/cli.mjs';
+import { root } from './lib/repo.mjs';
+import { run } from './lib/subprocess.mjs';
 import { setLernaPackageDependencies } from './lib/version.mjs';
-import { bootstrap } from './lib/lerna.mjs';
 
 execute(async () => {
   const packages = Object.fromEntries(
@@ -13,5 +14,5 @@ execute(async () => {
 
   await setLernaPackageDependencies(packages, 'devDependencies');
   await setLernaPackageDependencies(peerPackages, 'peerDependencies');
-  await bootstrap();
+  await run('npm', ['install'], { cwd: root, stdio: 'inherit' });
 });
