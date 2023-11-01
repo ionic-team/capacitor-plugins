@@ -4,7 +4,7 @@ import { PROJECTS } from './lib/capacitor.mjs';
 import { execute } from './lib/cli.mjs';
 import { unlink, readJSON, writeJSON } from './lib/fs.mjs';
 import { root } from './lib/repo.mjs';
-import { bootstrap, ls } from './lib/lerna.mjs';
+import { ls } from './lib/lerna.mjs';
 import { setPackageJsonDependencies } from './lib/version.mjs';
 import * as cp from './lib/subprocess.mjs';
 
