@@ -436,6 +436,7 @@ export class CapacitorGoogleMapsWeb
   async create(_args: CreateMapArgs): Promise<void> {
     console.log(`Create map: ${_args.id}`);
     await this.importGoogleLib(_args.apiKey, _args.region, _args.language);
+
     this.maps[_args.id] = {
       map: new window.google.maps.Map(_args.element, { ..._args.config }),
       element: _args.element,
