@@ -59,8 +59,7 @@ execute(async () => {
     ),
   );
 
-  // await bootstrap();
-  await cp.run('npm', ['install'], { cwd: root, stdio: 'inherit' });
+  await run('npm', ['install'], { cwd: root, stdio: 'inherit' });
 
   if (markerFile) {
     await unlink(markerFilePath);
