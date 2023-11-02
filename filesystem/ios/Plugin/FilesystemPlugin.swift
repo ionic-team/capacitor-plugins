@@ -204,8 +204,8 @@ public class FilesystemPlugin: CAPPlugin {
                     "name": url.lastPathComponent,
                     "type": implementation.getType(from: attr),
                     "size": attr[.size] as? UInt64 ?? 0,
-                    "ctime": ctime,
-                    "mtime": mtime,
+                    "ctime": UInt64(ctime),
+                    "mtime": UInt64(mtime),
                     "uri": url.absoluteString
                 ]
             }
