@@ -256,7 +256,7 @@ public class CameraPlugin extends Plugin {
                 }
                 PermissionState permissionState = getPermissionState(alias);
                 if (permissionState != PermissionState.GRANTED) {
-                    Logger.debug(getLogTag(), "User denied photos permission: " + permissionState.toString());
+                    Logger.debug(getLogTag(), "User denied photos (" + alias + ") permission: " + permissionState.toString());
                     call.reject(PERMISSION_DENIED_ERROR_PHOTOS);
                     return;
                 }
