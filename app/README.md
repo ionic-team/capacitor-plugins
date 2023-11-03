@@ -2,7 +2,6 @@
 
 The App API handles high level App state and events. For example, this API emits events when the app enters and leaves the foreground, handles deeplinks, opens other apps, and manages persisted plugin state.
 
-
 ## Install
 
 ```bash
