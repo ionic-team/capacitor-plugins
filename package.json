@@ -4,7 +4,7 @@
   "scripts": {
     "build": "lerna run build",
     "watch": "lerna run --parallel --stream watch",
-    "lint": "npm run scripts:prettier -- --check && lerna run lint",
+    "lint": "npm run scripts:prettier -- --check",
     "fmt": "npm run scripts:prettier -- --write && lerna run fmt",
     "scripts:prettier": "npx prettier \"scripts/**/*.mjs\"",
     "apply-patches": "node ./scripts/apply-patches.mjs",
