@@ -3,8 +3,11 @@ dist
 node_modules
 
 # iOS files
-.DS_Store
-.build
+Pods
+Podfile.lock
+Build
+xcuserdata
+/.build
 /Packages
 xcuserdata/
 DerivedData/
