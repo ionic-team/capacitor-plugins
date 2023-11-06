@@ -7,21 +7,19 @@ let package = Package(
     products: [
         .library(
             name: "HapticsPlugin",
-            targets: ["HapticsPlugin", "Capacitor", "Cordova"]),
+            targets: ["HapticsPlugin"]),
+    ],
+     dependencies: [
+        .package(url: "https://github.com/ionic-team/capacitor6-spm-test.git", branch: "main")
     ],
     targets: [
         .target(
             name: "HapticsPlugin", 
-            dependencies: ["Capacitor", "Cordova"],
+             dependencies: [
+                .product(name: "Capacitor", package: "capacitor6-spm-test"),
+                .product(name: "Cordova", package: "capacitor6-spm-test")
+            ],
             path: "ios/Sources/HapticsPlugin"),
-        .binaryTarget(
-            name: "Capacitor",
-            path: "../node_modules/@capacitor/ios/Frameworks/Capacitor.xcframework"
-        ),
-        .binaryTarget(
-            name: "Cordova",
-            path: "../node_modules/@capacitor/ios/Frameworks/Cordova.xcframework"
-        ),
         .testTarget(
             name: "HapticsPluginTests",
             dependencies: ["HapticsPlugin"],
