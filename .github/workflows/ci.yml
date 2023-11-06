@@ -12,7 +12,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-12]
+        os: [ubuntu-latest, macos-13]
     timeout-minutes: 30
     outputs:
       plugins: ${{ steps.packages.outputs.paths }}
@@ -51,7 +51,7 @@ jobs:
          files: ${{ steps.catjson.outputs.FILES_JSON }}
 
   lint:
-    runs-on: macos-12
+    runs-on: macos-13
     timeout-minutes: 30
     needs:
       - setup
@@ -74,7 +74,7 @@ jobs:
       - run: npm run lint
 
   verify-ios:
-    runs-on: macos-12
+    runs-on: macos-13
     if: needs.setup.outputs.plugins != '[]'
     timeout-minutes: 30
     needs:
@@ -83,7 +83,7 @@ jobs:
     strategy:
       matrix:
         xcode:
-        - /Applications/Xcode_14.2.app
+        - /Applications/Xcode_15.0.app
         plugin: ${{ fromJson(needs.setup.outputs.plugins) }}
     steps:
       - run: sudo xcode-select --switch ${{ matrix.xcode }}
