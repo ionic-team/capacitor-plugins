@@ -231,6 +231,8 @@ public class LocalNotificationsPlugin extends Plugin {
     public void changeExactNotificationSetting(PluginCall call) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             startActivityForResult(call, new Intent(ACTION_REQUEST_SCHEDULE_EXACT_ALARM), "alarmPermissionsCallback");
+        } else {
+            checkExactNotificationSetting(call);
         }
     }
 
