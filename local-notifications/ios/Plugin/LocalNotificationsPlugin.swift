@@ -131,11 +131,11 @@ public class LocalNotificationsPlugin: CAPPlugin {
     }
 
     @objc public func checkExactNotificationSetting(_ call: CAPPluginCall) {
-        changeExactNotificationSetting(call)
+        call.unimplemented()
     }
 
     @objc public func changeExactNotificationSetting(_ call: CAPPluginCall) {
-        call.resolve(["exact_alarm": "granted"])
+        call.unimplemented()
     }
 
     /**

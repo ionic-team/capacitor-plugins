@@ -108,13 +108,11 @@ export class LocalNotificationsWeb
   }
 
   async changeExactNotificationSetting(): Promise<SettingsPermissionStatus> {
-    return this.checkExactNotificationSetting();
+    throw this.unimplemented('Not implemented on web.');
   }
 
   async checkExactNotificationSetting(): Promise<SettingsPermissionStatus> {
-    return {
-      exact_alarm: 'granted',
-    };
+    throw this.unimplemented('Not implemented on web.');
   }
 
   async requestPermissions(): Promise<PermissionStatus> {
