@@ -158,7 +158,7 @@ export interface LocalNotificationsPlugin {
   /**
    * Direct user to the application settings screen to configure exact alarms.
    *
-   * Only available on Android.
+   * Only available on Android >= S.
    *
    * @since 6.0.0
    */
