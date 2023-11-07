@@ -11,5 +11,4 @@ CAP_PLUGIN(KeyboardPlugin, "Keyboard",
            CAP_PLUGIN_METHOD(setResizeMode, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(getResizeMode, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(setScroll, CAPPluginReturnPromise);
-           CAP_PLUGIN_METHOD(removeAllListeners, CAPPluginReturnPromise);
 )
