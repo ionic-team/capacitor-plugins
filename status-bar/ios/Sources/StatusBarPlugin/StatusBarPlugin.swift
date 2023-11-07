@@ -7,16 +7,16 @@ import Capacitor
  */
 @objc(StatusBarPlugin)
 public class StatusBarPlugin: CAPPlugin, CAPBridgedPlugin {
-    public let identifier = "StatusBarPlugin" 
-    public let jsName = "StatusBar" 
+    public let identifier = "StatusBarPlugin"
+    public let jsName = "StatusBar"
     public let pluginMethods: [CAPPluginMethod] = [
         CAPPluginMethod(name: "setStyle", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "setBackgroundColor", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "show", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "hide", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getInfo", returnType: CAPPluginReturnPromise),
-        CAPPluginMethod(name: "setOverlaysWebView", returnType: CAPPluginReturnPromise),
-    ] 
+        CAPPluginMethod(name: "setOverlaysWebView", returnType: CAPPluginReturnPromise)
+    ]
     private var observer: NSObjectProtocol?
 
     override public func load() {
@@ -104,4 +104,3 @@ public class StatusBarPlugin: CAPPlugin, CAPBridgedPlugin {
         call.unimplemented()
     }
 }
-

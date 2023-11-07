@@ -8,7 +8,7 @@ let package = Package(
     products: [
         .library(
             name: "KeyboardPlugin",
-            targets: ["KeyboardPlugin"]),
+            targets: ["KeyboardPlugin"])
     ],
     dependencies: [
         .package(url: "https://github.com/ionic-team/capacitor6-spm-test.git", branch: "main")
@@ -24,7 +24,6 @@ let package = Package(
         .testTarget(
             name: "KeyboardPluginTests",
             dependencies: ["KeyboardPlugin"],
-            path: "ios/Tests/KeyboardPluginTests"),
+            path: "ios/Tests/KeyboardPluginTests")
     ]
 )
-

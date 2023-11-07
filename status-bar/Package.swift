@@ -8,7 +8,7 @@ let package = Package(
     products: [
         .library(
             name: "StatusBarPlugin",
-            targets: ["StatusBarPlugin"]),
+            targets: ["StatusBarPlugin"])
     ],
     dependencies: [
         .package(url: "https://github.com/ionic-team/capacitor6-spm-test.git", branch: "main")
@@ -19,11 +19,11 @@ let package = Package(
             dependencies: [
                 .product(name: "Capacitor", package: "capacitor6-spm-test"),
                 .product(name: "Cordova", package: "capacitor6-spm-test")],
-                path: "ios/Sources/StatusBarPlugin"
+            path: "ios/Sources/StatusBarPlugin"
         ),
         .testTarget(
             name: "StatusBarPluginTests",
             dependencies: ["StatusBarPlugin"],
-            path: "ios/Tests/StatusBarPluginTests"),
+            path: "ios/Tests/StatusBarPluginTests")
     ]
 )

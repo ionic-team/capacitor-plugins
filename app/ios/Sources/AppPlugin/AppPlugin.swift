@@ -3,15 +3,15 @@ import Capacitor
 
 @objc(AppPlugin)
 public class AppPlugin: CAPPlugin, CAPBridgedPlugin {
-    public let identifier = "AppPlugin" 
-    public let jsName = "App" 
+    public let identifier = "AppPlugin"
+    public let jsName = "App"
     public let pluginMethods: [CAPPluginMethod] = [
         CAPPluginMethod(name: "exitApp", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getInfo", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getLaunchUrl", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getState", returnType: CAPPluginReturnPromise),
-        CAPPluginMethod(name: "minimizeApp", returnType: CAPPluginReturnPromise),
-    ] 
+        CAPPluginMethod(name: "minimizeApp", returnType: CAPPluginReturnPromise)
+    ]
     private var observers: [NSObjectProtocol] = []
 
     override public func load() {

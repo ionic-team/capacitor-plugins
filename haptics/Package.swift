@@ -7,15 +7,15 @@ let package = Package(
     products: [
         .library(
             name: "HapticsPlugin",
-            targets: ["HapticsPlugin"]),
+            targets: ["HapticsPlugin"])
     ],
-     dependencies: [
+    dependencies: [
         .package(url: "https://github.com/ionic-team/capacitor6-spm-test.git", branch: "main")
     ],
     targets: [
         .target(
-            name: "HapticsPlugin", 
-             dependencies: [
+            name: "HapticsPlugin",
+            dependencies: [
                 .product(name: "Capacitor", package: "capacitor6-spm-test"),
                 .product(name: "Cordova", package: "capacitor6-spm-test")
             ],
@@ -23,6 +23,6 @@ let package = Package(
         .testTarget(
             name: "HapticsPluginTests",
             dependencies: ["HapticsPlugin"],
-            path: "ios/Tests/HapticsPluginTests"),
+            path: "ios/Tests/HapticsPluginTests")
     ]
 )

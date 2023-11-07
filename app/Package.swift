@@ -7,7 +7,7 @@ let package = Package(
     products: [
         .library(
             name: "AppPlugin",
-            targets: ["AppPlugin"]),
+            targets: ["AppPlugin"])
     ],
     dependencies: [
         .package(url: "https://github.com/ionic-team/capacitor6-spm-test.git", branch: "main")
@@ -22,7 +22,6 @@ let package = Package(
             path: "ios/Sources/AppPlugin"),
         .testTarget(
             name: "AppPluginTests",
-            dependencies: ["AppPlugin"]),
+            dependencies: ["AppPlugin"])
     ]
 )
-

@@ -2,16 +2,16 @@ import Capacitor
 
 @objc(HapticsPlugin)
 public class HapticsPlugin: CAPPlugin, CAPBridgedPlugin {
-    public let identifier = "HapticsPlugin" 
-    public let jsName = "Haptics" 
+    public let identifier = "HapticsPlugin"
+    public let jsName = "Haptics"
     public let pluginMethods: [CAPPluginMethod] = [
         CAPPluginMethod(name: "impact", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "notification", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "selectionStart", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "selectionChanged", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "selectionEnd", returnType: CAPPluginReturnPromise),
-        CAPPluginMethod(name: "vibrate", returnType: CAPPluginReturnPromise),
-    ] 
+        CAPPluginMethod(name: "vibrate", returnType: CAPPluginReturnPromise)
+    ]
     private let implementation = Haptics()
 
     @objc public func impact(_ call: CAPPluginCall) {
@@ -73,4 +73,3 @@ public class HapticsPlugin: CAPPlugin, CAPBridgedPlugin {
         call.resolve()
     }
 }
-
