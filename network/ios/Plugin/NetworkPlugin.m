@@ -5,5 +5,4 @@
 // each method the plugin supports using the CAP_PLUGIN_METHOD macro.
 CAP_PLUGIN(CAPNetworkPlugin, "Network",
   CAP_PLUGIN_METHOD(getStatus, CAPPluginReturnPromise);
-  CAP_PLUGIN_METHOD(removeAllListeners, CAPPluginReturnPromise);
 )

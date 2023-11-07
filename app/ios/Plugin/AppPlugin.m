@@ -9,5 +9,4 @@ CAP_PLUGIN(AppPlugin, "App",
            CAP_PLUGIN_METHOD(getLaunchUrl, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(getState, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(minimizeApp, CAPPluginReturnPromise);
-           CAP_PLUGIN_METHOD(removeAllListeners, CAPPluginReturnPromise);
 )
