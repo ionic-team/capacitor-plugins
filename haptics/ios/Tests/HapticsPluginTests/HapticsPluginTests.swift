@@ -1,7 +1,7 @@
 import XCTest
 @testable import HapticsPlugin
 
-final class iosTests: XCTestCase {
+final class HapticsPluginTests: XCTestCase {
     func testExample() throws {
         // XCTest Documentation
         // https://developer.apple.com/documentation/xctest

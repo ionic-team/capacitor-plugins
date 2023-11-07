@@ -1,7 +1,7 @@
 import XCTest
 @testable import KeyboardPlugin
 
-final class iosTests: XCTestCase {
+final class KeyboardPluginTests: XCTestCase {
     func testExample() throws {
         // XCTest Documentation
         // https://developer.apple.com/documentation/xctest

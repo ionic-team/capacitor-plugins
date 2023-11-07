@@ -1,7 +1,7 @@
 import XCTest
 @testable import StatusBarPlugin
 
-final class iosTests: XCTestCase {
+final class StatusBarPluginTests: XCTestCase {
     func testExample() throws {
         // XCTest Documentation
         // https://developer.apple.com/documentation/xctest
