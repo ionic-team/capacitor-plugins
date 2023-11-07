@@ -11,7 +11,6 @@ public class AppPlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "getLaunchUrl", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getState", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "minimizeApp", returnType: CAPPluginReturnPromise),
-        CAPPluginMethod(name: "removeAllListeners", returnType: CAPPluginReturnPromise),
     ] 
     private var observers: [NSObjectProtocol] = []
 
