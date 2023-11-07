@@ -90,6 +90,7 @@ public class StatusBarPlugin extends Plugin {
         data.put("style", info.getStyle());
         data.put("color", info.getColor());
         data.put("overlays", info.isOverlays());
+        data.put("height", info.getHeight());
         call.resolve(data);
     }
 
