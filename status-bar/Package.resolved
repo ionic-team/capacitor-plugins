@@ -1,0 +1,14 @@
+{
+  "pins" : [
+    {
+      "identity" : "capacitor6-spm-test",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ionic-team/capacitor6-spm-test.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "b2e3d8d3ae3b421e5a0b22fd2a32347b40d1ed32"
+      }
+    }
+  ],
+  "version" : 2
+}
