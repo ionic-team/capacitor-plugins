@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.0.0-alpha.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/google-maps@5.3.0...@capacitor/google-maps@6.0.0-alpha.1) (2023-11-08)
+
+### Bug Fixes
+
+- **google-maps:** Apply iconAnchor value to Marker anchor on Android ([#1814](https://github.com/ionic-team/capacitor-plugins/issues/1814)) ([5a8399e](https://github.com/ionic-team/capacitor-plugins/commit/5a8399e4a05b4885036271c18dd22c6841ac8a4c))
+- **google-maps:** attach native map view to correct scroll view ([#1638](https://github.com/ionic-team/capacitor-plugins/issues/1638)) ([dfe6043](https://github.com/ionic-team/capacitor-plugins/commit/dfe6043e8cbeb9aeabe847f62341dcaae674951a))
+- **google-maps:** correctly apply CapacitorGoogleMapsPoint y value ([#1800](https://github.com/ionic-team/capacitor-plugins/issues/1800)) ([338953f](https://github.com/ionic-team/capacitor-plugins/commit/338953f41cfc5b1a55832df5d94928465d7ce10e))
+- **google-maps:** problems on get/setMapType on web ([#1738](https://github.com/ionic-team/capacitor-plugins/issues/1738)) ([a23202f](https://github.com/ionic-team/capacitor-plugins/commit/a23202fce338899e4ffa23b948ddd7394af127e0))
+- **google-maps:** use URLSession for remote iconUrl on iOS ([#1818](https://github.com/ionic-team/capacitor-plugins/issues/1818)) ([da5fc51](https://github.com/ionic-team/capacitor-plugins/commit/da5fc5100466db0f9f2de0872ca5fa86465b225b))
+
+### Features
+
+- **google-maps:** Separate mapId for Google Maps Cloud IDs ([#1750](https://github.com/ionic-team/capacitor-plugins/issues/1750)) ([88a633c](https://github.com/ionic-team/capacitor-plugins/commit/88a633ccab6753fe2559a9b8b55a697022fe327c))
+
 ## [5.3.3](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/google-maps@5.3.2...@capacitor/google-maps@5.3.3) (2023-10-04)
 
 ### Bug Fixes
