@@ -10,7 +10,6 @@ CAP_PLUGIN(PushNotificationsPlugin, "PushNotifications",
            CAP_PLUGIN_METHOD(requestPermissions, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(getDeliveredNotifications, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(removeAllDeliveredNotifications, CAPPluginReturnPromise);
-           CAP_PLUGIN_METHOD(removeAllListeners, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(removeDeliveredNotifications, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(createChannel, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(listChannels, CAPPluginReturnPromise);
