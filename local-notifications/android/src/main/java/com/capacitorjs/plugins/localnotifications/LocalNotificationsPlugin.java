@@ -8,6 +8,7 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.service.notification.StatusBarNotification;
 import androidx.activity.result.ActivityResult;
@@ -230,7 +231,7 @@ public class LocalNotificationsPlugin extends Plugin {
     @PluginMethod
     public void changeExactNotificationSetting(PluginCall call) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            startActivityForResult(call, new Intent(ACTION_REQUEST_SCHEDULE_EXACT_ALARM), "alarmPermissionsCallback");
+            startActivityForResult(call, new Intent(ACTION_REQUEST_SCHEDULE_EXACT_ALARM, Uri.parse("package:" + getActivity().getPackageName())), "alarmPermissionsCallback");
         } else {
             checkExactNotificationSetting(call);
         }
