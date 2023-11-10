@@ -22,6 +22,7 @@ let package = Package(
             path: "ios/Sources/AppPlugin"),
         .testTarget(
             name: "AppPluginTests",
-            dependencies: ["AppPlugin"])
+            dependencies: ["AppPlugin"],
+            path: "ios/Tests/AppPluginTests")
     ]
 )
