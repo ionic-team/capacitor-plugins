@@ -102,7 +102,6 @@ jobs:
             */node_modules
           key: ${{ runner.os }}-dependency-caching-${{ hashFiles('package.json', '*/package.json') }}
       - run: npm install
-      - run: npm run set-podfiles-for-monorepo
       - run: npm run verify:ios
         working-directory: ${{ matrix.plugin }}
 
