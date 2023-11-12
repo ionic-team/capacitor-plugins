@@ -24,9 +24,16 @@ let accelHandler: PluginListenerHandle;
 
 myButton.addEventListener('click', async () => {
   try {
-    await DeviceMotionEvent.requestPermission();
+    // On Web and iOS we need to request permissions
+    if ((DeviceMotionEvent as any).requestPermission) {
+      const result = await (DeviceMotionEvent as any).requestPermission();
+      // This should return a result of 'granted'
+    } else {
+      // Chrome/Android does not have this API
+    }
   } catch (e) {
     // Handle error
+    console.error(e);
     return;
   }
 
