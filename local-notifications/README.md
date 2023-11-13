@@ -333,7 +333,10 @@ changeExactNotificationSetting() => Promise<SettingsPermissionStatus>
 
 Direct user to the application settings screen to configure exact alarms.
 
-Only available on Android &gt;= S.
+In the event that a user changes the settings from granted to denied, the application
+will restart and any notification scheduled with an exact alarm will be deleted.
+
+Only available on Android &gt;= 12.
 
 **Returns:** <code>Promise&lt;<a href="#settingspermissionstatus">SettingsPermissionStatus</a>&gt;</code>
 
