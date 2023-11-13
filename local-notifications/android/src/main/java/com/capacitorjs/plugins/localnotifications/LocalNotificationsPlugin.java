@@ -12,7 +12,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.service.notification.StatusBarNotification;
 import androidx.activity.result.ActivityResult;
-import androidx.core.app.AlarmManagerCompat;
 import com.getcapacitor.Bridge;
 import com.getcapacitor.JSArray;
 import com.getcapacitor.JSObject;
