@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.0.0-alpha.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/browser@5.0.6...@capacitor/browser@6.0.0-alpha.1) (2023-11-08)
+
+### Features
+
+- **browser:** support other custom tabs providers ([#1669](https://github.com/ionic-team/capacitor-plugins/issues/1669)) ([b9b68c2](https://github.com/ionic-team/capacitor-plugins/commit/b9b68c2cc3344ab7bad2d005b10d5b554e310dde))
+
 # [5.1.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/browser@5.0.6...@capacitor/browser@5.1.0) (2023-09-14)
 
 ### Features

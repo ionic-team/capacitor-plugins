@@ -4,7 +4,7 @@
   "scripts": {
     "build": "lerna run build",
     "watch": "lerna run --parallel --stream watch",
-    "lint": "npm run scripts:prettier -- --check && lerna run lint",
+    "lint": "npm run scripts:prettier -- --check",
     "fmt": "npm run scripts:prettier -- --write && lerna run fmt",
     "scripts:prettier": "npx prettier \"scripts/**/*.mjs\"",
     "apply-patches": "node ./scripts/apply-patches.mjs",
@@ -12,7 +12,6 @@
     "update-all": "node ./scripts/update-all.mjs",
     "set-capacitor-version": "node ./scripts/set-capacitor-version.mjs",
     "set-settings-gradle-for-monorepo": "node ./scripts/monorepo-tools/android-settings-gradle-fix.mjs",
-    "set-podfiles-for-monorepo": "node ./scripts/monorepo-tools/ios-podfile-fix.mjs",
     "publish:cocoapod": "lerna run publish:cocoapod --concurrency 1",
     "ci:publish:nightly": "lerna publish prerelease --conventional-commits --conventional-prerelease --preid nightly-$(date +\"%Y%m%dT%H%M%S\") --force-publish --no-changelog --no-git-tag-version --dist-tag nightly --no-push --yes",
     "ci:publish:alpha": "lerna publish prerelease --conventional-commits --conventional-prerelease --preid alpha --force-publish --dist-tag next --yes",
