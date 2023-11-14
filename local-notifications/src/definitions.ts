@@ -157,7 +157,7 @@ export interface LocalNotificationsPlugin {
 
   /**
    * Direct user to the application settings screen to configure exact alarms.
-   * 
+   *
    * In the event that a user changes the settings from granted to denied, the application
    * will restart and any notification scheduled with an exact alarm will be deleted.
    *
