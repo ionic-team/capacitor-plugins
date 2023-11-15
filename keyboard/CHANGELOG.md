@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.0.0-alpha.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/keyboard@6.0.0-alpha.1...@capacitor/keyboard@6.0.0-alpha.2) (2023-11-15)
+
+### Bug Fixes
+
+- **keyboard:** distribute the new SPM files ([#1895](https://github.com/ionic-team/capacitor-plugins/issues/1895)) ([c5f7fbb](https://github.com/ionic-team/capacitor-plugins/commit/c5f7fbb99d5c73bfcfaa267155a4f641d4510177))
+
 # [6.0.0-alpha.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/keyboard@5.0.6...@capacitor/keyboard@6.0.0-alpha.1) (2023-11-08)
 
 ### Features
