@@ -6,6 +6,10 @@ on:
       - opened
       - synchronize
 
+permissions:
+  contents: write
+  id-token: write
+
 jobs:
   setup:
     if: github.event.pull_request.draft == false
