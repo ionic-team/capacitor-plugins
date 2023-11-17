@@ -4,6 +4,8 @@ export interface OrientationLockOptions {
   orientation: OrientationLockType;
 }
 
+export type OrientationLockType = 'landscape-primary' | 'landscape-secondary' | 'portrait-primary' | 'portrait-secondary' | 'landscape' | 'portrait';
+
 export interface ScreenOrientationResult {
   type: OrientationType;
 }
