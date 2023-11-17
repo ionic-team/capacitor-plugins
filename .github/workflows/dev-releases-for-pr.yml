@@ -54,6 +54,7 @@ jobs:
     timeout-minutes: 30
     permissions:
       pull-requests: write
+      id-token: write
     needs:
       - setup
     strategy:
