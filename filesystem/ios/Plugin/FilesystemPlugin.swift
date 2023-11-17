@@ -345,6 +345,23 @@ public class FilesystemPlugin: CAPPlugin {
         ])
     }
 
+    @objc func downloadFile(_ call: CAPPluginCall) {
+        guard let url = call.getString("url") else { return call.reject("Must provide a URL") }
+        let progressEmitter: Filesystem.ProgressEmitter = { bytes, contentLength in
+            self.notifyListeners("progress", data: [
+                "url": url,
+                "bytes": bytes,
+                "contentLength": contentLength
+            ])
+        }
+
+        do {
+            try implementation.downloadFile(call: call, emitter: progressEmitter, config: bridge?.config)
+        } catch let error {
+            call.reject(error.localizedDescription)
+        }
+    }
+
     /**
      * Helper for handling errors
      */

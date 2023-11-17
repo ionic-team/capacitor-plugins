@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { GoogleMap } from '@capacitor/google-maps';
+import { GoogleMap, LatLngBounds } from '@capacitor/google-maps';
 import {
   IonButton,
   IonCol,
@@ -68,6 +68,29 @@ const BoundsMapPage: React.FC = () => {
     }
   }
 
+  async function fitBounds() {
+    setCommandOutput('');
+    try {
+      const bounds = new LatLngBounds({
+        southwest: {
+          lat: lat - 1,
+          lng: lng - 1,
+        },
+        center: {
+          lat,
+          lng,
+        },
+        northeast: {
+          lat: lat + 1,
+          lng: lng + 1,
+        },
+      });
+      await map!.fitBounds(bounds, 50);
+    } catch (err: any) {
+      setCommandOutput(err.message);
+    }
+  }
+
   async function boundsContainsPoint() {
     setCommandOutput('');
     try {
@@ -107,6 +130,9 @@ const BoundsMapPage: React.FC = () => {
         </IonButton>
         <IonButton expand="block" id="getBoundsButton" onClick={getBounds}>
           Get Bounds
+        </IonButton>
+        <IonButton expand="block" id="fitBoundsButton" onClick={fitBounds}>
+          Fit Bounds
         </IonButton>
         <IonRow>
           <IonCol size="3">

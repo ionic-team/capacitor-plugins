@@ -11,6 +11,7 @@ import com.getcapacitor.annotation.CapacitorPlugin
 import com.getcapacitor.annotation.Permission
 import com.getcapacitor.annotation.PermissionCallback
 import com.google.android.gms.maps.MapsInitializer
+import com.google.android.gms.maps.OnMapsSdkInitializedCallback
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import kotlinx.coroutines.CoroutineScope
@@ -29,10 +30,11 @@ import org.json.JSONObject
                         ),
                 ],
 )
-class CapacitorGoogleMapsPlugin : Plugin() {
+class CapacitorGoogleMapsPlugin : Plugin(), OnMapsSdkInitializedCallback {
     private var maps: HashMap<String, CapacitorGoogleMap> = HashMap()
     private var cachedTouchEvents: HashMap<String, MutableList<MotionEvent>> = HashMap()
     private val tag: String = "CAP-GOOGLE-MAPS"
+    private var touchEnabled: HashMap<String, Boolean> = HashMap()
 
     companion object {
         const val LOCATION = "location"
@@ -42,7 +44,8 @@ class CapacitorGoogleMapsPlugin : Plugin() {
     override fun load() {
         super.load()
 
-        MapsInitializer.initialize(this.context, MapsInitializer.Renderer.LATEST, null)
+        MapsInitializer.initialize(this.context, MapsInitializer.Renderer.LATEST, this)
+
 
         this.bridge.webView.setOnTouchListener(
                 object : View.OnTouchListener {
@@ -56,6 +59,9 @@ class CapacitorGoogleMapsPlugin : Plugin() {
                             val touchY = event.y
 
                             for ((id, map) in maps) {
+                                if (touchEnabled[id] == false) {
+                                    continue
+                                }
                                 val mapRect = map.getMapBounds()
                                 if (mapRect.contains(touchX.toInt(), touchY.toInt())) {
                                     if (event.action == MotionEvent.ACTION_DOWN) {
@@ -84,6 +90,13 @@ class CapacitorGoogleMapsPlugin : Plugin() {
                     }
                 }
         )
+    }
+
+    override fun onMapsSdkInitialized(renderer: MapsInitializer.Renderer) {
+        when (renderer) {
+            MapsInitializer.Renderer.LATEST -> Logger.debug("Capacitor Google Maps", "Latest Google Maps renderer enabled")
+            MapsInitializer.Renderer.LEGACY -> Logger.debug("Capacitor Google Maps", "Legacy Google Maps renderer enabled - Cloud based map styling and advanced drawing not available")
+        }
     }
 
     override fun handleOnStart() {
@@ -161,6 +174,34 @@ class CapacitorGoogleMapsPlugin : Plugin() {
             val removedMap = maps.remove(id) ?: throw MapNotFoundError()
             removedMap.destroy()
 
+            call.resolve()
+        } catch (e: GoogleMapsError) {
+            handleError(call, e)
+        } catch (e: Exception) {
+            handleError(call, e)
+        }
+    }
+
+    @PluginMethod
+    fun enableTouch(call: PluginCall) {
+        try {
+            val id = call.getString("id")
+            id ?: throw InvalidMapIdError()
+            touchEnabled[id] = true
+            call.resolve()
+        } catch (e: GoogleMapsError) {
+            handleError(call, e)
+        } catch (e: Exception) {
+            handleError(call, e)
+        }
+    }
+
+    @PluginMethod
+    fun disableTouch(call: PluginCall) {
+        try {
+            val id = call.getString("id")
+            id ?: throw InvalidMapIdError()
+            touchEnabled[id] = false
             call.resolve()
         } catch (e: GoogleMapsError) {
             handleError(call, e)
@@ -798,6 +839,36 @@ class CapacitorGoogleMapsPlugin : Plugin() {
     }
 
     @PluginMethod
+    fun onResize(call: PluginCall) {
+        try {
+            val id = call.getString("id")
+            id ?: throw InvalidMapIdError()
+
+            val map = maps[id]
+            map ?: throw MapNotFoundError()
+
+            val boundsObj =
+                    call.getObject("mapBounds")
+                            ?: throw InvalidArgumentsError("mapBounds object is missing")
+
+            val bounds = boundsObjectToRect(boundsObj)
+
+            map.updateRender(bounds)
+
+            call.resolve()
+        } catch (e: GoogleMapsError) {
+            handleError(call, e)
+        } catch (e: Exception) {
+            handleError(call, e)
+        }
+    }
+
+    @PluginMethod
+    fun onDisplay(call: PluginCall) {
+        call.unavailable("this call is not available on android")
+    }
+
+    @PluginMethod
     fun dispatchMapEvent(call: PluginCall) {
         try {
             val id = call.getString("id")
@@ -863,6 +934,32 @@ class CapacitorGoogleMapsPlugin : Plugin() {
                 val data = JSObject()
                 data.put("contains", contains)
                 call.resolve(data)
+            }
+        } catch (e: GoogleMapsError) {
+            handleError(call, e)
+        } catch (e: Exception) {
+            handleError(call, e)
+        }
+    }
+
+    @PluginMethod
+    fun fitBounds(call: PluginCall) {
+        try {
+            val id = call.getString("id")
+            id ?: throw InvalidMapIdError()
+
+            val map = maps[id]
+            map ?: throw MapNotFoundError()
+
+            val boundsObject =
+                call.getObject("bounds") ?: throw InvalidArgumentsError("bounds is missing")
+
+            val padding = call.getInt("padding", 0)!!
+
+            CoroutineScope(Dispatchers.Main).launch {
+                val bounds = createLatLngBounds(boundsObject)
+                map.fitBounds(bounds, padding)
+                call.resolve()
             }
         } catch (e: GoogleMapsError) {
             handleError(call, e)

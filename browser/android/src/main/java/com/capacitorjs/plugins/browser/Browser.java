@@ -39,7 +39,7 @@ public class Browser {
     private BrowserEventListener browserEventListener;
 
     private Context context;
-    private static final String CUSTOM_TAB_PACKAGE_NAME = "com.android.chrome"; // Change when in stable
+    private static final String FALLBACK_CUSTOM_TAB_PACKAGE_NAME = "com.android.chrome";
     private CustomTabsClient customTabsClient;
     private CustomTabsSession browserSession;
     private boolean isInitialLoad = false;
@@ -116,7 +116,11 @@ public class Browser {
      * Bind to the custom tabs service, required to be called in the `onResume` lifecycle event.
      */
     public boolean bindService() {
-        boolean result = CustomTabsClient.bindCustomTabsService(context, CUSTOM_TAB_PACKAGE_NAME, connection);
+        String customTabPackageName = CustomTabsClient.getPackageName(context, null);
+        if (null == customTabPackageName) {
+            customTabPackageName = FALLBACK_CUSTOM_TAB_PACKAGE_NAME;
+        }
+        boolean result = CustomTabsClient.bindCustomTabsService(context, customTabPackageName, connection);
         group.leave();
         return result;
     }
