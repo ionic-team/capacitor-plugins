@@ -14,7 +14,7 @@ npx cap sync
 ```typescript
 import { ScreenReader } from '@capacitor/screen-reader';
 
-ScreenReader.addListener('screenReaderStateChange', ({ value }) => {
+ScreenReader.addListener('stateChange', ({ value }) => {
   console.log(`Screen reader is now ${value ? 'on' : 'off'}`);
 });
 
