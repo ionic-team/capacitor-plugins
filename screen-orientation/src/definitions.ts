@@ -1,8 +1,21 @@
 import type { PluginListenerHandle } from '@capacitor/core';
 
 export interface OrientationLockOptions {
-  orientation: OrientationLockType;
+  /**
+   * OrientationLockType was removed from lib.dom. Use the preferred ScreenOrientationLockType
+   */
+  orientation: OrientationLockType | ScreenOrientationLockType;
 }
+
+export type ScreenOrientationLockType =
+  | 'any'
+  | 'natural'
+  | 'landscape'
+  | 'portrait'
+  | 'portrait-primary'
+  | 'portrait-secondary'
+  | 'landscape-primary'
+  | 'landscape-secondary';
 
 export interface ScreenOrientationResult {
   type: OrientationType;
