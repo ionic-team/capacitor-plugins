@@ -136,9 +136,9 @@ Removes all listeners.
 
 #### OrientationLockOptions
 
-| Prop              | Type             | Description                                                                                                                        |
-| ----------------- | ---------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| **`orientation`** | <code>any</code> | OrientationLockType was removed from lib.dom. Use the preferred <a href="#screenorientationlocktype">ScreenOrientationLockType</a> |
+| Prop              | Type                                                                | Description                                                                                         |
+| ----------------- | ------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| **`orientation`** | <code><a href="#orientationlocktype">OrientationLockType</a></code> | Note: <a href="#orientationlocktype">OrientationLockType</a> was removed from typescript &gt;= 5.2. |
 
 
 #### PluginListenerHandle
@@ -151,7 +151,7 @@ Removes all listeners.
 ### Type Aliases
 
 
-#### ScreenOrientationLockType
+#### OrientationLockType
 
 <code>'any' | 'natural' | 'landscape' | 'portrait' | 'portrait-primary' | 'portrait-secondary' | 'landscape-primary' | 'landscape-secondary'</code>
 

@@ -2,12 +2,12 @@ import type { PluginListenerHandle } from '@capacitor/core';
 
 export interface OrientationLockOptions {
   /**
-   * OrientationLockType was removed from lib.dom. Use the preferred ScreenOrientationLockType
+   * Note: OrientationLockType was removed from typescript >= 5.2.
    */
-  orientation: OrientationLockType | ScreenOrientationLockType;
+  orientation: OrientationLockType;
 }
 
-export type ScreenOrientationLockType =
+export type OrientationLockType =
   | 'any'
   | 'natural'
   | 'landscape'
