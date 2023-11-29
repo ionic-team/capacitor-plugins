@@ -2,7 +2,13 @@ import Foundation
 import Capacitor
 
 @objc(SplashScreenPlugin)
-public class SplashScreenPlugin: CAPPlugin {
+public class SplashScreenPlugin: CAPPlugin, CAPBridgedPlugin {
+    public let identifier = "SplashScreenPlugin" 
+    public let jsName = "SplashScreen" 
+    public let pluginMethods: [CAPPluginMethod] = [
+        CAPPluginMethod(name: "show", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "hide", returnType: CAPPluginReturnPromise),
+    ] 
     private var splashScreen: SplashScreen?
 
     override public func load() {
