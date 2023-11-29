@@ -46,9 +46,9 @@ public class Clipboard {
     }
 
     func read() -> [String: Any] {
-        if let stringValue = UIPasteboard.general.string {
+        if let strings = UIPasteboard.general.strings {
             return [
-                "value": stringValue,
+                "value": strings.joined(separator: "\n"),
                 "type": "text/plain"
             ]
         }
