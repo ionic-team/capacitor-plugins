@@ -3,15 +3,15 @@ import Capacitor
 
 @objc(DevicePlugin)
 public class DevicePlugin: CAPPlugin, CAPBridgedPlugin {
-    public let identifier = "DevicePlugin" 
-    public let jsName = "Device" 
+    public let identifier = "DevicePlugin"
+    public let jsName = "Device"
     public let pluginMethods: [CAPPluginMethod] = [
         CAPPluginMethod(name: "getId", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getInfo", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getBatteryInfo", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getLanguageCode", returnType: CAPPluginReturnPromise),
-        CAPPluginMethod(name: "getLanguageTag", returnType: CAPPluginReturnPromise),
-    ] 
+        CAPPluginMethod(name: "getLanguageTag", returnType: CAPPluginReturnPromise)
+    ]
     private let implementation = Device()
 
     @objc func getId(_ call: CAPPluginCall) {
