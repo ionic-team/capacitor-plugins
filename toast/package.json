@@ -10,7 +10,7 @@
     "android/src/main/",
     "android/build.gradle",
     "dist/",
-        "ios/Sources",
+    "ios/Sources",
     "ios/Tests",
     "Package.swift",
     "CapacitorToast.podspec"
