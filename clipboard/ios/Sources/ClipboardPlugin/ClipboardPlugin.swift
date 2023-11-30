@@ -2,7 +2,13 @@ import Foundation
 import Capacitor
 
 @objc(ClipboardPlugin)
-public class ClipboardPlugin: CAPPlugin {
+public class ClipboardPlugin: CAPPlugin, CAPBridgedPlugin {
+    public let identifier = "ClipboardPlugin"
+    public let jsName = "Clipboard"
+    public let pluginMethods: [CAPPluginMethod] = [
+        CAPPluginMethod(name: "read", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "write", returnType: CAPPluginReturnPromise)
+    ]
     private let implementation = Clipboard()
 
     @objc func read(_ call: CAPPluginCall) {
