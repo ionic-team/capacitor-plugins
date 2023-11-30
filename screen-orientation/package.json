@@ -5,6 +5,16 @@
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
+  "typesVersions": {
+    ">=5.2": {
+      "dist/esm/index.d.ts": [
+        "dist/esm/TS_5-2/index.d.ts"
+      ],
+      "dist/esm/definitions.d.ts": [
+        "dist/esm/TS_5-2/definitions.d.ts"
+      ]
+    }
+  },
   "unpkg": "dist/plugin.js",
   "files": [
     "android/src/main/",
@@ -38,11 +48,12 @@
     "prettier": "prettier \"**/*.{css,html,ts,js,java}\"",
     "swiftlint": "node-swiftlint",
     "docgen": "docgen --api ScreenOrientationPlugin --output-readme README.md --output-json dist/docs.json",
-    "build": "npm run clean && npm run docgen && tsc && rollup -c rollup.config.js",
+    "build": "npm run clean && npm run docgen && tsc && rollup -c rollup.config.js && npm run patch-ts-5_2",
     "clean": "rimraf ./dist",
     "watch": "tsc --watch",
     "prepublishOnly": "npm run build",
-    "publish:cocoapod": "pod trunk push ./CapacitorScreenOrientation.podspec --allow-warnings"
+    "publish:cocoapod": "pod trunk push ./CapacitorScreenOrientation.podspec --allow-warnings",
+    "patch-ts-5_2": "node ./scripts/ts5-2_patch.mjs"
   },
   "devDependencies": {
     "@capacitor/android": "next",
@@ -52,6 +63,7 @@
     "@ionic/eslint-config": "^0.3.0",
     "@ionic/prettier-config": "~1.0.1",
     "@ionic/swiftlint-config": "^1.1.2",
+    "@types/node": "18.11.9",
     "eslint": "^7.11.0",
     "prettier": "~2.3.0",
     "prettier-plugin-java": "~1.0.2",
