@@ -121,7 +121,6 @@ double stageManagerOffset;
 
 - (void)onKeyboardWillShow:(NSNotification *)notification
 {
-  [self changeKeyboardStyle:self.keyboardStyle];
   if (hideTimer != nil) {
     [hideTimer invalidate];
   }
