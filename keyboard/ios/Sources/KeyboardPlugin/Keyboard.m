@@ -110,7 +110,6 @@ double stageManagerOffset;
 
 - (void)onKeyboardWillHide:(NSNotification *)notification
 {
-  [self changeKeyboardStyle:self.keyboardStyle]; 
   [self setKeyboardHeight:0 delay:0.01];
   [self resetScrollView];
   hideTimer = [NSTimer scheduledTimerWithTimeInterval:0 repeats:NO block:^(NSTimer * _Nonnull timer) {
@@ -325,6 +324,7 @@ static IMP WKOriginalImp;
 - (void)setStyle:(CAPPluginCall *)call
 {
   self.keyboardStyle = [call getString:@"style" defaultValue:@"LIGHT"];
+  [self changeKeyboardStyle:self.keyboardStyle]; 
   [call resolve];
 }
 
