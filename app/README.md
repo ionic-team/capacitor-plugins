@@ -178,7 +178,7 @@ Get the app specific language locale code.
 
 **Returns:** <code>Promise&lt;<a href="#applanguagecode">AppLanguageCode</a>&gt;</code>
 
-**Since:** 5.1.0
+**Since:** 6.0.0
 
 --------------------
 

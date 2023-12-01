@@ -183,7 +183,7 @@ export interface AppPlugin {
   /**
    * Get the app specific language locale code.
    *
-   * @since 5.1.0
+   * @since 6.0.0
    */
   getAppLanguage(): Promise<AppLanguageCode>;
 
