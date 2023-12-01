@@ -2,7 +2,13 @@ import Foundation
 import Capacitor
 
 @objc(AppLauncherPlugin)
-public class AppLauncherPlugin: CAPPlugin {
+public class AppLauncherPlugin: CAPPlugin, CAPBridgedPlugin {
+    public let identifier = "AppLauncherPlugin" 
+    public let jsName = "AppLauncher" 
+    public let pluginMethods: [CAPPluginMethod] = [
+        CAPPluginMethod(name: "canOpenUrl", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "openUrl", returnType: CAPPluginReturnPromise),
+    ] 
 
     @objc func canOpenUrl(_ call: CAPPluginCall) {
         guard let urlString = call.getString("url") else {
