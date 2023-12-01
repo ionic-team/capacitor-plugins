@@ -76,8 +76,7 @@ const checkAppLaunchUrl = async () => {
 * [`getState()`](#getstate)
 * [`getLaunchUrl()`](#getlaunchurl)
 * [`minimizeApp()`](#minimizeapp)
-* [`getAppLanguageCode()`](#getapplanguagecode)
-* [`getAppLanguageTag()`](#getapplanguagetag)
+* [`getAppLanguage()`](#getapplanguage)
 * [`addListener('appStateChange', ...)`](#addlistenerappstatechange)
 * [`addListener('pause', ...)`](#addlistenerpause)
 * [`addListener('resume', ...)`](#addlistenerresume)
@@ -169,10 +168,10 @@ Only available for Android.
 --------------------
 
 
-### getAppLanguageCode()
+### getAppLanguage()
 
 ```typescript
-getAppLanguageCode() => Promise<AppLanguageCode>
+getAppLanguage() => Promise<AppLanguageCode>
 ```
 
 Get the app specific language locale code.
@@ -184,25 +183,10 @@ Get the app specific language locale code.
 --------------------
 
 
-### getAppLanguageTag()
-
-```typescript
-getAppLanguageTag() => Promise<AppLanguageTag>
-```
-
-Get the app specific language locale tag.
-
-**Returns:** <code>Promise&lt;<a href="#applanguagetag">AppLanguageTag</a>&gt;</code>
-
-**Since:** 5.1.0
-
---------------------
-
-
 ### addListener('appStateChange', ...)
 
 ```typescript
-addListener(eventName: 'appStateChange', listenerFunc: StateChangeListener) => Promise<PluginListenerHandle> & PluginListenerHandle
+addListener(eventName: 'appStateChange', listenerFunc: StateChangeListener) => Promise<PluginListenerHandle>
 ```
 
 Listen for changes in the app or the activity states.
@@ -217,7 +201,7 @@ On Web it's fired when the document's visibilitychange gets fired.
 | **`eventName`**    | <code>'appStateChange'</code>                                       |
 | **`listenerFunc`** | <code><a href="#statechangelistener">StateChangeListener</a></code> |
 
-**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt; & <a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
 
 **Since:** 1.0.0
 
@@ -227,7 +211,7 @@ On Web it's fired when the document's visibilitychange gets fired.
 ### addListener('pause', ...)
 
 ```typescript
-addListener(eventName: 'pause', listenerFunc: () => void) => Promise<PluginListenerHandle> & PluginListenerHandle
+addListener(eventName: 'pause', listenerFunc: () => void) => Promise<PluginListenerHandle>
 ```
 
 Listen for when the app or the activity are paused.
@@ -241,7 +225,7 @@ On Web it's fired when the document's visibilitychange gets fired and document.h
 | **`eventName`**    | <code>'pause'</code>       |
 | **`listenerFunc`** | <code>() =&gt; void</code> |
 
-**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt; & <a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
 
 **Since:** 4.1.0
 
@@ -251,7 +235,7 @@ On Web it's fired when the document's visibilitychange gets fired and document.h
 ### addListener('resume', ...)
 
 ```typescript
-addListener(eventName: 'resume', listenerFunc: () => void) => Promise<PluginListenerHandle> & PluginListenerHandle
+addListener(eventName: 'resume', listenerFunc: () => void) => Promise<PluginListenerHandle>
 ```
 
 Listen for when the app or activity are resumed.
@@ -266,7 +250,7 @@ On Web it's fired when the document's visibilitychange gets fired and document.h
 | **`eventName`**    | <code>'resume'</code>      |
 | **`listenerFunc`** | <code>() =&gt; void</code> |
 
-**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt; & <a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
 
 **Since:** 4.1.0
 
@@ -276,7 +260,7 @@ On Web it's fired when the document's visibilitychange gets fired and document.h
 ### addListener('appUrlOpen', ...)
 
 ```typescript
-addListener(eventName: 'appUrlOpen', listenerFunc: URLOpenListener) => Promise<PluginListenerHandle> & PluginListenerHandle
+addListener(eventName: 'appUrlOpen', listenerFunc: URLOpenListener) => Promise<PluginListenerHandle>
 ```
 
 Listen for url open events for the app. This handles both custom URL scheme links as well
@@ -287,7 +271,7 @@ as URLs your app handles (Universal Links on iOS and App Links on Android)
 | **`eventName`**    | <code>'appUrlOpen'</code>                                   |
 | **`listenerFunc`** | <code><a href="#urlopenlistener">URLOpenListener</a></code> |
 
-**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt; & <a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
 
 **Since:** 1.0.0
 
@@ -297,7 +281,7 @@ as URLs your app handles (Universal Links on iOS and App Links on Android)
 ### addListener('appRestoredResult', ...)
 
 ```typescript
-addListener(eventName: 'appRestoredResult', listenerFunc: RestoredListener) => Promise<PluginListenerHandle> & PluginListenerHandle
+addListener(eventName: 'appRestoredResult', listenerFunc: RestoredListener) => Promise<PluginListenerHandle>
 ```
 
 If the app was launched with previously persisted plugin call data, such as on Android
@@ -327,7 +311,7 @@ Activities (for example, Camera) to have this event and process handled.
 | **`eventName`**    | <code>'appRestoredResult'</code>                              |
 | **`listenerFunc`** | <code><a href="#restoredlistener">RestoredListener</a></code> |
 
-**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt; & <a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
 
 **Since:** 1.0.0
 
@@ -337,7 +321,7 @@ Activities (for example, Camera) to have this event and process handled.
 ### addListener('backButton', ...)
 
 ```typescript
-addListener(eventName: 'backButton', listenerFunc: BackButtonListener) => Promise<PluginListenerHandle> & PluginListenerHandle
+addListener(eventName: 'backButton', listenerFunc: BackButtonListener) => Promise<PluginListenerHandle>
 ```
 
 Listen for the hardware back button event (Android only). Listening for this event will disable the
@@ -349,7 +333,7 @@ If you want to close the app, call `App.exitApp()`.
 | **`eventName`**    | <code>'backButton'</code>                                         |
 | **`listenerFunc`** | <code><a href="#backbuttonlistener">BackButtonListener</a></code> |
 
-**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt; & <a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
 
 **Since:** 1.0.0
 
@@ -398,16 +382,9 @@ Remove all native listeners for this plugin
 
 #### AppLanguageCode
 
-| Prop        | Type                | Description                  | Since |
-| ----------- | ------------------- | ---------------------------- | ----- |
-| **`value`** | <code>string</code> | Two character language code. | 5.1.0 |
-
-
-#### AppLanguageTag
-
-| Prop        | Type                | Description                                     | Since |
-| ----------- | ------------------- | ----------------------------------------------- | ----- |
-| **`value`** | <code>string</code> | Returns a well-formed IETF BCP 47 language tag. | 5.1.0 |
+| Prop        | Type                | Description                           | Since |
+| ----------- | ------------------- | ------------------------------------- | ----- |
+| **`value`** | <code>string</code> | Two or Three character language code. | 5.1.0 |
 
 
 #### PluginListenerHandle
