@@ -6,13 +6,13 @@ import Capacitor
  */
 @objc(DialogPlugin)
 public class DialogPlugin: CAPPlugin, CAPBridgedPlugin {
-    public let identifier = "DialogPlugin" 
-    public let jsName = "Dialog" 
+    public let identifier = "DialogPlugin"
+    public let jsName = "Dialog"
     public let pluginMethods: [CAPPluginMethod] = [
         CAPPluginMethod(name: "alert", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "prompt", returnType: CAPPluginReturnPromise),
-        CAPPluginMethod(name: "confirm", returnType: CAPPluginReturnPromise),
-    ] 
+        CAPPluginMethod(name: "confirm", returnType: CAPPluginReturnPromise)
+    ]
 
     @objc public func alert(_ call: CAPPluginCall) {
         let title = call.options["title"] as? String
