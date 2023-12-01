@@ -7,8 +7,8 @@ import Capacitor
  */
 @objc(FilesystemPlugin)
 public class FilesystemPlugin: CAPPlugin, CAPBridgedPlugin {
-    public let identifier = "FilesystemPlugin" 
-    public let jsName = "Filesystem" 
+    public let identifier = "FilesystemPlugin"
+    public let jsName = "Filesystem"
     public let pluginMethods: [CAPPluginMethod] = [
         CAPPluginMethod(name: "readFile", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "writeFile", returnType: CAPPluginReturnPromise),
@@ -23,8 +23,8 @@ public class FilesystemPlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "copy", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "checkPermissions", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "requestPermissions", returnType: CAPPluginReturnPromise),
-        CAPPluginMethod(name: "downloadFile", returnType: CAPPluginReturnPromise),
-    ] 
+        CAPPluginMethod(name: "downloadFile", returnType: CAPPluginReturnPromise)
+    ]
     private let implementation = Filesystem()
 
     /**
