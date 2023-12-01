@@ -6,7 +6,6 @@ import type {
   AppLaunchUrl,
   AppState,
   AppLanguageCode,
-  AppLanguageTag,
 } from './definitions';
 
 export class AppWeb extends WebPlugin implements AppPlugin {
@@ -52,15 +51,9 @@ export class AppWeb extends WebPlugin implements AppPlugin {
     }
   };
 
-  async getAppLanguageCode(): Promise<AppLanguageCode> {
+  async getAppLanguage(): Promise<AppLanguageCode> {
     return {
       value: navigator.language.split('-')[0].toLowerCase(),
-    };
-  }
-
-  async getAppLanguageTag(): Promise<AppLanguageTag> {
-    return {
-      value: navigator.language,
     };
   }
 }

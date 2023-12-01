@@ -117,16 +117,9 @@ public class AppPlugin extends Plugin {
     }
 
     @PluginMethod
-    public void getAppLanguageCode(PluginCall call) {
+    public void getAppLanguage(PluginCall call) {
         JSObject ret = new JSObject();
         ret.put("value", Locale.getDefault().getLanguage());
-        call.resolve(ret);
-    }
-
-    @PluginMethod
-    public void getAppLanguageTag(PluginCall call) {
-        JSObject ret = new JSObject();
-        ret.put("value", Locale.getDefault().toLanguageTag());
         call.resolve(ret);
     }
 

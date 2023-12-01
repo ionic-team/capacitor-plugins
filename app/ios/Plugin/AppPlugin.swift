@@ -105,26 +105,9 @@ public class AppPlugin: CAPPlugin {
         call.unimplemented()
     }
 
-    @objc func getAppLanguageCode(_ call: CAPPluginCall) {
-
-        // According to https://developer.apple.com/news/?id=u2cfuj88, the current
-        // app language is returned by 'Bundle.main.preferredLocalizations.first'.
-        // Fallback to device language if app language is not defined.
-
-        let appLanguageWithFallbackToDeviceLanguage =
-            Bundle.main.preferredLocalizations.first ?? Locale.preferredLanguages[0]
-        let code = String(appLanguageWithFallbackToDeviceLanguage.prefix(2))
-
+    @objc func getAppLanguage(_ call: CAPPluginCall) {
         call.resolve([
-            "value": code
-        ])
-    }
-
-    @objc func getAppLanguageTag(_ call: CAPPluginCall) {
-        let tag = Bundle.main.preferredLocalizations.first ?? Locale.preferredLanguages[0]
-
-        call.resolve([
-            "value": tag
+            "value": Bundle.main.preferredLocalizations.first
         ])
     }
 }

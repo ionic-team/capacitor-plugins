@@ -132,16 +132,7 @@ export type BackButtonListener = (event: BackButtonListenerEvent) => void;
 
 export interface AppLanguageCode {
   /**
-   * Two character language code.
-   *
-   * @since 5.1.0
-   */
-  value: string;
-}
-
-export interface AppLanguageTag {
-  /**
-   * Returns a well-formed IETF BCP 47 language tag.
+   * Two or Three character language code.
    *
    * @since 5.1.0
    */
@@ -194,14 +185,7 @@ export interface AppPlugin {
    *
    * @since 5.1.0
    */
-  getAppLanguageCode(): Promise<AppLanguageCode>;
-
-  /**
-   * Get the app specific language locale tag.
-   *
-   * @since 5.1.0
-   */
-  getAppLanguageTag(): Promise<AppLanguageTag>;
+  getAppLanguage(): Promise<AppLanguageCode>;
 
   /**
    * Listen for changes in the app or the activity states.
