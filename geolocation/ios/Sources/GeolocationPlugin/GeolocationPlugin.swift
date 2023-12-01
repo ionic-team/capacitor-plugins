@@ -5,15 +5,15 @@ import Capacitor
 
 @objc(GeolocationPlugin)
 public class GeolocationPlugin: CAPPlugin, CLLocationManagerDelegate, CAPBridgedPlugin {
-    public let identifier = "GeolocationPlugin" 
-    public let jsName = "Geolocation" 
+    public let identifier = "GeolocationPlugin"
+    public let jsName = "Geolocation"
     public let pluginMethods: [CAPPluginMethod] = [
         CAPPluginMethod(name: "getCurrentPosition", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "watchPosition", returnType: CAPPluginReturnCallback),
         CAPPluginMethod(name: "clearWatch", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "checkPermissions", returnType: CAPPluginReturnPromise),
-        CAPPluginMethod(name: "requestPermissions", returnType: CAPPluginReturnPromise),
-    ] 
+        CAPPluginMethod(name: "requestPermissions", returnType: CAPPluginReturnPromise)
+    ]
 
     enum CallType {
         case permissions
