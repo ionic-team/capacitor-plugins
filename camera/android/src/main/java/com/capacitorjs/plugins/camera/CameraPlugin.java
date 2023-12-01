@@ -702,6 +702,7 @@ public class CameraPlugin extends Plugin {
             ret.put("path", newUri.toString());
             ret.put("webPath", FileUtils.getPortablePath(getContext(), bridge.getLocalUrl(), newUri));
             ret.put("saved", isSaved);
+            ret.put("size", bitmapOutputStream.size());
             call.resolve(ret);
         } else {
             call.reject(UNABLE_TO_PROCESS_IMAGE);
@@ -764,6 +765,7 @@ public class CameraPlugin extends Plugin {
         data.put("format", "jpeg");
         data.put("dataUrl", "data:image/jpeg;base64," + encoded);
         data.put("exif", exif.toJson());
+        data.put("size", bitmapOutputStream.size());
         call.resolve(data);
     }
 
@@ -775,6 +777,7 @@ public class CameraPlugin extends Plugin {
         data.put("format", "jpeg");
         data.put("base64String", encoded);
         data.put("exif", exif.toJson());
+        data.put("size", bitmapOutputStream.size());
         call.resolve(data);
     }
 

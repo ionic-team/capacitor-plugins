@@ -321,7 +321,8 @@ private extension CameraPlugin {
                         "path": fileURL.absoluteString,
                         "exif": processedImage.exifData,
                         "webPath": webURL.absoluteString,
-                        "format": "jpeg"
+                        "format": "jpeg",
+                        "size": jpeg.count
                     ]]
                 ])
                 return
@@ -331,21 +332,24 @@ private extension CameraPlugin {
                 "exif": processedImage.exifData,
                 "webPath": webURL.absoluteString,
                 "format": "jpeg",
-                "saved": isSaved
+                "saved": isSaved,
+                "size": jpeg.count
             ])
         } else if settings.resultType == CameraResultType.base64 {
             self.call?.resolve([
                 "base64String": jpeg.base64EncodedString(),
                 "exif": processedImage.exifData,
                 "format": "jpeg",
-                "saved": isSaved
+                "saved": isSaved,
+                "size": jpeg.count
             ])
         } else if settings.resultType == CameraResultType.dataURL {
             call?.resolve([
                 "dataUrl": "data:image/jpeg;base64," + jpeg.base64EncodedString(),
                 "exif": processedImage.exifData,
                 "format": "jpeg",
-                "saved": isSaved
+                "saved": isSaved,
+                "size": jpeg.count
             ])
         }
     }
@@ -368,7 +372,8 @@ private extension CameraPlugin {
                 "path": fileURL.absoluteString,
                 "exif": processedImage.exifData,
                 "webPath": webURL.absoluteString,
-                "format": "jpeg"
+                "format": "jpeg",
+                "size": jpeg.count
             ])
         }
         call?.resolve([

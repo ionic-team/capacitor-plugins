@@ -106,6 +106,7 @@ export class CameraWeb extends WebPlugin implements CameraPlugin {
       input.addEventListener('change', (_e: any) => {
         const file = input.files![0];
         let format = 'jpeg';
+        const filesize = file.size;
 
         if (file.type === 'image/png') {
           format = 'png';
@@ -124,12 +125,14 @@ export class CameraWeb extends WebPlugin implements CameraPlugin {
               resolve({
                 dataUrl: reader.result,
                 format,
+                size: filesize,
               } as Photo);
             } else if (options.resultType === 'base64') {
               const b64 = (reader.result as string).split(',')[1];
               resolve({
                 base64String: b64,
                 format,
+                size: filesize,
               } as Photo);
             }
 
@@ -141,6 +144,7 @@ export class CameraWeb extends WebPlugin implements CameraPlugin {
           resolve({
             webPath: URL.createObjectURL(file),
             format: format,
+            size: filesize,
           });
           cleanup();
         }
@@ -186,6 +190,7 @@ export class CameraWeb extends WebPlugin implements CameraPlugin {
         for (let i = 0; i < input.files!.length; i++) {
           const file = input.files![i];
           let format = 'jpeg';
+          const filesize = file.size;
 
           if (file.type === 'image/png') {
             format = 'png';
@@ -195,6 +200,7 @@ export class CameraWeb extends WebPlugin implements CameraPlugin {
           photos.push({
             webPath: URL.createObjectURL(file),
             format: format,
+            size: filesize,
           });
         }
         resolve({ photos });
@@ -211,11 +217,13 @@ export class CameraWeb extends WebPlugin implements CameraPlugin {
     return new Promise<Photo>((resolve, reject) => {
       const reader = new FileReader();
       const format = photo.type.split('/')[1];
+      const fileSize = phoyo.size;
       if (options.resultType === 'uri') {
         resolve({
           webPath: URL.createObjectURL(photo),
           format: format,
           saved: false,
+          size: filesize,
         });
       } else {
         reader.readAsDataURL(photo);
@@ -226,12 +234,14 @@ export class CameraWeb extends WebPlugin implements CameraPlugin {
               dataUrl: r,
               format: format,
               saved: false,
+              size: filesize,
             });
           } else {
             resolve({
               base64String: r.split(',')[1],
               format: format,
               saved: false,
+              size: filesize,
             });
           }
         };

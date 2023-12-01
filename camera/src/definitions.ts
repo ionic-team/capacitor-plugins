@@ -237,6 +237,12 @@ export interface Photo {
    * @since 1.1.0
    */
   saved: boolean;
+  /**
+   * The size of the imagefile in bytes.
+   * 
+   * @since 5.?.0
+   */
+  size: number;
 }
 
 export interface GalleryPhotos {
@@ -277,6 +283,12 @@ export interface GalleryPhoto {
    * @since 1.2.0
    */
   format: string;
+  /**
+   * The size of the imagefile in bytes.
+   * 
+   * @since 5.?.0
+   */
+  size: number;
 }
 export interface GalleryImageOptions {
   /**
