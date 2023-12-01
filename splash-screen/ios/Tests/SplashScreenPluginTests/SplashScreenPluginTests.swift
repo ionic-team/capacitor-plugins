@@ -1,5 +1,5 @@
 import XCTest
-@testable import Plugin
+@testable import SplashScreenPlugin
 
 class SplashScreenTests: XCTestCase {
     override func setUp() {
