@@ -1,5 +1,5 @@
 import XCTest
-@testable import Plugin
+@testable import ScreenOrientationPlugin
 
 class ScreenOrientationTests: XCTestCase {
     override func setUp() {
