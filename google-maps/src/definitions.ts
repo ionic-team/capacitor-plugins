@@ -198,7 +198,7 @@ export interface GoogleMapConfig extends google.maps.MapOptions {
    *
    * Only for Web.
    *
-   * @since 6.0.0
+   * @since 5.4.0
    */
   mapId?: string;
   /**
@@ -208,7 +208,7 @@ export interface GoogleMapConfig extends google.maps.MapOptions {
    *
    * Only for Android.
    *
-   * @since 6.0.0
+   * @since 5.4.0
    */
   androidMapId?: string;
   /**
@@ -218,7 +218,7 @@ export interface GoogleMapConfig extends google.maps.MapOptions {
    *
    * Only for iOS.
    *
-   * @since 6.0.0
+   * @since 5.4.0
    */
   iOSMapId?: string;
 }
