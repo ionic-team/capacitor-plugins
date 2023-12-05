@@ -121,7 +121,6 @@ double stageManagerOffset;
 
 - (void)onKeyboardWillShow:(NSNotification *)notification
 {
-  [self changeKeyboardStyle:self.keyboardStyle];
   if (hideTimer != nil) {
     [hideTimer invalidate];
   }
@@ -324,6 +323,7 @@ static IMP WKOriginalImp;
 - (void)setStyle:(CAPPluginCall *)call
 {
   self.keyboardStyle = [call getString:@"style" defaultValue:@"LIGHT"];
+  [self changeKeyboardStyle:self.keyboardStyle]; 
   [call resolve];
 }
 
