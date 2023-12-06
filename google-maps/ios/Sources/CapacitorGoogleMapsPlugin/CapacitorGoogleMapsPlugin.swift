@@ -64,7 +64,42 @@ extension CGRect {
 
 // swiftlint:disable type_body_length
 @objc(CapacitorGoogleMapsPlugin)
-public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
+public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate, CAPBridgedPlugin {
+    public let identifier = "CapacitorGoogleMapsPlugin" 
+    public let jsName = "CapacitorGoogleMaps" 
+    public let pluginMethods: [CAPPluginMethod] = [
+        CAPPluginMethod(name: "create", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "enableTouch", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "disableTouch", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "addMarker", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "addMarkers", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "addPolygons", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "addPolylines", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "addCircles", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "removeMarker", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "removeMarkers", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "removeCircles", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "removePolygons", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "removePolylines", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "enableClustering", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "disableClustering", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "destroy", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "setCamera", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "getMapType", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "setMapType", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "enableIndoorMaps", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "enableTrafficLayer", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "enableAccessibilityElements", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "enableCurrentLocation", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "setPadding", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "onScroll", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "onResize", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "onDisplay", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "getMapBounds", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "fitBounds", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "mapBoundsContains", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "mapBoundsExtend", returnType: CAPPluginReturnPromise),
+    ] 
     private var maps = [String: Map]()
     private var isInitialized = false
 

@@ -1,0 +1,32 @@
+{
+  "pins" : [
+    {
+      "identity" : "capacitor6-spm-test",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ionic-team/capacitor6-spm-test.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "cf4ff2bc1dffb14adc27b1e5a09ac37e85424b99"
+      }
+    },
+    {
+      "identity" : "google-maps-ios-utils",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/googlemaps/google-maps-ios-utils.git",
+      "state" : {
+        "revision" : "b56b39cec0e3d5938ddadbfeb4d3fec541ebbb5e",
+        "version" : "4.2.2"
+      }
+    },
+    {
+      "identity" : "googlemaps-spm",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/yourparkingspace/googlemaps-spm.git",
+      "state" : {
+        "revision" : "ed79f9af9c3b6960be2308a667e130d051526464",
+        "version" : "7.1.0"
+      }
+    }
+  ],
+  "version" : 2
+}
