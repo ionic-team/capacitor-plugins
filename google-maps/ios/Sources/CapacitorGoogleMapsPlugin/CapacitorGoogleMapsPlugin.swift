@@ -65,8 +65,8 @@ extension CGRect {
 // swiftlint:disable type_body_length
 @objc(CapacitorGoogleMapsPlugin)
 public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate, CAPBridgedPlugin {
-    public let identifier = "CapacitorGoogleMapsPlugin" 
-    public let jsName = "CapacitorGoogleMaps" 
+    public let identifier = "CapacitorGoogleMapsPlugin"
+    public let jsName = "CapacitorGoogleMaps"
     public let pluginMethods: [CAPPluginMethod] = [
         CAPPluginMethod(name: "create", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "enableTouch", returnType: CAPPluginReturnPromise),
@@ -98,8 +98,8 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate, CAPBridge
         CAPPluginMethod(name: "getMapBounds", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "fitBounds", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "mapBoundsContains", returnType: CAPPluginReturnPromise),
-        CAPPluginMethod(name: "mapBoundsExtend", returnType: CAPPluginReturnPromise),
-    ] 
+        CAPPluginMethod(name: "mapBoundsExtend", returnType: CAPPluginReturnPromise)
+    ]
     private var maps = [String: Map]()
     private var isInitialized = false
 
