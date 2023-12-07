@@ -1,5 +1,5 @@
 import XCTest
-@testable import Plugin
+@testable import SharePlugin
 
 class ShareTests: XCTestCase {
     override func setUp() {

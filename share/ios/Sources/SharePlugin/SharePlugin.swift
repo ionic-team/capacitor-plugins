@@ -2,7 +2,13 @@ import Foundation
 import Capacitor
 
 @objc(SharePlugin)
-public class SharePlugin: CAPPlugin {
+public class SharePlugin: CAPPlugin, CAPBridgedPlugin {
+    public let identifier = "SharePlugin" 
+    public let jsName = "Share" 
+    public let pluginMethods: [CAPPluginMethod] = [
+        CAPPluginMethod(name: "canShare", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "share", returnType: CAPPluginReturnPromise),
+    ] 
 
     @objc func canShare(_ call: CAPPluginCall) {
         call.resolve([
