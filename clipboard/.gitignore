@@ -7,6 +7,13 @@ Pods
 Podfile.lock
 Build
 xcuserdata
+/.build
+/Packages
+xcuserdata/
+DerivedData/
+.swiftpm/configuration/registries.json
+.swiftpm/xcode/package.xcworkspace/contents.xcworkspacedata
+.netrc
 
 # macOS files
 .DS_Store
