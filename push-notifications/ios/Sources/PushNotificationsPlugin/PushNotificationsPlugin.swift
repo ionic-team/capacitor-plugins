@@ -14,7 +14,21 @@ enum PushNotificationsPermissions: String {
 }
 
 @objc(PushNotificationsPlugin)
-public class PushNotificationsPlugin: CAPPlugin {
+public class PushNotificationsPlugin: CAPPlugin, CAPBridgedPlugin {
+    public let identifier = "PushNotificationsPlugin" 
+    public let jsName = "PushNotifications" 
+    public let pluginMethods: [CAPPluginMethod] = [
+        CAPPluginMethod(name: "register", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "unregister", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "checkPermissions", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "requestPermissions", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "getDeliveredNotifications", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "removeAllDeliveredNotifications", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "removeDeliveredNotifications", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "createChannel", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "listChannels", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "deleteChannel", returnType: CAPPluginReturnPromise),
+    ] 
     private let notificationDelegateHandler = PushNotificationsHandler()
     private var appDelegateRegistrationCalled: Bool = false
 

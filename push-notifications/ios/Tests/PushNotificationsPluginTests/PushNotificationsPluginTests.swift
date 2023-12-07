@@ -1,5 +1,5 @@
 import XCTest
-@testable import Plugin
+@testable import PushNotificationsPlugin
 
 class PushNotificationsTests: XCTestCase {
     override func setUp() {
