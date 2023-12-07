@@ -5,7 +5,14 @@ import Capacitor
  * Implement three common dialog types: alert, confirm, and prompt
  */
 @objc(DialogPlugin)
-public class DialogPlugin: CAPPlugin {
+public class DialogPlugin: CAPPlugin, CAPBridgedPlugin {
+    public let identifier = "DialogPlugin"
+    public let jsName = "Dialog"
+    public let pluginMethods: [CAPPluginMethod] = [
+        CAPPluginMethod(name: "alert", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "prompt", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "confirm", returnType: CAPPluginReturnPromise)
+    ]
 
     @objc public func alert(_ call: CAPPluginCall) {
         let title = call.options["title"] as? String
