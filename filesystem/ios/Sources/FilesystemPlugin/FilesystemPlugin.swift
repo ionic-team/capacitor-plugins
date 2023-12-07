@@ -6,7 +6,25 @@ import Capacitor
  * here: https://capacitorjs.com/docs/plugins/ios
  */
 @objc(FilesystemPlugin)
-public class FilesystemPlugin: CAPPlugin {
+public class FilesystemPlugin: CAPPlugin, CAPBridgedPlugin {
+    public let identifier = "FilesystemPlugin"
+    public let jsName = "Filesystem"
+    public let pluginMethods: [CAPPluginMethod] = [
+        CAPPluginMethod(name: "readFile", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "writeFile", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "appendFile", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "deleteFile", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "mkdir", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "rmdir", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "readdir", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "getUri", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "stat", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "rename", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "copy", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "checkPermissions", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "requestPermissions", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "downloadFile", returnType: CAPPluginReturnPromise)
+    ]
     private let implementation = Filesystem()
 
     /**
