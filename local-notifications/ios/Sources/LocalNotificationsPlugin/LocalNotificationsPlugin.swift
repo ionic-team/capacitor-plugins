@@ -25,7 +25,24 @@ enum LocalNotificationError: LocalizedError {
 
 // swiftlint:disable type_body_length
 @objc(LocalNotificationsPlugin)
-public class LocalNotificationsPlugin: CAPPlugin {
+public class LocalNotificationsPlugin: CAPPlugin, CAPBridgedPlugin {
+    public let identifier = "LocalNotificationsPlugin"
+    public let jsName = "LocalNotifications"
+    public let pluginMethods: [CAPPluginMethod] = [
+        CAPPluginMethod(name: "schedule", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "requestPermissions", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "checkPermissions", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "cancel", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "getPending", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "registerActionTypes", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "areEnabled", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "getDeliveredNotifications", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "removeAllDeliveredNotifications", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "removeDeliveredNotifications", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "createChannel", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "deleteChannel", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "listChannels", returnType: CAPPluginReturnPromise)
+    ]
     private let notificationDelegationHandler = LocalNotificationsHandler()
 
     override public func load() {
