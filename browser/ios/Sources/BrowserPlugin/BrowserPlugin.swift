@@ -2,7 +2,13 @@ import Foundation
 import Capacitor
 
 @objc(CAPBrowserPlugin)
-public class CAPBrowserPlugin: CAPPlugin {
+public class CAPBrowserPlugin: CAPPlugin, CAPBridgedPlugin {
+    public let identifier = "CAPBrowserPlugin" 
+    public let jsName = "Browser" 
+    public let pluginMethods: [CAPPluginMethod] = [
+        CAPPluginMethod(name: "open", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "close", returnType: CAPPluginReturnPromise),
+    ] 
     private let implementation = Browser()
 
     @objc func open(_ call: CAPPluginCall) {
