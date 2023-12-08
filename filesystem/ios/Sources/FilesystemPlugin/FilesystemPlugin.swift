@@ -208,15 +208,15 @@ public class FilesystemPlugin: CAPPlugin, CAPBridgedPlugin {
             let directoryContents = try implementation.readdir(at: fileUrl)
             let directoryContent = try directoryContents.map {(url: URL) -> [String: Any] in
                 let attr = try implementation.stat(at: url)
-                var ctime = ""
-                var mtime = ""
+                var ctime: UInt64 = 0
+                var mtime: UInt64 = 0
 
                 if let ctimeSeconds = (attr[.creationDate] as? Date)?.timeIntervalSince1970 {
-                    ctime = String(format: "%.0f", ctimeSeconds * 1000)
+                    ctime = UInt64((ctimeSeconds * 1000).rounded())
                 }
 
                 if let mtimeSeconds = (attr[.modificationDate] as? Date)?.timeIntervalSince1970 {
-                    mtime = String(format: "%.0f", mtimeSeconds * 1000)
+                    mtime = UInt64((mtimeSeconds * 1000).rounded())
                 }
                 return [
                     "name": url.lastPathComponent,
@@ -250,15 +250,15 @@ public class FilesystemPlugin: CAPPlugin, CAPBridgedPlugin {
         do {
             let attr = try implementation.stat(at: fileUrl)
 
-            var ctime = ""
-            var mtime = ""
+            var ctime: UInt64 = 0
+            var mtime: UInt64 = 0
 
             if let ctimeSeconds = (attr[.creationDate] as? Date)?.timeIntervalSince1970 {
-                ctime = String(format: "%.0f", ctimeSeconds * 1000)
+                ctime = UInt64((ctimeSeconds * 1000).rounded())
             }
 
             if let mtimeSeconds = (attr[.modificationDate] as? Date)?.timeIntervalSince1970 {
-                mtime = String(format: "%.0f", mtimeSeconds * 1000)
+                mtime = UInt64((mtimeSeconds * 1000).rounded())
             }
 
             call.resolve([
