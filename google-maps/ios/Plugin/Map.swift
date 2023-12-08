@@ -13,6 +13,7 @@ class GMViewController: UIViewController {
     var GMapView: GMSMapView!
     var cameraPosition: [String: Double]!
     var minimumClusterSize: Int?
+    var mapId: String?
 
     private var clusterManager: GMUClusterManager?
 
@@ -25,7 +26,13 @@ class GMViewController: UIViewController {
 
         let camera = GMSCameraPosition.camera(withLatitude: cameraPosition["latitude"] ?? 0, longitude: cameraPosition["longitude"] ?? 0, zoom: Float(cameraPosition["zoom"] ?? 12))
         let frame = CGRect(x: mapViewBounds["x"] ?? 0, y: mapViewBounds["y"] ?? 0, width: mapViewBounds["width"] ?? 0, height: mapViewBounds["height"] ?? 0)
-        self.GMapView = GMSMapView.map(withFrame: frame, camera: camera)
+        if let id = mapId {
+            let gmsId = GMSMapID(identifier: id)
+            self.GMapView = GMSMapView(frame: frame, mapID: gmsId, camera: camera)
+        } else {
+            self.GMapView = GMSMapView(frame: frame, camera: camera)
+        }
+
         self.view = GMapView
     }
 
@@ -85,6 +92,7 @@ public class Map {
         self.config = config
         self.delegate = delegate
         self.mapViewController = GMViewController()
+        self.mapViewController.mapId = config.mapId
 
         self.render()
     }
