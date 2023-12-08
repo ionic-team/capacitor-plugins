@@ -3,28 +3,30 @@ import PackageDescription
 
 let package = Package(
     name: "CapacitorGoogleMaps",
-    platforms: [.iOS(.v13)],
+    platforms: [.iOS(.v14)],
     products: [
         .library(
             name: "CapacitorGoogleMapsPlugin",
-            targets: ["CapacitorGoogleMapsPlugin"])
+            targets: ["CapacitorGoogleMapsPlugin"]),
     ],
     dependencies: [
         .package(url: "https://github.com/ionic-team/capacitor6-spm-test.git", branch: "main"),
-        .package(url: "https://github.com/yourparkingspace/googlemaps-spm.git", from: "7.1.0"),
-        .package(url: "https://github.com/googlemaps/google-maps-ios-utils.git", from: "4.2.2")
+        .package(url: "https://github.com/googlemaps/google-maps-ios-utils.git", exact: "4.2.2"),
+        .package(url: "https://github.com/ionic-team/capacitor-gmaps-spm", from: "8.3.1"),
     ],
     targets: [
         .target(
             name: "CapacitorGoogleMapsPlugin",
             dependencies: [
                 .product(name: "Capacitor", package: "capacitor6-spm-test"),
-                .product(name: "Cordova", package: "capacitor6-spm-test")
+                .product(name: "Cordova", package: "capacitor6-spm-test"),
+                .product(name: "GoogleMapsUtils", package: "google-maps-ios-utils"),
+                .product(name: "GoogleMaps", package: "capacitor-gmaps-spm")
             ],
             path: "ios/Sources/CapacitorGoogleMapsPlugin"),
         .testTarget(
             name: "CapacitorGoogleMapsPluginTests",
             dependencies: ["CapacitorGoogleMapsPlugin"],
-            path: "ios/Tests/CapacitorGoogleMapsPluginTests")
+            path: "ios/Tests/CapacitorGoogleMapsPluginTests"),
     ]
 )
