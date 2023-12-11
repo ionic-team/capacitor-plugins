@@ -32,6 +32,8 @@ public class LocalNotificationsPlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "schedule", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "requestPermissions", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "checkPermissions", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "checkExactNotificationSetting", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "changeExactNotificationSetting", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "cancel", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getPending", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "registerActionTypes", returnType: CAPPluginReturnPromise),
