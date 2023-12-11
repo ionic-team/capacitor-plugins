@@ -336,7 +336,10 @@ Direct user to the application settings screen to configure exact alarms.
 In the event that a user changes the settings from granted to denied, the application
 will restart and any notification scheduled with an exact alarm will be deleted.
 
-Only available on Android &gt;= 12.
+On Android &lt; 12, the user will NOT be directed to the application settings screen, instead this function will
+return `granted`.
+
+Only available on Android.
 
 **Returns:** <code>Promise&lt;<a href="#settingspermissionstatus">SettingsPermissionStatus</a>&gt;</code>
 
