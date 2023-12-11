@@ -161,7 +161,10 @@ export interface LocalNotificationsPlugin {
    * In the event that a user changes the settings from granted to denied, the application
    * will restart and any notification scheduled with an exact alarm will be deleted.
    *
-   * Only available on Android >= 12.
+   * On Android < 12, the user will NOT be directed to the application settings screen, instead this function will
+   * return `granted`.
+   *
+   * Only available on Android.
    *
    * @since 6.0.0
    */

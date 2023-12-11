@@ -20,7 +20,7 @@ Starting on Android 12, scheduled notifications won't be exact unless this permi
 <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
 ```
 
-Note that even if the permission is present, users can still disable exact notifications from the app settings.  Use `checkExactNotificationSetting()` to check the the value of the setting.  If a user disables this setting, the app will restart and any notification scheduled with an exact alarm will be deleted.  If your application depends on exact alarms, be sure to check this setting in order provide fallbacks or alternative behavior.
+Note that even if the permission is present, users can still disable exact notifications from the app settings.  Use `checkExactNotificationSetting()` to check the the value of the setting.  If a user disables this setting, the app will restart and any notification scheduled with an exact alarm will be deleted.  If your application depends on exact alarms, be sure to check this setting on app launch (for example, in [`App.appStateChange`](https://capacitorjs.com/docs/apis/app#addlistenerappstatechange-)) in order provide fallbacks or alternative behavior.
 
 On Android 14, there is a new permission called `USE_EXACT_ALARM`.  Use this permission to use exact alarms without needing to request permission from the user.  This should only be used if the use of exact alarms is central to your app's functionality.  Read more about the implications of using this permission [here](https://developer.android.com/reference/android/Manifest.permission#USE_EXACT_ALARM).
 
