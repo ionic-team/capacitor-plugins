@@ -88,7 +88,11 @@ export class CameraWeb extends WebPlugin implements CameraPlugin {
     }
   }
 
-  private fileInputExperience(options: ImageOptions, resolve: any, reject: any) {
+  private fileInputExperience(
+    options: ImageOptions,
+    resolve: any,
+    reject: any,
+  ) {
     let input = document.querySelector(
       '#_capacitor-camera-input',
     ) as HTMLInputElement;
@@ -148,7 +152,7 @@ export class CameraWeb extends WebPlugin implements CameraPlugin {
       input.addEventListener('cancel', (_e: any) => {
         reject(new CapacitorException('User cancelled photos app'));
         cleanup();
-      })
+      });
     }
 
     input.accept = 'image/*';
@@ -207,7 +211,7 @@ export class CameraWeb extends WebPlugin implements CameraPlugin {
       input.addEventListener('cancel', (_e: any) => {
         reject(new CapacitorException('User cancelled photos app'));
         cleanup();
-      })
+      });
     }
 
     input.accept = 'image/*';
