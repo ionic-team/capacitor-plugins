@@ -136,9 +136,9 @@ Removes all listeners.
 
 #### OrientationLockOptions
 
-| Prop              | Type                                                                | Description                                                                                         |
-| ----------------- | ------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
-| **`orientation`** | <code><a href="#orientationlocktype">OrientationLockType</a></code> | Note: <a href="#orientationlocktype">OrientationLockType</a> was removed from typescript &gt;= 5.2. |
+| Prop              | Type                                                                | Description                                                                                                                           |
+| ----------------- | ------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| **`orientation`** | <code><a href="#orientationlocktype">OrientationLockType</a></code> | Note: Typescript v5.2+ users should import <a href="#orientationlocktype">OrientationLockType</a> from @capacitor/screen-orientation. |
 
 
 #### PluginListenerHandle
