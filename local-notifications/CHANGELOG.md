@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.0.0-beta.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/local-notifications@6.0.0-alpha.2...@capacitor/local-notifications@6.0.0-beta.0) (2023-12-13)
+
+### Features
+
+- **local-notifications:** Adding permissions for using SCHEDULE_EXACT_ALARM in Android 14 ([#1840](https://github.com/ionic-team/capacitor-plugins/issues/1840)) ([55c31e8](https://github.com/ionic-team/capacitor-plugins/commit/55c31e897783a372527121b7b74e3bf138295a15))
+
 # [6.0.0-alpha.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/local-notifications@6.0.0-alpha.1...@capacitor/local-notifications@6.0.0-alpha.2) (2023-11-15)
 
 **Note:** Version bump only for package @capacitor/local-notifications
