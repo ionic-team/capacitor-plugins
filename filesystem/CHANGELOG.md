@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.0.0-beta.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@6.0.0-beta.0...@capacitor/filesystem@6.0.0-beta.1) (2023-12-14)
+
+### Bug Fixes
+
+- **filesystem:** use next tag for capacitor dependencies ([#1963](https://github.com/ionic-team/capacitor-plugins/issues/1963)) ([80e5261](https://github.com/ionic-team/capacitor-plugins/commit/80e5261b4d7af36d6803deef28153e06e79ab214))
+
 # [6.0.0-beta.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@6.0.0-alpha.2...@capacitor/filesystem@6.0.0-beta.0) (2023-12-13)
 
 **Note:** Version bump only for package @capacitor/filesystem

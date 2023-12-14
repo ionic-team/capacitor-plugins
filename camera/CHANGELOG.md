@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.0.0-beta.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@6.0.0-beta.0...@capacitor/camera@6.0.0-beta.1) (2023-12-14)
+
+### Bug Fixes
+
+- **camera:** reject promise on web input cancel event ([#1958](https://github.com/ionic-team/capacitor-plugins/issues/1958)) ([d218ba6](https://github.com/ionic-team/capacitor-plugins/commit/d218ba6c53250b990f4913bd121915cfd3d65d72))
+
 # [6.0.0-beta.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@6.0.0-alpha.2...@capacitor/camera@6.0.0-beta.0) (2023-12-13)
 
 **Note:** Version bump only for package @capacitor/camera
