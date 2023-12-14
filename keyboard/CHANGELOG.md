@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.0.0-beta.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/keyboard@6.0.0-alpha.2...@capacitor/keyboard@6.0.0-beta.0) (2023-12-13)
+
+### Bug Fixes
+
+- **keyboard:** Change keyboard style during setStyle ([#1920](https://github.com/ionic-team/capacitor-plugins/issues/1920)) ([f5ef4dc](https://github.com/ionic-team/capacitor-plugins/commit/f5ef4dc53279573d76c683dc2ac783f8d261a15b))
+
 # [6.0.0-alpha.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/keyboard@6.0.0-alpha.1...@capacitor/keyboard@6.0.0-alpha.2) (2023-11-15)
 
 ### Bug Fixes
