@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.4.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/google-maps@5.3.3...@capacitor/google-maps@5.4.0) (2023-12-15)
+
+### Features
+
+- **google-maps:** Separate mapId for Google Maps Cloud IDs ([#1943](https://github.com/ionic-team/capacitor-plugins/issues/1943)) ([bf7ec33](https://github.com/ionic-team/capacitor-plugins/commit/bf7ec3306e7943358ac9ea118b904ff27d6ea2f6))
+
 ## [5.3.3](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/google-maps@5.3.2...@capacitor/google-maps@5.3.3) (2023-10-04)
 
 ### Bug Fixes
