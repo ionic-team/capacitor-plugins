@@ -66,6 +66,18 @@ export interface Point {
 }
 
 /**
+ * For web, all the javascript TileOverlay options are available as
+ * For iOS and Android only the config options declared on TileOverlay are available.
+ */
+export interface TileOverlay {
+  getTile: (x: number, y: number, zoom: number) => string;
+  opacity?: number;
+  visible?: boolean;
+  zIndex?: number;
+  debug?: boolean;
+}
+
+/**
  * For web, all the javascript Polygon options are available as
  * Polygon extends google.maps.PolygonOptions.
  * For iOS and Android only the config options declared on Polygon are available.
