@@ -1,15 +1,10 @@
 package com.capacitorjs.plugins.keyboard;
 
 import android.content.Context;
-import android.graphics.Insets;
 import android.graphics.Point;
-import android.graphics.Rect;
-import android.os.Build;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.View;
-import android.view.ViewTreeObserver;
-import android.view.Window;
 import android.view.WindowInsets;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
@@ -21,8 +16,6 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsAnimationCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.getcapacitor.Logger;
-
 import java.util.List;
 
 public class Keyboard {
@@ -32,16 +25,7 @@ public class Keyboard {
     }
 
     private AppCompatActivity activity;
-    private ViewTreeObserver.OnGlobalLayoutListener list;
     private View rootView;
-    private View mChildOfContent;
-    private int usableHeightPrevious;
-    private FrameLayout.LayoutParams frameLayoutParams;
-
-    @Nullable
-    public KeyboardEventListener getKeyboardEventListener() {
-        return keyboardEventListener;
-    }
 
     public void setKeyboardEventListener(@Nullable KeyboardEventListener keyboardEventListener) {
         this.keyboardEventListener = keyboardEventListener;
@@ -57,10 +41,6 @@ public class Keyboard {
 
     public Keyboard(AppCompatActivity activity, boolean resizeOnFullScreen) {
         this.activity = activity;
-        //calculate density-independent pixels (dp)
-        //http://developer.android.com/guide/practices/screens_support.html
-        DisplayMetrics dm = activity.getResources().getDisplayMetrics();
-        final float density = dm.density;
 
         //http://stackoverflow.com/a/4737265/1091751 detect if keyboard is showing
         FrameLayout content = activity.getWindow().getDecorView().findViewById(android.R.id.content);
