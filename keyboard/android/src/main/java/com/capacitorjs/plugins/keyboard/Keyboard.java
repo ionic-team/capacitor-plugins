@@ -13,9 +13,17 @@ import android.view.Window;
 import android.view.WindowInsets;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
+
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsAnimationCompat;
+import androidx.core.view.WindowInsetsCompat;
+
 import com.getcapacitor.Logger;
+
+import java.util.List;
 
 public class Keyboard {
 
@@ -57,92 +65,139 @@ public class Keyboard {
         //http://stackoverflow.com/a/4737265/1091751 detect if keyboard is showing
         FrameLayout content = activity.getWindow().getDecorView().findViewById(android.R.id.content);
         rootView = content.getRootView();
-        list =
-            new ViewTreeObserver.OnGlobalLayoutListener() {
-                int previousHeightDiff = 0;
 
-                @Override
-                public void onGlobalLayout() {
-                    Rect r = new Rect();
-                    //r will be populated with the coordinates of your view that area still visible.
-                    rootView.getWindowVisibleDisplayFrame(r);
-
-                    // cache properties for later use
-                    int rootViewHeight = rootView.getRootView().getHeight();
-                    int resultBottom = r.bottom;
-                    int screenHeight;
-
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                        Insets windowInsets = rootView.getRootWindowInsets().getInsetsIgnoringVisibility(WindowInsets.Type.systemBars());
-                        screenHeight = rootViewHeight;
-                        resultBottom = resultBottom + windowInsets.bottom;
-                    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        WindowInsets windowInsets = rootView.getRootWindowInsets();
-                        int stableInsetBottom = getLegacyStableInsetBottom(windowInsets);
-                        screenHeight = rootViewHeight;
-                        resultBottom = resultBottom + stableInsetBottom;
-                    } else {
-                        Point size = getLegacySizePoint();
-                        screenHeight = size.y;
+        ViewCompat.setWindowInsetsAnimationCallback(
+                rootView,
+                new WindowInsetsAnimationCompat.Callback(
+                        WindowInsetsAnimationCompat.Callback.DISPATCH_MODE_STOP
+                ) {
+                    @NonNull
+                    @Override
+                    public WindowInsetsCompat onProgress(@NonNull WindowInsetsCompat insets, @NonNull List<WindowInsetsAnimationCompat> runningAnimations) {
+                        return insets;
                     }
 
-                    int heightDiff = screenHeight - resultBottom;
-
-                    int pixelHeightDiff = (int) (heightDiff / density);
-
-                    if (pixelHeightDiff > 100 && pixelHeightDiff != previousHeightDiff) { // if more than 100 pixels, its probably a keyboard...
-                        if (resizeOnFullScreen) {
-                            possiblyResizeChildOfContent(true);
-                        }
-
-                        if (keyboardEventListener != null) {
-                            keyboardEventListener.onKeyboardEvent(EVENT_KB_WILL_SHOW, pixelHeightDiff);
-                            keyboardEventListener.onKeyboardEvent(EVENT_KB_DID_SHOW, pixelHeightDiff);
+                    @NonNull
+                    @Override
+                    public WindowInsetsAnimationCompat.BoundsCompat onStart(@NonNull WindowInsetsAnimationCompat animation, @NonNull WindowInsetsAnimationCompat.BoundsCompat bounds) {
+                        boolean showingKeyboard = ViewCompat.getRootWindowInsets(rootView).isVisible(WindowInsetsCompat.Type.ime());
+                        WindowInsetsCompat insets = ViewCompat.getRootWindowInsets(rootView);
+                        int imeHeight = insets.getInsets(WindowInsetsCompat.Type.ime()).bottom;
+                        DisplayMetrics dm = activity.getResources().getDisplayMetrics();
+                        final float density = dm.density;
+                        if (showingKeyboard) {
+                            keyboardEventListener.onKeyboardEvent(EVENT_KB_WILL_SHOW, Math.round(imeHeight/density));
                         } else {
-                            Logger.warn("Native Keyboard Event Listener not found");
-                        }
-                    } else if (pixelHeightDiff != previousHeightDiff && (previousHeightDiff - pixelHeightDiff) > 100) {
-                        if (resizeOnFullScreen) {
-                            possiblyResizeChildOfContent(false);
-                        }
-
-                        if (keyboardEventListener != null) {
                             keyboardEventListener.onKeyboardEvent(EVENT_KB_WILL_HIDE, 0);
-                            keyboardEventListener.onKeyboardEvent(EVENT_KB_DID_HIDE, 0);
+                        }
+                        return super.onStart(animation, bounds);
+                    }
+
+                    @Override
+                    public void onEnd(@NonNull WindowInsetsAnimationCompat animation) {
+                        super.onEnd(animation);
+                        boolean showingKeyboard = ViewCompat.getRootWindowInsets(rootView).isVisible(WindowInsetsCompat.Type.ime());
+                        WindowInsetsCompat insets = ViewCompat.getRootWindowInsets(rootView);
+                        int imeHeight = insets.getInsets(WindowInsetsCompat.Type.ime()).bottom;
+                        DisplayMetrics dm = activity.getResources().getDisplayMetrics();
+                        final float density = dm.density;
+
+                        if (showingKeyboard) {
+                            keyboardEventListener.onKeyboardEvent(EVENT_KB_DID_SHOW, Math.round(imeHeight/density));
                         } else {
-                            Logger.warn("Native Keyboard Event Listener not found");
+                            keyboardEventListener.onKeyboardEvent(EVENT_KB_DID_HIDE, 0);
                         }
                     }
-                    previousHeightDiff = pixelHeightDiff;
                 }
+        );
 
-                private void possiblyResizeChildOfContent(boolean keyboardShown) {
-                    int usableHeightNow = keyboardShown ? computeUsableHeight() : -1;
-                    if (usableHeightPrevious != usableHeightNow) {
-                        frameLayoutParams.height = usableHeightNow;
-                        mChildOfContent.requestLayout();
-                        usableHeightPrevious = usableHeightNow;
-                    }
-                }
 
-                private int computeUsableHeight() {
-                    Rect r = new Rect();
-                    mChildOfContent.getWindowVisibleDisplayFrame(r);
-                    return isOverlays() ? r.bottom : r.height();
-                }
-
-                @SuppressWarnings("deprecation")
-                private boolean isOverlays() {
-                    final Window window = activity.getWindow();
-                    return (
-                        (window.getDecorView().getSystemUiVisibility() & View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN) ==
-                        View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                    );
-                }
-            };
-        mChildOfContent = content.getChildAt(0);
-        rootView.getViewTreeObserver().addOnGlobalLayoutListener(list);
-        frameLayoutParams = (FrameLayout.LayoutParams) mChildOfContent.getLayoutParams();
+//        list =
+//            new ViewTreeObserver.OnGlobalLayoutListener() {
+//                int previousHeightDiff = 0;
+//
+//                @Override
+//                public void onGlobalLayout() {
+//                    Rect r = new Rect();
+//                    //r will be populated with the coordinates of your view that area still visible.
+//                    rootView.getWindowVisibleDisplayFrame(r);
+//
+//                    // cache properties for later use
+//                    int rootViewHeight = rootView.getRootView().getHeight();
+//                    int resultBottom = r.bottom;
+//                    int screenHeight;
+//
+//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+//                        Insets windowInsets = rootView.getRootWindowInsets().getInsetsIgnoringVisibility(WindowInsets.Type.systemBars());
+//                        screenHeight = rootViewHeight;
+//                        resultBottom = resultBottom + windowInsets.bottom;
+//                    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//                        WindowInsets windowInsets = rootView.getRootWindowInsets();
+//                        int stableInsetBottom = getLegacyStableInsetBottom(windowInsets);
+//                        screenHeight = rootViewHeight;
+//                        resultBottom = resultBottom + stableInsetBottom;
+//                    } else {
+//                        Point size = getLegacySizePoint();
+//                        screenHeight = size.y;
+//                    }
+//
+//                    int heightDiff = screenHeight - resultBottom;
+//
+//                    int pixelHeightDiff = (int) (heightDiff / density);
+//
+//                    if (pixelHeightDiff > 100 && pixelHeightDiff != previousHeightDiff) { // if more than 100 pixels, its probably a keyboard...
+//                        if (resizeOnFullScreen) {
+//                            possiblyResizeChildOfContent(true);
+//                        }
+//
+//                        if (keyboardEventListener != null) {
+//                            keyboardEventListener.onKeyboardEvent(EVENT_KB_WILL_SHOW, pixelHeightDiff);
+//                            keyboardEventListener.onKeyboardEvent(EVENT_KB_DID_SHOW, pixelHeightDiff);
+//                        } else {
+//                            Logger.warn("Native Keyboard Event Listener not found");
+//                        }
+//                    } else if (pixelHeightDiff != previousHeightDiff && (previousHeightDiff - pixelHeightDiff) > 100) {
+//                        if (resizeOnFullScreen) {
+//                            possiblyResizeChildOfContent(false);
+//                        }
+//
+//                        if (keyboardEventListener != null) {
+//                            keyboardEventListener.onKeyboardEvent(EVENT_KB_WILL_HIDE, 0);
+//                            keyboardEventListener.onKeyboardEvent(EVENT_KB_DID_HIDE, 0);
+//                        } else {
+//                            Logger.warn("Native Keyboard Event Listener not found");
+//                        }
+//                    }
+//                    previousHeightDiff = pixelHeightDiff;
+//                }
+//
+//                private void possiblyResizeChildOfContent(boolean keyboardShown) {
+//                    int usableHeightNow = keyboardShown ? computeUsableHeight() : -1;
+//                    if (usableHeightPrevious != usableHeightNow) {
+//                        frameLayoutParams.height = usableHeightNow;
+//                        mChildOfContent.requestLayout();
+//                        usableHeightPrevious = usableHeightNow;
+//                    }
+//                }
+//
+//                private int computeUsableHeight() {
+//                    Rect r = new Rect();
+//                    mChildOfContent.getWindowVisibleDisplayFrame(r);
+//                    return isOverlays() ? r.bottom : r.height();
+//                }
+//
+//                @SuppressWarnings("deprecation")
+//                private boolean isOverlays() {
+//                    final Window window = activity.getWindow();
+//                    return (
+//                        (window.getDecorView().getSystemUiVisibility() & View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN) ==
+//                        View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+//                    );
+//                }
+//            };
+//        mChildOfContent = content.getChildAt(0);
+//        rootView.getViewTreeObserver().addOnGlobalLayoutListener(list);
+//        frameLayoutParams = (FrameLayout.LayoutParams) mChildOfContent.getLayoutParams();
     }
 
     @SuppressWarnings("deprecation")
