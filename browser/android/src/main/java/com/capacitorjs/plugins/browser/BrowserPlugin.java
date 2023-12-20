@@ -21,7 +21,7 @@ public class BrowserPlugin extends Plugin {
 
     public static void setBrowserControllerListener(BrowserControllerListener listener) {
         browserControllerListener = listener;
-        if(listener == null) {
+        if (listener == null) {
             browserControllerActivityInstance = null;
         }
     }
@@ -70,11 +70,13 @@ public class BrowserPlugin extends Plugin {
             getContext().startActivity(intent);
 
             Integer finalToolbarColor = toolbarColor;
-            setBrowserControllerListener(activity -> {
-                activity.open(implementation, url, finalToolbarColor);
-                browserControllerActivityInstance = activity;
-                call.resolve();
-            });
+            setBrowserControllerListener(
+                activity -> {
+                    activity.open(implementation, url, finalToolbarColor);
+                    browserControllerActivityInstance = activity;
+                    call.resolve();
+                }
+            );
         } catch (ActivityNotFoundException ex) {
             Logger.error(getLogTag(), ex.getLocalizedMessage(), null);
             call.reject("Unable to display URL");
@@ -84,7 +86,7 @@ public class BrowserPlugin extends Plugin {
 
     @PluginMethod
     public void close(PluginCall call) {
-        if(browserControllerActivityInstance != null) {
+        if (browserControllerActivityInstance != null) {
             browserControllerActivityInstance = null;
             Intent intent = new Intent(getContext(), BrowserControllerActivity.class);
             intent.putExtra("close", true);

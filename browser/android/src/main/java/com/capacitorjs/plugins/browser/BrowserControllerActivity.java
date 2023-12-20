@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-
 import androidx.annotation.Nullable;
 
 public class BrowserControllerActivity extends Activity {
@@ -24,7 +23,7 @@ public class BrowserControllerActivity extends Activity {
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        if(intent.hasExtra("close")) {
+        if (intent.hasExtra("close")) {
             finish();
         }
     }
@@ -32,11 +31,10 @@ public class BrowserControllerActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        if(isCustomTabsOpen) {
+        if (isCustomTabsOpen) {
             isCustomTabsOpen = false;
             finish();
-        }
-        else {
+        } else {
             isCustomTabsOpen = true;
         }
     }
