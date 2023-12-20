@@ -24,6 +24,15 @@ export interface ShowOptions {
   duration?: 'short' | 'long';
 
   /**
+   * Duration of the Toast in milliseconds.
+   *
+   * This option is only supported on iOS and Web.
+   * 
+   * @since 6.0.0
+   */
+  durationMilliseconds?: number;
+
+  /**
    * Position of the Toast.
    *
    * On Android 12 and newer all toasts are shown at the bottom.
