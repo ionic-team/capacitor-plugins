@@ -14,9 +14,9 @@ export interface NetworkPlugin {
    * @since 1.0.0
    */
   addListener(
-      eventName: 'networkStatusChange',
-      listenerFunc: ConnectionStatusChangeListener,
-  ): Promise<PluginListenerHandle> & PluginListenerHandle;
+    eventName: 'networkStatusChange',
+    listenerFunc: ConnectionStatusChangeListener,
+  ): Promise<PluginListenerHandle>;
 
   /**
    * Remove all listeners (including the network status changes) for this plugin.

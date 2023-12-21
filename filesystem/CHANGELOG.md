@@ -3,6 +3,31 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.0.0-beta.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@6.0.0-beta.0...@capacitor/filesystem@6.0.0-beta.1) (2023-12-14)
+
+### Bug Fixes
+
+- **filesystem:** use next tag for capacitor dependencies ([#1963](https://github.com/ionic-team/capacitor-plugins/issues/1963)) ([80e5261](https://github.com/ionic-team/capacitor-plugins/commit/80e5261b4d7af36d6803deef28153e06e79ab214))
+
+# [6.0.0-beta.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@6.0.0-alpha.2...@capacitor/filesystem@6.0.0-beta.0) (2023-12-13)
+
+**Note:** Version bump only for package @capacitor/filesystem
+
+# [6.0.0-alpha.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@6.0.0-alpha.1...@capacitor/filesystem@6.0.0-alpha.2) (2023-11-15)
+
+**Note:** Version bump only for package @capacitor/filesystem
+
+# [6.0.0-alpha.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@5.1.2...@capacitor/filesystem@6.0.0-alpha.1) (2023-11-08)
+
+### Bug Fixes
+
+- **filesystem:** accessing security scoped resources on iOS ([#1660](https://github.com/ionic-team/capacitor-plugins/issues/1660)) ([ee6d93b](https://github.com/ionic-team/capacitor-plugins/commit/ee6d93b1a6efb299cb041b21dbccef225af667c4))
+- **filesystem:** catch http errors on downloadFile ([#1742](https://github.com/ionic-team/capacitor-plugins/issues/1742)) ([5ed01d3](https://github.com/ionic-team/capacitor-plugins/commit/5ed01d303686fdab727b0d40a1cf903ba82c0f43))
+
+### Features
+
+- **filesystem:** add removeAllListeners method ([#1862](https://github.com/ionic-team/capacitor-plugins/issues/1862)) ([f5f84ee](https://github.com/ionic-team/capacitor-plugins/commit/f5f84eedd0806382ba35cb1cdc9f104e35e9b61a))
+
 ## [5.1.4](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@5.1.3...@capacitor/filesystem@5.1.4) (2023-09-14)
 
 **Note:** Version bump only for package @capacitor/filesystem

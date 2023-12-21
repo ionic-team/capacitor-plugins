@@ -1,0 +1,99 @@
+name: Release Dev Build for PR
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+
+permissions:
+  contents: write
+  id-token: write
+
+jobs:
+  setup:
+    if: github.event.pull_request.draft == false
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    outputs:
+      plugins: ${{ steps.packages.outputs.paths }}
+    steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@ce177499ccf9fd2aded3b0426c97e5434c2e8a73
+        with:
+          access_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Get Latest
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.18.0
+      - uses: actions/checkout@v3
+      - name: Restore Dependency Cache
+        id: cache-modules
+        uses: actions/cache@v3
+        with:
+          path: |
+            node_modules
+            */node_modules
+          key: ${{ runner.os }}-dependency-caching-${{ hashFiles('package.json', '*/package.json') }}
+      - run: npm install
+      - id: files
+        uses: tj-actions/changed-files@v37
+        with:
+          json: true
+          write_output_files: true
+      - id: catjson
+        run: |
+          echo "FILES_JSON=$(cat .github/outputs/all_changed_files.json)" >> $GITHUB_OUTPUT
+      - id: packages
+        uses: ./.github/actions/changed-packages
+        with:
+         files: ${{ steps.catjson.outputs.FILES_JSON }}
+
+  release-dev-of-plugins:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      pull-requests: write
+      id-token: write
+    needs:
+      - setup
+    strategy:
+      matrix:
+        plugin: ${{ fromJson(needs.setup.outputs.plugins) }}
+    steps:
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18.18.0
+      - uses: actions/checkout@v3
+      - name: Restore Dependency Cache
+        id: cache-modules
+        uses: actions/cache@v3
+        with:
+          path: |
+            node_modules
+            */node_modules
+          key: ${{ runner.os }}-dependency-caching-${{ hashFiles('package.json', '*/package.json') }}
+      - name: "NPM Identity"
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >> ~/.npmrc
+          npm whoami
+      - run: npm install
+      - name: Version & Publish
+        env: 
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          GH_TOKEN: ${{ secrets.CAP_GH_RELEASE_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: | 
+          npm whoami
+          npm version prerelease --no-git-tag-version -f --preid dev-$PR_NUMBER-$(date +%Y%m%dT%H%M%S)
+          npm publish --tag dev
+        working-directory: ${{ matrix.plugin }}
+      - name: get-npm-version
+        id: package-version
+        uses: martinbeentjes/npm-get-version-action@v1.3.1
+        with:
+          path: ${{ matrix.plugin }}
+      - uses: mshick/add-pr-comment@v2
+        with:
+          message: |
+            Released dev build of ${{ matrix.plugin }} with dev version: ${{ steps.package-version.outputs.current-version }}
