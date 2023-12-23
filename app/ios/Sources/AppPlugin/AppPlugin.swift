@@ -113,4 +113,10 @@ public class AppPlugin: CAPPlugin, CAPBridgedPlugin {
     @objc func minimizeApp(_ call: CAPPluginCall) {
         call.unimplemented()
     }
+
+    @objc func getAppLanguage(_ call: CAPPluginCall) {
+        call.resolve([
+            "value": Bundle.main.preferredLocalizations.first
+        ])
+    }
 }

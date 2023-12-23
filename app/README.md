@@ -76,6 +76,7 @@ const checkAppLaunchUrl = async () => {
 * [`getState()`](#getstate)
 * [`getLaunchUrl()`](#getlaunchurl)
 * [`minimizeApp()`](#minimizeapp)
+* [`getAppLanguage()`](#getapplanguage)
 * [`addListener('appStateChange', ...)`](#addlistenerappstatechange)
 * [`addListener('pause', ...)`](#addlistenerpause)
 * [`addListener('resume', ...)`](#addlistenerresume)
@@ -163,6 +164,21 @@ Minimizes the application.
 Only available for Android.
 
 **Since:** 1.1.0
+
+--------------------
+
+
+### getAppLanguage()
+
+```typescript
+getAppLanguage() => Promise<AppLanguageCode>
+```
+
+Get the app specific language locale code.
+
+**Returns:** <code>Promise&lt;<a href="#applanguagecode">AppLanguageCode</a>&gt;</code>
+
+**Since:** 6.0.0
 
 --------------------
 
@@ -362,6 +378,13 @@ Remove all native listeners for this plugin
 | Prop      | Type                | Description                   | Since |
 | --------- | ------------------- | ----------------------------- | ----- |
 | **`url`** | <code>string</code> | The url used to open the app. | 1.0.0 |
+
+
+#### AppLanguageCode
+
+| Prop        | Type                | Description                           | Since |
+| ----------- | ------------------- | ------------------------------------- | ----- |
+| **`value`** | <code>string</code> | Two or Three character language code. | 5.1.0 |
 
 
 #### PluginListenerHandle

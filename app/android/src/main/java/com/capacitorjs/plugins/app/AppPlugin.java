@@ -13,6 +13,7 @@ import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
 import com.getcapacitor.util.InternalUtils;
+import java.util.Locale;
 
 @CapacitorPlugin(name = "App")
 public class AppPlugin extends Plugin {
@@ -113,6 +114,13 @@ public class AppPlugin extends Plugin {
         startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         getActivity().startActivity(startMain);
         call.resolve();
+    }
+
+    @PluginMethod
+    public void getAppLanguage(PluginCall call) {
+        JSObject ret = new JSObject();
+        ret.put("value", Locale.getDefault().getLanguage());
+        call.resolve(ret);
     }
 
     /**
