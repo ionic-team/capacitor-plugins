@@ -21,7 +21,30 @@ Read about [Configuring `Info.plist`](https://capacitorjs.com/docs/ios/configura
 
 ## Android
 
-This API requires no permissions, unless using `saveToGallery: true`, in that case the following permissions should be added to your `AndroidManifest.xml`:
+When picking existing images from the device gallery, the Android Photo Picker component is now used. The Photo Picker is available on devices that meet the following criteria:
+
+- Run Android 11 (API level 30) or higher
+- Receive changes to Modular System Components through Google System Updates
+
+Older devices and Android Go devices running Android 11 or 12 that support Google Play services can install a backported version of the photo picker. To enable the automatic installation of the backported photo picker module through Google Play services, add the following entry to the `<application>` tag in your `AndroidManifest.xml` file:
+
+```xml
+<!-- Trigger Google Play services to install the backported photo picker module. -->
+<!--suppress AndroidDomInspection -->
+<service android:name="com.google.android.gms.metadata.ModuleDependencies"
+    android:enabled="false"
+    android:exported="false"
+    tools:ignore="MissingClass">
+    <intent-filter>
+        <action android:name="com.google.android.gms.metadata.MODULE_DEPENDENCIES" />
+    </intent-filter>
+    <meta-data android:name="photopicker_activity:0:required" android:value="" />
+</service>
+```
+
+If that entry is not added, the devices that don't support the Photo Picker, the Photo Picker component fallbacks to `Intent.ACTION_OPEN_DOCUMENT`.
+
+The Camera plugin requires no permissions, unless using `saveToGallery: true`, in that case the following permissions should be added to your `AndroidManifest.xml`:
 
 ```xml
 <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
