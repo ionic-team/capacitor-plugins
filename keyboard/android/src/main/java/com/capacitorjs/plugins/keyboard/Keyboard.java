@@ -5,14 +5,12 @@ import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsAnimationCompat;
 import androidx.core.view.WindowInsetsCompat;
-
 import java.util.List;
 
 public class Keyboard {
@@ -44,48 +42,52 @@ public class Keyboard {
         rootView = content.getRootView();
 
         ViewCompat.setWindowInsetsAnimationCallback(
-                rootView,
-                new WindowInsetsAnimationCompat.Callback(
-                        WindowInsetsAnimationCompat.Callback.DISPATCH_MODE_STOP
+            rootView,
+            new WindowInsetsAnimationCompat.Callback(WindowInsetsAnimationCompat.Callback.DISPATCH_MODE_STOP) {
+                @NonNull
+                @Override
+                public WindowInsetsCompat onProgress(
+                    @NonNull WindowInsetsCompat insets,
+                    @NonNull List<WindowInsetsAnimationCompat> runningAnimations
                 ) {
-                    @NonNull
-                    @Override
-                    public WindowInsetsCompat onProgress(@NonNull WindowInsetsCompat insets, @NonNull List<WindowInsetsAnimationCompat> runningAnimations) {
-                        return insets;
+                    return insets;
+                }
+
+                @NonNull
+                @Override
+                public WindowInsetsAnimationCompat.BoundsCompat onStart(
+                    @NonNull WindowInsetsAnimationCompat animation,
+                    @NonNull WindowInsetsAnimationCompat.BoundsCompat bounds
+                ) {
+                    boolean showingKeyboard = ViewCompat.getRootWindowInsets(rootView).isVisible(WindowInsetsCompat.Type.ime());
+                    WindowInsetsCompat insets = ViewCompat.getRootWindowInsets(rootView);
+                    int imeHeight = insets.getInsets(WindowInsetsCompat.Type.ime()).bottom;
+                    DisplayMetrics dm = activity.getResources().getDisplayMetrics();
+                    final float density = dm.density;
+                    if (showingKeyboard) {
+                        keyboardEventListener.onKeyboardEvent(EVENT_KB_WILL_SHOW, Math.round(imeHeight / density));
+                    } else {
+                        keyboardEventListener.onKeyboardEvent(EVENT_KB_WILL_HIDE, 0);
                     }
+                    return super.onStart(animation, bounds);
+                }
 
-                    @NonNull
-                    @Override
-                    public WindowInsetsAnimationCompat.BoundsCompat onStart(@NonNull WindowInsetsAnimationCompat animation, @NonNull WindowInsetsAnimationCompat.BoundsCompat bounds) {
-                        boolean showingKeyboard = ViewCompat.getRootWindowInsets(rootView).isVisible(WindowInsetsCompat.Type.ime());
-                        WindowInsetsCompat insets = ViewCompat.getRootWindowInsets(rootView);
-                        int imeHeight = insets.getInsets(WindowInsetsCompat.Type.ime()).bottom;
-                        DisplayMetrics dm = activity.getResources().getDisplayMetrics();
-                        final float density = dm.density;
-                        if (showingKeyboard) {
-                            keyboardEventListener.onKeyboardEvent(EVENT_KB_WILL_SHOW, Math.round(imeHeight/density));
-                        } else {
-                            keyboardEventListener.onKeyboardEvent(EVENT_KB_WILL_HIDE, 0);
-                        }
-                        return super.onStart(animation, bounds);
-                    }
+                @Override
+                public void onEnd(@NonNull WindowInsetsAnimationCompat animation) {
+                    super.onEnd(animation);
+                    boolean showingKeyboard = ViewCompat.getRootWindowInsets(rootView).isVisible(WindowInsetsCompat.Type.ime());
+                    WindowInsetsCompat insets = ViewCompat.getRootWindowInsets(rootView);
+                    int imeHeight = insets.getInsets(WindowInsetsCompat.Type.ime()).bottom;
+                    DisplayMetrics dm = activity.getResources().getDisplayMetrics();
+                    final float density = dm.density;
 
-                    @Override
-                    public void onEnd(@NonNull WindowInsetsAnimationCompat animation) {
-                        super.onEnd(animation);
-                        boolean showingKeyboard = ViewCompat.getRootWindowInsets(rootView).isVisible(WindowInsetsCompat.Type.ime());
-                        WindowInsetsCompat insets = ViewCompat.getRootWindowInsets(rootView);
-                        int imeHeight = insets.getInsets(WindowInsetsCompat.Type.ime()).bottom;
-                        DisplayMetrics dm = activity.getResources().getDisplayMetrics();
-                        final float density = dm.density;
-
-                        if (showingKeyboard) {
-                            keyboardEventListener.onKeyboardEvent(EVENT_KB_DID_SHOW, Math.round(imeHeight/density));
-                        } else {
-                            keyboardEventListener.onKeyboardEvent(EVENT_KB_DID_HIDE, 0);
-                        }
+                    if (showingKeyboard) {
+                        keyboardEventListener.onKeyboardEvent(EVENT_KB_DID_SHOW, Math.round(imeHeight / density));
+                    } else {
+                        keyboardEventListener.onKeyboardEvent(EVENT_KB_DID_HIDE, 0);
                     }
                 }
+            }
         );
     }
 
