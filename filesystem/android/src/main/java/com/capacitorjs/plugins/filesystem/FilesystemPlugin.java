@@ -507,6 +507,11 @@ public class FilesystemPlugin extends Plugin {
             case "downloadFile":
                 downloadFile(call);
                 break;
+            case "requestPermissions":
+                JSObject permissionsResultJSON = new JSObject();
+                permissionsResultJSON.put(PUBLIC_STORAGE, "granted");
+                call.resolve(permissionsResultJSON);
+                break;                
         }
     }
 
