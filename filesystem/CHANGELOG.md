@@ -28,6 +28,12 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 - **filesystem:** add removeAllListeners method ([#1862](https://github.com/ionic-team/capacitor-plugins/issues/1862)) ([f5f84ee](https://github.com/ionic-team/capacitor-plugins/commit/f5f84eedd0806382ba35cb1cdc9f104e35e9b61a))
 
+# [5.2.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@5.1.4...@capacitor/filesystem@5.2.0) (2023-12-15)
+
+### Features
+
+- **filesystem:** add removeAllListeners method ([#1868](https://github.com/ionic-team/capacitor-plugins/issues/1868)) ([fb941c7](https://github.com/ionic-team/capacitor-plugins/commit/fb941c7f39c37684c07c5162644756f4b919418d))
+
 ## [5.1.4](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@5.1.3...@capacitor/filesystem@5.1.4) (2023-09-14)
 
 **Note:** Version bump only for package @capacitor/filesystem

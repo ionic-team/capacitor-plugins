@@ -19,6 +19,10 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 **Note:** Version bump only for package @capacitor/screen-reader
 
+## [5.0.7](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/screen-reader@5.0.6...@capacitor/screen-reader@5.0.7) (2023-12-15)
+
+**Note:** Version bump only for package @capacitor/screen-reader
+
 ## [5.0.6](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/screen-reader@5.0.5...@capacitor/screen-reader@5.0.6) (2023-07-12)
 
 **Note:** Version bump only for package @capacitor/screen-reader
