@@ -11,6 +11,7 @@ import type {
   PermissionStatus,
   ScheduleOptions,
   ScheduleResult,
+  SettingsPermissionStatus,
 } from './definitions';
 
 export class LocalNotificationsWeb
@@ -104,6 +105,14 @@ export class LocalNotificationsWeb
     return {
       value: display === 'granted',
     };
+  }
+
+  async changeExactNotificationSetting(): Promise<SettingsPermissionStatus> {
+    throw this.unimplemented('Not implemented on web.');
+  }
+
+  async checkExactNotificationSetting(): Promise<SettingsPermissionStatus> {
+    throw this.unimplemented('Not implemented on web.');
   }
 
   async requestPermissions(): Promise<PermissionStatus> {
