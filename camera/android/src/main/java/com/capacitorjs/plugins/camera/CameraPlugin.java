@@ -51,7 +51,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -104,6 +103,7 @@ public class CameraPlugin extends Plugin {
     private static final String UNABLE_TO_PROCESS_IMAGE = "Unable to process image";
     private static final String IMAGE_EDIT_ERROR = "Unable to edit image";
     private static final String IMAGE_GALLERY_SAVE_ERROR = "Unable to save the image in the gallery";
+    private static final String USER_CANCELLED = "User cancelled photos app";
 
     private String imageFileSavePath;
     private String imageEditedFileSavePath;
@@ -180,7 +180,7 @@ public class CameraPlugin extends Plugin {
                     openCamera(call);
                 }
             },
-            () -> call.reject("User cancelled photos app")
+            () -> call.reject(USER_CANCELLED)
         );
         fragment.show(getActivity().getSupportFragmentManager(), "capacitorModalsActionSheet");
     }
@@ -376,7 +376,7 @@ public class CameraPlugin extends Plugin {
                                     }
                                 );
                             } else {
-                                call.reject("No images picked");
+                                call.reject(USER_CANCELLED);
                             }
                             pickMultipleMedia.unregister();
                         }
@@ -393,7 +393,7 @@ public class CameraPlugin extends Plugin {
                                 imagePickedContentUri = uri;
                                 processPickedImage(uri, call);
                             } else {
-                                call.reject("No image picked");
+                                call.reject(USER_CANCELLED);
                             }
                             pickMedia.unregister();
                         }
@@ -421,7 +421,7 @@ public class CameraPlugin extends Plugin {
         Bitmap bitmap = BitmapFactory.decodeFile(imageFileSavePath, bmOptions);
 
         if (bitmap == null) {
-            call.reject("User cancelled photos app");
+            call.reject(USER_CANCELLED);
             return;
         }
 
@@ -432,7 +432,7 @@ public class CameraPlugin extends Plugin {
         settings = getSettings(call);
         Intent data = result.getData();
         if (data == null) {
-            call.reject("No image picked");
+            call.reject(USER_CANCELLED);
             return;
         }
 
