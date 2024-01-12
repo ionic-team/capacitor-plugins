@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.0.0-beta.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/google-maps@6.0.0-beta.0...@capacitor/google-maps@6.0.0-beta.1) (2023-12-14)
+
+**Note:** Version bump only for package @capacitor/google-maps
+
+# [6.0.0-beta.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/google-maps@6.0.0-alpha.2...@capacitor/google-maps@6.0.0-beta.0) (2023-12-13)
+
+**Note:** Version bump only for package @capacitor/google-maps
+
 # [6.0.0-alpha.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/google-maps@6.0.0-alpha.1...@capacitor/google-maps@6.0.0-alpha.2) (2023-11-15)
 
 **Note:** Version bump only for package @capacitor/google-maps
@@ -20,6 +28,12 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ### Features
 
 - **google-maps:** Separate mapId for Google Maps Cloud IDs ([#1750](https://github.com/ionic-team/capacitor-plugins/issues/1750)) ([88a633c](https://github.com/ionic-team/capacitor-plugins/commit/88a633ccab6753fe2559a9b8b55a697022fe327c))
+
+# [5.4.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/google-maps@5.3.3...@capacitor/google-maps@5.4.0) (2023-12-15)
+
+### Features
+
+- **google-maps:** Separate mapId for Google Maps Cloud IDs ([#1943](https://github.com/ionic-team/capacitor-plugins/issues/1943)) ([bf7ec33](https://github.com/ionic-team/capacitor-plugins/commit/bf7ec3306e7943358ac9ea118b904ff27d6ea2f6))
 
 ## [5.3.3](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/google-maps@5.3.2...@capacitor/google-maps@5.3.3) (2023-10-04)
 
