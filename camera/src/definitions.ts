@@ -316,7 +316,9 @@ export interface GalleryImageOptions {
   presentationStyle?: 'fullscreen' | 'popover';
 
   /**
-   * iOS only: Maximum number of pictures the user will be able to choose.
+   * Maximum number of pictures the user will be able to choose.
+   * Note: This option is only supported on Android 13+ and iOS.
+   *
    * @default 0 (unlimited)
    *
    * @since 1.2.0

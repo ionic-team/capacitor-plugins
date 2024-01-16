@@ -93,7 +93,7 @@ Unlocks the screen's orientation.
 ### addListener('screenOrientationChange', ...)
 
 ```typescript
-addListener(eventName: 'screenOrientationChange', listenerFunc: (orientation: ScreenOrientationResult) => void) => Promise<PluginListenerHandle> & PluginListenerHandle
+addListener(eventName: 'screenOrientationChange', listenerFunc: (orientation: ScreenOrientationResult) => void) => Promise<PluginListenerHandle>
 ```
 
 Listens for screen orientation changes.
@@ -103,7 +103,7 @@ Listens for screen orientation changes.
 | **`eventName`**    | <code>'screenOrientationChange'</code>                                                                |
 | **`listenerFunc`** | <code>(orientation: <a href="#screenorientationresult">ScreenOrientationResult</a>) =&gt; void</code> |
 
-**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt; & <a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
 
 **Since:** 4.0.0
 

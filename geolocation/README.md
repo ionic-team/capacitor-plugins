@@ -13,7 +13,6 @@ npx cap sync
 
 Apple requires privacy descriptions to be specified in `Info.plist` for location information:
 
-- `NSLocationAlwaysUsageDescription` (`Privacy - Location Always Usage Description`)
 - `NSLocationWhenInUseUsageDescription` (`Privacy - Location When In Use Usage Description`)
 
 Read about [Configuring `Info.plist`](https://capacitorjs.com/docs/ios/configuration#configuring-infoplist) in the [iOS Guide](https://capacitorjs.com/docs/ios) for more information on setting iOS permissions in Xcode
@@ -202,6 +201,17 @@ Request location permissions.  Will throw if system location services are disabl
 
 
 ### Type Aliases
+
+
+#### Position
+
+A <a href="#position">Position</a> is an array of coordinates.
+https://tools.ietf.org/html/rfc7946#section-3.1.1
+Array should contain between two and three elements.
+The previous GeoJSON specification allowed more elements (e.g., which could be used to represent M values),
+but the current specification only allows X, Y, and (optionally) Z to be defined.
+
+<code>number[]</code>
 
 
 #### WatchPositionCallback
