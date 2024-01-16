@@ -28,6 +28,7 @@ public class PushNotificationsPlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "createChannel", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "listChannels", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "deleteChannel", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "openSettings", returnType: CAPPluginReturnPromise),
     ] 
     private let notificationDelegateHandler = PushNotificationsHandler()
     private var appDelegateRegistrationCalled: Bool = false
