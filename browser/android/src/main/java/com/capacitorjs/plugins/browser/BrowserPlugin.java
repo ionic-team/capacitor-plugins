@@ -62,8 +62,6 @@ public class BrowserPlugin extends Plugin {
 
         // open the browser and finish
         try {
-            //implementation.open(url, toolbarColor);
-
             Intent intent = new Intent(getContext(), BrowserControllerActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
