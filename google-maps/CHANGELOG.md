@@ -29,6 +29,12 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 - **google-maps:** Separate mapId for Google Maps Cloud IDs ([#1750](https://github.com/ionic-team/capacitor-plugins/issues/1750)) ([88a633c](https://github.com/ionic-team/capacitor-plugins/commit/88a633ccab6753fe2559a9b8b55a697022fe327c))
 
+# [5.4.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/google-maps@5.3.3...@capacitor/google-maps@5.4.0) (2023-12-15)
+
+### Features
+
+- **google-maps:** Separate mapId for Google Maps Cloud IDs ([#1943](https://github.com/ionic-team/capacitor-plugins/issues/1943)) ([bf7ec33](https://github.com/ionic-team/capacitor-plugins/commit/bf7ec3306e7943358ac9ea118b904ff27d6ea2f6))
+
 ## [5.3.3](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/google-maps@5.3.2...@capacitor/google-maps@5.3.3) (2023-10-04)
 
 ### Bug Fixes
