@@ -1,8 +1,10 @@
 package com.capacitorjs.plugins.keyboard;
 
 import android.content.Context;
+import android.graphics.Rect;
 import android.util.DisplayMetrics;
 import android.view.View;
+import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 import androidx.annotation.NonNull;
@@ -21,6 +23,9 @@ public class Keyboard {
 
     private AppCompatActivity activity;
     private View rootView;
+    private int usableHeightPrevious;
+    private FrameLayout.LayoutParams frameLayoutParams;
+    private View mChildOfContent;
 
     public void setKeyboardEventListener(@Nullable KeyboardEventListener keyboardEventListener) {
         this.keyboardEventListener = keyboardEventListener;
@@ -34,7 +39,7 @@ public class Keyboard {
     static final String EVENT_KB_WILL_HIDE = "keyboardWillHide";
     static final String EVENT_KB_DID_HIDE = "keyboardDidHide";
 
-    public Keyboard(AppCompatActivity activity) {
+    public Keyboard(AppCompatActivity activity, boolean resizeOnFullScreen) {
         this.activity = activity;
 
         //http://stackoverflow.com/a/4737265/1091751 detect if keyboard is showing
@@ -64,6 +69,11 @@ public class Keyboard {
                     int imeHeight = insets.getInsets(WindowInsetsCompat.Type.ime()).bottom;
                     DisplayMetrics dm = activity.getResources().getDisplayMetrics();
                     final float density = dm.density;
+
+                    if (resizeOnFullScreen) {
+                        possiblyResizeChildOfContent(true);
+                    }
+
                     if (showingKeyboard) {
                         keyboardEventListener.onKeyboardEvent(EVENT_KB_WILL_SHOW, Math.round(imeHeight / density));
                     } else {
@@ -89,6 +99,9 @@ public class Keyboard {
                 }
             }
         );
+
+        mChildOfContent = content.getChildAt(0);
+        frameLayoutParams = (FrameLayout.LayoutParams) mChildOfContent.getLayoutParams();
     }
 
     public void show() {
@@ -104,5 +117,29 @@ public class Keyboard {
             inputManager.hideSoftInputFromWindow(v.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
             return true;
         }
+    }
+
+    private void possiblyResizeChildOfContent(boolean keyboardShown) {
+        int usableHeightNow = keyboardShown ? computeUsableHeight() : -1;
+        if (usableHeightPrevious != usableHeightNow) {
+            frameLayoutParams.height = usableHeightNow;
+            mChildOfContent.requestLayout();
+            usableHeightPrevious = usableHeightNow;
+        }
+    }
+
+    private int computeUsableHeight() {
+        Rect r = new Rect();
+        mChildOfContent.getWindowVisibleDisplayFrame(r);
+        return isOverlays() ? r.bottom : r.height();
+    }
+
+    @SuppressWarnings("deprecation")
+    private boolean isOverlays() {
+        final Window window = activity.getWindow();
+        return (
+                (window.getDecorView().getSystemUiVisibility() & View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN) ==
+                        View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+        );
     }
 }
