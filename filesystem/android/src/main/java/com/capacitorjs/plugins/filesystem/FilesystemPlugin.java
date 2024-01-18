@@ -460,7 +460,7 @@ public class FilesystemPlugin extends Plugin {
             permissionsResultJSON.put(PUBLIC_STORAGE, "granted");
             call.resolve(permissionsResultJSON);
         } else {
-            requestPermissionForAlias(PUBLIC_STORAGE, call, "permissionCallback");
+            super.requestPermissions(call);
         }
     }
 
