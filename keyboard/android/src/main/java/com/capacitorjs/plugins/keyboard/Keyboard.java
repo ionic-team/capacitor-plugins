@@ -71,7 +71,7 @@ public class Keyboard {
                     final float density = dm.density;
 
                     if (resizeOnFullScreen) {
-                        possiblyResizeChildOfContent(true);
+                        possiblyResizeChildOfContent(showingKeyboard);
                     }
 
                     if (showingKeyboard) {
@@ -138,8 +138,7 @@ public class Keyboard {
     private boolean isOverlays() {
         final Window window = activity.getWindow();
         return (
-                (window.getDecorView().getSystemUiVisibility() & View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN) ==
-                        View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+            (window.getDecorView().getSystemUiVisibility() & View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN) == View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
         );
     }
 }
