@@ -39,6 +39,7 @@ By default, an iPad allows Multitasking and its orientation cannot be locked. If
 * [`addListener('screenOrientationChange', ...)`](#addlistenerscreenorientationchange)
 * [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
+* [Type Aliases](#type-aliases)
 
 </docgen-index>
 
@@ -135,9 +136,9 @@ Removes all listeners.
 
 #### OrientationLockOptions
 
-| Prop              | Type                             |
-| ----------------- | -------------------------------- |
-| **`orientation`** | <code>OrientationLockType</code> |
+| Prop              | Type                                                                | Description                                                                                                                           |
+| ----------------- | ------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| **`orientation`** | <code><a href="#orientationlocktype">OrientationLockType</a></code> | Note: Typescript v5.2+ users should import <a href="#orientationlocktype">OrientationLockType</a> from @capacitor/screen-orientation. |
 
 
 #### PluginListenerHandle
@@ -145,5 +146,13 @@ Removes all listeners.
 | Prop         | Type                                      |
 | ------------ | ----------------------------------------- |
 | **`remove`** | <code>() =&gt; Promise&lt;void&gt;</code> |
+
+
+### Type Aliases
+
+
+#### OrientationLockType
+
+<code>'any' | 'natural' | 'landscape' | 'portrait' | 'portrait-primary' | 'portrait-secondary' | 'landscape-primary' | 'landscape-secondary'</code>
 
 </docgen-api>
