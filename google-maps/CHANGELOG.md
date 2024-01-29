@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.4.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/google-maps@5.4.0...@capacitor/google-maps@5.4.1) (2024-01-29)
+
+**Note:** Version bump only for package @capacitor/google-maps
+
 # [5.4.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/google-maps@5.3.3...@capacitor/google-maps@5.4.0) (2023-12-15)
 
 ### Features

@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.2.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/browser@5.1.0...@capacitor/browser@5.2.0) (2024-01-29)
+
+### Features
+
+- **browser:** implement close() method for android ([e2cdf35](https://github.com/ionic-team/capacitor-plugins/commit/e2cdf3538b9741c5ec394abb14516ceaf5e12d43))
+
 # [5.1.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/browser@5.0.6...@capacitor/browser@5.1.0) (2023-09-14)
 
 ### Features

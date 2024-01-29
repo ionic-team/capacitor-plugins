@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.2.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@5.2.0...@capacitor/filesystem@5.2.1) (2024-01-29)
+
+### Bug Fixes
+
+- **filesystem:** requestPermissions not resolving ([#1991](https://github.com/ionic-team/capacitor-plugins/issues/1991)) ([f9afbe9](https://github.com/ionic-team/capacitor-plugins/commit/f9afbe9b03fefa13be3120158487fc685d199d69))
+
 # [5.2.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@5.1.4...@capacitor/filesystem@5.2.0) (2023-12-15)
 
 ### Features

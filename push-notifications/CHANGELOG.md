@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.1.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/push-notifications@5.1.0...@capacitor/push-notifications@5.1.1) (2024-01-29)
+
+**Note:** Version bump only for package @capacitor/push-notifications
+
 # [5.1.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/push-notifications@5.0.6...@capacitor/push-notifications@5.1.0) (2023-09-14)
 
 ### Features
