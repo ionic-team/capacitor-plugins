@@ -47,7 +47,7 @@
   "devDependencies": {
     "@capacitor/android": "^5.1.1",
     "@capacitor/core": "^5.1.1",
-    "@capacitor/docgen": "0.2.0",
+    "@capacitor/docgen": "0.2.2",
     "@capacitor/ios": "^5.1.1",
     "@ionic/eslint-config": "^0.3.0",
     "@ionic/prettier-config": "~1.0.1",
