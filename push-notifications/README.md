@@ -130,6 +130,8 @@ On Android, there are various system and app states that can affect the delivery
 * If the device has entered [Doze](https://developer.android.com/training/monitoring-device-state/doze-standby) mode, your application may have restricted capabilities. To increase the chance of your notification being received, consider using [FCM high priority messages](https://firebase.google.com/docs/cloud-messaging/concept-options#setting-the-priority-of-a-message).
 * There are differences in behavior between development and production. Try testing your app outside of being launched by Android Studio. Read more [here](https://stackoverflow.com/a/50238790/1351469).
 
+On an iOS simulator, there is no way to receive the registration event, or a registrationError event in the listeners. It will fail silently. You can grant the permissions for push notifications in a simulator, but in order to test registering the device token you will need a physical device.
+
 ---
 
 ## Example
