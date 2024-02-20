@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.0.0-rc.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/screen-orientation@6.0.0-beta.1...@capacitor/screen-orientation@6.0.0-rc.0) (2024-02-07)
+
+### Bug Fixes
+
+- **screen-orientation:** Add OrientationLockType ([#1914](https://github.com/ionic-team/capacitor-plugins/issues/1914)) ([bc61f5c](https://github.com/ionic-team/capacitor-plugins/commit/bc61f5cd82fecb11fa039919f555d5b2596071ab))
+
 # [6.0.0-beta.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/screen-orientation@6.0.0-beta.0...@capacitor/screen-orientation@6.0.0-beta.1) (2023-12-14)
 
 **Note:** Version bump only for package @capacitor/screen-orientation
