@@ -5,10 +5,10 @@ ext {
     androidxJunitVersion = project.hasProperty('androidxJunitVersion') ? rootProject.ext.androidxJunitVersion : '1.1.5'
     androidxEspressoCoreVersion = project.hasProperty('androidxEspressoCoreVersion') ? rootProject.ext.androidxEspressoCoreVersion : '3.5.1'
     androidxCoreKTXVersion = project.hasProperty('androidxCoreKTXVersion') ? rootProject.ext.androidxCoreKTXVersion : '1.12.0'
-    googleMapsPlayServicesVersion = project.hasProperty('googleMapsPlayServicesVersion') ? rootProject.ext.googleMapsPlayServicesVersion : '18.1.0'
-    googleMapsUtilsVersion = project.hasProperty('googleMapsUtilsVersion') ? rootProject.ext.googleMapsUtilsVersion : '3.5.3'
-    googleMapsKtxVersion = project.hasProperty('googleMapsKtxVersion') ? rootProject.ext.googleMapsKtxVersion : '3.4.0'
-    googleMapsUtilsKtxVersion = project.hasProperty('googleMapsUtilsKtxVersion') ? rootProject.ext.googleMapsUtilsKtxVersion : '3.4.0'
+    googleMapsPlayServicesVersion = project.hasProperty('googleMapsPlayServicesVersion') ? rootProject.ext.googleMapsPlayServicesVersion : '18.2.0'
+    googleMapsUtilsVersion = project.hasProperty('googleMapsUtilsVersion') ? rootProject.ext.googleMapsUtilsVersion : '3.8.2'
+    googleMapsKtxVersion = project.hasProperty('googleMapsKtxVersion') ? rootProject.ext.googleMapsKtxVersion : '5.0.0'
+    googleMapsUtilsKtxVersion = project.hasProperty('googleMapsUtilsKtxVersion') ? rootProject.ext.googleMapsUtilsKtxVersion : '5.0.0'
     kotlinxCoroutinesVersion = project.hasProperty('kotlinxCoroutinesVersion') ? rootProject.ext.kotlinxCoroutinesVersion : '1.7.3'
 }
 
