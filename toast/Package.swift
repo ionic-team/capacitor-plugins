@@ -7,14 +7,14 @@ let package = Package(
     products: [
         .library(
             name: "CapacitorToast",
-            targets: ["ToastPlugin"])
+            targets: ["CapacitorToast"])
     ],
     dependencies: [
         .package(url: "https://github.com/ionic-team/capacitor-spm.git", branch: "main")
     ],
     targets: [
         .target(
-            name: "ToastPlugin",
+            name: "CapacitorToast",
             dependencies: [
                 .product(name: "Capacitor", package: "capacitor-spm"),
                 .product(name: "Cordova", package: "capacitor-spm")
