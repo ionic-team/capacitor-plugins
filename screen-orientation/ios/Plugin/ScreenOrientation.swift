@@ -84,7 +84,9 @@ public class ScreenOrientation: NSObject {
         switch orientationType {
         case "any":
             return UIInterfaceOrientationMask.all
-        case "landscape", "landscape-primary":
+        case "landscape":
+            return UIInterfaceOrientationMask.landscape
+        case "landscape-primary":
             return UIInterfaceOrientationMask.landscapeLeft
         case "landscape-secondary":
             return UIInterfaceOrientationMask.landscapeRight
