@@ -2,11 +2,11 @@
 import PackageDescription
 
 let package = Package(
-    name: "CapacitorHapticsPlugin",
+    name: "CapacitorHaptics",
     platforms: [.iOS(.v13)],
     products: [
         .library(
-            name: "CapacitorHapticsPlugin",
+            name: "CapacitorHaptics",
             targets: ["HapticsPlugin"])
     ],
     dependencies: [
