@@ -2,11 +2,11 @@
 import PackageDescription
 
 let package = Package(
-    name: "CapacitorAppPlugin",
+    name: "CapacitorApp",
     platforms: [.iOS(.v13)],
     products: [
         .library(
-            name: "CapacitorAppPlugin",
+            name: "CapacitorApp",
             targets: ["AppPlugin"])
     ],
     dependencies: [
