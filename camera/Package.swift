@@ -6,7 +6,7 @@ let package = Package(
     platforms: [.iOS(.v13)],
     products: [
         .library(
-            name: "CameraPlugin",
+            name: "CapacitorCamera",
             targets: ["CameraPlugin"])
     ],
     dependencies: [

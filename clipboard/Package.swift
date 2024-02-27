@@ -6,7 +6,7 @@ let package = Package(
     platforms: [.iOS(.v13)],
     products: [
         .library(
-            name: "ClipboardPlugin",
+            name: "CapacitorClipboard",
             targets: ["ClipboardPlugin"])
     ],
     dependencies: [

@@ -6,7 +6,7 @@ let package = Package(
     platforms: [.iOS(.v13)],
     products: [
         .library(
-            name: "SharePlugin",
+            name: "CapacitorShare",
             targets: ["SharePlugin"])
     ],
     dependencies: [
