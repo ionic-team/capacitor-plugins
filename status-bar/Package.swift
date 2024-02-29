@@ -3,11 +3,11 @@
 import PackageDescription
 
 let package = Package(
-    name: "CapacitorStatusBarPlugin",
+    name: "CapacitorStatusBar",
     platforms: [.iOS(.v13)],
     products: [
         .library(
-            name: "CapacitorStatusBarPlugin",
+            name: "CapacitorStatusBar",
             targets: ["StatusBarPlugin"])
     ],
     dependencies: [
