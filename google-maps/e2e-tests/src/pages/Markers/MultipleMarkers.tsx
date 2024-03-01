@@ -210,7 +210,7 @@ const MultipleMarkers: React.FC = () => {
       animate: true,
       animationDuration: 50,
     });
-    await map?.enableCurrentLocation(true);
+    await map?.update({ isMyLocationEnabled: true });
   }
 
   async function showCurrentBounds() {
