@@ -19,6 +19,8 @@ import type {
   CircleClickCallbackData,
   Polyline,
   PolylineCallbackData,
+  FeatureType,
+  FeatureStyles,
 } from './definitions';
 import { LatLngBounds, MapType } from './definitions';
 import type { CreateMapArgs } from './implementation';
@@ -48,6 +50,14 @@ export interface GoogleMapInterface {
   removeCircles(ids: string[]): Promise<void>;
   addPolylines(polylines: Polyline[]): Promise<string[]>;
   removePolylines(ids: string[]): Promise<void>;
+  addFeatures(
+    type: FeatureType,
+    data: any,
+    idPropertyName?: string,
+    styles?: FeatureStyles,
+  ): Promise<string[]>;
+  getFeatureBounds(featureId: string): Promise<LatLngBounds>;
+  removeFeature(featureId: string): Promise<void>;
   destroy(): Promise<void>;
   setCamera(config: CameraConfig): Promise<void>;
   /**
@@ -472,6 +482,39 @@ export class GoogleMap {
     return CapacitorGoogleMaps.removePolylines({
       id: this.id,
       polylineIds: ids,
+    });
+  }
+
+  async addFeatures(
+    type: FeatureType,
+    data: any,
+    idPropertyName?: string,
+    styles?: FeatureStyles,
+  ): Promise<string[]> {
+    const res = await CapacitorGoogleMaps.addFeatures({
+      id: this.id,
+      type,
+      data,
+      idPropertyName,
+      styles,
+    });
+
+    return res.ids;
+  }
+
+  async getFeatureBounds(id: string): Promise<LatLngBounds> {
+    const res = await CapacitorGoogleMaps.getFeatureBounds({
+      id: this.id,
+      featureId: id,
+    });
+
+    return new LatLngBounds(res.bounds);
+  }
+
+  async removeFeature(id: string): Promise<void> {
+    return CapacitorGoogleMaps.removeFeature({
+      id: this.id,
+      featureId: id,
     });
   }
 

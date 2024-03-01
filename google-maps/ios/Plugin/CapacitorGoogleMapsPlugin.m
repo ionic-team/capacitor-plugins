@@ -20,6 +20,9 @@ CAP_PLUGIN(CapacitorGoogleMapsPlugin, "CapacitorGoogleMaps",
    CAP_PLUGIN_METHOD(enableClustering, CAPPluginReturnPromise);
    CAP_PLUGIN_METHOD(disableClustering, CAPPluginReturnPromise);
    CAP_PLUGIN_METHOD(destroy, CAPPluginReturnPromise);
+   CAP_PLUGIN_METHOD(addFeatures, CAPPluginReturnPromise);
+   CAP_PLUGIN_METHOD(getFeatureBounds, CAPPluginReturnPromise);
+   CAP_PLUGIN_METHOD(removeFeature, CAPPluginReturnPromise);
    CAP_PLUGIN_METHOD(setCamera, CAPPluginReturnPromise);
    CAP_PLUGIN_METHOD(getMapType, CAPPluginReturnPromise);
    CAP_PLUGIN_METHOD(setMapType, CAPPluginReturnPromise);
