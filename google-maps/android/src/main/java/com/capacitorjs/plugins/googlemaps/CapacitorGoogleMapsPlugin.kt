@@ -631,6 +631,134 @@ class CapacitorGoogleMapsPlugin : Plugin(), OnMapsSdkInitializedCallback {
     }
 
     @PluginMethod
+    fun addFeatures(call: PluginCall) {
+        try {
+            val id = call.getString("id")
+            id ?: throw InvalidMapIdError()
+
+            val map = maps[id]
+            map ?: throw MapNotFoundError()
+
+            val type =
+                call.getString("type")
+                    ?: throw InvalidArgumentsError("feature type is missing")
+
+            val data =
+                call.getObject("data")
+                    ?: throw InvalidArgumentsError("feature data is missing")
+
+            val idPropertyName = call.getString("idPropertyName") ?: null
+
+            val styles = call.getObject("styles") ?: null
+
+            map.addFeatures(
+                type,
+                data,
+                idPropertyName,
+                styles
+            ) { result ->
+                try {
+                    val ids = result.getOrThrow()
+
+                    val jsonIDs = JSONArray()
+                    ids.forEach { jsonIDs.put(it) }
+
+                    val res = JSObject()
+                    res.put("ids", jsonIDs)
+                    call.resolve(res)
+                } catch (e: GoogleMapsError) {
+                    handleError(call, e)
+                } catch (e: Exception) {
+                    handleError(call, e)
+                }
+            }
+        } catch (e: GoogleMapsError) {
+            handleError(call, e)
+        } catch (e: Exception) {
+            handleError(call, e)
+        }
+    }
+
+    @PluginMethod
+    fun getFeatureBounds(call: PluginCall) {
+        try {
+            val id = call.getString("id")
+            id ?: throw InvalidMapIdError()
+
+            val map = maps[id]
+            map ?: throw MapNotFoundError()
+
+            val featureId =
+                call.getString("featureId")
+                    ?: throw InvalidArgumentsError("feature id is missing")
+
+            map.getFeatureBounds(featureId) { result ->
+                try {
+                    val featureBounds = result.getOrThrow()
+
+                    val southwest = JSObject()
+                    southwest.put("lat", featureBounds?.southwest?.latitude)
+                    southwest.put("lng", featureBounds?.southwest?.longitude)
+
+                    val center = JSObject()
+                    center.put("lat", featureBounds?.center?.latitude)
+                    center.put("lng", featureBounds?.center?.longitude)
+
+                    val northeast = JSObject()
+                    northeast.put("lat", featureBounds?.northeast?.latitude)
+                    northeast.put("lng", featureBounds?.northeast?.longitude)
+
+                    val bounds = JSObject()
+                    bounds.put("southwest", southwest)
+                    bounds.put("center", center)
+                    bounds.put("northeast", northeast)
+
+                    val res = JSObject()
+                    res.put("bounds", bounds)
+                    call.resolve(res)
+                } catch (e: GoogleMapsError) {
+                    handleError(call, e)
+                } catch (e: Exception) {
+                    handleError(call, e)
+                }
+            }
+        } catch (e: GoogleMapsError) {
+            handleError(call, e)
+        } catch (e: Exception) {
+            handleError(call, e)
+        }
+    }
+
+    @PluginMethod
+    fun removeFeature(call: PluginCall) {
+        try {
+            val id = call.getString("id")
+            id ?: throw InvalidMapIdError()
+
+            val map = maps[id]
+            map ?: throw MapNotFoundError()
+
+            val featureId =
+                call.getString("featureId")
+                    ?: throw InvalidArgumentsError("feature id is missing")
+
+            map.removeFeature(featureId) {
+                try {
+                    call.resolve()
+                } catch (e: GoogleMapsError) {
+                    handleError(call, e)
+                } catch (e: Exception) {
+                    handleError(call, e)
+                }
+            }
+        } catch (e: GoogleMapsError) {
+            handleError(call, e)
+        } catch (e: Exception) {
+            handleError(call, e)
+        }
+    }
+
+    @PluginMethod
     fun setCamera(call: PluginCall) {
         try {
             val id = call.getString("id")

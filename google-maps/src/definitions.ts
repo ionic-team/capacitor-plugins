@@ -130,6 +130,34 @@ export interface Polyline extends google.maps.PolylineOptions {
 }
 
 /**
+ * Feature types
+ */
+export enum FeatureType {
+  /**
+   * Default
+   */
+  Default = 'Default',
+  /**
+   * GeoJSON
+   */
+  GeoJSON = 'GeoJSON',
+}
+
+/**
+ * Feature styles, identified by the feature id
+ */
+export interface FeatureStyles {
+  [key: string]: {
+    strokeColor: string;
+    strokeOpacity: number;
+    strokeWeight: number;
+    fillColor: string;
+    fillOpacity: number;
+    geodesic: boolean;
+  };
+}
+
+/**
  * Describes the style for some region of a polyline.
  */
 export interface StyleSpan {

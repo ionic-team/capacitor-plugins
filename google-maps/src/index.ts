@@ -7,6 +7,8 @@ import {
   Circle,
   Polyline,
   StyleSpan,
+  FeatureType,
+  FeatureStyles,
 } from './definitions';
 import { GoogleMap } from './map';
 
@@ -19,6 +21,8 @@ export {
   Circle,
   Polyline,
   StyleSpan,
+  FeatureType,
+  FeatureStyles
 };
 
 declare global {
