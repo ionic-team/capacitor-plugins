@@ -19,6 +19,7 @@ import com.google.maps.android.clustering.ClusterManager
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import java.io.InputStream
+import java.net.HttpURLConnection
 import java.net.URL
 
 
@@ -170,6 +171,86 @@ class CapacitorGoogleMap(
                     }
 
             job.join()
+        }
+    }
+
+    fun addTileOverlay(tileOverlay: CapacitorGoogleMapsTileOverlay, callback: (result: Result<String>) -> Unit) {
+        try {
+            googleMap ?: throw GoogleMapNotAvailable()
+            var tileOverlayId: String
+
+            val bitmapFunc = CoroutineScope(Dispatchers.IO).async {
+                val url = URL(tileOverlay.imageSrc)
+                val connection: HttpURLConnection = url.openConnection() as HttpURLConnection
+
+                connection.doInput = true
+                connection.connect()
+
+                val input: InputStream = connection.inputStream
+
+                BitmapFactory.decodeStream(input)
+            }
+
+            CoroutineScope(Dispatchers.Main).launch {
+                /*
+                var tileProvider: TileProvider = object : UrlTileProvider(256, 256) {
+                    override fun getTileUrl(x: Int, y: Int, zoom: Int): URL? {
+
+                        /* Define the URL pattern for the tile images */
+                        val url = "https://avatars.githubusercontent.com/u/103097039?v=4"
+                        return if (!checkTileExists(x, y, zoom)) {
+                            null
+                        } else try {
+                            URL(url)
+                        } catch (e: MalformedURLException) {
+                            throw AssertionError(e)
+                        }
+                    }
+
+                    /*
+                     * Check that the tile server supports the requested x, y and zoom.
+                     * Complete this stub according to the tile range you support.
+                     * If you support a limited range of tiles at different zoom levels, then you
+                     * need to define the supported x, y range at each zoom level.
+                     */
+                    private fun checkTileExists(x: Int, y: Int, zoom: Int): Boolean {
+                        val minZoom = 1
+                        val maxZoom = 16
+                        return zoom in minZoom..maxZoom
+                    }
+                }
+
+                Log.d("TileOverlay ^^^ ", "tileProvider")
+
+                val tileOverlay = googleMap?.addTileOverlay(
+                    TileOverlayOptions()
+                        .tileProvider(tileProvider)
+                )
+                */
+
+                val bitmap = bitmapFunc.await()
+
+                // Now you can safely use the bitmap
+                if (bitmap != null) {
+                    val imageDescriptor = BitmapDescriptorFactory.fromBitmap(bitmap)
+
+                    val groundOverlay = googleMap?.addGroundOverlay(
+                        GroundOverlayOptions()
+                            .image(imageDescriptor)
+                            .positionFromBounds(tileOverlay.imageBounds)
+                            .transparency(tileOverlay.opacity)
+                            .zIndex(tileOverlay.zIndex)
+                            .visible(tileOverlay.visible)
+                    )
+
+                    tileOverlay.googleMapsTileOverlay = groundOverlay
+                    tileOverlayId = groundOverlay!!.id
+
+                    callback(Result.success(tileOverlayId))
+                }
+            }
+        } catch (e: GoogleMapsError) {
+            callback(Result.failure(e))
         }
     }
 
