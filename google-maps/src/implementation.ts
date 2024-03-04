@@ -112,6 +112,10 @@ export interface MapTypeArgs {
   mapType: MapType;
 }
 
+export interface RawGoogleMapInstanceArgs {
+  id: string
+}
+
 export interface IndoorMapArgs {
   id: string;
   enabled: boolean;
@@ -189,6 +193,7 @@ export interface CapacitorGoogleMapsPlugin extends Plugin {
   setCamera(args: CameraArgs): Promise<void>;
   getMapType(args: { id: string }): Promise<{ type: string }>;
   setMapType(args: MapTypeArgs): Promise<void>;
+  getRawGoogleMapInstance(args: RawGoogleMapInstanceArgs): google.maps.Map;
   enableIndoorMaps(args: IndoorMapArgs): Promise<void>;
   enableTrafficLayer(args: TrafficLayerArgs): Promise<void>;
   enableAccessibilityElements(args: AccElementsArgs): Promise<void>;

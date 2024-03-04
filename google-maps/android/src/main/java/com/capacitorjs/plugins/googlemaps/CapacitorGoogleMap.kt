@@ -611,6 +611,10 @@ class CapacitorGoogleMap(
         }
     }
 
+    fun getRawGoogleMapInstance(callback: (type: String, error: GoogleMapsError?) -> Unit) {
+        throw GoogleMapsError('Not implemented on Android platform.');
+    }
+
     fun enableIndoorMaps(enabled: Boolean, callback: (error: GoogleMapsError?) -> Unit) {
         try {
             googleMap ?: throw GoogleMapNotAvailable()

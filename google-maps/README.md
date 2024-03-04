@@ -300,6 +300,7 @@ export default MyMap;
 * [`setCamera(...)`](#setcamera)
 * [`getMapType()`](#getmaptype)
 * [`setMapType(...)`](#setmaptype)
+* [`getRawGoogleMapInstance()`](#getrawgooglemapinstance)
 * [`enableIndoorMaps(...)`](#enableindoormaps)
 * [`enableTrafficLayer(...)`](#enabletrafficlayer)
 * [`enableAccessibilityElements(...)`](#enableaccessibilityelements)
@@ -571,6 +572,19 @@ setMapType(mapType: MapType) => Promise<void>
 | Param         | Type                                        |
 | ------------- | ------------------------------------------- |
 | **`mapType`** | <code><a href="#maptype">MapType</a></code> |
+
+--------------------
+
+
+### getRawGoogleMapInstance(...)
+
+```typescript
+getRawGoogleMapInstance(id: string) => Promise<google.maps.Map>
+```
+
+| Param         | Type                                        |
+| ------------- | ------------------------------------------- |
+| **`id`** | <code>string</code> |
 
 --------------------
 
