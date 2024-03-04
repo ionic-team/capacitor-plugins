@@ -11,6 +11,7 @@ import org.json.JSONObject
 class CapacitorGoogleMapMarker(fromJSONObject: JSONObject): ClusterItem {
     var coordinate: LatLng = LatLng(0.0, 0.0)
     var opacity: Float = 1.0f
+    var rotation: Float = 1.0f
     private var title: String
     private var snippet: String
     private var zIndex: Float = 0.0f
@@ -36,6 +37,7 @@ class CapacitorGoogleMapMarker(fromJSONObject: JSONObject): ClusterItem {
         coordinate = LatLng(latLngObj.getDouble("lat"), latLngObj.getDouble("lng"))
         title = fromJSONObject.optString("title")
         opacity = fromJSONObject.optDouble("opacity", 1.0).toFloat()
+        rotation = fromJSONObject.optDouble("rotation", 0.0).toFloat()
         snippet = fromJSONObject.optString("snippet")
         isFlat = fromJSONObject.optBoolean("isFlat", false)
         iconUrl = fromJSONObject.optString("iconUrl")

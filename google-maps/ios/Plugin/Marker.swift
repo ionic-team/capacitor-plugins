@@ -4,6 +4,7 @@ import Capacitor
 public struct Marker {
     let coordinate: LatLng
     let opacity: Float?
+    let rotation: Float?
     let title: String?
     let snippet: String?
     let isFlat: Bool?
@@ -55,6 +56,7 @@ public struct Marker {
 
         self.coordinate = LatLng(lat: lat, lng: lng)
         self.opacity = fromJSObject["opacity"] as? Float
+        self.rotation = fromJSObject["rotation"] as? Float
         self.title = fromJSObject["title"] as? String
         self.snippet = fromJSObject["snippet"] as? String
         self.isFlat = fromJSObject["isFlat"] as? Bool
