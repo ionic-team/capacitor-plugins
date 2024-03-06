@@ -29,6 +29,19 @@ const openCapacitorSite = async () => {
 };
 ```
 
+### Closing browser from external page
+
+- Register [custom scheme](https://capacitorjs.com/docs/apis/app)
+- On android redirect app into your custom scheme `window.location.href='customschema://'`
+- On iOS listen to **appUrlOpen** event and close browser
+```typescript
+ App.addListener('appUrlOpen', data => {
+    if (data.url.indexOf('customschema://')> -1) {
+      Browser.close();
+    }
+  });
+```
+
 ## API
 
 <docgen-index>
