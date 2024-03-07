@@ -241,7 +241,24 @@ public class CameraPlugin extends Plugin {
     @PermissionCallback
     private void cameraPermissionsCallback(PluginCall call) {
         if (call.getMethodName().equals("pickImages")) {
-            openPhotos(call, true, true);
+          if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+            if (getPermissionState(PHOTOS) != PermissionState.GRANTED) {
+              Logger.debug(getLogTag(), "User denied photos permission: " + getPermissionState(PHOTOS).toString());
+              call.reject(PERMISSION_DENIED_ERROR_PHOTOS);
+              return;
+            }
+          } else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+            if (getPermissionState(READ_EXTERNAL_STORAGE) != PermissionState.GRANTED) {
+              Logger.debug(getLogTag(), "User denied photos permission: " + getPermissionState(READ_EXTERNAL_STORAGE).toString());
+              call.reject(PERMISSION_DENIED_ERROR_PHOTOS);
+              return;
+            }
+          } else if (getPermissionState(MEDIA) != PermissionState.GRANTED) {
+            Logger.debug(getLogTag(), "User denied photos permission: " + getPermissionState(MEDIA).toString());
+            call.reject(PERMISSION_DENIED_ERROR_PHOTOS);
+            return;
+          }
+          openPhotos(call, true, true);
         } else {
             if (settings.getSource() == CameraSource.CAMERA && getPermissionState(CAMERA) != PermissionState.GRANTED) {
                 Logger.debug(getLogTag(), "User denied camera permission: " + getPermissionState(CAMERA).toString());
