@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { GoogleMap } from '@capacitor/google-maps';
-import { MapType } from '@capacitor/google-maps';
 import { IonButton, IonTextarea } from '@ionic/react';
 import BaseTestingPage from '../../components/BaseTestingPage';
 
@@ -87,10 +86,10 @@ const ConfigMapPage: React.FC = () => {
         setCommandOutput("");
         try {
             const map1 = maps[0];
-            await map1.setMapType(MapType.Terrain)
+            await map1.update({ mapTypeId: 'terrain' })
 
             const map2 = maps[1];
-            await map2.setMapType(MapType.Satellite)
+            await map2.update({ mapTypeId: 'satellite' })
         } catch(err: any) {
             setCommandOutput(err.message);
         }
@@ -111,7 +110,7 @@ const ConfigMapPage: React.FC = () => {
                 animate: true,
                 animationDuration: 50,
             })
-            await map1.enableIndoorMaps(true);
+            await map1.update({ isIndoorMapsEnabled: true });
         } catch(err: any) {
             setCommandOutput(err.message);
         }
@@ -121,7 +120,7 @@ const ConfigMapPage: React.FC = () => {
         setCommandOutput("");
         try {
             const map1 = maps[0];           
-            await map1.enableTrafficLayer(true);
+            await map1.update({ isTrafficLayerEnabled: true });
             await map1.setCamera({               
                 zoom: 10,
                 animate: true,
@@ -129,7 +128,7 @@ const ConfigMapPage: React.FC = () => {
             })
 
             const map2 = maps[0];           
-            await map2.enableTrafficLayer(true);
+            await map2.update({ isTrafficLayerEnabled: true });
         } catch(err: any) {
             setCommandOutput(err.message);
         }
@@ -139,10 +138,10 @@ const ConfigMapPage: React.FC = () => {
         setCommandOutput("");
         try {
             const map1 = maps[0];           
-            await map1.enableTrafficLayer(false);
+            await map1.update({ isTrafficLayerEnabled: false });
 
             const map2 = maps[0];           
-            await map2.enableTrafficLayer(false);
+            await map2.update({ isTrafficLayerEnabled: false });
         } catch(err: any) {
             setCommandOutput(err.message);
         }
@@ -171,7 +170,7 @@ const ConfigMapPage: React.FC = () => {
                 animate: true,
                 animationDuration: 50,
             })
-            await map1.enableCurrentLocation(true);
+            await map1.update({ isMyLocationEnabled: true });
 
             const map2 = maps[1];                       
             await map2.setCamera({               
@@ -179,7 +178,7 @@ const ConfigMapPage: React.FC = () => {
                 animate: true,
                 animationDuration: 50,
             });
-            await map2.enableCurrentLocation(true);
+            await map2.update({ isMyLocationEnabled: true });
         } catch(err: any) {
             setCommandOutput(err.message);
         }
@@ -189,10 +188,10 @@ const ConfigMapPage: React.FC = () => {
         setCommandOutput("");
         try {
             const map1 = maps[0];                                   
-            await map1.enableCurrentLocation(false);
+            await map1.update({ isMyLocationEnabled: false });
 
             const map2 = maps[1];                                 
-            await map2.enableCurrentLocation(false);
+            await map2.update({ isMyLocationEnabled: false });
         } catch(err: any) {
             setCommandOutput(err.message);
         }
@@ -202,10 +201,10 @@ const ConfigMapPage: React.FC = () => {
         setCommandOutput("");
         try {
             const map1 = maps[0];                                   
-            await map1.enableAccessibilityElements(true);
+            await map1.update({ isAccessibilityElementsEnabled: true });
 
             const map2 = maps[1];                                 
-            await map2.enableAccessibilityElements(true);
+            await map2.update({ isAccessibilityElementsEnabled: true });
         } catch(err: any) {
             setCommandOutput(err.message);
         }
@@ -215,10 +214,10 @@ const ConfigMapPage: React.FC = () => {
         setCommandOutput("");
         try {
             const map1 = maps[0];                                   
-            await map1.enableAccessibilityElements(false);
+            await map1.update({ isAccessibilityElementsEnabled: false });
 
             const map2 = maps[1];                                 
-            await map2.enableAccessibilityElements(false);
+            await map2.update({ isAccessibilityElementsEnabled: false });
         } catch(err: any) {
             setCommandOutput(err.message);
         }
