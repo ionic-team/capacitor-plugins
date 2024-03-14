@@ -131,14 +131,6 @@ public class SplashScreen {
                             isVisible = false;
                         }
                     );
-                } else {
-                    windowSplashScreen.setOnExitAnimationListener(
-                        windowSplashScreenView -> {
-                            isHiding = false;
-                            isVisible = false;
-                            windowSplashScreenView.remove();
-                        }
-                    );
                 }
 
                 // Set Pre Draw Listener & Delay Drawing Until Duration Elapses
