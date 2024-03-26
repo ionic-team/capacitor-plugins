@@ -764,6 +764,15 @@ export interface LocalNotificationSchema {
    * @since 1.0.0
    */
   inboxList?: string[];
+
+  /**
+   * If true, notification will not appear while app is in the foreground.
+   *
+   * Only available for iOS.
+   *
+   * @since 5.0.0
+   */
+  silent?: boolean;
 }
 
 /**
