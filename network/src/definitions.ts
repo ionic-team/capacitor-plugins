@@ -47,6 +47,31 @@ export interface ConnectionStatus {
    * @since 1.0.0
    */
   connectionType: ConnectionType;
+
+  /**
+   * The upstream bandwidth in kbps.
+   *
+   * If the platform does not provide the value will be undefined.
+   *
+   * @since TBD
+   */
+  upstreamInKbps?: number;
+  /**
+   * The downstream bandwidth in kbps.
+   *
+   * If the platform does not provide the value will be undefined.
+   *
+   * @since TBD
+   */
+  downstreamInKbps?: number;
+  /**
+   * The signal strength as number.
+   *
+   * If the platform does not provide the value will be undefined.
+   *
+   * @since TBD
+   */
+  signalStrength?: number;
 }
 
 /**
