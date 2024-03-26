@@ -59,10 +59,11 @@ Shows a Toast on the screen
 
 #### ShowOptions
 
-| Prop           | Type                                       | Description                                                                        | Default               | Since |
-| -------------- | ------------------------------------------ | ---------------------------------------------------------------------------------- | --------------------- | ----- |
-| **`text`**     | <code>string</code>                        | Text to display on the Toast                                                       |                       | 1.0.0 |
-| **`duration`** | <code>'short' \| 'long'</code>             | Duration of the Toast, either 'short' (2000ms) or 'long' (3500ms)                  | <code>'short'</code>  | 1.0.0 |
-| **`position`** | <code>'top' \| 'center' \| 'bottom'</code> | Position of the Toast. On Android 12 and newer all toasts are shown at the bottom. | <code>'bottom'</code> | 1.0.0 |
+| Prop                       | Type                                       | Description                                                                          | Default               | Since |
+| -------------------------- | ------------------------------------------ | ------------------------------------------------------------------------------------ | --------------------- | ----- |
+| **`text`**                 | <code>string</code>                        | Text to display on the Toast                                                         |                       | 1.0.0 |
+| **`duration`**             | <code>'short' \| 'long'</code>             | Duration of the Toast, either 'short' (2000ms) or 'long' (3500ms)                    | <code>'short'</code>  | 1.0.0 |
+| **`durationMilliseconds`** | <code>number</code>                        | Duration of the Toast in milliseconds. This option is only supported on iOS and Web. |                       | 6.0.0 |
+| **`position`**             | <code>'top' \| 'center' \| 'bottom'</code> | Position of the Toast. On Android 12 and newer all toasts are shown at the bottom.   | <code>'bottom'</code> | 1.0.0 |
 
 </docgen-api>
