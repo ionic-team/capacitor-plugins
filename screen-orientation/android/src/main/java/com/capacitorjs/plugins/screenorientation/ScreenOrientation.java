@@ -60,6 +60,7 @@ public class ScreenOrientation {
             case "any":
                 return ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
             case "landscape":
+                return ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE;
             case "landscape-primary":
                 return ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
             case "landscape-secondary":
