@@ -3,22 +3,22 @@
 import PackageDescription
 
 let package = Package(
-    name: "CapacitorStatusBarPlugin",
+    name: "CapacitorStatusBar",
     platforms: [.iOS(.v13)],
     products: [
         .library(
-            name: "StatusBarPlugin",
+            name: "CapacitorStatusBar",
             targets: ["StatusBarPlugin"])
     ],
     dependencies: [
-        .package(url: "https://github.com/ionic-team/capacitor6-spm-test.git", branch: "main")
+        .package(url: "https://github.com/ionic-team/capacitor-spm.git", branch: "main")
     ],
     targets: [
         .target(
             name: "StatusBarPlugin",
             dependencies: [
-                .product(name: "Capacitor", package: "capacitor6-spm-test"),
-                .product(name: "Cordova", package: "capacitor6-spm-test")],
+                .product(name: "Capacitor", package: "capacitor-spm"),
+                .product(name: "Cordova", package: "capacitor-spm")],
             path: "ios/Sources/StatusBarPlugin"
         ),
         .testTarget(

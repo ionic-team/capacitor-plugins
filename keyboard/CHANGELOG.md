@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.0.0-rc.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/keyboard@6.0.0-rc.0...@capacitor/keyboard@6.0.0-rc.1) (2024-03-25)
+
+**Note:** Version bump only for package @capacitor/keyboard
+
+# [6.0.0-rc.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/keyboard@6.0.0-beta.1...@capacitor/keyboard@6.0.0-rc.0) (2024-02-07)
+
+**Note:** Version bump only for package @capacitor/keyboard
+
 # [6.0.0-beta.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/keyboard@6.0.0-beta.0...@capacitor/keyboard@6.0.0-beta.1) (2023-12-14)
 
 **Note:** Version bump only for package @capacitor/keyboard
@@ -24,6 +32,12 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ### Features
 
 - **app,haptics,status-bar,keyboard:** Supporting Swift Package Manager ([#1886](https://github.com/ionic-team/capacitor-plugins/issues/1886)) ([918ea30](https://github.com/ionic-team/capacitor-plugins/commit/918ea30a95f80d740f39e9ab472ed90f9d4a6aba))
+
+## [5.0.7](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/keyboard@5.0.6...@capacitor/keyboard@5.0.7) (2023-12-15)
+
+### Bug Fixes
+
+- **keyboard:** Change keyboard style during setStyle ([#1935](https://github.com/ionic-team/capacitor-plugins/issues/1935)) ([3b520b8](https://github.com/ionic-team/capacitor-plugins/commit/3b520b845563f08897f55eb44fe212ae384a7675))
 
 ## [5.0.6](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/keyboard@5.0.5...@capacitor/keyboard@5.0.6) (2023-07-12)
 

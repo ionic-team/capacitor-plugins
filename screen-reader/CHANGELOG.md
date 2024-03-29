@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.0.0-rc.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/screen-reader@6.0.0-rc.0...@capacitor/screen-reader@6.0.0-rc.1) (2024-03-25)
+
+**Note:** Version bump only for package @capacitor/screen-reader
+
+# [6.0.0-rc.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/screen-reader@6.0.0-beta.1...@capacitor/screen-reader@6.0.0-rc.0) (2024-02-07)
+
+**Note:** Version bump only for package @capacitor/screen-reader
+
 # [6.0.0-beta.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/screen-reader@6.0.0-beta.0...@capacitor/screen-reader@6.0.0-beta.1) (2023-12-14)
 
 **Note:** Version bump only for package @capacitor/screen-reader
@@ -16,6 +24,10 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 **Note:** Version bump only for package @capacitor/screen-reader
 
 # [6.0.0-alpha.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/screen-reader@5.0.6...@capacitor/screen-reader@6.0.0-alpha.1) (2023-11-08)
+
+**Note:** Version bump only for package @capacitor/screen-reader
+
+## [5.0.7](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/screen-reader@5.0.6...@capacitor/screen-reader@5.0.7) (2023-12-15)
 
 **Note:** Version bump only for package @capacitor/screen-reader
 

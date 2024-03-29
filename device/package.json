@@ -1,6 +1,6 @@
 {
   "name": "@capacitor/device",
-  "version": "6.0.0-beta.1",
+  "version": "6.0.0-rc.1",
   "description": "The Device API exposes internal information about the device, such as the model and operating system version, along with user information such as unique ids.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
@@ -50,7 +50,7 @@
   "devDependencies": {
     "@capacitor/android": "next",
     "@capacitor/core": "next",
-    "@capacitor/docgen": "0.2.0",
+    "@capacitor/docgen": "0.2.2",
     "@capacitor/ios": "next",
     "@ionic/eslint-config": "^0.3.0",
     "@ionic/prettier-config": "~1.0.1",
