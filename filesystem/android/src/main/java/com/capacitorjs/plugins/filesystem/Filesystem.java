@@ -222,6 +222,7 @@ public class Filesystem {
             if (u.getScheme() == null || u.getScheme().equals("file")) {
                 return new File(u.getPath());
             }
+            return null;
         }
 
         File androidDirectory = this.getDirectory(directory);

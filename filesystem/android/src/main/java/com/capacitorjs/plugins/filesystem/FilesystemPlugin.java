@@ -1,10 +1,12 @@
 package com.capacitorjs.plugins.filesystem;
 
 import android.Manifest;
+import android.database.Cursor;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.provider.DocumentsContract.Document;
 import com.capacitorjs.plugins.filesystem.exceptions.CopyFailedException;
 import com.capacitorjs.plugins.filesystem.exceptions.DirectoryExistsException;
 import com.capacitorjs.plugins.filesystem.exceptions.DirectoryNotFoundException;
@@ -338,7 +340,29 @@ public class FilesystemPlugin extends Plugin {
 
         File fileObject = implementation.getFileObject(path, directory);
 
-        if (isPublicDirectory(directory) && !isStoragePermissionGranted()) {
+        if (fileObject == null && directory == null) {
+            // We are dealing with an URI that is not a path or a file:// so let’s use the SAF
+            String[] projection = {Document.COLUMN_MIME_TYPE, Document.COLUMN_SIZE, Document.COLUMN_LAST_MODIFIED};
+            Cursor c = getContext().getContentResolver().query(Uri.parse(path), projection, null, null);
+
+            if (c == null) {
+                call.reject("Document does not exist");
+                return;
+            } else if (c.getCount() != 1) {
+                call.reject("Provider returned unexpected data (file might not exist)");
+                return;
+            }
+
+            JSObject data = new JSObject();
+            c.moveToNext();
+            data.put("type", Document.MIME_TYPE_DIR.equals(c.getString(0)) ? "directory" : "file");
+            data.put("size", c.getLong(1));
+            data.put("mtime", c.getLong(2));
+            data.put("ctime", null);
+            data.put("uri", path);
+
+            call.resolve(data);
+        } else if (isPublicDirectory(directory) && !isStoragePermissionGranted()) {
             requestAllPermissions(call, "permissionCallback");
         } else {
             if (!fileObject.exists()) {
