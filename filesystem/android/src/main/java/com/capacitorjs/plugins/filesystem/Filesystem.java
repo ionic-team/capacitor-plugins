@@ -1,13 +1,20 @@
 package com.capacitorjs.plugins.filesystem;
 
+import android.content.ContentResolver;
 import android.content.Context;
+import android.database.ContentObserver;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
+import android.provider.DocumentsContract;
 import android.util.Base64;
 import com.capacitorjs.plugins.filesystem.exceptions.CopyFailedException;
 import com.capacitorjs.plugins.filesystem.exceptions.DirectoryExistsException;
 import com.capacitorjs.plugins.filesystem.exceptions.DirectoryNotFoundException;
 import com.getcapacitor.Bridge;
+import com.getcapacitor.JSArray;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.plugin.util.CapacitorHttpUrlConnection;
@@ -98,6 +105,61 @@ public class Filesystem {
             throw new DirectoryNotFoundException("Directory does not exist");
         }
         return files;
+    }
+
+    public void readdir_content_uri(final PluginCall call, final Uri uri, boolean callback) {
+        ContentResolver resolver = context.getContentResolver();
+
+        Uri childrenUri = DocumentsContract.buildChildDocumentsUriUsingTree(uri, DocumentsContract.getDocumentId(uri));
+        String[] projections = {
+                DocumentsContract.Document.COLUMN_DISPLAY_NAME,
+                DocumentsContract.Document.COLUMN_MIME_TYPE,
+                DocumentsContract.Document.COLUMN_SIZE,
+                DocumentsContract.Document.COLUMN_LAST_MODIFIED,
+                DocumentsContract.Document.COLUMN_DOCUMENT_ID
+        };
+        Cursor c = resolver.query(childrenUri, projections, null, null);
+
+        if (c == null) {
+            call.reject("Document does not exist");
+            return;
+        }
+
+        Looper looper = Looper.myLooper();
+        if (looper == null) {
+            looper = Looper.getMainLooper();
+        }
+
+        ContentObserver observer = new ContentObserver(new Handler(looper)) {
+            @Override
+            public void onChange(boolean selfChange) {
+                if (!selfChange) {
+                    c.unregisterContentObserver(this);
+                }
+
+                JSArray filesArray = new JSArray();
+                while (c.moveToNext()) {
+                    JSObject data = new JSObject();
+                    data.put("name", c.getString(0));
+                    data.put("type", DocumentsContract.Document.MIME_TYPE_DIR.equals(c.getString(1)) ? "directory" : "file");
+                    data.put("size", c.getLong(2));
+                    data.put("mtime", c.getLong(3));
+                    data.put("ctime", null);
+                    data.put("uri", DocumentsContract.buildDocumentUriUsingTree(uri, c.getString(4)));
+                    filesArray.put(data);
+                }
+
+                JSObject ret = new JSObject();
+                ret.put("files", filesArray);
+                call.resolve(ret);
+            }
+        };
+
+        if (!callback && c.getExtras().getBoolean(DocumentsContract.EXTRA_LOADING, false)) {
+            c.registerContentObserver(observer);
+        } else {
+            observer.onChange(true);
+        }
     }
 
     public File copy(String from, String directory, String to, String toDirectory, boolean doRename)
