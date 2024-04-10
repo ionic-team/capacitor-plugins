@@ -68,13 +68,13 @@ const logBatteryInfo = async () => {
 
 <docgen-index>
 
-- [`getId()`](#getid)
-- [`getInfo()`](#getinfo)
-- [`getBatteryInfo()`](#getbatteryinfo)
-- [`getLanguageCode()`](#getlanguagecode)
-- [`getLanguageTag()`](#getlanguagetag)
-- [Interfaces](#interfaces)
-- [Type Aliases](#type-aliases)
+* [`getId()`](#getid)
+* [`getInfo()`](#getinfo)
+* [`getBatteryInfo()`](#getbatteryinfo)
+* [`getLanguageCode()`](#getlanguagecode)
+* [`getLanguageTag()`](#getlanguagetag)
+* [Interfaces](#interfaces)
+* [Type Aliases](#type-aliases)
 
 </docgen-index>
 
@@ -93,7 +93,8 @@ Return an unique identifier for the device.
 
 **Since:** 1.0.0
 
----
+--------------------
+
 
 ### getInfo()
 
@@ -107,7 +108,8 @@ Return information about the underlying device/os/platform.
 
 **Since:** 1.0.0
 
----
+--------------------
+
 
 ### getBatteryInfo()
 
@@ -121,7 +123,8 @@ Return information about the battery.
 
 **Since:** 1.0.0
 
----
+--------------------
+
 
 ### getLanguageCode()
 
@@ -135,7 +138,8 @@ Get the device's current language locale code.
 
 **Since:** 1.0.0
 
----
+--------------------
+
 
 ### getLanguageTag()
 
@@ -149,15 +153,18 @@ Get the device's current language locale tag.
 
 **Since:** 4.0.0
 
----
+--------------------
+
 
 ### Interfaces
+
 
 #### DeviceId
 
 | Prop             | Type                | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | Since |
 | ---------------- | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`identifier`** | <code>string</code> | The identifier of the device as available to the app. This identifier may change on modern mobile platforms that only allow per-app install ids. On iOS, the identifier is a UUID that uniquely identifies a device to the app’s vendor ([read more](https://developer.apple.com/documentation/uikit/uidevice/1620059-identifierforvendor)). on Android 8+, **the identifier is a 64-bit number (expressed as a hexadecimal string)**, unique to each combination of app-signing key, user, and device ([read more](https://developer.android.com/reference/android/provider/Settings.Secure#ANDROID_ID)). On web, a random identifier is generated and stored on localStorage for subsequent calls. If localStorage is not available a new random identifier will be generated on every call. | 1.0.0 |
+| **`identifier`** | <code>string</code> | The identifier of the device as available to the app. This identifier may change on modern mobile platforms that only allow per-app install ids. On iOS, the identifier is a UUID that uniquely identifies a device to the app’s vendor ([read more](https://developer.apple.com/documentation/uikit/uidevice/1620059-identifierforvendor)). on Android 8+, __the identifier is a 64-bit number (expressed as a hexadecimal string)__, unique to each combination of app-signing key, user, and device ([read more](https://developer.android.com/reference/android/provider/Settings.Secure#ANDROID_ID)). On web, a random identifier is generated and stored on localStorage for subsequent calls. If localStorage is not available a new random identifier will be generated on every call. | 1.0.0 |
+
 
 #### DeviceInfo
 
@@ -179,6 +186,7 @@ Get the device's current language locale tag.
 | **`realDiskTotal`**     | <code>number</code>                                         | The total size of the normal data storage path, in bytes.                                                                                                                                                                                                                                                                                        | 1.1.0 |
 | **`webViewVersion`**    | <code>string</code>                                         | The web view browser version                                                                                                                                                                                                                                                                                                                     | 1.0.0 |
 
+
 #### BatteryInfo
 
 | Prop               | Type                 | Description                                                       | Since |
@@ -186,11 +194,13 @@ Get the device's current language locale tag.
 | **`batteryLevel`** | <code>number</code>  | A percentage (0 to 1) indicating how much the battery is charged. | 1.0.0 |
 | **`isCharging`**   | <code>boolean</code> | Whether the device is charging.                                   | 1.0.0 |
 
+
 #### GetLanguageCodeResult
 
 | Prop        | Type                | Description                  | Since |
 | ----------- | ------------------- | ---------------------------- | ----- |
 | **`value`** | <code>string</code> | Two character language code. | 1.0.0 |
+
 
 #### LanguageTag
 
@@ -198,7 +208,9 @@ Get the device's current language locale tag.
 | ----------- | ------------------- | ----------------------------------------------- | ----- |
 | **`value`** | <code>string</code> | Returns a well-formed IETF BCP 47 language tag. | 4.0.0 |
 
+
 ### Type Aliases
+
 
 #### OperatingSystem
 
