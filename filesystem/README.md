@@ -28,8 +28,6 @@ When using this specific plugin in your app, you must create a `PrivacyInfo.xcpr
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
   <dict>
-    <key>NSPrivacyTracking</key>
-    <false/>
     <key>NSPrivacyAccessedAPITypes</key>
     <array>
       <!-- Add this dict entry to the array if the PrivacyInfo file already exists -->
@@ -38,7 +36,7 @@ When using this specific plugin in your app, you must create a `PrivacyInfo.xcpr
         <string>NSPrivacyAccessedAPICategoryFileTimestamp</string>
         <key>NSPrivacyAccessedAPITypeReasons</key>
         <array>
-          <string>C617.1</string> <!-- Replace with the appropriate reason code -->
+          <string>C617.1</string>
         </array>
       </dict>
     </array>
