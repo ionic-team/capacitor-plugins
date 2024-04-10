@@ -23,7 +23,44 @@ npm install @capacitor/preferences
 npx cap sync
 ```
 
-## Example
+## Apple Privacy Manifest Requirements
+
+Apple mandates that app developers now specify approved reasons for API usage to enhance user privacy. By May 1st, 2024, it's required to include these reasons when submitting apps to the App Store Connect.
+
+When using this specific plugin in your app, you must create a `PrivacyInfo.xcprivacy` file in `/ios/App` or use the VS Code Extension to generate it, specifying the usage reasons.
+
+### Manual Steps
+
+1. In Xcode, select File > New File.
+2. Choose App Privacy File type under the Resource section.
+3. After creation, edit `PrivacyInfo.xcprivacy` to add the necessary keys and reasons, as detailed in [Apple's documentation](https://developer.apple.com/documentation/bundleresources/privacy_manifest_files/describing_use_of_required_reason_api).
+
+### Example PrivacyInfo.xcprivacy
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <key>NSPrivacyTracking</key>
+    <false/>
+    <key>NSPrivacyAccessedAPITypes</key>
+    <array>
+      <!-- Add this dict entry to the array if the PrivacyInfo file already exists -->
+      <dict>
+        <key>NSPrivacyAccessedAPIType</key>
+        <string>NSPrivacyAccessedAPICategoryUserDefaults</string>
+        <key>NSPrivacyAccessedAPITypeReasons</key>
+        <array>
+          <string>CA92.1</string> <!-- Replace with the appropriate reason code -->
+        </array>
+      </dict>
+    </array>
+  </dict>
+</plist>
+```
+
+## Example Plugin Usage
 
 ```typescript
 import { Preferences } from '@capacitor/preferences';
@@ -56,15 +93,15 @@ This method can also be used to store non-string values, such as numbers and boo
 
 <docgen-index>
 
-* [`configure(...)`](#configure)
-* [`get(...)`](#get)
-* [`set(...)`](#set)
-* [`remove(...)`](#remove)
-* [`clear()`](#clear)
-* [`keys()`](#keys)
-* [`migrate()`](#migrate)
-* [`removeOld()`](#removeold)
-* [Interfaces](#interfaces)
+- [`configure(...)`](#configure)
+- [`get(...)`](#get)
+- [`set(...)`](#set)
+- [`remove(...)`](#remove)
+- [`clear()`](#clear)
+- [`keys()`](#keys)
+- [`migrate()`](#migrate)
+- [`removeOld()`](#removeold)
+- [Interfaces](#interfaces)
 
 </docgen-index>
 
@@ -87,8 +124,7 @@ Options that are `undefined` will not be used.
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### get(...)
 
@@ -106,8 +142,7 @@ Get the value from preferences of a given key.
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### set(...)
 
@@ -123,8 +158,7 @@ Set the value in preferences for a given key.
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### remove(...)
 
@@ -140,8 +174,7 @@ Remove the value from preferences for a given key, if any.
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### clear()
 
@@ -153,8 +186,7 @@ Clear keys and values from preferences.
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### keys()
 
@@ -168,8 +200,7 @@ Return the list of known keys in preferences.
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### migrate()
 
@@ -187,8 +218,7 @@ To remove the old data after being migrated, call removeOld().
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### removeOld()
 
@@ -200,11 +230,9 @@ Removes old data with `_cap_` prefix from the Capacitor 2 Storage plugin.
 
 **Since:** 1.1.0
 
---------------------
-
+---
 
 ### Interfaces
-
 
 #### ConfigureOptions
 
@@ -212,20 +240,17 @@ Removes old data with `_cap_` prefix from the Capacitor 2 Storage plugin.
 | ----------- | ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------- | ----- |
 | **`group`** | <code>string</code> | Set the preferences group. Preferences groups are used to organize key/value pairs. Using the value 'NativeStorage' provides backwards-compatibility with [`cordova-plugin-nativestorage`](https://www.npmjs.com/package/cordova-plugin-nativestorage). WARNING: The `clear()` method can delete unintended values when using the 'NativeStorage' group. | <code>CapacitorStorage</code> | 1.0.0 |
 
-
 #### GetResult
 
 | Prop        | Type                        | Description                                                                                                                       | Since |
 | ----------- | --------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ----- |
 | **`value`** | <code>string \| null</code> | The value from preferences associated with the given key. If a value was not previously set or was removed, value will be `null`. | 1.0.0 |
 
-
 #### GetOptions
 
 | Prop      | Type                | Description                                       | Since |
 | --------- | ------------------- | ------------------------------------------------- | ----- |
 | **`key`** | <code>string</code> | The key whose value to retrieve from preferences. | 1.0.0 |
-
 
 #### SetOptions
 
@@ -234,20 +259,17 @@ Removes old data with `_cap_` prefix from the Capacitor 2 Storage plugin.
 | **`key`**   | <code>string</code> | The key to associate with the value being set in preferences. | 1.0.0 |
 | **`value`** | <code>string</code> | The value to set in preferences with the associated key.      | 1.0.0 |
 
-
 #### RemoveOptions
 
 | Prop      | Type                | Description                                     | Since |
 | --------- | ------------------- | ----------------------------------------------- | ----- |
 | **`key`** | <code>string</code> | The key whose value to remove from preferences. | 1.0.0 |
 
-
 #### KeysResult
 
 | Prop       | Type                  | Description                    | Since |
 | ---------- | --------------------- | ------------------------------ | ----- |
 | **`keys`** | <code>string[]</code> | The known keys in preferences. | 1.0.0 |
-
 
 #### MigrateResult
 

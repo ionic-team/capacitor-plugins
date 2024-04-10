@@ -9,9 +9,46 @@ npm install @capacitor/filesystem
 npx cap sync
 ```
 
+## Apple Privacy Manifest Requirements
+
+Apple mandates that app developers now specify approved reasons for API usage to enhance user privacy. By May 1st, 2024, it's required to include these reasons when submitting apps to the App Store Connect.
+
+When using this specific plugin in your app, you must create a `PrivacyInfo.xcprivacy` file in `/ios/App` or use the VS Code Extension to generate it, specifying the usage reasons.
+
+### Manual Steps
+
+1. In Xcode, select File > New File.
+2. Choose App Privacy File type under the Resource section.
+3. After creation, edit `PrivacyInfo.xcprivacy` to add the necessary keys and reasons, as detailed in [Apple's documentation](https://developer.apple.com/documentation/bundleresources/privacy_manifest_files/describing_use_of_required_reason_api).
+
+### Example PrivacyInfo.xcprivacy
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <key>NSPrivacyTracking</key>
+    <false/>
+    <key>NSPrivacyAccessedAPITypes</key>
+    <array>
+      <!-- Add this dict entry to the array if the PrivacyInfo file already exists -->
+      <dict>
+        <key>NSPrivacyAccessedAPIType</key>
+        <string>NSPrivacyAccessedAPICategoryFileTimestamp</string>
+        <key>NSPrivacyAccessedAPITypeReasons</key>
+        <array>
+          <string>C617.1</string> <!-- Replace with the appropriate reason code -->
+        </array>
+      </dict>
+    </array>
+  </dict>
+</plist>
+```
+
 ## iOS
 
-To have files appear in the Files app, you must set the following keys to `YES` in `Info.plist`:
+To have files appear in the Files app, you must also set the following keys to `YES` in `Info.plist`:
 
 - `UIFileSharingEnabled` (`Application supports iTunes file sharing`)
 - `LSSupportsOpeningDocumentsInPlace` (`Supports opening documents in place`)
@@ -86,25 +123,25 @@ const readFilePath = async () => {
 
 <docgen-index>
 
-* [`readFile(...)`](#readfile)
-* [`writeFile(...)`](#writefile)
-* [`appendFile(...)`](#appendfile)
-* [`deleteFile(...)`](#deletefile)
-* [`mkdir(...)`](#mkdir)
-* [`rmdir(...)`](#rmdir)
-* [`readdir(...)`](#readdir)
-* [`getUri(...)`](#geturi)
-* [`stat(...)`](#stat)
-* [`rename(...)`](#rename)
-* [`copy(...)`](#copy)
-* [`checkPermissions()`](#checkpermissions)
-* [`requestPermissions()`](#requestpermissions)
-* [`downloadFile(...)`](#downloadfile)
-* [`addListener('progress', ...)`](#addlistenerprogress-)
-* [`removeAllListeners()`](#removealllisteners)
-* [Interfaces](#interfaces)
-* [Type Aliases](#type-aliases)
-* [Enums](#enums)
+- [`readFile(...)`](#readfile)
+- [`writeFile(...)`](#writefile)
+- [`appendFile(...)`](#appendfile)
+- [`deleteFile(...)`](#deletefile)
+- [`mkdir(...)`](#mkdir)
+- [`rmdir(...)`](#rmdir)
+- [`readdir(...)`](#readdir)
+- [`getUri(...)`](#geturi)
+- [`stat(...)`](#stat)
+- [`rename(...)`](#rename)
+- [`copy(...)`](#copy)
+- [`checkPermissions()`](#checkpermissions)
+- [`requestPermissions()`](#requestpermissions)
+- [`downloadFile(...)`](#downloadfile)
+- [`addListener('progress', ...)`](#addlistenerprogress-)
+- [`removeAllListeners()`](#removealllisteners)
+- [Interfaces](#interfaces)
+- [Type Aliases](#type-aliases)
+- [Enums](#enums)
 
 </docgen-index>
 
@@ -127,8 +164,7 @@ Read a file from disk
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### writeFile(...)
 
@@ -146,8 +182,7 @@ Write a file to disk in the specified location on device
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### appendFile(...)
 
@@ -163,8 +198,7 @@ Append to a file on disk in the specified location on device
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### deleteFile(...)
 
@@ -180,8 +214,7 @@ Delete a file from disk
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### mkdir(...)
 
@@ -197,8 +230,7 @@ Create a directory.
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### rmdir(...)
 
@@ -214,8 +246,7 @@ Remove a directory
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### readdir(...)
 
@@ -233,8 +264,7 @@ Return a list of files from the directory (not recursive)
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### getUri(...)
 
@@ -252,8 +282,7 @@ Return full File URI for a path and directory
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### stat(...)
 
@@ -271,8 +300,7 @@ Return data about a file
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### rename(...)
 
@@ -288,8 +316,7 @@ Rename a file or directory
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### copy(...)
 
@@ -307,8 +334,7 @@ Copy a file or directory
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### checkPermissions()
 
@@ -324,8 +350,7 @@ Required on Android, only when using <a href="#directory">`Directory.Documents`<
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### requestPermissions()
 
@@ -341,8 +366,7 @@ Required on Android, only when using <a href="#directory">`Directory.Documents`<
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### downloadFile(...)
 
@@ -360,8 +384,7 @@ Perform a http request to a server and download the file to the specified destin
 
 **Since:** 5.1.0
 
---------------------
-
+---
 
 ### addListener('progress', ...)
 
@@ -380,8 +403,7 @@ Add a listener to file download progress events.
 
 **Since:** 5.1.0
 
---------------------
-
+---
 
 ### removeAllListeners()
 
@@ -393,18 +415,15 @@ Remove all listeners for this plugin.
 
 **Since:** 5.2.0
 
---------------------
-
+---
 
 ### Interfaces
-
 
 #### ReadFileResult
 
 | Prop       | Type                        | Description                                                                                                                            | Since |
 | ---------- | --------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | ----- |
 | **`data`** | <code>string \| Blob</code> | The representation of the data contained in the file Note: Blob is only available on Web. On native, the data is returned as a string. | 1.0.0 |
-
 
 #### ReadFileOptions
 
@@ -414,13 +433,11 @@ Remove all listeners for this plugin.
 | **`directory`** | <code><a href="#directory">Directory</a></code> | The <a href="#directory">`Directory`</a> to read the file from                                                                                                              | 1.0.0 |
 | **`encoding`**  | <code><a href="#encoding">Encoding</a></code>   | The encoding to read the file in, if not provided, data is read as binary and returned as base64 encoded. Pass <a href="#encoding">Encoding.UTF8</a> to read data as string | 1.0.0 |
 
-
 #### WriteFileResult
 
 | Prop      | Type                | Description                             | Since |
 | --------- | ------------------- | --------------------------------------- | ----- |
 | **`uri`** | <code>string</code> | The uri where the file was written into | 1.0.0 |
-
 
 #### WriteFileOptions
 
@@ -432,7 +449,6 @@ Remove all listeners for this plugin.
 | **`encoding`**  | <code><a href="#encoding">Encoding</a></code>   | The encoding to write the file in. If not provided, data is written as base64 encoded. Pass <a href="#encoding">Encoding.UTF8</a> to write data as string |                    | 1.0.0 |
 | **`recursive`** | <code>boolean</code>                            | Whether to create any missing parent directories.                                                                                                         | <code>false</code> | 1.0.0 |
 
-
 #### AppendFileOptions
 
 | Prop            | Type                                            | Description                                                                                                                                               | Since |
@@ -442,14 +458,12 @@ Remove all listeners for this plugin.
 | **`directory`** | <code><a href="#directory">Directory</a></code> | The <a href="#directory">`Directory`</a> to store the file in                                                                                             | 1.0.0 |
 | **`encoding`**  | <code><a href="#encoding">Encoding</a></code>   | The encoding to write the file in. If not provided, data is written as base64 encoded. Pass <a href="#encoding">Encoding.UTF8</a> to write data as string | 1.0.0 |
 
-
 #### DeleteFileOptions
 
 | Prop            | Type                                            | Description                                                      | Since |
 | --------------- | ----------------------------------------------- | ---------------------------------------------------------------- | ----- |
 | **`path`**      | <code>string</code>                             | The path of the file to delete                                   | 1.0.0 |
 | **`directory`** | <code><a href="#directory">Directory</a></code> | The <a href="#directory">`Directory`</a> to delete the file from | 1.0.0 |
-
 
 #### MkdirOptions
 
@@ -459,7 +473,6 @@ Remove all listeners for this plugin.
 | **`directory`** | <code><a href="#directory">Directory</a></code> | The <a href="#directory">`Directory`</a> to make the new directory in |                    | 1.0.0 |
 | **`recursive`** | <code>boolean</code>                            | Whether to create any missing parent directories as well.             | <code>false</code> | 1.0.0 |
 
-
 #### RmdirOptions
 
 | Prop            | Type                                            | Description                                                           | Default            | Since |
@@ -468,13 +481,11 @@ Remove all listeners for this plugin.
 | **`directory`** | <code><a href="#directory">Directory</a></code> | The <a href="#directory">`Directory`</a> to remove the directory from |                    | 1.0.0 |
 | **`recursive`** | <code>boolean</code>                            | Whether to recursively remove the contents of the directory           | <code>false</code> | 1.0.0 |
 
-
 #### ReaddirResult
 
 | Prop        | Type                    | Description                                        | Since |
 | ----------- | ----------------------- | -------------------------------------------------- | ----- |
 | **`files`** | <code>FileInfo[]</code> | List of files and directories inside the directory | 1.0.0 |
-
 
 #### FileInfo
 
@@ -487,7 +498,6 @@ Remove all listeners for this plugin.
 | **`mtime`** | <code>number</code>                | Time of last modification in milliseconds.                                           | 4.0.0 |
 | **`uri`**   | <code>string</code>                | The uri of the file.                                                                 | 4.0.0 |
 
-
 #### ReaddirOptions
 
 | Prop            | Type                                            | Description                                                 | Since |
@@ -495,13 +505,11 @@ Remove all listeners for this plugin.
 | **`path`**      | <code>string</code>                             | The path of the directory to read                           | 1.0.0 |
 | **`directory`** | <code><a href="#directory">Directory</a></code> | The <a href="#directory">`Directory`</a> to list files from | 1.0.0 |
 
-
 #### GetUriResult
 
 | Prop      | Type                | Description         | Since |
 | --------- | ------------------- | ------------------- | ----- |
 | **`uri`** | <code>string</code> | The uri of the file | 1.0.0 |
-
 
 #### GetUriOptions
 
@@ -509,7 +517,6 @@ Remove all listeners for this plugin.
 | --------------- | ----------------------------------------------- | -------------------------------------------------------------- | ----- |
 | **`path`**      | <code>string</code>                             | The path of the file to get the URI for                        | 1.0.0 |
 | **`directory`** | <code><a href="#directory">Directory</a></code> | The <a href="#directory">`Directory`</a> to get the file under | 1.0.0 |
-
 
 #### StatResult
 
@@ -521,14 +528,12 @@ Remove all listeners for this plugin.
 | **`mtime`** | <code>number</code>                | Time of last modification in milliseconds.                                           | 1.0.0 |
 | **`uri`**   | <code>string</code>                | The uri of the file                                                                  | 1.0.0 |
 
-
 #### StatOptions
 
 | Prop            | Type                                            | Description                                                    | Since |
 | --------------- | ----------------------------------------------- | -------------------------------------------------------------- | ----- |
 | **`path`**      | <code>string</code>                             | The path of the file to get data about                         | 1.0.0 |
 | **`directory`** | <code><a href="#directory">Directory</a></code> | The <a href="#directory">`Directory`</a> to get the file under | 1.0.0 |
-
 
 #### CopyOptions
 
@@ -539,13 +544,11 @@ Remove all listeners for this plugin.
 | **`directory`**   | <code><a href="#directory">Directory</a></code> | The <a href="#directory">`Directory`</a> containing the existing file or directory                                                                           | 1.0.0 |
 | **`toDirectory`** | <code><a href="#directory">Directory</a></code> | The <a href="#directory">`Directory`</a> containing the destination file or directory. If not supplied will use the 'directory' parameter as the destination | 1.0.0 |
 
-
 #### CopyResult
 
 | Prop      | Type                | Description                            | Since |
 | --------- | ------------------- | -------------------------------------- | ----- |
 | **`uri`** | <code>string</code> | The uri where the file was copied into | 4.0.0 |
-
 
 #### PermissionStatus
 
@@ -553,14 +556,12 @@ Remove all listeners for this plugin.
 | ------------------- | ----------------------------------------------------------- |
 | **`publicStorage`** | <code><a href="#permissionstate">PermissionState</a></code> |
 
-
 #### DownloadFileResult
 
 | Prop       | Type                | Description                                                          | Since |
 | ---------- | ------------------- | -------------------------------------------------------------------- | ----- |
 | **`path`** | <code>string</code> | The path the file was downloaded to.                                 | 5.1.0 |
 | **`blob`** | <code>Blob</code>   | The blob data of the downloaded file. This is only available on web. | 5.1.0 |
-
 
 #### DownloadFileOptions
 
@@ -571,13 +572,11 @@ Remove all listeners for this plugin.
 | **`progress`**  | <code>boolean</code>                            | An optional listener function to receive downloaded progress events. If this option is used, progress event should be dispatched on every chunk received. Chunks are throttled to every 100ms on Android/iOS to avoid slowdowns. |                    | 5.1.0 |
 | **`recursive`** | <code>boolean</code>                            | Whether to create any missing parent directories.                                                                                                                                                                                | <code>false</code> | 5.1.2 |
 
-
 #### PluginListenerHandle
 
 | Prop         | Type                                      |
 | ------------ | ----------------------------------------- |
 | **`remove`** | <code>() =&gt; Promise&lt;void&gt;</code> |
-
 
 #### ProgressStatus
 
@@ -587,19 +586,15 @@ Remove all listeners for this plugin.
 | **`bytes`**         | <code>number</code> | The number of bytes downloaded so far.               | 5.1.0 |
 | **`contentLength`** | <code>number</code> | The total number of bytes to download for this file. | 5.1.0 |
 
-
 ### Type Aliases
-
 
 #### RenameOptions
 
 <code><a href="#copyoptions">CopyOptions</a></code>
 
-
 #### PermissionState
 
 <code>'prompt' | 'prompt-with-rationale' | 'granted' | 'denied'</code>
-
 
 #### ProgressListener
 
@@ -607,9 +602,7 @@ A listener function that receives progress events.
 
 <code>(progress: <a href="#progressstatus">ProgressStatus</a>): void</code>
 
-
 ### Enums
-
 
 #### Directory
 
@@ -621,7 +614,6 @@ A listener function that receives progress events.
 | **`Cache`**           | <code>'CACHE'</code>            | The Cache directory. Can be deleted in cases of low memory, so use this directory to write app-specific files. that your app can re-create easily.                                                                                                                                                                                                                                                                                                                                        | 1.0.0 |
 | **`External`**        | <code>'EXTERNAL'</code>         | The external directory. On iOS it will use the Documents directory. On Android it's the directory on the primary shared/external storage device where the application can place persistent files it owns. These files are internal to the applications, and not typically visible to the user as media. Files will be deleted when the application is uninstalled.                                                                                                                        | 1.0.0 |
 | **`ExternalStorage`** | <code>'EXTERNAL_STORAGE'</code> | The external storage directory. On iOS it will use the Documents directory. On Android it's the primary shared/external storage directory. It's not accesible on Android 10 unless the app enables legacy External Storage by adding `android:requestLegacyExternalStorage="true"` in the `application` tag in the `AndroidManifest.xml`. It's not accesible on Android 11 or newer.                                                                                                      | 1.0.0 |
-
 
 #### Encoding
 
