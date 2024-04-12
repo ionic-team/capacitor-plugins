@@ -47,11 +47,11 @@
     "publish:cocoapod": "pod trunk push ./CapacitorLocalNotifications.podspec --allow-warnings"
   },
   "devDependencies": {
-    "@capacitor/android": "next",
-    "@capacitor/cli": "next",
-    "@capacitor/core": "next",
+    "@capacitor/android": "^6.0.0",
+    "@capacitor/cli": "^6.0.0",
+    "@capacitor/core": "^6.0.0",
     "@capacitor/docgen": "0.2.2",
-    "@capacitor/ios": "next",
+    "@capacitor/ios": "^6.0.0",
     "@ionic/eslint-config": "^0.3.0",
     "@ionic/prettier-config": "~1.0.1",
     "@ionic/swiftlint-config": "^1.1.2",
@@ -64,7 +64,7 @@
     "typescript": "~4.1.5"
   },
   "peerDependencies": {
-    "@capacitor/core": "next"
+    "@capacitor/core": "^6.0.0"
   },
   "prettier": "@ionic/prettier-config",
   "swiftlint": "@ionic/swiftlint-config",
