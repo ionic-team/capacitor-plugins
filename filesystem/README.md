@@ -15,11 +15,9 @@ Apple mandates that app developers now specify approved reasons for API usage to
 
 When using this specific plugin in your app, you must create a `PrivacyInfo.xcprivacy` file in `/ios/App` or use the VS Code Extension to generate it, specifying the usage reasons.
 
-### Manual Steps
+For detailed steps on how to do this, please see the [Capacitor Docs](https://capacitorjs.com/docs/ios/privacy-manifest).
 
-1. In Xcode, select File > New File.
-2. Choose App Privacy File type under the Resource section.
-3. After creation, edit `PrivacyInfo.xcprivacy` to add the necessary keys and reasons, as detailed in [Apple's documentation](https://developer.apple.com/documentation/bundleresources/privacy_manifest_files/describing_use_of_required_reason_api).
+**For this plugin, the required dictionary key is [NSPrivacyAccessedAPICategoryFileTimestamp](https://developer.apple.com/documentation/bundleresources/privacy_manifest_files/describing_use_of_required_reason_api#4278393) and the recommended reason is [CA617.1](https://developer.apple.com/documentation/bundleresources/privacy_manifest_files/describing_use_of_required_reason_api#4278393).**
 
 ### Example PrivacyInfo.xcprivacy
 
