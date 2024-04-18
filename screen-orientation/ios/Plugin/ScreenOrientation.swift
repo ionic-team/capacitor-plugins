@@ -93,6 +93,7 @@ public class ScreenOrientation: NSObject {
         case "landscape-primary":
             return UIInterfaceOrientationMask.landscapeLeft
         case "landscape-secondary":
+            // UIInterfaceOrientationMask.landscapeRight is the same as UIDeviceOrientation.landscapeLeft
             return UIInterfaceOrientationMask.landscapeRight
         case "portrait-secondary":
             return UIInterfaceOrientationMask.portraitUpsideDown
@@ -109,9 +110,12 @@ public class ScreenOrientation: NSObject {
         case "landscape":
             return [UIInterfaceOrientation.landscapeLeft.rawValue, UIInterfaceOrientation.landscapeRight.rawValue]
         case "landscape-primary":
-            return UIInterfaceOrientation.landscapeLeft.rawValue
-        case "landscape-secondary":
             return UIInterfaceOrientation.landscapeRight.rawValue
+        case "landscape-secondary":
+            // UIInterfaceOrientation.landscapeLeft is the same as UIDeviceOrientation.landscapeRight
+            // @see https://developer.apple.com/documentation/uikit/uiinterfaceorientation/landscapeleft
+            // @see https://developer.apple.com/documentation/uikit/uideviceorientation/landscaperight
+            return UIInterfaceOrientation.landscapeLeft.rawValue
         case "portrait-secondary":
             return UIInterfaceOrientation.portraitUpsideDown.rawValue
         default:
