@@ -261,9 +261,12 @@ extension CameraPlugin: PHPickerViewControllerDelegate {
             return
         }
         if multiple {
-            var images: [ProcessedImage] = []
+            var images: [ProcessedImage?] = Array(repeating: nil, count: results.count)
             var processedCount = 0
-            for img in results {
+
+            for index in results.indices {
+                let img = results[index]
+
                 guard img.itemProvider.canLoadObject(ofClass: UIImage.self) else {
                     self.call?.reject("Error loading image")
                     return
@@ -276,11 +279,11 @@ extension CameraPlugin: PHPickerViewControllerDelegate {
                             asset = PHAsset.fetchAssets(withLocalIdentifiers: [assetId], options: nil).firstObject
                         }
                         if let processedImage = self?.processedImage(from: image, with: asset?.imageData) {
-                            images.append(processedImage)
+                            images[index] = processedImage
                         }
                         processedCount += 1
                         if processedCount == results.count {
-                            self?.returnImages(images)
+                            self?.returnImages(images.compactMap({ $0 }))
                         }
                     } else {
                         self?.call?.reject("Error loading image")
