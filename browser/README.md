@@ -68,7 +68,7 @@ Open a page with the specified options.
 close() => Promise<void>
 ```
 
-Web & iOS only: Close an open browser window.
+Web & iOS & Android only: Close an open browser window.
 
 No-op on other platforms.
 
