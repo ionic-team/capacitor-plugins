@@ -37,7 +37,7 @@ jobs:
           key: ${{ runner.os }}-dependency-caching-${{ hashFiles('package.json', '*/package.json') }}
       - run: npm install
       - id: files
-        uses: tj-actions/changed-files@v37
+        uses: tj-actions/changed-files@v41
         with:
           json: true
           write_output_files: true
