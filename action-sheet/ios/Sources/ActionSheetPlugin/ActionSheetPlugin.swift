@@ -7,11 +7,11 @@ import Capacitor
  */
 @objc(ActionSheetPlugin)
 public class ActionSheetPlugin: CAPPlugin, CAPBridgedPlugin {
-    public let identifier = "ActionSheetPlugin" 
-    public let jsName = "ActionSheet" 
+    public let identifier = "ActionSheetPlugin"
+    public let jsName = "ActionSheet"
     public let pluginMethods: [CAPPluginMethod] = [
-        CAPPluginMethod(name: "showActions", returnType: CAPPluginReturnPromise),
-    ] 
+        CAPPluginMethod(name: "showActions", returnType: CAPPluginReturnPromise)
+    ]
     private let implementation = ActionSheet()
 
     @objc func showActions(_ call: CAPPluginCall) {
