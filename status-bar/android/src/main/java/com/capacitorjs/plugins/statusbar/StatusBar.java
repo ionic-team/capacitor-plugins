@@ -70,7 +70,7 @@ public class StatusBar {
 
             // Disable immersive mode
             windowInsetsController.setSystemBarsBehavior(
-                WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_TOUCH
+                WindowInsetsControllerCompat.BEHAVIOR_DEFAULT
             );
         }
     }
