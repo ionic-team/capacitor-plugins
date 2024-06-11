@@ -47,14 +47,32 @@ public class StatusBar {
 
     public void hide() {
         View decorView = activity.getWindow().getDecorView();
-        WindowInsetsControllerCompat windowInsetsControllerCompat = WindowCompat.getInsetsController(activity.getWindow(), decorView);
-        windowInsetsControllerCompat.hide(WindowInsetsCompat.Type.statusBars());
+        WindowInsetsControllerCompat windowInsetsController = WindowCompat.getInsetsController(activity.getWindow(), decorView);
+
+        // Hide the status bar and navigation bar
+        if (windowInsetsController != null) {
+            windowInsetsController.hide(WindowInsetsCompat.Type.systemBars());
+
+            // Enable immersive mode
+            windowInsetsController.setSystemBarsBehavior(
+                WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+            );
+        }
     }
 
     public void show() {
         View decorView = activity.getWindow().getDecorView();
-        WindowInsetsControllerCompat windowInsetsControllerCompat = WindowCompat.getInsetsController(activity.getWindow(), decorView);
-        windowInsetsControllerCompat.show(WindowInsetsCompat.Type.statusBars());
+        WindowInsetsControllerCompat windowInsetsController = WindowCompat.getInsetsController(activity.getWindow(), decorView);
+
+        // Hide the status bar and navigation bar
+        if (windowInsetsController != null) {
+            windowInsetsController.show(WindowInsetsCompat.Type.systemBars());
+
+            // Enable immersive mode
+            windowInsetsController.setSystemBarsBehavior(
+                WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_TOUCH
+            );
+        }
     }
 
     @SuppressWarnings("deprecation")
