@@ -64,11 +64,11 @@ public class StatusBar {
         View decorView = activity.getWindow().getDecorView();
         WindowInsetsControllerCompat windowInsetsController = WindowCompat.getInsetsController(activity.getWindow(), decorView);
 
-        // Hide the status bar and navigation bar
+        // Show the status bar and navigation bar
         if (windowInsetsController != null) {
             windowInsetsController.show(WindowInsetsCompat.Type.systemBars());
 
-            // Enable immersive mode
+            // Disable immersive mode
             windowInsetsController.setSystemBarsBehavior(
                 WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_TOUCH
             );
