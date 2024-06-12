@@ -19,6 +19,26 @@ npm install @capacitor/text-zoom
 npx cap sync
 ```
 
+## Example
+
+```typescript
+import { TextZoom } from '@capacitor/text-zoom';
+
+const getTextZoom = async () => {
+  const { value } = await TextZoom.get();
+  console.log(`Current zoom level is ${value}`);
+};
+
+const getPreferredTextZoom = async () => {
+  const { value } = await TextZoom.getPreferred();
+  console.log(`Preferred zoom level is ${value}`);
+};
+
+const setTextZoom = async () => {
+  await TextZoom.set({ value: 1.3 });
+};
+```
+
 ## API
 
 <docgen-index>
