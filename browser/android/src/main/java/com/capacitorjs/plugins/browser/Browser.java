@@ -105,7 +105,6 @@ public class Browser {
         }
 
         CustomTabsIntent tabsIntent = builder.build();
-        tabsIntent.intent.putExtra(Intent.EXTRA_REFERRER, Uri.parse(Intent.URI_ANDROID_APP_SCHEME + "//" + context.getPackageName()));
 
         isInitialLoad = true;
         group.reset();
