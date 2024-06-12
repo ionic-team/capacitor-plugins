@@ -1,5 +1,14 @@
 export interface ConfigureOptions {
   /**
+   * Set the suite name.
+   *
+   * If a suite is set, the group is automatically set to NativeStorage.
+   *
+   * @default ""
+   */
+  suite?: string;
+
+  /**
    * Set the preferences group.
    *
    * Preferences groups are used to organize key/value pairs.
