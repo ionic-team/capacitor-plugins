@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.9](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/keyboard@5.0.8...@capacitor/keyboard@5.0.9) (2024-06-13)
+
+### Bug Fixes
+
+- **ios:** apply filter to fetch correct scene object ([#2103](https://github.com/ionic-team/capacitor-plugins/issues/2103)) ([c4feee0](https://github.com/ionic-team/capacitor-plugins/commit/c4feee0846830308a38154b9c1538031b374e2b8))
+
 ## [5.0.8](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/keyboard@5.0.7...@capacitor/keyboard@5.0.8) (2024-01-29)
 
 **Note:** Version bump only for package @capacitor/keyboard

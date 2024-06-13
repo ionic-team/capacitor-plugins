@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.10](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@5.0.9...@capacitor/camera@5.0.10) (2024-06-13)
+
+### Bug Fixes
+
+- **ios:** iOS panorama photos selected through CameraPlugin are corrupted ([#2088](https://github.com/ionic-team/capacitor-plugins/issues/2088)) ([eafc76d](https://github.com/ionic-team/capacitor-plugins/commit/eafc76db31e74c35491628a554b67f980de37efe))
+- **ios:** Picking ProRAW pictures from Gallery ([#2098](https://github.com/ionic-team/capacitor-plugins/issues/2098)) ([#2099](https://github.com/ionic-team/capacitor-plugins/issues/2099)) ([41683f7](https://github.com/ionic-team/capacitor-plugins/commit/41683f712808e4251bd8bea75ce18c864057a444))
+
 ## [5.0.9](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@5.0.8...@capacitor/camera@5.0.9) (2024-01-29)
 
 **Note:** Version bump only for package @capacitor/camera

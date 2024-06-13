@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.2.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/browser@5.2.0...@capacitor/browser@5.2.1) (2024-06-13)
+
+**Note:** Version bump only for package @capacitor/browser
+
 # [5.2.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/browser@5.1.0...@capacitor/browser@5.2.0) (2024-01-29)
 
 ### Features

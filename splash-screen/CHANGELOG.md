@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.8](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/splash-screen@5.0.7...@capacitor/splash-screen@5.0.8) (2024-06-13)
+
+### Bug Fixes
+
+- **android:** removes setOnExitAnimationListener when fade out is disabled ([0dd789d](https://github.com/ionic-team/capacitor-plugins/commit/0dd789de984d93922084a0c1e1f2d977617bde38))
+
 ## [5.0.7](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/splash-screen@5.0.6...@capacitor/splash-screen@5.0.7) (2024-01-29)
 
 **Note:** Version bump only for package @capacitor/splash-screen
