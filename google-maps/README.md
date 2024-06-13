@@ -5,7 +5,7 @@ Google maps on Capacitor
 ## Install
 
 ```bash
-npm install @capacitor/google-maps
+npm install @capacitor/google-maps@latest-5
 npx cap sync
 ```
 
