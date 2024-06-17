@@ -45,7 +45,11 @@ public class ScreenOrientation: NSObject {
                     completion(ScreenOrientationError.noWindowScene)
                 }
             } else {
-                self.lockLegacy(orientation)
+                if let orientation = orientation as? [Int] {
+                    self.lockLegacy(orientation[0])
+                } else {
+                    self.lockLegacy(orientation as! Int)
+                }
             }
             completion(nil)
         }
