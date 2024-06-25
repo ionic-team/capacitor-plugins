@@ -3,11 +3,11 @@ import Capacitor
 
 @objc(CAPNetworkPlugin)
 public class NetworkPlugin: CAPPlugin, CAPBridgedPlugin {
-    public let identifier = "CAPNetworkPlugin" 
-    public let jsName = "Network" 
+    public let identifier = "CAPNetworkPlugin"
+    public let jsName = "Network"
     public let pluginMethods: [CAPPluginMethod] = [
-        CAPPluginMethod(name: "getStatus", returnType: CAPPluginReturnPromise),
-    ] 
+        CAPPluginMethod(name: "getStatus", returnType: CAPPluginReturnPromise)
+    ]
     private var implementation: Network?
 
     override public func load() {
