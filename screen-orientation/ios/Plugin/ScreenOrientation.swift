@@ -21,7 +21,7 @@ public class ScreenOrientation: NSObject {
         return fromDeviceOrientationToOrientationType(currentOrientation)
     }
 
-    private func lockLegacy(_ orientation: Int) {
+    private func lockLegacy(_ orientation: Any) {
         UIDevice.current.setValue(orientation, forKey: "orientation")
         UINavigationController.attemptRotationToDeviceOrientation()
     }
@@ -29,7 +29,11 @@ public class ScreenOrientation: NSObject {
     public func lock(_ orientationType: String, completion: @escaping (Error?) -> Void) {
         DispatchQueue.main.async {
             let orientation = self.fromOrientationTypeToInt(orientationType)
-            self.capViewController?.supportedOrientations = [orientation]
+            if let orientation = orientation as? Int {
+                self.capViewController?.supportedOrientations = [orientation]
+            } else {
+                self.capViewController?.supportedOrientations = orientation as! [Int]
+            }
             let mask = self.fromOrientationTypeToMask(orientationType)
             if #available(iOS 16.0, *) {
                 if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
@@ -41,7 +45,11 @@ public class ScreenOrientation: NSObject {
                     completion(ScreenOrientationError.noWindowScene)
                 }
             } else {
-                self.lockLegacy(orientation)
+                if let orientation = orientation as? [Int] {
+                    self.lockLegacy(orientation[1])
+                } else {
+                    self.lockLegacy(orientation as! Int)
+                }
             }
             completion(nil)
         }
@@ -84,7 +92,9 @@ public class ScreenOrientation: NSObject {
         switch orientationType {
         case "any":
             return UIInterfaceOrientationMask.all
-        case "landscape", "landscape-primary":
+        case "landscape":
+            return UIInterfaceOrientationMask.landscape
+        case "landscape-primary":
             // UIInterfaceOrientationMask.landscapeRight is the same as UIDeviceOrientation.landscapeLeft
             return UIInterfaceOrientationMask.landscapeRight
         case "landscape-secondary":
@@ -98,11 +108,13 @@ public class ScreenOrientation: NSObject {
         }
     }
 
-    private func fromOrientationTypeToInt(_ orientationType: String) -> Int {
+    private func fromOrientationTypeToInt(_ orientationType: String) -> Any {
         switch orientationType {
         case "any":
             return UIInterfaceOrientation.unknown.rawValue
-        case "landscape", "landscape-primary":
+        case "landscape":
+            return [UIInterfaceOrientation.landscapeLeft.rawValue, UIInterfaceOrientation.landscapeRight.rawValue]
+        case "landscape-primary":
             // UIInterfaceOrientation.landscapeRight is the same as UIDeviceOrientation.landscapeLeft
             // @see https://developer.apple.com/documentation/uikit/uiinterfaceorientation/landscaperight
             // @see https://developer.apple.com/documentation/uikit/uideviceorientation/landscapeleft
