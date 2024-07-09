@@ -46,7 +46,7 @@ public class ScreenOrientation: NSObject {
                 }
             } else {
                 if let orientation = orientation as? [Int] {
-                    self.lockLegacy(orientation[0])
+                    self.lockLegacy(orientation[1])
                 } else {
                     self.lockLegacy(orientation as! Int)
                 }
