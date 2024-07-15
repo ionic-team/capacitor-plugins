@@ -112,7 +112,9 @@ public class Filesystem {
             toDirectory = directory;
         }
 
-        boolean isContentUri = Uri.parse(from).getScheme().equals("content");
+        String scheme = Uri.parse(from).getScheme();
+        boolean isContentUri = scheme != null && scheme.equals("content");
+
         File toObject = getFileObject(to, toDirectory);
 
         if (toObject == null) {
