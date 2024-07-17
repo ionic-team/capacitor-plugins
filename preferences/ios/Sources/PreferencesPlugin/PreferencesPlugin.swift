@@ -19,16 +19,21 @@ public class PreferencesPlugin: CAPPlugin, CAPBridgedPlugin {
 
     @objc func configure(_ call: CAPPluginCall) {
         let group = call.getString("group")
+        let suite = call.getString("suite")
         let configuration: PreferencesConfiguration
 
-        if let group = group {
-            if group == "NativeStorage" {
-                configuration = PreferencesConfiguration(for: .cordovaNativeStorage)
-            } else {
-                configuration = PreferencesConfiguration(for: .named(group))
-            }
+        if group == nil, let suite = suite {
+            configuration = PreferencesConfiguration(for: suite)
         } else {
-            configuration = PreferencesConfiguration()
+            if let group = group, let suite = suite {
+                if group == "NativeStorage" {
+                    configuration = PreferencesConfiguration(for: suite, for: .cordovaNativeStorage)
+                } else {
+                    configuration = PreferencesConfiguration(for: suite, for: .named(group))
+                }
+            } else {
+                configuration = PreferencesConfiguration()
+            }
         }
 
         preferences = Preferences(with: configuration)
