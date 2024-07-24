@@ -1,12 +1,17 @@
 package com.capacitorjs.plugins.localnotifications;
 
+import static android.provider.Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM;
+
 import android.Manifest;
+import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.service.notification.StatusBarNotification;
+import androidx.activity.result.ActivityResult;
 import com.getcapacitor.Bridge;
 import com.getcapacitor.JSArray;
 import com.getcapacitor.JSObject;
@@ -15,6 +20,7 @@ import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginHandle;
 import com.getcapacitor.PluginMethod;
+import com.getcapacitor.annotation.ActivityCallback;
 import com.getcapacitor.annotation.CapacitorPlugin;
 import com.getcapacitor.annotation.Permission;
 import com.getcapacitor.annotation.PermissionCallback;
@@ -221,11 +227,38 @@ public class LocalNotificationsPlugin extends Plugin {
         }
     }
 
+    @PluginMethod
+    public void changeExactNotificationSetting(PluginCall call) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            startActivityForResult(
+                call,
+                new Intent(ACTION_REQUEST_SCHEDULE_EXACT_ALARM, Uri.parse("package:" + getActivity().getPackageName())),
+                "alarmPermissionsCallback"
+            );
+        } else {
+            checkExactNotificationSetting(call);
+        }
+    }
+
+    @PluginMethod
+    public void checkExactNotificationSetting(PluginCall call) {
+        JSObject permissionsResultJSON = new JSObject();
+        permissionsResultJSON.put("exact_alarm", getExactAlarmPermissionText());
+
+        call.resolve(permissionsResultJSON);
+    }
+
     @PermissionCallback
     private void permissionsCallback(PluginCall call) {
         JSObject permissionsResultJSON = new JSObject();
         permissionsResultJSON.put("display", getNotificationPermissionText());
+
         call.resolve(permissionsResultJSON);
+    }
+
+    @ActivityCallback
+    private void alarmPermissionsCallback(PluginCall call, ActivityResult result) {
+        checkExactNotificationSetting(call);
     }
 
     private String getNotificationPermissionText() {
@@ -234,6 +267,19 @@ public class LocalNotificationsPlugin extends Plugin {
         } else {
             return "denied";
         }
+    }
+
+    private String getExactAlarmPermissionText() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+            if (alarmManager.canScheduleExactAlarms()) {
+                return "granted";
+            } else {
+                return "denied";
+            }
+        }
+
+        return "granted";
     }
 
     public static void fireReceived(JSObject notification) {

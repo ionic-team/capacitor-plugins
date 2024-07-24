@@ -121,7 +121,6 @@ double stageManagerOffset;
 
 - (void)onKeyboardWillShow:(NSNotification *)notification
 {
-  [self changeKeyboardStyle:self.keyboardStyle];
   if (hideTimer != nil) {
     [hideTimer invalidate];
   }
@@ -214,7 +213,8 @@ double stageManagerOffset;
   
   if (!window) {
     if (@available(iOS 13.0, *)) {
-      UIScene *scene = [UIApplication sharedApplication].connectedScenes.allObjects.firstObject;
+      NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self isKindOfClass: %@", UIWindowScene.class];
+      UIScene *scene = [UIApplication.sharedApplication.connectedScenes.allObjects filteredArrayUsingPredicate:predicate].firstObject;
       window = [[(UIWindowScene*)scene windows] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"isKeyWindow == YES"]].firstObject;
     }
   }
@@ -324,6 +324,7 @@ static IMP WKOriginalImp;
 - (void)setStyle:(CAPPluginCall *)call
 {
   self.keyboardStyle = [call getString:@"style" defaultValue:@"LIGHT"];
+  [self changeKeyboardStyle:self.keyboardStyle]; 
   [call resolve];
 }
 
