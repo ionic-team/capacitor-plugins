@@ -46,6 +46,7 @@ These are official Capacitor plugins that are not contained in this repository.
 | GitHub | Package | Version |
 | --- | --- | --- |
 | [Background Runner](https://github.com/ionic-team/capacitor-background-runner) | [`@capacitor/background-runner`](https://capacitorjs.com/docs/apis/background-runner) | [![npm badge](https://img.shields.io/npm/v/@capacitor/background-runner?style=flat-square)](https://www.npmjs.com/package/@capacitor/background-runner) |
+| [Barcode Scanner](https://github.com/ionic-team/capacitor-barcode-scanner) | [`@capacitor/barcode-scanner`](https://capacitorjs.com/docs/apis/barcode-scanner) | [![npm badge](https://img.shields.io/npm/v/@capacitor/barcode-scanner?style=flat-square)](https://www.npmjs.com/package/@capacitor/barcode-scanner) |
 | [Google Maps](https://github.com/ionic-team/capacitor-google-maps) | [`@capacitor/google-maps`](https://capacitorjs.com/docs/apis/google-maps) | [![npm badge](https://img.shields.io/npm/v/@capacitor/google-maps?style=flat-square)](https://www.npmjs.com/package/@capacitor/google-maps) |
 
 ## Capacitor Labs
