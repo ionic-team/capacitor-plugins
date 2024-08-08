@@ -13,6 +13,15 @@ export interface ConfigureOptions {
    * @since 1.0.0
    */
   group?: string;
+
+  /**
+   * Set the suite name.
+   *
+   * If a suite is set, the group is automatically set to NativeStorage.
+   *
+   * @default ""
+   */
+  suite?: string;
 }
 
 export interface GetOptions {
