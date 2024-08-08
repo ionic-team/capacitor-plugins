@@ -1,5 +1,6 @@
 package com.capacitorjs.plugins.statusbar;
 
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.view.View;
 import android.view.Window;
@@ -14,25 +15,38 @@ public class StatusBar {
 
     private int currentStatusBarColor;
     private final AppCompatActivity activity;
-    private final String defaultStyle;
+    private String currentStyle = "DEFAULT";
 
     public StatusBar(AppCompatActivity activity) {
         // save initial color of the status bar
         this.activity = activity;
         this.currentStatusBarColor = activity.getWindow().getStatusBarColor();
-        this.defaultStyle = getStyle();
+        setStyle(this.currentStyle);
     }
 
     public void setStyle(String style) {
         Window window = activity.getWindow();
         View decorView = window.getDecorView();
-
+        this.currentStyle = style;
         if (style.equals("DEFAULT")) {
-            style = this.defaultStyle;
+            style = getStyleForTheme();
         }
 
         WindowInsetsControllerCompat windowInsetsControllerCompat = WindowCompat.getInsetsController(window, decorView);
         windowInsetsControllerCompat.setAppearanceLightStatusBars(!style.equals("DARK"));
+    }
+
+    private String getStyleForTheme() {
+        int currentNightMode = activity.getResources().getConfiguration().uiMode
+                & Configuration.UI_MODE_NIGHT_MASK;
+        if (currentNightMode != Configuration.UI_MODE_NIGHT_YES) {
+            return "LIGHT";
+        }
+        return "DARK";
+    }
+
+    public void updateStyle() {
+        setStyle(this.currentStyle);
     }
 
     @SuppressWarnings("deprecation")
