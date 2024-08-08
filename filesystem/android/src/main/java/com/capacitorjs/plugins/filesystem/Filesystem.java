@@ -1,5 +1,7 @@
 package com.capacitorjs.plugins.filesystem;
 
+import static java.nio.channels.Channels.newChannel;
+
 import android.content.Context;
 import android.net.Uri;
 import android.os.Environment;
@@ -21,9 +23,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.channels.FileChannel;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
+import java.nio.channels.WritableByteChannel;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Locale;
@@ -106,22 +112,13 @@ public class Filesystem {
             toDirectory = directory;
         }
 
-        File fromObject = getFileObject(from, directory);
+        String scheme = Uri.parse(from).getScheme();
+        boolean isContentUri = scheme != null && scheme.equals("content");
+
         File toObject = getFileObject(to, toDirectory);
 
-        if (fromObject == null) {
-            throw new CopyFailedException("from file is null");
-        }
         if (toObject == null) {
             throw new CopyFailedException("to file is null");
-        }
-
-        if (toObject.equals(fromObject)) {
-            return toObject;
-        }
-
-        if (!fromObject.exists()) {
-            throw new CopyFailedException("The source object does not exist");
         }
 
         if (toObject.getParentFile().isFile()) {
@@ -136,16 +133,40 @@ public class Filesystem {
             throw new CopyFailedException("Cannot overwrite a directory");
         }
 
-        toObject.delete();
+        if (isContentUri) {
+            InputStream fromObject = getInputStream(from, directory);
 
-        if (doRename) {
-            boolean modified = fromObject.renameTo(toObject);
-            if (!modified) {
-                throw new CopyFailedException("Unable to rename, unknown reason");
-            }
+            toObject.delete();
+
+            copyContent(fromObject, toObject);
+
+            return toObject;
         } else {
-            copyRecursively(fromObject, toObject);
-        }
+            File fromObject = getFileObject(from, directory);
+
+            if (fromObject == null) {
+                throw new CopyFailedException("from file is null");
+            }
+        
+            if (toObject.equals(fromObject)) {
+                return toObject;
+            }
+    
+            if (!fromObject.exists()) {
+                throw new CopyFailedException("The source object does not exist");
+            }
+
+            toObject.delete();
+
+            if (doRename) {
+                boolean modified = fromObject.renameTo(toObject);
+                if (!modified) {
+                    throw new CopyFailedException("Unable to rename, unknown reason");
+                }
+            } else {
+                copyRecursively(fromObject, toObject);
+            }
+        }    
 
         return toObject;
     }
@@ -300,6 +321,27 @@ public class Filesystem {
 
         try (FileChannel source = new FileInputStream(src).getChannel(); FileChannel destination = new FileOutputStream(dst).getChannel()) {
             destination.transferFrom(source, 0, source.size());
+        }
+    }
+
+    /**
+     * Helper function to copy content files
+     *
+     * @param srcStream The source location stream
+     * @param dstFile The destination location
+     * @throws IOException
+     */
+    public void copyContent(InputStream srcStream, File dstFile) throws IOException {
+        if (!dstFile.getParentFile().exists()) {
+            dstFile.getParentFile().mkdirs();
+        }
+
+        if (!dstFile.exists()) {
+            dstFile.createNewFile();
+        }
+
+        try (ReadableByteChannel source = newChannel(srcStream); FileChannel destination = new FileOutputStream(dstFile).getChannel()) {
+            destination.transferFrom(source, 0, Long.MAX_VALUE);
         }
     }
 
