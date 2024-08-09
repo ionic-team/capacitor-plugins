@@ -48,7 +48,26 @@ public class StatusBarPlugin: CAPPlugin, CAPBridgedPlugin {
     }
 
     @objc func setBackgroundColor(_ call: CAPPluginCall) {
-        call.unimplemented()
+        let options = call.options
+
+        if let color = options?["color"] as? String {
+            DispatchQueue.main.async {
+                if let window = UIApplication.shared.windows.first {
+                    let statusBarView = UIView(frame: window.windowScene?.statusBarManager?.statusBarFrame ?? CGRect.zero)
+                    if let uiColor = UIColor(hexString: color) {
+                        statusBarView.backgroundColor = uiColor
+                        window.addSubview(statusBarView)
+                        if uiColor.isLight {
+                            self.bridge?.statusBarStyle = .darkContent
+                         } else {
+                            self.bridge?.statusBarStyle = .lightContent
+                        }
+                    }
+                }
+            }
+        }
+
+        call.resolve([:])
     }
 
     func setAnimation(_ call: CAPPluginCall) {
@@ -102,5 +121,28 @@ public class StatusBarPlugin: CAPPlugin, CAPBridgedPlugin {
 
     @objc func setOverlaysWebView(_ call: CAPPluginCall) {
         call.unimplemented()
+    }
+}
+
+
+extension UIColor {
+    convenience init?(hexString: String) {
+        
+        var hexSanitized = hexString.trimmingCharacters(in: .whitespacesAndNewlines)
+        hexSanitized = hexSanitized.replacingOccurrences(of: "#", with: "")
+        print("Failed to scan hex value.",hexSanitized)
+        var rgb: UInt64 = 0
+        
+        guard Scanner(string: hexSanitized).scanHexInt64(&rgb) else { return nil }
+        
+        self.init(red: CGFloat((rgb & 0xFF0000) >> 16) / 255.0,
+                  green: CGFloat((rgb & 0x00FF00) >> 8) / 255.0,
+                  blue: CGFloat(rgb & 0x0000FF) / 255.0,
+                  alpha: 1.0)
+    }
+    var isLight: Bool {
+        var white: CGFloat = 0
+        getWhite(&white, alpha: nil)
+        return white > 0.7
     }
 }
