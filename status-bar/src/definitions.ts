@@ -76,8 +76,6 @@ export interface BackgroundColorOptions {
   /**
    * A hex color to which the status bar color is set.
    *
-   * This option is only supported on Android.
-   *
    * @since 1.0.0
    */
   color: string;
@@ -101,16 +99,12 @@ export interface StatusBarInfo {
   /**
    * The current status bar color.
    *
-   * This option is only supported on Android.
-   *
    * @since 1.0.0
    */
   color?: string;
 
   /**
    * Whether the statusbar is overlaid or not.
-   *
-   * This option is only supported on Android.
    *
    * @since 1.0.0
    */
@@ -136,8 +130,6 @@ export interface StatusBarPlugin {
 
   /**
    * Set the background color of the status bar.
-   *
-   * This method is only supported on Android.
    *
    * @since 1.0.0
    */
@@ -171,8 +163,6 @@ export interface StatusBarPlugin {
   /**
    * Set whether or not the status bar should overlay the webview to allow usage
    * of the space underneath it.
-   *
-   * This method is only supported on Android.
    *
    * @since 1.0.0
    */

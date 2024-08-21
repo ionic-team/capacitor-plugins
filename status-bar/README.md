@@ -20,9 +20,6 @@ The status bar visibility defaults to visible and the style defaults to
 `Style.Default`. You can change these defaults by adding
 `UIStatusBarHidden` and/or `UIStatusBarStyle` in `Info.plist`.
 
-`setBackgroundColor` and `setOverlaysWebView` are currently not supported on
-iOS devices.
-
 ## Example
 
 ```typescript
@@ -33,7 +30,7 @@ window.addEventListener('statusTap', function () {
   console.log('statusbar tapped');
 });
 
-// Display content under transparent status bar (Android only)
+// Display content under transparent status bar
 StatusBar.setOverlaysWebView({ overlay: true });
 
 const setStatusBarStyleDark = async () => {
@@ -95,8 +92,6 @@ setBackgroundColor(options: BackgroundColorOptions) => Promise<void>
 ```
 
 Set the background color of the status bar.
-
-This method is only supported on Android.
 
 | Param         | Type                                                                      |
 | ------------- | ------------------------------------------------------------------------- |
@@ -169,8 +164,6 @@ setOverlaysWebView(options: SetOverlaysWebViewOptions) => Promise<void>
 Set whether or not the status bar should overlay the webview to allow usage
 of the space underneath it.
 
-This method is only supported on Android.
-
 | Param         | Type                                                                            |
 | ------------- | ------------------------------------------------------------------------------- |
 | **`options`** | <code><a href="#setoverlayswebviewoptions">SetOverlaysWebViewOptions</a></code> |
@@ -192,9 +185,9 @@ This method is only supported on Android.
 
 #### BackgroundColorOptions
 
-| Prop        | Type                | Description                                                                                 | Since |
-| ----------- | ------------------- | ------------------------------------------------------------------------------------------- | ----- |
-| **`color`** | <code>string</code> | A hex color to which the status bar color is set. This option is only supported on Android. | 1.0.0 |
+| Prop        | Type                | Description                                       | Since |
+| ----------- | ------------------- | ------------------------------------------------- | ----- |
+| **`color`** | <code>string</code> | A hex color to which the status bar color is set. | 1.0.0 |
 
 
 #### AnimationOptions
@@ -206,12 +199,12 @@ This method is only supported on Android.
 
 #### StatusBarInfo
 
-| Prop           | Type                                    | Description                                                                         | Since |
-| -------------- | --------------------------------------- | ----------------------------------------------------------------------------------- | ----- |
-| **`visible`**  | <code>boolean</code>                    | Whether the status bar is visible or not.                                           | 1.0.0 |
-| **`style`**    | <code><a href="#style">Style</a></code> | The current status bar style.                                                       | 1.0.0 |
-| **`color`**    | <code>string</code>                     | The current status bar color. This option is only supported on Android.             | 1.0.0 |
-| **`overlays`** | <code>boolean</code>                    | Whether the statusbar is overlaid or not. This option is only supported on Android. | 1.0.0 |
+| Prop           | Type                                    | Description                               | Since |
+| -------------- | --------------------------------------- | ----------------------------------------- | ----- |
+| **`visible`**  | <code>boolean</code>                    | Whether the status bar is visible or not. | 1.0.0 |
+| **`style`**    | <code><a href="#style">Style</a></code> | The current status bar style.             | 1.0.0 |
+| **`color`**    | <code>string</code>                     | The current status bar color.             | 1.0.0 |
+| **`overlays`** | <code>boolean</code>                    | Whether the statusbar is overlaid or not. | 1.0.0 |
 
 
 #### SetOverlaysWebViewOptions

@@ -1,6 +1,7 @@
 package com.capacitorjs.plugins.statusbar;
 
 import com.getcapacitor.JSObject;
+import com.getcapacitor.Logger;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
@@ -15,7 +16,35 @@ public class StatusBarPlugin extends Plugin {
 
     @Override
     public void load() {
-        implementation = new StatusBar(getActivity());
+        StatusBarConfig config = getStatusBarConfig();
+        implementation = new StatusBar(getActivity(), config);
+    }
+
+    private StatusBarConfig getStatusBarConfig() {
+        StatusBarConfig config = new StatusBarConfig();
+        String backgroundColor = getConfig().getString("StatusBarBackgroundColor");
+        if (backgroundColor != null) {
+            try {
+                config.setBackgroundColor(WebColor.parseColor(backgroundColor));
+            } catch (IllegalArgumentException ex) {
+                Logger.debug("Background color not applied");
+            }
+        }
+        config.setStyle(styleFromConfig(getConfig().getString("StatusBarStyle", config.getStyle())));
+        config.setOverlaysWebView(getConfig().getBoolean("StatusBarOverlaysWebView", config.isOverlaysWebView()));
+        return config;
+    }
+
+    private String styleFromConfig(String style) {
+        switch (style.toLowerCase()) {
+            case "lightcontent":
+                return "DARK";
+            case "darkcontent":
+                return "LIGHT";
+            case "default":
+            default:
+                return "DEFAULT";
+        }
     }
 
     @PluginMethod
