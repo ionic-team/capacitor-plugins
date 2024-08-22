@@ -22,7 +22,7 @@ public class StatusBarPlugin extends Plugin {
 
     private StatusBarConfig getStatusBarConfig() {
         StatusBarConfig config = new StatusBarConfig();
-        String backgroundColor = getConfig().getString("StatusBarBackgroundColor");
+        String backgroundColor = getConfig().getString("backgroundColor");
         if (backgroundColor != null) {
             try {
                 config.setBackgroundColor(WebColor.parseColor(backgroundColor));
@@ -30,16 +30,18 @@ public class StatusBarPlugin extends Plugin {
                 Logger.debug("Background color not applied");
             }
         }
-        config.setStyle(styleFromConfig(getConfig().getString("StatusBarStyle", config.getStyle())));
-        config.setOverlaysWebView(getConfig().getBoolean("StatusBarOverlaysWebView", config.isOverlaysWebView()));
+        config.setStyle(styleFromConfig(getConfig().getString("style", config.getStyle())));
+        config.setOverlaysWebView(getConfig().getBoolean("overlaysWebView", config.isOverlaysWebView()));
         return config;
     }
 
     private String styleFromConfig(String style) {
         switch (style.toLowerCase()) {
             case "lightcontent":
+            case "dark":
                 return "DARK";
             case "darkcontent":
+            case "light":
                 return "LIGHT";
             case "default":
             default:

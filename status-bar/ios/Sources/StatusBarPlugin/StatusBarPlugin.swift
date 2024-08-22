@@ -26,12 +26,12 @@ public class StatusBarPlugin: CAPPlugin, CAPBridgedPlugin {
     
     private func statusBarConfig() -> StatusBarConfig {
         var config = StatusBarConfig()
-        config.overlaysWebView = getConfig().getBoolean("StatusBarOverlaysWebView", config.overlaysWebView)
-        if let colorConfig = getConfig().getString("StatusBarBackgroundColor"), let color = UIColor.capacitor.color(fromHex: colorConfig)
+        config.overlaysWebView = getConfig().getBoolean("overlaysWebView", config.overlaysWebView)
+        if let colorConfig = getConfig().getString("backgroundColor"), let color = UIColor.capacitor.color(fromHex: colorConfig)
         {
             config.backgroundColor = color
         }
-        if let configStyle = getConfig().getString("StatusBarStyle") {
+        if let configStyle = getConfig().getString("style") {
             config.style = style(fromString: configStyle)
         }
         return config

@@ -57,11 +57,11 @@ const showStatusBar = async () => {
 
 These config values are available:
 
-| Prop                           | Type                 | Description                                                                                                          | Default              | Since |
-| ------------------------------ | -------------------- | -------------------------------------------------------------------------------------------------------------------- | -------------------- | ----- |
-| **`StatusBarOverlaysWebView`** | <code>boolean</code> | Whether the statusbar is overlaid or not.                                                                            | <code>true</code>    | 1.0.0 |
-| **`StatusBarStyle`**           | <code>string</code>  | <a href="#style">Style</a> of the text of the status bar.                                                            | <code>default</code> | 1.0.0 |
-| **`StatusBarBackgroundColor`** | <code>string</code>  | Color of the background of the statusbar in hex format, #RRGGBB. Doesn't work if `StatusBarOverlaysWebView` is true. | <code>#000000</code> | 1.0.0 |
+| Prop                  | Type                 | Description                                                                                                 | Default              | Since |
+| --------------------- | -------------------- | ----------------------------------------------------------------------------------------------------------- | -------------------- | ----- |
+| **`overlaysWebView`** | <code>boolean</code> | Whether the statusbar is overlaid or not.                                                                   | <code>true</code>    | 1.0.0 |
+| **`style`**           | <code>string</code>  | <a href="#style">Style</a> of the text of the status bar.                                                   | <code>default</code> | 1.0.0 |
+| **`backgroundColor`** | <code>string</code>  | Color of the background of the statusbar in hex format, #RRGGBB. Doesn't work if `overlaysWebView` is true. | <code>#000000</code> | 1.0.0 |
 
 ### Examples
 
@@ -71,9 +71,9 @@ In `capacitor.config.json`:
 {
   "plugins": {
     "StatusBar": {
-      "StatusBarOverlaysWebView": false,
-      "StatusBarStyle": "DARK",
-      "StatusBarBackgroundColor": "#ffffffff"
+      "overlaysWebView": false,
+      "style": "DARK",
+      "backgroundColor": "#ffffffff"
     }
   }
 }
@@ -89,9 +89,9 @@ import { CapacitorConfig } from '@capacitor/cli';
 const config: CapacitorConfig = {
   plugins: {
     StatusBar: {
-      StatusBarOverlaysWebView: false,
-      StatusBarStyle: "DARK",
-      StatusBarBackgroundColor: "#ffffffff",
+      overlaysWebView: false,
+      style: "DARK",
+      backgroundColor: "#ffffffff",
     },
   },
 };

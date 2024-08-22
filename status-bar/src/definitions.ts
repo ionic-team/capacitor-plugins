@@ -13,7 +13,7 @@ declare module '@capacitor/cli' {
        * @default true
        * @example false
        */
-      StatusBarOverlaysWebView?: boolean;
+      overlaysWebView?: boolean;
 
       /**
        * Style of the text of the status bar.
@@ -22,17 +22,17 @@ declare module '@capacitor/cli' {
        * @default default
        * @example "DARK"
        */
-      StatusBarStyle?: string;
+      style?: string;
 
       /**
        * Color of the background of the statusbar in hex format, #RRGGBB.
-       * Doesn't work if `StatusBarOverlaysWebView` is true.
+       * Doesn't work if `overlaysWebView` is true.
        *
        * @since 1.0.0
        * @default #000000
        * @example "#ffffffff"
        */
-      StatusBarBackgroundColor?: string;
+      backgroundColor?: string;
     };
   }
 }
