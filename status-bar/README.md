@@ -50,6 +50,57 @@ const showStatusBar = async () => {
 };
 ```
 
+## Configuration
+
+<docgen-config>
+<!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
+
+These config values are available:
+
+| Prop                           | Type                 | Description                                                                                                          | Default              | Since |
+| ------------------------------ | -------------------- | -------------------------------------------------------------------------------------------------------------------- | -------------------- | ----- |
+| **`StatusBarOverlaysWebView`** | <code>boolean</code> | Whether the statusbar is overlaid or not.                                                                            | <code>true</code>    | 1.0.0 |
+| **`StatusBarStyle`**           | <code>string</code>  | <a href="#style">Style</a> of the text of the status bar.                                                            | <code>default</code> | 1.0.0 |
+| **`StatusBarBackgroundColor`** | <code>string</code>  | Color of the background of the statusbar in hex format, #RRGGBB. Doesn't work if `StatusBarOverlaysWebView` is true. | <code>#000000</code> | 1.0.0 |
+
+### Examples
+
+In `capacitor.config.json`:
+
+```json
+{
+  "plugins": {
+    "StatusBar": {
+      "StatusBarOverlaysWebView": false,
+      "StatusBarStyle": "DARK",
+      "StatusBarBackgroundColor": "#ffffffff"
+    }
+  }
+}
+```
+
+In `capacitor.config.ts`:
+
+```ts
+/// <reference types="@capacitor/status-bar" />
+
+import { CapacitorConfig } from '@capacitor/cli';
+
+const config: CapacitorConfig = {
+  plugins: {
+    StatusBar: {
+      StatusBarOverlaysWebView: false,
+      StatusBarStyle: "DARK",
+      StatusBarBackgroundColor: "#ffffffff",
+    },
+  },
+};
+
+export default config;
+```
+
+</docgen-config>
+
 ## API
 
 <docgen-index>

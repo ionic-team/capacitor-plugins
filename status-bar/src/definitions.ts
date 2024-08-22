@@ -1,3 +1,42 @@
+/// <reference types="@capacitor/cli" />
+
+declare module '@capacitor/cli' {
+  export interface PluginsConfig {
+    /**
+     * These config values are available:
+     */
+    StatusBar?: {
+      /**
+       * Whether the statusbar is overlaid or not.
+       *
+       * @since 1.0.0
+       * @default true
+       * @example false
+       */
+      StatusBarOverlaysWebView?: boolean;
+
+      /**
+       * Style of the text of the status bar.
+       *
+       * @since 1.0.0
+       * @default default
+       * @example "DARK"
+       */
+      StatusBarStyle?: string;
+
+      /**
+       * Color of the background of the statusbar in hex format, #RRGGBB.
+       * Doesn't work if `StatusBarOverlaysWebView` is true.
+       *
+       * @since 1.0.0
+       * @default #000000
+       * @example "#ffffffff"
+       */
+      StatusBarBackgroundColor?: string;
+    };
+  }
+}
+
 export interface StyleOptions {
   /**
    * Style of the text of the status bar.
