@@ -43,11 +43,15 @@ public class PreferencesPlugin extends Plugin {
             return;
         }
 
-        String value = preferences.get(key);
+        try{
+            String value = preferences.get(key);
 
-        JSObject ret = new JSObject();
-        ret.put("value", value == null ? JSObject.NULL : value);
-        call.resolve(ret);
+            JSObject ret = new JSObject();
+            ret.put("value", value == null ? JSObject.NULL : value);
+            call.resolve(ret);
+        } catch (ClassCastException exception){
+            call.reject(exception.getMessage());
+        }
     }
 
     @PluginMethod
