@@ -1,6 +1,6 @@
 {
   "name": "@capacitor/push-notifications",
-  "version": "6.0.2",
+  "version": "7.0.0-alpha.0",
   "description": "The Push Notifications API provides access to native push notifications.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",

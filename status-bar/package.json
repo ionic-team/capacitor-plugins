@@ -1,6 +1,6 @@
 {
   "name": "@capacitor/status-bar",
-  "version": "6.0.1",
+  "version": "7.0.0-alpha.0",
   "description": "The StatusBar API Provides methods for configuring the style of the Status Bar, along with showing or hiding it.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
