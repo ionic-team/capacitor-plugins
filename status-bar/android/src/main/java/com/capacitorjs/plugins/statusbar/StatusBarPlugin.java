@@ -12,6 +12,9 @@ import java.util.Locale;
 @CapacitorPlugin(name = "StatusBar")
 public class StatusBarPlugin extends Plugin {
 
+    public static final String statusBarVisibilityChanged = "statusBarVisibilityChanged";
+    public static final String statusBarOverlayChanged = "statusBarOverlayChanged";
+
     private StatusBar implementation;
 
     @Override
@@ -95,6 +98,8 @@ public class StatusBarPlugin extends Plugin {
             .executeOnMainThread(
                 () -> {
                     implementation.hide();
+                    StatusBarInfo info = implementation.getInfo();
+                    notifyListeners(statusBarVisibilityChanged, toJSObject(info));
                     call.resolve();
                 }
             );
@@ -107,6 +112,8 @@ public class StatusBarPlugin extends Plugin {
             .executeOnMainThread(
                 () -> {
                     implementation.show();
+                    StatusBarInfo info = implementation.getInfo();
+                    notifyListeners(statusBarVisibilityChanged, toJSObject(info));
                     call.resolve();
                 }
             );
@@ -115,13 +122,7 @@ public class StatusBarPlugin extends Plugin {
     @PluginMethod
     public void getInfo(final PluginCall call) {
         StatusBarInfo info = implementation.getInfo();
-
-        JSObject data = new JSObject();
-        data.put("visible", info.isVisible());
-        data.put("style", info.getStyle());
-        data.put("color", info.getColor());
-        data.put("overlays", info.isOverlays());
-        call.resolve(data);
+        call.resolve(toJSObject(info));
     }
 
     @PluginMethod
@@ -131,8 +132,20 @@ public class StatusBarPlugin extends Plugin {
             .executeOnMainThread(
                 () -> {
                     implementation.setOverlaysWebView(overlays);
+                    StatusBarInfo info = implementation.getInfo();
+                    notifyListeners(statusBarOverlayChanged, toJSObject(info));
                     call.resolve();
                 }
             );
+    }
+
+    private JSObject toJSObject(StatusBarInfo info) {
+        JSObject data = new JSObject();
+        data.put("visible", info.isVisible());
+        data.put("style", info.getStyle());
+        data.put("color", info.getColor());
+        data.put("overlays", info.isOverlays());
+        data.put("height", info.getHeight());
+        return data;
     }
 }

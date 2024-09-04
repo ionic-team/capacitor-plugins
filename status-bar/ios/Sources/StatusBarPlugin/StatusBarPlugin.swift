@@ -18,6 +18,8 @@ public class StatusBarPlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "setOverlaysWebView", returnType: CAPPluginReturnPromise),
     ]
     private var statusBar: StatusBar?
+    private let statusBarVisibilityChanged = "statusBarVisibilityChanged"
+    private let statusBarOverlayChanged = "statusBarOverlayChanged"
     
     override public func load() {
         guard let bridge = bridge else { return }
@@ -73,6 +75,12 @@ public class StatusBarPlugin: CAPPlugin, CAPBridgedPlugin {
         let animation = call.getString("animation", "FADE")
         DispatchQueue.main.async { [weak self] in
             self?.statusBar?.hide(animation: animation)
+            guard
+                let info = self?.statusBar?.getInfo(),
+                let dict = self?.toDict(info),
+                let event = self?.statusBarVisibilityChanged
+            else { return }
+            self?.notifyListeners(event, data: dict);
         }
         call.resolve()
     }
@@ -81,19 +89,23 @@ public class StatusBarPlugin: CAPPlugin, CAPBridgedPlugin {
         let animation = call.getString("animation", "FADE")
         DispatchQueue.main.async { [weak self] in
             self?.statusBar?.show(animation: animation)
+            guard
+                let info = self?.statusBar?.getInfo(),
+                let dict = self?.toDict(info),
+                let event = self?.statusBarVisibilityChanged
+            else { return }
+            self?.notifyListeners(event, data: dict);
         }
         call.resolve()
     }
     
     @objc func getInfo(_ call: CAPPluginCall) {
         DispatchQueue.main.async { [weak self] in
-            guard let info = self?.statusBar?.getInfo() else { return }
-            call.resolve([
-                "visible": info.visible!,
-                "style": info.style!,
-                "color": info.color!,
-                "overlays": info.overlays!
-            ])
+            guard
+                let info = self?.statusBar?.getInfo(),
+                let dict = self?.toDict(info)
+            else { return }
+            call.resolve(dict)
         }
     }
 
@@ -101,7 +113,23 @@ public class StatusBarPlugin: CAPPlugin, CAPBridgedPlugin {
         guard let overlay = call.options["overlay"] as? Bool else { return }
         DispatchQueue.main.async { [weak self] in
             self?.statusBar?.setOverlaysWebView(overlay)
+            guard
+                let info = self?.statusBar?.getInfo(),
+                let dict = self?.toDict(info),
+                let event = self?.statusBarOverlayChanged
+            else { return }
+            self?.notifyListeners(event, data: dict);
         }
         call.resolve()
+    }
+    
+    private func toDict(_ info: StatusBarInfo) -> [String: Any] {
+        return [
+            "visible": info.visible!,
+            "style": info.style!,
+            "color": info.color!,
+            "overlays": info.overlays!,
+            "height": info.height!
+        ]
     }
 }

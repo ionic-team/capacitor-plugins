@@ -1,6 +1,5 @@
 package com.capacitorjs.plugins.statusbar;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.util.DisplayMetrics;
 import android.view.View;
@@ -11,16 +10,12 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 public class StatusBar {
 
     private int currentStatusBarColor;
     private final AppCompatActivity activity;
     private final String defaultStyle;
-
-    public static final String statusBarVisibilityChanged = "statusBarVisibilityChanged";
-    public static final String statusBarOverlayChanged = "statusBarOverlayChanged";
 
     public StatusBar(AppCompatActivity activity, StatusBarConfig config) {
         // save initial color of the status bar
@@ -59,20 +54,12 @@ public class StatusBar {
         View decorView = activity.getWindow().getDecorView();
         WindowInsetsControllerCompat windowInsetsControllerCompat = WindowCompat.getInsetsController(activity.getWindow(), decorView);
         windowInsetsControllerCompat.hide(WindowInsetsCompat.Type.statusBars());
-        sendBroadcast(statusBarVisibilityChanged);
     }
 
     public void show() {
         View decorView = activity.getWindow().getDecorView();
         WindowInsetsControllerCompat windowInsetsControllerCompat = WindowCompat.getInsetsController(activity.getWindow(), decorView);
         windowInsetsControllerCompat.show(WindowInsetsCompat.Type.statusBars());
-        sendBroadcast(statusBarVisibilityChanged);
-    }
-
-    private void sendBroadcast(String action) {
-        Intent intent = new Intent(action);
-        intent.putExtra("info", getInfo());
-        LocalBroadcastManager.getInstance(activity).sendBroadcast(intent);
     }
 
     @SuppressWarnings("deprecation")
@@ -92,7 +79,6 @@ public class StatusBar {
             // recover the previous color of the status bar
             activity.getWindow().setStatusBarColor(currentStatusBarColor);
         }
-        sendBroadcast(statusBarOverlayChanged);
     }
 
     @SuppressWarnings("deprecation")

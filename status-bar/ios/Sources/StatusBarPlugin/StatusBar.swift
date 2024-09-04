@@ -1,11 +1,6 @@
 import Foundation
 import Capacitor
 
-public extension Notification.Name {
-    static let statusBarVisibilityChanged = Notification.Name("statusBarVisibilityChanged")
-    static let statusBarOverlayChanged = Notification.Name("statusBarOverlayChanged")
-}
-
 @objc public class StatusBar: NSObject {
     
     private var bridge: CAPBridgeProtocol
@@ -77,7 +72,6 @@ public extension Notification.Name {
                 self?.backgroundView?.removeFromSuperview()
                 self?.backgroundView?.isHidden = true
             }
-            NotificationCenter.default.post(name: .statusBarVisibilityChanged, object: getInfo())
         }
     }
 
@@ -93,7 +87,6 @@ public extension Notification.Name {
                 }
                 backgroundView?.isHidden = false
             }
-            NotificationCenter.default.post(name: .statusBarVisibilityChanged, object: getInfo())
         }
     }
 
@@ -129,7 +122,6 @@ public extension Notification.Name {
             bridge.webView?.superview?.addSubview(backgroundView!)
         }
         resizeWebView()
-        NotificationCenter.default.post(name: .statusBarOverlayChanged, object: getInfo())
     }
     
     private func resizeWebView() {
