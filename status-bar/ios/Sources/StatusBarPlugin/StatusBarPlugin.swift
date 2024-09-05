@@ -15,92 +15,121 @@ public class StatusBarPlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "show", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "hide", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getInfo", returnType: CAPPluginReturnPromise),
-        CAPPluginMethod(name: "setOverlaysWebView", returnType: CAPPluginReturnPromise)
+        CAPPluginMethod(name: "setOverlaysWebView", returnType: CAPPluginReturnPromise),
     ]
-    private var observer: NSObjectProtocol?
-
+    private var statusBar: StatusBar?
+    private let statusBarVisibilityChanged = "statusBarVisibilityChanged"
+    private let statusBarOverlayChanged = "statusBarOverlayChanged"
+    
     override public func load() {
-        observer = NotificationCenter.default.addObserver(forName: Notification.Name.capacitorStatusBarTapped, object: .none, queue: .none) { [weak self] _ in
-            self?.bridge?.triggerJSEvent(eventName: "statusTap", target: "window")
-        }
+        guard let bridge = bridge else { return }
+        statusBar = StatusBar(bridge: bridge, config: statusBarConfig())
     }
-
-    deinit {
-        if let observer = observer {
-            NotificationCenter.default.removeObserver(observer)
+    
+    private func statusBarConfig() -> StatusBarConfig {
+        var config = StatusBarConfig()
+        config.overlaysWebView = getConfig().getBoolean("overlaysWebView", config.overlaysWebView)
+        if let colorConfig = getConfig().getString("backgroundColor"), let color = UIColor.capacitor.color(fromHex: colorConfig)
+        {
+            config.backgroundColor = color
+        }
+        if let configStyle = getConfig().getString("style") {
+            config.style = style(fromString: configStyle)
+        }
+        return config
+    }
+    
+    private func style(fromString: String) -> UIStatusBarStyle {
+        switch fromString.lowercased() {
+        case "dark", "lightcontent":
+            return .lightContent
+        case "light", "darkcontent":
+            return .darkContent
+        case "default":
+            return .default
+        default:
+            return .default
         }
     }
 
     @objc func setStyle(_ call: CAPPluginCall) {
         let options = call.options!
-
-        if let style = options["style"] as? String {
-            if style == "DARK" {
-                bridge?.statusBarStyle = .lightContent
-            } else if style == "LIGHT" {
-                bridge?.statusBarStyle = .darkContent
-            } else if style == "DEFAULT" {
-                bridge?.statusBarStyle = .default
-            }
+        if let styleString = options["style"] as? String {
+            statusBar?.setStyle(style(fromString: styleString))
         }
-
         call.resolve([:])
     }
 
     @objc func setBackgroundColor(_ call: CAPPluginCall) {
-        call.unimplemented()
-    }
-
-    func setAnimation(_ call: CAPPluginCall) {
-        let animation = call.getString("animation", "FADE")
-        if animation == "SLIDE" {
-            bridge?.statusBarAnimation = .slide
-        } else if animation == "NONE" {
-            bridge?.statusBarAnimation = .none
-        } else {
-            bridge?.statusBarAnimation = .fade
+        guard
+            let hexString = call.options["color"] as? String,
+            let color = UIColor.capacitor.color(fromHex: hexString)
+        else { return }
+        DispatchQueue.main.async { [weak self] in
+            self?.statusBar?.setBackgroundColor(color)
         }
+        call.resolve()
     }
-
+    
     @objc func hide(_ call: CAPPluginCall) {
-        setAnimation(call)
-        bridge?.statusBarVisible = false
+        let animation = call.getString("animation", "FADE")
+        DispatchQueue.main.async { [weak self] in
+            self?.statusBar?.hide(animation: animation)
+            guard
+                let info = self?.statusBar?.getInfo(),
+                let dict = self?.toDict(info),
+                let event = self?.statusBarVisibilityChanged
+            else { return }
+            self?.notifyListeners(event, data: dict);
+        }
         call.resolve()
     }
 
     @objc func show(_ call: CAPPluginCall) {
-        setAnimation(call)
-        bridge?.statusBarVisible = true
+        let animation = call.getString("animation", "FADE")
+        DispatchQueue.main.async { [weak self] in
+            self?.statusBar?.show(animation: animation)
+            guard
+                let info = self?.statusBar?.getInfo(),
+                let dict = self?.toDict(info),
+                let event = self?.statusBarVisibilityChanged
+            else { return }
+            self?.notifyListeners(event, data: dict);
+        }
         call.resolve()
     }
-
+    
     @objc func getInfo(_ call: CAPPluginCall) {
         DispatchQueue.main.async { [weak self] in
-            guard let bridge = self?.bridge else {
-                return
-            }
-            let style: String
-            switch bridge.statusBarStyle {
-            case .default:
-                if bridge.userInterfaceStyle == UIUserInterfaceStyle.dark {
-                    style = "DARK"
-                } else {
-                    style = "LIGHT"
-                }
-            case .lightContent:
-                style = "DARK"
-            default:
-                style = "LIGHT"
-            }
-
-            call.resolve([
-                "visible": bridge.statusBarVisible,
-                "style": style
-            ])
+            guard
+                let info = self?.statusBar?.getInfo(),
+                let dict = self?.toDict(info)
+            else { return }
+            call.resolve(dict)
         }
     }
 
     @objc func setOverlaysWebView(_ call: CAPPluginCall) {
-        call.unimplemented()
+        guard let overlay = call.options["overlay"] as? Bool else { return }
+        DispatchQueue.main.async { [weak self] in
+            self?.statusBar?.setOverlaysWebView(overlay)
+            guard
+                let info = self?.statusBar?.getInfo(),
+                let dict = self?.toDict(info),
+                let event = self?.statusBarOverlayChanged
+            else { return }
+            self?.notifyListeners(event, data: dict);
+        }
+        call.resolve()
+    }
+    
+    private func toDict(_ info: StatusBarInfo) -> [String: Any] {
+        return [
+            "visible": info.visible!,
+            "style": info.style!,
+            "color": info.color!,
+            "overlays": info.overlays!,
+            "height": info.height!
+        ]
     }
 }

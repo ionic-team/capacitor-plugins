@@ -1,6 +1,7 @@
 package com.capacitorjs.plugins.statusbar;
 
 import com.getcapacitor.JSObject;
+import com.getcapacitor.Logger;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
@@ -11,11 +12,44 @@ import java.util.Locale;
 @CapacitorPlugin(name = "StatusBar")
 public class StatusBarPlugin extends Plugin {
 
+    public static final String statusBarVisibilityChanged = "statusBarVisibilityChanged";
+    public static final String statusBarOverlayChanged = "statusBarOverlayChanged";
+
     private StatusBar implementation;
 
     @Override
     public void load() {
-        implementation = new StatusBar(getActivity());
+        StatusBarConfig config = getStatusBarConfig();
+        implementation = new StatusBar(getActivity(), config);
+    }
+
+    private StatusBarConfig getStatusBarConfig() {
+        StatusBarConfig config = new StatusBarConfig();
+        String backgroundColor = getConfig().getString("backgroundColor");
+        if (backgroundColor != null) {
+            try {
+                config.setBackgroundColor(WebColor.parseColor(backgroundColor));
+            } catch (IllegalArgumentException ex) {
+                Logger.debug("Background color not applied");
+            }
+        }
+        config.setStyle(styleFromConfig(getConfig().getString("style", config.getStyle())));
+        config.setOverlaysWebView(getConfig().getBoolean("overlaysWebView", config.isOverlaysWebView()));
+        return config;
+    }
+
+    private String styleFromConfig(String style) {
+        switch (style.toLowerCase()) {
+            case "lightcontent":
+            case "dark":
+                return "DARK";
+            case "darkcontent":
+            case "light":
+                return "LIGHT";
+            case "default":
+            default:
+                return "DEFAULT";
+        }
     }
 
     @PluginMethod
@@ -64,6 +98,8 @@ public class StatusBarPlugin extends Plugin {
             .executeOnMainThread(
                 () -> {
                     implementation.hide();
+                    StatusBarInfo info = implementation.getInfo();
+                    notifyListeners(statusBarVisibilityChanged, toJSObject(info));
                     call.resolve();
                 }
             );
@@ -76,6 +112,8 @@ public class StatusBarPlugin extends Plugin {
             .executeOnMainThread(
                 () -> {
                     implementation.show();
+                    StatusBarInfo info = implementation.getInfo();
+                    notifyListeners(statusBarVisibilityChanged, toJSObject(info));
                     call.resolve();
                 }
             );
@@ -84,13 +122,7 @@ public class StatusBarPlugin extends Plugin {
     @PluginMethod
     public void getInfo(final PluginCall call) {
         StatusBarInfo info = implementation.getInfo();
-
-        JSObject data = new JSObject();
-        data.put("visible", info.isVisible());
-        data.put("style", info.getStyle());
-        data.put("color", info.getColor());
-        data.put("overlays", info.isOverlays());
-        call.resolve(data);
+        call.resolve(toJSObject(info));
     }
 
     @PluginMethod
@@ -100,8 +132,20 @@ public class StatusBarPlugin extends Plugin {
             .executeOnMainThread(
                 () -> {
                     implementation.setOverlaysWebView(overlays);
+                    StatusBarInfo info = implementation.getInfo();
+                    notifyListeners(statusBarOverlayChanged, toJSObject(info));
                     call.resolve();
                 }
             );
+    }
+
+    private JSObject toJSObject(StatusBarInfo info) {
+        JSObject data = new JSObject();
+        data.put("visible", info.isVisible());
+        data.put("style", info.getStyle());
+        data.put("color", info.getColor());
+        data.put("overlays", info.isOverlays());
+        data.put("height", info.getHeight());
+        return data;
     }
 }
