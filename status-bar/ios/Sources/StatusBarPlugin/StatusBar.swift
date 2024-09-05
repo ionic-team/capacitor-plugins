@@ -1,7 +1,7 @@
 import Foundation
 import Capacitor
 
-@objc public class StatusBar: NSObject {
+public class StatusBar {
     
     private var bridge: CAPBridgeProtocol
     private var isOverlayingWebview = true
@@ -11,7 +11,6 @@ import Capacitor
 
     init(bridge: CAPBridgeProtocol, config: StatusBarConfig) {
         self.bridge = bridge
-        super.init()
         setupObservers(with: config)
     }
     
