@@ -1,6 +1,6 @@
 {
   "name": "@capacitor/dialog",
-  "version": "6.0.1",
+  "version": "7.0.0-alpha.0",
   "description": "The Dialog API provides methods for triggering native dialog windows for alerts, confirmations, and input prompts",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
