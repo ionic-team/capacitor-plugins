@@ -55,9 +55,11 @@ public class CAPBrowserPlugin: CAPPlugin, CAPBridgedPlugin {
     @objc func close(_ call: CAPPluginCall) {
         DispatchQueue.main.async { [weak self] in
             if self?.implementation.viewController != nil {
+
                 self?.bridge?.dismissVC(animated: true) {
                     call.resolve()
-                    self?.implementation.cleanup()
+                    let clearWebsiteData = call.getBool("clearWebsiteData") ?? false
+                    self?.implementation.cleanup(clearWebsiteData: clearWebsiteData)
                 }
             } else {
                 call.reject("No active window to close!")

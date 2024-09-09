@@ -34,7 +34,7 @@ const openCapacitorSite = async () => {
 <docgen-index>
 
 * [`open(...)`](#open)
-* [`close()`](#close)
+* [`close(...)`](#close)
 * [`addListener('browserFinished', ...)`](#addlistenerbrowserfinished-)
 * [`addListener('browserPageLoaded', ...)`](#addlistenerbrowserpageloaded-)
 * [`removeAllListeners()`](#removealllisteners)
@@ -62,15 +62,19 @@ Open a page with the specified options.
 --------------------
 
 
-### close()
+### close(...)
 
 ```typescript
-close() => Promise<void>
+close(options?: CloseOptions | undefined) => Promise<void>
 ```
 
 Web & iOS only: Close an open browser window.
 
 No-op on other platforms.
+
+| Param         | Type                                                  |
+| ------------- | ----------------------------------------------------- |
+| **`options`** | <code><a href="#closeoptions">CloseOptions</a></code> |
 
 **Since:** 1.0.0
 
@@ -148,6 +152,13 @@ Represents the options passed to `open`.
 | **`presentationStyle`** | <code>'fullscreen' \| 'popover'</code> | iOS only: The presentation style of the browser. Defaults to fullscreen. Ignored on other platforms.                                       | 1.0.0 |
 | **`width`**             | <code>number</code>                    | iOS only: The width the browser when using presentationStyle 'popover' on iPads. Ignored on other platforms.                               | 4.0.0 |
 | **`height`**            | <code>number</code>                    | iOS only: The height the browser when using presentationStyle 'popover' on iPads. Ignored on other platforms.                              | 4.0.0 |
+
+
+#### CloseOptions
+
+| Prop                   | Type                 | Description                                                         |
+| ---------------------- | -------------------- | ------------------------------------------------------------------- |
+| **`clearWebsiteData`** | <code>boolean</code> | iOS only: clear all website data before close default: null / false |
 
 
 #### PluginListenerHandle
