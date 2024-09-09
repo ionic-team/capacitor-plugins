@@ -1,6 +1,7 @@
 package com.capacitorjs.plugins.statusbar;
 
 import android.graphics.Color;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -16,11 +17,15 @@ public class StatusBar {
     private final AppCompatActivity activity;
     private final String defaultStyle;
 
-    public StatusBar(AppCompatActivity activity) {
+    public StatusBar(AppCompatActivity activity, StatusBarConfig config) {
         // save initial color of the status bar
         this.activity = activity;
         this.currentStatusBarColor = activity.getWindow().getStatusBarColor();
         this.defaultStyle = getStyle();
+
+        setBackgroundColor(config.getBackgroundColor());
+        setStyle(config.getStyle());
+        setOverlaysWebView(config.isOverlaysWebView());
     }
 
     public void setStyle(String style) {
@@ -93,6 +98,7 @@ public class StatusBar {
         info.setOverlays(getIsOverlaid());
         info.setVisible(isVisible);
         info.setColor(String.format("#%06X", (0xFFFFFF & window.getStatusBarColor())));
+        info.setHeight(getStatusBarHeight());
         return info;
     }
 
@@ -104,5 +110,18 @@ public class StatusBar {
             style = "LIGHT";
         }
         return style;
+    }
+
+    private int getStatusBarHeight() {
+        int statusbarHeight = 0;
+        int resourceId = activity.getApplicationContext().getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            statusbarHeight = (int) activity.getApplicationContext().getResources().getDimension(resourceId);
+        }
+
+        DisplayMetrics metrics = activity.getApplicationContext().getResources().getDisplayMetrics();
+        float densityDpi = metrics.density;
+
+        return (int) (statusbarHeight / densityDpi);
     }
 }
