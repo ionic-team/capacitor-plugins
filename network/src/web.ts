@@ -14,11 +14,14 @@ declare global {
   }
 }
 
+function getConnection() {
+    return window.navigator.connection ||
+        window.navigator.mozConnection ||
+        window.navigator.webkitConnection;
+}
+
 function translatedConnection(): ConnectionType {
-  const connection =
-    window.navigator.connection ||
-    window.navigator.mozConnection ||
-    window.navigator.webkitConnection;
+  const connection = getConnection();
   let result: ConnectionType = 'unknown';
   const type = connection ? connection.type || connection.effectiveType : null;
   if (type && typeof type === 'string') {
@@ -75,9 +78,11 @@ export class NetworkWeb extends WebPlugin implements NetworkPlugin {
     const connected = window.navigator.onLine;
     const connectionType = translatedConnection();
 
+    const downlink = getConnection()?.downlink;
     const status: ConnectionStatus = {
       connected,
       connectionType: connected ? connectionType : 'none',
+      downstreamInKbps: downlink ? downlink * 1024 : undefined,
     };
 
     return status;
