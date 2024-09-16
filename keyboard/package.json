@@ -1,6 +1,6 @@
 {
   "name": "@capacitor/keyboard",
-  "version": "6.0.2",
+  "version": "7.0.0-alpha.0",
   "description": "The Keyboard API provides keyboard display and visibility control, along with event tracking when the keyboard shows and hides.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",

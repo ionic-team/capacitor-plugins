@@ -1,6 +1,6 @@
 {
   "name": "@capacitor/screen-reader",
-  "version": "6.0.2",
+  "version": "7.0.0-alpha.0",
   "description": "The Screen Reader API provides access to TalkBack/VoiceOver/etc. and provides simple text-to-speech capabilities for visual accessibility.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",

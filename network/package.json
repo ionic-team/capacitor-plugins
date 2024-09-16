@@ -1,6 +1,6 @@
 {
   "name": "@capacitor/network",
-  "version": "6.0.2",
+  "version": "7.0.0-alpha.0",
   "description": "The Network API provides network and connectivity information.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",

@@ -1,6 +1,6 @@
 {
   "name": "@capacitor/preferences",
-  "version": "6.0.2",
+  "version": "7.0.0-alpha.0",
   "description": "The Preferences API provides a simple key/value persistent store for lightweight data.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",

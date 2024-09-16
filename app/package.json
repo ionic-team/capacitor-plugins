@@ -1,6 +1,6 @@
 {
   "name": "@capacitor/app",
-  "version": "6.0.1",
+  "version": "7.0.0-alpha.0",
   "description": "The App API handles high level App state and events.For example, this API emits events when the app enters and leaves the foreground, handles deeplinks, opens other apps, and manages persisted plugin state.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
