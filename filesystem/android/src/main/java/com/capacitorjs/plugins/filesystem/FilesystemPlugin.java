@@ -1,10 +1,12 @@
 package com.capacitorjs.plugins.filesystem;
 
 import android.Manifest;
+import android.database.Cursor;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.provider.DocumentsContract.Document;
 import com.capacitorjs.plugins.filesystem.exceptions.CopyFailedException;
 import com.capacitorjs.plugins.filesystem.exceptions.DirectoryExistsException;
 import com.capacitorjs.plugins.filesystem.exceptions.DirectoryNotFoundException;
@@ -270,7 +272,10 @@ public class FilesystemPlugin extends Plugin {
         String path = call.getString("path");
         String directory = getDirectoryParameter(call);
 
-        if (isPublicDirectory(directory) && !isStoragePermissionGranted()) {
+        if (directory == null && isContentURL(path)) {
+            Uri uri = Uri.parse(path);
+            implementation.readdir_content_uri(call, uri, false);
+        } else if (isPublicDirectory(directory) && !isStoragePermissionGranted()) {
             requestAllPermissions(call, "permissionCallback");
         } else {
             try {
@@ -336,11 +341,31 @@ public class FilesystemPlugin extends Plugin {
         String path = call.getString("path");
         String directory = getDirectoryParameter(call);
 
-        File fileObject = implementation.getFileObject(path, directory);
+        if (directory == null && isContentURL(path)) {
+            String[] projection = {Document.COLUMN_MIME_TYPE, Document.COLUMN_SIZE, Document.COLUMN_LAST_MODIFIED};
+            Cursor c = getContext().getContentResolver().query(Uri.parse(path), projection, null, null);
 
-        if (isPublicDirectory(directory) && !isStoragePermissionGranted()) {
+            if (c == null) {
+                call.reject("Document does not exist");
+                return;
+            } else if (c.getCount() != 1) {
+                call.reject("Provider returned unexpected data (file might not exist)");
+                return;
+            }
+
+            JSObject data = new JSObject();
+            c.moveToNext();
+            data.put("type", Document.MIME_TYPE_DIR.equals(c.getString(0)) ? "directory" : "file");
+            data.put("size", c.getLong(1));
+            data.put("mtime", c.getLong(2));
+            data.put("ctime", null);
+            data.put("uri", path);
+
+            call.resolve(data);
+        } else if (isPublicDirectory(directory) && !isStoragePermissionGranted()) {
             requestAllPermissions(call, "permissionCallback");
         } else {
+            File fileObject = implementation.getFileObject(path, directory);
             if (!fileObject.exists()) {
                 call.reject("File does not exist");
                 return;
@@ -508,6 +533,11 @@ public class FilesystemPlugin extends Plugin {
                 downloadFile(call);
                 break;
         }
+    }
+
+    private boolean isContentURL(String path) {
+        Uri u = Uri.parse(path);
+        return "content".equals(u.getScheme());
     }
 
     /**
