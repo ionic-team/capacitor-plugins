@@ -9,9 +9,7 @@ export interface BrowserPlugin {
   open(options: OpenOptions): Promise<void>;
 
   /**
-   * Web & iOS only: Close an open browser window.
-   *
-   * No-op on other platforms.
+   * Close an open browser window.
    *
    * @since 1.0.0
    */
