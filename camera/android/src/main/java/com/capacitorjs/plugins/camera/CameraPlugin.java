@@ -204,7 +204,18 @@ public class CameraPlugin extends Plugin {
         boolean hasGalleryPerms = getPermissionState(SAVE_GALLERY) == PermissionState.GRANTED;
 
         // If we want to save to the gallery, we need two permissions
-        if (settings.isSaveToGallery() && !(hasCameraPerms && hasGalleryPerms) && isFirstRequest) {
+        // actually we only need permissions to save to gallery for Android <= 9 (API 28)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            // we might still need to request permission for the camera
+            if (!hasCameraPerms) {
+                requestPermissionForAlias(CAMERA, call, "cameraPermissionsCallback");
+                return false;
+            }
+            return true;
+        }
+
+        // we need to request permissions to save to gallery for Android <= 9
+        else if (settings.isSaveToGallery() && !(hasCameraPerms && hasGalleryPerms) && isFirstRequest) {
             isFirstRequest = false;
             String[] aliases;
             if (needCameraPerms) {
