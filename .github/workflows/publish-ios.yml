@@ -16,9 +16,9 @@ jobs:
         plugin: ${{ fromJson(github.event.inputs.plugins) }}
     steps:
       - run: sudo xcode-select --switch /Applications/Xcode_15.0.app
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
-          node-version: 16
+          node-version: 20
       - uses: actions/checkout@v3
       - name: Install Cocoapods
         run: | 
