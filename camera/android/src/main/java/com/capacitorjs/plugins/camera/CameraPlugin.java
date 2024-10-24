@@ -215,7 +215,7 @@ public class CameraPlugin extends Plugin {
         }
 
         // we need to request permissions to save to gallery for Android <= 9
-        else if (settings.isSaveToGallery() && !(hasCameraPerms && hasGalleryPerms) && isFirstRequest) {
+        if (settings.isSaveToGallery() && !(hasCameraPerms && hasGalleryPerms) && isFirstRequest) {
             isFirstRequest = false;
             String[] aliases;
             if (needCameraPerms) {
