@@ -38,6 +38,7 @@ public class DevicePlugin: CAPPlugin, CAPBridgedPlugin {
         let realDiskFree = implementation.getRealFreeDiskSize() ?? 0
         let diskTotal = implementation.getTotalDiskSize() ?? 0
         let systemVersionNum = implementation.getSystemVersionInt() ?? 0
+        let systemVersionInfo = implementation.getVersionInfo()
 
         call.resolve([
             "memUsed": memUsed,
@@ -48,7 +49,8 @@ public class DevicePlugin: CAPPlugin, CAPBridgedPlugin {
             "name": UIDevice.current.name,
             "model": modelName,
             "operatingSystem": "ios",
-            "osVersion": UIDevice.current.systemVersion,
+            "osVersion": systemVersionInfo.version,
+            "osBuild": systemVersionInfo.build,
             "iOSVersion": systemVersionNum,
             "platform": "ios",
             "manufacturer": "Apple",
