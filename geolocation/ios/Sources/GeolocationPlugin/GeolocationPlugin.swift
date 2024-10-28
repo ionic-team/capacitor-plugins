@@ -127,7 +127,9 @@ public class GeolocationPlugin: CAPPlugin, CLLocationManagerDelegate, CAPBridged
 
         for (id, _) in removalQueue {
             if let call = bridge?.savedCall(withID: id) {
-                checkPermissions(call)
+                DispatchQueue(label: "permissionsQueue").async {
+                    self.checkPermissions(call)
+                }
                 bridge?.releaseCall(call)
             }
         }
