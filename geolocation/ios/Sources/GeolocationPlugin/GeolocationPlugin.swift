@@ -38,7 +38,7 @@ public class GeolocationPlugin: CAPPlugin, CLLocationManagerDelegate, CAPBridged
                 self.locationManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers
             }
 
-            if CLLocationManager.authorizationStatus() == .notDetermined {
+            if self.locationManager.authorizationStatus == .notDetermined {
                 self.locationManager.requestWhenInUseAuthorization()
             } else {
                 self.locationManager.requestLocation()
@@ -59,7 +59,7 @@ public class GeolocationPlugin: CAPPlugin, CLLocationManagerDelegate, CAPBridged
                 self.locationManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers
             }
 
-            if CLLocationManager.authorizationStatus() == .notDetermined {
+            if self.locationManager.authorizationStatus == .notDetermined {
                 self.locationManager.requestWhenInUseAuthorization()
             } else {
                 self.locationManager.startUpdatingLocation()
@@ -121,7 +121,7 @@ public class GeolocationPlugin: CAPPlugin, CLLocationManagerDelegate, CAPBridged
         }
     }
 
-    public func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+    public func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         let removalQueue = callQueue.filter { $0.value == .permissions }
         callQueue = callQueue.filter { $0.value != .permissions }
 
@@ -161,7 +161,7 @@ public class GeolocationPlugin: CAPPlugin, CLLocationManagerDelegate, CAPBridged
         var status: String = ""
 
         if CLLocationManager.locationServicesEnabled() {
-            switch CLLocationManager.authorizationStatus() {
+            switch self.locationManager.authorizationStatus {
             case .notDetermined:
                 status = "prompt"
             case .restricted, .denied:
@@ -188,7 +188,7 @@ public class GeolocationPlugin: CAPPlugin, CLLocationManagerDelegate, CAPBridged
         if CLLocationManager.locationServicesEnabled() {
             // If state is not yet determined, request perms.
             // Otherwise, report back the state right away
-            if CLLocationManager.authorizationStatus() == .notDetermined {
+            if self.locationManager.authorizationStatus == .notDetermined {
                 bridge?.saveCall(call)
                 callQueue[call.callbackId] = .permissions
 
