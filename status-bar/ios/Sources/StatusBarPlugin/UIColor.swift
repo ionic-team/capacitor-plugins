@@ -1,7 +1,7 @@
 import Capacitor
 
 public extension CapacitorExtensionTypeWrapper where T: UIColor {
-    
+
     static func hex(fromColor: UIColor) -> String? {
         var red: CGFloat = 0
         var green: CGFloat = 0
