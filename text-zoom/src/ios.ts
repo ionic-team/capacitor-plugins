@@ -1,8 +1,4 @@
-import type {
-  GetResult,
-  SetOptions,
-  TextZoomPlugin,
-} from './definitions';
+import type { GetResult, SetOptions, TextZoomPlugin } from './definitions';
 
 export class TextZoomIOS implements TextZoomPlugin {
   static readonly TEXT_SIZE_REGEX = /(\d+)%/;
