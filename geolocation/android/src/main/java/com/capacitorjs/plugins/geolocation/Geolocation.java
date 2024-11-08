@@ -1,4 +1,4 @@
-package org.mapcomplete;
+package com.capacitorjs.plugins.geolocation;
 
 import android.content.Context;
 import android.location.Location;
@@ -6,7 +6,6 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.util.Log;
 
 import androidx.core.location.LocationManagerCompat;
 
