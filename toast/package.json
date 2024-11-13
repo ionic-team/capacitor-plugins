@@ -31,7 +31,7 @@
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",
-    "verify:ios": "xcodebuild build -scheme CapacitorToast -sdk iphonesimulator17.0 -destination 'OS=17.0,name=iPhone 15'",
+    "verify:ios": "xcodebuild build -scheme CapacitorToast -sdk iphonesimulator18.0 -destination 'OS=18.0,name=iPhone 16'",
     "verify:android": "cd android && ./gradlew clean build test && cd ..",
     "verify:web": "npm run build",
     "lint": "npm run eslint && npm run prettier -- --check && npm run swiftlint -- lint",
