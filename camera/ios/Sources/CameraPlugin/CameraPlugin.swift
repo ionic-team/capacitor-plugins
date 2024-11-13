@@ -256,58 +256,60 @@ extension CameraPlugin: UIImagePickerControllerDelegate, UINavigationControllerD
 extension CameraPlugin: PHPickerViewControllerDelegate {
     public func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         picker.dismiss(animated: true, completion: nil)
-        guard let result = results.first else {
+
+        guard !results.isEmpty else {
             self.call?.reject("User cancelled photos app")
             return
         }
-        if multiple {
-            var images: [ProcessedImage] = []
-            var processedCount = 0
-            for img in results {
-                guard img.itemProvider.canLoadObject(ofClass: UIImage.self) else {
-                    self.call?.reject("Error loading image")
-                    return
-                }
-                // extract the image
-                img.itemProvider.loadObject(ofClass: UIImage.self) { [weak self] (reading, _) in
-                    if let image = reading as? UIImage {
-                        var asset: PHAsset?
-                        if let assetId = img.assetIdentifier {
-                            asset = PHAsset.fetchAssets(withLocalIdentifiers: [assetId], options: nil).firstObject
-                        }
-                        if let processedImage = self?.processedImage(from: image, with: asset?.imageData) {
-                            images.append(processedImage)
-                        }
-                        processedCount += 1
-                        if processedCount == results.count {
-                            self?.returnImages(images)
-                        }
-                    } else {
-                        self?.call?.reject("Error loading image")
-                    }
-                }
-            }
 
-        } else {
-            guard result.itemProvider.canLoadObject(ofClass: UIImage.self) else {
-                self.call?.reject("Error loading image")
+        self.fetchProcessedImages(from: results) { [weak self] processedImageArray in
+            guard let processedImageArray else {
+                self?.call?.reject("Error loading image")
                 return
             }
-            // extract the image
-            result.itemProvider.loadObject(ofClass: UIImage.self) { [weak self] (reading, _) in
-                if let image = reading as? UIImage {
-                    var asset: PHAsset?
-                    if let assetId = result.assetIdentifier {
-                        asset = PHAsset.fetchAssets(withLocalIdentifiers: [assetId], options: nil).firstObject
-                    }
-                    if var processedImage = self?.processedImage(from: image, with: asset?.imageData) {
-                        processedImage.flags = .gallery
-                        self?.returnProcessedImage(processedImage)
-                        return
-                    }
-                }
-                self?.call?.reject("Error loading image")
+
+            if self?.multiple == true {
+                self?.returnImages(processedImageArray)
+            } else if var processedImage = processedImageArray.first {
+                processedImage.flags = .gallery
+                self?.returnProcessedImage(processedImage)
             }
+        }
+    }
+
+    private func fetchProcessedImages(from pickerResultArray: [PHPickerResult], accumulating: [ProcessedImage] = [], _ completionHandler: @escaping ([ProcessedImage]?) -> Void) {
+        func loadImage(from pickerResult: PHPickerResult, _ completionHandler: @escaping (UIImage?) -> Void) {
+            let itemProvider = pickerResult.itemProvider
+            if itemProvider.canLoadObject(ofClass: UIImage.self) {
+                // extract the image
+                itemProvider.loadObject(ofClass: UIImage.self) { itemProviderReading, _ in
+                    completionHandler(itemProviderReading as? UIImage)
+                }
+            } else {
+                // extract the image's data representation
+                itemProvider.loadDataRepresentation(forTypeIdentifier: UTType.image.identifier) { data, _ in
+                    guard let data else {
+                        return completionHandler(nil)
+                    }
+                    completionHandler(UIImage(data: data))
+                }
+            }
+        }
+
+        guard let currentPickerResult = pickerResultArray.first else { return completionHandler(accumulating) }
+
+        loadImage(from: currentPickerResult) { [weak self] loadedImage in
+            guard let self, let loadedImage else { return completionHandler(nil) }
+            var asset: PHAsset?
+            if let assetId = currentPickerResult.assetIdentifier {
+                asset = PHAsset.fetchAssets(withLocalIdentifiers: [assetId], options: nil).firstObject
+            }
+            let newElement = self.processedImage(from: loadedImage, with: asset?.imageData)
+            self.fetchProcessedImages(
+                from: Array(pickerResultArray.dropFirst()),
+                accumulating: accumulating + [newElement],
+                completionHandler
+            )
         }
     }
 }

@@ -22,7 +22,6 @@
         "{projectRoot}/dialog/dist",
         "{projectRoot}/filesystem/dist",
         "{projectRoot}/geolocation/dist",
-        "{projectRoot}/google-maps/dist",
         "{projectRoot}/haptics/dist",
         "{projectRoot}/keyboard/dist",
         "{projectRoot}/local-notifications/dist",
