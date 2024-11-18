@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.1.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@6.0.2...@capacitor/camera@6.1.0) (2024-10-24)
+
+### Features
+
+- **camera:** only request permission to save to the gallery for Android <= 9 ([#2222](https://github.com/ionic-team/capacitor-plugins/issues/2222)) ([b94cc72](https://github.com/ionic-team/capacitor-plugins/commit/b94cc72729b7ae7e2e8b1542237dd881d960d02d))
+
 ## [6.0.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@6.0.1...@capacitor/camera@6.0.2) (2024-08-08)
 
 **Note:** Version bump only for package @capacitor/camera
