@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.0.3](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/text-zoom@6.0.2...@capacitor/text-zoom@6.0.3) (2024-11-19)
+
+**Note:** Version bump only for package @capacitor/text-zoom
+
 ## [6.0.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/text-zoom@6.0.1...@capacitor/text-zoom@6.0.2) (2024-08-08)
 
 **Note:** Version bump only for package @capacitor/text-zoom
