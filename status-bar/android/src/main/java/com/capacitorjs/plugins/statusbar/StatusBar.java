@@ -1,9 +1,11 @@
 package com.capacitorjs.plugins.statusbar;
 
 import android.graphics.Color;
+import android.os.Build;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowInsets;
 import android.view.WindowManager;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.ViewCompat;
@@ -113,15 +115,19 @@ public class StatusBar {
     }
 
     private int getStatusBarHeight() {
-        int statusbarHeight = 0;
-        int resourceId = activity.getApplicationContext().getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            statusbarHeight = (int) activity.getApplicationContext().getResources().getDimension(resourceId);
+        DisplayMetrics metrics = activity.getResources().getDisplayMetrics();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            WindowInsets insets = activity.getWindowManager().getCurrentWindowMetrics().getWindowInsets();
+            return (int) (insets.getInsets(WindowInsets.Type.statusBars()).top / metrics.density);
         }
 
-        DisplayMetrics metrics = activity.getApplicationContext().getResources().getDisplayMetrics();
-        float densityDpi = metrics.density;
+        WindowInsets insets = activity.getWindow().getDecorView().getRootWindowInsets();
+        if (insets != null) {
+            return (int) (insets.getSystemWindowInsetTop() / metrics.density);
+        }
 
-        return (int) (statusbarHeight / densityDpi);
+        // Fallback if the insets are not available
+        return 0;
     }
 }
