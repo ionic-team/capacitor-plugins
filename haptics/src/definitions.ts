@@ -124,27 +124,3 @@ export interface VibrateOptions {
    */
   duration: number;
 }
-
-/**
- * @deprecated Use `ImpactOptions`.
- * @since 1.0.0
- */
-export type HapticsImpactOptions = ImpactOptions;
-
-/**
- * @deprecated Use `NotificationOptions`.
- * @since 1.0.0
- */
-export type HapticsNotificationOptions = NotificationOptions;
-
-/**
- * @deprecated Use `NotificationType`.
- * @since 1.0.0
- */
-export const HapticsNotificationType = NotificationType;
-
-/**
- * @deprecated Use `ImpactStyle`.
- * @since 1.0.0
- */
-export const HapticsImpactStyle = ImpactStyle;
