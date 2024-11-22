@@ -35,7 +35,7 @@ Android 13 requires a permission check in order to receive push notifications.  
 
 This plugin will use the following project variables (defined in your app's `variables.gradle` file):
 
-- `firebaseMessagingVersion` version of `com.google.firebase:firebase-messaging` (default: `23.3.1`)
+- `firebaseMessagingVersion` version of `com.google.firebase:firebase-messaging` (default: `24.1.0`)
 
 ---
 
