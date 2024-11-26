@@ -15,19 +15,27 @@ import androidx.core.view.WindowInsetsControllerCompat;
 
 public class StatusBar {
 
+    public static final String statusBarVisibilityChanged = "statusBarVisibilityChanged";
+    public static final String statusBarOverlayChanged = "statusBarOverlayChanged";
+
     private int currentStatusBarColor;
+    private final ChangeListener listener;
     private final AppCompatActivity activity;
     private final String defaultStyle;
 
-    public StatusBar(AppCompatActivity activity, StatusBarConfig config) {
+    public StatusBar(AppCompatActivity activity, StatusBarConfig config, ChangeListener listener) {
         // save initial color of the status bar
         this.activity = activity;
         this.currentStatusBarColor = activity.getWindow().getStatusBarColor();
+        this.listener = listener;
         this.defaultStyle = getStyle();
 
         setBackgroundColor(config.getBackgroundColor());
         setStyle(config.getStyle());
         setOverlaysWebView(config.isOverlaysWebView());
+        StatusBarInfo info = getInfo();
+        info.setVisible(true);
+        listener.onChange(statusBarOverlayChanged, info);
     }
 
     public void setStyle(String style) {
@@ -56,12 +64,18 @@ public class StatusBar {
         View decorView = activity.getWindow().getDecorView();
         WindowInsetsControllerCompat windowInsetsControllerCompat = WindowCompat.getInsetsController(activity.getWindow(), decorView);
         windowInsetsControllerCompat.hide(WindowInsetsCompat.Type.statusBars());
+        StatusBarInfo info = getInfo();
+        info.setVisible(false);
+        listener.onChange(statusBarVisibilityChanged, info);
     }
 
     public void show() {
         View decorView = activity.getWindow().getDecorView();
         WindowInsetsControllerCompat windowInsetsControllerCompat = WindowCompat.getInsetsController(activity.getWindow(), decorView);
         windowInsetsControllerCompat.show(WindowInsetsCompat.Type.statusBars());
+        StatusBarInfo info = getInfo();
+        info.setVisible(true);
+        listener.onChange(statusBarVisibilityChanged, info);
     }
 
     @SuppressWarnings("deprecation")
@@ -81,6 +95,7 @@ public class StatusBar {
             // recover the previous color of the status bar
             activity.getWindow().setStatusBarColor(currentStatusBarColor);
         }
+        listener.onChange(statusBarOverlayChanged, getInfo());
     }
 
     @SuppressWarnings("deprecation")
@@ -129,5 +144,9 @@ public class StatusBar {
 
         // Fallback if the insets are not available
         return 0;
+    }
+
+    public interface ChangeListener {
+        void onChange(String eventName, StatusBarInfo info);
     }
 }
