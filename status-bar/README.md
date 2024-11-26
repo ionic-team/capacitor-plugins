@@ -57,11 +57,11 @@ const showStatusBar = async () => {
 
 These config values are available:
 
-| Prop                  | Type                 | Description                                                                                                 | Default              | Since |
-| --------------------- | -------------------- | ----------------------------------------------------------------------------------------------------------- | -------------------- | ----- |
-| **`overlaysWebView`** | <code>boolean</code> | Whether the statusbar is overlaid or not.                                                                   | <code>true</code>    | 1.0.0 |
-| **`style`**           | <code>string</code>  | <a href="#style">Style</a> of the text of the status bar.                                                   | <code>default</code> | 1.0.0 |
-| **`backgroundColor`** | <code>string</code>  | Color of the background of the statusbar in hex format, #RRGGBB. Doesn't work if `overlaysWebView` is true. | <code>#000000</code> | 1.0.0 |
+| Prop                  | Type                 | Description                                                                                                                                                                                                                                                                                                                                                                      | Default              | Since |
+| --------------------- | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------- | ----- |
+| **`overlaysWebView`** | <code>boolean</code> | Whether the statusbar is overlaid or not. For applications targeting Android 15, this property has no effect unless the property windowOptOutEdgeToEdgeEnforcement is added to the application layout file. Otherwise, the application assumes always overlays as true. More details in https://developer.android.com/reference/android/R.attr#windowOptOutEdgeToEdgeEnforcement | <code>true</code>    | 1.0.0 |
+| **`style`**           | <code>string</code>  | <a href="#style">Style</a> of the text of the status bar.                                                                                                                                                                                                                                                                                                                        | <code>default</code> | 1.0.0 |
+| **`backgroundColor`** | <code>string</code>  | Color of the background of the statusbar in hex format, #RRGGBB. Doesn't work if `overlaysWebView` is true.                                                                                                                                                                                                                                                                      | <code>#000000</code> | 1.0.0 |
 
 ### Examples
 
