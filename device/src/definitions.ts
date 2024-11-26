@@ -177,15 +177,3 @@ export interface DevicePlugin {
    */
   getLanguageTag(): Promise<LanguageTag>;
 }
-
-/**
- * @deprecated Use `BatteryInfo`.
- * @since 1.0.0
- */
-export type DeviceBatteryInfo = BatteryInfo;
-
-/**
- * @deprecated Use `GetLanguageCodeResult`.
- * @since 1.0.0
- */
-export type DeviceLanguageCodeResult = GetLanguageCodeResult;
