@@ -12,6 +12,12 @@ The Text Zoom API provides the ability to change Web View text size for visual a
 }
 ```
 
+**Note:** text-zoom plugin won't work unless your index.html contains this metadata tag.
+
+```html
+<meta name="mobile-web-app-capable" content="yes" />
+```
+
 ## Install
 
 ```bash
