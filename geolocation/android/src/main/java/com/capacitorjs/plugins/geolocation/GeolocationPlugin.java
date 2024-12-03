@@ -14,6 +14,8 @@ import com.getcapacitor.annotation.PermissionCallback;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.google.android.gms.location.LocationRequest.Builder.IMPLICIT_MIN_UPDATE_INTERVAL;
+
 @CapacitorPlugin(
     name = "Geolocation",
     permissions = {
@@ -171,11 +173,15 @@ public class GeolocationPlugin extends Plugin {
 
     @SuppressWarnings("MissingPermission")
     private void startWatch(final PluginCall call) {
-        int timeout = call.getInt("timeout", 10000);
+        long timeout = call.getLong("timeout", 10000L);
+        long interval = call.getLong("interval", 10000L);
+        long minInterval = call.getLong("minInterval", IMPLICIT_MIN_UPDATE_INTERVAL);
 
         implementation.requestLocationUpdates(
             isHighAccuracy(call),
             timeout,
+            interval,
+            minInterval,
             new LocationResultCallback() {
                 @Override
                 public void success(Location location) {

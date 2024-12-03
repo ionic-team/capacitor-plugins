@@ -180,6 +180,24 @@ export interface PositionOptions {
    * @since 1.0.0
    */
   maximumAge?: number;
+
+  /**
+   * The desired interval in milliseconds between each location updates (Android only).
+   *
+   * @default 10000
+   */
+  interval?: number;
+
+  /**
+   * Sets the fastest allowed interval in milliseconds between each location updates. (Android only)
+   *
+   * Location updates may arrive faster than the desired interval, but will never arrive faster than specified here.
+   *
+   * Default value is a special value that match desired interval value.
+   *
+   * @default -1
+   */
+  minInterval?: number;
 }
 
 export type WatchPositionCallback = (
