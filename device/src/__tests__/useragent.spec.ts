@@ -1,11 +1,9 @@
-import type { WebPluginConfig } from '@capacitor/core';
 import { test } from 'uvu';
 import * as assert from 'uvu/assert';
 
 import { DeviceWeb } from '../web';
 
-const config: WebPluginConfig = { name: 'DevicePlugin' };
-const web = new DeviceWeb(config);
+const web = new DeviceWeb();
 
 test('Chrome', () => {
   // Mock empty navigator/window objects

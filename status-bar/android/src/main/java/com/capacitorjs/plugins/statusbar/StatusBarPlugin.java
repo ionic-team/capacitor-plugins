@@ -12,15 +12,12 @@ import java.util.Locale;
 @CapacitorPlugin(name = "StatusBar")
 public class StatusBarPlugin extends Plugin {
 
-    public static final String statusBarVisibilityChanged = "statusBarVisibilityChanged";
-    public static final String statusBarOverlayChanged = "statusBarOverlayChanged";
-
     private StatusBar implementation;
 
     @Override
     public void load() {
         StatusBarConfig config = getStatusBarConfig();
-        implementation = new StatusBar(getActivity(), config);
+        implementation = new StatusBar(getActivity(), config, (eventName, info) -> notifyListeners(eventName, toJSObject(info), true));
     }
 
     private StatusBarConfig getStatusBarConfig() {
@@ -98,8 +95,6 @@ public class StatusBarPlugin extends Plugin {
             .executeOnMainThread(
                 () -> {
                     implementation.hide();
-                    StatusBarInfo info = implementation.getInfo();
-                    notifyListeners(statusBarVisibilityChanged, toJSObject(info));
                     call.resolve();
                 }
             );
@@ -112,8 +107,6 @@ public class StatusBarPlugin extends Plugin {
             .executeOnMainThread(
                 () -> {
                     implementation.show();
-                    StatusBarInfo info = implementation.getInfo();
-                    notifyListeners(statusBarVisibilityChanged, toJSObject(info));
                     call.resolve();
                 }
             );
@@ -127,13 +120,11 @@ public class StatusBarPlugin extends Plugin {
 
     @PluginMethod
     public void setOverlaysWebView(final PluginCall call) {
-        final Boolean overlays = call.getBoolean("overlay", true);
+        final Boolean overlay = call.getBoolean("overlay", true);
         getBridge()
             .executeOnMainThread(
                 () -> {
-                    implementation.setOverlaysWebView(overlays);
-                    StatusBarInfo info = implementation.getInfo();
-                    notifyListeners(statusBarOverlayChanged, toJSObject(info));
+                    implementation.setOverlaysWebView(overlay);
                     call.resolve();
                 }
             );
