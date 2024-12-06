@@ -181,16 +181,18 @@ export interface PositionOptions {
    */
   maximumAge?: number;
 
-    /**
+  /**
    * The minumum update interval for location updates.
-   * 
-   * If location updates are available faster than this interval then an update 
+   *
+   * If location updates are available faster than this interval then an update
    * will only occur if the minimum update interval has expired since the last location update.
-   * 
+   *
+   * This parameter is only available for Android. It has no effect on iOS or Web platforms.
+   *
    * @default 5000
    * @since 6.1.0
    */
-    minimumUpdateInterval?: number;
+  minimumUpdateInterval?: number;
 }
 
 export type WatchPositionCallback = (
