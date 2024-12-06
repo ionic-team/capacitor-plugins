@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.1.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/geolocation@6.0.2...@capacitor/geolocation@6.1.0) (2024-12-06)
+
+### Features
+
+- **geolocation:** add `minimumUpdateInterval` parameter for `startWatch` ([#2272](https://github.com/ionic-team/capacitor-plugins/issues/2272)) ([2c6a499](https://github.com/ionic-team/capacitor-plugins/commit/2c6a4999a3876629799d607eea5ac2c317e73eb4))
+
 ## [6.0.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/geolocation@6.0.1...@capacitor/geolocation@6.0.2) (2024-11-19)
 
 **Note:** Version bump only for package @capacitor/geolocation
