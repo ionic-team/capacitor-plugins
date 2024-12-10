@@ -113,11 +113,12 @@ public class CameraBottomSheetDialogFragment extends BottomSheetDialogFragment {
         dialog.setContentView(parentLayout.getRootView());
 
         CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) ((View) parentLayout.getParent()).getLayoutParams();
-        CoordinatorLayout.Behavior<?> behavior = params.getBehavior();
+        CoordinatorLayout.Behavior<View> behavior = params.getBehavior();
 
         if (behavior instanceof BottomSheetBehavior) {
-            ((BottomSheetBehavior<?>) behavior).addBottomSheetCallback(mBottomSheetBehaviorCallback);
-            ((BottomSheetBehavior<?>) behavior).setState(BottomSheetBehavior.STATE_EXPANDED);
+            BottomSheetBehavior<View> bottomSheetBehavior = (BottomSheetBehavior<View>) behavior;
+            bottomSheetBehavior.addBottomSheetCallback(mBottomSheetBehaviorCallback);
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         }
     }
 }
