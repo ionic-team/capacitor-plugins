@@ -275,15 +275,3 @@ export interface AppPlugin {
    */
   removeAllListeners(): Promise<void>;
 }
-
-/**
- * @deprecated Use `RestoredListenerEvent`.
- * @since 1.0.0
- */
-export type AppRestoredResult = RestoredListenerEvent;
-
-/**
- * @deprecated Use `URLOpenListenerEvent`.
- * @since 1.0.0
- */
-export type AppUrlOpen = URLOpenListenerEvent;

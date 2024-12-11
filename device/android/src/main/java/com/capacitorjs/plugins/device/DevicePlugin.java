@@ -32,10 +32,6 @@ public class DevicePlugin extends Plugin {
         JSObject r = new JSObject();
 
         r.put("memUsed", implementation.getMemUsed());
-        r.put("diskFree", implementation.getDiskFree());
-        r.put("diskTotal", implementation.getDiskTotal());
-        r.put("realDiskFree", implementation.getRealDiskFree());
-        r.put("realDiskTotal", implementation.getRealDiskTotal());
         r.put("model", android.os.Build.MODEL);
         r.put("operatingSystem", "android");
         r.put("osVersion", android.os.Build.VERSION.RELEASE);
