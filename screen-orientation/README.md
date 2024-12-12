@@ -29,6 +29,17 @@ By default, an iPad allows Multitasking and its orientation cannot be locked. If
   <true/>
 ```
 
+
+## Example
+
+```typescript
+import { ScreenOrientation } from  '@capacitor/screen-orientation';
+
+async ngOnInit(){
+   return await ScreenOrientation.lock({orientation: 'portrait'});
+}
+```
+
 ## API
 
 <docgen-index>
