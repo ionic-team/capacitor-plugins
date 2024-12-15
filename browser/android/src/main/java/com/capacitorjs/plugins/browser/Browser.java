@@ -5,11 +5,17 @@ import static androidx.browser.customtabs.CustomTabsIntent.SHARE_STATE_ON;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.browser.customtabs.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The Browser class implements Custom Chrome Tabs. See
@@ -79,6 +85,24 @@ public class Browser {
     @Nullable
     public BrowserEventListener getBrowserEventListenerListener() {
         return browserEventListener;
+    }
+
+    /**
+     * Check if custom tabs are supported.
+     * @return boolean
+     */
+    public boolean areCustomTabsSupported() {
+        PackageManager packageManager = context.getPackageManager();
+        Intent activityIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.example.com"));
+        List<ResolveInfo> resolveInfos = packageManager.queryIntentActivities(activityIntent, PackageManager.MATCH_ALL);
+
+        List<String> packageNames = new ArrayList<>();
+        for (ResolveInfo info : resolveInfos) {
+            packageNames.add(info.activityInfo.packageName);
+        }
+
+        String packageName = CustomTabsClient.getPackageName(context, packageNames, true);
+        return packageName != null;
     }
 
     /**
