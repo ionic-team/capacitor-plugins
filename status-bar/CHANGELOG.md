@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.0.0-alpha.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/status-bar@6.0.1...@capacitor/status-bar@7.0.0-alpha.1) (2024-12-16)
+
+### Bug Fixes
+
+- **statusbar:** fix info when notify listeners ([#2247](https://github.com/ionic-team/capacitor-plugins/issues/2247)) ([af2317f](https://github.com/ionic-team/capacitor-plugins/commit/af2317f75f72d80308fac83ae65b7196cca98371))
+
 ## [6.0.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/status-bar@6.0.0...@capacitor/status-bar@6.0.1) (2024-08-08)
 
 **Note:** Version bump only for package @capacitor/status-bar

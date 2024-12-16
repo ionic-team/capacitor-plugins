@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.0.0-alpha.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/browser@6.0.2...@capacitor/browser@7.0.0-alpha.1) (2024-12-16)
+
+### Bug Fixes
+
+- **browser:** call notifyListeners only when browser is dismissed ([#2186](https://github.com/ionic-team/capacitor-plugins/issues/2186)) ([aaa8658](https://github.com/ionic-team/capacitor-plugins/commit/aaa8658eb65b6c95ae231a3ed1547f3f78cd2cac))
+
 ## [6.0.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/browser@6.0.1...@capacitor/browser@6.0.2) (2024-08-08)
 
 **Note:** Version bump only for package @capacitor/browser
