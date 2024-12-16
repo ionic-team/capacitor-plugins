@@ -23,7 +23,7 @@ export class CameraWeb extends WebPlugin implements CameraPlugin {
           document.body.appendChild(actionSheet);
         }
         actionSheet.header = options.promptLabelHeader || 'Photo';
-        actionSheet.cancelable = false;
+        actionSheet.cancelable = true;
         actionSheet.options = [
           { title: options.promptLabelPhoto || 'From Photos' },
           { title: options.promptLabelPicture || 'Take Picture' },
