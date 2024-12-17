@@ -15,14 +15,23 @@ export class ActionSheetWeb extends WebPlugin implements ActionSheetPlugin {
         document.body.appendChild(actionSheet);
       }
       actionSheet.header = options.title;
-      actionSheet.cancelable = false;
+      actionSheet.cancelable = options.cancelable;
       actionSheet.options = options.options;
       actionSheet.addEventListener('onSelection', async (e: any) => {
         const selection = e.detail;
         resolve({
           index: selection,
+          canceled: false
         });
       });
+      if (options.cancelable) {
+        actionSheet.addEventListener('onCanceled', async () => {
+          resolve({
+            index: -1,
+            canceled: true
+          });
+        })
+      }
     });
   }
 }
