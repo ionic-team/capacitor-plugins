@@ -36,6 +36,9 @@ export class CameraWeb extends WebPlugin implements CameraPlugin {
             this.cameraExperience(options, resolve, reject);
           }
         });
+        actionSheet.addEventListener('onCanceled', async () => {
+          reject(new CapacitorException('User cancelled photos app'));
+        });
       } else {
         this.cameraExperience(options, resolve, reject);
       }
