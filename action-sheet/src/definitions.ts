@@ -16,6 +16,16 @@ export interface ShowActionsOptions {
   message?: string;
 
   /**
+   * If true, sheet is canceled when clicked outside; If false, it is not. By default, false.
+   * 
+   * On iOS, sheet is also cancelable if a button with ActionSheetButtonStyle.Cancel is provided and cancelable is false.
+   * 
+   * @since TODO provide release number
+   */
+  cancelable?: boolean;
+
+
+  /**
    * Options the user can choose from.
    *
    * @since 1.0.0

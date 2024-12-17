@@ -19,6 +19,7 @@ public class ActionSheetPlugin extends Plugin {
     @PluginMethod
     public void showActions(final PluginCall call) {
         String title = call.getString("title");
+        boolean cancelable = Boolean.TRUE.equals(call.getBoolean("cancelable", false));
         JSArray options = call.getArray("options");
         if (options == null) {
             call.reject("Must supply options");
@@ -39,7 +40,12 @@ public class ActionSheetPlugin extends Plugin {
             }
             implementation.setTitle(title);
             implementation.setOptions(actionOptions);
-            implementation.setCancelable(false);
+            implementation.setCancelable(cancelable);
+            if (cancelable) {
+                implementation.setOnCancelListener(
+                        () -> call.reject("User canceled action sheet")
+                );
+            }
             implementation.setOnSelectedListener(
                 index -> {
                     JSObject ret = new JSObject();
