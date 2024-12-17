@@ -35,7 +35,8 @@ public class ActionSheetPlugin: CAPPlugin, CAPBridgedPlugin {
             }
             let action = UIAlertAction(title: title, style: buttonStyle, handler: { (_) -> Void in
                 call.resolve([
-                    "index": index
+                    "index": index,
+                    "canceled": false
                 ])
             })
             alertActions.append(action)
@@ -48,7 +49,10 @@ public class ActionSheetPlugin: CAPPlugin, CAPBridgedPlugin {
                     if (forceCancelableOnClickOutside) {
                         let gestureRecognizer = TapGestureRecognizerWithClosure {
                             alertController.dismiss(animated: true, completion: nil)
-                            call.reject("User canceled action sheet")
+                            call.resolve([
+                                "index": -1,
+                                "canceled": true
+                            ])
                         }
                         let backroundView = alertController.view.superview?.subviews[0]
                         backroundView?.addGestureRecognizer(gestureRecognizer)
