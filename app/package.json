@@ -1,6 +1,6 @@
 {
   "name": "@capacitor/app",
-  "version": "6.0.1",
+  "version": "7.0.0",
   "description": "The App API handles high level App state and events.For example, this API emits events when the app enters and leaves the foreground, handles deeplinks, opens other apps, and manages persisted plugin state.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
@@ -47,23 +47,23 @@
     "publish:cocoapod": "pod trunk push ./CapacitorApp.podspec --allow-warnings"
   },
   "devDependencies": {
-    "@capacitor/android": "^6.0.0",
-    "@capacitor/core": "^6.0.0",
+    "@capacitor/android": "next",
+    "@capacitor/core": "next",
     "@capacitor/docgen": "0.2.2",
-    "@capacitor/ios": "^6.0.0",
+    "@capacitor/ios": "next",
     "@ionic/eslint-config": "^0.4.0",
     "@ionic/prettier-config": "~1.0.1",
-    "@ionic/swiftlint-config": "^1.1.2",
+    "@ionic/swiftlint-config": "^2.0.0",
     "eslint": "^8.57.0",
     "prettier": "~2.3.0",
     "prettier-plugin-java": "~1.0.2",
-    "rimraf": "^3.0.0",
+    "rimraf": "^6.0.1",
     "rollup": "^2.29.0",
-    "swiftlint": "^1.0.1",
+    "swiftlint": "^2.0.0",
     "typescript": "~4.1.5"
   },
   "peerDependencies": {
-    "@capacitor/core": "^6.0.0"
+    "@capacitor/core": "next"
   },
   "prettier": "@ionic/prettier-config",
   "swiftlint": "@ionic/swiftlint-config",
