@@ -21,16 +21,16 @@ export class ActionSheetWeb extends WebPlugin implements ActionSheetPlugin {
         const selection = e.detail;
         resolve({
           index: selection,
-          canceled: false
+          canceled: false,
         });
       });
       if (options.cancelable) {
         actionSheet.addEventListener('onCanceled', async () => {
           resolve({
             index: -1,
-            canceled: true
+            canceled: true,
           });
-        })
+        });
       }
     });
   }
