@@ -17,9 +17,11 @@ public class ActionSheetPlugin: CAPPlugin, CAPBridgedPlugin {
     @objc func showActions(_ call: CAPPluginCall) {
         let title = call.options["title"] as? String
         let message = call.options["message"] as? String
+        let cancelable = call.options["cancelable"] as? Bool ?? false
 
         let options = call.getArray("options", JSObject.self) ?? []
         var alertActions = [UIAlertAction]()
+        var forceCancelableOnClickOutside = cancelable
         for (index, option) in options.enumerated() {
             let style = option["style"] as? String ?? "DEFAULT"
             let title = option["title"] as? String ?? ""
@@ -27,11 +29,14 @@ public class ActionSheetPlugin: CAPPlugin, CAPBridgedPlugin {
             if style == "DESTRUCTIVE" {
                 buttonStyle = .destructive
             } else if style == "CANCEL" {
+                // if there's a cancel action, then it will already be cancelable when clicked outside
+                forceCancelableOnClickOutside = false
                 buttonStyle = .cancel
             }
             let action = UIAlertAction(title: title, style: buttonStyle, handler: { (_) -> Void in
                 call.resolve([
-                    "index": index
+                    "index": index,
+                    "canceled": false
                 ])
             })
             alertActions.append(action)
@@ -40,9 +45,34 @@ public class ActionSheetPlugin: CAPPlugin, CAPBridgedPlugin {
         DispatchQueue.main.async { [weak self] in
             if let alertController = self?.implementation.buildActionSheet(title: title, message: message, actions: alertActions) {
                 self?.setCenteredPopover(alertController)
-                self?.bridge?.viewController?.present(alertController, animated: true, completion: nil)
+                self?.bridge?.viewController?.present(alertController, animated: true) {
+                    if (forceCancelableOnClickOutside) {
+                        let gestureRecognizer = TapGestureRecognizerWithClosure {
+                            alertController.dismiss(animated: true, completion: nil)
+                            call.resolve([
+                                "index": -1,
+                                "canceled": true
+                            ])
+                        }
+                        let backroundView = alertController.view.superview?.subviews[0]
+                        backroundView?.addGestureRecognizer(gestureRecognizer)
+                    }
+                }
             }
         }
     }
+    
+    private final class TapGestureRecognizerWithClosure: UITapGestureRecognizer {
+        private let onTap: () -> Void
 
+        init(onTap: @escaping () -> Void) {
+            self.onTap = onTap
+            super.init(target: nil, action: nil)
+            self.addTarget(self, action: #selector(action))
+        }
+
+        @objc private func action() {
+            onTap()
+        }
+    }
 }

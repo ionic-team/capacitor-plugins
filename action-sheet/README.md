@@ -84,18 +84,20 @@ to select.
 
 #### ShowActionsResult
 
-| Prop        | Type                | Description                                  | Since |
-| ----------- | ------------------- | -------------------------------------------- | ----- |
-| **`index`** | <code>number</code> | The index of the clicked option (Zero-based) | 1.0.0 |
+| Prop           | Type                 | Description                                  | Since |
+| -------------- | -------------------- | -------------------------------------------- | ----- |
+| **`index`**    | <code>number</code>  | The index of the clicked option (Zero-based), or -1 if the sheet was canceled. On iOS, if there is a button with ActionSheetButtonStyle.Cancel, and user clicks outside the sheet, the index of the cancel option is returned | 1.0.0 |
+| **`canceled`** | <code>boolean</code> | True if sheet was canceled by user; False otherwise | 6.1.0 |
 
 
 #### ShowActionsOptions
 
-| Prop          | Type                             | Description                                                              | Since |
-| ------------- | -------------------------------- | ------------------------------------------------------------------------ | ----- |
-| **`title`**   | <code>string</code>              | The title of the Action Sheet.                                           | 1.0.0 |
-| **`message`** | <code>string</code>              | A message to show under the title. This option is only supported on iOS. | 1.0.0 |
-| **`options`** | <code>ActionSheetButton[]</code> | Options the user can choose from.                                        | 1.0.0 |
+| Prop             | Type                             | Description                                                              | Since |
+| ---------------- | -------------------------------- | ------------------------------------------------------------------------ | ----- |
+| **`title`**      | <code>string</code>              | The title of the Action Sheet.                                           | 1.0.0 |
+| **`message`**    | <code>string</code>              | A message to show under the title. This option is only supported on iOS. | 1.0.0 |
+| **`options`**    | <code>ActionSheetButton[]</code> | Options the user can choose from.                                        | 1.0.0 |
+| **`cancelable`** | <code>boolean</code>             | If true, sheet is canceled when clicked outside; If false, it is not. By default, false. On iOS, the sheet is also cancelable if a button with ActionSheetButtonStyle.Cancel is provided and cancelable is false. | 6.1.0 |
 
 
 #### ActionSheetButton
