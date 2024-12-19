@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.0.0-alpha.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/browser@7.0.0-alpha.1...@capacitor/browser@7.0.0-alpha.2) (2024-12-19)
+
+### Bug Fixes
+
+- **browser:** crash when trying to open blob urls on android ([#2274](https://github.com/ionic-team/capacitor-plugins/issues/2274)) ([74fe051](https://github.com/ionic-team/capacitor-plugins/commit/74fe051ed9e852293550f201337d427e21c06421))
+
 # [7.0.0-alpha.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/browser@6.0.2...@capacitor/browser@7.0.0-alpha.1) (2024-12-16)
 
 ### Bug Fixes
