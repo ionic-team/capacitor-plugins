@@ -61,24 +61,24 @@ public class BrowserPlugin extends Plugin {
 
         if (implementation.areCustomTabsSupported()) {
             // open the browser and finish
-            try {
-                Intent intent = new Intent(getContext(), BrowserControllerActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                getContext().startActivity(intent);
+            Intent intent = new Intent(getContext(), BrowserControllerActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            getContext().startActivity(intent);
 
-                Integer finalToolbarColor = toolbarColor;
-                setBrowserControllerListener(
-                    activity -> {
+            Integer finalToolbarColor = toolbarColor;
+            setBrowserControllerListener(
+                activity -> {
+                    try {
                         activity.open(implementation, url, finalToolbarColor);
                         browserControllerActivityInstance = activity;
                         call.resolve();
+                    } catch (ActivityNotFoundException ex) {
+                        Logger.error(getLogTag(), ex.getLocalizedMessage(), null);
+                        call.reject("Unable to display URL");
                     }
-                );
-            } catch (ActivityNotFoundException ex) {
-                Logger.error(getLogTag(), ex.getLocalizedMessage(), null);
-                call.reject("Unable to display URL");
-            }
+                }
+            );
         } else {
             // fallback to opening the URL in the default browser
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, url);
