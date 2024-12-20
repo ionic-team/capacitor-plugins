@@ -55,12 +55,11 @@ public class Filesystem {
     public void saveFile(File file, String data, Charset charset, Boolean append) throws IOException {
         // if charset is not null assume its a plain text file the user wants to save
         if (charset != null) {
-            BufferedWriter writer = new BufferedWriter(
-                    new OutputStreamWriter(new FileOutputStream(file, append), charset));
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file, append), charset));
             writer.write(data);
             writer.close();
         } else {
-            // remove header from dataURL
+            //remove header from dataURL
             if (data.contains(",")) {
                 data = data.split(",")[1];
             }
@@ -303,8 +302,7 @@ public class Filesystem {
             dst.createNewFile();
         }
 
-        try (FileChannel source = new FileInputStream(src).getChannel();
-                FileChannel destination = new FileOutputStream(dst).getChannel()) {
+        try (FileChannel source = new FileInputStream(src).getChannel(); FileChannel destination = new FileOutputStream(dst).getChannel()) {
             destination.transferFrom(source, 0, source.size());
         }
     }
