@@ -29,8 +29,6 @@ public class StatusBar {
         this.activity = activity;
         this.currentStatusBarColor = activity.getWindow().getStatusBarColor();
         this.listener = listener;
-        this.defaultStyle = getStyle();
-
         setBackgroundColor(config.getBackgroundColor());
         setStyle(config.getStyle());
         setOverlaysWebView(config.isOverlaysWebView());
