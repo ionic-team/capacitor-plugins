@@ -10,12 +10,10 @@ import com.capacitorjs.plugins.haptics.arguments.HapticsVibrationType;
 
 public class Haptics {
 
-    private Context context;
     private boolean selectionStarted = false;
     private final Vibrator vibrator;
 
     Haptics(Context context) {
-        this.context = context;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             VibratorManager vibratorManager = (VibratorManager) context.getSystemService(Context.VIBRATOR_MANAGER_SERVICE);
             this.vibrator = vibratorManager.getDefaultVibrator();
@@ -43,8 +41,8 @@ public class Haptics {
     }
 
     @SuppressWarnings({ "deprecation" })
-    private void vibratePre26(long[] pattern, int repeat) {
-        vibrator.vibrate(pattern, repeat);
+    private void vibratePre26(long[] pattern) {
+        vibrator.vibrate(pattern, -1);
     }
 
     public void selectionStart() {
@@ -65,7 +63,7 @@ public class Haptics {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             vibrator.vibrate(VibrationEffect.createWaveform(type.getTimings(), type.getAmplitudes(), -1));
         } else {
-            vibratePre26(type.getOldSDKPattern(), -1);
+            vibratePre26(type.getOldSDKPattern());
         }
     }
 }

@@ -1,3 +1,46 @@
+/// <reference types="@capacitor/cli" />
+
+declare module '@capacitor/cli' {
+  export interface PluginsConfig {
+    /**
+     * These config values are available:
+     */
+    StatusBar?: {
+      /**
+       * Whether the statusbar is overlaid or not.
+       * For applications targeting Android 15, this property has no effect unless
+       * the property windowOptOutEdgeToEdgeEnforcement is added to the application layout file.
+       * Otherwise, the application assumes always overlays as true.
+       * More details in https://developer.android.com/reference/android/R.attr#windowOptOutEdgeToEdgeEnforcement
+       *
+       * @since 1.0.0
+       * @default true
+       * @example false
+       */
+      overlaysWebView?: boolean;
+
+      /**
+       * Style of the text of the status bar.
+       *
+       * @since 1.0.0
+       * @default default
+       * @example "DARK"
+       */
+      style?: string;
+
+      /**
+       * Color of the background of the statusbar in hex format, #RRGGBB.
+       * Doesn't work if `overlaysWebView` is true.
+       *
+       * @since 1.0.0
+       * @default #000000
+       * @example "#ffffffff"
+       */
+      backgroundColor?: string;
+    };
+  }
+}
+
 export interface StyleOptions {
   /**
    * Style of the text of the status bar.
@@ -75,8 +118,6 @@ export interface BackgroundColorOptions {
   /**
    * A hex color to which the status bar color is set.
    *
-   * This option is only supported on Android.
-   *
    * @since 1.0.0
    */
   color: string;
@@ -100,16 +141,12 @@ export interface StatusBarInfo {
   /**
    * The current status bar color.
    *
-   * This option is only supported on Android.
-   *
    * @since 1.0.0
    */
   color?: string;
 
   /**
    * Whether the statusbar is overlaid or not.
-   *
-   * This option is only supported on Android.
    *
    * @since 1.0.0
    */
@@ -135,8 +172,6 @@ export interface StatusBarPlugin {
 
   /**
    * Set the background color of the status bar.
-   *
-   * This method is only supported on Android.
    *
    * @since 1.0.0
    */
@@ -170,8 +205,6 @@ export interface StatusBarPlugin {
   /**
    * Set whether or not the status bar should overlay the webview to allow usage
    * of the space underneath it.
-   *
-   * This method is only supported on Android.
    *
    * @since 1.0.0
    */

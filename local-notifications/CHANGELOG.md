@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.0.0-alpha.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/local-notifications@7.0.0-alpha.1...@capacitor/local-notifications@7.0.0-alpha.2) (2024-12-19)
+
+**Note:** Version bump only for package @capacitor/local-notifications
+
+# [7.0.0-alpha.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/local-notifications@6.1.0...@capacitor/local-notifications@7.0.0-alpha.1) (2024-12-16)
+
+**Note:** Version bump only for package @capacitor/local-notifications
+
+# [6.1.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/local-notifications@6.0.0...@capacitor/local-notifications@6.1.0) (2024-08-08)
+
+### Features
+
+- **local-notifications:** Allowing local notifications to be delivered silently while app is in foreground (iOS only) ([#1921](https://github.com/ionic-team/capacitor-plugins/issues/1921)) ([9421137](https://github.com/ionic-team/capacitor-plugins/commit/94211377433c7d26208aedbcee8bb82f3d0985ae))
+
 # [6.0.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/local-notifications@6.0.0-rc.1...@capacitor/local-notifications@6.0.0) (2024-04-15)
 
 **Note:** Version bump only for package @capacitor/local-notifications

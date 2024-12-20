@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.0.0-alpha.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@7.0.0-alpha.1...@capacitor/camera@7.0.0-alpha.2) (2024-12-19)
+
+**Note:** Version bump only for package @capacitor/camera
+
+# [7.0.0-alpha.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@6.0.2...@capacitor/camera@7.0.0-alpha.1) (2024-12-16)
+
+### Bug Fixes
+
+- **camera:** Android dialog not fully showing when in landscape ([#2276](https://github.com/ionic-team/capacitor-plugins/issues/2276)) ([123193b](https://github.com/ionic-team/capacitor-plugins/commit/123193b9cf19784c69e1fd382516a319779e36a5))
+
+### Features
+
+- **camera:** only request permission to save to the gallery for Android <= 9 ([#2222](https://github.com/ionic-team/capacitor-plugins/issues/2222)) ([30da38e](https://github.com/ionic-team/capacitor-plugins/commit/30da38ee9a92da1c5bbeb301fa6371a43365dfeb))
+
+## [6.0.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@6.0.1...@capacitor/camera@6.0.2) (2024-08-08)
+
+**Note:** Version bump only for package @capacitor/camera
+
 ## [6.0.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@6.0.0...@capacitor/camera@6.0.1) (2024-06-13)
 
 ### Bug Fixes
