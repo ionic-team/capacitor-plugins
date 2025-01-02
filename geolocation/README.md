@@ -36,7 +36,7 @@ Read about [Setting Permissions](https://capacitorjs.com/docs/android/configurat
 
 This plugin will use the following project variables (defined in your app's `variables.gradle` file):
 
-- `playServicesLocationVersion` version of `com.google.android.gms:play-services-location` (default: `21.1.0`)
+- `playServicesLocationVersion` version of `com.google.android.gms:play-services-location` (default: `21.3.0`)
 
 ## Example
 
@@ -171,11 +171,12 @@ Request location permissions.  Will throw if system location services are disabl
 
 #### PositionOptions
 
-| Prop                     | Type                 | Description                                                                                                                                                                           | Default            | Since |
-| ------------------------ | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
-| **`enableHighAccuracy`** | <code>boolean</code> | High accuracy mode (such as GPS, if available) On Android 12+ devices it will be ignored if users didn't grant ACCESS_FINE_LOCATION permissions (can be checked with location alias). | <code>false</code> | 1.0.0 |
-| **`timeout`**            | <code>number</code>  | The maximum wait time in milliseconds for location updates. In Android, since version 4.0.0 of the plugin, timeout gets ignored for getCurrentPosition.                               | <code>10000</code> | 1.0.0 |
-| **`maximumAge`**         | <code>number</code>  | The maximum age in milliseconds of a possible cached position that is acceptable to return                                                                                            | <code>0</code>     | 1.0.0 |
+| Prop                        | Type                 | Description                                                                                                                                                                                                                                                                                                     | Default            | Since |
+| --------------------------- | -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
+| **`enableHighAccuracy`**    | <code>boolean</code> | High accuracy mode (such as GPS, if available) On Android 12+ devices it will be ignored if users didn't grant ACCESS_FINE_LOCATION permissions (can be checked with location alias).                                                                                                                           | <code>false</code> | 1.0.0 |
+| **`timeout`**               | <code>number</code>  | The maximum wait time in milliseconds for location updates. In Android, since version 4.0.0 of the plugin, timeout gets ignored for getCurrentPosition.                                                                                                                                                         | <code>10000</code> | 1.0.0 |
+| **`maximumAge`**            | <code>number</code>  | The maximum age in milliseconds of a possible cached position that is acceptable to return                                                                                                                                                                                                                      | <code>0</code>     | 1.0.0 |
+| **`minimumUpdateInterval`** | <code>number</code>  | The minumum update interval for location updates. If location updates are available faster than this interval then an update will only occur if the minimum update interval has expired since the last location update. This parameter is only available for Android. It has no effect on iOS or Web platforms. | <code>5000</code>  | 6.1.0 |
 
 
 #### ClearWatchOptions

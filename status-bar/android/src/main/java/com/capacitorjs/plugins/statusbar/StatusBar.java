@@ -1,8 +1,11 @@
 package com.capacitorjs.plugins.statusbar;
 
 import android.graphics.Color;
+import android.os.Build;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowInsets;
 import android.view.WindowManager;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.ViewCompat;
@@ -12,15 +15,27 @@ import androidx.core.view.WindowInsetsControllerCompat;
 
 public class StatusBar {
 
+    public static final String statusBarVisibilityChanged = "statusBarVisibilityChanged";
+    public static final String statusBarOverlayChanged = "statusBarOverlayChanged";
+
     private int currentStatusBarColor;
+    private final ChangeListener listener;
     private final AppCompatActivity activity;
     private final String defaultStyle;
 
-    public StatusBar(AppCompatActivity activity) {
+    public StatusBar(AppCompatActivity activity, StatusBarConfig config, ChangeListener listener) {
         // save initial color of the status bar
         this.activity = activity;
         this.currentStatusBarColor = activity.getWindow().getStatusBarColor();
+        this.listener = listener;
         this.defaultStyle = getStyle();
+
+        setBackgroundColor(config.getBackgroundColor());
+        setStyle(config.getStyle());
+        setOverlaysWebView(config.isOverlaysWebView());
+        StatusBarInfo info = getInfo();
+        info.setVisible(true);
+        listener.onChange(statusBarOverlayChanged, info);
     }
 
     public void setStyle(String style) {
@@ -49,12 +64,18 @@ public class StatusBar {
         View decorView = activity.getWindow().getDecorView();
         WindowInsetsControllerCompat windowInsetsControllerCompat = WindowCompat.getInsetsController(activity.getWindow(), decorView);
         windowInsetsControllerCompat.hide(WindowInsetsCompat.Type.statusBars());
+        StatusBarInfo info = getInfo();
+        info.setVisible(false);
+        listener.onChange(statusBarVisibilityChanged, info);
     }
 
     public void show() {
         View decorView = activity.getWindow().getDecorView();
         WindowInsetsControllerCompat windowInsetsControllerCompat = WindowCompat.getInsetsController(activity.getWindow(), decorView);
         windowInsetsControllerCompat.show(WindowInsetsCompat.Type.statusBars());
+        StatusBarInfo info = getInfo();
+        info.setVisible(true);
+        listener.onChange(statusBarVisibilityChanged, info);
     }
 
     @SuppressWarnings("deprecation")
@@ -74,6 +95,7 @@ public class StatusBar {
             // recover the previous color of the status bar
             activity.getWindow().setStatusBarColor(currentStatusBarColor);
         }
+        listener.onChange(statusBarOverlayChanged, getInfo());
     }
 
     @SuppressWarnings("deprecation")
@@ -93,6 +115,7 @@ public class StatusBar {
         info.setOverlays(getIsOverlaid());
         info.setVisible(isVisible);
         info.setColor(String.format("#%06X", (0xFFFFFF & window.getStatusBarColor())));
+        info.setHeight(getStatusBarHeight());
         return info;
     }
 
@@ -104,5 +127,26 @@ public class StatusBar {
             style = "LIGHT";
         }
         return style;
+    }
+
+    private int getStatusBarHeight() {
+        DisplayMetrics metrics = activity.getResources().getDisplayMetrics();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            WindowInsets insets = activity.getWindowManager().getCurrentWindowMetrics().getWindowInsets();
+            return (int) (insets.getInsets(WindowInsets.Type.statusBars()).top / metrics.density);
+        }
+
+        WindowInsets insets = activity.getWindow().getDecorView().getRootWindowInsets();
+        if (insets != null) {
+            return (int) (insets.getSystemWindowInsetTop() / metrics.density);
+        }
+
+        // Fallback if the insets are not available
+        return 0;
+    }
+
+    public interface ChangeListener {
+        void onChange(String eventName, StatusBarInfo info);
     }
 }

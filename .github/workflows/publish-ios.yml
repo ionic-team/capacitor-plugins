@@ -8,17 +8,17 @@ on:
         required: true
 jobs:
   publish-ios:
-    runs-on: macos-14
+    runs-on: macos-15
     if: github.event.inputs.plugins != '[]'
     timeout-minutes: 30
     strategy:
       matrix:
         plugin: ${{ fromJson(github.event.inputs.plugins) }}
     steps:
-      - run: sudo xcode-select --switch /Applications/Xcode_15.0.app
-      - uses: actions/setup-node@v3
+      - run: sudo xcode-select --switch /Applications/Xcode_16.app
+      - uses: actions/setup-node@v4
         with:
-          node-version: 16
+          node-version: 20
       - uses: actions/checkout@v3
       - name: Install Cocoapods
         run: | 

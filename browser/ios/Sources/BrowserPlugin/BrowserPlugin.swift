@@ -29,7 +29,13 @@ public class CAPBrowserPlugin: CAPPlugin, CAPBridgedPlugin {
             return
         }
         implementation.browserEventDidOccur = { [weak self] (event) in
-            self?.notifyListeners(event.listenerEvent, data: nil)
+            if event == .finished {
+                self?.bridge?.dismissVC(animated: true, completion: {
+                    self?.notifyListeners(event.listenerEvent, data: nil)
+                })
+            } else {
+                self?.notifyListeners(event.listenerEvent, data: nil)
+            }
         }
         // display
         DispatchQueue.main.async { [weak self] in
