@@ -75,7 +75,12 @@ public class AppPlugin: CAPPlugin, CAPBridgedPlugin {
     }
 
     @objc func exitApp(_ call: CAPPluginCall) {
-        call.unimplemented()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            UIApplication.shared.perform(#selector(NSXPCConnection.suspend))
+             DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+              exit(0)
+            }
+        }
     }
 
     @objc func getInfo(_ call: CAPPluginCall) {
