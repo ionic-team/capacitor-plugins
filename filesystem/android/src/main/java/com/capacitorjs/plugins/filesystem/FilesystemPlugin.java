@@ -133,7 +133,7 @@ public class FilesystemPlugin extends Plugin {
                 } else {
                     if (
                         fileObject.getParentFile() == null ||
-                            fileObject.getParentFile().exists() ||
+                        fileObject.getParentFile().exists() ||
                         (recursive && fileObject.getParentFile().mkdirs())
                     ) {
                         saveFile(call, fileObject, data);
@@ -169,7 +169,7 @@ public class FilesystemPlugin extends Plugin {
             call.resolve(result);
         } catch (IOException ex) {
             Logger.error(
-                    getLogTag(),
+                getLogTag(),
                 "Creating file '" + file.getPath() + "' with charset '" + charset + "' failed. Error: " + ex.getMessage(),
                 ex
             );
