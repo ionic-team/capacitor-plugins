@@ -1,5 +1,6 @@
 package com.capacitorjs.plugins.statusbar;
 
+import android.content.res.Configuration;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Logger;
 import com.getcapacitor.Plugin;
@@ -47,6 +48,12 @@ public class StatusBarPlugin extends Plugin {
             default:
                 return "DEFAULT";
         }
+    }
+
+    @Override
+    protected void handleOnConfigurationChanged(Configuration newConfig) {
+        super.handleOnConfigurationChanged(newConfig);
+        implementation.updateStyle();
     }
 
     @PluginMethod

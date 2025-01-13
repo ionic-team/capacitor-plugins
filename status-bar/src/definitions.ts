@@ -69,7 +69,6 @@ export enum Style {
    * The style is based on the device appearance.
    * If the device is using Dark mode, the statusbar text will be light.
    * If the device is using Light mode, the statusbar text will be dark.
-   * On Android the default will be the one the app was launched with.
    *
    * @since 1.0.0
    */
