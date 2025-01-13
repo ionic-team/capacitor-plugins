@@ -15,9 +15,9 @@ public class ActionSheetPlugin: CAPPlugin, CAPBridgedPlugin {
     private let implementation = ActionSheet()
 
     @objc func showActions(_ call: CAPPluginCall) {
-        let title = call.options["title"] as? String
-        let message = call.options["message"] as? String
-        let cancelable = call.options["cancelable"] as? Bool ?? false
+        let title = call.getString("title")
+        let message = call.getString("message")
+        let cancelable = call.getBool("cancelable", false)
 
         let options = call.getArray("options", JSObject.self) ?? []
         var alertActions = [UIAlertAction]()
