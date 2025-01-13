@@ -67,7 +67,7 @@
     "uvu": "^0.5.1"
   },
   "peerDependencies": {
-    "@capacitor/core": "next"
+    "@capacitor/core": ">=7.0.0-rc.0"
   },
   "prettier": "@ionic/prettier-config",
   "swiftlint": "@ionic/swiftlint-config",
