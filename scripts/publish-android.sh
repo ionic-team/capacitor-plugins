@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # The default Capacitor version(s) the plugin should depend on. Latest published in a range will be pulled by the user
-DEFAULT_CAPACITOR_VERSION="[6.0,7.0)"
+DEFAULT_CAPACITOR_VERSION="[7.0,8.0)"
 
 publish_plugin () {
     PLUGIN_PATH=$1
