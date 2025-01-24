@@ -284,6 +284,11 @@ public class LocalNotificationsPlugin: CAPPlugin, CAPBridgedPlugin {
         let on = schedule["on"] as? JSObject
         let repeats = schedule["repeats"] as? Bool ?? false
 
+        if (at != nil ? 1 : 0) + (on != nil ? 1 : 0) + (every != nil ? 1 : 0) <= 1 {
+            call.reject("You cannot use multiple scheduler types. Use either 'at', 'every' or 'on' in the schedule object.")
+            return nil
+        }
+
         // If there's a specific date for this notificiation
         if let at = at {
             let dateInfo = Calendar.current.dateComponents(in: TimeZone.current, from: at)
