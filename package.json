@@ -52,7 +52,6 @@
     "device",
     "dialog",
     "filesystem",
-    "geolocation",
     "haptics",
     "keyboard",
     "local-notifications",
