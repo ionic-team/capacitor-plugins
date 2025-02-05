@@ -61,7 +61,12 @@ public class Filesystem {
         } else {
             //remove header from dataURL
             if (data.contains(",")) {
-                data = data.split(",")[1];
+                String[] tmp = data.split(",");
+                if (tmp.length > 1) {
+                    data = tmp[1];
+                } else {
+                    throw new IllegalArgumentException("The supplied data is not valid base64 content.");
+                }
             }
             FileOutputStream fos = new FileOutputStream(file, append);
             fos.write(Base64.decode(data, Base64.NO_WRAP));
