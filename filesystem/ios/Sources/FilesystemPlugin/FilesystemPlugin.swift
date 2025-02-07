@@ -1,5 +1,8 @@
 import Foundation
 import Capacitor
+import IONFilesystemLib
+
+typealias FileService = any IONFILEDirectoryManager & IONFILEFileManager
 
 /**
  * Please read the Capacitor iOS Plugin Development Guide
@@ -25,31 +28,36 @@ public class FilesystemPlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "requestPermissions", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "downloadFile", returnType: CAPPluginReturnPromise)
     ]
-    private let implementation = Filesystem()
+    
+    private var fileService: FileService?
 
+    public override func load() {
+        self.fileService = IONFILEManager()
+    }
+
+    func getService() -> Result<FileService, FilesystemError> {
+        if fileService == nil { load() }
+        return fileService.map(Result.success) ?? .failure(.bridgeNotInitialised)
+    }
+
+    override public func checkPermissions(_ call: CAPPluginCall) {
+        call.handlePermissionSuccess()
+    }
+
+    override public func requestPermissions(_ call: CAPPluginCall) {
+        call.handlePermissionSuccess()
+    }
+}
+
+// MARK: - Public API Methods
+private extension FilesystemPlugin {
     /**
      * Read a file from the filesystem.
      */
     @objc func readFile(_ call: CAPPluginCall) {
-        let encoding = call.getString("encoding")
-
-        guard let file = call.getString("path") else {
-            handleError(call, "path must be provided and must be a string.")
-            return
-        }
-        let directory = call.getString("directory")
-
-        guard let fileUrl = implementation.getFileUrl(at: file, in: directory) else {
-            handleError(call, "Invalid path")
-            return
-        }
-        do {
-            let data = try implementation.readFile(at: fileUrl, with: encoding)
-            call.resolve([
-                "data": data
-            ])
-        } catch let error as NSError {
-            handleError(call, error.localizedDescription, error)
+        let encoding = call.getEncoding(Constants.MethodParameter.encoding)
+        performSinglePathOperation(call) {
+            .read(url: $0, encoding: encoding)
         }
     }
 
@@ -57,33 +65,16 @@ public class FilesystemPlugin: CAPPlugin, CAPBridgedPlugin {
      * Write a file to the filesystem.
      */
     @objc func writeFile(_ call: CAPPluginCall) {
-        let encoding = call.getString("encoding")
-        let recursive = call.getBool("recursive") ?? false
-
-        guard let file = call.getString("path") else {
-            handleError(call, "path must be provided and must be a string.")
-            return
+        guard let data = call.getString(Constants.MethodParameter.data) else {
+            return call.handleError(.invalidDataParameter)
         }
-
-        guard let data = call.getString("data") else {
-            handleError(call, "Data must be provided and must be a string.")
-            return
+        guard let encodingMapper = call.getEncodingMapper(usingValue: data) else {
+            return call.handleError(.invalidDataEncodingCombination(method: .writeFile))
         }
+        let recursive = call.getBool(Constants.MethodParameter.recursive, false)
 
-        let directory = call.getString("directory")
-
-        guard let fileUrl = implementation.getFileUrl(at: file, in: directory) else {
-            handleError(call, "Invalid path")
-            return
-        }
-
-        do {
-            let path = try implementation.writeFile(at: fileUrl, with: data, recursive: recursive, with: encoding)
-            call.resolve([
-                "uri": path
-            ])
-        } catch let error as NSError {
-            handleError(call, error.localizedDescription, error)
+        performSinglePathOperation(call) {
+            .write(url: $0, encodingMapper: encodingMapper, recursive: recursive)
         }
     }
 
@@ -91,29 +82,16 @@ public class FilesystemPlugin: CAPPlugin, CAPBridgedPlugin {
      * Append to a file.
      */
     @objc func appendFile(_ call: CAPPluginCall) {
-        let encoding = call.getString("encoding")
-
-        guard let file = call.getString("path") else {
-            handleError(call, "path must be provided and must be a string.")
-            return
+        guard let data = call.getString(Constants.MethodParameter.data) else {
+            return call.handleError(.invalidDataParameter)
         }
-
-        guard let data = call.getString("data") else {
-            handleError(call, "Data must be provided and must be a string.")
-            return
+        guard let encodingMapper = call.getEncodingMapper(usingValue: data) else {
+            return call.handleError(.invalidDataEncodingCombination(method: .appendFile))
         }
+        let recursive = call.getBool(Constants.MethodParameter.recursive, false)
 
-        let directory = call.getString("directory")
-        guard let fileUrl = implementation.getFileUrl(at: file, in: directory) else {
-            handleError(call, "Invalid path")
-            return
-        }
-
-        do {
-            try implementation.appendFile(at: fileUrl, with: data, recursive: false, with: encoding)
-            call.resolve()
-        } catch let error as NSError {
-            handleError(call, error.localizedDescription, error)
+        performSinglePathOperation(call) {
+            .append(url: $0, encodingMapper: encodingMapper, recursive: recursive)
         }
     }
 
@@ -121,22 +99,8 @@ public class FilesystemPlugin: CAPPlugin, CAPBridgedPlugin {
      * Delete a file.
      */
     @objc func deleteFile(_ call: CAPPluginCall) {
-        guard let file = call.getString("path") else {
-            handleError(call, "path must be provided and must be a string.")
-            return
-        }
-
-        let directory = call.getString("directory")
-        guard let fileUrl = implementation.getFileUrl(at: file, in: directory) else {
-            handleError(call, "Invalid path")
-            return
-        }
-
-        do {
-            try implementation.deleteFile(at: fileUrl)
-            call.resolve()
-        } catch let error as NSError {
-            handleError(call, error.localizedDescription, error)
+        performSinglePathOperation(call) {
+            .delete(url: $0)
         }
     }
 
@@ -144,23 +108,10 @@ public class FilesystemPlugin: CAPPlugin, CAPBridgedPlugin {
      * Make a new directory, optionally creating parent folders first.
      */
     @objc func mkdir(_ call: CAPPluginCall) {
-        guard let path = call.getString("path") else {
-            handleError(call, "path must be provided and must be a string.")
-            return
-        }
+        let recursive = call.getBool(Constants.MethodParameter.recursive, false)
 
-        let recursive = call.getBool("recursive") ?? false
-        let directory = call.getString("directory")
-        guard let fileUrl = implementation.getFileUrl(at: path, in: directory) else {
-            handleError(call, "Invalid path")
-            return
-        }
-
-        do {
-            try implementation.mkdir(at: fileUrl, recursive: recursive)
-            call.resolve()
-        } catch let error as NSError {
-            handleError(call, error.localizedDescription, error)
+        performSinglePathOperation(call) {
+            .mkdir(url: $0,recursive: recursive)
         }
     }
 
@@ -168,24 +119,10 @@ public class FilesystemPlugin: CAPPlugin, CAPBridgedPlugin {
      * Remove a directory.
      */
     @objc func rmdir(_ call: CAPPluginCall) {
-        guard let path = call.getString("path") else {
-            handleError(call, "path must be provided and must be a string.")
-            return
-        }
+        let recursive = call.getBool(Constants.MethodParameter.recursive, false)
 
-        let directory = call.getString("directory")
-        guard let fileUrl = implementation.getFileUrl(at: path, in: directory) else {
-            handleError(call, "Invalid path")
-            return
-        }
-
-        let recursive = call.getBool("recursive") ?? false
-
-        do {
-            try implementation.rmdir(at: fileUrl, recursive: recursive)
-            call.resolve()
-        } catch let error as NSError {
-            handleError(call, error.localizedDescription, error)
+        performSinglePathOperation(call) {
+            .rmdir(url: $0, recursive: recursive)
         }
     }
 
@@ -193,130 +130,29 @@ public class FilesystemPlugin: CAPPlugin, CAPBridgedPlugin {
      * Read the contents of a directory.
      */
     @objc func readdir(_ call: CAPPluginCall) {
-        guard let path = call.getString("path") else {
-            handleError(call, "path must be provided and must be a string.")
-            return
-        }
-
-        let directory = call.getString("directory")
-        guard let fileUrl = implementation.getFileUrl(at: path, in: directory) else {
-            handleError(call, "Invalid path")
-            return
-        }
-
-        do {
-            let directoryContents = try implementation.readdir(at: fileUrl)
-            let directoryContent = try directoryContents.map {(url: URL) -> [String: Any] in
-                let attr = try implementation.stat(at: url)
-                var ctime: UInt64 = 0
-                var mtime: UInt64 = 0
-
-                if let ctimeSeconds = (attr[.creationDate] as? Date)?.timeIntervalSince1970 {
-                    ctime = UInt64((ctimeSeconds * 1000).rounded())
-                }
-
-                if let mtimeSeconds = (attr[.modificationDate] as? Date)?.timeIntervalSince1970 {
-                    mtime = UInt64((mtimeSeconds * 1000).rounded())
-                }
-                return [
-                    "name": url.lastPathComponent,
-                    "type": implementation.getType(from: attr),
-                    "size": attr[.size] as? UInt64 ?? 0,
-                    "ctime": ctime,
-                    "mtime": mtime,
-                    "uri": url.absoluteString
-                ]
-            }
-            call.resolve([
-                "files": directoryContent
-            ])
-        } catch {
-            handleError(call, error.localizedDescription, error)
+        performSinglePathOperation(call) {
+            .readdir(url: $0)
         }
     }
 
     @objc func stat(_ call: CAPPluginCall) {
-        guard let path = call.getString("path") else {
-            handleError(call, "path must be provided and must be a string.")
-            return
-        }
-
-        let directory = call.getString("directory")
-        guard let fileUrl = implementation.getFileUrl(at: path, in: directory) else {
-            handleError(call, "Invalid path")
-            return
-        }
-
-        do {
-            let attr = try implementation.stat(at: fileUrl)
-
-            var ctime: UInt64 = 0
-            var mtime: UInt64 = 0
-
-            if let ctimeSeconds = (attr[.creationDate] as? Date)?.timeIntervalSince1970 {
-                ctime = UInt64((ctimeSeconds * 1000).rounded())
-            }
-
-            if let mtimeSeconds = (attr[.modificationDate] as? Date)?.timeIntervalSince1970 {
-                mtime = UInt64((mtimeSeconds * 1000).rounded())
-            }
-
-            call.resolve([
-                "type": implementation.getType(from: attr),
-                "size": attr[.size] as? UInt64 ?? 0,
-                "ctime": ctime,
-                "mtime": mtime,
-                "uri": fileUrl.absoluteString
-            ])
-        } catch {
-            handleError(call, error.localizedDescription, error)
+        performSinglePathOperation(call) {
+            .stat(url: $0)
         }
     }
 
     @objc func getUri(_ call: CAPPluginCall) {
-        guard let path = call.getString("path") else {
-            handleError(call, "path must be provided and must be a string.")
-            return
+        performSinglePathOperation(call) {
+            .getUri(url: $0)
         }
-
-        let directory = call.getString("directory")
-        guard let fileUrl = implementation.getFileUrl(at: path, in: directory) else {
-            handleError(call, "Invalid path")
-            return
-        }
-
-        call.resolve([
-            "uri": fileUrl.absoluteString
-        ])
-
     }
 
     /**
      * Rename a file or directory.
      */
     @objc func rename(_ call: CAPPluginCall) {
-        guard let from = call.getString("from"), let to = call.getString("to") else {
-            handleError(call, "Both to and from must be provided")
-            return
-        }
-
-        let directory = call.getString("directory")
-        let toDirectory = call.getString("toDirectory") ?? directory
-
-        guard let fromUrl = implementation.getFileUrl(at: from, in: directory) else {
-            handleError(call, "Invalid from path")
-            return
-        }
-
-        guard let toUrl = implementation.getFileUrl(at: to, in: toDirectory) else {
-            handleError(call, "Invalid to path")
-            return
-        }
-        do {
-            try implementation.rename(at: fromUrl, to: toUrl)
-            call.resolve()
-        } catch let error as NSError {
-            handleError(call, error.localizedDescription, error)
+        performDualPathOperation(call) {
+            .rename(source: $0, destination: $1)
         }
     }
 
@@ -324,67 +160,59 @@ public class FilesystemPlugin: CAPPlugin, CAPBridgedPlugin {
      * Copy a file or directory.
      */
     @objc func copy(_ call: CAPPluginCall) {
-        guard let from = call.getString("from"), let to = call.getString("to") else {
-            handleError(call, "Both to and from must be provided")
-            return
+        performDualPathOperation(call) {
+            .copy(source: $0, destination: $1)
         }
-
-        let directory = call.getString("directory")
-        let toDirectory = call.getString("toDirectory") ?? directory
-
-        guard let fromUrl = implementation.getFileUrl(at: from, in: directory) else {
-            handleError(call, "Invalid from path")
-            return
-        }
-
-        guard let toUrl = implementation.getFileUrl(at: to, in: toDirectory) else {
-            handleError(call, "Invalid to path")
-            return
-        }
-        do {
-            try implementation.copy(at: fromUrl, to: toUrl)
-            call.resolve([
-                "uri": toUrl.absoluteString
-            ])
-        } catch let error as NSError {
-            handleError(call, error.localizedDescription, error)
-        }
-    }
-
-    @objc override public func checkPermissions(_ call: CAPPluginCall) {
-        call.resolve([
-            "publicStorage": "granted"
-        ])
-    }
-
-    @objc override public func requestPermissions(_ call: CAPPluginCall) {
-        call.resolve([
-            "publicStorage": "granted"
-        ])
     }
 
     @objc func downloadFile(_ call: CAPPluginCall) {
-        guard let url = call.getString("url") else { return call.reject("Must provide a URL") }
-        let progressEmitter: Filesystem.ProgressEmitter = { bytes, contentLength in
-            self.notifyListeners("progress", data: [
-                "url": url,
-                "bytes": bytes,
-                "contentLength": contentLength
-            ])
-        }
+        //        guard let url = call.getString("url") else { return call.reject("Must provide a URL") }
+        //        let progressEmitter: Filesystem.ProgressEmitter = { bytes, contentLength in
+        //            self.notifyListeners("progress", data: [
+        //                "url": url,
+        //                "bytes": bytes,
+        //                "contentLength": contentLength
+        //            ])
+        //        }
+        //
+        //        do {
+        //            try implementation.downloadFile(call: call, emitter: progressEmitter, config: bridge?.config)
+        //        } catch let error {
+        //            call.reject(error.localizedDescription)
+        //        }
+    }
+}
 
-        do {
-            try implementation.downloadFile(call: call, emitter: progressEmitter, config: bridge?.config)
-        } catch let error {
-            call.reject(error.localizedDescription)
+// MARK: - Operation Execution
+private extension FilesystemPlugin {
+    func performSinglePathOperation(_ call: CAPPluginCall, operationBuilder: (URL) -> FilesystemOperation) {
+        executeOperation(call) { service in
+            FilesystemLocationResolver(service: service)
+                .resolveSinglePath(from: call)
+                .map { operationBuilder($0) }
         }
     }
 
-    /**
-     * Helper for handling errors
-     */
-    private func handleError(_ call: CAPPluginCall, _ message: String, _ error: Error? = nil) {
-        call.reject(message, nil, error)
+    func performDualPathOperation(_ call: CAPPluginCall, operationBuilder: (URL, URL) -> FilesystemOperation) {
+        executeOperation(call) { service in
+            FilesystemLocationResolver(service: service)
+                .resolveDualPaths(from: call)
+                .map { operationBuilder($0.source, $0.destination) }
+        }
     }
 
+    func executeOperation(_ call: CAPPluginCall, operationProvider: (FileService) -> Result<FilesystemOperation, FilesystemError>) {
+        switch getService() {
+        case .success(let service):
+            switch operationProvider(service) {
+            case .success(let operation):
+                let executor = FilesystemOperationExecutor(service: service)
+                executor.execute(operation, call)
+            case .failure(let error):
+                call.handleError(error)
+            }
+        case .failure(let error):
+            call.handleError(error)
+        }
+    }
 }
