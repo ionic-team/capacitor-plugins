@@ -99,6 +99,11 @@ public class Network {
                     networkStatus.connected =
                         capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED) &&
                         capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET);
+                    networkStatus.downstreamInKbps = capabilities.getLinkDownstreamBandwidthKbps();
+                    networkStatus.upstreamInKbps = capabilities.getLinkUpstreamBandwidthKbps();
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        networkStatus.signalStrength = capabilities.getSignalStrength();
+                    }
                     if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
                         networkStatus.connectionType = NetworkStatus.ConnectionType.WIFI;
                     } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
