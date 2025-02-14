@@ -1,11 +1,4 @@
-import { Plugins } from '@capacitor/core';
-
-import type {
-  GetPreferredResult,
-  GetResult,
-  SetOptions,
-  TextZoomPlugin,
-} from './definitions';
+import type { GetResult, SetOptions, TextZoomPlugin } from './definitions';
 
 export class TextZoomIOS implements TextZoomPlugin {
   static readonly TEXT_SIZE_REGEX = /(\d+)%/;
@@ -17,8 +10,8 @@ export class TextZoomIOS implements TextZoomPlugin {
     return { value };
   }
 
-  async getPreferred(): Promise<GetPreferredResult> {
-    return Plugins.TextZoom.getPreferred();
+  async getPreferred(): Promise<never> {
+    throw 'Native implementation will be used';
   }
 
   async set(options: SetOptions): Promise<void> {

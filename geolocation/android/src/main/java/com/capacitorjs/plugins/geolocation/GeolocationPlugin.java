@@ -172,10 +172,12 @@ public class GeolocationPlugin extends Plugin {
     @SuppressWarnings("MissingPermission")
     private void startWatch(final PluginCall call) {
         int timeout = call.getInt("timeout", 10000);
+        int minUpdateInterval = call.getInt("minimumUpdateInterval", 5000);
 
         implementation.requestLocationUpdates(
             isHighAccuracy(call),
             timeout,
+            minUpdateInterval,
             new LocationResultCallback() {
                 @Override
                 public void success(Location location) {

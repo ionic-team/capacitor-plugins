@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.0.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@7.0.0-rc.0...@capacitor/filesystem@7.0.0) (2025-01-20)
+
+**Note:** Version bump only for package @capacitor/filesystem
+
+# [7.0.0-rc.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@7.0.0-alpha.2...@capacitor/filesystem@7.0.0-rc.0) (2025-01-13)
+
+### Bug Fixes
+
+- **android:** run downloadFile asynchronously ([3e64606](https://github.com/ionic-team/capacitor-plugins/commit/3e646062ab34351714080618ec5a3a44c4beab46))
+
+# [7.0.0-alpha.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@7.0.0-alpha.1...@capacitor/filesystem@7.0.0-alpha.2) (2024-12-19)
+
+**Note:** Version bump only for package @capacitor/filesystem
+
+# [7.0.0-alpha.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@6.0.1...@capacitor/filesystem@7.0.0-alpha.1) (2024-12-16)
+
+**Note:** Version bump only for package @capacitor/filesystem
+
+## [6.0.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@6.0.0...@capacitor/filesystem@6.0.1) (2024-08-08)
+
+**Note:** Version bump only for package @capacitor/filesystem
+
 # [6.0.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@6.0.0-rc.1...@capacitor/filesystem@6.0.0) (2024-04-15)
 
 **Note:** Version bump only for package @capacitor/filesystem

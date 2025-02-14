@@ -3,13 +3,13 @@ import Capacitor
 
 @objc(ScreenOrientationPlugin)
 public class ScreenOrientationPlugin: CAPPlugin, CAPBridgedPlugin {
-    public let identifier = "ScreenOrientationPlugin" 
-    public let jsName = "ScreenOrientation" 
+    public let identifier = "ScreenOrientationPlugin"
+    public let jsName = "ScreenOrientation"
     public let pluginMethods: [CAPPluginMethod] = [
         CAPPluginMethod(name: "orientation", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "lock", returnType: CAPPluginReturnPromise),
-        CAPPluginMethod(name: "unlock", returnType: CAPPluginReturnPromise),
-    ] 
+        CAPPluginMethod(name: "unlock", returnType: CAPPluginReturnPromise)
+    ]
 
     private let implementation = ScreenOrientation()
 
