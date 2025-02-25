@@ -147,6 +147,15 @@ export interface ImageOptions {
   webUseInput?: boolean;
 
   /**
+   * Hide the PWA elements file picker button from the camera UI.
+   * Requires PWA elements 3.3.0 or newer.
+   * @default false
+   *
+   * @since 6.1.0
+   */
+  webHidePicker?: boolean;
+
+  /**
    * Text value to use when displaying the prompt.
    * @default: 'Photo'
    *
