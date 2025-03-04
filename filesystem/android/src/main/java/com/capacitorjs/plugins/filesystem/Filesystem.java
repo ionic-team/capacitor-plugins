@@ -340,6 +340,7 @@ public class Filesystem {
         Boolean disableRedirects = call.getBoolean("disableRedirects");
         Boolean shouldEncode = call.getBoolean("shouldEncodeUrlParams", true);
         Boolean progress = call.getBoolean("progress", false);
+        Boolean recursive = call.getBoolean("recursive", false);
 
         String method = call.getString("method", "GET").toUpperCase(Locale.ROOT);
         String path = call.getString("path");
@@ -347,6 +348,10 @@ public class Filesystem {
 
         final URL url = new URL(urlString);
         final File file = getFileObject(path, directory);
+
+        if(recursive) {
+            file.getParentFile().mkdirs();
+        }
 
         HttpRequestHandler.HttpURLConnectionBuilder connectionBuilder = new HttpRequestHandler.HttpURLConnectionBuilder()
             .setUrl(url)

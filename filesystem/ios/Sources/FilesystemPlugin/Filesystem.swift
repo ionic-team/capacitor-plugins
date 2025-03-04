@@ -186,6 +186,7 @@ import Capacitor
     // swiftlint:disable function_body_length
     @objc public func downloadFile(call: CAPPluginCall, emitter: @escaping ProgressEmitter, config: InstanceConfiguration?) throws {
         let directory = call.getString("directory", "DOCUMENTS")
+        let recursive = call.getBool("recursive", false)
         guard let path = call.getString("path") else {
             call.reject("Invalid file path")
             return
@@ -222,7 +223,7 @@ import Capacitor
                     let dest = dir!.appendingPathComponent(path)
                     CAPLog.print("Attempting to write to file destination: \(dest.absoluteString)")
 
-                    if !FileManager.default.fileExists(atPath: dest.deletingLastPathComponent().absoluteString) {
+                    if recursive && !FileManager.default.fileExists(atPath: dest.deletingLastPathComponent().absoluteString) {
                         try FileManager.default.createDirectory(at: dest.deletingLastPathComponent(), withIntermediateDirectories: true, attributes: nil)
                     }
 
