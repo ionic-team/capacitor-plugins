@@ -43,7 +43,7 @@ public class PushNotificationsHandler: NSObject, NotificationHandlerProtocol {
                 case "sound":
                     presentationOptions.insert(.sound)
                 default:
-                    print("Unrecogizned presentation option: \(option)")
+                    print("Unrecognized presentation option: \(option)")
                 }
             }
 
