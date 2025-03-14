@@ -244,6 +244,7 @@ Removes old data with `_cap_` prefix from the Capacitor 2 Storage plugin.
 | Prop        | Type                | Description                                                                                                                                                                                                                                                                                                                                              | Default                       | Since |
 | ----------- | ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------- | ----- |
 | **`group`** | <code>string</code> | Set the preferences group. Preferences groups are used to organize key/value pairs. Using the value 'NativeStorage' provides backwards-compatibility with [`cordova-plugin-nativestorage`](https://www.npmjs.com/package/cordova-plugin-nativestorage). WARNING: The `clear()` method can delete unintended values when using the 'NativeStorage' group. | <code>CapacitorStorage</code> | 1.0.0 |
+| **`suite`** | <code>string</code> | iOS: Set the suite name. If a suite is set, the group is automatically set to NativeStorage. | <code></code> | 6.0.0 |
 
 
 #### GetResult
