@@ -76,6 +76,7 @@ public class Keyboard {
 
                     if (showingKeyboard) {
                         keyboardEventListener.onKeyboardEvent(EVENT_KB_WILL_SHOW, Math.round(imeHeight / density));
+                        keyboardEventListener.onKeyboardEvent(EVENT_KB_DID_SHOW, Math.round(imeHeight / density));
                     } else {
                         keyboardEventListener.onKeyboardEvent(EVENT_KB_WILL_HIDE, 0);
                     }
@@ -94,6 +95,7 @@ public class Keyboard {
                     if (showingKeyboard) {
                         keyboardEventListener.onKeyboardEvent(EVENT_KB_DID_SHOW, Math.round(imeHeight / density));
                     } else {
+                        keyboardEventListener.onKeyboardEvent(EVENT_KB_WILL_HIDE, 0);
                         keyboardEventListener.onKeyboardEvent(EVENT_KB_DID_HIDE, 0);
                     }
                 }
