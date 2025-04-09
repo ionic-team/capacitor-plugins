@@ -7,7 +7,7 @@ On iOS, this uses `SFSafariViewController` and is compliant with leading OAuth s
 ## Install
 
 ```bash
-npm install @capacitor/browser
+npm install @capacitor/browser@latest-6
 npx cap sync
 ```
 

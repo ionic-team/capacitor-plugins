@@ -8,7 +8,7 @@ API](https://web.dev/web-share/)), though web support is currently spotty.
 ## Install
 
 ```bash
-npm install @capacitor/share
+npm install @capacitor/share@latest-6
 npx cap sync
 ```
 ## Android
