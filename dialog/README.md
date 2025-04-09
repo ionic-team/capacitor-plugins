@@ -5,7 +5,7 @@ The Dialog API provides methods for triggering native dialog windows for alerts,
 ## Install
 
 ```bash
-npm install @capacitor/dialog
+npm install @capacitor/dialog@latest-6
 npx cap sync
 ```
 
