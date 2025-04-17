@@ -19,6 +19,7 @@ public class KeyboardPlugin extends Plugin {
             () -> {
                 boolean resizeOnFullScreen = getConfig().getBoolean("resizeOnFullScreen", false);
                 implementation = new Keyboard(getActivity(), resizeOnFullScreen);
+
                 implementation.setKeyboardEventListener(this::onKeyboardEvent);
             }
         );

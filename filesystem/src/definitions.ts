@@ -668,7 +668,13 @@ export interface FilesystemPlugin {
   addListener(
     eventName: 'progress',
     listenerFunc: ProgressListener,
-  ): Promise<PluginListenerHandle> & PluginListenerHandle;
+  ): Promise<PluginListenerHandle>;
+  /**
+   * Remove all listeners for this plugin.
+   *
+   * @since 5.2.0
+   */
+  removeAllListeners(): Promise<void>;
 }
 
 /**

@@ -15,7 +15,7 @@ export class CameraWeb extends WebPlugin implements CameraPlugin {
     // eslint-disable-next-line no-async-promise-executor
     return new Promise<Photo>(async (resolve, reject) => {
       if (options.webUseInput || options.source === CameraSource.Photos) {
-        this.fileInputExperience(options, resolve);
+        this.fileInputExperience(options, resolve, reject);
       } else if (options.source === CameraSource.Prompt) {
         let actionSheet: any = document.querySelector('pwa-action-sheet');
         if (!actionSheet) {
@@ -31,7 +31,7 @@ export class CameraWeb extends WebPlugin implements CameraPlugin {
         actionSheet.addEventListener('onSelection', async (e: any) => {
           const selection = e.detail;
           if (selection === 0) {
-            this.fileInputExperience(options, resolve);
+            this.fileInputExperience(options, resolve, reject);
           } else {
             this.cameraExperience(options, resolve, reject);
           }
@@ -44,8 +44,8 @@ export class CameraWeb extends WebPlugin implements CameraPlugin {
 
   async pickImages(_options: GalleryImageOptions): Promise<GalleryPhotos> {
     // eslint-disable-next-line no-async-promise-executor
-    return new Promise<GalleryPhotos>(async resolve => {
-      this.multipleFileInputExperience(resolve);
+    return new Promise<GalleryPhotos>(async (resolve, reject) => {
+      this.multipleFileInputExperience(resolve, reject);
     });
   }
 
@@ -78,17 +78,21 @@ export class CameraWeb extends WebPlugin implements CameraPlugin {
 
         cameraModal.present();
       } catch (e) {
-        this.fileInputExperience(options, resolve);
+        this.fileInputExperience(options, resolve, reject);
       }
     } else {
       console.error(
         `Unable to load PWA Element 'pwa-camera-modal'. See the docs: https://capacitorjs.com/docs/web/pwa-elements.`,
       );
-      this.fileInputExperience(options, resolve);
+      this.fileInputExperience(options, resolve, reject);
     }
   }
 
-  private fileInputExperience(options: ImageOptions, resolve: any) {
+  private fileInputExperience(
+    options: ImageOptions,
+    resolve: any,
+    reject: any,
+  ) {
     let input = document.querySelector(
       '#_capacitor-camera-input',
     ) as HTMLInputElement;
@@ -145,6 +149,10 @@ export class CameraWeb extends WebPlugin implements CameraPlugin {
           cleanup();
         }
       });
+      input.addEventListener('cancel', (_e: any) => {
+        reject(new CapacitorException('User cancelled photos app'));
+        cleanup();
+      });
     }
 
     input.accept = 'image/*';
@@ -164,7 +172,7 @@ export class CameraWeb extends WebPlugin implements CameraPlugin {
     input.click();
   }
 
-  private multipleFileInputExperience(resolve: any) {
+  private multipleFileInputExperience(resolve: any, reject: any) {
     let input = document.querySelector(
       '#_capacitor-camera-input-multiple',
     ) as HTMLInputElement;
@@ -198,6 +206,10 @@ export class CameraWeb extends WebPlugin implements CameraPlugin {
           });
         }
         resolve({ photos });
+        cleanup();
+      });
+      input.addEventListener('cancel', (_e: any) => {
+        reject(new CapacitorException('User cancelled photos app'));
         cleanup();
       });
     }

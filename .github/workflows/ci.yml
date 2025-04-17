@@ -12,7 +12,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-12]
+        os: [ubuntu-latest, macos-15]
     timeout-minutes: 30
     outputs:
       plugins: ${{ steps.packages.outputs.paths }}
@@ -22,11 +22,9 @@ jobs:
         with:
           access_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Get Latest
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: 18.x
-      - name: NPM ^9.5.0
-        run: npm i -g npm@^9.5.0 --registry=https://registry.npmjs.org
+          node-version: 20
       - uses: actions/checkout@v3
       - name: Restore Dependency Cache
         id: cache-modules
@@ -50,17 +48,15 @@ jobs:
         with:
          files: ${{ steps.catjson.outputs.FILES_JSON }}
 
-  lint:
-    runs-on: macos-12
+  lint-scripts:
+    runs-on: macos-15
     timeout-minutes: 30
     needs:
       - setup
     steps:
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
-          node-version: 18.x
-      - name: NPM ^9.5.0
-        run: npm i -g npm@^9.5.0 --registry=https://registry.npmjs.org
+          node-version: 20
       - uses: actions/checkout@v3
       - name: Restore Dependency Cache
         id: cache-modules
@@ -73,25 +69,20 @@ jobs:
       - run: npm install
       - run: npm run lint
 
-  verify-ios:
-    runs-on: macos-12
-    if: needs.setup.outputs.plugins != '[]'
+  lint:
+    runs-on: macos-15
     timeout-minutes: 30
     needs:
       - setup
-      - lint
+      - lint-scripts
+    if: needs.setup.outputs.plugins != '[]'
     strategy:
       matrix:
-        xcode:
-        - /Applications/Xcode_14.2.app
         plugin: ${{ fromJson(needs.setup.outputs.plugins) }}
     steps:
-      - run: sudo xcode-select --switch ${{ matrix.xcode }}
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
-          node-version: 18.x
-      - name: NPM ^9.5.0
-        run: npm i -g npm@^9.5.0 --registry=https://registry.npmjs.org
+          node-version: 20
       - uses: actions/checkout@v3
       - name: Restore Dependency Cache
         id: cache-modules
@@ -102,7 +93,37 @@ jobs:
             */node_modules
           key: ${{ runner.os }}-dependency-caching-${{ hashFiles('package.json', '*/package.json') }}
       - run: npm install
-      - run: npm run set-podfiles-for-monorepo
+      - run: npm run lint
+        working-directory: ${{ matrix.plugin }}
+
+  verify-ios:
+    runs-on: macos-15
+    if: needs.setup.outputs.plugins != '[]'
+    timeout-minutes: 30
+    needs:
+      - setup
+      - lint
+      - lint-scripts
+    strategy:
+      matrix:
+        xcode:
+        - /Applications/Xcode_16.app
+        plugin: ${{ fromJson(needs.setup.outputs.plugins) }}
+    steps:
+      - run: sudo xcode-select --switch ${{ matrix.xcode }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - uses: actions/checkout@v3
+      - name: Restore Dependency Cache
+        id: cache-modules
+        uses: actions/cache@v3
+        with:
+          path: |
+            node_modules
+            */node_modules
+          key: ${{ runner.os }}-dependency-caching-${{ hashFiles('package.json', '*/package.json') }}
+      - run: npm install
       - run: npm run verify:ios
         working-directory: ${{ matrix.plugin }}
 
@@ -113,20 +134,19 @@ jobs:
     needs:
       - setup
       - lint
+      - lint-scripts
     strategy:
       matrix:
         plugin: ${{ fromJson(needs.setup.outputs.plugins) }}
     steps:
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
-          node-version: 18.x
-      - name: set up JDK 17
-        uses: actions/setup-java@v3
+          node-version: 20
+      - name: set up JDK 21
+        uses: actions/setup-java@v4
         with:
-          java-version: '17'
+          java-version: '21'
           distribution: 'zulu'
-      - name: NPM ^9.5.0
-        run: npm i -g npm@^9.5.0 --registry=https://registry.npmjs.org
       - uses: actions/checkout@v3
       - name: Restore Dependency Cache
         id: cache-modules
@@ -148,15 +168,14 @@ jobs:
     needs:
       - setup
       - lint
+      - lint-scripts
     strategy:
       matrix:
         plugin: ${{ fromJson(needs.setup.outputs.plugins) }}
     steps:
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
-          node-version: 18.x
-      - name: NPM ^9.5.0
-        run: npm i -g npm@^9.5.0 --registry=https://registry.npmjs.org
+          node-version: 20
       - uses: actions/checkout@v3
       - name: Restore Dependency Cache
         id: cache-modules

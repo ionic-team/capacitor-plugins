@@ -1,6 +1,7 @@
 import { PROJECTS } from './lib/capacitor.mjs';
 import { execute } from './lib/cli.mjs';
-import { bootstrap } from './lib/lerna.mjs';
+import { root } from './lib/repo.mjs';
+import { run } from './lib/subprocess.mjs';
 import {
   getLatestVersion,
   setLernaPackageDependencies,
@@ -18,5 +19,5 @@ execute(async () => {
 
   await setLernaPackageDependencies(packages, 'devDependencies');
   await setLernaPackageDependencies(packages, 'peerDependencies');
-  await bootstrap();
+  await run('npm', ['install'], { cwd: root, stdio: 'inherit' });
 });

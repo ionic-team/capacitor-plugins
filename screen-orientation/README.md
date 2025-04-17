@@ -36,9 +36,10 @@ By default, an iPad allows Multitasking and its orientation cannot be locked. If
 * [`orientation()`](#orientation)
 * [`lock(...)`](#lock)
 * [`unlock()`](#unlock)
-* [`addListener('screenOrientationChange', ...)`](#addlistenerscreenorientationchange)
+* [`addListener('screenOrientationChange', ...)`](#addlistenerscreenorientationchange-)
 * [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
+* [Type Aliases](#type-aliases)
 
 </docgen-index>
 
@@ -93,7 +94,7 @@ Unlocks the screen's orientation.
 ### addListener('screenOrientationChange', ...)
 
 ```typescript
-addListener(eventName: 'screenOrientationChange', listenerFunc: (orientation: ScreenOrientationResult) => void) => Promise<PluginListenerHandle> & PluginListenerHandle
+addListener(eventName: 'screenOrientationChange', listenerFunc: (orientation: ScreenOrientationResult) => void) => Promise<PluginListenerHandle>
 ```
 
 Listens for screen orientation changes.
@@ -103,7 +104,7 @@ Listens for screen orientation changes.
 | **`eventName`**    | <code>'screenOrientationChange'</code>                                                                |
 | **`listenerFunc`** | <code>(orientation: <a href="#screenorientationresult">ScreenOrientationResult</a>) =&gt; void</code> |
 
-**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt; & <a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
 
 **Since:** 4.0.0
 
@@ -135,9 +136,9 @@ Removes all listeners.
 
 #### OrientationLockOptions
 
-| Prop              | Type                             |
-| ----------------- | -------------------------------- |
-| **`orientation`** | <code>OrientationLockType</code> |
+| Prop              | Type                                                                | Description                                                                                                                           |
+| ----------------- | ------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| **`orientation`** | <code><a href="#orientationlocktype">OrientationLockType</a></code> | Note: Typescript v5.2+ users should import <a href="#orientationlocktype">OrientationLockType</a> from @capacitor/screen-orientation. |
 
 
 #### PluginListenerHandle
@@ -145,5 +146,13 @@ Removes all listeners.
 | Prop         | Type                                      |
 | ------------ | ----------------------------------------- |
 | **`remove`** | <code>() =&gt; Promise&lt;void&gt;</code> |
+
+
+### Type Aliases
+
+
+#### OrientationLockType
+
+<code>'any' | 'natural' | 'landscape' | 'portrait' | 'portrait-primary' | 'portrait-secondary' | 'landscape-primary' | 'landscape-secondary'</code>
 
 </docgen-api>

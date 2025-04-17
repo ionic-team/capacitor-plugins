@@ -184,7 +184,7 @@ export interface AppPlugin {
   addListener(
     eventName: 'appStateChange',
     listenerFunc: StateChangeListener,
-  ): Promise<PluginListenerHandle> & PluginListenerHandle;
+  ): Promise<PluginListenerHandle>;
 
   /**
    * Listen for when the app or the activity are paused.
@@ -198,7 +198,7 @@ export interface AppPlugin {
   addListener(
     eventName: 'pause',
     listenerFunc: () => void,
-  ): Promise<PluginListenerHandle> & PluginListenerHandle;
+  ): Promise<PluginListenerHandle>;
 
   /**
    * Listen for when the app or activity are resumed.
@@ -213,7 +213,7 @@ export interface AppPlugin {
   addListener(
     eventName: 'resume',
     listenerFunc: () => void,
-  ): Promise<PluginListenerHandle> & PluginListenerHandle;
+  ): Promise<PluginListenerHandle>;
 
   /**
    * Listen for url open events for the app. This handles both custom URL scheme links as well
@@ -224,7 +224,7 @@ export interface AppPlugin {
   addListener(
     eventName: 'appUrlOpen',
     listenerFunc: URLOpenListener,
-  ): Promise<PluginListenerHandle> & PluginListenerHandle;
+  ): Promise<PluginListenerHandle>;
 
   /**
    * If the app was launched with previously persisted plugin call data, such as on Android
@@ -254,7 +254,7 @@ export interface AppPlugin {
   addListener(
     eventName: 'appRestoredResult',
     listenerFunc: RestoredListener,
-  ): Promise<PluginListenerHandle> & PluginListenerHandle;
+  ): Promise<PluginListenerHandle>;
 
   /**
    * Listen for the hardware back button event (Android only). Listening for this event will disable the
@@ -266,7 +266,7 @@ export interface AppPlugin {
   addListener(
     eventName: 'backButton',
     listenerFunc: BackButtonListener,
-  ): Promise<PluginListenerHandle> & PluginListenerHandle;
+  ): Promise<PluginListenerHandle>;
 
   /**
    * Remove all native listeners for this plugin
@@ -275,15 +275,3 @@ export interface AppPlugin {
    */
   removeAllListeners(): Promise<void>;
 }
-
-/**
- * @deprecated Use `RestoredListenerEvent`.
- * @since 1.0.0
- */
-export type AppRestoredResult = RestoredListenerEvent;
-
-/**
- * @deprecated Use `URLOpenListenerEvent`.
- * @since 1.0.0
- */
-export type AppUrlOpen = URLOpenListenerEvent;

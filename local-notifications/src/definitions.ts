@@ -156,6 +156,30 @@ export interface LocalNotificationsPlugin {
   requestPermissions(): Promise<PermissionStatus>;
 
   /**
+   * Direct user to the application settings screen to configure exact alarms.
+   *
+   * In the event that a user changes the settings from granted to denied, the application
+   * will restart and any notification scheduled with an exact alarm will be deleted.
+   *
+   * On Android < 12, the user will NOT be directed to the application settings screen, instead this function will
+   * return `granted`.
+   *
+   * Only available on Android.
+   *
+   * @since 6.0.0
+   */
+  changeExactNotificationSetting(): Promise<SettingsPermissionStatus>;
+
+  /**
+   * Check application setting for using exact alarms.
+   *
+   * Only available on Android.
+   *
+   * @since 6.0.0
+   */
+  checkExactNotificationSetting(): Promise<SettingsPermissionStatus>;
+
+  /**
    * Listen for when notifications are displayed.
    *
    * @since 1.0.0
@@ -163,7 +187,7 @@ export interface LocalNotificationsPlugin {
   addListener(
     eventName: 'localNotificationReceived',
     listenerFunc: (notification: LocalNotificationSchema) => void,
-  ): Promise<PluginListenerHandle> & PluginListenerHandle;
+  ): Promise<PluginListenerHandle>;
 
   /**
    * Listen for when an action is performed on a notification.
@@ -173,7 +197,7 @@ export interface LocalNotificationsPlugin {
   addListener(
     eventName: 'localNotificationActionPerformed',
     listenerFunc: (notificationAction: ActionPerformed) => void,
-  ): Promise<PluginListenerHandle> & PluginListenerHandle;
+  ): Promise<PluginListenerHandle>;
 
   /**
    * Remove all listeners for this plugin.
@@ -740,6 +764,15 @@ export interface LocalNotificationSchema {
    * @since 1.0.0
    */
   inboxList?: string[];
+
+  /**
+   * If true, notification will not appear while app is in the foreground.
+   *
+   * Only available for iOS.
+   *
+   * @since 5.0.0
+   */
+  silent?: boolean;
 }
 
 /**
@@ -842,6 +875,15 @@ export interface PermissionStatus {
    * @since 1.0.0
    */
   display: PermissionState;
+}
+
+export interface SettingsPermissionStatus {
+  /**
+   * Permission state of using exact alarms.
+   *
+   * @since 6.0.0
+   */
+  exact_alarm: PermissionState;
 }
 
 export interface ActionPerformed {

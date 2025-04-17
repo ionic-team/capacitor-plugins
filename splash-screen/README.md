@@ -185,7 +185,7 @@ To use splash screen images named something other than `splash.png`, set `androi
 
 This plugin will use the following project variables (defined in your app's `variables.gradle` file):
 
-- `coreSplashScreenVersion` version of `androidx.core:core-splashscreen` (default: `1.0.0`)
+- `coreSplashScreenVersion` version of `androidx.core:core-splashscreen` (default: `1.0.1`)
 
 ## Example Guides
 

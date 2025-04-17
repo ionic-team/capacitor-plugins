@@ -1,8 +1,21 @@
 import type { PluginListenerHandle } from '@capacitor/core';
 
 export interface OrientationLockOptions {
+  /**
+   * Note: Typescript v5.2+ users should import OrientationLockType from @capacitor/screen-orientation.
+   */
   orientation: OrientationLockType;
 }
+
+export type OrientationLockType =
+  | 'any'
+  | 'natural'
+  | 'landscape'
+  | 'portrait'
+  | 'portrait-primary'
+  | 'portrait-secondary'
+  | 'landscape-primary'
+  | 'landscape-secondary';
 
 export interface ScreenOrientationResult {
   type: OrientationType;
@@ -38,7 +51,7 @@ export interface ScreenOrientationPlugin {
   addListener(
     eventName: 'screenOrientationChange',
     listenerFunc: (orientation: ScreenOrientationResult) => void,
-  ): Promise<PluginListenerHandle> & PluginListenerHandle;
+  ): Promise<PluginListenerHandle>;
 
   /**
    * Removes all listeners.

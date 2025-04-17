@@ -3,6 +3,87 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.0.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@7.0.0...@capacitor/filesystem@7.0.1) (2025-04-02)
+
+**Note:** Version bump only for package @capacitor/filesystem
+
+# [7.0.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@7.0.0-rc.0...@capacitor/filesystem@7.0.0) (2025-01-20)
+
+**Note:** Version bump only for package @capacitor/filesystem
+
+# [7.0.0-rc.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@7.0.0-alpha.2...@capacitor/filesystem@7.0.0-rc.0) (2025-01-13)
+
+### Bug Fixes
+
+- **android:** run downloadFile asynchronously ([3e64606](https://github.com/ionic-team/capacitor-plugins/commit/3e646062ab34351714080618ec5a3a44c4beab46))
+
+# [7.0.0-alpha.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@7.0.0-alpha.1...@capacitor/filesystem@7.0.0-alpha.2) (2024-12-19)
+
+**Note:** Version bump only for package @capacitor/filesystem
+
+# [7.0.0-alpha.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@6.0.1...@capacitor/filesystem@7.0.0-alpha.1) (2024-12-16)
+
+**Note:** Version bump only for package @capacitor/filesystem
+
+## [6.0.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@6.0.0...@capacitor/filesystem@6.0.1) (2024-08-08)
+
+**Note:** Version bump only for package @capacitor/filesystem
+
+# [6.0.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@6.0.0-rc.1...@capacitor/filesystem@6.0.0) (2024-04-15)
+
+**Note:** Version bump only for package @capacitor/filesystem
+
+# [6.0.0-rc.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@6.0.0-rc.0...@capacitor/filesystem@6.0.0-rc.1) (2024-03-25)
+
+**Note:** Version bump only for package @capacitor/filesystem
+
+# [6.0.0-rc.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@6.0.0-beta.1...@capacitor/filesystem@6.0.0-rc.0) (2024-02-07)
+
+### Bug Fixes
+
+- **filesystem:** requestPermissions not resolving ([#1990](https://github.com/ionic-team/capacitor-plugins/issues/1990)) ([2fe419b](https://github.com/ionic-team/capacitor-plugins/commit/2fe419b4af67f5ee0350880c62ebeda93badc3d8))
+
+# [6.0.0-beta.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@6.0.0-beta.0...@capacitor/filesystem@6.0.0-beta.1) (2023-12-14)
+
+### Bug Fixes
+
+- **filesystem:** use next tag for capacitor dependencies ([#1963](https://github.com/ionic-team/capacitor-plugins/issues/1963)) ([80e5261](https://github.com/ionic-team/capacitor-plugins/commit/80e5261b4d7af36d6803deef28153e06e79ab214))
+
+# [6.0.0-beta.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@6.0.0-alpha.2...@capacitor/filesystem@6.0.0-beta.0) (2023-12-13)
+
+**Note:** Version bump only for package @capacitor/filesystem
+
+# [6.0.0-alpha.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@6.0.0-alpha.1...@capacitor/filesystem@6.0.0-alpha.2) (2023-11-15)
+
+**Note:** Version bump only for package @capacitor/filesystem
+
+# [6.0.0-alpha.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@5.1.2...@capacitor/filesystem@6.0.0-alpha.1) (2023-11-08)
+
+### Bug Fixes
+
+- **filesystem:** accessing security scoped resources on iOS ([#1660](https://github.com/ionic-team/capacitor-plugins/issues/1660)) ([ee6d93b](https://github.com/ionic-team/capacitor-plugins/commit/ee6d93b1a6efb299cb041b21dbccef225af667c4))
+- **filesystem:** catch http errors on downloadFile ([#1742](https://github.com/ionic-team/capacitor-plugins/issues/1742)) ([5ed01d3](https://github.com/ionic-team/capacitor-plugins/commit/5ed01d303686fdab727b0d40a1cf903ba82c0f43))
+
+### Features
+
+- **filesystem:** add removeAllListeners method ([#1862](https://github.com/ionic-team/capacitor-plugins/issues/1862)) ([f5f84ee](https://github.com/ionic-team/capacitor-plugins/commit/f5f84eedd0806382ba35cb1cdc9f104e35e9b61a))
+
+# [5.2.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@5.1.4...@capacitor/filesystem@5.2.0) (2023-12-15)
+
+### Features
+
+- **filesystem:** add removeAllListeners method ([#1868](https://github.com/ionic-team/capacitor-plugins/issues/1868)) ([fb941c7](https://github.com/ionic-team/capacitor-plugins/commit/fb941c7f39c37684c07c5162644756f4b919418d))
+
+## [5.1.4](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@5.1.3...@capacitor/filesystem@5.1.4) (2023-09-14)
+
+**Note:** Version bump only for package @capacitor/filesystem
+
+## [5.1.3](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@5.1.2...@capacitor/filesystem@5.1.3) (2023-08-23)
+
+### Bug Fixes
+
+- **filesystem:** catch http errors on downloadFile ([#1742](https://github.com/ionic-team/capacitor-plugins/issues/1742)) ([5ed01d3](https://github.com/ionic-team/capacitor-plugins/commit/5ed01d303686fdab727b0d40a1cf903ba82c0f43))
+
 ## [5.1.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@5.1.1...@capacitor/filesystem@5.1.2) (2023-08-09)
 
 ### Bug Fixes

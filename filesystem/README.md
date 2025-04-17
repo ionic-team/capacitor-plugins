@@ -9,9 +9,42 @@ npm install @capacitor/filesystem
 npx cap sync
 ```
 
+## Apple Privacy Manifest Requirements
+
+Apple mandates that app developers now specify approved reasons for API usage to enhance user privacy. By May 1st, 2024, it's required to include these reasons when submitting apps to the App Store Connect.
+
+When using this specific plugin in your app, you must create a `PrivacyInfo.xcprivacy` file in `/ios/App` or use the VS Code Extension to generate it, specifying the usage reasons.
+
+For detailed steps on how to do this, please see the [Capacitor Docs](https://capacitorjs.com/docs/ios/privacy-manifest).
+
+**For this plugin, the required dictionary key is [NSPrivacyAccessedAPICategoryFileTimestamp](https://developer.apple.com/documentation/bundleresources/privacy_manifest_files/describing_use_of_required_reason_api#4278393) and the recommended reason is [C617.1](https://developer.apple.com/documentation/bundleresources/privacy_manifest_files/describing_use_of_required_reason_api#4278393).**
+
+### Example PrivacyInfo.xcprivacy
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <key>NSPrivacyAccessedAPITypes</key>
+    <array>
+      <!-- Add this dict entry to the array if the PrivacyInfo file already exists -->
+      <dict>
+        <key>NSPrivacyAccessedAPIType</key>
+        <string>NSPrivacyAccessedAPICategoryFileTimestamp</string>
+        <key>NSPrivacyAccessedAPITypeReasons</key>
+        <array>
+          <string>C617.1</string>
+        </array>
+      </dict>
+    </array>
+  </dict>
+</plist>
+```
+
 ## iOS
 
-To have files appear in the Files app, you must set the following keys to `YES` in `Info.plist`:
+To have files appear in the Files app, you must also set the following keys to `YES` in `Info.plist`:
 
 - `UIFileSharingEnabled` (`Application supports iTunes file sharing`)
 - `LSSupportsOpeningDocumentsInPlace` (`Supports opening documents in place`)
@@ -100,7 +133,8 @@ const readFilePath = async () => {
 * [`checkPermissions()`](#checkpermissions)
 * [`requestPermissions()`](#requestpermissions)
 * [`downloadFile(...)`](#downloadfile)
-* [`addListener('progress', ...)`](#addlistenerprogress)
+* [`addListener('progress', ...)`](#addlistenerprogress-)
+* [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
 * [Enums](#enums)
@@ -365,7 +399,7 @@ Perform a http request to a server and download the file to the specified destin
 ### addListener('progress', ...)
 
 ```typescript
-addListener(eventName: 'progress', listenerFunc: ProgressListener) => Promise<PluginListenerHandle> & PluginListenerHandle
+addListener(eventName: 'progress', listenerFunc: ProgressListener) => Promise<PluginListenerHandle>
 ```
 
 Add a listener to file download progress events.
@@ -375,9 +409,22 @@ Add a listener to file download progress events.
 | **`eventName`**    | <code>'progress'</code>                                       |
 | **`listenerFunc`** | <code><a href="#progresslistener">ProgressListener</a></code> |
 
-**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt; & <a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
 
 **Since:** 5.1.0
+
+--------------------
+
+
+### removeAllListeners()
+
+```typescript
+removeAllListeners() => Promise<void>
+```
+
+Remove all listeners for this plugin.
+
+**Since:** 5.2.0
 
 --------------------
 

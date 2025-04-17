@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.webkit.MimeTypeMap;
 import androidx.activity.result.ActivityResult;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import com.getcapacitor.JSArray;
 import com.getcapacitor.JSObject;
@@ -41,7 +42,12 @@ public class SharePlugin extends Plugin {
                     }
                 }
             };
-        getActivity().registerReceiver(broadcastReceiver, new IntentFilter(Intent.EXTRA_CHOSEN_COMPONENT));
+        ContextCompat.registerReceiver(
+            getContext(),
+            broadcastReceiver,
+            new IntentFilter(Intent.EXTRA_CHOSEN_COMPONENT),
+            ContextCompat.RECEIVER_EXPORTED
+        );
     }
 
     @SuppressWarnings("deprecation")
@@ -113,8 +119,11 @@ public class SharePlugin extends Plugin {
                 shareFiles(files, intent, call);
             }
             int flags = PendingIntent.FLAG_UPDATE_CURRENT;
-            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 flags = flags | PendingIntent.FLAG_MUTABLE;
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                flags = flags | PendingIntent.FLAG_ALLOW_UNSAFE_IMPLICIT_INTENT;
             }
 
             // requestCode parameter is not used. Providing 0
