@@ -309,7 +309,9 @@ import Capacitor
                     let timeElapsed = currentTimestamp - lastEmitTimestamp
 
                     if totalBytesExpectedToWrite > 0 {
-                        if timeElapsed >= 0.1 {
+                        let isTimeToEmit = timeElapsed >= 0.1
+                        let isLastChunk = totalBytesWritten == totalBytesExpectedToWrite
+                        if isTimeToEmit || isLastChunk {
                             emitter(totalBytesWritten, totalBytesExpectedToWrite)
                             lastEmitTimestamp = currentTimestamp
                         }
