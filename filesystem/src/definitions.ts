@@ -485,7 +485,7 @@ export interface CopyResult {
 export interface DownloadFileOptions extends HttpOptions {
   /**
    * The path the downloaded file should be moved to.
-   * 
+   *
    * @deprecated Use @capacitor/file-transfer instead.
    * @since 5.1.0
    */
@@ -494,7 +494,7 @@ export interface DownloadFileOptions extends HttpOptions {
    * The directory to write the file to.
    * If this option is used, filePath can be a relative path rather than absolute.
    * The default is the `DATA` directory.
-   * 
+   *
    * @deprecated Use @capacitor/file-transfer instead.
    * @since 5.1.0
    */
@@ -503,14 +503,14 @@ export interface DownloadFileOptions extends HttpOptions {
    * An optional listener function to receive downloaded progress events.
    * If this option is used, progress event should be dispatched on every chunk received.
    * Chunks are throttled to every 100ms on Android/iOS to avoid slowdowns.
-   * 
+   *
    * @deprecated Use @capacitor/file-transfer instead.
    * @since 5.1.0
    */
   progress?: boolean;
   /**
    * Whether to create any missing parent directories.
-   * 
+   *
    * @default false
    * @deprecated Use @capacitor/file-transfer instead.
    * @since 5.1.2
@@ -521,7 +521,7 @@ export interface DownloadFileOptions extends HttpOptions {
 export interface DownloadFileResult {
   /**
    * The path the file was downloaded to.
-   * 
+   *
    * @deprecated Use @capacitor/file-transfer instead.
    * @since 5.1.0
    */
@@ -529,7 +529,7 @@ export interface DownloadFileResult {
   /**
    * The blob data of the downloaded file.
    * This is only available on web.
-   * 
+   *
    * @deprecated Use @capacitor/file-transfer instead.
    * @since 5.1.0
    */
@@ -538,21 +538,21 @@ export interface DownloadFileResult {
 export interface ProgressStatus {
   /**
    * The url of the file being downloaded.
-   * 
+   *
    * @deprecated Use @capacitor/file-transfer instead.
    * @since 5.1.0
    */
   url: string;
   /**
    * The number of bytes downloaded so far.
-   * 
+   *
    * @deprecated Use @capacitor/file-transfer instead.
    * @since 5.1.0
    */
   bytes: number;
   /**
    * The total number of bytes to download for this file.
-   * 
+   *
    * @deprecated Use @capacitor/file-transfer instead.
    * @since 5.1.0
    */
@@ -561,7 +561,7 @@ export interface ProgressStatus {
 
 /**
  * A listener function that receives progress events.
- * 
+ *
  * @deprecated Use @capacitor/file-transfer instead.
  * @since 5.1.0
  */
@@ -665,7 +665,7 @@ export interface FilesystemPlugin {
 
   /**
    * Perform a http request to a server and download the file to the specified destination.
-   * 
+   *
    * @deprecated Use @capacitor/file-transfer plugin instead.
    * @since 5.1.0
    */
@@ -673,7 +673,7 @@ export interface FilesystemPlugin {
 
   /**
    * Add a listener to file download progress events.
-   * 
+   *
    * @deprecated Use @capacitor/file-transfer plugin instead.
    * @since 5.1.0
    */
@@ -683,7 +683,7 @@ export interface FilesystemPlugin {
   ): Promise<PluginListenerHandle>;
   /**
    * Remove all listeners for this plugin.
-   * 
+   *
    * @deprecated Use @capacitor/file-transfer plugin instead.
    * @since 5.2.0
    */
