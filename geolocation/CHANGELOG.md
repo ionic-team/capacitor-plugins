@@ -1,6 +1,6 @@
 # ⓘ Plugin migrated
 
-**From version 7.1.0 onwards, this plugin is now housed in a separate repository. Refer to the [updated CHANGELOG](https://github.com/ionic-team/capacitor-geolocation/blob/main/CHANGELOG.md).**
+**From version 7.1.0 onwards, this plugin is now hosted in a separate repository. Refer to the [updated CHANGELOG](https://github.com/ionic-team/capacitor-geolocation/blob/main/CHANGELOG.md).**
 
 This file remains here as a record of the plugin's history for versions older than 7.1.0.
 
