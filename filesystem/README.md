@@ -48,6 +48,64 @@ For detailed steps on how to do this, please see the [Capacitor Docs](https://ca
 </plist>
 ```
 
+## Migrating from downloadFile to File Transfer plugin
+
+As of version 7.1.0, the `downloadFile` functionality in the Filesystem plugin has been deprecated in favor of the new [@capacitor/file-transfer](https://capacitorjs.com/docs/apis/file-transfer) plugin.
+
+### Installing the File Transfer plugin
+
+```bash
+npm install @capacitor/file-transfer
+npx cap sync
+```
+
+### Migration example
+
+Before (using Filesystem plugin):
+
+```typescript
+import { Filesystem, Directory } from '@capacitor/filesystem';
+
+await Filesystem.downloadFile({
+  url: 'https://example.com/file.pdf',
+  path: 'downloaded-file.pdf',
+  directory: Directory.Documents,
+  progress: true
+});
+
+// Progress events
+Filesystem.addListener('progress', (progress) => {
+  console.log(`Downloaded ${progress.bytes} of ${progress.contentLength}`);
+});
+```
+
+After (using File Transfer plugin):
+
+```typescript
+import { FileTransfer } from '@capacitor/file-transfer';
+import { Filesystem, Directory } from '@capacitor/filesystem';
+
+// First get the full file path using Filesystem
+const fileInfo = await Filesystem.getUri({
+  directory: Directory.Documents,
+  path: 'downloaded-file.pdf'
+});
+
+// Then use the FileTransfer plugin to download
+await FileTransfer.downloadFile({
+  url: 'https://example.com/file.pdf',
+  path: fileInfo.uri,
+  progress: true
+});
+
+// Progress events
+FileTransfer.addListener('progress', (progress) => {
+  console.log(`Downloaded ${progress.bytes} of ${progress.contentLength}`);
+});
+```
+
+The File Transfer plugin offers improved reliability, better error handling with specific error codes, and also adds upload functionality.
+
 ## iOS
 
 To have files appear in the Files app, you must also set the following keys to `YES` in `Info.plist`:
