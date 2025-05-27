@@ -1,3 +1,9 @@
+# ⓘ Plugin migrated
+
+**From version 7.1.0 onwards, this plugin is now hosted in a separate repository. Refer to [capacitor-filesystem repository](https://github.com/ionic-team/capacitor-filesystem).**
+
+This file remains here to serve as documentation for version 7.0.1.
+
 # @capacitor/filesystem
 
 The Filesystem API provides a NodeJS-like API for working with files on the device.
