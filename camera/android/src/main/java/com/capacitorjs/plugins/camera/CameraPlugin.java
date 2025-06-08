@@ -347,6 +347,15 @@ public class CameraPlugin extends Plugin {
 
     private ActivityResultContract<PickVisualMediaRequest, List<Uri>> getContractForCall(final PluginCall call) {
         int limit = call.getInt("limit", 0);
+
+        // Ensure limit does not exceed system max limit
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            int maxLimit = MediaStore.getPickImagesMaxLimit();
+            if (limit > maxLimit) {
+                limit = maxLimit; // Restrict to allowed limit
+            }
+        }
+        
         if (limit > 1) {
             return new ActivityResultContracts.PickMultipleVisualMedia(limit);
         } else {
