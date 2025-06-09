@@ -121,6 +121,9 @@ public class SplashScreen {
                                     public void onAnimationEnd(Animator animation) {
                                         isHiding = false;
                                         windowSplashScreenView.remove();
+                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                                          activity.getSplashScreen().clearOnExitAnimationListener();
+                                        }
                                     }
                                 }
                             );
