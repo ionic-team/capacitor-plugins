@@ -35,14 +35,15 @@ public class PushNotificationsHandler: NSObject, NotificationHandlerProtocol {
             optionsArray.forEach { option in
                 switch option {
                 case "alert":
-                    presentationOptions.insert(.alert)
+                    presentationOptions.insert(.banner)
+                case "banner":
+                    presentationOptions.insert(.banner)
                 case "badge":
                     presentationOptions.insert(.badge)
-
                 case "sound":
                     presentationOptions.insert(.sound)
                 default:
-                    print("Unrecogizned presentation option: \(option)")
+                    print("Unrecognized presentation option: \(option)")
                 }
             }
 
