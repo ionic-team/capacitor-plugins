@@ -1,7 +1,25 @@
+# ⓘ Plugin migrated
+
+**From version 7.1.0 onwards, this plugin is now hosted in a separate repository. Refer to the [updated CHANGELOG](https://github.com/ionic-team/capacitor-filesystem/blob/main/CHANGELOG.md).**
+
 # Change Log
 
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+## [7.0.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@7.0.0...@capacitor/filesystem@7.0.1) (2025-04-02)
+
+**Note:** Version bump only for package @capacitor/filesystem
+
+# [7.0.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@7.0.0-rc.0...@capacitor/filesystem@7.0.0) (2025-01-20)
+
+**Note:** Version bump only for package @capacitor/filesystem
+
+# [7.0.0-rc.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@7.0.0-alpha.2...@capacitor/filesystem@7.0.0-rc.0) (2025-01-13)
+
+### Bug Fixes
+
+- **android:** run downloadFile asynchronously ([3e64606](https://github.com/ionic-team/capacitor-plugins/commit/3e646062ab34351714080618ec5a3a44c4beab46))
 
 # [7.0.0-alpha.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@7.0.0-alpha.1...@capacitor/filesystem@7.0.0-alpha.2) (2024-12-19)
 

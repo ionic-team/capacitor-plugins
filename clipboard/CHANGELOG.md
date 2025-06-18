@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.0.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/clipboard@7.0.0...@capacitor/clipboard@7.0.1) (2025-04-02)
+
+**Note:** Version bump only for package @capacitor/clipboard
+
+# [7.0.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/clipboard@7.0.0-rc.0...@capacitor/clipboard@7.0.0) (2025-01-20)
+
+**Note:** Version bump only for package @capacitor/clipboard
+
+# [7.0.0-rc.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/clipboard@7.0.0-alpha.2...@capacitor/clipboard@7.0.0-rc.0) (2025-01-13)
+
+**Note:** Version bump only for package @capacitor/clipboard
+
 # [7.0.0-alpha.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/clipboard@7.0.0-alpha.1...@capacitor/clipboard@7.0.0-alpha.2) (2024-12-19)
 
 **Note:** Version bump only for package @capacitor/clipboard

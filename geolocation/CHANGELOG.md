@@ -1,7 +1,21 @@
+# ⓘ Plugin migrated
+
+**From version 7.1.0 onwards, this plugin is now hosted in a separate repository. Refer to the [updated CHANGELOG](https://github.com/ionic-team/capacitor-geolocation/blob/main/CHANGELOG.md).**
+
+This file remains here as a record of the plugin's history for versions older than 7.1.0.
+
 # Change Log
 
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+# [7.0.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/geolocation@7.0.0-rc.0...@capacitor/geolocation@7.0.0) (2025-01-20)
+
+**Note:** Version bump only for package @capacitor/geolocation
+
+# [7.0.0-rc.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/geolocation@7.0.0-alpha.2...@capacitor/geolocation@7.0.0-rc.0) (2025-01-13)
+
+**Note:** Version bump only for package @capacitor/geolocation
 
 # [7.0.0-alpha.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/geolocation@7.0.0-alpha.1...@capacitor/geolocation@7.0.0-alpha.2) (2024-12-19)
 
