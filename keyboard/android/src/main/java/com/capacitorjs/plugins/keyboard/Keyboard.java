@@ -2,6 +2,7 @@ package com.capacitorjs.plugins.keyboard;
 
 import android.content.Context;
 import android.graphics.Rect;
+import android.os.Build;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.Window;
@@ -131,6 +132,17 @@ public class Keyboard {
     private int computeUsableHeight() {
         Rect r = new Rect();
         mChildOfContent.getWindowVisibleDisplayFrame(r);
+
+        if (Build.VERSION.SDK_INT >= 35) { // Android 15+ (API 35)
+            WindowInsetsCompat insets = ViewCompat.getRootWindowInsets(rootView);
+            if (insets != null) {
+                int systemGestures = insets.getInsets(WindowInsetsCompat.Type.systemGestures()).bottom;
+                if (systemGestures > 0) {
+                    return r.bottom + systemGestures;
+                }
+            }
+        }
+
         return isOverlays() ? r.bottom : r.height();
     }
 
