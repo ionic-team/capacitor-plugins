@@ -5,7 +5,7 @@ The Local Notifications API provides a way to schedule device notifications loca
 ## Install
 
 ```bash
-npm install @capacitor/local-notifications
+npm install @capacitor/local-notifications@latest-6
 npx cap sync
 ```
 

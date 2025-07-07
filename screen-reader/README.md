@@ -5,7 +5,7 @@ The Screen Reader API provides access to TalkBack/VoiceOver/etc. and provides si
 ## Install
 
 ```bash
-npm install @capacitor/screen-reader
+npm install @capacitor/screen-reader@latest-6
 npx cap sync
 ```
 

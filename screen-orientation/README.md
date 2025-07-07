@@ -5,7 +5,7 @@ The Screen Orientation API provides information and functionality related to the
 ## Install
 
 ```bash
-npm install @capacitor/screen-orientation
+npm install @capacitor/screen-orientation@latest-6
 npx cap sync
 ```
 
