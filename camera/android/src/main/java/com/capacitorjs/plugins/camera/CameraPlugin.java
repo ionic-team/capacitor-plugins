@@ -746,13 +746,14 @@ public class CameraPlugin extends Plugin {
      * @return
      */
     private Bitmap prepareBitmap(Bitmap bitmap, Uri imageUri, ExifWrapper exif) throws IOException {
-        if (settings.isShouldCorrectOrientation()) {
-            final Bitmap newBitmap = ImageUtils.correctOrientation(getContext(), bitmap, imageUri, exif);
-            bitmap = replaceBitmap(bitmap, newBitmap);
-        }
 
         if (settings.isShouldResize()) {
             final Bitmap newBitmap = ImageUtils.resize(bitmap, settings.getWidth(), settings.getHeight());
+            bitmap = replaceBitmap(bitmap, newBitmap);
+        }
+
+        if (settings.isShouldCorrectOrientation()) {
+            final Bitmap newBitmap = ImageUtils.correctOrientation(getContext(), bitmap, imageUri, exif);
             bitmap = replaceBitmap(bitmap, newBitmap);
         }
 
