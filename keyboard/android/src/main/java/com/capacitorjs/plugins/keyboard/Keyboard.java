@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Rect;
 import android.os.Build;
 import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
@@ -14,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsAnimationCompat;
 import androidx.core.view.WindowInsetsCompat;
+import com.getcapacitor.Bridge;
 import java.util.List;
 
 public class Keyboard {
@@ -22,6 +24,7 @@ public class Keyboard {
         void onKeyboardEvent(String event, int size);
     }
 
+    private Bridge bridge;
     private AppCompatActivity activity;
     private View rootView;
     private int usableHeightPrevious;
@@ -40,8 +43,9 @@ public class Keyboard {
     static final String EVENT_KB_WILL_HIDE = "keyboardWillHide";
     static final String EVENT_KB_DID_HIDE = "keyboardDidHide";
 
-    public Keyboard(AppCompatActivity activity, boolean resizeOnFullScreen) {
-        this.activity = activity;
+    public Keyboard(Bridge bridge, boolean resizeOnFullScreen) {
+        this.bridge = bridge;
+        this.activity = this.bridge.getActivity();
 
         //http://stackoverflow.com/a/4737265/1091751 detect if keyboard is showing
         FrameLayout content = activity.getWindow().getDecorView().findViewById(android.R.id.content);
@@ -132,8 +136,7 @@ public class Keyboard {
     private int computeUsableHeight() {
         Rect r = new Rect();
         mChildOfContent.getWindowVisibleDisplayFrame(r);
-
-        if (Build.VERSION.SDK_INT >= 35) { // Android 15+ (API 35)
+        if (shouldApplyEdgeToEdgeAdjustments()) {
             WindowInsetsCompat insets = ViewCompat.getRootWindowInsets(rootView);
             if (insets != null) {
                 int systemGestures = insets.getInsets(WindowInsetsCompat.Type.systemGestures()).bottom;
@@ -144,6 +147,25 @@ public class Keyboard {
         }
 
         return isOverlays() ? r.bottom : r.height();
+    }
+
+    private boolean shouldApplyEdgeToEdgeAdjustments() {
+        var adjustMarginsForEdgeToEdge = this.bridge.getConfig().adjustMarginsForEdgeToEdge();
+        if (adjustMarginsForEdgeToEdge.equals("force")) { // Force edge-to-edge adjustments regardless of app settings
+            return true;
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM && adjustMarginsForEdgeToEdge.equals("auto")) { // Auto means that we need to check the app's edge-to-edge preference
+            TypedValue value = new TypedValue();
+            boolean optOutAttributeExists = activity
+                .getTheme()
+                .resolveAttribute(android.R.attr.windowOptOutEdgeToEdgeEnforcement, value, true);
+
+            if (!optOutAttributeExists) { // Default is to apply edge to edge
+                return true;
+            } else {
+                return value.data == 0;
+            }
+        }
+        return false;
     }
 
     @SuppressWarnings("deprecation")
