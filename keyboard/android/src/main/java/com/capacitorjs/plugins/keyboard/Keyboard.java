@@ -139,9 +139,9 @@ public class Keyboard {
         if (shouldApplyEdgeToEdgeAdjustments()) {
             WindowInsetsCompat insets = ViewCompat.getRootWindowInsets(rootView);
             if (insets != null) {
-                int systemGestures = insets.getInsets(WindowInsetsCompat.Type.systemGestures()).bottom;
-                if (systemGestures > 0) {
-                    return r.bottom + systemGestures;
+                int systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom;
+                if (systemBars > 0) {
+                    return r.bottom + systemBars;
                 }
             }
         }
