@@ -2,6 +2,8 @@ package com.capacitorjs.plugins.statusbar;
 
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.DisplayMetrics;
 import android.view.View;
@@ -27,7 +29,7 @@ public class StatusBar {
     public StatusBar(AppCompatActivity activity, StatusBarConfig config, ChangeListener listener) {
         // save initial color of the status bar
         this.activity = activity;
-        this.currentStatusBarColor = activity.getWindow().getStatusBarColor();
+        this.currentStatusBarColor = getStatusBarColor();
         this.listener = listener;
         setBackgroundColor(config.getBackgroundColor());
         setStyle(config.getStyle());
@@ -66,7 +68,7 @@ public class StatusBar {
         Window window = activity.getWindow();
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.setStatusBarColor(color);
+        setStatusBarColor(color);
         // update the local color field as well
         currentStatusBarColor = color;
     }
@@ -97,14 +99,14 @@ public class StatusBar {
             // Sets the layout to a fullscreen one that does not hide the actual status bar, so the WebView is displayed behind it.
             uiOptions = uiOptions | View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
             decorView.setSystemUiVisibility(uiOptions);
-            currentStatusBarColor = activity.getWindow().getStatusBarColor();
-            activity.getWindow().setStatusBarColor(Color.TRANSPARENT);
+            currentStatusBarColor = getStatusBarColor();
+            setStatusBarColor(Color.TRANSPARENT);
         } else {
             // Sets the layout to a normal one that displays the WebView below the status bar.
             uiOptions = uiOptions & ~View.SYSTEM_UI_FLAG_LAYOUT_STABLE & ~View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
             decorView.setSystemUiVisibility(uiOptions);
             // recover the previous color of the status bar
-            activity.getWindow().setStatusBarColor(currentStatusBarColor);
+            setStatusBarColor(currentStatusBarColor);
         }
         listener.onChange(statusBarOverlayChanged, getInfo());
     }
@@ -125,7 +127,7 @@ public class StatusBar {
         info.setStyle(getStyle());
         info.setOverlays(getIsOverlaid());
         info.setVisible(isVisible);
-        info.setColor(String.format("#%06X", (0xFFFFFF & window.getStatusBarColor())));
+        info.setColor(String.format("#%06X", (0xFFFFFF & getStatusBarColor())));
         info.setHeight(getStatusBarHeight());
         return info;
     }
@@ -155,6 +157,31 @@ public class StatusBar {
 
         // Fallback if the insets are not available
         return 0;
+    }
+
+    private int getStatusBarColor() {
+        Window window = activity.getWindow();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+            View decorView = window.getDecorView();
+            Drawable background = decorView.getBackground();
+            if (background instanceof ColorDrawable) {
+                return ((ColorDrawable) background).getColor();
+            }
+
+            return Color.TRANSPARENT;
+        }
+
+        return window.getStatusBarColor();
+    }
+
+    private void setStatusBarColor(int color) {
+        Window window = activity.getWindow();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+            View decorView = window.getDecorView();
+            decorView.setBackgroundColor(color);
+        } else {
+            window.setStatusBarColor(color);
+        }
     }
 
     public interface ChangeListener {
