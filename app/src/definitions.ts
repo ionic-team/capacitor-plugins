@@ -126,6 +126,11 @@ export interface BackButtonListenerEvent {
 }
 
 export interface TogglePredictiveBackOptions {
+  /**
+   * Indicates whether to enable or disable predictive back gesture support.
+   *
+   * @since 8.0.0
+   */
   enabled: boolean;
 }
 
@@ -176,9 +181,11 @@ export interface AppPlugin {
   minimizeApp(): Promise<void>;
 
   /**
-   * Toggles support for Android's predictive back button support.
+   * Toggles support for Android's predictive back gesture.
    *
-   * Only available for Android.
+   * Enabling this will disable this plugin's `backButton` listener.
+   *
+   * Only available for Android 15+.
    *
    * @since 8.0.0
    */

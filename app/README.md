@@ -174,9 +174,11 @@ Only available for Android.
 togglePredictiveBack(options: TogglePredictiveBackOptions) => Promise<void>
 ```
 
-Toggles support for Android's predictive back button support.
+Toggles support for Android's predictive back gesture.
 
-Only available for Android.
+Enabling this will disable this plugin's `backButton` listener.
+
+Only available for Android 15+.
 
 | Param         | Type                                                                                |
 | ------------- | ----------------------------------------------------------------------------------- |
@@ -386,9 +388,9 @@ Remove all native listeners for this plugin
 
 #### TogglePredictiveBackOptions
 
-| Prop          | Type                 |
-| ------------- | -------------------- |
-| **`enabled`** | <code>boolean</code> |
+| Prop          | Type                 | Description                                                             | Since |
+| ------------- | -------------------- | ----------------------------------------------------------------------- | ----- |
+| **`enabled`** | <code>boolean</code> | Indicates whether to enable or disable predictive back gesture support. | 8.0.0 |
 
 
 #### PluginListenerHandle
