@@ -25,6 +25,8 @@ public class AppPlugin extends Plugin {
     private static final String EVENT_RESUME = "resume";
     private boolean hasPausedEver = false;
 
+    private OnBackPressedCallback onbackPressedCallback;
+    
     public void load() {
         bridge
             .getApp()
@@ -59,7 +61,10 @@ public class AppPlugin extends Plugin {
                 }
             }
         };
+
         getActivity().getOnBackPressedDispatcher().addCallback(getActivity(), callback);
+
+        this.onbackPressedCallback = callback;
     }
 
     @PluginMethod
@@ -109,6 +114,19 @@ public class AppPlugin extends Plugin {
     @PluginMethod
     public void minimizeApp(PluginCall call) {
         getActivity().moveTaskToBack(true);
+        call.resolve();
+    }
+
+    @PluginMethod
+    public void togglePredictiveBack(PluginCall call) {
+        if (this.onbackPressedCallback == null) {
+            call.resolve();
+            return;
+        }
+
+        Boolean enabled = call.getBoolean("enabled");
+
+        this.onbackPressedCallback.setEnabled(!enabled);
         call.resolve();
     }
 

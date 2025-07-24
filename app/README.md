@@ -76,6 +76,7 @@ const checkAppLaunchUrl = async () => {
 * [`getState()`](#getstate)
 * [`getLaunchUrl()`](#getlaunchurl)
 * [`minimizeApp()`](#minimizeapp)
+* [`togglePredictiveBack(...)`](#togglepredictiveback)
 * [`addListener('appStateChange', ...)`](#addlistenerappstatechange-)
 * [`addListener('pause', ...)`](#addlistenerpause-)
 * [`addListener('resume', ...)`](#addlistenerresume-)
@@ -163,6 +164,25 @@ Minimizes the application.
 Only available for Android.
 
 **Since:** 1.1.0
+
+--------------------
+
+
+### togglePredictiveBack(...)
+
+```typescript
+togglePredictiveBack(options: TogglePredictiveBackOptions) => Promise<void>
+```
+
+Toggles support for Android's predictive back button support.
+
+Only available for Android.
+
+| Param         | Type                                                                                |
+| ------------- | ----------------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#togglepredictivebackoptions">TogglePredictiveBackOptions</a></code> |
+
+**Since:** 8.0.0
 
 --------------------
 
@@ -362,6 +382,13 @@ Remove all native listeners for this plugin
 | Prop      | Type                | Description                   | Since |
 | --------- | ------------------- | ----------------------------- | ----- |
 | **`url`** | <code>string</code> | The url used to open the app. | 1.0.0 |
+
+
+#### TogglePredictiveBackOptions
+
+| Prop          | Type                 |
+| ------------- | -------------------- |
+| **`enabled`** | <code>boolean</code> |
 
 
 #### PluginListenerHandle
