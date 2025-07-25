@@ -114,7 +114,7 @@ public class AppPlugin: CAPPlugin, CAPBridgedPlugin {
     @objc func minimizeApp(_ call: CAPPluginCall) {
         call.unimplemented()
     }
-    
+
     @objc func togglePredictiveBack(_ call: CAPPluginCall) {
         call.unimplemented()
     }

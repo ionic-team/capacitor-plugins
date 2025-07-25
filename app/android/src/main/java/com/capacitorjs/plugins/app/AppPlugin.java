@@ -26,7 +26,7 @@ public class AppPlugin extends Plugin {
     private boolean hasPausedEver = false;
 
     private OnBackPressedCallback onbackPressedCallback;
-    
+
     public void load() {
         bridge
             .getApp()
