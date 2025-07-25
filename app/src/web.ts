@@ -32,6 +32,10 @@ export class AppWeb extends WebPlugin implements AppPlugin {
     throw this.unimplemented('Not implemented on web.');
   }
 
+  async togglePredictiveBack(): Promise<void> {
+    throw this.unimplemented('Not implemented on web.');
+  }
+
   private handleVisibilityChange = () => {
     const data = {
       isActive: document.hidden !== true,
