@@ -91,6 +91,19 @@ public class ThumbnailAdapter extends RecyclerView.Adapter<ThumbnailAdapter.View
         return thumbnails.size();
     }
 
+    /**
+     * Get the ThumbnailItem at the specified position
+     *
+     * @param position Position of the item to retrieve
+     * @return The ThumbnailItem at the specified position, or null if position is invalid
+     */
+    public ThumbnailItem getThumbnailItem(int position) {
+        if (position >= 0 && position < thumbnails.size()) {
+            return thumbnails.get(position);
+        }
+        return null;
+    }
+
     public void setOnThumbnailsChangedCallback(OnThumbnailsChangedCallback callback) {
         this.thumbnailsChangedCallback = callback;
     }

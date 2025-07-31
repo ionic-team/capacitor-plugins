@@ -32,6 +32,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowInsetsController;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -207,10 +208,8 @@ public class CameraFragment extends Fragment {
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
 
-        // Store the current camera controller
-        LifecycleCameraController currentController = cameraController;
-
         // Check if device is in landscape mode with the new configuration
+        boolean wasLandscape = isLandscape;
         isLandscape = newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE;
 
         // Recreate the layout when orientation changes
@@ -219,7 +218,13 @@ public class CameraFragment extends Fragment {
             int currentLensFacing = lensFacing;
             int currentFlashMode = flashMode;
 
-            // Remove all views but don't destroy the camera controller
+            // Completely recreate the camera controller when switching orientations
+            if (cameraController != null) {
+                cameraController.unbind();
+                cameraController = null;
+            }
+
+            // Remove all views
             relativeLayout.removeAllViews();
 
             // Recreate the UI with the new orientation
@@ -229,8 +234,20 @@ public class CameraFragment extends Fragment {
 
             ColorStateList buttonColors = createButtonColorList();
 
+            // Create a black background that fills the entire screen
+            View blackBackground = new View(fragmentActivity);
+            blackBackground.setId(View.generateViewId());
+            blackBackground.setBackgroundColor(Color.BLACK);
+            RelativeLayout.LayoutParams blackBgParams = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.MATCH_PARENT,
+                RelativeLayout.LayoutParams.MATCH_PARENT
+            );
+            blackBackground.setLayoutParams(blackBgParams);
+            relativeLayout.addView(blackBackground, 0); // Add at index 0 to be behind everything
+
             // Create the preview view first
             createPreviewView(fragmentActivity);
+
             createFocusIndicator(fragmentActivity);
 
             if (isLandscape) {
@@ -256,20 +273,77 @@ public class CameraFragment extends Fragment {
                 createFlashButton(fragmentActivity, margin, buttonColors);
             }
 
-            // Restore the camera controller to the new preview view
-            if (currentController != null) {
-                previewView.setController(currentController);
-                cameraController = currentController;
+            // Create a new camera controller
+            cameraController = new LifecycleCameraController(requireActivity());
+            cameraController.bindToLifecycle(requireActivity());
+            previewView.setController(cameraController);
 
-                // Restore camera settings
-                lensFacing = currentLensFacing;
-                flashMode = currentFlashMode;
+            // Restore camera settings
+            lensFacing = currentLensFacing;
+            flashMode = currentFlashMode;
 
-                // Make sure the camera selector is set correctly
-                CameraSelector cameraSelector = new CameraSelector.Builder().requireLensFacing(lensFacing).build();
-                cameraController.setCameraSelector(cameraSelector);
-                cameraController.setImageCaptureFlashMode(flashMode);
-            }
+            // Make sure the camera selector is set correctly
+            CameraSelector cameraSelector = new CameraSelector.Builder().requireLensFacing(lensFacing).build();
+            cameraController.setCameraSelector(cameraSelector);
+            cameraController.setImageCaptureFlashMode(flashMode);
+
+            // Force layout update
+            relativeLayout.requestLayout();
+            relativeLayout.invalidate();
+            previewView.requestLayout();
+
+            // Post a delayed layout update to ensure everything is properly laid out
+            new Handler(requireActivity().getMainLooper()).postDelayed(() -> {
+                if (isLandscape) {
+                    // Force the preview view to take up the correct width in landscape mode
+                    int containerWidth = (int) (displayMetrics.widthPixels * 0.2);
+                    RelativeLayout.LayoutParams previewParams = (RelativeLayout.LayoutParams) previewView.getLayoutParams();
+
+                    // Clear any existing rules that might be interfering
+                    previewParams.removeRule(RelativeLayout.ABOVE);
+                    previewParams.removeRule(RelativeLayout.BELOW);
+                    previewParams.removeRule(RelativeLayout.RIGHT_OF);
+                    previewParams.removeRule(RelativeLayout.LEFT_OF);
+                    previewParams.removeRule(RelativeLayout.CENTER_IN_PARENT);
+                    previewParams.removeRule(RelativeLayout.CENTER_HORIZONTAL);
+                    previewParams.removeRule(RelativeLayout.CENTER_VERTICAL);
+
+                    // Set explicit width to 80% of screen width
+                    previewParams.width = displayMetrics.widthPixels - containerWidth;
+                    previewParams.height = RelativeLayout.LayoutParams.MATCH_PARENT;
+
+                    // Set the correct rules for landscape mode
+                    previewParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+                    previewParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+                    previewParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+                    if (controlsContainer != null) {
+                        previewParams.addRule(RelativeLayout.LEFT_OF, controlsContainer.getId());
+                    }
+
+                    previewParams.setMargins(0, 0, 0, 0);
+                    previewView.setLayoutParams(previewParams);
+
+                    // Force update the scale type
+                    previewView.setScaleType(PreviewView.ScaleType.FILL_CENTER);
+
+                    // Force a layout update
+                    previewView.requestLayout();
+                    previewView.invalidate();
+                    relativeLayout.requestLayout();
+                    relativeLayout.invalidate();
+
+                    // Add a second delayed update to ensure the camera preview is properly sized
+                    new Handler(requireActivity().getMainLooper()).postDelayed(() -> {
+                        if (previewView != null && isLandscape) {
+                            previewView.setScaleType(PreviewView.ScaleType.FILL_CENTER);
+                            previewView.requestLayout();
+                            previewView.invalidate();
+                            relativeLayout.requestLayout();
+                            relativeLayout.invalidate();
+                        }
+                    }, 300);
+                }
+            }, 100);
         }
     }
 
@@ -284,6 +358,17 @@ public class CameraFragment extends Fragment {
         isLandscape = isLandscapeMode(fragmentActivity);
 
         relativeLayout = new RelativeLayout(fragmentActivity);
+
+        // Create a black background that fills the entire screen
+        View blackBackground = new View(fragmentActivity);
+        blackBackground.setId(View.generateViewId());
+        blackBackground.setBackgroundColor(Color.BLACK);
+        RelativeLayout.LayoutParams blackBgParams = new RelativeLayout.LayoutParams(
+            RelativeLayout.LayoutParams.MATCH_PARENT,
+            RelativeLayout.LayoutParams.MATCH_PARENT
+        );
+        blackBackground.setLayoutParams(blackBgParams);
+        relativeLayout.addView(blackBackground); // Add the background first
 
         ColorStateList buttonColors = createButtonColorList();
 
@@ -753,7 +838,7 @@ public class CameraFragment extends Fragment {
         controlsContainer.setId(View.generateViewId());
         controlsContainer.setBackgroundColor(Color.BLACK);
 
-        // Set the container to take up the right side of the screen (about 20% of width)
+        // Set the container to take up the right 20% of the screen
         int containerWidth = (int) (displayMetrics.widthPixels * 0.2);
         RelativeLayout.LayoutParams containerParams = new RelativeLayout.LayoutParams(
             containerWidth,
@@ -765,26 +850,32 @@ public class CameraFragment extends Fragment {
         // Add the container to the main layout
         relativeLayout.addView(controlsContainer);
 
-        // Create a black background that fills the entire screen
-        View blackBackground = new View(fragmentActivity);
-        blackBackground.setId(View.generateViewId());
-        blackBackground.setBackgroundColor(Color.BLACK);
-        RelativeLayout.LayoutParams blackBgParams = new RelativeLayout.LayoutParams(
-            RelativeLayout.LayoutParams.MATCH_PARENT,
-            RelativeLayout.LayoutParams.MATCH_PARENT
-        );
-        blackBackground.setLayoutParams(blackBgParams);
-        relativeLayout.addView(blackBackground, 0); // Add at index 0 to be behind everything
-
-        // Adjust the preview view to take the full width minus the controls container
+        // First remove any existing layout rules from the preview view
         RelativeLayout.LayoutParams previewParams = (RelativeLayout.LayoutParams) previewView.getLayoutParams();
         previewParams.width = displayMetrics.widthPixels - containerWidth;
         previewParams.height = RelativeLayout.LayoutParams.MATCH_PARENT;
+
+        // Clear any existing rules that might be interfering
+        previewParams.removeRule(RelativeLayout.ABOVE);
+        previewParams.removeRule(RelativeLayout.BELOW);
+        previewParams.removeRule(RelativeLayout.RIGHT_OF);
+        previewParams.removeRule(RelativeLayout.LEFT_OF);
+        previewParams.removeRule(RelativeLayout.CENTER_IN_PARENT);
+        previewParams.removeRule(RelativeLayout.CENTER_HORIZONTAL);
+        previewParams.removeRule(RelativeLayout.CENTER_VERTICAL);
+
+        // Set the correct rules for landscape mode
         previewParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
         previewParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
         previewParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-        previewParams.setMargins(0, 0, 0, 0); // Remove any margins
+        previewParams.addRule(RelativeLayout.LEFT_OF, controlsContainer.getId());
+
+        // Remove any margins
+        previewParams.setMargins(0, 0, 0, 0);
         previewView.setLayoutParams(previewParams);
+
+        // Force the scale type to FILL_CENTER to ensure it fills the available space
+        previewView.setScaleType(PreviewView.ScaleType.FILL_CENTER);
 
         // Ensure the preview view has a black background to prevent transparency
         previewView.setBackgroundColor(Color.BLACK);
@@ -810,28 +901,44 @@ public class CameraFragment extends Fragment {
         previewView = new PreviewView(fragmentActivity);
         previewView.setId(View.generateViewId());
 
-        RelativeLayout.LayoutParams previewLayoutParams = new RelativeLayout.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.MATCH_PARENT
-        );
+        RelativeLayout.LayoutParams previewLayoutParams;
 
-        // We'll set the ABOVE rule after bottomBar is created in portrait mode
-        // In landscape mode, it takes the full height but not the full width
+        if (isLandscape) {
+            // In landscape mode, explicitly set width to account for controls container
+            int containerWidth = (int) (displayMetrics.widthPixels * 0.2);
+            previewLayoutParams = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+            );
+            // Initially set to match_parent, we'll adjust the width after the controls container is created
+            previewLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+            previewLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+            previewLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+            previewLayoutParams.setMargins(0, 0, 0, 0);
+        } else {
+            // In portrait mode, use match_parent for width
+            previewLayoutParams = new RelativeLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+            );
+            // We'll set the ABOVE rule after bottomBar is created
+        }
 
         previewView.setLayoutParams(previewLayoutParams);
 
         // Set background color to black to prevent transparency
         previewView.setBackgroundColor(Color.BLACK);
 
-        // Use FILL_START for landscape mode to ensure the preview fills the available width
-        // while maintaining the aspect ratio and aligning to the left
-        previewView.setScaleType(isLandscape ? PreviewView.ScaleType.FILL_START : PreviewView.ScaleType.FIT_CENTER);
+        // Use FILL_CENTER for both orientations to ensure the preview fills the available space
+        previewView.setScaleType(PreviewView.ScaleType.FILL_CENTER);
 
         previewView.setOnTouchListener(
             (v, event) -> {
-                // Position the focus indicator at the touch point
-                focusIndicator.setX(event.getX() - (focusIndicator.getWidth() / 2f));
-                focusIndicator.setY(event.getY() - (focusIndicator.getHeight() / 2f));
+                if (focusIndicator != null) {
+                    // Position the focus indicator at the touch point
+                    focusIndicator.setX(event.getX() - (focusIndicator.getWidth() / 2f));
+                    focusIndicator.setY(event.getY() - (focusIndicator.getHeight() / 2f));
+                }
 
                 // Let the PreviewView handle the rest of the touch event.
                 // Returning false allows the default tap-to-focus behavior to trigger.
@@ -1040,7 +1147,20 @@ public class CameraFragment extends Fragment {
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(fragmentActivity, LinearLayoutManager.HORIZONTAL, false);
         filmstripView.setLayoutManager(layoutManager);
+
+        // If we already have an adapter with thumbnails, preserve them
+        ThumbnailAdapter existingAdapter = thumbnailAdapter;
         thumbnailAdapter = new ThumbnailAdapter();
+
+        // If we had an existing adapter with thumbnails, transfer them to the new adapter
+        if (existingAdapter != null && existingAdapter.getItemCount() > 0) {
+            for (int i = 0; i < existingAdapter.getItemCount(); i++) {
+                ThumbnailAdapter.ThumbnailItem item = existingAdapter.getThumbnailItem(i);
+                if (item != null) {
+                    thumbnailAdapter.addThumbnail(item.getUri(), item.getBitmap());
+                }
+            }
+        }
         filmstripView.setAdapter(thumbnailAdapter);
         relativeLayout.addView(filmstripView);
 
@@ -1077,24 +1197,66 @@ public class CameraFragment extends Fragment {
         // Calculate width to fill the remaining space (minus controls container and some margin for the flash button)
         int flashButtonWidth = dpToPx(fragmentActivity, 56); // Approximate width of FAB
         int margin = dpToPx(fragmentActivity, 20);
+        // Calculate width to use more of the available space
+        // We're keeping the 20% for controls container but reducing other margins
         filmstripLayoutParams.width = displayMetrics.widthPixels -
                                      (int)(displayMetrics.widthPixels * 0.2) - // Controls container
                                      flashButtonWidth - // Flash button width
-                                     margin * 3; // Extra margin
+                                     margin; // Reduced margin to allow more thumbnails
 
         // Add left margin to create space between flash button and filmstrip
         filmstripLayoutParams.setMargins(margin, 0, 0, margin);
 
         filmstripView.setLayoutParams(filmstripLayoutParams);
 
-        // Add padding to the filmstrip
-        int padding = dpToPx(fragmentActivity, 12);
+        // Add padding to the filmstrip - reduced for landscape mode
+        int padding = dpToPx(fragmentActivity, 6);
         filmstripView.setPadding(padding, padding, padding, padding);
         filmstripView.setClipToPadding(false);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(fragmentActivity, LinearLayoutManager.HORIZONTAL, false);
         filmstripView.setLayoutManager(layoutManager);
-        thumbnailAdapter = new ThumbnailAdapter();
+
+        // Create a custom adapter with smaller thumbnails for landscape mode
+        // If we already have an adapter with thumbnails, preserve them
+        ThumbnailAdapter existingAdapter = thumbnailAdapter;
+        thumbnailAdapter = new ThumbnailAdapter() {
+            @Override
+            public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                Context context = parent.getContext();
+                int thumbnailSize = dpToPx(context, 60); // Smaller thumbnail size for landscape mode (was 80dp)
+                int margin = dpToPx(context, 3); // Smaller margin for landscape mode (was 4dp)
+
+                FrameLayout frameLayout = new FrameLayout(context);
+                FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(thumbnailSize, thumbnailSize);
+                layoutParams.setMargins(margin, margin, margin, margin);
+                frameLayout.setLayoutParams(layoutParams);
+
+                ImageView imageView = new ImageView(context);
+                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                frameLayout.addView(imageView);
+
+                ImageView removeButton = new ImageView(context);
+                int buttonSize = dpToPx(context, 20); // Smaller remove button (was 24dp)
+                FrameLayout.LayoutParams buttonParams = new FrameLayout.LayoutParams(buttonSize, buttonSize);
+                buttonParams.gravity = Gravity.TOP | Gravity.END;
+                removeButton.setLayoutParams(buttonParams);
+                removeButton.setImageResource(R.drawable.ic_cancel_white_24dp);
+                frameLayout.addView(removeButton);
+
+                return new ViewHolder(frameLayout, imageView, removeButton);
+            }
+        };
+
+        // If we had an existing adapter with thumbnails, transfer them to the new adapter
+        if (existingAdapter != null && existingAdapter.getItemCount() > 0) {
+            for (int i = 0; i < existingAdapter.getItemCount(); i++) {
+                ThumbnailAdapter.ThumbnailItem item = existingAdapter.getThumbnailItem(i);
+                if (item != null) {
+                    thumbnailAdapter.addThumbnail(item.getUri(), item.getBitmap());
+                }
+            }
+        }
         filmstripView.setAdapter(thumbnailAdapter);
         relativeLayout.addView(filmstripView);
 
