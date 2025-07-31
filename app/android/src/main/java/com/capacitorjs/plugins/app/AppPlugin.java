@@ -25,7 +25,7 @@ public class AppPlugin extends Plugin {
     private static final String EVENT_RESUME = "resume";
     private boolean hasPausedEver = false;
 
-    private OnBackPressedCallback onbackPressedCallback;
+    private OnBackPressedCallback onBackPressedCallback;
 
     public void load() {
         bridge
@@ -46,7 +46,7 @@ public class AppPlugin extends Plugin {
                     notifyListeners(EVENT_RESTORED_RESULT, result.getWrappedResult(), true);
                 }
             );
-        this.onbackPressedCallback = new OnBackPressedCallback(true) {
+        this.onBackPressedCallback = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
                 if (!hasListeners(EVENT_BACK_BUTTON)) {
@@ -62,7 +62,7 @@ public class AppPlugin extends Plugin {
             }
         };
 
-        getActivity().getOnBackPressedDispatcher().addCallback(getActivity(), this.onbackPressedCallback);
+        getActivity().getOnBackPressedDispatcher().addCallback(getActivity(), this.onBackPressedCallback);
 
     }
 
@@ -118,14 +118,14 @@ public class AppPlugin extends Plugin {
 
     @PluginMethod
     public void togglePredictiveBack(PluginCall call) {
-        if (this.onbackPressedCallback == null) {
-            call.reject("onbackPressedCallback is not set");
+        if (this.onBackPressedCallback == null) {
+            call.reject("onBackPressedCallback is not set");
             return;
         }
 
         Boolean enabled = call.getBoolean("enabled");
 
-        this.onbackPressedCallback.setEnabled(!enabled);
+        this.onBackPressedCallback.setEnabled(!enabled);
         call.resolve();
     }
 
