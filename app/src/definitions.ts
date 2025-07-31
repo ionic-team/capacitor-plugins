@@ -1,4 +1,14 @@
+/// <reference types="@capacitor/cli" />
+
 import type { PluginListenerHandle } from '@capacitor/core';
+
+declare module '@capacitor/cli' {
+  export interface PluginsConfig {
+    App?: {
+      disableBackButtonListener?: boolean;
+    };
+  }
+}
 
 export interface AppInfo {
   /**

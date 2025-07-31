@@ -28,6 +28,8 @@ public class AppPlugin extends Plugin {
     private OnBackPressedCallback onBackPressedCallback;
 
     public void load() {
+        boolean disableBackButtonHandler = bridge.getConfig().getPluginConfiguration("App").getBoolean("disableBackButtonListener", false);
+
         bridge
             .getApp()
             .setStatusChangeListener(
@@ -47,7 +49,7 @@ public class AppPlugin extends Plugin {
                 }
             );
         this.onBackPressedCallback =
-            new OnBackPressedCallback(true) {
+            new OnBackPressedCallback(!disableBackButtonHandler) {
                 @Override
                 public void handleOnBackPressed() {
                     if (!hasListeners(EVENT_BACK_BUTTON)) {
