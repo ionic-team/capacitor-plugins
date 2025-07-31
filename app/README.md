@@ -178,7 +178,7 @@ Toggles support for Android's predictive back gesture.
 
 Enabling this will disable this plugin's `backButton` listener.
 
-Only available for Android 15+.
+Only available for Android 13+.
 
 | Param         | Type                                                                                |
 | ------------- | ----------------------------------------------------------------------------------- |

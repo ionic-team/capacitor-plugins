@@ -185,7 +185,7 @@ export interface AppPlugin {
    *
    * Enabling this will disable this plugin's `backButton` listener.
    *
-   * Only available for Android 15+.
+   * Only available for Android 13+.
    *
    * @since 8.0.0
    */
