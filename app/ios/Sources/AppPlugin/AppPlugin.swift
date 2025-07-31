@@ -11,7 +11,7 @@ public class AppPlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "getLaunchUrl", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getState", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "minimizeApp", returnType: CAPPluginReturnPromise),
-        CAPPluginMethod(name: "togglePredictiveBack", returnType: CAPPluginReturnPromise)
+        CAPPluginMethod(name: "toggleBackButtonHandler", returnType: CAPPluginReturnPromise)
     ]
     private var observers: [NSObjectProtocol] = []
 
@@ -115,7 +115,7 @@ public class AppPlugin: CAPPlugin, CAPBridgedPlugin {
         call.unimplemented()
     }
 
-    @objc func togglePredictiveBack(_ call: CAPPluginCall) {
+    @objc func toggleBackButtonHandler(_ call: CAPPluginCall) {
         call.unimplemented()
     }
 }

@@ -32,7 +32,7 @@ export class AppWeb extends WebPlugin implements AppPlugin {
     throw this.unimplemented('Not implemented on web.');
   }
 
-  async togglePredictiveBack(): Promise<void> {
+  async toggleBackButtonHandler(): Promise<void> {
     throw this.unimplemented('Not implemented on web.');
   }
 

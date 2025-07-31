@@ -5,7 +5,15 @@ import type { PluginListenerHandle } from '@capacitor/core';
 declare module '@capacitor/cli' {
   export interface PluginsConfig {
     App?: {
-      disableBackButtonListener?: boolean;
+      /**
+       * Disable the plugin's default back button handling.
+       *
+       * Only available for Android.
+       *
+       * @since 8.0.0
+       * @default false
+       */
+      disableBackButtonHandler?: boolean;
     };
   }
 }
@@ -135,9 +143,9 @@ export interface BackButtonListenerEvent {
   canGoBack: boolean;
 }
 
-export interface TogglePredictiveBackOptions {
+export interface ToggleBackButtonHandlerOptions {
   /**
-   * Indicates whether to enable or disable predictive back gesture support.
+   * Indicates whether to enable or disable default back button handling.
    *
    * @since 8.0.0
    */
@@ -191,15 +199,15 @@ export interface AppPlugin {
   minimizeApp(): Promise<void>;
 
   /**
-   * Toggles support for Android's predictive back gesture.
+   * Enables or disables the plugin's back button handling during runtime.
    *
-   * Enabling this will disable this plugin's `backButton` listener.
-   *
-   * Only available for Android 13+.
+   * Only available for Android.
    *
    * @since 8.0.0
    */
-  togglePredictiveBack(options: TogglePredictiveBackOptions): Promise<void>;
+  toggleBackButtonHandler(
+    options: ToggleBackButtonHandlerOptions,
+  ): Promise<void>;
 
   /**
    * Listen for changes in the app or the activity states.

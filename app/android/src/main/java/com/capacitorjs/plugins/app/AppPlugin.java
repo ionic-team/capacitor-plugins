@@ -119,7 +119,7 @@ public class AppPlugin extends Plugin {
     }
 
     @PluginMethod
-    public void togglePredictiveBack(PluginCall call) {
+    public void toggleBackButtonHandler(PluginCall call) {
         if (this.onBackPressedCallback == null) {
             call.reject("onBackPressedCallback is not set");
             return;
@@ -127,7 +127,7 @@ public class AppPlugin extends Plugin {
 
         Boolean enabled = call.getBoolean("enabled");
 
-        this.onBackPressedCallback.setEnabled(!enabled);
+        this.onBackPressedCallback.setEnabled(enabled);
         call.resolve();
     }
 

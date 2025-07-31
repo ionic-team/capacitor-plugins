@@ -76,7 +76,7 @@ const checkAppLaunchUrl = async () => {
 * [`getState()`](#getstate)
 * [`getLaunchUrl()`](#getlaunchurl)
 * [`minimizeApp()`](#minimizeapp)
-* [`togglePredictiveBack(...)`](#togglepredictiveback)
+* [`toggleBackButtonHandler(...)`](#togglebackbuttonhandler)
 * [`addListener('appStateChange', ...)`](#addlistenerappstatechange-)
 * [`addListener('pause', ...)`](#addlistenerpause-)
 * [`addListener('resume', ...)`](#addlistenerresume-)
@@ -168,21 +168,19 @@ Only available for Android.
 --------------------
 
 
-### togglePredictiveBack(...)
+### toggleBackButtonHandler(...)
 
 ```typescript
-togglePredictiveBack(options: TogglePredictiveBackOptions) => Promise<void>
+toggleBackButtonHandler(options: ToggleBackButtonHandlerOptions) => Promise<void>
 ```
 
-Toggles support for Android's predictive back gesture.
+Enables or disables the plugin's back button handling during runtime.
 
-Enabling this will disable this plugin's `backButton` listener.
+Only available for Android.
 
-Only available for Android 13+.
-
-| Param         | Type                                                                                |
-| ------------- | ----------------------------------------------------------------------------------- |
-| **`options`** | <code><a href="#togglepredictivebackoptions">TogglePredictiveBackOptions</a></code> |
+| Param         | Type                                                                                      |
+| ------------- | ----------------------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#togglebackbuttonhandleroptions">ToggleBackButtonHandlerOptions</a></code> |
 
 **Since:** 8.0.0
 
@@ -386,11 +384,11 @@ Remove all native listeners for this plugin
 | **`url`** | <code>string</code> | The url used to open the app. | 1.0.0 |
 
 
-#### TogglePredictiveBackOptions
+#### ToggleBackButtonHandlerOptions
 
-| Prop          | Type                 | Description                                                             | Since |
-| ------------- | -------------------- | ----------------------------------------------------------------------- | ----- |
-| **`enabled`** | <code>boolean</code> | Indicates whether to enable or disable predictive back gesture support. | 8.0.0 |
+| Prop          | Type                 | Description                                                          | Since |
+| ------------- | -------------------- | -------------------------------------------------------------------- | ----- |
+| **`enabled`** | <code>boolean</code> | Indicates whether to enable or disable default back button handling. | 8.0.0 |
 
 
 #### PluginListenerHandle
