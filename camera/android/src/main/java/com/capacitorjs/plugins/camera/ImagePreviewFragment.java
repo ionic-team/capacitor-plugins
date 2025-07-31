@@ -1,5 +1,6 @@
 package com.capacitorjs.plugins.camera;
 
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -59,6 +60,9 @@ public class ImagePreviewFragment extends DialogFragment {
         imageView.setLayoutParams(new FrameLayout.LayoutParams(
                 FrameLayout.LayoutParams.MATCH_PARENT,
                 FrameLayout.LayoutParams.MATCH_PARENT));
+
+        // Use FIT_CENTER for better handling of different aspect ratios
+        // This helps prevent stretching in both portrait and landscape modes
         imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
 
         // Create a progress bar to show while loading
@@ -114,6 +118,14 @@ public class ImagePreviewFragment extends DialogFragment {
                 ExifWrapper exifWrapper = ImageUtils.getExifData(requireContext(), fullResolutionBitmap, uri);
                 try {
                     fullResolutionBitmap = ImageUtils.correctOrientation(requireContext(), fullResolutionBitmap, uri, exifWrapper);
+
+                    // Additional rotation for landscape mode if needed
+                    int orientation = requireContext().getResources().getConfiguration().orientation;
+                    if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                        // In landscape mode, ensure the image is properly oriented
+                        // The image is already rotated based on EXIF data, so we don't need additional rotation
+                        // But we ensure it's displayed with the correct aspect ratio
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

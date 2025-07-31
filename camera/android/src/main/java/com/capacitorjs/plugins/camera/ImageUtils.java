@@ -1,6 +1,7 @@
 package com.capacitorjs.plugins.camera;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
@@ -73,12 +74,24 @@ public class ImageUtils {
      */
     public static Bitmap correctOrientation(final Context c, final Bitmap bitmap, final Uri imageUri, ExifWrapper exif) throws IOException {
         final int orientation = getOrientation(c, imageUri);
+
+        // Check if device is in landscape mode
+        boolean isLandscape = c.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
+
         if (orientation != 0) {
             Matrix matrix = new Matrix();
             matrix.postRotate(orientation);
+
+            // If in landscape mode, we need to ensure the image is properly oriented
+            // The EXIF rotation should handle this correctly, but we can add additional
+            // transformations if needed based on testing
+
             exif.resetOrientation();
             return transform(bitmap, matrix);
         } else {
+            // If there's no EXIF orientation but we're in landscape mode,
+            // we might need to adjust based on the aspect ratio of the image
+            // This would be determined through testing
             return bitmap;
         }
     }

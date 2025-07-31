@@ -8,6 +8,7 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.res.ColorStateList;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -110,6 +111,8 @@ public class CameraFragment extends Fragment {
     private RelativeLayout.LayoutParams closeButtonLayoutParams;
     private RelativeLayout.LayoutParams flashButtonLayoutParams;
     private DisplayMetrics displayMetrics;
+    private boolean isLandscape = false;
+    private RelativeLayout controlsContainer; // Container for camera controls in landscape mode
     // Camera variables
     private int lensFacing = CameraSelector.LENS_FACING_BACK;
     private int flashMode = ImageCapture.FLASH_MODE_AUTO;
@@ -156,6 +159,9 @@ public class CameraFragment extends Fragment {
         zoomHandler = new Handler(requireActivity().getMainLooper());
         mediaActionSound = new MediaActionSound();
         mediaActionSound.load(MediaActionSound.SHUTTER_CLICK);
+
+        // Register for configuration changes (like orientation changes)
+        setRetainInstance(true);
     }
 
     @Override
@@ -187,6 +193,86 @@ public class CameraFragment extends Fragment {
     }
 
     @Nullable
+    /**
+     * Checks if the device is currently in landscape mode
+     *
+     * @param context The context to check orientation
+     * @return true if in landscape mode, false otherwise
+     */
+    private boolean isLandscapeMode(Context context) {
+        return context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
+    }
+
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        // Store the current camera controller
+        LifecycleCameraController currentController = cameraController;
+
+        // Check if device is in landscape mode with the new configuration
+        isLandscape = newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE;
+
+        // Recreate the layout when orientation changes
+        if (relativeLayout != null) {
+            // Save the current camera state
+            int currentLensFacing = lensFacing;
+            int currentFlashMode = flashMode;
+
+            // Remove all views but don't destroy the camera controller
+            relativeLayout.removeAllViews();
+
+            // Recreate the UI with the new orientation
+            FragmentActivity fragmentActivity = requireActivity();
+            int margin = (int) (20 * displayMetrics.density);
+            int barHeight = (int) (100 * displayMetrics.density);
+
+            ColorStateList buttonColors = createButtonColorList();
+
+            // Create the preview view first
+            createPreviewView(fragmentActivity);
+            createFocusIndicator(fragmentActivity);
+
+            if (isLandscape) {
+                // In landscape mode, create a container for controls on the right side
+                createControlsContainerForLandscape(fragmentActivity, buttonColors, margin);
+            } else {
+                // In portrait mode, create the bottom bar and buttons
+                createBottomBar(fragmentActivity, barHeight, margin, buttonColors);
+
+                // Set preview view to be above bottom bar in portrait mode
+                RelativeLayout.LayoutParams previewParams = (RelativeLayout.LayoutParams) previewView.getLayoutParams();
+                previewParams.addRule(RelativeLayout.ABOVE, bottomBar.getId());
+                previewView.setLayoutParams(previewParams);
+
+                // Zoom bar is above the bottom bar/buttons
+                createZoomTabLayout(fragmentActivity, margin);
+
+                // Thumbnail images in the filmstrip are above the zoom buttons
+                createFilmstripView(fragmentActivity);
+
+                // Close button and flash are top left/right corners
+                createCloseButton(fragmentActivity, margin, buttonColors);
+                createFlashButton(fragmentActivity, margin, buttonColors);
+            }
+
+            // Restore the camera controller to the new preview view
+            if (currentController != null) {
+                previewView.setController(currentController);
+                cameraController = currentController;
+
+                // Restore camera settings
+                lensFacing = currentLensFacing;
+                flashMode = currentFlashMode;
+
+                // Make sure the camera selector is set correctly
+                CameraSelector cameraSelector = new CameraSelector.Builder().requireLensFacing(lensFacing).build();
+                cameraController.setCameraSelector(cameraSelector);
+                cameraController.setImageCaptureFlashMode(flashMode);
+            }
+        }
+    }
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         FragmentActivity fragmentActivity = requireActivity();
@@ -194,27 +280,40 @@ public class CameraFragment extends Fragment {
         int margin = (int) (20 * displayMetrics.density);
         int barHeight = (int) (100 * displayMetrics.density);
 
+        // Check if device is in landscape mode
+        isLandscape = isLandscapeMode(fragmentActivity);
+
         relativeLayout = new RelativeLayout(fragmentActivity);
 
         ColorStateList buttonColors = createButtonColorList();
 
-        // Create the bottom bar and the buttons that sit inside it
-        createBottomBar(fragmentActivity, barHeight, margin, buttonColors);
-
-        // Camera preview is above the bottom bar. The zoom buttons and filmstrip overlap it
+        // Create the preview view first
         createPreviewView(fragmentActivity);
 
         createFocusIndicator(fragmentActivity);
 
-        // Zoom bar is above the bottom bar/buttons
-        createZoomTabLayout(fragmentActivity, margin);
+        if (isLandscape) {
+            // In landscape mode, create a container for controls on the right side
+            createControlsContainerForLandscape(fragmentActivity, buttonColors, margin);
+        } else {
+            // In portrait mode, create the bottom bar and buttons
+            createBottomBar(fragmentActivity, barHeight, margin, buttonColors);
 
-        // Thumbnail images in the filmstrip are above the zoom buttons
-        createFilmstripView(fragmentActivity);
+            // Set preview view to be above bottom bar in portrait mode
+            RelativeLayout.LayoutParams previewParams = (RelativeLayout.LayoutParams) previewView.getLayoutParams();
+            previewParams.addRule(RelativeLayout.ABOVE, bottomBar.getId());
+            previewView.setLayoutParams(previewParams);
 
-        // Close button and flash are top left/right corners
-        createCloseButton(fragmentActivity, margin, buttonColors);
-        createFlashButton(fragmentActivity, margin, buttonColors);
+            // Zoom bar is above the bottom bar/buttons
+            createZoomTabLayout(fragmentActivity, margin);
+
+            // Thumbnail images in the filmstrip are above the zoom buttons
+            createFilmstripView(fragmentActivity);
+
+            // Close button and flash are top left/right corners
+            createCloseButton(fragmentActivity, margin, buttonColors);
+            createFlashButton(fragmentActivity, margin, buttonColors);
+        }
 
         // Set a transparent navigation bar
         Window window = requireActivity().getWindow();
@@ -294,6 +393,214 @@ public class CameraFragment extends Fragment {
         createTakePictureButton(fragmentActivity, margin, buttonColors);
         createFlipButton(fragmentActivity, margin, buttonColors);
         createDoneButton(fragmentActivity, margin, buttonColors);
+    }
+
+    private void createTakePictureButtonForLandscape(FragmentActivity fragmentActivity, int margin, ColorStateList buttonColors) {
+        takePictureButton = new FloatingActionButton(fragmentActivity);
+        takePictureButton.setId(View.generateViewId());
+        takePictureButton.setImageResource(R.drawable.ic_shutter_circle);
+        takePictureButton.setBackgroundColor(Color.TRANSPARENT);
+        takePictureButton.setBackgroundTintList(buttonColors);
+
+        int fabSize = dpToPx(fragmentActivity, 84);
+        int iconSize = (int) (fabSize * 0.9);
+        takePictureButton.setCustomSize(fabSize);
+        takePictureButton.setMaxImageSize(iconSize);
+
+        takePictureLayoutParams = new RelativeLayout.LayoutParams(
+            RelativeLayout.LayoutParams.WRAP_CONTENT,
+            RelativeLayout.LayoutParams.WRAP_CONTENT
+        );
+        // Position in the center of the right side
+        takePictureLayoutParams.addRule(RelativeLayout.CENTER_VERTICAL);
+        takePictureLayoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        takePictureButton.setLayoutParams(takePictureLayoutParams);
+        takePictureButton.setStateListAnimator(android.animation.AnimatorInflater.loadStateListAnimator(fragmentActivity, R.animator.button_press_animation));
+        takePictureButton.setOnClickListener(
+            v -> {
+                v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                mediaActionSound.play(MediaActionSound.SHUTTER_CLICK);
+                var name = new SimpleDateFormat(FILENAME, Locale.US).format(System.currentTimeMillis());
+                var contentValues = new ContentValues();
+                contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, name);
+                contentValues.put(MediaStore.MediaColumns.MIME_TYPE, PHOTO_TYPE);
+                var outputOptions = new ImageCapture.OutputFileOptions.Builder(
+                    requireContext().getContentResolver(),
+                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                    contentValues
+                )
+                    .build();
+
+                cameraController.takePicture(
+                    outputOptions,
+                    cameraExecutor,
+                    new ImageCapture.OnImageSavedCallback() {
+                        @Override
+                        public void onImageSaved(@NonNull ImageCapture.OutputFileResults outputFileResults) {
+                            Uri savedImageUri = outputFileResults.getSavedUri();
+                            if (savedImageUri != null) {
+                                try {
+                                    InputStream stream = requireContext().getContentResolver().openInputStream(savedImageUri);
+                                    Bitmap bmp = BitmapFactory.decodeStream(stream);
+                                    images.put(savedImageUri, bmp);
+                                    requireView()
+                                        .post(
+                                            () -> thumbnailAdapter.addThumbnail(savedImageUri, getThumbnail(savedImageUri))
+                                        );
+                                } catch (FileNotFoundException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onError(@NonNull ImageCaptureException exception) {}
+                    }
+                );
+            }
+        );
+        controlsContainer.addView(takePictureButton);
+    }
+
+    private void createFlipButtonForLandscape(FragmentActivity fragmentActivity, int margin, ColorStateList buttonColors) {
+        flipCameraButton = new FloatingActionButton(fragmentActivity);
+        flipCameraButton.setId(View.generateViewId());
+        flipCameraButton.setImageResource(R.drawable.flip_camera_android_24px);
+        flipCameraButton.setColorFilter(Color.WHITE);
+        flipCameraButton.setBackgroundTintList(buttonColors);
+        flipButtonLayoutParams = new RelativeLayout.LayoutParams(
+            RelativeLayout.LayoutParams.WRAP_CONTENT,
+            RelativeLayout.LayoutParams.WRAP_CONTENT
+        );
+        // Position at the bottom right
+        flipButtonLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        flipButtonLayoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        flipButtonLayoutParams.setMargins(0, 0, 0, margin * 2);
+        flipCameraButton.setLayoutParams(flipButtonLayoutParams);
+        flipCameraButton.setOnClickListener(
+            v -> {
+                v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                lensFacing = lensFacing == CameraSelector.LENS_FACING_FRONT ? CameraSelector.LENS_FACING_BACK : CameraSelector.LENS_FACING_FRONT;
+                flashButton.setVisibility(lensFacing == CameraSelector.LENS_FACING_BACK ? View.VISIBLE : View.GONE);
+                if (!zoomTabs.isEmpty()) {
+                    zoomTabLayout.removeAllTabs();
+                    zoomTabs.clear();
+                }
+                setupCamera();
+            }
+        );
+        controlsContainer.addView(flipCameraButton);
+    }
+
+    private void createDoneButtonForLandscape(FragmentActivity fragmentActivity, int margin, ColorStateList buttonColors) {
+        doneButton = new FloatingActionButton(fragmentActivity);
+        doneButton.setId(View.generateViewId());
+        doneButton.setImageResource(R.drawable.done_24px);
+        doneButton.setColorFilter(Color.WHITE);
+        doneButton.setBackgroundTintList(buttonColors);
+        doneButtonLayoutParams = new RelativeLayout.LayoutParams(
+            RelativeLayout.LayoutParams.WRAP_CONTENT,
+            RelativeLayout.LayoutParams.WRAP_CONTENT
+        );
+        // Position at the top right
+        doneButtonLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+        doneButtonLayoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        doneButtonLayoutParams.setMargins(0, margin * 2, 0, 0);
+        doneButton.setLayoutParams(doneButtonLayoutParams);
+        doneButton.setOnClickListener(
+            view -> {
+                view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                done();
+            }
+        );
+        controlsContainer.addView(doneButton);
+    }
+
+    private void createCloseButtonForLandscape(FragmentActivity fragmentActivity, int margin, ColorStateList buttonColors) {
+        closeButton = new FloatingActionButton(fragmentActivity);
+        closeButton.setId(View.generateViewId());
+        closeButton.setImageResource(R.drawable.close_24px);
+        closeButton.setBackgroundTintList(buttonColors);
+        closeButton.setColorFilter(Color.WHITE);
+        closeButtonLayoutParams = new RelativeLayout.LayoutParams(
+            RelativeLayout.LayoutParams.WRAP_CONTENT,
+            RelativeLayout.LayoutParams.WRAP_CONTENT
+        );
+        // Position at the top left of the preview area
+        closeButtonLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+        closeButtonLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+        closeButtonLayoutParams.setMargins(margin * 2, margin * 2, 0, 0);
+        closeButton.setLayoutParams(closeButtonLayoutParams);
+        closeButton.setOnClickListener(
+            view -> {
+                view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                if (images != null && !images.isEmpty()) {
+                    new AlertDialog.Builder(requireContext())
+                    .setMessage(CONFIRM_CANCEL_MESSAGE)
+                    .setPositiveButton(CONFIRM_CANCEL_POSITIVE, (dialogInterface, i) -> cancel())
+                    .setNegativeButton(CONFIRM_CANCEL_NEGATIVE, (dialogInterface, i) -> dialogInterface.dismiss())
+                    .create()
+                    .show();
+                } else {
+                    cancel();
+                }
+            }
+        );
+
+        // Add to the main layout instead of the controls container
+        relativeLayout.addView(closeButton);
+    }
+
+    private void createFlashButtonForLandscape(FragmentActivity fragmentActivity, int margin, ColorStateList buttonColors) {
+        flashButton = new FloatingActionButton(fragmentActivity);
+        flashButton.setId(View.generateViewId());
+        flashButton.setImageResource(R.drawable.flash_auto_24px);
+        flashButton.setBackgroundTintList(buttonColors);
+        flashButton.setColorFilter(Color.WHITE);
+        flashButtonLayoutParams = new RelativeLayout.LayoutParams(
+            RelativeLayout.LayoutParams.WRAP_CONTENT,
+            RelativeLayout.LayoutParams.WRAP_CONTENT
+        );
+        // Position at the bottom left of the preview area
+        flashButtonLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        flashButtonLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+        flashButtonLayoutParams.setMargins(margin * 2, 0, 0, margin * 2);
+        flashButton.setLayoutParams(flashButtonLayoutParams);
+        flashButton.setOnClickListener(
+            view -> {
+                view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                flashMode = cameraController.getImageCaptureFlashMode();
+                switch (flashMode) {
+                    case ImageCapture.FLASH_MODE_OFF:
+                        {
+                            flashMode = ImageCapture.FLASH_MODE_ON;
+                            flashButton.setImageResource(R.drawable.flash_on_24px);
+                            flashButton.setColorFilter(Color.WHITE);
+                            break;
+                        }
+                    case ImageCapture.FLASH_MODE_ON:
+                        {
+                            flashMode = ImageCapture.FLASH_MODE_AUTO;
+                            flashButton.setImageResource(R.drawable.flash_auto_24px);
+                            flashButton.setColorFilter(Color.WHITE);
+                            break;
+                        }
+                    case ImageCapture.FLASH_MODE_AUTO:
+                        {
+                            flashMode = ImageCapture.FLASH_MODE_OFF;
+                            flashButton.setImageResource(R.drawable.flash_off_24px);
+                            flashButton.setColorFilter(Color.WHITE);
+                            break;
+                        }
+                    default:
+                        throw new IllegalStateException("Unexpected flash mode: " + flashMode);
+                }
+                cameraController.setImageCaptureFlashMode(flashMode);
+            }
+        );
+
+        // Add to the main layout instead of the controls container
+        relativeLayout.addView(flashButton);
     }
 
     private void createFlashButton(FragmentActivity fragmentActivity, int margin, ColorStateList buttonColors) {
@@ -437,6 +744,67 @@ public class CameraFragment extends Fragment {
         bottomBar.addView(flipCameraButton);
     }
 
+    /**
+     * Creates a container for camera controls in landscape mode
+     */
+    private void createControlsContainerForLandscape(FragmentActivity fragmentActivity, ColorStateList buttonColors, int margin) {
+        // Create a container for controls on the right side
+        controlsContainer = new RelativeLayout(fragmentActivity);
+        controlsContainer.setId(View.generateViewId());
+        controlsContainer.setBackgroundColor(Color.BLACK);
+
+        // Set the container to take up the right side of the screen (about 20% of width)
+        int containerWidth = (int) (displayMetrics.widthPixels * 0.2);
+        RelativeLayout.LayoutParams containerParams = new RelativeLayout.LayoutParams(
+            containerWidth,
+            RelativeLayout.LayoutParams.MATCH_PARENT
+        );
+        containerParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+        controlsContainer.setLayoutParams(containerParams);
+
+        // Add the container to the main layout
+        relativeLayout.addView(controlsContainer);
+
+        // Create a black background that fills the entire screen
+        View blackBackground = new View(fragmentActivity);
+        blackBackground.setId(View.generateViewId());
+        blackBackground.setBackgroundColor(Color.BLACK);
+        RelativeLayout.LayoutParams blackBgParams = new RelativeLayout.LayoutParams(
+            RelativeLayout.LayoutParams.MATCH_PARENT,
+            RelativeLayout.LayoutParams.MATCH_PARENT
+        );
+        blackBackground.setLayoutParams(blackBgParams);
+        relativeLayout.addView(blackBackground, 0); // Add at index 0 to be behind everything
+
+        // Adjust the preview view to take the full width minus the controls container
+        RelativeLayout.LayoutParams previewParams = (RelativeLayout.LayoutParams) previewView.getLayoutParams();
+        previewParams.width = displayMetrics.widthPixels - containerWidth;
+        previewParams.height = RelativeLayout.LayoutParams.MATCH_PARENT;
+        previewParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+        previewParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+        previewParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        previewParams.setMargins(0, 0, 0, 0); // Remove any margins
+        previewView.setLayoutParams(previewParams);
+
+        // Ensure the preview view has a black background to prevent transparency
+        previewView.setBackgroundColor(Color.BLACK);
+
+        // Create camera control buttons for landscape mode that go in the right container
+        createTakePictureButtonForLandscape(fragmentActivity, margin, buttonColors);
+        createFlipButtonForLandscape(fragmentActivity, margin, buttonColors);
+        createDoneButtonForLandscape(fragmentActivity, margin, buttonColors);
+
+        // Create buttons that go directly on the main layout (left side)
+        createCloseButtonForLandscape(fragmentActivity, margin, buttonColors);
+        createFlashButtonForLandscape(fragmentActivity, margin, buttonColors);
+
+        // Create zoom tabs for landscape mode
+        createZoomTabLayoutForLandscape(fragmentActivity, margin);
+
+        // Create filmstrip for landscape mode
+        createFilmstripViewForLandscape(fragmentActivity);
+    }
+
     @SuppressLint("ClickableViewAccessibility")
     private void createPreviewView(FragmentActivity fragmentActivity) {
         previewView = new PreviewView(fragmentActivity);
@@ -446,9 +814,18 @@ public class CameraFragment extends Fragment {
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.MATCH_PARENT
         );
-        previewLayoutParams.addRule(RelativeLayout.ABOVE, bottomBar.getId());
+
+        // We'll set the ABOVE rule after bottomBar is created in portrait mode
+        // In landscape mode, it takes the full height but not the full width
+
         previewView.setLayoutParams(previewLayoutParams);
-        previewView.setScaleType(PreviewView.ScaleType.FILL_CENTER);
+
+        // Set background color to black to prevent transparency
+        previewView.setBackgroundColor(Color.BLACK);
+
+        // Use FILL_START for landscape mode to ensure the preview fills the available width
+        // while maintaining the aspect ratio and aligning to the left
+        previewView.setScaleType(isLandscape ? PreviewView.ScaleType.FILL_START : PreviewView.ScaleType.FIT_CENTER);
 
         previewView.setOnTouchListener(
             (v, event) -> {
@@ -554,6 +931,83 @@ public class CameraFragment extends Fragment {
         zoomTabCardView.addView(zoomTabLayout);
     }
 
+    private void createZoomTabLayoutForLandscape(FragmentActivity fragmentActivity, int margin) {
+        zoomTabCardView = new CardView(fragmentActivity);
+        zoomTabCardView.setId(View.generateViewId());
+
+        // Make the card view rounded corners
+        GradientDrawable backgroundDrawable = new GradientDrawable();
+        backgroundDrawable.setShape(GradientDrawable.RECTANGLE);
+        backgroundDrawable.setColor(ZOOM_TAB_LAYOUT_BACKGROUND_COLOR);
+        backgroundDrawable.setCornerRadius(dpToPx(requireContext(), 56 / 2));
+        zoomTabCardView.setBackground(backgroundDrawable);
+
+        // Define the LayoutParams for the cardView in landscape mode
+        cardViewLayoutParams = new RelativeLayout.LayoutParams(
+            RelativeLayout.LayoutParams.WRAP_CONTENT,
+            RelativeLayout.LayoutParams.WRAP_CONTENT
+        );
+        // Position it below the flip button
+        cardViewLayoutParams.addRule(RelativeLayout.BELOW, flipCameraButton.getId());
+        cardViewLayoutParams.addRule(RelativeLayout.ABOVE, takePictureButton.getId());
+        cardViewLayoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        cardViewLayoutParams.setMargins(margin, margin, margin, margin);
+        zoomTabCardView.setLayoutParams(cardViewLayoutParams);
+
+        controlsContainer.addView(zoomTabCardView);
+
+        zoomTabLayout = new TabLayout(fragmentActivity);
+        zoomTabLayout.setId(View.generateViewId());
+        tabLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        zoomTabLayout.setLayoutParams(tabLayoutParams);
+
+        // Set TabLayout parameters
+        zoomTabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+        zoomTabLayout.setTabMode(TabLayout.MODE_FIXED);
+        zoomTabLayout.setSelectedTabIndicatorColor(Color.TRANSPARENT);
+        zoomTabLayout.setSelectedTabIndicator(null);
+        zoomTabLayout.setBackgroundColor(Color.TRANSPARENT);
+        zoomTabLayout.setBackground(null);
+
+        // Set the listener for tab selection
+        zoomTabLayout.addOnTabSelectedListener(
+            new TabLayout.OnTabSelectedListener() {
+                @Override
+                public void onTabSelected(TabLayout.Tab tab) {
+                    ZoomTab zoomTab = zoomTabs.get(tab.getPosition());
+                    zoomTab.setSelected(true);
+                    if (!isSnappingZoom.get()) {
+                        zoomTab.setTransientZoomLevel(null);
+                        if (cameraController != null) {
+                            cameraController.setZoomRatio(zoomTab.getZoomLevel());
+                        }
+                    }
+                }
+
+                @Override
+                public void onTabUnselected(TabLayout.Tab tab) {
+                    ZoomTab zoomTab = zoomTabs.get(tab.getPosition());
+                    zoomTab.setSelected(false);
+                    zoomTab.setTransientZoomLevel(null);
+                }
+
+                @Override
+                public void onTabReselected(TabLayout.Tab tab) {
+                    ZoomTab zoomTab = zoomTabs.get(tab.getPosition());
+                    zoomTab.setSelected(true);
+                    if (!isSnappingZoom.get()) {
+                        zoomTab.setTransientZoomLevel(null);
+                        if (cameraController != null) {
+                            cameraController.setZoomRatio(zoomTab.getZoomLevel());
+                        }
+                    }
+                }
+            }
+        );
+
+        zoomTabCardView.addView(zoomTabLayout);
+    }
+
     private void createZoomTabs(FragmentActivity fragmentActivity, TabLayout tabLayout) {
         float[] zoomLevels = { minZoom, 1f, 2f, 5f };
 
@@ -580,6 +1034,60 @@ public class CameraFragment extends Fragment {
         filmstripView.setLayoutParams(filmstripLayoutParams);
 
         // Add padding to the filmstrip to prevent clipping of the remove button
+        int padding = dpToPx(fragmentActivity, 12);
+        filmstripView.setPadding(padding, padding, padding, padding);
+        filmstripView.setClipToPadding(false);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(fragmentActivity, LinearLayoutManager.HORIZONTAL, false);
+        filmstripView.setLayoutManager(layoutManager);
+        thumbnailAdapter = new ThumbnailAdapter();
+        filmstripView.setAdapter(thumbnailAdapter);
+        relativeLayout.addView(filmstripView);
+
+        thumbnailAdapter.setOnThumbnailsChangedCallback(
+            new ThumbnailAdapter.OnThumbnailsChangedCallback() {
+                @Override
+                public void onThumbnailRemoved(Uri uri, Bitmap bmp) {
+                    images.remove(uri);
+                    deleteFile(uri);
+                }
+            }
+        );
+
+        // Set click listener for thumbnails to show preview
+        thumbnailAdapter.setOnThumbnailClickListener(new ThumbnailAdapter.OnThumbnailClickListener() {
+            @Override
+            public void onThumbnailClick(Uri uri, Bitmap bitmap) {
+                showImagePreview(uri);
+            }
+        });
+    }
+
+    private void createFilmstripViewForLandscape(FragmentActivity fragmentActivity) {
+        filmstripView = new RecyclerView(fragmentActivity);
+        RelativeLayout.LayoutParams filmstripLayoutParams = new RelativeLayout.LayoutParams(
+            RelativeLayout.LayoutParams.MATCH_PARENT,
+            RelativeLayout.LayoutParams.WRAP_CONTENT
+        );
+
+        // Position the filmstrip at the bottom of the preview area, but to the right of the flash button
+        filmstripLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        filmstripLayoutParams.addRule(RelativeLayout.RIGHT_OF, flashButton.getId());
+
+        // Calculate width to fill the remaining space (minus controls container and some margin for the flash button)
+        int flashButtonWidth = dpToPx(fragmentActivity, 56); // Approximate width of FAB
+        int margin = dpToPx(fragmentActivity, 20);
+        filmstripLayoutParams.width = displayMetrics.widthPixels -
+                                     (int)(displayMetrics.widthPixels * 0.2) - // Controls container
+                                     flashButtonWidth - // Flash button width
+                                     margin * 3; // Extra margin
+
+        // Add left margin to create space between flash button and filmstrip
+        filmstripLayoutParams.setMargins(margin, 0, 0, margin);
+
+        filmstripView.setLayoutParams(filmstripLayoutParams);
+
+        // Add padding to the filmstrip
         int padding = dpToPx(fragmentActivity, 12);
         filmstripView.setPadding(padding, padding, padding, padding);
         filmstripView.setClipToPadding(false);
