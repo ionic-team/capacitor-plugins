@@ -75,9 +75,6 @@ public class ImageUtils {
     public static Bitmap correctOrientation(final Context c, final Bitmap bitmap, final Uri imageUri, ExifWrapper exif) throws IOException {
         final int orientation = getOrientation(c, imageUri);
 
-        // Check if device is in landscape mode
-        boolean isLandscape = c.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
-
         if (orientation != 0) {
             Matrix matrix = new Matrix();
             matrix.postRotate(orientation);
@@ -90,8 +87,16 @@ public class ImageUtils {
             return transform(bitmap, matrix);
         } else {
             // If there's no EXIF orientation but we're in landscape mode,
-            // we might need to adjust based on the aspect ratio of the image
-            // This would be determined through testing
+            // check the aspect ratio and rotate if needed
+            int width = bitmap.getWidth();
+            int height = bitmap.getHeight();
+            if (width > height) {
+                // Landscape image, rotate 90 degrees to portrait
+                Matrix matrix = new Matrix();
+                matrix.postRotate(90);
+                // Optionally, you may want to flip or further adjust based on your use case
+                return transform(bitmap, matrix);
+            }
             return bitmap;
         }
     }
