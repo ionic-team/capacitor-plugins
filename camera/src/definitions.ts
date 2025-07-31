@@ -337,7 +337,7 @@ export enum CameraSource {
   Camera = 'CAMERA',
   /**
    * Take multiple photos in a row using the camera.
-   * Only available on Android.
+   * Available on Android and iOS.
    */
   CameraMulti = 'CAMERA_MULTI',
   /**

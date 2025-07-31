@@ -102,15 +102,15 @@ const takePicture = async () => {
 
 <docgen-index>
 
-* [`getPhoto(...)`](#getphoto)
-* [`pickImages(...)`](#pickimages)
-* [`pickLimitedLibraryPhotos()`](#picklimitedlibraryphotos)
-* [`getLimitedLibraryPhotos()`](#getlimitedlibraryphotos)
-* [`checkPermissions()`](#checkpermissions)
-* [`requestPermissions(...)`](#requestpermissions)
-* [Interfaces](#interfaces)
-* [Type Aliases](#type-aliases)
-* [Enums](#enums)
+- [`getPhoto(...)`](#getphoto)
+- [`pickImages(...)`](#pickimages)
+- [`pickLimitedLibraryPhotos()`](#picklimitedlibraryphotos)
+- [`getLimitedLibraryPhotos()`](#getlimitedlibraryphotos)
+- [`checkPermissions()`](#checkpermissions)
+- [`requestPermissions(...)`](#requestpermissions)
+- [Interfaces](#interfaces)
+- [Type Aliases](#type-aliases)
+- [Enums](#enums)
 
 </docgen-index>
 
@@ -136,7 +136,6 @@ with the camera.
 
 --------------------
 
-
 ### pickImages(...)
 
 ```typescript
@@ -156,7 +155,6 @@ On iOS 13 and older it only allows to pick one picture.
 
 --------------------
 
-
 ### pickLimitedLibraryPhotos()
 
 ```typescript
@@ -173,7 +171,6 @@ On iOS 14 or if the user gave full access to the photos it returns an empty arra
 
 --------------------
 
-
 ### getLimitedLibraryPhotos()
 
 ```typescript
@@ -188,7 +185,6 @@ iOS 14+ Only: Return an array of photos selected from the limited photo library.
 
 --------------------
 
-
 ### checkPermissions()
 
 ```typescript
@@ -202,7 +198,6 @@ Check camera and photo album permissions
 **Since:** 1.0.0
 
 --------------------
-
 
 ### requestPermissions(...)
 
@@ -222,9 +217,7 @@ Request camera and photo album permissions
 
 --------------------
 
-
 ### Interfaces
-
 
 #### Photo
 
@@ -237,7 +230,6 @@ Request camera and photo album permissions
 | **`exif`**         | <code>any</code>     | Exif data, if any, retrieved from the image                                                                                                                                                                                                                              | 1.0.0 |
 | **`format`**       | <code>string</code>  | The format of the image, ex: jpeg, png, gif. iOS and Android only support jpeg. Web supports jpeg, png and gif, but the exact availability may vary depending on the browser. gif is only supported if `webUseInput` is set to `true` or if `source` is set to `Photos`. | 1.0.0 |
 | **`saved`**        | <code>boolean</code> | Whether if the image was saved to the gallery or not. On Android and iOS, saving to the gallery can fail if the user didn't grant the required permissions. On Web there is no gallery, so always returns false.                                                         | 1.1.0 |
-
 
 #### ImageOptions
 
@@ -253,19 +245,17 @@ Request camera and photo album permissions
 | **`source`**             | <code><a href="#camerasource">CameraSource</a></code>         | The source to get the photo from. By default this prompts the user to select either the photo album or take a photo.                                                                                                                                                       | <code>: CameraSource.Prompt</code>  | 1.0.0 |
 | **`direction`**          | <code><a href="#cameradirection">CameraDirection</a></code>   | iOS and Web only: The camera direction.                                                                                                                                                                                                                                    | <code>: CameraDirection.Rear</code> | 1.0.0 |
 | **`presentationStyle`**  | <code>'fullscreen' \| 'popover'</code>                        | iOS only: The presentation style of the Camera.                                                                                                                                                                                                                            | <code>: 'fullscreen'</code>         | 1.0.0 |
-| **`webUseInput`**        | <code>boolean</code>                                          | Web only: Whether to use the PWA Element experience or file input. The default is to use PWA Elements if installed and fall back to file input. To always use file input, set this to `true`. Learn more about PWA Elements: https://capacitorjs.com/docs/web/pwa-elements |                                     | 1.0.0 |
+| **`webUseInput`**        | <code>boolean</code>                                          | Web only: Whether to use the PWA Element experience or file input. The default is to use PWA Elements if installed and fall back to file input. To always use file input, set this to `true`. Learn more about PWA Elements: <https://capacitorjs.com/docs/web/pwa-elements> |                                     | 1.0.0 |
 | **`promptLabelHeader`**  | <code>string</code>                                           | Text value to use when displaying the prompt.                                                                                                                                                                                                                              | <code>: 'Photo'</code>              | 1.0.0 |
 | **`promptLabelCancel`**  | <code>string</code>                                           | Text value to use when displaying the prompt. iOS only: The label of the 'cancel' button.                                                                                                                                                                                  | <code>: 'Cancel'</code>             | 1.0.0 |
 | **`promptLabelPhoto`**   | <code>string</code>                                           | Text value to use when displaying the prompt. The label of the button to select a saved image.                                                                                                                                                                             | <code>: 'From Photos'</code>        | 1.0.0 |
 | **`promptLabelPicture`** | <code>string</code>                                           | Text value to use when displaying the prompt. The label of the button to open the camera.                                                                                                                                                                                  | <code>: 'Take Picture'</code>       | 1.0.0 |
-
 
 #### GalleryPhotos
 
 | Prop         | Type                        | Description                     | Since |
 | ------------ | --------------------------- | ------------------------------- | ----- |
 | **`photos`** | <code>GalleryPhoto[]</code> | Array of all the picked photos. | 1.2.0 |
-
 
 #### GalleryPhoto
 
@@ -275,7 +265,6 @@ Request camera and photo album permissions
 | **`webPath`** | <code>string</code> | webPath returns a path that can be used to set the src attribute of an image for efficient loading and rendering. | 1.2.0 |
 | **`exif`**    | <code>any</code>    | Exif data, if any, retrieved from the image                                                                       | 1.2.0 |
 | **`format`**  | <code>string</code> | The format of the image, ex: jpeg, png, gif. iOS and Android only support jpeg. Web supports jpeg, png and gif.   | 1.2.0 |
-
 
 #### GalleryImageOptions
 
@@ -288,7 +277,6 @@ Request camera and photo album permissions
 | **`presentationStyle`**  | <code>'fullscreen' \| 'popover'</code> | iOS only: The presentation style of the Camera.                                                                         | <code>: 'fullscreen'</code> | 1.2.0 |
 | **`limit`**              | <code>number</code>                    | Maximum number of pictures the user will be able to choose. Note: This option is only supported on Android 13+ and iOS. | <code>0 (unlimited)</code>  | 1.2.0 |
 
-
 #### PermissionStatus
 
 | Prop         | Type                                                                    |
@@ -296,34 +284,27 @@ Request camera and photo album permissions
 | **`camera`** | <code><a href="#camerapermissionstate">CameraPermissionState</a></code> |
 | **`photos`** | <code><a href="#camerapermissionstate">CameraPermissionState</a></code> |
 
-
 #### CameraPluginPermissions
 
 | Prop              | Type                                |
 | ----------------- | ----------------------------------- |
 | **`permissions`** | <code>CameraPermissionType[]</code> |
 
-
 ### Type Aliases
-
 
 #### CameraPermissionState
 
 <code><a href="#permissionstate">PermissionState</a> | 'limited'</code>
 
-
 #### PermissionState
 
 <code>'prompt' | 'prompt-with-rationale' | 'granted' | 'denied'</code>
-
 
 #### CameraPermissionType
 
 <code>'camera' | 'photos'</code>
 
-
 ### Enums
-
 
 #### CameraResultType
 
@@ -333,16 +314,14 @@ Request camera and photo album permissions
 | **`Base64`**  | <code>'base64'</code>  |
 | **`DataUrl`** | <code>'dataUrl'</code> |
 
-
 #### CameraSource
 
 | Members           | Value                       | Description                                                                |
 | ----------------- | --------------------------- | -------------------------------------------------------------------------- |
 | **`Prompt`**      | <code>'PROMPT'</code>       | Prompts the user to select either the photo album or take a photo.         |
 | **`Camera`**      | <code>'CAMERA'</code>       | Take a new photo using the camera.                                         |
-| **`CameraMulti`** | <code>'CAMERA_MULTI'</code> | Take multiple photos in a row using the camera. Only available on Android. |
+| **`CameraMulti`** | <code>'CAMERA_MULTI'</code> | Take multiple photos in a row using the camera. Available on Android and iOS. |
 | **`Photos`**      | <code>'PHOTOS'</code>       | Pick an existing photo from the gallery or photo album.                    |
-
 
 #### CameraDirection
 
