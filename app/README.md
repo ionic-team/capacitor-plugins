@@ -76,6 +76,7 @@ const checkAppLaunchUrl = async () => {
 * [`getState()`](#getstate)
 * [`getLaunchUrl()`](#getlaunchurl)
 * [`minimizeApp()`](#minimizeapp)
+* [`toggleBackButtonHandler(...)`](#togglebackbuttonhandler)
 * [`addListener('appStateChange', ...)`](#addlistenerappstatechange-)
 * [`addListener('pause', ...)`](#addlistenerpause-)
 * [`addListener('resume', ...)`](#addlistenerresume-)
@@ -163,6 +164,25 @@ Minimizes the application.
 Only available for Android.
 
 **Since:** 1.1.0
+
+--------------------
+
+
+### toggleBackButtonHandler(...)
+
+```typescript
+toggleBackButtonHandler(options: ToggleBackButtonHandlerOptions) => Promise<void>
+```
+
+Enables or disables the plugin's back button handling during runtime.
+
+Only available for Android.
+
+| Param         | Type                                                                                      |
+| ------------- | ----------------------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#togglebackbuttonhandleroptions">ToggleBackButtonHandlerOptions</a></code> |
+
+**Since:** 8.0.0
 
 --------------------
 
@@ -362,6 +382,13 @@ Remove all native listeners for this plugin
 | Prop      | Type                | Description                   | Since |
 | --------- | ------------------- | ----------------------------- | ----- |
 | **`url`** | <code>string</code> | The url used to open the app. | 1.0.0 |
+
+
+#### ToggleBackButtonHandlerOptions
+
+| Prop          | Type                 | Description                                                          | Since |
+| ------------- | -------------------- | -------------------------------------------------------------------- | ----- |
+| **`enabled`** | <code>boolean</code> | Indicates whether to enable or disable default back button handling. | 8.0.0 |
 
 
 #### PluginListenerHandle
