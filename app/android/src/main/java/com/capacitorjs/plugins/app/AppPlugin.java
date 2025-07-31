@@ -46,7 +46,7 @@ public class AppPlugin extends Plugin {
                     notifyListeners(EVENT_RESTORED_RESULT, result.getWrappedResult(), true);
                 }
             );
-        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+        this.onbackPressedCallback = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
                 if (!hasListeners(EVENT_BACK_BUTTON)) {
@@ -62,9 +62,8 @@ public class AppPlugin extends Plugin {
             }
         };
 
-        getActivity().getOnBackPressedDispatcher().addCallback(getActivity(), callback);
+        getActivity().getOnBackPressedDispatcher().addCallback(getActivity(), this.onbackPressedCallback);
 
-        this.onbackPressedCallback = callback;
     }
 
     @PluginMethod
