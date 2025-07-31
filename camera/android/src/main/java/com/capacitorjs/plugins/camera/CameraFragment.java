@@ -599,6 +599,14 @@ public class CameraFragment extends Fragment {
                 }
             }
         );
+
+        // Set click listener for thumbnails to show preview
+        thumbnailAdapter.setOnThumbnailClickListener(new ThumbnailAdapter.OnThumbnailClickListener() {
+            @Override
+            public void onThumbnailClick(Uri uri, Bitmap bitmap) {
+                showImagePreview(uri);
+            }
+        });
     }
 
     private void createDoneButton(FragmentActivity fragmentActivity, int margin, ColorStateList buttonColors) {
@@ -674,6 +682,16 @@ public class CameraFragment extends Fragment {
             // Handle any exceptions
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Shows a full-screen preview of the image when a thumbnail is clicked
+     *
+     * @param uri The URI of the image to display in the preview
+     */
+    private void showImagePreview(Uri uri) {
+        ImagePreviewFragment previewFragment = ImagePreviewFragment.newInstance(uri);
+        previewFragment.show(requireActivity().getSupportFragmentManager(), "image_preview");
     }
 
     private void setupCamera() throws IllegalStateException {

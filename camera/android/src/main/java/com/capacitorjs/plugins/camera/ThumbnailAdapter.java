@@ -18,6 +18,7 @@ public class ThumbnailAdapter extends RecyclerView.Adapter<ThumbnailAdapter.View
 
     private final ArrayList<ThumbnailItem> thumbnails;
     private OnThumbnailsChangedCallback thumbnailsChangedCallback = null;
+    private OnThumbnailClickListener thumbnailClickListener = null;
 
     ThumbnailAdapter() {
         this.thumbnails = new ArrayList<>();
@@ -59,7 +60,15 @@ public class ThumbnailAdapter extends RecyclerView.Adapter<ThumbnailAdapter.View
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.imageView.setImageBitmap(thumbnails.get(position).bitmap);
+        ThumbnailItem item = thumbnails.get(position);
+        holder.imageView.setImageBitmap(item.bitmap);
+
+        // Set click listener for the thumbnail
+        holder.mainView.setOnClickListener(v -> {
+            if (thumbnailClickListener != null) {
+                thumbnailClickListener.onThumbnailClick(item.getUri(), item.getBitmap());
+            }
+        });
 
         holder.removeButton.setOnClickListener(
             v -> {
@@ -86,6 +95,10 @@ public class ThumbnailAdapter extends RecyclerView.Adapter<ThumbnailAdapter.View
         this.thumbnailsChangedCallback = callback;
     }
 
+    public void setOnThumbnailClickListener(OnThumbnailClickListener listener) {
+        this.thumbnailClickListener = listener;
+    }
+
     static class ViewHolder extends RecyclerView.ViewHolder {
 
         ImageView imageView;
@@ -103,6 +116,10 @@ public class ThumbnailAdapter extends RecyclerView.Adapter<ThumbnailAdapter.View
     public abstract static class OnThumbnailsChangedCallback {
 
         public void onThumbnailRemoved(Uri uri, Bitmap bmp) {}
+    }
+
+    public interface OnThumbnailClickListener {
+        void onThumbnailClick(Uri uri, Bitmap bitmap);
     }
 
     public static class ThumbnailItem {
