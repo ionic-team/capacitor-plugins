@@ -13,6 +13,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
+import android.media.MediaActionSound;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -21,17 +22,18 @@ import android.provider.MediaStore;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.Size;
-import android.view.GestureDetector;
 import android.view.Gravity;
+import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowInsetsController;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -47,10 +49,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
-
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -78,11 +78,14 @@ public class CameraFragment extends Fragment {
     private final String CONFIRM_CANCEL_NEGATIVE = "No";
 
     @ColorInt
-    private final int ZOOM_TAB_LAYOUT_BACKGROUND_COLOR = 0xA0000000;
+    private final int ZOOM_TAB_LAYOUT_BACKGROUND_COLOR = 0x80000000;
+
     @ColorInt
-    private final int ZOOM_BUTTON_COLOR_SELECTED = 0xD0ADD8E6;
+    private final int ZOOM_BUTTON_COLOR_SELECTED = 0xFFFFFFFF;
+
     @ColorInt
-    private final int ZOOM_BUTTON_COLOR_UNSELECTED = 0xC0CCCCCC;
+    private final int ZOOM_BUTTON_COLOR_UNSELECTED = 0x80FFFFFF;
+
     private final AtomicBoolean isSnappingZoom = new AtomicBoolean(false);
     // View related variables
     private RelativeLayout relativeLayout;
@@ -110,39 +113,38 @@ public class CameraFragment extends Fragment {
     // Camera variables
     private int lensFacing = CameraSelector.LENS_FACING_BACK;
     private int flashMode = ImageCapture.FLASH_MODE_AUTO;
+
     @SuppressWarnings("unused")
     private ZoomState zoomRatio = null;
+
     private float minZoom = 0f;
+
     @SuppressWarnings("unused")
     private float maxZoom = 1f;
+
     private ExecutorService cameraExecutor;
     private LifecycleCameraController cameraController;
     // Utility variables
     private HashMap<Uri, Bitmap> images;
     private ArrayList<ZoomTab> zoomTabs;
 
-
     private Handler zoomHandler = null;
     private Runnable zoomRunnable = null;
+    private MediaActionSound mediaActionSound;
 
     // Callbacks
     private OnImagesCapturedCallback imagesCapturedCallback;
 
     @NonNull
     private static ColorStateList createButtonColorList() {
-        int[][] states = new int[][]{
-                new int[]{android.R.attr.state_enabled}, // enabled
-                new int[]{-android.R.attr.state_enabled}, // disabled
-                new int[]{-android.R.attr.state_checked}, // unchecked
-                new int[]{android.R.attr.state_pressed}  // pressed
+        int[][] states = new int[][] {
+            new int[] { android.R.attr.state_enabled }, // enabled
+            new int[] { -android.R.attr.state_enabled }, // disabled
+            new int[] { -android.R.attr.state_checked }, // unchecked
+            new int[] { android.R.attr.state_pressed } // pressed
         };
 
-        int[] colors = new int[]{
-                Color.DKGRAY,
-                Color.TRANSPARENT,
-                Color.TRANSPARENT,
-                Color.LTGRAY
-        };
+        int[] colors = new int[] { Color.DKGRAY, Color.TRANSPARENT, Color.TRANSPARENT, Color.LTGRAY };
         return new ColorStateList(states, colors);
     }
 
@@ -152,6 +154,36 @@ public class CameraFragment extends Fragment {
         images = new HashMap<>();
         zoomTabs = new ArrayList<>();
         zoomHandler = new Handler(requireActivity().getMainLooper());
+        mediaActionSound = new MediaActionSound();
+        mediaActionSound.load(MediaActionSound.SHUTTER_CLICK);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        // Restore the original system UI settings
+        Window window = requireActivity().getWindow();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            final WindowInsetsController insetsController = window.getInsetsController();
+            if (insetsController != null) {
+                insetsController.show(android.view.WindowInsets.Type.statusBars() | android.view.WindowInsets.Type.navigationBars());
+                insetsController.setSystemBarsBehavior(WindowInsetsController.BEHAVIOR_DEFAULT);
+            }
+        } else {
+            View decorView = window.getDecorView();
+            int flags = View.SYSTEM_UI_FLAG_VISIBLE;
+            decorView.setSystemUiVisibility(flags);
+        }
+        window.setStatusBarColor(requireActivity().getResources().getColor(android.R.color.transparent));
+        window.setNavigationBarColor(requireActivity().getResources().getColor(android.R.color.transparent));
+
+        if (mediaActionSound != null) {
+            mediaActionSound.release();
+            mediaActionSound = null;
+        }
+        if (cameraExecutor != null) {
+            cameraExecutor.shutdown();
+        }
     }
 
     @Nullable
@@ -159,7 +191,7 @@ public class CameraFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         FragmentActivity fragmentActivity = requireActivity();
         displayMetrics = fragmentActivity.getResources().getDisplayMetrics();
-        int margin = (int) (16 * displayMetrics.density);
+        int margin = (int) (20 * displayMetrics.density);
         int barHeight = (int) (100 * displayMetrics.density);
 
         relativeLayout = new RelativeLayout(fragmentActivity);
@@ -184,6 +216,27 @@ public class CameraFragment extends Fragment {
         createCloseButton(fragmentActivity, margin, buttonColors);
         createFlashButton(fragmentActivity, margin, buttonColors);
 
+        // Set a transparent navigation bar
+        Window window = requireActivity().getWindow();
+        window.setStatusBarColor(Color.BLACK);
+        window.setNavigationBarColor(Color.BLACK);
+
+        // Enable immersive fullscreen mode (hide status and navigation bars)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            final WindowInsetsController insetsController = window.getInsetsController();
+            if (insetsController != null) {
+                insetsController.hide(android.view.WindowInsets.Type.statusBars() | android.view.WindowInsets.Type.navigationBars());
+                insetsController.setSystemBarsBehavior(WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
+            }
+        } else {
+            View decorView = window.getDecorView();
+            int flags = View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
+            decorView.setSystemUiVisibility(flags);
+        }
+
+        // Remove edge-to-edge insets handling for true fullscreen
+        requireActivity().getWindow().setDecorFitsSystemWindows(true);
+
         return relativeLayout;
     }
 
@@ -191,13 +244,15 @@ public class CameraFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // Request focus for the root view to ensure it can receive touch events immediately.
+        view.setFocusableInTouchMode(true);
+        view.requestFocus();
+
         cameraController = new LifecycleCameraController(requireActivity());
         cameraController.bindToLifecycle(requireActivity());
         previewView.setController(cameraController);
         cameraExecutor = Executors.newSingleThreadExecutor();
         relativeLayout.post(this::setupCamera);
-
-
     }
 
     private void cancel() {
@@ -220,10 +275,7 @@ public class CameraFragment extends Fragment {
     }
 
     private void closeFragment() {
-        requireActivity().getSupportFragmentManager()
-                .beginTransaction()
-                .remove(this)
-                .commit();
+        requireActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
     }
 
     public void setImagesCapturedCallback(OnImagesCapturedCallback imagesCapturedCallback) {
@@ -234,14 +286,10 @@ public class CameraFragment extends Fragment {
         bottomBar = new RelativeLayout(fragmentActivity);
         bottomBar.setId(View.generateViewId());
         bottomBar.setBackgroundColor(Color.BLACK);
-        bottomBarLayoutParams = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.MATCH_PARENT,
-                barHeight
-        );
+        bottomBarLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, barHeight);
         bottomBarLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         bottomBar.setLayoutParams(bottomBarLayoutParams);
         relativeLayout.addView(bottomBar);
-
 
         createTakePictureButton(fragmentActivity, margin, buttonColors);
         createFlipButton(fragmentActivity, margin, buttonColors);
@@ -255,95 +303,108 @@ public class CameraFragment extends Fragment {
         flashButton.setBackgroundTintList(buttonColors);
         flashButton.setColorFilter(Color.WHITE);
         flashButtonLayoutParams = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.WRAP_CONTENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT
+            RelativeLayout.LayoutParams.WRAP_CONTENT,
+            RelativeLayout.LayoutParams.WRAP_CONTENT
         );
         flashButtonLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
         flashButtonLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-        flashButtonLayoutParams.setMargins(0, margin, margin, 0);
+        int topMargin = (int) (margin * 2.5);
+        flashButtonLayoutParams.setMargins(0, topMargin, margin, 0);
         flashButton.setLayoutParams(flashButtonLayoutParams);
-        flashButton.setOnClickListener(view -> {
-            flashMode = cameraController.getImageCaptureFlashMode();
-            switch (flashMode) {
-                case ImageCapture.FLASH_MODE_OFF -> {
-                    flashMode = ImageCapture.FLASH_MODE_ON;
-                    flashButton.setImageResource(R.drawable.flash_on_24px);
-                    flashButton.setColorFilter(Color.WHITE);
+        flashButton.setOnClickListener(
+            view -> {
+                view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                flashMode = cameraController.getImageCaptureFlashMode();
+                switch (flashMode) {
+                    case ImageCapture.FLASH_MODE_OFF:
+                        {
+                            flashMode = ImageCapture.FLASH_MODE_ON;
+                            flashButton.setImageResource(R.drawable.flash_on_24px);
+                            flashButton.setColorFilter(Color.WHITE);
+                            break;
+                        }
+                    case ImageCapture.FLASH_MODE_ON:
+                        {
+                            flashMode = ImageCapture.FLASH_MODE_AUTO;
+                            flashButton.setImageResource(R.drawable.flash_auto_24px);
+                            flashButton.setColorFilter(Color.WHITE);
+                            break;
+                        }
+                    case ImageCapture.FLASH_MODE_AUTO:
+                        {
+                            flashMode = ImageCapture.FLASH_MODE_OFF;
+                            flashButton.setImageResource(R.drawable.flash_off_24px);
+                            flashButton.setColorFilter(Color.WHITE);
+                            break;
+                        }
+                    default:
+                        throw new IllegalStateException("Unexpected flash mode: " + flashMode);
                 }
-                case ImageCapture.FLASH_MODE_ON -> {
-                    flashMode = ImageCapture.FLASH_MODE_AUTO;
-                    flashButton.setImageResource(R.drawable.flash_auto_24px);
-                    flashButton.setColorFilter(Color.WHITE);
-                }
-                case ImageCapture.FLASH_MODE_AUTO -> {
-                    flashMode = ImageCapture.FLASH_MODE_OFF;
-                    flashButton.setImageResource(R.drawable.flash_off_24px);
-                    flashButton.setColorFilter(Color.WHITE);
-                }
-                default -> throw new IllegalStateException("Unexpected flash mode: " + flashMode);
+                cameraController.setImageCaptureFlashMode(flashMode);
             }
-            cameraController.setImageCaptureFlashMode(flashMode);
-
-        });
+        );
         relativeLayout.addView(flashButton);
     }
 
     private void createTakePictureButton(FragmentActivity fragmentActivity, int margin, ColorStateList buttonColors) {
         takePictureButton = new FloatingActionButton(fragmentActivity);
         takePictureButton.setId(View.generateViewId());
-        takePictureButton.setImageResource(R.drawable.photo_camera_24px);
+        takePictureButton.setImageResource(R.drawable.ic_shutter_circle);
         takePictureButton.setBackgroundColor(Color.TRANSPARENT);
         takePictureButton.setBackgroundTintList(buttonColors);
-        takePictureButton.setColorFilter(Color.WHITE);
 
-        takePictureButton.setScaleX(1.5f);
-        takePictureButton.setScaleY(1.5f);
-        takePictureLayoutParams = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.WRAP_CONTENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT
-        );
-        takePictureLayoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
-        takePictureLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-        takePictureLayoutParams.setMargins(0, 0, 0, margin);
+        int fabSize = dpToPx(fragmentActivity, 84);
+        int iconSize = (int) (fabSize * 0.9);
+        takePictureButton.setCustomSize(fabSize);
+        takePictureButton.setMaxImageSize(iconSize);
+
+        takePictureLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        takePictureLayoutParams.addRule(RelativeLayout.CENTER_IN_PARENT);
         takePictureButton.setLayoutParams(takePictureLayoutParams);
-        takePictureButton.setOnClickListener(v -> {
-            var name = new SimpleDateFormat(FILENAME, Locale.US)
-                    .format(System.currentTimeMillis());
-            var contentValues = new ContentValues();
-            contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, name);
-            contentValues.put(MediaStore.MediaColumns.MIME_TYPE, PHOTO_TYPE);
-            var outputOptions = new ImageCapture.OutputFileOptions.Builder(
+        takePictureButton.setStateListAnimator(android.animation.AnimatorInflater.loadStateListAnimator(fragmentActivity, R.animator.button_press_animation));
+        takePictureButton.setOnClickListener(
+            v -> {
+                v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                mediaActionSound.play(MediaActionSound.SHUTTER_CLICK);
+                var name = new SimpleDateFormat(FILENAME, Locale.US).format(System.currentTimeMillis());
+                var contentValues = new ContentValues();
+                contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, name);
+                contentValues.put(MediaStore.MediaColumns.MIME_TYPE, PHOTO_TYPE);
+                var outputOptions = new ImageCapture.OutputFileOptions.Builder(
                     requireContext().getContentResolver(),
                     MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                    contentValues)
+                    contentValues
+                )
                     .build();
 
-            cameraController.takePicture(outputOptions, cameraExecutor, new ImageCapture.OnImageSavedCallback() {
-                @Override
-                public void onImageSaved(@NonNull ImageCapture.OutputFileResults outputFileResults) {
-                    Uri savedImageUri = outputFileResults.getSavedUri();
-                    if (savedImageUri != null) {
-                        try {
-                            InputStream stream = requireContext().getContentResolver()
-                                    .openInputStream(savedImageUri);
-                            Bitmap bmp = BitmapFactory.decodeStream(stream);
-                            images.put(savedImageUri, bmp);
-                            requireView().post(() -> thumbnailAdapter.addThumbnail(
-                                    savedImageUri,
-                                    getThumbnail(savedImageUri)
-                            ));
-                        } catch (FileNotFoundException e) {
-                            e.printStackTrace();
+                cameraController.takePicture(
+                    outputOptions,
+                    cameraExecutor,
+                    new ImageCapture.OnImageSavedCallback() {
+                        @Override
+                        public void onImageSaved(@NonNull ImageCapture.OutputFileResults outputFileResults) {
+                            Uri savedImageUri = outputFileResults.getSavedUri();
+                            if (savedImageUri != null) {
+                                try {
+                                    InputStream stream = requireContext().getContentResolver().openInputStream(savedImageUri);
+                                    Bitmap bmp = BitmapFactory.decodeStream(stream);
+                                    images.put(savedImageUri, bmp);
+                                    requireView()
+                                        .post(
+                                            () -> thumbnailAdapter.addThumbnail(savedImageUri, getThumbnail(savedImageUri))
+                                        );
+                                } catch (FileNotFoundException e) {
+                                    e.printStackTrace();
+                                }
+                            }
                         }
+
+                        @Override
+                        public void onError(@NonNull ImageCaptureException exception) {}
                     }
-                }
-
-                @Override
-                public void onError(@NonNull ImageCaptureException exception) {
-
-                }
-            });
-        });
+                );
+            }
+        );
         bottomBar.addView(takePictureButton);
     }
 
@@ -354,25 +415,25 @@ public class CameraFragment extends Fragment {
         flipCameraButton.setColorFilter(Color.WHITE);
         flipCameraButton.setBackgroundTintList(buttonColors);
         flipButtonLayoutParams = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.WRAP_CONTENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT
+            RelativeLayout.LayoutParams.WRAP_CONTENT,
+            RelativeLayout.LayoutParams.WRAP_CONTENT
         );
-        flipButtonLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-        flipButtonLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-        flipButtonLayoutParams.setMargins(margin, 0, 0, margin);
+        flipButtonLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_START);
+        flipButtonLayoutParams.addRule(RelativeLayout.CENTER_VERTICAL);
+        flipButtonLayoutParams.setMargins(margin, 0, 0, 0);
         flipCameraButton.setLayoutParams(flipButtonLayoutParams);
-        flipCameraButton.setOnClickListener(v -> {
-            lensFacing = lensFacing == CameraSelector.LENS_FACING_FRONT ?
-                    CameraSelector.LENS_FACING_BACK : CameraSelector.LENS_FACING_FRONT;
-            flashButton.setVisibility(
-                    lensFacing == CameraSelector.LENS_FACING_BACK ? View.VISIBLE : View.GONE
-            );
-            if (!zoomTabs.isEmpty()) {
-                zoomTabLayout.removeAllTabs();
-                zoomTabs.clear();
+        flipCameraButton.setOnClickListener(
+            v -> {
+                v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                lensFacing = lensFacing == CameraSelector.LENS_FACING_FRONT ? CameraSelector.LENS_FACING_BACK : CameraSelector.LENS_FACING_FRONT;
+                flashButton.setVisibility(lensFacing == CameraSelector.LENS_FACING_BACK ? View.VISIBLE : View.GONE);
+                if (!zoomTabs.isEmpty()) {
+                    zoomTabLayout.removeAllTabs();
+                    zoomTabs.clear();
+                }
+                setupCamera();
             }
-            setupCamera();
-        });
+        );
         bottomBar.addView(flipCameraButton);
     }
 
@@ -382,28 +443,24 @@ public class CameraFragment extends Fragment {
         previewView.setId(View.generateViewId());
 
         RelativeLayout.LayoutParams previewLayoutParams = new RelativeLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT
         );
         previewLayoutParams.addRule(RelativeLayout.ABOVE, bottomBar.getId());
         previewView.setLayoutParams(previewLayoutParams);
         previewView.setScaleType(PreviewView.ScaleType.FILL_CENTER);
 
-        GestureDetector gestureDetector = new GestureDetector(fragmentActivity, new GestureDetector.SimpleOnGestureListener() {
-            @Override
-            public boolean onSingleTapConfirmed(@NonNull MotionEvent event) {
-                // This is a confirmed single tap, so it's safe to perform a click action here
-                previewView.performClick();
+        previewView.setOnTouchListener(
+            (v, event) -> {
+                // Position the focus indicator at the touch point
+                focusIndicator.setX(event.getX() - (focusIndicator.getWidth() / 2f));
+                focusIndicator.setY(event.getY() - (focusIndicator.getHeight() / 2f));
 
-                return true;
+                // Let the PreviewView handle the rest of the touch event.
+                // Returning false allows the default tap-to-focus behavior to trigger.
+                return false;
             }
-        });
-
-        previewView.setOnTouchListener((v, event) -> {
-            focusIndicator.setX(event.getX() - (focusIndicator.getWidth() / 2f));
-            focusIndicator.setY(event.getY() - (focusIndicator.getHeight() / 2f));
-            return gestureDetector.onTouchEvent(event);
-        });
+        );
 
         relativeLayout.addView(previewView);
     }
@@ -412,34 +469,12 @@ public class CameraFragment extends Fragment {
         focusIndicator = new ImageView(context);
         focusIndicator.setImageResource(R.drawable.center_focus_24px);
 
-        focusIndicator.post(() -> {
-            int desiredSizeDp = 72;
-            // Get the actual dimensions of the ImageView
-            int width = focusIndicator.getWidth();
-            int height = focusIndicator.getHeight();
+        int size = dpToPx(context, 72);
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(size, size);
+        focusIndicator.setLayoutParams(layoutParams);
 
-            // Determine the smaller dimension to maintain the aspect ratio (assuming square for simplicity)
-            int minDimension = Math.min(width, height);
-
-            // Convert the desired size from dp to pixels
-            int desiredSizePx = dpToPx(context, desiredSizeDp);
-
-            // Calculate the scaling factor
-            float scaleFactor = (float) desiredSizePx / minDimension;
-
-            // Apply the scale to the ImageView
-            focusIndicator.setScaleX(scaleFactor);
-            focusIndicator.setScaleY(scaleFactor);
-        });
         focusIndicator.setColorFilter(Color.WHITE);
         focusIndicator.setVisibility(View.INVISIBLE); // Initially hidden
-
-        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
-        );
-        layoutParams.addRule(RelativeLayout.ABOVE, bottomBar.getId());
-        focusIndicator.setLayoutParams(layoutParams);
 
         relativeLayout.addView(focusIndicator);
     }
@@ -452,14 +487,13 @@ public class CameraFragment extends Fragment {
         GradientDrawable backgroundDrawable = new GradientDrawable();
         backgroundDrawable.setShape(GradientDrawable.RECTANGLE);
         backgroundDrawable.setColor(ZOOM_TAB_LAYOUT_BACKGROUND_COLOR);
-        backgroundDrawable.setCornerRadius(dpToPx(requireContext(),56 / 2));
+        backgroundDrawable.setCornerRadius(dpToPx(requireContext(), 56 / 2));
         zoomTabCardView.setBackground(backgroundDrawable);
-
 
         // Define the LayoutParams for the cardView
         cardViewLayoutParams = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.WRAP_CONTENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT
+            RelativeLayout.LayoutParams.WRAP_CONTENT,
+            RelativeLayout.LayoutParams.WRAP_CONTENT
         );
         cardViewLayoutParams.addRule(RelativeLayout.ABOVE, bottomBar.getId());
         cardViewLayoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
@@ -470,10 +504,7 @@ public class CameraFragment extends Fragment {
 
         zoomTabLayout = new TabLayout(fragmentActivity);
         zoomTabLayout.setId(View.generateViewId());
-        tabLayoutParams = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.MATCH_PARENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT
-        );
+        tabLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         zoomTabLayout.setLayoutParams(tabLayoutParams);
 
         // Set TabLayout parameters
@@ -485,44 +516,46 @@ public class CameraFragment extends Fragment {
         zoomTabLayout.setBackground(null);
 
         // Set the listener for tab selection to change the text color and background
-        zoomTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                ZoomTab zoomTab = zoomTabs.get(tab.getPosition());
-                zoomTab.setSelected(true);
-                if (!isSnappingZoom.get()) {
+        zoomTabLayout.addOnTabSelectedListener(
+            new TabLayout.OnTabSelectedListener() {
+                @Override
+                public void onTabSelected(TabLayout.Tab tab) {
+                    ZoomTab zoomTab = zoomTabs.get(tab.getPosition());
+                    zoomTab.setSelected(true);
+                    if (!isSnappingZoom.get()) {
+                        zoomTab.setTransientZoomLevel(null);
+                        if (cameraController != null) {
+                            cameraController.setZoomRatio(zoomTab.getZoomLevel());
+                        }
+                    }
+                }
+
+                @Override
+                public void onTabUnselected(TabLayout.Tab tab) {
+                    ZoomTab zoomTab = zoomTabs.get(tab.getPosition());
+                    zoomTab.setSelected(false);
                     zoomTab.setTransientZoomLevel(null);
-                    if (cameraController != null) {
-                        cameraController.setZoomRatio(zoomTab.getZoomLevel());
+                }
+
+                @Override
+                public void onTabReselected(TabLayout.Tab tab) {
+                    ZoomTab zoomTab = zoomTabs.get(tab.getPosition());
+                    zoomTab.setSelected(true);
+                    if (!isSnappingZoom.get()) {
+                        zoomTab.setTransientZoomLevel(null);
+                        if (cameraController != null) {
+                            cameraController.setZoomRatio(zoomTab.getZoomLevel());
+                        }
                     }
                 }
             }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-                ZoomTab zoomTab = zoomTabs.get(tab.getPosition());
-                zoomTab.setSelected(false);
-                zoomTab.setTransientZoomLevel(null);
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-                ZoomTab zoomTab = zoomTabs.get(tab.getPosition());
-                zoomTab.setSelected(true);
-                if (!isSnappingZoom.get()) {
-                    zoomTab.setTransientZoomLevel(null);
-                    if (cameraController != null) {
-                        cameraController.setZoomRatio(zoomTab.getZoomLevel());
-                    }
-                }
-            }
-        });
+        );
 
         zoomTabCardView.addView(zoomTabLayout);
     }
 
     private void createZoomTabs(FragmentActivity fragmentActivity, TabLayout tabLayout) {
-        float[] zoomLevels = {minZoom, 1f, 2f, 5f};
+        float[] zoomLevels = { minZoom, 1f, 2f, 5f };
 
         for (int i = 0; i < zoomLevels.length; i++) {
             float zoomLevel = zoomLevels[i];
@@ -539,26 +572,33 @@ public class CameraFragment extends Fragment {
     private void createFilmstripView(FragmentActivity fragmentActivity) {
         filmstripView = new RecyclerView(fragmentActivity);
         RelativeLayout.LayoutParams filmstripLayoutParams = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.WRAP_CONTENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT
+            RelativeLayout.LayoutParams.MATCH_PARENT,
+            RelativeLayout.LayoutParams.WRAP_CONTENT
         );
         filmstripLayoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
         filmstripLayoutParams.addRule(RelativeLayout.ABOVE, zoomTabCardView.getId());
         filmstripView.setLayoutParams(filmstripLayoutParams);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(fragmentActivity,
-                LinearLayoutManager.HORIZONTAL, false);
+
+        // Add padding to the filmstrip to prevent clipping of the remove button
+        int padding = dpToPx(fragmentActivity, 12);
+        filmstripView.setPadding(padding, padding, padding, padding);
+        filmstripView.setClipToPadding(false);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(fragmentActivity, LinearLayoutManager.HORIZONTAL, false);
         filmstripView.setLayoutManager(layoutManager);
         thumbnailAdapter = new ThumbnailAdapter();
         filmstripView.setAdapter(thumbnailAdapter);
         relativeLayout.addView(filmstripView);
 
-        thumbnailAdapter.setOnThumbnailsChangedCallback(new ThumbnailAdapter.OnThumbnailsChangedCallback() {
-            @Override
-            public void onThumbnailRemoved(Uri uri, Bitmap bmp) {
-                images.remove(uri);
-                deleteFile(uri);
+        thumbnailAdapter.setOnThumbnailsChangedCallback(
+            new ThumbnailAdapter.OnThumbnailsChangedCallback() {
+                @Override
+                public void onThumbnailRemoved(Uri uri, Bitmap bmp) {
+                    images.remove(uri);
+                    deleteFile(uri);
+                }
             }
-        });
+        );
     }
 
     private void createDoneButton(FragmentActivity fragmentActivity, int margin, ColorStateList buttonColors) {
@@ -568,14 +608,19 @@ public class CameraFragment extends Fragment {
         doneButton.setColorFilter(Color.WHITE);
         doneButton.setBackgroundTintList(buttonColors);
         doneButtonLayoutParams = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.WRAP_CONTENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT
+            RelativeLayout.LayoutParams.WRAP_CONTENT,
+            RelativeLayout.LayoutParams.WRAP_CONTENT
         );
-        doneButtonLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-        doneButtonLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-        doneButtonLayoutParams.setMargins(0, 0, margin, margin);
+        doneButtonLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_END);
+        doneButtonLayoutParams.addRule(RelativeLayout.CENTER_VERTICAL);
+        doneButtonLayoutParams.setMargins(0, 0, margin, 0);
         doneButton.setLayoutParams(doneButtonLayoutParams);
-        doneButton.setOnClickListener(view -> done());
+        doneButton.setOnClickListener(
+            view -> {
+                view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                done();
+            }
+        );
         bottomBar.addView(doneButton);
     }
 
@@ -586,20 +631,29 @@ public class CameraFragment extends Fragment {
         closeButton.setBackgroundTintList(buttonColors);
         closeButton.setColorFilter(Color.WHITE);
         closeButtonLayoutParams = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.WRAP_CONTENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT
+            RelativeLayout.LayoutParams.WRAP_CONTENT,
+            RelativeLayout.LayoutParams.WRAP_CONTENT
         );
         closeButtonLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
         closeButtonLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-        closeButtonLayoutParams.setMargins(margin, margin, 0, 0);
+        // Increase top margin for immersive mode (e.g., 2.5x the original margin)
+        int topMargin = (int) (margin * 2.5);
+        closeButtonLayoutParams.setMargins(margin, topMargin, 0, 0);
         closeButton.setLayoutParams(closeButtonLayoutParams);
-        closeButton.setOnClickListener(view -> new AlertDialog.Builder(requireContext())
-                .setMessage(CONFIRM_CANCEL_MESSAGE)
-                .setPositiveButton(CONFIRM_CANCEL_POSITIVE, (dialogInterface, i) -> cancel())
-                .setNegativeButton(CONFIRM_CANCEL_NEGATIVE,
-                        (dialogInterface, i) -> dialogInterface.dismiss())
-                .create()
-                .show()
+        closeButton.setOnClickListener(
+            view -> {
+                view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                if (images != null && !images.isEmpty()) {
+                    new AlertDialog.Builder(requireContext())
+                    .setMessage(CONFIRM_CANCEL_MESSAGE)
+                    .setPositiveButton(CONFIRM_CANCEL_POSITIVE, (dialogInterface, i) -> cancel())
+                    .setNegativeButton(CONFIRM_CANCEL_NEGATIVE, (dialogInterface, i) -> dialogInterface.dismiss())
+                    .create()
+                    .show();
+                } else {
+                    cancel();
+                }
+            }
         );
         relativeLayout.addView(closeButton);
     }
@@ -622,80 +676,87 @@ public class CameraFragment extends Fragment {
         }
     }
 
-
     private void setupCamera() throws IllegalStateException {
-        cameraController.getInitializationFuture().addListener(() -> {
-            if (!hasFrontFacingCamera()) {
-                flipCameraButton.setVisibility(View.GONE);
-            }
-        }, ContextCompat.getMainExecutor(requireContext()));
+        cameraController
+            .getInitializationFuture()
+            .addListener(() -> {
+                if (!hasFrontFacingCamera()) {
+                    flipCameraButton.setVisibility(View.GONE);
+                }
+            }, ContextCompat.getMainExecutor(requireContext()));
 
-        cameraController.getZoomState().observe(requireActivity(), zoomState -> {
-            zoomRatio = zoomState;
-            minZoom = zoomState.getMinZoomRatio();
-            maxZoom = zoomState.getMaxZoomRatio();
+        cameraController
+            .getZoomState()
+            .observe(
+                requireActivity(),
+                zoomState -> {
+                    zoomRatio = zoomState;
+                    minZoom = zoomState.getMinZoomRatio();
+                    maxZoom = zoomState.getMaxZoomRatio();
 
-            if (zoomTabs.isEmpty()) {
-                createZoomTabs(requireActivity(), zoomTabLayout);
-            }
+                    if (zoomTabs.isEmpty()) {
+                        createZoomTabs(requireActivity(), zoomTabLayout);
+                    }
 
-            if (zoomRunnable != null) {
-                zoomHandler.removeCallbacks(zoomRunnable);
-            }
+                    if (zoomRunnable != null) {
+                        zoomHandler.removeCallbacks(zoomRunnable);
+                    }
 
-            zoomRunnable = () -> {
-                float currentZoom = zoomRatio.getZoomRatio();
-                ZoomTab closestTab = null;
-                final float threshold = 0.05f; // Threshold for considering the next zoom level
+                    zoomRunnable =
+                        () -> {
+                            float currentZoom = zoomRatio.getZoomRatio();
+                            ZoomTab closestTab = null;
+                            final float threshold = 0.05f; // Threshold for considering the next zoom level
 
-                for (int i = 0; i < zoomTabs.size(); i++) {
-                    ZoomTab currentTab = zoomTabs.get(i);
-                    // Check if this is the last tab or if the current zoom is less than the next tab's level minus the threshold
-                    if (i == zoomTabs.size() - 1 || currentZoom < zoomTabs.get(i + 1).zoomLevel - threshold) {
-                        closestTab = currentTab;
-                        break;
+                            for (int i = 0; i < zoomTabs.size(); i++) {
+                                ZoomTab currentTab = zoomTabs.get(i);
+                                // Check if this is the last tab or if the current zoom is less than the next tab's level minus the threshold
+                                if (i == zoomTabs.size() - 1 || currentZoom < zoomTabs.get(i + 1).zoomLevel - threshold) {
+                                    closestTab = currentTab;
+                                    break;
+                                }
+                            }
+
+                            // If we found a closest tab, update its display and select the tab.
+                            if (closestTab != null) {
+                                TabLayout.Tab tab = zoomTabLayout.getTabAt(closestTab.getTabIndex());
+                                if (tab != null) {
+                                    closestTab.setTransientZoomLevel(currentZoom); // Update the tab's display to show the current zoom level
+                                    isSnappingZoom.set(true);
+                                    zoomTabLayout.selectTab(tab); // This will not trigger the camera zoom change due to the isSnappingZoom flag
+                                    isSnappingZoom.set(false);
+                                }
+                            }
+                        };
+                    zoomHandler.post(zoomRunnable);
+                }
+            );
+
+        cameraController
+            .getTapToFocusState()
+            .observe(
+                requireActivity(),
+                tapToFocusState -> {
+                    if (focusIndicator == null) return;
+                    // Show and animate the focus indicator when focusing starts
+                    if (tapToFocusState == LifecycleCameraController.TAP_TO_FOCUS_STARTED) {
+                        focusIndicator.setVisibility(View.VISIBLE);
+                        focusIndicator.setAlpha(0f); // Start fully transparent
+                        focusIndicator.animate().alpha(1f).setDuration(200).setInterpolator(new AccelerateDecelerateInterpolator()).start();
+                    } else {
+                        // Fade out and hide the focus indicator when focusing ends, regardless of the result
+                        focusIndicator
+                            .animate()
+                            .alpha(0f)
+                            .setDuration(500)
+                            .setInterpolator(new AccelerateDecelerateInterpolator())
+                            .withEndAction(() -> focusIndicator.setVisibility(View.INVISIBLE))
+                            .start();
                     }
                 }
+            );
 
-                // If we found a closest tab, update its display and select the tab.
-                if (closestTab != null) {
-                    TabLayout.Tab tab = zoomTabLayout.getTabAt(closestTab.getTabIndex());
-                    if (tab != null) {
-                        closestTab.setTransientZoomLevel(currentZoom); // Update the tab's display to show the current zoom level
-                        isSnappingZoom.set(true);
-                        zoomTabLayout.selectTab(tab); // This will not trigger the camera zoom change due to the isSnappingZoom flag
-                        isSnappingZoom.set(false);
-                    }
-                }
-            };
-            zoomHandler.post(zoomRunnable);
-        });
-
-        cameraController.getTapToFocusState().observe(requireActivity(), tapToFocusState -> {
-            if (focusIndicator == null) return;
-            // Show and animate the focus indicator when focusing starts
-            if (tapToFocusState == LifecycleCameraController.TAP_TO_FOCUS_STARTED) {
-                focusIndicator.setVisibility(View.VISIBLE);
-                focusIndicator.setAlpha(0f); // Start fully transparent
-                focusIndicator.animate()
-                        .alpha(1f)
-                        .setDuration(200) // Duration for fade-in
-                        .setInterpolator(new AccelerateDecelerateInterpolator()) // Ease-in/ease-out
-                        .start();
-            } else {
-                // Fade out and hide the focus indicator when focusing ends, regardless of the result
-                focusIndicator.animate()
-                        .alpha(0f)
-                        .setDuration(500) // Duration for fade-out
-                        .setInterpolator(new AccelerateDecelerateInterpolator()) // Ease-in/ease-out
-                        .withEndAction(() -> focusIndicator.setVisibility(View.INVISIBLE))
-                        .start();
-            }
-        });
-
-        CameraSelector cameraSelector = new CameraSelector.Builder()
-                .requireLensFacing(lensFacing)
-                .build();
+        CameraSelector cameraSelector = new CameraSelector.Builder().requireLensFacing(lensFacing).build();
         cameraController.setCameraSelector(cameraSelector);
         cameraController.setPinchToZoomEnabled(true);
         cameraController.setTapToFocusEnabled(true);
@@ -704,9 +765,7 @@ public class CameraFragment extends Fragment {
 
     private boolean hasFrontFacingCamera() {
         if (cameraController != null) {
-            CameraSelector frontFacing = new CameraSelector.Builder()
-                    .requireLensFacing(CameraSelector.LENS_FACING_FRONT)
-                    .build();
+            CameraSelector frontFacing = new CameraSelector.Builder().requireLensFacing(CameraSelector.LENS_FACING_FRONT).build();
 
             return cameraController.hasCamera(frontFacing);
         }
@@ -718,7 +777,7 @@ public class CameraFragment extends Fragment {
         ContentResolver contentResolver = requireContext().getContentResolver();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) { // API level 29 and above
-            try {            // Specify the size of the thumbnail
+            try { // Specify the size of the thumbnail
                 int width = (int) (displayMetrics.widthPixels * 0.25); // Thumbnail width as 25% of screen width
                 int height = (int) (displayMetrics.heightPixels * 0.25); // Thumbnail height as 25% of screen height
                 Size size = new Size(width, height);
@@ -730,37 +789,29 @@ public class CameraFragment extends Fragment {
                 return null;
             }
         } else { // Below API level 29
-            String[] projection = {MediaStore.Images.Media._ID};
-            Cursor cursor = contentResolver.query(imageUri,
-                    projection,
-                    null,
-                    null,
-                    null);
+            String[] projection = { MediaStore.Images.Media._ID };
+            Cursor cursor = contentResolver.query(imageUri, projection, null, null, null);
 
             if (cursor != null && cursor.moveToFirst()) {
                 int idColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID);
                 long imageId = cursor.getLong(idColumn);
                 cursor.close();
 
-                return MediaStore.Images.Thumbnails.getThumbnail(
-                        contentResolver,
-                        imageId,
-                        MediaStore.Images.Thumbnails.MINI_KIND,
-                        null);
+                return MediaStore.Images.Thumbnails.getThumbnail(contentResolver, imageId, MediaStore.Images.Thumbnails.MINI_KIND, null);
             }
             return null;
         }
     }
 
     public abstract static class OnImagesCapturedCallback {
-        public void onCaptureSuccess(HashMap<Uri, Bitmap> images) {
-        }
 
-        public void onCaptureCanceled() {
-        }
+        public void onCaptureSuccess(HashMap<Uri, Bitmap> images) {}
+
+        public void onCaptureCanceled() {}
     }
 
     public class ZoomTab {
+
         private final float zoomLevel;
         private final int tabIndex;
         private final int circleSize;
@@ -783,21 +834,21 @@ public class CameraFragment extends Fragment {
             String formattedZoom = getFormattedZoom();
             textView.setGravity(Gravity.CENTER);
             textView.setText(formattedZoom);
-            textView.setTextSize(dpToPx(requireContext(),4));
+            textView.setTextSize(12);
             textView.setBackgroundColor(Color.TRANSPARENT);
 
-            int padding = dpToPx(requireContext(),8);
+            int padding = dpToPx(requireContext(), 8);
             textView.setPadding(padding, padding, padding, padding);
 
-            int circlePx = dpToPx(requireContext(),circleSize);
+            int circlePx = dpToPx(requireContext(), circleSize);
             background.setShape(GradientDrawable.OVAL);
             background.setSize(circlePx, circlePx); // Make it circular
 
             textView.setBackground(background);
 
             ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.WRAP_CONTENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
             );
             textView.setLayoutParams(layoutParams);
 
@@ -827,11 +878,8 @@ public class CameraFragment extends Fragment {
         }
 
         public void setSelected(boolean isSelected) {
-            textView.setTextColor(isSelected ? Color.WHITE : Color.BLACK);
-            background.setColor(isSelected
-                    ? ZOOM_BUTTON_COLOR_SELECTED
-                    : ZOOM_BUTTON_COLOR_UNSELECTED
-            );
+            textView.setTextColor(isSelected ? Color.BLACK : Color.WHITE);
+            background.setColor(isSelected ? ZOOM_BUTTON_COLOR_SELECTED : ZOOM_BUTTON_COLOR_UNSELECTED);
         }
 
         public float getZoomLevel() {
@@ -853,3 +901,4 @@ public class CameraFragment extends Fragment {
         }
     }
 }
+

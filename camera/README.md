@@ -336,11 +336,12 @@ Request camera and photo album permissions
 
 #### CameraSource
 
-| Members      | Value                 | Description                                                        |
-| ------------ | --------------------- | ------------------------------------------------------------------ |
-| **`Prompt`** | <code>'PROMPT'</code> | Prompts the user to select either the photo album or take a photo. |
-| **`Camera`** | <code>'CAMERA'</code> | Take a new photo using the camera.                                 |
-| **`Photos`** | <code>'PHOTOS'</code> | Pick an existing photo from the gallery or photo album.            |
+| Members           | Value                       | Description                                                                |
+| ----------------- | --------------------------- | -------------------------------------------------------------------------- |
+| **`Prompt`**      | <code>'PROMPT'</code>       | Prompts the user to select either the photo album or take a photo.         |
+| **`Camera`**      | <code>'CAMERA'</code>       | Take a new photo using the camera.                                         |
+| **`CameraMulti`** | <code>'CAMERA_MULTI'</code> | Take multiple photos in a row using the camera. Only available on Android. |
+| **`Photos`**      | <code>'PHOTOS'</code>       | Pick an existing photo from the gallery or photo album.                    |
 
 
 #### CameraDirection
