@@ -141,6 +141,11 @@ class MultiCameraViewController: UIViewController {
     private var capturedImages: [UIImage] = []
     private var capturedMetadata: [[String: Any]] = []
 
+    // Track device orientation
+    private var isLandscape: Bool = false
+    private var portraitConstraints: [NSLayoutConstraint] = []
+    private var landscapeConstraints: [NSLayoutConstraint] = []
+
     // MARK: - UI Elements
     private lazy var previewView: UIView = {
         let view = UIView()
@@ -275,6 +280,42 @@ class MultiCameraViewController: UIViewController {
     private func updatePreviewLayerFrame() {
         guard let previewLayer = previewLayer else { return }
         previewLayer.frame = previewView.bounds
+
+        // Update video orientation based on device orientation
+        guard let connection = previewLayer.connection else { return }
+
+        if connection.isVideoOrientationSupported {
+            let orientation = UIDevice.current.orientation
+
+            switch orientation {
+            case .portrait:
+                connection.videoOrientation = .portrait
+            case .landscapeLeft:
+                connection.videoOrientation = .landscapeRight // Note: device orientation is opposite to video orientation
+            case .landscapeRight:
+                connection.videoOrientation = .landscapeLeft // Note: device orientation is opposite to video orientation
+            case .portraitUpsideDown:
+                connection.videoOrientation = .portraitUpsideDown
+            default:
+                connection.videoOrientation = isLandscape ? .landscapeRight : .portrait
+            }
+        }
+    }
+
+    private func updateConstraintsForOrientation() {
+        // Deactivate all constraints first
+        NSLayoutConstraint.deactivate(portraitConstraints)
+        NSLayoutConstraint.deactivate(landscapeConstraints)
+
+        // Activate the appropriate constraints based on orientation
+        if isLandscape {
+            NSLayoutConstraint.activate(landscapeConstraints)
+        } else {
+            NSLayoutConstraint.activate(portraitConstraints)
+        }
+
+        // Force layout update
+        view.layoutIfNeeded()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -285,9 +326,14 @@ class MultiCameraViewController: UIViewController {
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
 
+        // Determine if we're switching to landscape or portrait
+        isLandscape = size.width > size.height
+
         // Handle orientation changes
         coordinator.animate(alongsideTransition: { [weak self] _ in
-            self?.updatePreviewLayerFrame()
+            guard let self = self else { return }
+            self.updatePreviewLayerFrame()
+            self.updateConstraintsForOrientation()
         })
     }
 
@@ -322,44 +368,32 @@ class MultiCameraViewController: UIViewController {
         zoomOutButton.translatesAutoresizingMaskIntoConstraints = false
         zoomFactorLabel.translatesAutoresizingMaskIntoConstraints = false
 
-        NSLayoutConstraint.activate([
-            // Preview view
+        // Determine initial orientation
+        isLandscape = UIDevice.current.orientation.isLandscape
+
+        // Create portrait constraints
+        setupPortraitConstraints()
+
+        // Create landscape constraints
+        setupLandscapeConstraints()
+
+        // Activate the appropriate constraints based on current orientation
+        updateConstraintsForOrientation()
+
+        // Initially hide the done button until we have at least one image
+        doneButton.isHidden = true
+    }
+
+    private func setupPortraitConstraints() {
+        // Clear any existing constraints
+        portraitConstraints.removeAll()
+
+        // Add common constraints that don't change with orientation
+        let commonConstraints = [
+            // Preview view top, leading, trailing
             previewView.topAnchor.constraint(equalTo: view.topAnchor),
             previewView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             previewView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-
-            // Bottom bar
-            bottomBarView.heightAnchor.constraint(equalToConstant: 100),
-            bottomBarView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            bottomBarView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            bottomBarView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-
-            // Preview view bottom connects to bottom bar top
-            previewView.bottomAnchor.constraint(equalTo: bottomBarView.topAnchor),
-
-            // Thumbnail collection view
-            thumbnailCollectionView.heightAnchor.constraint(equalToConstant: 80),
-            thumbnailCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
-            thumbnailCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
-            thumbnailCollectionView.bottomAnchor.constraint(equalTo: bottomBarView.topAnchor, constant: -80),
-
-            // Take picture button
-            takePictureButton.centerXAnchor.constraint(equalTo: bottomBarView.centerXAnchor),
-            takePictureButton.centerYAnchor.constraint(equalTo: bottomBarView.centerYAnchor),
-            takePictureButton.widthAnchor.constraint(equalToConstant: 70),
-            takePictureButton.heightAnchor.constraint(equalToConstant: 70),
-
-            // Flip camera button
-            flipCameraButton.leadingAnchor.constraint(equalTo: bottomBarView.leadingAnchor, constant: 30),
-            flipCameraButton.centerYAnchor.constraint(equalTo: bottomBarView.centerYAnchor),
-            flipCameraButton.widthAnchor.constraint(equalToConstant: 50),
-            flipCameraButton.heightAnchor.constraint(equalToConstant: 50),
-
-            // Done button
-            doneButton.trailingAnchor.constraint(equalTo: bottomBarView.trailingAnchor, constant: -30),
-            doneButton.centerYAnchor.constraint(equalTo: bottomBarView.centerYAnchor),
-            doneButton.widthAnchor.constraint(equalToConstant: 50),
-            doneButton.heightAnchor.constraint(equalToConstant: 50),
 
             // Close button
             closeButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
@@ -373,26 +407,149 @@ class MultiCameraViewController: UIViewController {
             flashButton.widthAnchor.constraint(equalToConstant: 44),
             flashButton.heightAnchor.constraint(equalToConstant: 44),
 
-            // Zoom buttons
-            zoomInButton.bottomAnchor.constraint(equalTo: bottomBarView.topAnchor, constant: -20),
-            zoomInButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            // Button sizes
+            takePictureButton.widthAnchor.constraint(equalToConstant: 70),
+            takePictureButton.heightAnchor.constraint(equalToConstant: 70),
+            flipCameraButton.widthAnchor.constraint(equalToConstant: 50),
+            flipCameraButton.heightAnchor.constraint(equalToConstant: 50),
+            doneButton.widthAnchor.constraint(equalToConstant: 50),
+            doneButton.heightAnchor.constraint(equalToConstant: 50),
             zoomInButton.widthAnchor.constraint(equalToConstant: 44),
             zoomInButton.heightAnchor.constraint(equalToConstant: 44),
+            zoomOutButton.widthAnchor.constraint(equalToConstant: 44),
+            zoomOutButton.heightAnchor.constraint(equalToConstant: 44),
+            zoomFactorLabel.widthAnchor.constraint(equalToConstant: 50),
+            zoomFactorLabel.heightAnchor.constraint(equalToConstant: 25)
+        ]
+
+        portraitConstraints.append(contentsOf: commonConstraints)
+
+        // Portrait-specific constraints
+        let portraitSpecificConstraints = [
+            // Bottom bar - horizontal at bottom
+            bottomBarView.heightAnchor.constraint(equalToConstant: 100),
+            bottomBarView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            bottomBarView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            bottomBarView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+
+            // Preview view bottom connects to bottom bar top
+            previewView.bottomAnchor.constraint(equalTo: bottomBarView.topAnchor),
+
+            // Thumbnail collection view
+            thumbnailCollectionView.heightAnchor.constraint(equalToConstant: 80),
+            thumbnailCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
+            thumbnailCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
+            thumbnailCollectionView.bottomAnchor.constraint(equalTo: bottomBarView.topAnchor, constant: -90), // Positioned higher to be above zoom controls
+
+            // Take picture button
+            takePictureButton.centerXAnchor.constraint(equalTo: bottomBarView.centerXAnchor),
+            takePictureButton.centerYAnchor.constraint(equalTo: bottomBarView.centerYAnchor),
+
+            // Flip camera button
+            flipCameraButton.leadingAnchor.constraint(equalTo: bottomBarView.leadingAnchor, constant: 30),
+            flipCameraButton.centerYAnchor.constraint(equalTo: bottomBarView.centerYAnchor),
+
+            // Done button
+            doneButton.trailingAnchor.constraint(equalTo: bottomBarView.trailingAnchor, constant: -30),
+            doneButton.centerYAnchor.constraint(equalTo: bottomBarView.centerYAnchor),
+
+            // Zoom buttons - positioned below the film strip
+            zoomInButton.bottomAnchor.constraint(equalTo: bottomBarView.topAnchor, constant: -20),
+            zoomInButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
 
             zoomOutButton.bottomAnchor.constraint(equalTo: bottomBarView.topAnchor, constant: -20),
             zoomOutButton.trailingAnchor.constraint(equalTo: zoomInButton.leadingAnchor, constant: -10),
-            zoomOutButton.widthAnchor.constraint(equalToConstant: 44),
-            zoomOutButton.heightAnchor.constraint(equalToConstant: 44),
 
             // Zoom factor label
             zoomFactorLabel.centerYAnchor.constraint(equalTo: zoomInButton.centerYAnchor),
-            zoomFactorLabel.trailingAnchor.constraint(equalTo: zoomOutButton.leadingAnchor, constant: -10),
+            zoomFactorLabel.trailingAnchor.constraint(equalTo: zoomOutButton.leadingAnchor, constant: -10)
+        ]
+
+        portraitConstraints.append(contentsOf: portraitSpecificConstraints)
+    }
+
+    private func setupLandscapeConstraints() {
+        // Clear any existing constraints
+        landscapeConstraints.removeAll()
+
+        // Add common constraints that don't change with orientation
+        let commonConstraints = [
+            // Preview view top, leading
+            previewView.topAnchor.constraint(equalTo: view.topAnchor),
+            previewView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+
+            // Close button
+            closeButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
+            closeButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            closeButton.widthAnchor.constraint(equalToConstant: 44),
+            closeButton.heightAnchor.constraint(equalToConstant: 44),
+
+            // Flash button
+            flashButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
+            flashButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            flashButton.widthAnchor.constraint(equalToConstant: 44),
+            flashButton.heightAnchor.constraint(equalToConstant: 44),
+
+            // Button sizes
+            takePictureButton.widthAnchor.constraint(equalToConstant: 70),
+            takePictureButton.heightAnchor.constraint(equalToConstant: 70),
+            flipCameraButton.widthAnchor.constraint(equalToConstant: 50),
+            flipCameraButton.heightAnchor.constraint(equalToConstant: 50),
+            doneButton.widthAnchor.constraint(equalToConstant: 50),
+            doneButton.heightAnchor.constraint(equalToConstant: 50),
+            zoomInButton.widthAnchor.constraint(equalToConstant: 44),
+            zoomInButton.heightAnchor.constraint(equalToConstant: 44),
+            zoomOutButton.widthAnchor.constraint(equalToConstant: 44),
+            zoomOutButton.heightAnchor.constraint(equalToConstant: 44),
             zoomFactorLabel.widthAnchor.constraint(equalToConstant: 50),
             zoomFactorLabel.heightAnchor.constraint(equalToConstant: 25)
-        ])
+        ]
 
-        // Initially hide the done button until we have at least one image
-        doneButton.isHidden = true
+        landscapeConstraints.append(contentsOf: commonConstraints)
+
+        // Landscape-specific constraints
+        let landscapeSpecificConstraints = [
+            // Bottom bar - vertical on right side
+            bottomBarView.widthAnchor.constraint(equalToConstant: 120),
+            bottomBarView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            bottomBarView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            bottomBarView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+
+            // Preview view connects to bottom bar on right
+            previewView.trailingAnchor.constraint(equalTo: bottomBarView.leadingAnchor),
+            previewView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+
+            // Thumbnail collection view - horizontal at bottom of preview
+            thumbnailCollectionView.heightAnchor.constraint(equalToConstant: 80),
+            thumbnailCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 100), // Give space from left edge
+            thumbnailCollectionView.trailingAnchor.constraint(equalTo: bottomBarView.leadingAnchor, constant: -10),
+            thumbnailCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
+
+            // Take picture button - centered in the vertical bar
+            takePictureButton.centerXAnchor.constraint(equalTo: bottomBarView.centerXAnchor),
+            takePictureButton.centerYAnchor.constraint(equalTo: bottomBarView.centerYAnchor),
+
+            // Flip camera button - above the take picture button
+            flipCameraButton.centerXAnchor.constraint(equalTo: bottomBarView.centerXAnchor),
+            flipCameraButton.bottomAnchor.constraint(equalTo: takePictureButton.topAnchor, constant: -30),
+
+            // Done button - below the take picture button
+            doneButton.centerXAnchor.constraint(equalTo: bottomBarView.centerXAnchor),
+            doneButton.topAnchor.constraint(equalTo: takePictureButton.bottomAnchor, constant: 30),
+
+            // Zoom buttons - on the right side of the preview
+            zoomInButton.trailingAnchor.constraint(equalTo: bottomBarView.leadingAnchor, constant: -20),
+            zoomInButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -20),
+
+            zoomOutButton.trailingAnchor.constraint(equalTo: zoomInButton.leadingAnchor, constant: -10),
+            zoomOutButton.centerYAnchor.constraint(equalTo: zoomInButton.centerYAnchor),
+
+            // Zoom factor label
+            zoomFactorLabel.trailingAnchor.constraint(equalTo: zoomOutButton.leadingAnchor, constant: -10),
+            zoomFactorLabel.centerYAnchor.constraint(equalTo: zoomInButton.centerYAnchor)
+        ]
+
+        landscapeConstraints.append(contentsOf: landscapeSpecificConstraints)
     }
 
     private func checkPermissions() {
@@ -654,9 +811,7 @@ class MultiCameraViewController: UIViewController {
         zoomFactorLabel.text = "1.0x"
 
         // Update zoom limits for the new camera
-        if videoDevice != nil {
-            maxZoomFactor = min(videoDevice.activeFormat.videoMaxZoomFactor, 10.0)
-        }
+        maxZoomFactor = min(videoDevice.activeFormat.videoMaxZoomFactor, 10.0)
     }
 
     @objc private func toggleFlash() {
@@ -774,10 +929,8 @@ class MultiCameraViewController: UIViewController {
         thumbnailCollectionView.reloadData()
 
         // Scroll to the new image
-        if !capturedImages.isEmpty {
-            let indexPath = IndexPath(item: capturedImages.count - 1, section: 0)
-            thumbnailCollectionView.scrollToItem(at: indexPath, at: .right, animated: true)
-        }
+        let indexPath = IndexPath(item: capturedImages.count - 1, section: 0)
+        thumbnailCollectionView.scrollToItem(at: indexPath, at: .right, animated: true)
     }
 
     private func removeImage(at index: Int) {
@@ -810,13 +963,51 @@ extension MultiCameraViewController: AVCapturePhotoCaptureDelegate {
         }
 
         // Extract metadata
-        var metadata: [String: Any] = [:]
-        metadata = photo.metadata
+        let metadata = photo.metadata
+
+        // Fix image orientation based on device orientation
+        let fixedImage = fixImageOrientation(image)
 
         // Add the captured image
         DispatchQueue.main.async { [weak self] in
-            self?.addCapturedImage(image, metadata: metadata)
+            self?.addCapturedImage(fixedImage, metadata: metadata)
         }
+    }
+
+    private func fixImageOrientation(_ image: UIImage) -> UIImage {
+        // First, normalize the image orientation using reformat()
+        let normalizedImage = image.reformat()
+
+        // Then apply rotation based on the current device orientation
+        let orientation = UIDevice.current.orientation
+        let isUsingFrontCamera = currentCameraPosition == .front
+
+        // Create a new CGImage from the normalized image
+        guard let cgImage = normalizedImage.cgImage else { return normalizedImage }
+
+        // Determine the correct orientation based on device orientation
+        var uiOrientation: UIImage.Orientation = .up // Default is no additional rotation
+
+        switch orientation {
+        case .portrait:
+            // Portrait is already correct after normalization
+            return normalizedImage
+        case .portraitUpsideDown:
+            // Need 180-degree rotation
+            uiOrientation = .down
+        case .landscapeLeft:
+            // Need counter-clockwise 90-degree rotation for back camera
+            uiOrientation = isUsingFrontCamera ? .downMirrored : .left
+        case .landscapeRight:
+            // Need clockwise 90-degree rotation for back camera
+            uiOrientation = isUsingFrontCamera ? .upMirrored : .right
+        default:
+            // For unknown orientations, use the normalized image
+            return normalizedImage
+        }
+
+        // Create a new UIImage with the correct orientation
+        return UIImage(cgImage: cgImage, scale: normalizedImage.scale, orientation: uiOrientation)
     }
 }
 
