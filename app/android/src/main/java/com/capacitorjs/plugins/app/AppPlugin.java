@@ -46,24 +46,24 @@ public class AppPlugin extends Plugin {
                     notifyListeners(EVENT_RESTORED_RESULT, result.getWrappedResult(), true);
                 }
             );
-        this.onBackPressedCallback = new OnBackPressedCallback(true) {
-            @Override
-            public void handleOnBackPressed() {
-                if (!hasListeners(EVENT_BACK_BUTTON)) {
-                    if (bridge.getWebView().canGoBack()) {
-                        bridge.getWebView().goBack();
+        this.onBackPressedCallback =
+            new OnBackPressedCallback(true) {
+                @Override
+                public void handleOnBackPressed() {
+                    if (!hasListeners(EVENT_BACK_BUTTON)) {
+                        if (bridge.getWebView().canGoBack()) {
+                            bridge.getWebView().goBack();
+                        }
+                    } else {
+                        JSObject data = new JSObject();
+                        data.put("canGoBack", bridge.getWebView().canGoBack());
+                        notifyListeners(EVENT_BACK_BUTTON, data, true);
+                        bridge.triggerJSEvent("backbutton", "document");
                     }
-                } else {
-                    JSObject data = new JSObject();
-                    data.put("canGoBack", bridge.getWebView().canGoBack());
-                    notifyListeners(EVENT_BACK_BUTTON, data, true);
-                    bridge.triggerJSEvent("backbutton", "document");
                 }
-            }
-        };
+            };
 
         getActivity().getOnBackPressedDispatcher().addCallback(getActivity(), this.onBackPressedCallback);
-
     }
 
     @PluginMethod
