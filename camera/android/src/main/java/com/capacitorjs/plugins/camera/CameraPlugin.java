@@ -348,6 +348,10 @@ public class CameraPlugin extends Plugin {
     public void openMultiCamera(final PluginCall call) {
         if (checkCameraPermissions(call)) {
             final CameraFragment fragment = new CameraFragment();
+            // Pass camera settings to fragment, but disable orientation correction by default for multi-camera
+            CameraSettings multiCameraSettings = settings;
+            multiCameraSettings.setShouldCorrectOrientation(false); // Disable to prevent upside-down images
+            fragment.setCameraSettings(multiCameraSettings);
             fragment.setImagesCapturedCallback(new CameraFragment.OnImagesCapturedCallback() {
                 @Override
                 public void onCaptureSuccess(HashMap<Uri, Bitmap> images) {

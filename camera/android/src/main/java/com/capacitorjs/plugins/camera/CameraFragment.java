@@ -21,6 +21,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.provider.MediaStore;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -70,7 +71,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
-import androidx.collection.LruCache;
 
 @SuppressWarnings("FieldCanBeLocal")
 public class CameraFragment extends Fragment {
@@ -135,7 +135,7 @@ public class CameraFragment extends Fragment {
     private ExecutorService cameraExecutor;
     private LifecycleCameraController cameraController;
     // Utility variables
-    private LruCache<Uri, Bitmap> imageCache;
+    private HashMap<Uri, Bitmap> imageCache;
     private ArrayList<ZoomTab> zoomTabs;
 
     private Handler zoomHandler = null;
@@ -144,6 +144,16 @@ public class CameraFragment extends Fragment {
 
     // Callbacks
     private OnImagesCapturedCallback imagesCapturedCallback;
+    
+    // Camera settings
+    private CameraSettings cameraSettings;
+    
+    // Processing spinner overlay
+    private View processingOverlay;
+    private ProgressBar processingSpinner;
+    private TextView processingText;
+    private Handler processingHandler;
+    private Runnable processingRunnable;
 
     @NonNull
     private static ColorStateList createButtonColorList() {
@@ -162,26 +172,9 @@ public class CameraFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Calculate cache size as 1/8th of available memory
-        final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
-        final int cacheSize = maxMemory / 8;
-
-        // Initialize LruCache for image memory management
-        imageCache = new LruCache<Uri, Bitmap>(cacheSize) {
-            @Override
-            protected int sizeOf(Uri key, Bitmap bitmap) {
-                // Size in kilobytes
-                return bitmap.getByteCount() / 1024;
-            }
-
-            @Override
-            protected void entryRemoved(boolean evicted, Uri key, Bitmap oldValue, Bitmap newValue) {
-                if (evicted && oldValue != null && !oldValue.isRecycled()) {
-                    // Recycle bitmap to free memory immediately when evicted from cache
-                    oldValue.recycle();
-                }
-            }
-        };
+        // Initialize simple HashMap for image storage
+        imageCache = new HashMap<>();
+        Log.d(TAG, "Initialized HashMap for image cache");
 
         zoomTabs = new ArrayList<>();
         zoomHandler = new Handler(requireActivity().getMainLooper());
@@ -216,13 +209,31 @@ public class CameraFragment extends Fragment {
 
         // Clear image cache to free memory
         if (imageCache != null) {
-            imageCache.evictAll();
-            imageCache = null;
+            try {
+                // Manually recycle all bitmaps before clearing cache
+                for (Bitmap bitmap : imageCache.values()) {
+                    if (bitmap != null && !bitmap.isRecycled()) {
+                        bitmap.recycle();
+                    }
+                }
+                imageCache.clear();
+                imageCache = null;
+            } catch (Exception e) {
+                Log.e(TAG, "Error clearing image cache", e);
+                imageCache = null;
+            }
         }
 
         if (mediaActionSound != null) {
             mediaActionSound.release();
             mediaActionSound = null;
+        }
+        
+        // Clean up processing handler and runnable
+        if (processingHandler != null && processingRunnable != null) {
+            processingHandler.removeCallbacks(processingRunnable);
+            processingHandler = null;
+            processingRunnable = null;
         }
 
         if (cameraExecutor != null) {
@@ -501,6 +512,9 @@ public class CameraFragment extends Fragment {
         // Remove edge-to-edge insets handling for true fullscreen
         requireActivity().getWindow().setDecorFitsSystemWindows(true);
 
+        // Create processing overlay
+        createProcessingOverlay(fragmentActivity);
+
         return relativeLayout;
     }
 
@@ -536,7 +550,16 @@ public class CameraFragment extends Fragment {
      */
     private void addImageToCache(Uri uri, Bitmap bitmap) {
         if (uri != null && bitmap != null && !bitmap.isRecycled() && imageCache != null) {
-            imageCache.put(uri, bitmap);
+            try {
+                int bitmapSizeKB = bitmap.getByteCount() / 1024;
+                Log.d(TAG, "Adding image to cache: " + uri + ", bitmap size: " + bitmap.getWidth() + "x" + bitmap.getHeight() + " (" + bitmapSizeKB + " KB)");
+                imageCache.put(uri, bitmap);
+                Log.d(TAG, "Cache size after adding: " + imageCache.size() + " images");
+            } catch (Exception e) {
+                Log.e(TAG, "Error adding image to cache", e);
+            }
+        } else {
+            Log.w(TAG, "Failed to add image to cache - uri: " + uri + ", bitmap: " + bitmap + ", imageCache: " + imageCache);
         }
     }
 
@@ -558,15 +581,29 @@ public class CameraFragment extends Fragment {
     private HashMap<Uri, Bitmap> getAllCachedImages() {
         HashMap<Uri, Bitmap> result = new HashMap<>();
         if (imageCache != null) {
-            // We need to manually iterate through the snapshot to get all entries
-            for (Map.Entry<Uri, Bitmap> entry : imageCache.snapshot().entrySet()) {
+            Log.d(TAG, "getAllCachedImages: cache size = " + imageCache.size());
+            // Copy all entries from the cache
+            for (Map.Entry<Uri, Bitmap> entry : imageCache.entrySet()) {
+                Log.d(TAG, "Adding cached image: " + entry.getKey());
                 result.put(entry.getKey(), entry.getValue());
             }
         }
+        Log.d(TAG, "getAllCachedImages: returning " + result.size() + " images");
         return result;
     }
 
     private void cancel() {
+        // Stop any ongoing processing and cleanup resources
+        hideProcessingOverlay();
+        
+        // Cancel any ongoing background processing tasks
+        if (cameraExecutor != null && !cameraExecutor.isShutdown()) {
+            // Remove any loading thumbnails to stop processing
+            if (thumbnailAdapter != null) {
+                thumbnailAdapter.removeLoadingThumbnails();
+            }
+        }
+        
         // When the user cancels the camera session, it should clean up all the photos that were
         // taken.
         int failedDeletions = 0;
@@ -589,6 +626,38 @@ public class CameraFragment extends Fragment {
     }
 
     private void done() {
+        // Check if there are still images being processed
+        if (thumbnailAdapter != null && thumbnailAdapter.hasLoadingThumbnails()) {
+            Log.d(TAG, "Images still processing, showing spinner overlay");
+            // Show non-dismissable spinner while processing
+            showProcessingOverlay();
+            
+            // Check periodically if processing is complete
+            processingHandler = new Handler(Looper.getMainLooper());
+            processingRunnable = new Runnable() {
+                @Override
+                public void run() {
+                    if (thumbnailAdapter != null && thumbnailAdapter.hasLoadingThumbnails()) {
+                        // Still processing, check again in 500ms
+                        if (processingHandler != null) {
+                            processingHandler.postDelayed(this, 500);
+                        }
+                    } else {
+                        // Processing complete, hide spinner and proceed
+                        hideProcessingOverlay();
+                        finalizeDone();
+                    }
+                }
+            };
+            processingHandler.post(processingRunnable);
+        } else {
+            Log.d(TAG, "No images processing, proceeding immediately");
+            // No processing needed, proceed immediately
+            finalizeDone();
+        }
+    }
+    
+    private void finalizeDone() {
         if (imagesCapturedCallback != null) {
             imagesCapturedCallback.onCaptureSuccess(getAllCachedImages());
         }
@@ -613,8 +682,162 @@ public class CameraFragment extends Fragment {
         }
     }
 
+    /**
+     * Creates the processing overlay with spinner and text
+     */
+    private void createProcessingOverlay(FragmentActivity fragmentActivity) {
+        // Create the main overlay container with semi-transparent background
+        processingOverlay = new RelativeLayout(fragmentActivity);
+        processingOverlay.setId(View.generateViewId());
+        processingOverlay.setBackgroundColor(0x80000000); // Semi-transparent black
+        processingOverlay.setVisibility(View.GONE);
+        
+        RelativeLayout.LayoutParams overlayParams = new RelativeLayout.LayoutParams(
+            RelativeLayout.LayoutParams.MATCH_PARENT,
+            RelativeLayout.LayoutParams.MATCH_PARENT
+        );
+        processingOverlay.setLayoutParams(overlayParams);
+        
+        // Create content container for centering
+        RelativeLayout contentContainer = new RelativeLayout(fragmentActivity);
+        contentContainer.setId(View.generateViewId());
+        RelativeLayout.LayoutParams contentParams = new RelativeLayout.LayoutParams(
+            RelativeLayout.LayoutParams.WRAP_CONTENT,
+            RelativeLayout.LayoutParams.WRAP_CONTENT
+        );
+        contentParams.addRule(RelativeLayout.CENTER_IN_PARENT);
+        contentContainer.setLayoutParams(contentParams);
+        
+        // Create spinner
+        processingSpinner = new ProgressBar(fragmentActivity);
+        processingSpinner.setId(View.generateViewId());
+        int spinnerSize = (int) (48 * displayMetrics.density);
+        RelativeLayout.LayoutParams spinnerParams = new RelativeLayout.LayoutParams(spinnerSize, spinnerSize);
+        spinnerParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        processingSpinner.setLayoutParams(spinnerParams);
+        
+        // Create text
+        processingText = new TextView(fragmentActivity);
+        processingText.setId(View.generateViewId());
+        processingText.setText("Processing images...");
+        processingText.setTextColor(Color.WHITE);
+        processingText.setTextSize(16);
+        processingText.setGravity(Gravity.CENTER);
+        RelativeLayout.LayoutParams textParams = new RelativeLayout.LayoutParams(
+            RelativeLayout.LayoutParams.WRAP_CONTENT,
+            RelativeLayout.LayoutParams.WRAP_CONTENT
+        );
+        textParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        textParams.addRule(RelativeLayout.BELOW, processingSpinner.getId());
+        textParams.setMargins(0, (int) (16 * displayMetrics.density), 0, 0);
+        processingText.setLayoutParams(textParams);
+        
+        // Add spinner and text to content container
+        contentContainer.addView(processingSpinner);
+        contentContainer.addView(processingText);
+        
+        // Add content container to the main overlay
+        ((RelativeLayout) processingOverlay).addView(contentContainer);
+        
+        // Add the overlay to main layout
+        relativeLayout.addView(processingOverlay);
+        
+        Log.d(TAG, "Processing overlay created and hidden");
+    }
+
+    /**
+     * Shows the processing overlay
+     */
+    private void showProcessingOverlay() {
+        Log.d(TAG, "Showing processing overlay");
+        if (processingOverlay != null) {
+            processingOverlay.setVisibility(View.VISIBLE);
+            processingOverlay.bringToFront();
+        }
+    }
+
+    /**
+     * Hides the processing overlay and cleans up resources
+     */
+    private void hideProcessingOverlay() {
+        if (processingOverlay != null) {
+            processingOverlay.setVisibility(View.GONE);
+        }
+        
+        // Clean up processing handler and runnable
+        if (processingHandler != null && processingRunnable != null) {
+            processingHandler.removeCallbacks(processingRunnable);
+            processingHandler = null;
+            processingRunnable = null;
+        }
+    }
+
     public void setImagesCapturedCallback(OnImagesCapturedCallback imagesCapturedCallback) {
         this.imagesCapturedCallback = imagesCapturedCallback;
+    }
+    
+    public void setCameraSettings(CameraSettings settings) {
+        this.cameraSettings = settings;
+    }
+    
+    /**
+     * Process bitmap according to camera settings (quality, resize, orientation)
+     */
+    private Bitmap processBitmap(Bitmap originalBitmap, Uri imageUri) {
+        if (originalBitmap == null || originalBitmap.isRecycled()) {
+            Log.w(TAG, "Cannot process null or recycled bitmap");
+            return null;
+        }
+        
+        // If no settings are available, return original bitmap
+        if (cameraSettings == null) {
+            Log.d(TAG, "No camera settings available, returning original bitmap");
+            return originalBitmap;
+        }
+        
+        Bitmap processedBitmap = originalBitmap;
+        
+        try {
+            ExifWrapper exif = ImageUtils.getExifData(getContext(), processedBitmap, imageUri);
+            boolean wasProcessed = false;
+            
+            // Apply orientation correction (only if explicitly enabled)
+            if (cameraSettings.isShouldCorrectOrientation()) {
+                Bitmap correctedBitmap = ImageUtils.correctOrientation(getContext(), processedBitmap, imageUri, exif);
+                if (correctedBitmap != processedBitmap && correctedBitmap != null) {
+                    Log.d(TAG, "Applied orientation correction");
+                    if (processedBitmap != originalBitmap) {
+                        processedBitmap.recycle();
+                    }
+                    processedBitmap = correctedBitmap;
+                    wasProcessed = true;
+                }
+            }
+            
+            // Apply resizing
+            if (cameraSettings.isShouldResize() && cameraSettings.getWidth() > 0 && cameraSettings.getHeight() > 0) {
+                Bitmap resizedBitmap = ImageUtils.resize(processedBitmap, cameraSettings.getWidth(), cameraSettings.getHeight());
+                if (resizedBitmap != processedBitmap && resizedBitmap != null) {
+                    Log.d(TAG, "Applied resizing to " + cameraSettings.getWidth() + "x" + cameraSettings.getHeight());
+                    if (processedBitmap != originalBitmap) {
+                        processedBitmap.recycle();
+                    }
+                    processedBitmap = resizedBitmap;
+                    wasProcessed = true;
+                }
+            }
+            
+            if (wasProcessed) {
+                Log.d(TAG, "Bitmap processed: " + originalBitmap.getWidth() + "x" + originalBitmap.getHeight() + 
+                      " -> " + processedBitmap.getWidth() + "x" + processedBitmap.getHeight());
+            }
+            
+            return processedBitmap;
+        } catch (Exception e) {
+            Log.e(TAG, "Error processing bitmap", e);
+            // If processing fails, return original bitmap and don't crash
+            return originalBitmap;
+        }
     }
 
     private void createBottomBar(FragmentActivity fragmentActivity, int barHeight, int margin, ColorStateList buttonColors) {
@@ -704,7 +927,13 @@ public class CameraFragment extends Fragment {
                                         return;
                                     }
 
-                                    addImageToCache(savedImageUri, bmp);
+                                    // Process bitmap with quality and size settings
+                                    Bitmap processedBmp = processBitmap(bmp, savedImageUri);
+                                    if (processedBmp != bmp && bmp != null) {
+                                        bmp.recycle(); // Recycle original if it was replaced
+                                    }
+
+                                    addImageToCache(savedImageUri, processedBmp);
 
                                     // Generate thumbnail on a background thread to avoid UI jank
                                     if (cameraExecutor != null && !cameraExecutor.isShutdown()) {
@@ -726,7 +955,7 @@ public class CameraFragment extends Fragment {
                                     showErrorToast("Not enough memory to process image");
                                     // Try to recover by clearing the cache
                                     if (imageCache != null) {
-                                        imageCache.evictAll();
+                                        imageCache.clear();
                                     }
                                     System.gc(); // Request garbage collection
                                 } catch (Exception e) {
@@ -1054,7 +1283,13 @@ public class CameraFragment extends Fragment {
                                         return;
                                     }
 
-                                    addImageToCache(savedImageUri, bmp);
+                                    // Process bitmap with quality and size settings
+                                    Bitmap processedBmp = processBitmap(bmp, savedImageUri);
+                                    if (processedBmp != bmp && bmp != null) {
+                                        bmp.recycle(); // Recycle original if it was replaced
+                                    }
+
+                                    addImageToCache(savedImageUri, processedBmp);
 
                                     // Generate thumbnail on a background thread to avoid UI jank
                                     if (cameraExecutor != null && !cameraExecutor.isShutdown()) {
@@ -1076,7 +1311,7 @@ public class CameraFragment extends Fragment {
                                     showErrorToast("Not enough memory to process image");
                                     // Try to recover by clearing the cache
                                     if (imageCache != null) {
-                                        imageCache.evictAll();
+                                        imageCache.clear();
                                     }
                                     System.gc(); // Request garbage collection
                                 } catch (Exception e) {
