@@ -76,7 +76,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class CameraFragment extends Fragment {
 
     // Constants
-    @SuppressWarnings("unused")
     private final String TAG = "CameraFragment";
     private final String FILENAME = "yyyy-MM-dd-HH-mm-ss-SSS";
     private final String PHOTO_TYPE = "image/jpeg";
@@ -144,10 +143,10 @@ public class CameraFragment extends Fragment {
 
     // Callbacks
     private OnImagesCapturedCallback imagesCapturedCallback;
-    
+
     // Camera settings
     private CameraSettings cameraSettings;
-    
+
     // Processing spinner overlay
     private View processingOverlay;
     private ProgressBar processingSpinner;
@@ -228,7 +227,7 @@ public class CameraFragment extends Fragment {
             mediaActionSound.release();
             mediaActionSound = null;
         }
-        
+
         // Clean up processing handler and runnable
         if (processingHandler != null && processingRunnable != null) {
             processingHandler.removeCallbacks(processingRunnable);
@@ -595,7 +594,7 @@ public class CameraFragment extends Fragment {
     private void cancel() {
         // Stop any ongoing processing and cleanup resources
         hideProcessingOverlay();
-        
+
         // Cancel any ongoing background processing tasks
         if (cameraExecutor != null && !cameraExecutor.isShutdown()) {
             // Remove any loading thumbnails to stop processing
@@ -603,7 +602,7 @@ public class CameraFragment extends Fragment {
                 thumbnailAdapter.removeLoadingThumbnails();
             }
         }
-        
+
         // When the user cancels the camera session, it should clean up all the photos that were
         // taken.
         int failedDeletions = 0;
@@ -631,7 +630,7 @@ public class CameraFragment extends Fragment {
             Log.d(TAG, "Images still processing, showing spinner overlay");
             // Show non-dismissable spinner while processing
             showProcessingOverlay();
-            
+
             // Check periodically if processing is complete
             processingHandler = new Handler(Looper.getMainLooper());
             processingRunnable = new Runnable() {
@@ -656,7 +655,7 @@ public class CameraFragment extends Fragment {
             finalizeDone();
         }
     }
-    
+
     private void finalizeDone() {
         if (imagesCapturedCallback != null) {
             imagesCapturedCallback.onCaptureSuccess(getAllCachedImages());
@@ -691,13 +690,13 @@ public class CameraFragment extends Fragment {
         processingOverlay.setId(View.generateViewId());
         processingOverlay.setBackgroundColor(0x80000000); // Semi-transparent black
         processingOverlay.setVisibility(View.GONE);
-        
+
         RelativeLayout.LayoutParams overlayParams = new RelativeLayout.LayoutParams(
             RelativeLayout.LayoutParams.MATCH_PARENT,
             RelativeLayout.LayoutParams.MATCH_PARENT
         );
         processingOverlay.setLayoutParams(overlayParams);
-        
+
         // Create content container for centering
         RelativeLayout contentContainer = new RelativeLayout(fragmentActivity);
         contentContainer.setId(View.generateViewId());
@@ -707,7 +706,7 @@ public class CameraFragment extends Fragment {
         );
         contentParams.addRule(RelativeLayout.CENTER_IN_PARENT);
         contentContainer.setLayoutParams(contentParams);
-        
+
         // Create spinner
         processingSpinner = new ProgressBar(fragmentActivity);
         processingSpinner.setId(View.generateViewId());
@@ -715,7 +714,7 @@ public class CameraFragment extends Fragment {
         RelativeLayout.LayoutParams spinnerParams = new RelativeLayout.LayoutParams(spinnerSize, spinnerSize);
         spinnerParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
         processingSpinner.setLayoutParams(spinnerParams);
-        
+
         // Create text
         processingText = new TextView(fragmentActivity);
         processingText.setId(View.generateViewId());
@@ -731,17 +730,17 @@ public class CameraFragment extends Fragment {
         textParams.addRule(RelativeLayout.BELOW, processingSpinner.getId());
         textParams.setMargins(0, (int) (16 * displayMetrics.density), 0, 0);
         processingText.setLayoutParams(textParams);
-        
+
         // Add spinner and text to content container
         contentContainer.addView(processingSpinner);
         contentContainer.addView(processingText);
-        
+
         // Add content container to the main overlay
         ((RelativeLayout) processingOverlay).addView(contentContainer);
-        
+
         // Add the overlay to main layout
         relativeLayout.addView(processingOverlay);
-        
+
         Log.d(TAG, "Processing overlay created and hidden");
     }
 
@@ -763,7 +762,7 @@ public class CameraFragment extends Fragment {
         if (processingOverlay != null) {
             processingOverlay.setVisibility(View.GONE);
         }
-        
+
         // Clean up processing handler and runnable
         if (processingHandler != null && processingRunnable != null) {
             processingHandler.removeCallbacks(processingRunnable);
@@ -775,11 +774,11 @@ public class CameraFragment extends Fragment {
     public void setImagesCapturedCallback(OnImagesCapturedCallback imagesCapturedCallback) {
         this.imagesCapturedCallback = imagesCapturedCallback;
     }
-    
+
     public void setCameraSettings(CameraSettings settings) {
         this.cameraSettings = settings;
     }
-    
+
     /**
      * Process bitmap according to camera settings (quality, resize, orientation)
      */
@@ -788,19 +787,19 @@ public class CameraFragment extends Fragment {
             Log.w(TAG, "Cannot process null or recycled bitmap");
             return null;
         }
-        
+
         // If no settings are available, return original bitmap
         if (cameraSettings == null) {
             Log.d(TAG, "No camera settings available, returning original bitmap");
             return originalBitmap;
         }
-        
+
         Bitmap processedBitmap = originalBitmap;
-        
+
         try {
             ExifWrapper exif = ImageUtils.getExifData(getContext(), processedBitmap, imageUri);
             boolean wasProcessed = false;
-            
+
             // Apply orientation correction (only if explicitly enabled)
             if (cameraSettings.isShouldCorrectOrientation()) {
                 Bitmap correctedBitmap = ImageUtils.correctOrientation(getContext(), processedBitmap, imageUri, exif);
@@ -813,7 +812,7 @@ public class CameraFragment extends Fragment {
                     wasProcessed = true;
                 }
             }
-            
+
             // Apply resizing
             if (cameraSettings.isShouldResize() && cameraSettings.getWidth() > 0 && cameraSettings.getHeight() > 0) {
                 Bitmap resizedBitmap = ImageUtils.resize(processedBitmap, cameraSettings.getWidth(), cameraSettings.getHeight());
@@ -826,12 +825,12 @@ public class CameraFragment extends Fragment {
                     wasProcessed = true;
                 }
             }
-            
+
             if (wasProcessed) {
-                Log.d(TAG, "Bitmap processed: " + originalBitmap.getWidth() + "x" + originalBitmap.getHeight() + 
+                Log.d(TAG, "Bitmap processed: " + originalBitmap.getWidth() + "x" + originalBitmap.getHeight() +
                       " -> " + processedBitmap.getWidth() + "x" + processedBitmap.getHeight());
             }
-            
+
             return processedBitmap;
         } catch (Exception e) {
             Log.e(TAG, "Error processing bitmap", e);
@@ -2077,11 +2076,11 @@ public class CameraFragment extends Fragment {
             previewFragment.show(requireActivity().getSupportFragmentManager(), "image_preview");
             return;
         }
-        
+
         // Gather all non-loading image URIs and find the current position
         List<Uri> imageUris = new ArrayList<>();
         int currentPosition = 0;
-        
+
         for (int i = 0; i < thumbnailAdapter.getItemCount(); i++) {
             ThumbnailAdapter.ThumbnailItem item = thumbnailAdapter.getThumbnailItem(i);
             if (item != null && !item.isLoading()) {
@@ -2091,14 +2090,14 @@ public class CameraFragment extends Fragment {
                 imageUris.add(item.getUri());
             }
         }
-        
+
         if (imageUris.isEmpty()) {
             // Fallback to single image preview if no images found
             ImagePreviewFragment previewFragment = ImagePreviewFragment.newInstance(uri);
             previewFragment.show(requireActivity().getSupportFragmentManager(), "image_preview");
             return;
         }
-        
+
         // Show preview with swipe navigation
         ImagePreviewFragment previewFragment = ImagePreviewFragment.newInstance(imageUris, currentPosition);
         previewFragment.show(requireActivity().getSupportFragmentManager(), "image_preview");
