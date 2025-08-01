@@ -270,6 +270,15 @@ class MultiCameraViewController: UIViewController {
     var maxImages: Int = 0 // 0 means unlimited
     var cameraDirection: CameraDirection = .rear
 
+    // Image processing settings
+    var jpegQuality: CGFloat = 1.0
+    var width: CGFloat = 0
+    var height: CGFloat = 0
+    var shouldResize: Bool {
+        return width > 0 || height > 0
+    }
+    var shouldCorrectOrientation = true
+
     private var captureSession: AVCaptureSession?
     private var previewLayer: AVCaptureVideoPreviewLayer?
     private var photoOutput: AVCapturePhotoOutput?
@@ -524,7 +533,7 @@ class MultiCameraViewController: UIViewController {
         view.addSubview(zoomOutButton)
         view.addSubview(zoomFactorLabel)
         view.addSubview(processingOverlay)
-        
+
         // Add processing overlay subviews
         processingOverlay.addSubview(processingSpinner)
         processingOverlay.addSubview(processingLabel)
@@ -545,17 +554,17 @@ class MultiCameraViewController: UIViewController {
         zoomInButton.translatesAutoresizingMaskIntoConstraints = false
         zoomOutButton.translatesAutoresizingMaskIntoConstraints = false
         zoomFactorLabel.translatesAutoresizingMaskIntoConstraints = false
-        
+
         // Setup processing overlay constraints
         NSLayoutConstraint.activate([
             processingOverlay.topAnchor.constraint(equalTo: view.topAnchor),
             processingOverlay.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             processingOverlay.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             processingOverlay.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            
+
             processingSpinner.centerXAnchor.constraint(equalTo: processingOverlay.centerXAnchor),
             processingSpinner.centerYAnchor.constraint(equalTo: processingOverlay.centerYAnchor, constant: -20),
-            
+
             processingLabel.topAnchor.constraint(equalTo: processingSpinner.bottomAnchor, constant: 20),
             processingLabel.centerXAnchor.constraint(equalTo: processingOverlay.centerXAnchor)
         ])
@@ -1083,7 +1092,7 @@ class MultiCameraViewController: UIViewController {
         if hasProcessingImages() {
             return
         }
-        
+
         // If we have images, show confirmation alert
         if !capturedImages.isEmpty {
             let alert = UIAlertController(
@@ -1113,33 +1122,33 @@ class MultiCameraViewController: UIViewController {
             finishWithImages()
         }
     }
-    
+
     private func hasProcessingImages() -> Bool {
         return loadingStates.contains(true)
     }
-    
+
     private func showProcessingOverlay() {
         processingOverlay.isHidden = false
         processingSpinner.startAnimating()
-        
+
         // Disable user interaction on the main view
         view.isUserInteractionEnabled = false
         processingOverlay.isUserInteractionEnabled = true
     }
-    
+
     private func hideProcessingOverlay() {
         processingOverlay.isHidden = true
         processingSpinner.stopAnimating()
-        
+
         // Re-enable user interaction
         view.isUserInteractionEnabled = true
     }
-    
+
     private func waitForProcessingCompletion() {
         // Check every 0.1 seconds if processing is complete
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
             guard let self = self else { return }
-            
+
             if self.hasProcessingImages() {
                 // Still processing, check again
                 self.waitForProcessingCompletion()
@@ -1150,12 +1159,12 @@ class MultiCameraViewController: UIViewController {
             }
         }
     }
-    
+
     private func waitForProcessingCompletionThenFinish() {
         // Check every 0.1 seconds if processing is complete
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
             guard let self = self else { return }
-            
+
             if self.hasProcessingImages() {
                 // Still processing, check again
                 self.waitForProcessingCompletionThenFinish()
@@ -1166,9 +1175,24 @@ class MultiCameraViewController: UIViewController {
             }
         }
     }
-    
+
     private func finishWithImages() {
         delegate?.multiCameraViewController(self, didFinishWith: capturedImages, metadata: capturedMetadata)
+    }
+
+    // MARK: - Image Processing
+    private func processImage(from image: UIImage, with metadata: [String: Any]?) -> UIImage {
+        var processedImage = image
+
+        // Apply resizing if needed
+        if shouldResize, width > 0 || height > 0 {
+            processedImage = processedImage.reformat(to: CGSize(width: width, height: height))
+        } else if shouldCorrectOrientation {
+            // resizing implicitly reformats the image so this is only needed if we aren't resizing
+            processedImage = processedImage.reformat()
+        }
+
+        return processedImage
     }
 
     // MARK: - Image Management
@@ -1252,12 +1276,15 @@ extension MultiCameraViewController: AVCapturePhotoCaptureDelegate {
         // Extract metadata
         let metadata = photo.metadata
 
-        // Fix image orientation based on device orientation
-        let fixedImage = fixImageOrientation(image)
+        // Apply image processing (resizing, quality, etc.) - this also handles orientation correction
+        let processedImage = processImage(from: image, with: metadata)
+
+        // Apply device orientation correction if we didn't do resizing (since resizing includes orientation correction)
+        let finalImage = shouldResize ? processedImage : fixImageOrientation(processedImage)
 
         // Add the captured image
         DispatchQueue.main.async { [weak self] in
-            self?.addCapturedImage(fixedImage, metadata: metadata)
+            self?.addCapturedImage(finalImage, metadata: metadata)
         }
     }
 
