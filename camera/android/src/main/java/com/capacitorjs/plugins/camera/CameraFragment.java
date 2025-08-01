@@ -33,7 +33,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowInsets;
 import android.view.WindowInsetsController;
+import android.view.DisplayCutout;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -74,6 +76,21 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 @SuppressWarnings("FieldCanBeLocal")
+/**
+ * CameraFragment provides a full-screen camera interface with safe area inset awareness.
+ * 
+ * Safe Area Inset Implementation:
+ * - Detects display cutouts and system window insets (Android API 28+)
+ * - Automatically adjusts UI layout to avoid camera cutouts, especially in landscape right mode
+ * - Calculates safe margins for shutter button and controls positioning
+ * - Dynamically updates layout when orientation changes
+ * - Provides minimum safe margins even on devices without cutouts
+ * 
+ * Key methods for safe area handling:
+ * - calculateSafeAreaInsets(): Detects and calculates safe insets
+ * - getSafeControlMargin(): Returns appropriate margin based on orientation
+ * - logSafeAreaStatus(): Logs current safe area status for debugging
+ */
 public class CameraFragment extends Fragment {
 
     // Constants
@@ -121,6 +138,12 @@ public class CameraFragment extends Fragment {
     private DisplayMetrics displayMetrics;
     private boolean isLandscape = false;
     private RelativeLayout controlsContainer; // Container for camera controls in landscape mode
+
+    // Safe area insets for camera cutout awareness
+    private int safeInsetTop = 0;
+    private int safeInsetBottom = 0;
+    private int safeInsetLeft = 0;
+    private int safeInsetRight = 0;
     // Camera variables
     private int lensFacing = CameraSelector.LENS_FACING_BACK;
     private int flashMode = ImageCapture.FLASH_MODE_AUTO;
@@ -320,6 +343,91 @@ public class CameraFragment extends Fragment {
         return context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
     }
 
+    /**
+     * Calculates safe area insets to avoid camera cutouts and other display features
+     * This is particularly important for landscape right mode where the shutter button
+     * could be positioned near the camera cutout.
+     */
+    private void calculateSafeAreaInsets() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            Window window = requireActivity().getWindow();
+            WindowInsets rootInsets = window.getDecorView().getRootWindowInsets();
+
+            if (rootInsets != null) {
+                DisplayCutout displayCutout = rootInsets.getDisplayCutout();
+
+                if (displayCutout != null) {
+                    // Get cutout insets
+                    safeInsetTop = Math.max(safeInsetTop, displayCutout.getSafeInsetTop());
+                    safeInsetBottom = Math.max(safeInsetBottom, displayCutout.getSafeInsetBottom());
+                    safeInsetLeft = Math.max(safeInsetLeft, displayCutout.getSafeInsetLeft());
+                    safeInsetRight = Math.max(safeInsetRight, displayCutout.getSafeInsetRight());
+
+                    Log.d(TAG, "Display cutout detected - Top: " + safeInsetTop +
+                          ", Bottom: " + safeInsetBottom +
+                          ", Left: " + safeInsetLeft +
+                          ", Right: " + safeInsetRight);
+                } else {
+                    Log.d(TAG, "No display cutout detected");
+                }
+
+                // Also check for system window insets as fallback
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    android.graphics.Insets systemInsets = rootInsets.getInsets(WindowInsets.Type.systemBars());
+                    safeInsetTop = Math.max(safeInsetTop, systemInsets.top);
+                    safeInsetBottom = Math.max(safeInsetBottom, systemInsets.bottom);
+                    safeInsetLeft = Math.max(safeInsetLeft, systemInsets.left);
+                    safeInsetRight = Math.max(safeInsetRight, systemInsets.right);
+                }
+            }
+        }
+
+        // Apply minimum safe margins even if no cutout is detected
+        int minSafeMargin = dpToPx(requireContext(), 16);
+        safeInsetTop = Math.max(safeInsetTop, minSafeMargin);
+        safeInsetBottom = Math.max(safeInsetBottom, minSafeMargin);
+        safeInsetLeft = Math.max(safeInsetLeft, minSafeMargin);
+        safeInsetRight = Math.max(safeInsetRight, minSafeMargin);
+
+        Log.d(TAG, "Final safe area insets - Top: " + safeInsetTop +
+              ", Bottom: " + safeInsetBottom +
+              ", Left: " + safeInsetLeft +
+              ", Right: " + safeInsetRight);
+        
+        // Log safe area status for debugging
+        logSafeAreaStatus();
+    }
+
+    /**
+     * Gets the appropriate margin for controls based on orientation and safe area insets
+     * In landscape right mode, we need extra margin to avoid camera cutouts
+     */
+    private int getSafeControlMargin(int baseMargin) {
+        if (!isLandscape) {
+            return baseMargin;
+        }
+
+        // In landscape mode, especially landscape right, we need to account for cutouts
+        // The right side is where the controls container is positioned
+        return Math.max(baseMargin, safeInsetRight);
+    }
+
+    /**
+     * Logs current orientation and safe area inset information for debugging
+     */
+    private void logSafeAreaStatus() {
+        String orientation = isLandscape ? "LANDSCAPE" : "PORTRAIT";
+        Log.d(TAG, "Safe Area Status - Orientation: " + orientation + 
+              ", Safe Insets - Top: " + safeInsetTop + 
+              ", Bottom: " + safeInsetBottom + 
+              ", Left: " + safeInsetLeft + 
+              ", Right: " + safeInsetRight);
+        
+        if (isLandscape && safeInsetRight > dpToPx(requireContext(), 16)) {
+            Log.i(TAG, "Landscape mode with significant right inset detected - likely camera cutout area");
+        }
+    }
+
     @Override
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
@@ -327,6 +435,9 @@ public class CameraFragment extends Fragment {
         // Check if device is in landscape mode with the new configuration
         boolean wasLandscape = isLandscape;
         isLandscape = newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE;
+        
+        // Recalculate safe area insets for the new orientation
+        calculateSafeAreaInsets();
 
         // Recreate the layout when orientation changes
         if (relativeLayout != null) {
@@ -379,7 +490,9 @@ public class CameraFragment extends Fragment {
 
             if (isLandscape) {
                 // In landscape mode, create a container for controls on the right side
-                createControlsContainerForLandscape(fragmentActivity, buttonColors, margin);
+                // Use safe margin calculation for orientation change
+                int safeMargin = getSafeControlMargin(margin);
+                createControlsContainerForLandscape(fragmentActivity, buttonColors, safeMargin);
             } else {
                 // In portrait mode, create the bottom bar and buttons
                 createBottomBar(fragmentActivity, barHeight, margin, buttonColors);
@@ -493,6 +606,9 @@ public class CameraFragment extends Fragment {
         // Check if device is in landscape mode
         isLandscape = isLandscapeMode(fragmentActivity);
 
+        // Calculate safe area insets for camera cutout awareness
+        calculateSafeAreaInsets();
+
         relativeLayout = new RelativeLayout(fragmentActivity);
 
         // Create a black background that fills the entire screen
@@ -515,7 +631,9 @@ public class CameraFragment extends Fragment {
 
         if (isLandscape) {
             // In landscape mode, create a container for controls on the right side
-            createControlsContainerForLandscape(fragmentActivity, buttonColors, margin);
+            // Use safe margin calculation for initial creation
+            int safeMargin = getSafeControlMargin(margin);
+            createControlsContainerForLandscape(fragmentActivity, buttonColors, safeMargin);
         } else {
             // In portrait mode, create the bottom bar and buttons
             createBottomBar(fragmentActivity, barHeight, margin, buttonColors);
@@ -552,6 +670,15 @@ public class CameraFragment extends Fragment {
             View decorView = window.getDecorView();
             int flags = View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
             decorView.setSystemUiVisibility(flags);
+        }
+
+        // Set up window insets listener to handle safe area changes dynamically
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            relativeLayout.setOnApplyWindowInsetsListener((v, insets) -> {
+                // Recalculate safe area insets when window insets change
+                calculateSafeAreaInsets();
+                return insets;
+            });
         }
 
         // Remove edge-to-edge insets handling for true fullscreen
@@ -848,19 +975,6 @@ public class CameraFragment extends Fragment {
             ExifWrapper exif = ImageUtils.getExifData(getContext(), processedBitmap, imageUri);
             boolean wasProcessed = false;
 
-            // Apply orientation correction (only if explicitly enabled)
-            if (cameraSettings.isShouldCorrectOrientation()) {
-                Bitmap correctedBitmap = ImageUtils.correctOrientation(getContext(), processedBitmap, imageUri, exif);
-                if (correctedBitmap != processedBitmap && correctedBitmap != null) {
-                    Log.d(TAG, "Applied orientation correction");
-                    if (processedBitmap != originalBitmap) {
-                        processedBitmap.recycle();
-                    }
-                    processedBitmap = correctedBitmap;
-                    wasProcessed = true;
-                }
-            }
-
             // Apply resizing
             if (cameraSettings.isShouldResize() && cameraSettings.getWidth() > 0 && cameraSettings.getHeight() > 0) {
                 Bitmap resizedBitmap = ImageUtils.resize(processedBitmap, cameraSettings.getWidth(), cameraSettings.getHeight());
@@ -870,6 +984,19 @@ public class CameraFragment extends Fragment {
                         processedBitmap.recycle();
                     }
                     processedBitmap = resizedBitmap;
+                    wasProcessed = true;
+                }
+            }
+
+            // Apply orientation correction (only if explicitly enabled)
+            if (cameraSettings.isShouldCorrectOrientation()) {
+                Bitmap correctedBitmap = ImageUtils.correctOrientation(getContext(), processedBitmap, imageUri, exif);
+                if (correctedBitmap != processedBitmap && correctedBitmap != null) {
+                    Log.d(TAG, "Applied orientation correction");
+                    if (processedBitmap != originalBitmap) {
+                        processedBitmap.recycle();
+                    }
+                    processedBitmap = correctedBitmap;
                     wasProcessed = true;
                 }
             }
@@ -917,9 +1044,17 @@ public class CameraFragment extends Fragment {
             RelativeLayout.LayoutParams.WRAP_CONTENT,
             RelativeLayout.LayoutParams.WRAP_CONTENT
         );
-        // Position in the center of the right side
+
+        // Position in the center of the right side controls container
+        // Add extra margin to ensure it's not too close to potential camera cutouts
         takePictureLayoutParams.addRule(RelativeLayout.CENTER_VERTICAL);
         takePictureLayoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+
+        // Add safe area margins to ensure the button is positioned away from cutouts
+        int safeMarginHorizontal = Math.max(margin, safeInsetRight / 2);
+        int safeMarginVertical = Math.max(margin, Math.max(safeInsetTop, safeInsetBottom) / 4);
+        takePictureLayoutParams.setMargins(safeMarginHorizontal, safeMarginVertical, safeMarginHorizontal, safeMarginVertical);
+
         takePictureButton.setLayoutParams(takePictureLayoutParams);
         takePictureButton.setStateListAnimator(android.animation.AnimatorInflater.loadStateListAnimator(fragmentActivity, R.animator.button_press_animation));
         takePictureButton.setOnClickListener(
@@ -1074,10 +1209,13 @@ public class CameraFragment extends Fragment {
             RelativeLayout.LayoutParams.WRAP_CONTENT,
             RelativeLayout.LayoutParams.WRAP_CONTENT
         );
-        // Position at the bottom right
+        // Position at the bottom center of controls container with safe area margins
         flipButtonLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         flipButtonLayoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
-        flipButtonLayoutParams.setMargins(0, 0, 0, margin * 2);
+
+        // Use safe area insets to ensure button is not too close to bottom cutouts
+        int safeBottomMargin = Math.max(margin * 2, safeInsetBottom + margin);
+        flipButtonLayoutParams.setMargins(0, 0, 0, safeBottomMargin);
         flipCameraButton.setLayoutParams(flipButtonLayoutParams);
         flipCameraButton.setOnClickListener(
             v -> {
@@ -1125,10 +1263,13 @@ public class CameraFragment extends Fragment {
             RelativeLayout.LayoutParams.WRAP_CONTENT,
             RelativeLayout.LayoutParams.WRAP_CONTENT
         );
-        // Position at the top right
+        // Position at the top center of controls container with safe area margins
         doneButtonLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
         doneButtonLayoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
-        doneButtonLayoutParams.setMargins(0, margin * 2, 0, 0);
+
+        // Use safe area insets to ensure button is not too close to top cutouts
+        int safeTopMargin = Math.max(margin * 2, safeInsetTop + margin);
+        doneButtonLayoutParams.setMargins(0, safeTopMargin, 0, 0);
         doneButton.setLayoutParams(doneButtonLayoutParams);
         doneButton.setOnClickListener(
             view -> {
@@ -1149,10 +1290,14 @@ public class CameraFragment extends Fragment {
             RelativeLayout.LayoutParams.WRAP_CONTENT,
             RelativeLayout.LayoutParams.WRAP_CONTENT
         );
-        // Position at the top left of the preview area
+        // Position at the top left of the preview area with safe area margins
         closeButtonLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
         closeButtonLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-        closeButtonLayoutParams.setMargins(margin * 2, margin * 2, 0, 0);
+
+        // Use safe area insets to ensure button is positioned away from cutouts
+        int safeLeftMargin = Math.max(margin * 2, safeInsetLeft + margin);
+        int safeTopMargin = Math.max(margin * 2, safeInsetTop + margin);
+        closeButtonLayoutParams.setMargins(safeLeftMargin, safeTopMargin, 0, 0);
         closeButton.setLayoutParams(closeButtonLayoutParams);
         closeButton.setOnClickListener(
             view -> {
@@ -1184,10 +1329,14 @@ public class CameraFragment extends Fragment {
             RelativeLayout.LayoutParams.WRAP_CONTENT,
             RelativeLayout.LayoutParams.WRAP_CONTENT
         );
-        // Position at the bottom left of the preview area
+        // Position at the bottom left of the preview area with safe area margins
         flashButtonLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         flashButtonLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-        flashButtonLayoutParams.setMargins(margin * 2, 0, 0, margin * 2);
+
+        // Use safe area insets to ensure button is positioned away from cutouts
+        int safeLeftMargin = Math.max(margin * 2, safeInsetLeft + margin);
+        int safeBottomMargin = Math.max(margin * 2, safeInsetBottom + margin);
+        flashButtonLayoutParams.setMargins(safeLeftMargin, 0, 0, safeBottomMargin);
         flashButton.setLayoutParams(flashButtonLayoutParams);
         flashButton.setOnClickListener(
             view -> {
@@ -1493,13 +1642,23 @@ public class CameraFragment extends Fragment {
         controlsContainer.setId(View.generateViewId());
         controlsContainer.setBackgroundColor(Color.BLACK);
 
-        // Set the container to take up the right 20% of the screen
-        int containerWidth = (int) (displayMetrics.widthPixels * 0.2);
+        // Calculate safe control margin to avoid camera cutouts
+        int safeMargin = getSafeControlMargin(margin);
+
+        // Set the container to take up the right portion of the screen, accounting for safe area
+        // Base width is 20% of screen, but we add safe area insets to ensure controls are visible
+        int baseContainerWidth = (int) (displayMetrics.widthPixels * 0.2);
+        int containerWidth = Math.max(baseContainerWidth, safeInsetRight + dpToPx(fragmentActivity, 80)); // 80dp min for controls
+
         RelativeLayout.LayoutParams containerParams = new RelativeLayout.LayoutParams(
             containerWidth,
             RelativeLayout.LayoutParams.MATCH_PARENT
         );
         containerParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+
+        // Add top and bottom margins to account for safe area insets
+        containerParams.setMargins(0, safeInsetTop, 0, safeInsetBottom);
+
         controlsContainer.setLayoutParams(containerParams);
 
         // Add the container to the main layout
@@ -1525,8 +1684,8 @@ public class CameraFragment extends Fragment {
         previewParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         previewParams.addRule(RelativeLayout.LEFT_OF, controlsContainer.getId());
 
-        // Remove any margins
-        previewParams.setMargins(0, 0, 0, 0);
+        // Add left margin to account for safe area insets on the left side
+        previewParams.setMargins(safeInsetLeft, 0, 0, 0);
         previewView.setLayoutParams(previewParams);
 
         // Force the scale type to FILL_CENTER to ensure it fills the available space
@@ -1536,16 +1695,16 @@ public class CameraFragment extends Fragment {
         previewView.setBackgroundColor(Color.BLACK);
 
         // Create camera control buttons for landscape mode that go in the right container
-        createTakePictureButtonForLandscape(fragmentActivity, margin, buttonColors);
-        createFlipButtonForLandscape(fragmentActivity, margin, buttonColors);
-        createDoneButtonForLandscape(fragmentActivity, margin, buttonColors);
+        createTakePictureButtonForLandscape(fragmentActivity, safeMargin, buttonColors);
+        createFlipButtonForLandscape(fragmentActivity, safeMargin, buttonColors);
+        createDoneButtonForLandscape(fragmentActivity, safeMargin, buttonColors);
 
         // Create buttons that go directly on the main layout (left side)
-        createCloseButtonForLandscape(fragmentActivity, margin, buttonColors);
-        createFlashButtonForLandscape(fragmentActivity, margin, buttonColors);
+        createCloseButtonForLandscape(fragmentActivity, safeMargin, buttonColors);
+        createFlashButtonForLandscape(fragmentActivity, safeMargin, buttonColors);
 
         // Create zoom tabs for landscape mode
-        createZoomTabLayoutForLandscape(fragmentActivity, margin);
+        createZoomTabLayoutForLandscape(fragmentActivity, safeMargin);
 
         // Create filmstrip for landscape mode
         createFilmstripViewForLandscape(fragmentActivity);
