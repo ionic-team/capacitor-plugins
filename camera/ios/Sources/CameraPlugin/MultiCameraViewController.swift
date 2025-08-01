@@ -1,6 +1,7 @@
 import UIKit
 import AVFoundation
 import Photos
+import Capacitor
 
 // MARK: - ThumbnailCell
 class ThumbnailCell: UICollectionViewCell {
@@ -13,6 +14,14 @@ class ThumbnailCell: UICollectionViewCell {
         imageView.layer.cornerRadius = 5
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
+    }()
+
+    private let loadingIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .medium)
+        indicator.color = .white
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        indicator.hidesWhenStopped = true
+        return indicator
     }()
 
     private let deleteButton: UIButton = {
@@ -37,6 +46,7 @@ class ThumbnailCell: UICollectionViewCell {
 
     private func setupUI() {
         contentView.addSubview(imageView)
+        contentView.addSubview(loadingIndicator)
         contentView.addSubview(deleteButton)
 
         NSLayoutConstraint.activate([
@@ -44,6 +54,9 @@ class ThumbnailCell: UICollectionViewCell {
             imageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             imageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             imageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+
+            loadingIndicator.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            loadingIndicator.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
 
             deleteButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 2),
             deleteButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -2),
@@ -56,6 +69,15 @@ class ThumbnailCell: UICollectionViewCell {
 
     func configure(with image: UIImage) {
         imageView.image = image
+        loadingIndicator.stopAnimating()
+        deleteButton.isHidden = false
+    }
+
+    func configureAsLoading() {
+        imageView.image = nil
+        imageView.backgroundColor = UIColor.darkGray.withAlphaComponent(0.8)
+        loadingIndicator.startAnimating()
+        deleteButton.isHidden = true
     }
 
     @objc private func deleteButtonTapped() {
@@ -65,10 +87,41 @@ class ThumbnailCell: UICollectionViewCell {
 
 // MARK: - ImagePreviewViewController
 class ImagePreviewViewController: UIViewController {
-    private let previewImage: UIImage
+    private let images: [UIImage]
+    private var currentIndex: Int
 
-    init(image: UIImage) {
-        self.previewImage = image
+    private lazy var collectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        layout.minimumLineSpacing = 0
+        layout.minimumInteritemSpacing = 0
+
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.backgroundColor = .black
+        collectionView.isPagingEnabled = true
+        collectionView.showsHorizontalScrollIndicator = false
+        collectionView.register(ImagePreviewCell.self, forCellWithReuseIdentifier: "ImagePreviewCell")
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        return collectionView
+    }()
+
+    private lazy var positionIndicator: UILabel = {
+        let label = UILabel()
+        label.textColor = .white
+        label.textAlignment = .center
+        label.font = UIFont.systemFont(ofSize: 14, weight: .medium)
+        label.backgroundColor = UIColor.black.withAlphaComponent(0.6)
+        label.layer.cornerRadius = 12
+        label.layer.masksToBounds = true
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+
+    init(images: [UIImage], startingIndex: Int = 0) {
+        self.images = images
+        self.currentIndex = max(0, min(startingIndex, images.count - 1))
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -80,18 +133,29 @@ class ImagePreviewViewController: UIViewController {
         super.viewDidLoad()
 
         view.backgroundColor = .black
+        setupUI()
+        updatePositionIndicator()
+    }
 
-        // Setup image view
-        let imageView = UIImageView(image: previewImage)
-        imageView.contentMode = .scaleAspectFit
-        imageView.translatesAutoresizingMaskIntoConstraints = false
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
 
-        view.addSubview(imageView)
+        // Scroll to the starting index after layout is complete
+        if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+            layout.itemSize = collectionView.bounds.size
+            collectionView.scrollToItem(at: IndexPath(item: currentIndex, section: 0), at: .left, animated: false)
+        }
+    }
+
+    private func setupUI() {
+        view.addSubview(collectionView)
+        view.addSubview(positionIndicator)
+
         NSLayoutConstraint.activate([
-            imageView.topAnchor.constraint(equalTo: view.topAnchor),
-            imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            imageView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            imageView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            collectionView.topAnchor.constraint(equalTo: view.topAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
 
         // Setup close button
@@ -108,10 +172,90 @@ class ImagePreviewViewController: UIViewController {
             closeButton.widthAnchor.constraint(equalToConstant: 44),
             closeButton.heightAnchor.constraint(equalToConstant: 44)
         ])
+
+        // Position indicator constraints - only show if more than 1 image
+        if images.count > 1 {
+            NSLayoutConstraint.activate([
+                positionIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                positionIndicator.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+                positionIndicator.widthAnchor.constraint(greaterThanOrEqualToConstant: 40),
+                positionIndicator.heightAnchor.constraint(equalToConstant: 24)
+            ])
+        } else {
+            positionIndicator.isHidden = true
+        }
+    }
+
+    private func updatePositionIndicator() {
+        if images.count > 1 {
+            positionIndicator.text = "\(currentIndex + 1)/\(images.count)"
+        }
     }
 
     @objc private func closeButtonTapped() {
         dismiss(animated: true)
+    }
+}
+
+// MARK: - ImagePreviewViewController Extensions
+extension ImagePreviewViewController: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return images.count
+    }
+
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ImagePreviewCell", for: indexPath) as? ImagePreviewCell else {
+            return UICollectionViewCell()
+        }
+
+        cell.configure(with: images[indexPath.item])
+        return cell
+    }
+}
+
+extension ImagePreviewViewController: UICollectionViewDelegate {
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        let pageWidth = scrollView.frame.width
+        let currentPage = Int(scrollView.contentOffset.x / pageWidth)
+
+        if currentPage != currentIndex {
+            currentIndex = currentPage
+            updatePositionIndicator()
+        }
+    }
+}
+
+// MARK: - ImagePreviewCell
+class ImagePreviewCell: UICollectionViewCell {
+    private let imageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFit
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
+    }()
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupUI()
+    }
+
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        setupUI()
+    }
+
+    private func setupUI() {
+        contentView.addSubview(imageView)
+        NSLayoutConstraint.activate([
+            imageView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            imageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            imageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            imageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+        ])
+    }
+
+    func configure(with image: UIImage) {
+        imageView.image = image
     }
 }
 
@@ -140,6 +284,7 @@ class MultiCameraViewController: UIViewController {
 
     private var capturedImages: [UIImage] = []
     private var capturedMetadata: [[String: Any]] = []
+    private var loadingStates: [Bool] = [] // Track which thumbnails are still loading
 
     // Track device orientation
     private var isLandscape: Bool = false
@@ -745,13 +890,16 @@ class MultiCameraViewController: UIViewController {
 
             device.unlockForConfiguration()
         } catch {
-            print("Could not set zoom factor: \(error.localizedDescription)")
+            CAPLog.print("Could not set zoom factor: \(error.localizedDescription)")
         }
     }
 
     // MARK: - Actions
     @objc private func takePicture() {
         guard let photoOutput = photoOutput else { return }
+
+        // Add loading thumbnail immediately for responsive UI
+        addLoadingThumbnail()
 
         // Configure photo settings
         let photoSettings = AVCapturePhotoSettings()
@@ -803,8 +951,8 @@ class MultiCameraViewController: UIViewController {
 
         captureSession.commitConfiguration()
 
-        // Update flash button visibility (front camera usually doesn't have flash)
-        flashButton.isHidden = (currentCameraPosition == .front)
+        // Keep flash button visible for both cameras (front camera uses screen flash)
+        flashButton.isHidden = false
 
         // Reset zoom when switching cameras
         currentZoomFactor = 1.0
@@ -859,7 +1007,7 @@ class MultiCameraViewController: UIViewController {
             // Show focus indicator
             showFocusIndicator(at: point)
         } catch {
-            print("Could not focus at point: \(error.localizedDescription)")
+            CAPLog.print("Could not focus at point: \(error.localizedDescription)")
         }
     }
 
@@ -909,18 +1057,13 @@ class MultiCameraViewController: UIViewController {
     }
 
     // MARK: - Image Management
-    private func addCapturedImage(_ image: UIImage, metadata: [String: Any]) {
-        capturedImages.append(image)
-        capturedMetadata.append(metadata)
+    private func addLoadingThumbnail() {
+        // Add placeholder image and loading state
+        capturedImages.append(UIImage()) // Placeholder
+        capturedMetadata.append([:])
+        loadingStates.append(true)
 
-        // Check if we've reached the maximum number of images
-        if maxImages > 0 && capturedImages.count >= maxImages {
-            // Automatically finish if we've reached the limit
-            delegate?.multiCameraViewController(self, didFinishWith: capturedImages, metadata: capturedMetadata)
-            return
-        }
-
-        // Show the done button once we have at least one image
+        // Show the done button once we have at least one image (even loading)
         if doneButton.isHidden {
             doneButton.isHidden = false
         }
@@ -933,11 +1076,35 @@ class MultiCameraViewController: UIViewController {
         thumbnailCollectionView.scrollToItem(at: indexPath, at: .right, animated: true)
     }
 
+    private func addCapturedImage(_ image: UIImage, metadata: [String: Any]) {
+        // Find the most recent loading thumbnail and replace it
+        for i in (0..<loadingStates.count).reversed() {
+            if loadingStates[i] {
+                capturedImages[i] = image
+                capturedMetadata[i] = metadata
+                loadingStates[i] = false
+
+                // Update just this cell
+                let indexPath = IndexPath(item: i, section: 0)
+                thumbnailCollectionView.reloadItems(at: [indexPath])
+                break
+            }
+        }
+
+        // Check if we've reached the maximum number of images
+        if maxImages > 0 && capturedImages.count >= maxImages {
+            // Automatically finish if we've reached the limit
+            delegate?.multiCameraViewController(self, didFinishWith: capturedImages, metadata: capturedMetadata)
+            return
+        }
+    }
+
     private func removeImage(at index: Int) {
         guard index < capturedImages.count else { return }
 
         capturedImages.remove(at: index)
         capturedMetadata.remove(at: index)
+        loadingStates.remove(at: index)
 
         // Hide the done button if we have no images
         if capturedImages.isEmpty {
@@ -953,7 +1120,7 @@ class MultiCameraViewController: UIViewController {
 extension MultiCameraViewController: AVCapturePhotoCaptureDelegate {
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
         if let error = error {
-            print("Error capturing photo: \(error.localizedDescription)")
+            CAPLog.print("Error capturing photo: \(error.localizedDescription)")
             return
         }
 
@@ -1022,9 +1189,15 @@ extension MultiCameraViewController: UICollectionViewDataSource {
             return UICollectionViewCell()
         }
 
-        cell.configure(with: capturedImages[indexPath.item])
-        cell.deleteHandler = { [weak self] in
-            self?.removeImage(at: indexPath.item)
+        // Check if this thumbnail is still loading
+        if indexPath.item < loadingStates.count && loadingStates[indexPath.item] {
+            cell.configureAsLoading()
+            cell.deleteHandler = nil // Don't allow deletion of loading thumbnails
+        } else {
+            cell.configure(with: capturedImages[indexPath.item])
+            cell.deleteHandler = { [weak self] in
+                self?.removeImage(at: indexPath.item)
+            }
         }
 
         return cell
@@ -1034,11 +1207,27 @@ extension MultiCameraViewController: UICollectionViewDataSource {
 // MARK: - UICollectionViewDelegate
 extension MultiCameraViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        // Preview the selected image
-        let image = capturedImages[indexPath.item]
+        // Don't allow interaction with loading thumbnails
+        guard indexPath.item < loadingStates.count && !loadingStates[indexPath.item] else {
+            return
+        }
 
-        // Create a custom image preview controller
-        let previewController = ImagePreviewViewController(image: image)
+        // Filter out any loading images for the preview
+        let nonLoadingImages = capturedImages.enumerated().compactMap { index, image in
+            loadingStates.indices.contains(index) && !loadingStates[index] ? image : nil
+        }
+
+        // Calculate the correct starting index in the filtered array
+        let nonLoadingIndices = loadingStates.enumerated().compactMap { index, isLoading in
+            !isLoading ? index : nil
+        }
+
+        guard let startingIndex = nonLoadingIndices.firstIndex(of: indexPath.item) else {
+            return
+        }
+
+        // Create a custom image preview controller with all non-loading images
+        let previewController = ImagePreviewViewController(images: nonLoadingImages, startingIndex: startingIndex)
 
         // Present it modally
         present(previewController, animated: true)

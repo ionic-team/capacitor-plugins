@@ -647,7 +647,25 @@ extension CameraPlugin: MultiCameraViewControllerDelegate {
                 processedImages.append(processedImage)
             }
 
-            self.returnImages(processedImages)
+            // Save images to gallery if requested, similar to single photo flow
+            if self.settings.saveToGallery {
+                let dispatchGroup = DispatchGroup()
+                var savedResults: [Bool] = Array(repeating: false, count: processedImages.count)
+                
+                for (index, processedImage) in processedImages.enumerated() {
+                    dispatchGroup.enter()
+                    _ = ImageSaver(image: processedImage.image) { error in
+                        savedResults[index] = (error == nil)
+                        dispatchGroup.leave()
+                    }
+                }
+                
+                dispatchGroup.notify(queue: .main) {
+                    self.returnImages(processedImages)
+                }
+            } else {
+                self.returnImages(processedImages)
+            }
         }
     }
 
