@@ -58,6 +58,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.getcapacitor.Logger;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import java.io.FileNotFoundException;
@@ -78,14 +79,14 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @SuppressWarnings("FieldCanBeLocal")
 /**
  * CameraFragment provides a full-screen camera interface with safe area inset awareness.
- * 
+ *
  * Safe Area Inset Implementation:
  * - Detects display cutouts and system window insets (Android API 28+)
  * - Automatically adjusts UI layout to avoid camera cutouts, especially in landscape right mode
  * - Calculates safe margins for shutter button and controls positioning
  * - Dynamically updates layout when orientation changes
  * - Provides minimum safe margins even on devices without cutouts
- * 
+ *
  * Key methods for safe area handling:
  * - calculateSafeAreaInsets(): Detects and calculates safe insets
  * - getSafeControlMargin(): Returns appropriate margin based on orientation
@@ -207,7 +208,6 @@ public class CameraFragment extends Fragment {
 
         // Initialize simple HashMap for image storage
         imageCache = new HashMap<>();
-        Log.d(TAG, "Initialized HashMap for image cache");
 
         zoomTabs = new ArrayList<>();
         zoomHandler = new Handler(requireActivity().getMainLooper());
@@ -252,7 +252,7 @@ public class CameraFragment extends Fragment {
                 imageCache.clear();
                 imageCache = null;
             } catch (Exception e) {
-                Log.e(TAG, "Error clearing image cache", e);
+                Logger.error(TAG, "Error clearing image cache", e);
                 imageCache = null;
             }
         }
@@ -328,7 +328,7 @@ public class CameraFragment extends Fragment {
             }
         } catch (Exception e) {
             // Log but don't crash if there's an issue cleaning up listeners
-            Log.e(TAG, "Error cleaning up ViewTreeObserver listeners", e);
+            Logger.error(TAG, "Error cleaning up ViewTreeObserver listeners", e);
         }
     }
 
@@ -363,12 +363,12 @@ public class CameraFragment extends Fragment {
                     safeInsetLeft = Math.max(safeInsetLeft, displayCutout.getSafeInsetLeft());
                     safeInsetRight = Math.max(safeInsetRight, displayCutout.getSafeInsetRight());
 
-                    Log.d(TAG, "Display cutout detected - Top: " + safeInsetTop +
+                    Logger.debug(TAG, "Display cutout detected - Top: " + safeInsetTop +
                           ", Bottom: " + safeInsetBottom +
                           ", Left: " + safeInsetLeft +
                           ", Right: " + safeInsetRight);
                 } else {
-                    Log.d(TAG, "No display cutout detected");
+                    Logger.debug(TAG, "No display cutout detected");
                 }
 
                 // Also check for system window insets as fallback
@@ -389,11 +389,11 @@ public class CameraFragment extends Fragment {
         safeInsetLeft = Math.max(safeInsetLeft, minSafeMargin);
         safeInsetRight = Math.max(safeInsetRight, minSafeMargin);
 
-        Log.d(TAG, "Final safe area insets - Top: " + safeInsetTop +
+        Logger.debug(TAG, "Final safe area insets - Top: " + safeInsetTop +
               ", Bottom: " + safeInsetBottom +
               ", Left: " + safeInsetLeft +
               ", Right: " + safeInsetRight);
-        
+
         // Log safe area status for debugging
         logSafeAreaStatus();
     }
@@ -417,14 +417,14 @@ public class CameraFragment extends Fragment {
      */
     private void logSafeAreaStatus() {
         String orientation = isLandscape ? "LANDSCAPE" : "PORTRAIT";
-        Log.d(TAG, "Safe Area Status - Orientation: " + orientation + 
-              ", Safe Insets - Top: " + safeInsetTop + 
-              ", Bottom: " + safeInsetBottom + 
-              ", Left: " + safeInsetLeft + 
+        Logger.debug(TAG, "Safe Area Status - Orientation: " + orientation +
+              ", Safe Insets - Top: " + safeInsetTop +
+              ", Bottom: " + safeInsetBottom +
+              ", Left: " + safeInsetLeft +
               ", Right: " + safeInsetRight);
-        
+
         if (isLandscape && safeInsetRight > dpToPx(requireContext(), 16)) {
-            Log.i(TAG, "Landscape mode with significant right inset detected - likely camera cutout area");
+            Logger.info(TAG, "Landscape mode with significant right inset detected - likely camera cutout area");
         }
     }
 
@@ -435,7 +435,7 @@ public class CameraFragment extends Fragment {
         // Check if device is in landscape mode with the new configuration
         boolean wasLandscape = isLandscape;
         isLandscape = newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE;
-        
+
         // Recalculate safe area insets for the new orientation
         calculateSafeAreaInsets();
 
@@ -725,15 +725,12 @@ public class CameraFragment extends Fragment {
     private void addImageToCache(Uri uri, Bitmap bitmap) {
         if (uri != null && bitmap != null && !bitmap.isRecycled() && imageCache != null) {
             try {
-                int bitmapSizeKB = bitmap.getByteCount() / 1024;
-                Log.d(TAG, "Adding image to cache: " + uri + ", bitmap size: " + bitmap.getWidth() + "x" + bitmap.getHeight() + " (" + bitmapSizeKB + " KB)");
                 imageCache.put(uri, bitmap);
-                Log.d(TAG, "Cache size after adding: " + imageCache.size() + " images");
             } catch (Exception e) {
-                Log.e(TAG, "Error adding image to cache", e);
+                Logger.error(TAG, "Error adding image to cache", e);
             }
         } else {
-            Log.w(TAG, "Failed to add image to cache - uri: " + uri + ", bitmap: " + bitmap + ", imageCache: " + imageCache);
+            Logger.warn(TAG, "Failed to add image to cache - uri: " + uri + ", bitmap: " + bitmap + ", imageCache: " + imageCache);
         }
     }
 
@@ -755,14 +752,11 @@ public class CameraFragment extends Fragment {
     private HashMap<Uri, Bitmap> getAllCachedImages() {
         HashMap<Uri, Bitmap> result = new HashMap<>();
         if (imageCache != null) {
-            Log.d(TAG, "getAllCachedImages: cache size = " + imageCache.size());
             // Copy all entries from the cache
             for (Map.Entry<Uri, Bitmap> entry : imageCache.entrySet()) {
-                Log.d(TAG, "Adding cached image: " + entry.getKey());
                 result.put(entry.getKey(), entry.getValue());
             }
         }
-        Log.d(TAG, "getAllCachedImages: returning " + result.size() + " images");
         return result;
     }
 
@@ -784,12 +778,12 @@ public class CameraFragment extends Fragment {
         for (Map.Entry<Uri, Bitmap> image : getAllCachedImages().entrySet()) {
             if (!deleteFile(image.getKey())) {
                 failedDeletions++;
-                Log.w(TAG, "Failed to delete image during cancel: " + image.getKey());
+                Logger.warn(TAG, "Failed to delete image during cancel: " + image.getKey());
             }
         }
 
         if (failedDeletions > 0) {
-            Log.w(TAG, "Failed to delete " + failedDeletions + " images during cancel");
+            Logger.warn(TAG, "Failed to delete " + failedDeletions + " images during cancel");
             // We still proceed with cancellation even if some deletions failed
         }
 
@@ -802,7 +796,7 @@ public class CameraFragment extends Fragment {
     private void done() {
         // Check if there are still images being processed
         if (thumbnailAdapter != null && thumbnailAdapter.hasLoadingThumbnails()) {
-            Log.d(TAG, "Images still processing, showing spinner overlay");
+            Logger.debug(TAG, "Images still processing, showing spinner overlay");
             // Show non-dismissable spinner while processing
             showProcessingOverlay();
 
@@ -825,7 +819,7 @@ public class CameraFragment extends Fragment {
             };
             processingHandler.post(processingRunnable);
         } else {
-            Log.d(TAG, "No images processing, proceeding immediately");
+            Logger.debug(TAG, "No images processing, proceeding immediately");
             // No processing needed, proceed immediately
             finalizeDone();
         }
@@ -846,13 +840,13 @@ public class CameraFragment extends Fragment {
             if (getActivity() != null && !getActivity().isFinishing() && isAdded()) {
                 requireActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
             } else {
-                Log.w(TAG, "Cannot close fragment: activity is null, finishing, or fragment not added");
+                Logger.warn(TAG, "Cannot close fragment: activity is null, finishing, or fragment not added");
             }
         } catch (IllegalStateException e) {
             // This can happen if the activity is being destroyed
-            Log.e(TAG, "Error closing fragment", e);
+            Logger.error(TAG, "Error closing fragment", e);
         } catch (Exception e) {
-            Log.e(TAG, "Unexpected error closing fragment", e);
+            Logger.error(TAG, "Unexpected error closing fragment", e);
         }
     }
 
@@ -915,15 +909,13 @@ public class CameraFragment extends Fragment {
 
         // Add the overlay to main layout
         relativeLayout.addView(processingOverlay);
-
-        Log.d(TAG, "Processing overlay created and hidden");
     }
 
     /**
      * Shows the processing overlay
      */
     private void showProcessingOverlay() {
-        Log.d(TAG, "Showing processing overlay");
+        Logger.debug(TAG, "Showing processing overlay");
         if (processingOverlay != null) {
             processingOverlay.setVisibility(View.VISIBLE);
             processingOverlay.bringToFront();
@@ -959,13 +951,13 @@ public class CameraFragment extends Fragment {
      */
     private Bitmap processBitmap(Bitmap originalBitmap, Uri imageUri) {
         if (originalBitmap == null || originalBitmap.isRecycled()) {
-            Log.w(TAG, "Cannot process null or recycled bitmap");
+            Logger.warn(TAG, "Cannot process null or recycled bitmap");
             return null;
         }
 
         // If no settings are available, return original bitmap
         if (cameraSettings == null) {
-            Log.d(TAG, "No camera settings available, returning original bitmap");
+            Logger.debug(TAG, "No camera settings available, returning original bitmap");
             return originalBitmap;
         }
 
@@ -979,7 +971,7 @@ public class CameraFragment extends Fragment {
             if (cameraSettings.isShouldResize() && cameraSettings.getWidth() > 0 && cameraSettings.getHeight() > 0) {
                 Bitmap resizedBitmap = ImageUtils.resize(processedBitmap, cameraSettings.getWidth(), cameraSettings.getHeight());
                 if (resizedBitmap != processedBitmap && resizedBitmap != null) {
-                    Log.d(TAG, "Applied resizing to " + cameraSettings.getWidth() + "x" + cameraSettings.getHeight());
+                    Logger.debug(TAG, "Applied resizing to " + cameraSettings.getWidth() + "x" + cameraSettings.getHeight());
                     if (processedBitmap != originalBitmap) {
                         processedBitmap.recycle();
                     }
@@ -992,7 +984,7 @@ public class CameraFragment extends Fragment {
             if (cameraSettings.isShouldCorrectOrientation()) {
                 Bitmap correctedBitmap = ImageUtils.correctOrientation(getContext(), processedBitmap, imageUri, exif);
                 if (correctedBitmap != processedBitmap && correctedBitmap != null) {
-                    Log.d(TAG, "Applied orientation correction");
+                    Logger.debug(TAG, "Applied orientation correction");
                     if (processedBitmap != originalBitmap) {
                         processedBitmap.recycle();
                     }
@@ -1002,13 +994,13 @@ public class CameraFragment extends Fragment {
             }
 
             if (wasProcessed) {
-                Log.d(TAG, "Bitmap processed: " + originalBitmap.getWidth() + "x" + originalBitmap.getHeight() +
+                Logger.debug(TAG, "Bitmap processed: " + originalBitmap.getWidth() + "x" + originalBitmap.getHeight() +
                       " -> " + processedBitmap.getWidth() + "x" + processedBitmap.getHeight());
             }
 
             return processedBitmap;
         } catch (Exception e) {
-            Log.e(TAG, "Error processing bitmap", e);
+            Logger.error(TAG, "Error processing bitmap", e);
             // If processing fails, return original bitmap and don't crash
             return originalBitmap;
         }
@@ -1094,7 +1086,7 @@ public class CameraFragment extends Fragment {
                                 try {
                                     stream = requireContext().getContentResolver().openInputStream(savedImageUri);
                                     if (stream == null) {
-                                        Log.e(TAG, "Failed to open input stream for saved image: " + savedImageUri);
+                                        Logger.error(TAG, "Failed to open input stream for saved image: " + savedImageUri, null);
                                         showErrorToast("Failed to process captured image");
                                         return;
                                     }
@@ -1104,7 +1096,7 @@ public class CameraFragment extends Fragment {
                                     Bitmap bmp = BitmapFactory.decodeStream(stream, null, options);
 
                                     if (bmp == null) {
-                                        Log.e(TAG, "Failed to decode bitmap from saved image: " + savedImageUri);
+                                        Logger.error(TAG, "Failed to decode bitmap from saved image: " + savedImageUri, null);
                                         showErrorToast("Failed to process captured image");
                                         return;
                                     }
@@ -1130,10 +1122,10 @@ public class CameraFragment extends Fragment {
                                         });
                                     }
                                 } catch (FileNotFoundException e) {
-                                    Log.e(TAG, "File not found for saved image: " + savedImageUri, e);
+                                    Logger.error(TAG, "File not found for saved image: " + savedImageUri, e);
                                     showErrorToast("Image file not found");
                                 } catch (OutOfMemoryError e) {
-                                    Log.e(TAG, "Out of memory when processing image: " + savedImageUri, e);
+                                    Logger.error(TAG, "Out of memory when processing image: " + savedImageUri, e);
                                     showErrorToast("Not enough memory to process image");
                                     // Try to recover by clearing the cache
                                     if (imageCache != null) {
@@ -1141,19 +1133,19 @@ public class CameraFragment extends Fragment {
                                     }
                                     System.gc(); // Request garbage collection
                                 } catch (Exception e) {
-                                    Log.e(TAG, "Error processing saved image: " + savedImageUri, e);
+                                    Logger.error(TAG, "Error processing saved image: " + savedImageUri, e);
                                     showErrorToast("Error processing image");
                                 } finally {
                                     if (stream != null) {
                                         try {
                                             stream.close();
                                         } catch (IOException e) {
-                                            Log.e(TAG, "Error closing input stream", e);
+                                            Logger.error(TAG, "Error closing input stream", e);
                                         }
                                     }
                                 }
                             } else {
-                                Log.e(TAG, "Saved image URI is null");
+                                Logger.error(TAG, "Saved image URI is null", null);
                                 showErrorToast("Failed to save image");
                             }
                         }
@@ -1181,7 +1173,7 @@ public class CameraFragment extends Fragment {
                                     break;
                             }
 
-                            Log.e(TAG, "Image capture error: " + errorMessage, exception);
+                            Logger.error(TAG, "Image capture error: " + errorMessage, exception);
 
                             // Remove any loading thumbnails since capture failed
                             requireActivity().runOnUiThread(() -> {
@@ -1227,13 +1219,13 @@ public class CameraFragment extends Fragment {
                     showErrorToast("Capture cancelled due to camera switch");
                 }
 
-                Log.d(TAG, "Switching camera from " + (lensFacing == CameraSelector.LENS_FACING_FRONT ? "FRONT" : "BACK"));
+                Logger.debug(TAG, "Switching camera from " + (lensFacing == CameraSelector.LENS_FACING_FRONT ? "FRONT" : "BACK"));
                 lensFacing = lensFacing == CameraSelector.LENS_FACING_FRONT ? CameraSelector.LENS_FACING_BACK : CameraSelector.LENS_FACING_FRONT;
-                Log.d(TAG, "Switched camera to " + (lensFacing == CameraSelector.LENS_FACING_FRONT ? "FRONT" : "BACK"));
+                Logger.debug(TAG, "Switched camera to " + (lensFacing == CameraSelector.LENS_FACING_FRONT ? "FRONT" : "BACK"));
 
                 flashButton.setVisibility(lensFacing == CameraSelector.LENS_FACING_BACK ? View.VISIBLE : View.GONE);
                 if (!zoomTabs.isEmpty()) {
-                    Log.d(TAG, "Clearing " + zoomTabs.size() + " zoom tabs");
+                    Logger.debug(TAG, "Clearing " + zoomTabs.size() + " zoom tabs");
                     if (zoomTabLayout != null) {
                         zoomTabLayout.removeAllTabs();
                     }
@@ -1478,7 +1470,7 @@ public class CameraFragment extends Fragment {
                                 try {
                                     stream = requireContext().getContentResolver().openInputStream(savedImageUri);
                                     if (stream == null) {
-                                        Log.e(TAG, "Failed to open input stream for saved image: " + savedImageUri);
+                                        Logger.error(TAG, "Failed to open input stream for saved image: " + savedImageUri, null);
                                         showErrorToast("Failed to process captured image");
                                         return;
                                     }
@@ -1488,7 +1480,7 @@ public class CameraFragment extends Fragment {
                                     Bitmap bmp = BitmapFactory.decodeStream(stream, null, options);
 
                                     if (bmp == null) {
-                                        Log.e(TAG, "Failed to decode bitmap from saved image: " + savedImageUri);
+                                        Logger.error(TAG, "Failed to decode bitmap from saved image: " + savedImageUri, null);
                                         showErrorToast("Failed to process captured image");
                                         return;
                                     }
@@ -1514,10 +1506,10 @@ public class CameraFragment extends Fragment {
                                         });
                                     }
                                 } catch (FileNotFoundException e) {
-                                    Log.e(TAG, "File not found for saved image: " + savedImageUri, e);
+                                    Logger.error(TAG, "File not found for saved image: " + savedImageUri, e);
                                     showErrorToast("Image file not found");
                                 } catch (OutOfMemoryError e) {
-                                    Log.e(TAG, "Out of memory when processing image: " + savedImageUri, e);
+                                    Logger.error(TAG, "Out of memory when processing image: " + savedImageUri, e);
                                     showErrorToast("Not enough memory to process image");
                                     // Try to recover by clearing the cache
                                     if (imageCache != null) {
@@ -1525,19 +1517,19 @@ public class CameraFragment extends Fragment {
                                     }
                                     System.gc(); // Request garbage collection
                                 } catch (Exception e) {
-                                    Log.e(TAG, "Error processing saved image: " + savedImageUri, e);
+                                    Logger.error(TAG, "Error processing saved image: " + savedImageUri, e);
                                     showErrorToast("Error processing image");
                                 } finally {
                                     if (stream != null) {
                                         try {
                                             stream.close();
                                         } catch (IOException e) {
-                                            Log.e(TAG, "Error closing input stream", e);
+                                            Logger.error(TAG, "Error closing input stream", e);
                                         }
                                     }
                                 }
                             } else {
-                                Log.e(TAG, "Saved image URI is null");
+                                Logger.error(TAG, "Saved image URI is null", null);
                                 showErrorToast("Failed to save image");
                             }
                         }
@@ -1565,7 +1557,7 @@ public class CameraFragment extends Fragment {
                                     break;
                             }
 
-                            Log.e(TAG, "Image capture error: " + errorMessage, exception);
+                            Logger.error(TAG, "Image capture error: " + errorMessage, exception);
 
                             // Remove any loading thumbnails since capture failed
                             requireActivity().runOnUiThread(() -> {
@@ -1607,13 +1599,13 @@ public class CameraFragment extends Fragment {
                     showErrorToast("Capture cancelled due to camera switch");
                 }
 
-                Log.d(TAG, "Switching camera from " + (lensFacing == CameraSelector.LENS_FACING_FRONT ? "FRONT" : "BACK"));
+                Logger.debug(TAG, "Switching camera from " + (lensFacing == CameraSelector.LENS_FACING_FRONT ? "FRONT" : "BACK"));
                 lensFacing = lensFacing == CameraSelector.LENS_FACING_FRONT ? CameraSelector.LENS_FACING_BACK : CameraSelector.LENS_FACING_FRONT;
-                Log.d(TAG, "Switched camera to " + (lensFacing == CameraSelector.LENS_FACING_FRONT ? "FRONT" : "BACK"));
+                Logger.debug(TAG, "Switched camera to " + (lensFacing == CameraSelector.LENS_FACING_FRONT ? "FRONT" : "BACK"));
 
                 flashButton.setVisibility(lensFacing == CameraSelector.LENS_FACING_BACK ? View.VISIBLE : View.GONE);
                 if (!zoomTabs.isEmpty()) {
-                    Log.d(TAG, "Clearing " + zoomTabs.size() + " zoom tabs");
+                    Logger.debug(TAG, "Clearing " + zoomTabs.size() + " zoom tabs");
                     if (zoomTabLayout != null) {
                         zoomTabLayout.removeAllTabs();
                     }
@@ -1881,7 +1873,6 @@ public class CameraFragment extends Fragment {
     }
 
     private void createZoomTabLayoutForLandscape(FragmentActivity fragmentActivity, int margin) {
-        Log.d(TAG, "Creating zoom tab layout for landscape mode with vertical stacking");
         zoomTabCardView = new CardView(fragmentActivity);
         zoomTabCardView.setId(View.generateViewId());
 
@@ -1905,7 +1896,6 @@ public class CameraFragment extends Fragment {
 
         // Add to the main layout (preview area) instead of the controls container
         relativeLayout.addView(zoomTabCardView);
-        Log.d(TAG, "Added zoom tab card view to main layout (preview area)");
 
         // Create a LinearLayout with vertical orientation instead of TabLayout for landscape mode
         LinearLayout verticalZoomContainer = new LinearLayout(fragmentActivity);
@@ -1929,8 +1919,6 @@ public class CameraFragment extends Fragment {
         // Store the vertical container for use in createZoomTabsForLandscape
         zoomTabLayout = null; // We're not using TabLayout in landscape mode
         this.verticalZoomContainer = verticalZoomContainer;
-
-        Log.d(TAG, "Created vertical zoom container for landscape mode");
     }
 
     private void createZoomTabs(FragmentActivity fragmentActivity, TabLayout tabLayout) {
@@ -1946,7 +1934,7 @@ public class CameraFragment extends Fragment {
     private void createZoomTabsInternal(FragmentActivity fragmentActivity, TabLayout tabLayout, LinearLayout verticalContainer) {
         float[] zoomLevels;
 
-        Log.d(TAG, "Creating zoom tabs for camera facing: " + (lensFacing == CameraSelector.LENS_FACING_FRONT ? "FRONT" : "BACK") +
+        Logger.debug(TAG, "Creating zoom tabs for camera facing: " + (lensFacing == CameraSelector.LENS_FACING_FRONT ? "FRONT" : "BACK") +
                    ", minZoom: " + minZoom + ", maxZoom: " + maxZoom);
 
         // For front camera, don't include ultra-wide (minZoom like 0.6x) as it's not useful
@@ -1961,14 +1949,14 @@ public class CameraFragment extends Fragment {
             }
         }
 
-        Log.d(TAG, "Zoom levels to create: " + java.util.Arrays.toString(zoomLevels));
+        Logger.debug(TAG, "Zoom levels to create: " + java.util.Arrays.toString(zoomLevels));
 
         int selectedTabIndex = -1;
         for (int i = 0; i < zoomLevels.length; i++) {
             float zoomLevel = zoomLevels[i];
             // Skip zoom levels that exceed the maximum supported zoom
             if (zoomLevel > maxZoom) {
-                Log.d(TAG, "Skipping zoom level " + zoomLevel + " because it exceeds maxZoom " + maxZoom);
+                Logger.debug(TAG, "Skipping zoom level " + zoomLevel + " because it exceeds maxZoom " + maxZoom);
                 continue;
             }
 
@@ -1982,7 +1970,6 @@ public class CameraFragment extends Fragment {
                 TabLayout.Tab tab = tabLayout.newTab();
                 tab.setCustomView(zoomTab.getView());
                 tabLayout.addTab(tab);
-                Log.d(TAG, "Added zoom tab to TabLayout: " + zoomLevel + "x");
             } else if (verticalContainer != null) {
                 // Landscape mode - add to vertical LinearLayout
                 View zoomView = zoomTab.getView();
@@ -2015,7 +2002,6 @@ public class CameraFragment extends Fragment {
                 });
 
                 verticalContainer.addView(zoomView);
-                Log.d(TAG, "Added zoom tab to vertical container: " + zoomLevel + "x");
             }
 
             // Track which should be the default selected tab (1x zoom)
@@ -2024,17 +2010,13 @@ public class CameraFragment extends Fragment {
             }
         }
 
-        Log.d(TAG, "Total zoom tabs created: " + zoomTabs.size());
-
         // Select the 1x zoom tab
         if (selectedTabIndex >= 0) {
             if (tabLayout != null && selectedTabIndex < tabLayout.getTabCount()) {
                 tabLayout.selectTab(tabLayout.getTabAt(selectedTabIndex));
-                Log.d(TAG, "Selected default zoom tab at index: " + selectedTabIndex);
             } else if (verticalContainer != null && selectedTabIndex < zoomTabs.size()) {
                 // For landscape mode, manually select the 1x zoom tab
                 zoomTabs.get(selectedTabIndex).setSelected(true);
-                Log.d(TAG, "Selected default zoom tab for landscape at index: " + selectedTabIndex);
             }
         }
     }
@@ -2101,7 +2083,7 @@ public class CameraFragment extends Fragment {
                     }
 
                     if (!deleteFile(uri)) {
-                        Log.w(TAG, "Failed to delete file after thumbnail removal: " + uri);
+                        Logger.warn(TAG, "Failed to delete file after thumbnail removal: " + uri);
                         // Even if deletion fails, we've already removed it from the UI and cache,
                         // so we don't need to show an error to the user
                     }
@@ -2231,7 +2213,7 @@ public class CameraFragment extends Fragment {
                     }
 
                     if (!deleteFile(uri)) {
-                        Log.w(TAG, "Failed to delete file after thumbnail removal in landscape mode: " + uri);
+                        Logger.warn(TAG, "Failed to delete file after thumbnail removal in landscape mode: " + uri);
                         // Even if deletion fails, we've already removed it from the UI and cache,
                         // so we don't need to show an error to the user
                     }
@@ -2313,7 +2295,7 @@ public class CameraFragment extends Fragment {
      */
     private boolean deleteFile(Uri fileUri) {
         if (fileUri == null) {
-            Log.e(TAG, "Cannot delete null URI");
+            Logger.error(TAG, "Cannot delete null URI", null);
             return false;
         }
 
@@ -2323,25 +2305,25 @@ public class CameraFragment extends Fragment {
 
             if (deleted == 0) {
                 // File deletion failed
-                Log.e(TAG, "Failed to delete file: " + fileUri);
+                Logger.error(TAG, "Failed to delete file: " + fileUri, null);
                 return false;
             } else {
                 // File deletion successful
-                Log.i(TAG, "File deleted: " + fileUri);
+                Logger.info(TAG, "File deleted: " + fileUri);
                 return true;
             }
         } catch (SecurityException e) {
             // Handle permission issues
-            Log.e(TAG, "Security exception when deleting file: " + fileUri, e);
+            Logger.error(TAG, "Security exception when deleting file: " + fileUri, e);
             showErrorToast("Permission denied to delete image");
             return false;
         } catch (IllegalArgumentException e) {
             // Handle invalid URI
-            Log.e(TAG, "Invalid URI when deleting file: " + fileUri, e);
+            Logger.error(TAG, "Invalid URI when deleting file: " + fileUri, e);
             return false;
         } catch (Exception e) {
             // Handle any other exceptions
-            Log.e(TAG, "Error deleting file: " + fileUri, e);
+            Logger.error(TAG, "Error deleting file: " + fileUri, e);
             return false;
         }
     }
@@ -2403,17 +2385,17 @@ public class CameraFragment extends Fragment {
                     minZoom = zoomState.getMinZoomRatio();
                     maxZoom = zoomState.getMaxZoomRatio();
 
-                    Log.d(TAG, "Zoom state changed - minZoom: " + minZoom + ", maxZoom: " + maxZoom + ", current zoom tabs: " + zoomTabs.size());
+                    Logger.debug(TAG, "Zoom state changed - minZoom: " + minZoom + ", maxZoom: " + maxZoom + ", current zoom tabs: " + zoomTabs.size());
 
                     if (zoomTabs.isEmpty()) {
-                        Log.d(TAG, "Creating zoom tabs because zoomTabs is empty");
+                        Logger.debug(TAG, "Creating zoom tabs because zoomTabs is empty");
                         if (isLandscape && verticalZoomContainer != null) {
                             createZoomTabsForLandscape(requireActivity(), verticalZoomContainer);
                         } else if (zoomTabLayout != null) {
                             createZoomTabs(requireActivity(), zoomTabLayout);
                         }
                     } else {
-                        Log.d(TAG, "Not creating zoom tabs because zoomTabs is not empty (" + zoomTabs.size() + " tabs exist)");
+                        Logger.debug(TAG, "Not creating zoom tabs because zoomTabs is not empty (" + zoomTabs.size() + " tabs exist)");
                     }
 
                     if (zoomRunnable != null) {
@@ -2511,7 +2493,7 @@ public class CameraFragment extends Fragment {
                     ).show();
                 } catch (Exception e) {
                     // Fail silently if we can't show a toast
-                    Log.e(TAG, "Failed to show error toast: " + message, e);
+                    Logger.error(TAG, "Failed to show error toast: " + message, e);
                 }
             });
         }
@@ -2549,7 +2531,7 @@ public class CameraFragment extends Fragment {
                     return contentResolver.loadThumbnail(imageUri, size, null);
                 } catch (IOException e) {
                     // Fall back to manual downsampling if the built-in method fails
-                    Log.w(TAG, "Failed to load thumbnail with system API, falling back to manual downsampling", e);
+                    Logger.warn(TAG, "Failed to load thumbnail with system API, falling back to manual downsampling");
                     // Continue to manual downsampling below
                 }
             }
@@ -2580,7 +2562,7 @@ public class CameraFragment extends Fragment {
             return thumbnail;
 
         } catch (Exception e) {
-            Log.e(TAG, "Error creating thumbnail", e);
+            Logger.error(TAG, "Error creating thumbnail", e);
 
             // Last resort fallback for older devices
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
@@ -2604,7 +2586,7 @@ public class CameraFragment extends Fragment {
                         cursor.close();
                     }
                 } catch (Exception ex) {
-                    Log.e(TAG, "Error in thumbnail fallback", ex);
+                    Logger.error(TAG, "Error in thumbnail fallback", ex);
                 }
             }
 
@@ -2615,7 +2597,7 @@ public class CameraFragment extends Fragment {
                 try {
                     inputStream.close();
                 } catch (IOException e) {
-                    Log.e(TAG, "Error closing input stream", e);
+                    Logger.error(TAG, "Error closing input stream", e);
                 }
             }
         }
