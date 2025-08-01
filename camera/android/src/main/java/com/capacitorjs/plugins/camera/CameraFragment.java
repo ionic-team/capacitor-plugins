@@ -2,6 +2,8 @@ package com.capacitorjs.plugins.camera;
 
 import static com.capacitorjs.plugins.camera.DeviceUtils.dpToPx;
 
+import android.view.ViewTreeObserver;
+
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.ContentResolver;
@@ -34,6 +36,7 @@ import android.view.WindowInsetsController;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import androidx.annotation.ColorInt;
@@ -60,11 +63,14 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+import androidx.collection.LruCache;
 
 @SuppressWarnings("FieldCanBeLocal")
 public class CameraFragment extends Fragment {
@@ -129,7 +135,7 @@ public class CameraFragment extends Fragment {
     private ExecutorService cameraExecutor;
     private LifecycleCameraController cameraController;
     // Utility variables
-    private HashMap<Uri, Bitmap> images;
+    private LruCache<Uri, Bitmap> imageCache;
     private ArrayList<ZoomTab> zoomTabs;
 
     private Handler zoomHandler = null;
@@ -155,7 +161,28 @@ public class CameraFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        images = new HashMap<>();
+
+        // Calculate cache size as 1/8th of available memory
+        final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
+        final int cacheSize = maxMemory / 8;
+
+        // Initialize LruCache for image memory management
+        imageCache = new LruCache<Uri, Bitmap>(cacheSize) {
+            @Override
+            protected int sizeOf(Uri key, Bitmap bitmap) {
+                // Size in kilobytes
+                return bitmap.getByteCount() / 1024;
+            }
+
+            @Override
+            protected void entryRemoved(boolean evicted, Uri key, Bitmap oldValue, Bitmap newValue) {
+                if (evicted && oldValue != null && !oldValue.isRecycled()) {
+                    // Recycle bitmap to free memory immediately when evicted from cache
+                    oldValue.recycle();
+                }
+            }
+        };
+
         zoomTabs = new ArrayList<>();
         zoomHandler = new Handler(requireActivity().getMainLooper());
         mediaActionSound = new MediaActionSound();
@@ -184,12 +211,63 @@ public class CameraFragment extends Fragment {
         window.setStatusBarColor(requireActivity().getResources().getColor(android.R.color.transparent));
         window.setNavigationBarColor(requireActivity().getResources().getColor(android.R.color.transparent));
 
+        // Clean up any ViewTreeObserver listeners that might still be active
+        cleanupViewTreeObservers();
+
+        // Clear image cache to free memory
+        if (imageCache != null) {
+            imageCache.evictAll();
+            imageCache = null;
+        }
+
         if (mediaActionSound != null) {
             mediaActionSound.release();
             mediaActionSound = null;
         }
+
         if (cameraExecutor != null) {
             cameraExecutor.shutdown();
+            try {
+                // Wait for tasks to complete with timeout
+                if (!cameraExecutor.awaitTermination(500, TimeUnit.MILLISECONDS)) {
+                    cameraExecutor.shutdownNow();
+                }
+            } catch (InterruptedException e) {
+                cameraExecutor.shutdownNow();
+                Thread.currentThread().interrupt();
+            }
+        }
+    }
+
+    /**
+     * Cleans up any ViewTreeObserver listeners to prevent memory leaks
+     */
+    private void cleanupViewTreeObservers() {
+        try {
+            // Clean up ViewTreeObserver listeners for all views that might have them
+            if (relativeLayout != null && relativeLayout.getViewTreeObserver().isAlive()) {
+                // Use a no-op listener to avoid crashes when removing unknown listeners
+                ViewTreeObserver.OnGlobalLayoutListener noOpListener = () -> {};
+                relativeLayout.getViewTreeObserver().removeOnGlobalLayoutListener(noOpListener);
+            }
+
+            if (previewView != null && previewView.getViewTreeObserver().isAlive()) {
+                ViewTreeObserver.OnGlobalLayoutListener noOpListener = () -> {};
+                previewView.getViewTreeObserver().removeOnGlobalLayoutListener(noOpListener);
+            }
+
+            if (zoomTabCardView != null && zoomTabCardView.getViewTreeObserver().isAlive()) {
+                ViewTreeObserver.OnGlobalLayoutListener noOpListener = () -> {};
+                zoomTabCardView.getViewTreeObserver().removeOnGlobalLayoutListener(noOpListener);
+            }
+
+            if (filmstripView != null && filmstripView.getViewTreeObserver().isAlive()) {
+                ViewTreeObserver.OnGlobalLayoutListener noOpListener = () -> {};
+                filmstripView.getViewTreeObserver().removeOnGlobalLayoutListener(noOpListener);
+            }
+        } catch (Exception e) {
+            // Log but don't crash if there's an issue cleaning up listeners
+            Log.e(TAG, "Error cleaning up ViewTreeObserver listeners", e);
         }
     }
 
@@ -292,58 +370,60 @@ public class CameraFragment extends Fragment {
             relativeLayout.invalidate();
             previewView.requestLayout();
 
-            // Post a delayed layout update to ensure everything is properly laid out
-            new Handler(requireActivity().getMainLooper()).postDelayed(() -> {
-                if (isLandscape) {
-                    // Force the preview view to take up the correct width in landscape mode
-                    int containerWidth = (int) (displayMetrics.widthPixels * 0.2);
-                    RelativeLayout.LayoutParams previewParams = (RelativeLayout.LayoutParams) previewView.getLayoutParams();
+            // Use ViewTreeObserver to efficiently handle layout updates
+            relativeLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    // Remove the listener to prevent multiple callbacks
+                    relativeLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
 
-                    // Clear any existing rules that might be interfering
-                    previewParams.removeRule(RelativeLayout.ABOVE);
-                    previewParams.removeRule(RelativeLayout.BELOW);
-                    previewParams.removeRule(RelativeLayout.RIGHT_OF);
-                    previewParams.removeRule(RelativeLayout.LEFT_OF);
-                    previewParams.removeRule(RelativeLayout.CENTER_IN_PARENT);
-                    previewParams.removeRule(RelativeLayout.CENTER_HORIZONTAL);
-                    previewParams.removeRule(RelativeLayout.CENTER_VERTICAL);
+                    if (isLandscape) {
+                        // Force the preview view to take up the correct width in landscape mode
+                        int containerWidth = (int) (displayMetrics.widthPixels * 0.2);
+                        RelativeLayout.LayoutParams previewParams = (RelativeLayout.LayoutParams) previewView.getLayoutParams();
 
-                    // Set explicit width to 80% of screen width
-                    previewParams.width = displayMetrics.widthPixels - containerWidth;
-                    previewParams.height = RelativeLayout.LayoutParams.MATCH_PARENT;
+                        // Clear any existing rules that might be interfering
+                        previewParams.removeRule(RelativeLayout.ABOVE);
+                        previewParams.removeRule(RelativeLayout.BELOW);
+                        previewParams.removeRule(RelativeLayout.RIGHT_OF);
+                        previewParams.removeRule(RelativeLayout.LEFT_OF);
+                        previewParams.removeRule(RelativeLayout.CENTER_IN_PARENT);
+                        previewParams.removeRule(RelativeLayout.CENTER_HORIZONTAL);
+                        previewParams.removeRule(RelativeLayout.CENTER_VERTICAL);
 
-                    // Set the correct rules for landscape mode
-                    previewParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-                    previewParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-                    previewParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-                    if (controlsContainer != null) {
-                        previewParams.addRule(RelativeLayout.LEFT_OF, controlsContainer.getId());
-                    }
+                        // Set explicit width to 80% of screen width
+                        previewParams.width = displayMetrics.widthPixels - containerWidth;
+                        previewParams.height = RelativeLayout.LayoutParams.MATCH_PARENT;
 
-                    previewParams.setMargins(0, 0, 0, 0);
-                    previewView.setLayoutParams(previewParams);
-
-                    // Force update the scale type
-                    previewView.setScaleType(PreviewView.ScaleType.FILL_CENTER);
-
-                    // Force a layout update
-                    previewView.requestLayout();
-                    previewView.invalidate();
-                    relativeLayout.requestLayout();
-                    relativeLayout.invalidate();
-
-                    // Add a second delayed update to ensure the camera preview is properly sized
-                    new Handler(requireActivity().getMainLooper()).postDelayed(() -> {
-                        if (previewView != null && isLandscape) {
-                            previewView.setScaleType(PreviewView.ScaleType.FILL_CENTER);
-                            previewView.requestLayout();
-                            previewView.invalidate();
-                            relativeLayout.requestLayout();
-                            relativeLayout.invalidate();
+                        // Set the correct rules for landscape mode
+                        previewParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+                        previewParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+                        previewParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+                        if (controlsContainer != null) {
+                            previewParams.addRule(RelativeLayout.LEFT_OF, controlsContainer.getId());
                         }
-                    }, 300);
+
+                        previewParams.setMargins(0, 0, 0, 0);
+                        previewView.setLayoutParams(previewParams);
+
+                        // Force update the scale type
+                        previewView.setScaleType(PreviewView.ScaleType.FILL_CENTER);
+
+                        // Add a second layout listener for fine-tuning after the initial layout
+                        previewView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                            @Override
+                            public void onGlobalLayout() {
+                                // Remove this listener after execution
+                                previewView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+
+                                if (previewView != null && isLandscape) {
+                                    previewView.setScaleType(PreviewView.ScaleType.FILL_CENTER);
+                                }
+                            }
+                        });
+                    }
                 }
-            }, 100);
+            });
         }
     }
 
@@ -436,15 +516,72 @@ public class CameraFragment extends Fragment {
         cameraController.bindToLifecycle(requireActivity());
         previewView.setController(cameraController);
         cameraExecutor = Executors.newSingleThreadExecutor();
-        relativeLayout.post(this::setupCamera);
+
+        // Use ViewTreeObserver to ensure layout is complete before setting up camera
+        previewView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                // Remove the listener to prevent multiple callbacks
+                previewView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                setupCamera();
+            }
+        });
+    }
+
+    /**
+     * Safely adds an image to the cache
+     *
+     * @param uri The URI of the image
+     * @param bitmap The bitmap to cache
+     */
+    private void addImageToCache(Uri uri, Bitmap bitmap) {
+        if (uri != null && bitmap != null && !bitmap.isRecycled() && imageCache != null) {
+            imageCache.put(uri, bitmap);
+        }
+    }
+
+    /**
+     * Safely retrieves an image from the cache
+     *
+     * @param uri The URI of the image to retrieve
+     * @return The cached bitmap, or null if not found
+     */
+    private Bitmap getImageFromCache(Uri uri) {
+        return imageCache != null ? imageCache.get(uri) : null;
+    }
+
+    /**
+     * Gets all image URIs currently in the cache
+     *
+     * @return A HashMap of all cached images
+     */
+    private HashMap<Uri, Bitmap> getAllCachedImages() {
+        HashMap<Uri, Bitmap> result = new HashMap<>();
+        if (imageCache != null) {
+            // We need to manually iterate through the snapshot to get all entries
+            for (Map.Entry<Uri, Bitmap> entry : imageCache.snapshot().entrySet()) {
+                result.put(entry.getKey(), entry.getValue());
+            }
+        }
+        return result;
     }
 
     private void cancel() {
         // When the user cancels the camera session, it should clean up all the photos that were
         // taken.
-        for (Map.Entry<Uri, Bitmap> image : images.entrySet()) {
-            deleteFile(image.getKey());
+        int failedDeletions = 0;
+        for (Map.Entry<Uri, Bitmap> image : getAllCachedImages().entrySet()) {
+            if (!deleteFile(image.getKey())) {
+                failedDeletions++;
+                Log.w(TAG, "Failed to delete image during cancel: " + image.getKey());
+            }
         }
+
+        if (failedDeletions > 0) {
+            Log.w(TAG, "Failed to delete " + failedDeletions + " images during cancel");
+            // We still proceed with cancellation even if some deletions failed
+        }
+
         if (imagesCapturedCallback != null) {
             imagesCapturedCallback.onCaptureCanceled();
         }
@@ -453,13 +590,27 @@ public class CameraFragment extends Fragment {
 
     private void done() {
         if (imagesCapturedCallback != null) {
-            imagesCapturedCallback.onCaptureSuccess(images);
+            imagesCapturedCallback.onCaptureSuccess(getAllCachedImages());
         }
         closeFragment();
     }
 
+    /**
+     * Safely closes the fragment, handling any potential exceptions
+     */
     private void closeFragment() {
-        requireActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
+        try {
+            if (getActivity() != null && !getActivity().isFinishing() && isAdded()) {
+                requireActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
+            } else {
+                Log.w(TAG, "Cannot close fragment: activity is null, finishing, or fragment not added");
+            }
+        } catch (IllegalStateException e) {
+            // This can happen if the activity is being destroyed
+            Log.e(TAG, "Error closing fragment", e);
+        } catch (Exception e) {
+            Log.e(TAG, "Unexpected error closing fragment", e);
+        }
     }
 
     public void setImagesCapturedCallback(OnImagesCapturedCallback imagesCapturedCallback) {
@@ -505,6 +656,16 @@ public class CameraFragment extends Fragment {
             v -> {
                 v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
                 mediaActionSound.play(MediaActionSound.SHUTTER_CLICK);
+
+                // Add loading thumbnail immediately for visual feedback
+                if (thumbnailAdapter != null) {
+                    thumbnailAdapter.addLoadingThumbnail();
+                    // Scroll to show the new loading thumbnail
+                    if (filmstripView != null) {
+                        filmstripView.scrollToPosition(thumbnailAdapter.getItemCount() - 1);
+                    }
+                }
+
                 var name = new SimpleDateFormat(FILENAME, Locale.US).format(System.currentTimeMillis());
                 var contentValues = new ContentValues();
                 contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, name);
@@ -524,22 +685,102 @@ public class CameraFragment extends Fragment {
                         public void onImageSaved(@NonNull ImageCapture.OutputFileResults outputFileResults) {
                             Uri savedImageUri = outputFileResults.getSavedUri();
                             if (savedImageUri != null) {
+                                InputStream stream = null;
                                 try {
-                                    InputStream stream = requireContext().getContentResolver().openInputStream(savedImageUri);
-                                    Bitmap bmp = BitmapFactory.decodeStream(stream);
-                                    images.put(savedImageUri, bmp);
-                                    requireView()
-                                        .post(
-                                            () -> thumbnailAdapter.addThumbnail(savedImageUri, getThumbnail(savedImageUri))
-                                        );
+                                    stream = requireContext().getContentResolver().openInputStream(savedImageUri);
+                                    if (stream == null) {
+                                        Log.e(TAG, "Failed to open input stream for saved image: " + savedImageUri);
+                                        showErrorToast("Failed to process captured image");
+                                        return;
+                                    }
+
+                                    BitmapFactory.Options options = new BitmapFactory.Options();
+                                    options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+                                    Bitmap bmp = BitmapFactory.decodeStream(stream, null, options);
+
+                                    if (bmp == null) {
+                                        Log.e(TAG, "Failed to decode bitmap from saved image: " + savedImageUri);
+                                        showErrorToast("Failed to process captured image");
+                                        return;
+                                    }
+
+                                    addImageToCache(savedImageUri, bmp);
+
+                                    // Generate thumbnail on a background thread to avoid UI jank
+                                    if (cameraExecutor != null && !cameraExecutor.isShutdown()) {
+                                        cameraExecutor.execute(() -> {
+                                            final Bitmap thumbnail = getThumbnail(savedImageUri);
+                                            // Update UI on main thread
+                                            requireActivity().runOnUiThread(() -> {
+                                                if (thumbnailAdapter != null) {
+                                                    thumbnailAdapter.replaceLoadingThumbnail(savedImageUri, thumbnail);
+                                                }
+                                            });
+                                        });
+                                    }
                                 } catch (FileNotFoundException e) {
-                                    e.printStackTrace();
+                                    Log.e(TAG, "File not found for saved image: " + savedImageUri, e);
+                                    showErrorToast("Image file not found");
+                                } catch (OutOfMemoryError e) {
+                                    Log.e(TAG, "Out of memory when processing image: " + savedImageUri, e);
+                                    showErrorToast("Not enough memory to process image");
+                                    // Try to recover by clearing the cache
+                                    if (imageCache != null) {
+                                        imageCache.evictAll();
+                                    }
+                                    System.gc(); // Request garbage collection
+                                } catch (Exception e) {
+                                    Log.e(TAG, "Error processing saved image: " + savedImageUri, e);
+                                    showErrorToast("Error processing image");
+                                } finally {
+                                    if (stream != null) {
+                                        try {
+                                            stream.close();
+                                        } catch (IOException e) {
+                                            Log.e(TAG, "Error closing input stream", e);
+                                        }
+                                    }
                                 }
+                            } else {
+                                Log.e(TAG, "Saved image URI is null");
+                                showErrorToast("Failed to save image");
                             }
                         }
 
                         @Override
-                        public void onError(@NonNull ImageCaptureException exception) {}
+                        public void onError(@NonNull ImageCaptureException exception) {
+                            int errorCode = exception.getImageCaptureError();
+                            String errorMessage;
+
+                            switch (errorCode) {
+                                case ImageCapture.ERROR_CAMERA_CLOSED:
+                                    errorMessage = "Camera was closed during capture";
+                                    break;
+                                case ImageCapture.ERROR_CAPTURE_FAILED:
+                                    errorMessage = "Image capture failed";
+                                    break;
+                                case ImageCapture.ERROR_FILE_IO:
+                                    errorMessage = "File write operation failed";
+                                    break;
+                                case ImageCapture.ERROR_INVALID_CAMERA:
+                                    errorMessage = "Selected camera cannot be found";
+                                    break;
+                                default:
+                                    errorMessage = "Unknown error during image capture";
+                                    break;
+                            }
+
+                            Log.e(TAG, "Image capture error: " + errorMessage, exception);
+
+                            // Remove any loading thumbnails since capture failed
+                            requireActivity().runOnUiThread(() -> {
+                                if (thumbnailAdapter != null && thumbnailAdapter.hasLoadingThumbnails()) {
+                                    thumbnailAdapter.removeLoadingThumbnails();
+                                }
+                            });
+
+                            showErrorToast(errorMessage);
+                        }
                     }
                 );
             }
@@ -565,6 +806,13 @@ public class CameraFragment extends Fragment {
         flipCameraButton.setOnClickListener(
             v -> {
                 v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+
+                // Clean up any loading thumbnails since camera swap will cancel ongoing captures
+                if (thumbnailAdapter != null && thumbnailAdapter.hasLoadingThumbnails()) {
+                    thumbnailAdapter.removeLoadingThumbnails();
+                    showErrorToast("Capture cancelled due to camera switch");
+                }
+
                 lensFacing = lensFacing == CameraSelector.LENS_FACING_FRONT ? CameraSelector.LENS_FACING_BACK : CameraSelector.LENS_FACING_FRONT;
                 flashButton.setVisibility(lensFacing == CameraSelector.LENS_FACING_BACK ? View.VISIBLE : View.GONE);
                 if (!zoomTabs.isEmpty()) {
@@ -619,7 +867,7 @@ public class CameraFragment extends Fragment {
         closeButton.setOnClickListener(
             view -> {
                 view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-                if (images != null && !images.isEmpty()) {
+                if (imageCache != null && imageCache.size() > 0) {
                     new AlertDialog.Builder(requireContext())
                     .setMessage(CONFIRM_CANCEL_MESSAGE)
                     .setPositiveButton(CONFIRM_CANCEL_POSITIVE, (dialogInterface, i) -> cancel())
@@ -758,6 +1006,16 @@ public class CameraFragment extends Fragment {
             v -> {
                 v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
                 mediaActionSound.play(MediaActionSound.SHUTTER_CLICK);
+
+                // Add loading thumbnail immediately for visual feedback
+                if (thumbnailAdapter != null) {
+                    thumbnailAdapter.addLoadingThumbnail();
+                    // Scroll to show the new loading thumbnail
+                    if (filmstripView != null) {
+                        filmstripView.scrollToPosition(thumbnailAdapter.getItemCount() - 1);
+                    }
+                }
+
                 var name = new SimpleDateFormat(FILENAME, Locale.US).format(System.currentTimeMillis());
                 var contentValues = new ContentValues();
                 contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, name);
@@ -777,22 +1035,102 @@ public class CameraFragment extends Fragment {
                         public void onImageSaved(@NonNull ImageCapture.OutputFileResults outputFileResults) {
                             Uri savedImageUri = outputFileResults.getSavedUri();
                             if (savedImageUri != null) {
+                                InputStream stream = null;
                                 try {
-                                    InputStream stream = requireContext().getContentResolver().openInputStream(savedImageUri);
-                                    Bitmap bmp = BitmapFactory.decodeStream(stream);
-                                    images.put(savedImageUri, bmp);
-                                    requireView()
-                                        .post(
-                                            () -> thumbnailAdapter.addThumbnail(savedImageUri, getThumbnail(savedImageUri))
-                                        );
+                                    stream = requireContext().getContentResolver().openInputStream(savedImageUri);
+                                    if (stream == null) {
+                                        Log.e(TAG, "Failed to open input stream for saved image: " + savedImageUri);
+                                        showErrorToast("Failed to process captured image");
+                                        return;
+                                    }
+
+                                    BitmapFactory.Options options = new BitmapFactory.Options();
+                                    options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+                                    Bitmap bmp = BitmapFactory.decodeStream(stream, null, options);
+
+                                    if (bmp == null) {
+                                        Log.e(TAG, "Failed to decode bitmap from saved image: " + savedImageUri);
+                                        showErrorToast("Failed to process captured image");
+                                        return;
+                                    }
+
+                                    addImageToCache(savedImageUri, bmp);
+
+                                    // Generate thumbnail on a background thread to avoid UI jank
+                                    if (cameraExecutor != null && !cameraExecutor.isShutdown()) {
+                                        cameraExecutor.execute(() -> {
+                                            final Bitmap thumbnail = getThumbnail(savedImageUri);
+                                            // Update UI on main thread
+                                            requireActivity().runOnUiThread(() -> {
+                                                if (thumbnailAdapter != null) {
+                                                    thumbnailAdapter.replaceLoadingThumbnail(savedImageUri, thumbnail);
+                                                }
+                                            });
+                                        });
+                                    }
                                 } catch (FileNotFoundException e) {
-                                    e.printStackTrace();
+                                    Log.e(TAG, "File not found for saved image: " + savedImageUri, e);
+                                    showErrorToast("Image file not found");
+                                } catch (OutOfMemoryError e) {
+                                    Log.e(TAG, "Out of memory when processing image: " + savedImageUri, e);
+                                    showErrorToast("Not enough memory to process image");
+                                    // Try to recover by clearing the cache
+                                    if (imageCache != null) {
+                                        imageCache.evictAll();
+                                    }
+                                    System.gc(); // Request garbage collection
+                                } catch (Exception e) {
+                                    Log.e(TAG, "Error processing saved image: " + savedImageUri, e);
+                                    showErrorToast("Error processing image");
+                                } finally {
+                                    if (stream != null) {
+                                        try {
+                                            stream.close();
+                                        } catch (IOException e) {
+                                            Log.e(TAG, "Error closing input stream", e);
+                                        }
+                                    }
                                 }
+                            } else {
+                                Log.e(TAG, "Saved image URI is null");
+                                showErrorToast("Failed to save image");
                             }
                         }
 
                         @Override
-                        public void onError(@NonNull ImageCaptureException exception) {}
+                        public void onError(@NonNull ImageCaptureException exception) {
+                            int errorCode = exception.getImageCaptureError();
+                            String errorMessage;
+
+                            switch (errorCode) {
+                                case ImageCapture.ERROR_CAMERA_CLOSED:
+                                    errorMessage = "Camera was closed during capture";
+                                    break;
+                                case ImageCapture.ERROR_CAPTURE_FAILED:
+                                    errorMessage = "Image capture failed";
+                                    break;
+                                case ImageCapture.ERROR_FILE_IO:
+                                    errorMessage = "File write operation failed";
+                                    break;
+                                case ImageCapture.ERROR_INVALID_CAMERA:
+                                    errorMessage = "Selected camera cannot be found";
+                                    break;
+                                default:
+                                    errorMessage = "Unknown error during image capture";
+                                    break;
+                            }
+
+                            Log.e(TAG, "Image capture error: " + errorMessage, exception);
+
+                            // Remove any loading thumbnails since capture failed
+                            requireActivity().runOnUiThread(() -> {
+                                if (thumbnailAdapter != null && thumbnailAdapter.hasLoadingThumbnails()) {
+                                    thumbnailAdapter.removeLoadingThumbnails();
+                                }
+                            });
+
+                            showErrorToast(errorMessage);
+                        }
                     }
                 );
             }
@@ -817,6 +1155,13 @@ public class CameraFragment extends Fragment {
         flipCameraButton.setOnClickListener(
             v -> {
                 v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+
+                // Clean up any loading thumbnails since camera swap will cancel ongoing captures
+                if (thumbnailAdapter != null && thumbnailAdapter.hasLoadingThumbnails()) {
+                    thumbnailAdapter.removeLoadingThumbnails();
+                    showErrorToast("Capture cancelled due to camera switch");
+                }
+
                 lensFacing = lensFacing == CameraSelector.LENS_FACING_FRONT ? CameraSelector.LENS_FACING_BACK : CameraSelector.LENS_FACING_FRONT;
                 flashButton.setVisibility(lensFacing == CameraSelector.LENS_FACING_BACK ? View.VISIBLE : View.GONE);
                 if (!zoomTabs.isEmpty()) {
@@ -1036,6 +1381,32 @@ public class CameraFragment extends Fragment {
         );
 
         zoomTabCardView.addView(zoomTabLayout);
+
+        // Use ViewTreeObserver to ensure zoom tab layout is properly laid out
+        zoomTabCardView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                // Remove the listener to prevent multiple callbacks
+                zoomTabCardView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+
+                // Ensure the tab layout has the correct width
+                if (zoomTabLayout.getWidth() > 0) {
+                    // Distribute tab width evenly
+                    TabLayout.Tab tab = zoomTabLayout.getTabAt(0);
+                    if (tab != null && tab.view != null) {
+                        int tabWidth = zoomTabLayout.getWidth() / zoomTabLayout.getTabCount();
+                        for (int i = 0; i < zoomTabLayout.getTabCount(); i++) {
+                            TabLayout.Tab currentTab = zoomTabLayout.getTabAt(i);
+                            if (currentTab != null && currentTab.view != null) {
+                                ViewGroup.LayoutParams layoutParams = currentTab.view.getLayoutParams();
+                                layoutParams.width = tabWidth;
+                                currentTab.view.setLayoutParams(layoutParams);
+                            }
+                        }
+                    }
+                }
+            }
+        });
     }
 
     private void createZoomTabLayoutForLandscape(FragmentActivity fragmentActivity, int margin) {
@@ -1113,6 +1484,32 @@ public class CameraFragment extends Fragment {
         );
 
         zoomTabCardView.addView(zoomTabLayout);
+
+        // Use ViewTreeObserver to ensure zoom tab layout is properly laid out in landscape mode
+        zoomTabCardView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                // Remove the listener to prevent multiple callbacks
+                zoomTabCardView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+
+                // Ensure the tab layout has the correct width
+                if (zoomTabLayout.getWidth() > 0) {
+                    // Distribute tab width evenly
+                    TabLayout.Tab tab = zoomTabLayout.getTabAt(0);
+                    if (tab != null && tab.view != null) {
+                        int tabWidth = zoomTabLayout.getWidth() / zoomTabLayout.getTabCount();
+                        for (int i = 0; i < zoomTabLayout.getTabCount(); i++) {
+                            TabLayout.Tab currentTab = zoomTabLayout.getTabAt(i);
+                            if (currentTab != null && currentTab.view != null) {
+                                ViewGroup.LayoutParams layoutParams = currentTab.view.getLayoutParams();
+                                layoutParams.width = tabWidth;
+                                currentTab.view.setLayoutParams(layoutParams);
+                            }
+                        }
+                    }
+                }
+            }
+        });
     }
 
     private void createZoomTabs(FragmentActivity fragmentActivity, TabLayout tabLayout) {
@@ -1157,19 +1554,43 @@ public class CameraFragment extends Fragment {
             for (int i = 0; i < existingAdapter.getItemCount(); i++) {
                 ThumbnailAdapter.ThumbnailItem item = existingAdapter.getThumbnailItem(i);
                 if (item != null) {
-                    thumbnailAdapter.addThumbnail(item.getUri(), item.getBitmap());
+                    if (!item.isLoading()) {
+                        thumbnailAdapter.addThumbnail(item.getUri(), item.getBitmap());
+                    }
                 }
             }
         }
         filmstripView.setAdapter(thumbnailAdapter);
         relativeLayout.addView(filmstripView);
 
+        // Use ViewTreeObserver to ensure filmstrip is properly laid out
+        filmstripView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                // Remove the listener to prevent multiple callbacks
+                filmstripView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+
+                // Scroll to the end of the filmstrip to show the most recent thumbnails
+                if (thumbnailAdapter.getItemCount() > 0) {
+                    filmstripView.scrollToPosition(thumbnailAdapter.getItemCount() - 1);
+                }
+            }
+        });
+
         thumbnailAdapter.setOnThumbnailsChangedCallback(
             new ThumbnailAdapter.OnThumbnailsChangedCallback() {
                 @Override
                 public void onThumbnailRemoved(Uri uri, Bitmap bmp) {
-                    images.remove(uri);
-                    deleteFile(uri);
+                    Bitmap bitmap = getImageFromCache(uri);
+                    if (imageCache != null) {
+                        imageCache.remove(uri);
+                    }
+
+                    if (!deleteFile(uri)) {
+                        Log.w(TAG, "Failed to delete file after thumbnail removal: " + uri);
+                        // Even if deletion fails, we've already removed it from the UI and cache,
+                        // so we don't need to show an error to the user
+                    }
                 }
             }
         );
@@ -1244,7 +1665,16 @@ public class CameraFragment extends Fragment {
                 removeButton.setImageResource(R.drawable.ic_cancel_white_24dp);
                 frameLayout.addView(removeButton);
 
-                return new ViewHolder(frameLayout, imageView, removeButton);
+                // Add progress bar for loading state
+                ProgressBar progressBar = new ProgressBar(context);
+                int progressSize = dpToPx(context, 24); // Smaller progress bar for landscape mode
+                FrameLayout.LayoutParams progressParams = new FrameLayout.LayoutParams(progressSize, progressSize);
+                progressParams.gravity = Gravity.CENTER;
+                progressBar.setLayoutParams(progressParams);
+                progressBar.setVisibility(View.GONE); // Initially hidden
+                frameLayout.addView(progressBar);
+
+                return new ViewHolder(frameLayout, imageView, removeButton, progressBar);
             }
         };
 
@@ -1253,19 +1683,42 @@ public class CameraFragment extends Fragment {
             for (int i = 0; i < existingAdapter.getItemCount(); i++) {
                 ThumbnailAdapter.ThumbnailItem item = existingAdapter.getThumbnailItem(i);
                 if (item != null) {
-                    thumbnailAdapter.addThumbnail(item.getUri(), item.getBitmap());
+                    if (!item.isLoading()) {
+                        thumbnailAdapter.addThumbnail(item.getUri(), item.getBitmap());
+                    }
                 }
             }
         }
         filmstripView.setAdapter(thumbnailAdapter);
         relativeLayout.addView(filmstripView);
 
+        // Use ViewTreeObserver to ensure filmstrip is properly laid out in landscape mode
+        filmstripView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                // Remove the listener to prevent multiple callbacks
+                filmstripView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+
+                // Scroll to the end of the filmstrip to show the most recent thumbnails
+                if (thumbnailAdapter.getItemCount() > 0) {
+                    filmstripView.scrollToPosition(thumbnailAdapter.getItemCount() - 1);
+                }
+            }
+        });
+
         thumbnailAdapter.setOnThumbnailsChangedCallback(
             new ThumbnailAdapter.OnThumbnailsChangedCallback() {
                 @Override
                 public void onThumbnailRemoved(Uri uri, Bitmap bmp) {
-                    images.remove(uri);
-                    deleteFile(uri);
+                    if (imageCache != null) {
+                        imageCache.remove(uri);
+                    }
+
+                    if (!deleteFile(uri)) {
+                        Log.w(TAG, "Failed to delete file after thumbnail removal in landscape mode: " + uri);
+                        // Even if deletion fails, we've already removed it from the UI and cache,
+                        // so we don't need to show an error to the user
+                    }
                 }
             }
         );
@@ -1321,7 +1774,7 @@ public class CameraFragment extends Fragment {
         closeButton.setOnClickListener(
             view -> {
                 view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-                if (images != null && !images.isEmpty()) {
+                if (imageCache != null && imageCache.size() > 0) {
                     new AlertDialog.Builder(requireContext())
                     .setMessage(CONFIRM_CANCEL_MESSAGE)
                     .setPositiveButton(CONFIRM_CANCEL_POSITIVE, (dialogInterface, i) -> cancel())
@@ -1336,21 +1789,44 @@ public class CameraFragment extends Fragment {
         relativeLayout.addView(closeButton);
     }
 
-    private void deleteFile(Uri fileUri) {
+    /**
+     * Deletes a file from the device storage
+     *
+     * @param fileUri The URI of the file to delete
+     * @return true if deletion was successful, false otherwise
+     */
+    private boolean deleteFile(Uri fileUri) {
+        if (fileUri == null) {
+            Log.e(TAG, "Cannot delete null URI");
+            return false;
+        }
+
         try {
             ContentResolver contentResolver = requireContext().getContentResolver();
             int deleted = contentResolver.delete(fileUri, null, null);
 
             if (deleted == 0) {
                 // File deletion failed
-                Log.e("Delete File", "Failed to delete file: " + fileUri);
+                Log.e(TAG, "Failed to delete file: " + fileUri);
+                return false;
             } else {
                 // File deletion successful
-                Log.i("Delete File", "File deleted: " + fileUri);
+                Log.i(TAG, "File deleted: " + fileUri);
+                return true;
             }
+        } catch (SecurityException e) {
+            // Handle permission issues
+            Log.e(TAG, "Security exception when deleting file: " + fileUri, e);
+            showErrorToast("Permission denied to delete image");
+            return false;
+        } catch (IllegalArgumentException e) {
+            // Handle invalid URI
+            Log.e(TAG, "Invalid URI when deleting file: " + fileUri, e);
+            return false;
         } catch (Exception e) {
-            // Handle any exceptions
-            e.printStackTrace();
+            // Handle any other exceptions
+            Log.e(TAG, "Error deleting file: " + fileUri, e);
+            return false;
         }
     }
 
@@ -1360,7 +1836,36 @@ public class CameraFragment extends Fragment {
      * @param uri The URI of the image to display in the preview
      */
     private void showImagePreview(Uri uri) {
-        ImagePreviewFragment previewFragment = ImagePreviewFragment.newInstance(uri);
+        if (thumbnailAdapter == null) {
+            // Fallback to single image preview if no adapter
+            ImagePreviewFragment previewFragment = ImagePreviewFragment.newInstance(uri);
+            previewFragment.show(requireActivity().getSupportFragmentManager(), "image_preview");
+            return;
+        }
+        
+        // Gather all non-loading image URIs and find the current position
+        List<Uri> imageUris = new ArrayList<>();
+        int currentPosition = 0;
+        
+        for (int i = 0; i < thumbnailAdapter.getItemCount(); i++) {
+            ThumbnailAdapter.ThumbnailItem item = thumbnailAdapter.getThumbnailItem(i);
+            if (item != null && !item.isLoading()) {
+                if (uri.equals(item.getUri())) {
+                    currentPosition = imageUris.size();
+                }
+                imageUris.add(item.getUri());
+            }
+        }
+        
+        if (imageUris.isEmpty()) {
+            // Fallback to single image preview if no images found
+            ImagePreviewFragment previewFragment = ImagePreviewFragment.newInstance(uri);
+            previewFragment.show(requireActivity().getSupportFragmentManager(), "image_preview");
+            return;
+        }
+        
+        // Show preview with swipe navigation
+        ImagePreviewFragment previewFragment = ImagePreviewFragment.newInstance(imageUris, currentPosition);
         previewFragment.show(requireActivity().getSupportFragmentManager(), "image_preview");
     }
 
@@ -1451,6 +1956,28 @@ public class CameraFragment extends Fragment {
         cameraController.setImageCaptureFlashMode(flashMode);
     }
 
+    /**
+     * Shows an error toast message to the user
+     *
+     * @param message The error message to display
+     */
+    private void showErrorToast(String message) {
+        if (getActivity() != null && !getActivity().isFinishing()) {
+            requireActivity().runOnUiThread(() -> {
+                try {
+                    android.widget.Toast.makeText(
+                        requireContext(),
+                        message,
+                        android.widget.Toast.LENGTH_SHORT
+                    ).show();
+                } catch (Exception e) {
+                    // Fail silently if we can't show a toast
+                    Log.e(TAG, "Failed to show error toast: " + message, e);
+                }
+            });
+        }
+    }
+
     private boolean hasFrontFacingCamera() {
         if (cameraController != null) {
             CameraSelector frontFacing = new CameraSelector.Builder().requireLensFacing(CameraSelector.LENS_FACING_FRONT).build();
@@ -1460,35 +1987,127 @@ public class CameraFragment extends Fragment {
         return false;
     }
 
+    /**
+     * Gets a memory-efficient thumbnail for an image URI using downsampling techniques
+     *
+     * @param imageUri The URI of the image to create a thumbnail for
+     * @return A downsampled bitmap thumbnail or null if creation failed
+     */
     @SuppressWarnings("deprecation")
     private Bitmap getThumbnail(Uri imageUri) {
         ContentResolver contentResolver = requireContext().getContentResolver();
+        InputStream inputStream = null;
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) { // API level 29 and above
-            try { // Specify the size of the thumbnail
-                int width = (int) (displayMetrics.widthPixels * 0.25); // Thumbnail width as 25% of screen width
-                int height = (int) (displayMetrics.heightPixels * 0.25); // Thumbnail height as 25% of screen height
-                Size size = new Size(width, height);
-                // Load the thumbnail
-                return contentResolver.loadThumbnail(imageUri, size, null);
-            } catch (IOException e) {
-                // Handle exceptions
-                e.printStackTrace();
-                return null;
+        try {
+            // Target thumbnail size (smaller than the original implementation to save memory)
+            int targetWidth = (int) (displayMetrics.widthPixels * 0.2);
+            int targetHeight = (int) (displayMetrics.heightPixels * 0.2);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                try {
+                    // For Android 10+ use the built-in thumbnail loader with our target size
+                    Size size = new Size(targetWidth, targetHeight);
+                    return contentResolver.loadThumbnail(imageUri, size, null);
+                } catch (IOException e) {
+                    // Fall back to manual downsampling if the built-in method fails
+                    Log.w(TAG, "Failed to load thumbnail with system API, falling back to manual downsampling", e);
+                    // Continue to manual downsampling below
+                }
             }
-        } else { // Below API level 29
-            String[] projection = { MediaStore.Images.Media._ID };
-            Cursor cursor = contentResolver.query(imageUri, projection, null, null, null);
 
-            if (cursor != null && cursor.moveToFirst()) {
-                int idColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID);
-                long imageId = cursor.getLong(idColumn);
-                cursor.close();
+            // Manual downsampling approach for pre-Q devices or as fallback
 
-                return MediaStore.Images.Thumbnails.getThumbnail(contentResolver, imageId, MediaStore.Images.Thumbnails.MINI_KIND, null);
+            // FIRST PASS: Decode bounds only to determine dimensions
+            BitmapFactory.Options boundsOptions = new BitmapFactory.Options();
+            boundsOptions.inJustDecodeBounds = true; // Only decode bounds, not the actual bitmap
+
+            inputStream = contentResolver.openInputStream(imageUri);
+            BitmapFactory.decodeStream(inputStream, null, boundsOptions);
+            if (inputStream != null) {
+                inputStream.close();
             }
+
+            // Calculate optimal inSampleSize for downsampling
+            int inSampleSize = calculateInSampleSize(boundsOptions, targetWidth, targetHeight);
+
+            // SECOND PASS: Decode with calculated inSampleSize
+            BitmapFactory.Options decodeOptions = new BitmapFactory.Options();
+            decodeOptions.inSampleSize = inSampleSize;
+            decodeOptions.inPreferredConfig = Bitmap.Config.RGB_565; // Use RGB_565 instead of ARGB_8888 to reduce memory usage by half
+
+            inputStream = contentResolver.openInputStream(imageUri);
+            Bitmap thumbnail = BitmapFactory.decodeStream(inputStream, null, decodeOptions);
+
+            return thumbnail;
+
+        } catch (Exception e) {
+            Log.e(TAG, "Error creating thumbnail", e);
+
+            // Last resort fallback for older devices
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+                try {
+                    String[] projection = { MediaStore.Images.Media._ID };
+                    Cursor cursor = contentResolver.query(imageUri, projection, null, null, null);
+
+                    if (cursor != null && cursor.moveToFirst()) {
+                        int idColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID);
+                        long imageId = cursor.getLong(idColumn);
+                        cursor.close();
+
+                        return MediaStore.Images.Thumbnails.getThumbnail(
+                            contentResolver,
+                            imageId,
+                            MediaStore.Images.Thumbnails.MINI_KIND,
+                            null
+                        );
+                    }
+                    if (cursor != null) {
+                        cursor.close();
+                    }
+                } catch (Exception ex) {
+                    Log.e(TAG, "Error in thumbnail fallback", ex);
+                }
+            }
+
             return null;
+        } finally {
+            // Ensure streams are always closed
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+                    Log.e(TAG, "Error closing input stream", e);
+                }
+            }
         }
+    }
+
+    /**
+     * Calculates the optimal inSampleSize value for downsampling
+     *
+     * @param options BitmapFactory.Options with outWidth and outHeight set
+     * @param reqWidth Requested width of the resulting bitmap
+     * @param reqHeight Requested height of the resulting bitmap
+     * @return The optimal inSampleSize value (power of 2)
+     */
+    private int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        // Raw height and width of image
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
+
+            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+            // height and width larger than the requested height and width.
+            while ((halfHeight / inSampleSize) >= reqHeight && (halfWidth / inSampleSize) >= reqWidth) {
+                inSampleSize *= 2;
+            }
+        }
+
+        return inSampleSize;
     }
 
     public abstract static class OnImagesCapturedCallback {
