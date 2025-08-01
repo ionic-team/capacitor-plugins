@@ -382,6 +382,34 @@ class MultiCameraViewController: UIViewController {
         return button
     }()
 
+    private lazy var processingSpinner: UIActivityIndicatorView = {
+        let spinner = UIActivityIndicatorView(style: .large)
+        spinner.color = .white
+        spinner.backgroundColor = UIColor.black.withAlphaComponent(0.7)
+        spinner.layer.cornerRadius = 10
+        spinner.translatesAutoresizingMaskIntoConstraints = false
+        spinner.hidesWhenStopped = true
+        return spinner
+    }()
+
+    private lazy var processingLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Processing images..."
+        label.textColor = .white
+        label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        label.textAlignment = .center
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+
+    private lazy var processingOverlay: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor.black.withAlphaComponent(0.7)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.isHidden = true
+        return view
+    }()
+
     private lazy var thumbnailCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
@@ -495,6 +523,11 @@ class MultiCameraViewController: UIViewController {
         view.addSubview(zoomInButton)
         view.addSubview(zoomOutButton)
         view.addSubview(zoomFactorLabel)
+        view.addSubview(processingOverlay)
+        
+        // Add processing overlay subviews
+        processingOverlay.addSubview(processingSpinner)
+        processingOverlay.addSubview(processingLabel)
 
         bottomBarView.addSubview(takePictureButton)
         bottomBarView.addSubview(flipCameraButton)
@@ -512,6 +545,20 @@ class MultiCameraViewController: UIViewController {
         zoomInButton.translatesAutoresizingMaskIntoConstraints = false
         zoomOutButton.translatesAutoresizingMaskIntoConstraints = false
         zoomFactorLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        // Setup processing overlay constraints
+        NSLayoutConstraint.activate([
+            processingOverlay.topAnchor.constraint(equalTo: view.topAnchor),
+            processingOverlay.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            processingOverlay.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            processingOverlay.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            
+            processingSpinner.centerXAnchor.constraint(equalTo: processingOverlay.centerXAnchor),
+            processingSpinner.centerYAnchor.constraint(equalTo: processingOverlay.centerYAnchor, constant: -20),
+            
+            processingLabel.topAnchor.constraint(equalTo: processingSpinner.bottomAnchor, constant: 20),
+            processingLabel.centerXAnchor.constraint(equalTo: processingOverlay.centerXAnchor)
+        ])
 
         // Determine initial orientation
         isLandscape = UIDevice.current.orientation.isLandscape
@@ -1032,6 +1079,11 @@ class MultiCameraViewController: UIViewController {
     }
 
     @objc private func cancel() {
+        // Don't allow canceling while images are processing
+        if hasProcessingImages() {
+            return
+        }
+        
         // If we have images, show confirmation alert
         if !capturedImages.isEmpty {
             let alert = UIAlertController(
@@ -1053,6 +1105,69 @@ class MultiCameraViewController: UIViewController {
     }
 
     @objc private func done() {
+        // Check if any images are still processing
+        if hasProcessingImages() {
+            showProcessingOverlay()
+            waitForProcessingCompletion()
+        } else {
+            finishWithImages()
+        }
+    }
+    
+    private func hasProcessingImages() -> Bool {
+        return loadingStates.contains(true)
+    }
+    
+    private func showProcessingOverlay() {
+        processingOverlay.isHidden = false
+        processingSpinner.startAnimating()
+        
+        // Disable user interaction on the main view
+        view.isUserInteractionEnabled = false
+        processingOverlay.isUserInteractionEnabled = true
+    }
+    
+    private func hideProcessingOverlay() {
+        processingOverlay.isHidden = true
+        processingSpinner.stopAnimating()
+        
+        // Re-enable user interaction
+        view.isUserInteractionEnabled = true
+    }
+    
+    private func waitForProcessingCompletion() {
+        // Check every 0.1 seconds if processing is complete
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+            guard let self = self else { return }
+            
+            if self.hasProcessingImages() {
+                // Still processing, check again
+                self.waitForProcessingCompletion()
+            } else {
+                // All images processed, hide overlay and finish
+                self.hideProcessingOverlay()
+                self.finishWithImages()
+            }
+        }
+    }
+    
+    private func waitForProcessingCompletionThenFinish() {
+        // Check every 0.1 seconds if processing is complete
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+            guard let self = self else { return }
+            
+            if self.hasProcessingImages() {
+                // Still processing, check again
+                self.waitForProcessingCompletionThenFinish()
+            } else {
+                // All images processed, hide overlay and finish
+                self.hideProcessingOverlay()
+                self.finishWithImages()
+            }
+        }
+    }
+    
+    private func finishWithImages() {
         delegate?.multiCameraViewController(self, didFinishWith: capturedImages, metadata: capturedMetadata)
     }
 
@@ -1093,8 +1208,13 @@ class MultiCameraViewController: UIViewController {
 
         // Check if we've reached the maximum number of images
         if maxImages > 0 && capturedImages.count >= maxImages {
-            // Automatically finish if we've reached the limit
-            delegate?.multiCameraViewController(self, didFinishWith: capturedImages, metadata: capturedMetadata)
+            // Wait for processing if needed, then automatically finish
+            if hasProcessingImages() {
+                showProcessingOverlay()
+                waitForProcessingCompletionThenFinish()
+            } else {
+                finishWithImages()
+            }
             return
         }
     }
