@@ -99,7 +99,8 @@ public class CameraFragment extends Fragment {
     private final String FILENAME = "yyyy-MM-dd-HH-mm-ss-SSS";
     private final String PHOTO_TYPE = "image/jpeg";
 
-    private final String CONFIRM_CANCEL_MESSAGE = "Are you sure?";
+    private final String CONFIRM_CANCEL_TITLE = "Discard Photos?";
+    private final String CONFIRM_CANCEL_MESSAGE = "Are you sure you want to discard all photos?";
     private final String CONFIRM_CANCEL_POSITIVE = "Yes";
     private final String CONFIRM_CANCEL_NEGATIVE = "No";
 
@@ -1296,6 +1297,7 @@ public class CameraFragment extends Fragment {
                 view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
                 if (imageCache != null && imageCache.size() > 0) {
                     new AlertDialog.Builder(requireContext())
+                    .setTitle(CONFIRM_CANCEL_TITLE)
                     .setMessage(CONFIRM_CANCEL_MESSAGE)
                     .setPositiveButton(CONFIRM_CANCEL_POSITIVE, (dialogInterface, i) -> cancel())
                     .setNegativeButton(CONFIRM_CANCEL_NEGATIVE, (dialogInterface, i) -> dialogInterface.dismiss())
@@ -2274,6 +2276,7 @@ public class CameraFragment extends Fragment {
                 view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
                 if (imageCache != null && imageCache.size() > 0) {
                     new AlertDialog.Builder(requireContext())
+                    .setTitle(CONFIRM_CANCEL_TITLE)
                     .setMessage(CONFIRM_CANCEL_MESSAGE)
                     .setPositiveButton(CONFIRM_CANCEL_POSITIVE, (dialogInterface, i) -> cancel())
                     .setNegativeButton(CONFIRM_CANCEL_NEGATIVE, (dialogInterface, i) -> dialogInterface.dismiss())
