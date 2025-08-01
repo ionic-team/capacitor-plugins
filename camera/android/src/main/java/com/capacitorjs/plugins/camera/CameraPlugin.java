@@ -803,8 +803,10 @@ public class CameraPlugin extends Plugin {
                 } catch (JSONException e) {}
             }
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU ||
-                    (permsList != null && permsList.size() == 1 && (permsList.contains(CAMERA) || permsList.contains(PHOTOS)))) {
+            if (
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU ||
+                (permsList != null && permsList.size() == 1 && (permsList.contains(CAMERA) || permsList.contains(PHOTOS)))
+            ) {
                 // either we're on Android 13+ (storage permissions do not apply)
                 // or the only thing being asked for was the camera so we can just return the current state
                 checkPermissions(call);
