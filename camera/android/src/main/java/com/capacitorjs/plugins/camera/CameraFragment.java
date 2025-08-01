@@ -37,6 +37,7 @@ import android.view.WindowInsetsController;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -102,6 +103,7 @@ public class CameraFragment extends Fragment {
     private ThumbnailAdapter thumbnailAdapter;
     private RecyclerView filmstripView;
     private TabLayout zoomTabLayout;
+    private LinearLayout verticalZoomContainer; // For vertical zoom buttons in landscape mode
     private CardView zoomTabCardView;
     private FloatingActionButton takePictureButton;
     private FloatingActionButton flipCameraButton;
@@ -153,6 +155,15 @@ public class CameraFragment extends Fragment {
     private TextView processingText;
     private Handler processingHandler;
     private Runnable processingRunnable;
+
+    // ViewTreeObserver listener references for proper cleanup
+    private ViewTreeObserver.OnGlobalLayoutListener relativeLayoutListener;
+    private ViewTreeObserver.OnGlobalLayoutListener previewViewListener;
+    private ViewTreeObserver.OnGlobalLayoutListener previewViewSecondaryListener;
+    private ViewTreeObserver.OnGlobalLayoutListener zoomTabCardViewListener;
+    private ViewTreeObserver.OnGlobalLayoutListener zoomTabCardViewSecondaryListener;
+    private ViewTreeObserver.OnGlobalLayoutListener filmstripViewListener;
+    private ViewTreeObserver.OnGlobalLayoutListener filmstripViewSecondaryListener;
 
     @NonNull
     private static ColorStateList createButtonColorList() {
@@ -255,25 +266,42 @@ public class CameraFragment extends Fragment {
     private void cleanupViewTreeObservers() {
         try {
             // Clean up ViewTreeObserver listeners for all views that might have them
-            if (relativeLayout != null && relativeLayout.getViewTreeObserver().isAlive()) {
-                // Use a no-op listener to avoid crashes when removing unknown listeners
-                ViewTreeObserver.OnGlobalLayoutListener noOpListener = () -> {};
-                relativeLayout.getViewTreeObserver().removeOnGlobalLayoutListener(noOpListener);
+            if (relativeLayout != null && relativeLayout.getViewTreeObserver().isAlive() && relativeLayoutListener != null) {
+                relativeLayout.getViewTreeObserver().removeOnGlobalLayoutListener(relativeLayoutListener);
+                relativeLayoutListener = null;
             }
 
             if (previewView != null && previewView.getViewTreeObserver().isAlive()) {
-                ViewTreeObserver.OnGlobalLayoutListener noOpListener = () -> {};
-                previewView.getViewTreeObserver().removeOnGlobalLayoutListener(noOpListener);
+                if (previewViewListener != null) {
+                    previewView.getViewTreeObserver().removeOnGlobalLayoutListener(previewViewListener);
+                    previewViewListener = null;
+                }
+                if (previewViewSecondaryListener != null) {
+                    previewView.getViewTreeObserver().removeOnGlobalLayoutListener(previewViewSecondaryListener);
+                    previewViewSecondaryListener = null;
+                }
             }
 
             if (zoomTabCardView != null && zoomTabCardView.getViewTreeObserver().isAlive()) {
-                ViewTreeObserver.OnGlobalLayoutListener noOpListener = () -> {};
-                zoomTabCardView.getViewTreeObserver().removeOnGlobalLayoutListener(noOpListener);
+                if (zoomTabCardViewListener != null) {
+                    zoomTabCardView.getViewTreeObserver().removeOnGlobalLayoutListener(zoomTabCardViewListener);
+                    zoomTabCardViewListener = null;
+                }
+                if (zoomTabCardViewSecondaryListener != null) {
+                    zoomTabCardView.getViewTreeObserver().removeOnGlobalLayoutListener(zoomTabCardViewSecondaryListener);
+                    zoomTabCardViewSecondaryListener = null;
+                }
             }
 
             if (filmstripView != null && filmstripView.getViewTreeObserver().isAlive()) {
-                ViewTreeObserver.OnGlobalLayoutListener noOpListener = () -> {};
-                filmstripView.getViewTreeObserver().removeOnGlobalLayoutListener(noOpListener);
+                if (filmstripViewListener != null) {
+                    filmstripView.getViewTreeObserver().removeOnGlobalLayoutListener(filmstripViewListener);
+                    filmstripViewListener = null;
+                }
+                if (filmstripViewSecondaryListener != null) {
+                    filmstripView.getViewTreeObserver().removeOnGlobalLayoutListener(filmstripViewSecondaryListener);
+                    filmstripViewSecondaryListener = null;
+                }
             }
         } catch (Exception e) {
             // Log but don't crash if there's an issue cleaning up listeners
@@ -310,6 +338,17 @@ public class CameraFragment extends Fragment {
             if (cameraController != null) {
                 cameraController.unbind();
                 cameraController = null;
+            }
+
+            // Clear zoom tabs when recreating UI for orientation change
+            if (!zoomTabs.isEmpty()) {
+                if (zoomTabLayout != null) {
+                    zoomTabLayout.removeAllTabs();
+                }
+                if (verticalZoomContainer != null) {
+                    verticalZoomContainer.removeAllViews();
+                }
+                zoomTabs.clear();
             }
 
             // Remove all views
@@ -375,17 +414,21 @@ public class CameraFragment extends Fragment {
             cameraController.setCameraSelector(cameraSelector);
             cameraController.setImageCaptureFlashMode(flashMode);
 
+            // Setup camera to initialize zoom state and other camera features
+            setupCamera();
+
             // Force layout update
             relativeLayout.requestLayout();
             relativeLayout.invalidate();
             previewView.requestLayout();
 
             // Use ViewTreeObserver to efficiently handle layout updates
-            relativeLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            relativeLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
                 @Override
                 public void onGlobalLayout() {
                     // Remove the listener to prevent multiple callbacks
                     relativeLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    relativeLayoutListener = null;
 
                     if (isLandscape) {
                         // Force the preview view to take up the correct width in landscape mode
@@ -420,20 +463,23 @@ public class CameraFragment extends Fragment {
                         previewView.setScaleType(PreviewView.ScaleType.FILL_CENTER);
 
                         // Add a second layout listener for fine-tuning after the initial layout
-                        previewView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                        previewViewSecondaryListener = new ViewTreeObserver.OnGlobalLayoutListener() {
                             @Override
                             public void onGlobalLayout() {
                                 // Remove this listener after execution
                                 previewView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                                previewViewSecondaryListener = null;
 
                                 if (previewView != null && isLandscape) {
                                     previewView.setScaleType(PreviewView.ScaleType.FILL_CENTER);
                                 }
                             }
-                        });
+                        };
+                        previewView.getViewTreeObserver().addOnGlobalLayoutListener(previewViewSecondaryListener);
                     }
                 }
-            });
+            };
+            relativeLayout.getViewTreeObserver().addOnGlobalLayoutListener(relativeLayoutListener);
         }
     }
 
@@ -531,14 +577,16 @@ public class CameraFragment extends Fragment {
         cameraExecutor = Executors.newSingleThreadExecutor();
 
         // Use ViewTreeObserver to ensure layout is complete before setting up camera
-        previewView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+        previewViewListener = new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
                 // Remove the listener to prevent multiple callbacks
                 previewView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                previewViewListener = null;
                 setupCamera();
             }
-        });
+        };
+        previewView.getViewTreeObserver().addOnGlobalLayoutListener(previewViewListener);
     }
 
     /**
@@ -1041,12 +1089,26 @@ public class CameraFragment extends Fragment {
                     showErrorToast("Capture cancelled due to camera switch");
                 }
 
+                Log.d(TAG, "Switching camera from " + (lensFacing == CameraSelector.LENS_FACING_FRONT ? "FRONT" : "BACK"));
                 lensFacing = lensFacing == CameraSelector.LENS_FACING_FRONT ? CameraSelector.LENS_FACING_BACK : CameraSelector.LENS_FACING_FRONT;
+                Log.d(TAG, "Switched camera to " + (lensFacing == CameraSelector.LENS_FACING_FRONT ? "FRONT" : "BACK"));
+
                 flashButton.setVisibility(lensFacing == CameraSelector.LENS_FACING_BACK ? View.VISIBLE : View.GONE);
                 if (!zoomTabs.isEmpty()) {
-                    zoomTabLayout.removeAllTabs();
+                    Log.d(TAG, "Clearing " + zoomTabs.size() + " zoom tabs");
+                    if (zoomTabLayout != null) {
+                        zoomTabLayout.removeAllTabs();
+                    }
+                    if (verticalZoomContainer != null) {
+                        verticalZoomContainer.removeAllViews();
+                    }
                     zoomTabs.clear();
                 }
+
+                // Set the camera selector before setting up camera to ensure correct zoom capabilities
+                CameraSelector cameraSelector = new CameraSelector.Builder().requireLensFacing(lensFacing).build();
+                cameraController.setCameraSelector(cameraSelector);
+
                 setupCamera();
             }
         );
@@ -1396,12 +1458,26 @@ public class CameraFragment extends Fragment {
                     showErrorToast("Capture cancelled due to camera switch");
                 }
 
+                Log.d(TAG, "Switching camera from " + (lensFacing == CameraSelector.LENS_FACING_FRONT ? "FRONT" : "BACK"));
                 lensFacing = lensFacing == CameraSelector.LENS_FACING_FRONT ? CameraSelector.LENS_FACING_BACK : CameraSelector.LENS_FACING_FRONT;
+                Log.d(TAG, "Switched camera to " + (lensFacing == CameraSelector.LENS_FACING_FRONT ? "FRONT" : "BACK"));
+
                 flashButton.setVisibility(lensFacing == CameraSelector.LENS_FACING_BACK ? View.VISIBLE : View.GONE);
                 if (!zoomTabs.isEmpty()) {
-                    zoomTabLayout.removeAllTabs();
+                    Log.d(TAG, "Clearing " + zoomTabs.size() + " zoom tabs");
+                    if (zoomTabLayout != null) {
+                        zoomTabLayout.removeAllTabs();
+                    }
+                    if (verticalZoomContainer != null) {
+                        verticalZoomContainer.removeAllViews();
+                    }
                     zoomTabs.clear();
                 }
+
+                // Set the camera selector before setting up camera to ensure correct zoom capabilities
+                CameraSelector cameraSelector = new CameraSelector.Builder().requireLensFacing(lensFacing).build();
+                cameraController.setCameraSelector(cameraSelector);
+
                 setupCamera();
             }
         );
@@ -1617,11 +1693,12 @@ public class CameraFragment extends Fragment {
         zoomTabCardView.addView(zoomTabLayout);
 
         // Use ViewTreeObserver to ensure zoom tab layout is properly laid out
-        zoomTabCardView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+        zoomTabCardViewListener = new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
                 // Remove the listener to prevent multiple callbacks
                 zoomTabCardView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                zoomTabCardViewListener = null;
 
                 // Ensure the tab layout has the correct width
                 if (zoomTabLayout.getWidth() > 0) {
@@ -1640,10 +1717,12 @@ public class CameraFragment extends Fragment {
                     }
                 }
             }
-        });
+        };
+        zoomTabCardView.getViewTreeObserver().addOnGlobalLayoutListener(zoomTabCardViewListener);
     }
 
     private void createZoomTabLayoutForLandscape(FragmentActivity fragmentActivity, int margin) {
+        Log.d(TAG, "Creating zoom tab layout for landscape mode with vertical stacking");
         zoomTabCardView = new CardView(fragmentActivity);
         zoomTabCardView.setId(View.generateViewId());
 
@@ -1659,106 +1738,146 @@ public class CameraFragment extends Fragment {
             RelativeLayout.LayoutParams.WRAP_CONTENT,
             RelativeLayout.LayoutParams.WRAP_CONTENT
         );
-        // Position it below the flip button
-        cardViewLayoutParams.addRule(RelativeLayout.BELOW, flipCameraButton.getId());
-        cardViewLayoutParams.addRule(RelativeLayout.ABOVE, takePictureButton.getId());
-        cardViewLayoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        // Position it to the left of the controls container, centered vertically in the preview area
+        cardViewLayoutParams.addRule(RelativeLayout.LEFT_OF, controlsContainer.getId());
+        cardViewLayoutParams.addRule(RelativeLayout.CENTER_VERTICAL);
         cardViewLayoutParams.setMargins(margin, margin, margin, margin);
         zoomTabCardView.setLayoutParams(cardViewLayoutParams);
 
-        controlsContainer.addView(zoomTabCardView);
+        // Add to the main layout (preview area) instead of the controls container
+        relativeLayout.addView(zoomTabCardView);
+        Log.d(TAG, "Added zoom tab card view to main layout (preview area)");
 
-        zoomTabLayout = new TabLayout(fragmentActivity);
-        zoomTabLayout.setId(View.generateViewId());
-        tabLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        zoomTabLayout.setLayoutParams(tabLayoutParams);
+        // Create a LinearLayout with vertical orientation instead of TabLayout for landscape mode
+        LinearLayout verticalZoomContainer = new LinearLayout(fragmentActivity);
+        verticalZoomContainer.setId(View.generateViewId());
+        verticalZoomContainer.setOrientation(LinearLayout.VERTICAL);
+        verticalZoomContainer.setGravity(Gravity.CENTER);
 
-        // Set TabLayout parameters
-        zoomTabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-        zoomTabLayout.setTabMode(TabLayout.MODE_FIXED);
-        zoomTabLayout.setSelectedTabIndicatorColor(Color.TRANSPARENT);
-        zoomTabLayout.setSelectedTabIndicator(null);
-        zoomTabLayout.setBackgroundColor(Color.TRANSPARENT);
-        zoomTabLayout.setBackground(null);
-
-        // Set the listener for tab selection
-        zoomTabLayout.addOnTabSelectedListener(
-            new TabLayout.OnTabSelectedListener() {
-                @Override
-                public void onTabSelected(TabLayout.Tab tab) {
-                    ZoomTab zoomTab = zoomTabs.get(tab.getPosition());
-                    zoomTab.setSelected(true);
-                    if (!isSnappingZoom.get()) {
-                        zoomTab.setTransientZoomLevel(null);
-                        if (cameraController != null) {
-                            cameraController.setZoomRatio(zoomTab.getZoomLevel());
-                        }
-                    }
-                }
-
-                @Override
-                public void onTabUnselected(TabLayout.Tab tab) {
-                    ZoomTab zoomTab = zoomTabs.get(tab.getPosition());
-                    zoomTab.setSelected(false);
-                    zoomTab.setTransientZoomLevel(null);
-                }
-
-                @Override
-                public void onTabReselected(TabLayout.Tab tab) {
-                    ZoomTab zoomTab = zoomTabs.get(tab.getPosition());
-                    zoomTab.setSelected(true);
-                    if (!isSnappingZoom.get()) {
-                        zoomTab.setTransientZoomLevel(null);
-                        if (cameraController != null) {
-                            cameraController.setZoomRatio(zoomTab.getZoomLevel());
-                        }
-                    }
-                }
-            }
+        // Use WRAP_CONTENT for both width and height to make the container compact
+        LinearLayout.LayoutParams containerParams = new LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.WRAP_CONTENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
         );
+        verticalZoomContainer.setLayoutParams(containerParams);
 
-        zoomTabCardView.addView(zoomTabLayout);
+        // Add padding between buttons
+        int buttonSpacing = dpToPx(fragmentActivity, 8);
+        verticalZoomContainer.setPadding(buttonSpacing, buttonSpacing, buttonSpacing, buttonSpacing);
 
-        // Use ViewTreeObserver to ensure zoom tab layout is properly laid out in landscape mode
-        zoomTabCardView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                // Remove the listener to prevent multiple callbacks
-                zoomTabCardView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+        zoomTabCardView.addView(verticalZoomContainer);
 
-                // Ensure the tab layout has the correct width
-                if (zoomTabLayout.getWidth() > 0) {
-                    // Distribute tab width evenly
-                    TabLayout.Tab tab = zoomTabLayout.getTabAt(0);
-                    if (tab != null && tab.view != null) {
-                        int tabWidth = zoomTabLayout.getWidth() / zoomTabLayout.getTabCount();
-                        for (int i = 0; i < zoomTabLayout.getTabCount(); i++) {
-                            TabLayout.Tab currentTab = zoomTabLayout.getTabAt(i);
-                            if (currentTab != null && currentTab.view != null) {
-                                ViewGroup.LayoutParams layoutParams = currentTab.view.getLayoutParams();
-                                layoutParams.width = tabWidth;
-                                currentTab.view.setLayoutParams(layoutParams);
-                            }
-                        }
-                    }
-                }
-            }
-        });
+        // Store the vertical container for use in createZoomTabsForLandscape
+        zoomTabLayout = null; // We're not using TabLayout in landscape mode
+        this.verticalZoomContainer = verticalZoomContainer;
+
+        Log.d(TAG, "Created vertical zoom container for landscape mode");
     }
 
     private void createZoomTabs(FragmentActivity fragmentActivity, TabLayout tabLayout) {
-        float[] zoomLevels = { minZoom, 1f, 2f, 5f };
+        // This method is for portrait mode with TabLayout
+        createZoomTabsInternal(fragmentActivity, tabLayout, null);
+    }
 
-        for (int i = 0; i < zoomLevels.length; i++) {
-            float zoomLevel = zoomLevels[i];
-            ZoomTab zoomTab = new ZoomTab(fragmentActivity, zoomLevel, 40, i);
-            zoomTabs.add(zoomTab);
-            TabLayout.Tab tab = tabLayout.newTab();
-            tab.setCustomView(zoomTab.getView());
-            tabLayout.addTab(tab);
+    private void createZoomTabsForLandscape(FragmentActivity fragmentActivity, LinearLayout verticalContainer) {
+        // This method is for landscape mode with vertical LinearLayout
+        createZoomTabsInternal(fragmentActivity, null, verticalContainer);
+    }
+
+    private void createZoomTabsInternal(FragmentActivity fragmentActivity, TabLayout tabLayout, LinearLayout verticalContainer) {
+        float[] zoomLevels;
+
+        Log.d(TAG, "Creating zoom tabs for camera facing: " + (lensFacing == CameraSelector.LENS_FACING_FRONT ? "FRONT" : "BACK") +
+                   ", minZoom: " + minZoom + ", maxZoom: " + maxZoom);
+
+        // For front camera, don't include ultra-wide (minZoom like 0.6x) as it's not useful
+        if (lensFacing == CameraSelector.LENS_FACING_FRONT) {
+            zoomLevels = new float[]{ 1f, 2f };
+        } else {
+            // For back camera, include minZoom (like 0.6x ultra-wide) if it's less than 1f
+            if (minZoom < 1f) {
+                zoomLevels = new float[]{ minZoom, 1f, 2f, 5f };
+            } else {
+                zoomLevels = new float[]{ 1f, 2f, 5f };
+            }
         }
 
-        tabLayout.selectTab(tabLayout.getTabAt(1));
+        Log.d(TAG, "Zoom levels to create: " + java.util.Arrays.toString(zoomLevels));
+
+        int selectedTabIndex = -1;
+        for (int i = 0; i < zoomLevels.length; i++) {
+            float zoomLevel = zoomLevels[i];
+            // Skip zoom levels that exceed the maximum supported zoom
+            if (zoomLevel > maxZoom) {
+                Log.d(TAG, "Skipping zoom level " + zoomLevel + " because it exceeds maxZoom " + maxZoom);
+                continue;
+            }
+
+            // Use smaller circle size for landscape mode
+            int circleSize = (verticalContainer != null) ? 32 : 40;
+            ZoomTab zoomTab = new ZoomTab(fragmentActivity, zoomLevel, circleSize, i);
+            zoomTabs.add(zoomTab);
+
+            if (tabLayout != null) {
+                // Portrait mode - add to TabLayout
+                TabLayout.Tab tab = tabLayout.newTab();
+                tab.setCustomView(zoomTab.getView());
+                tabLayout.addTab(tab);
+                Log.d(TAG, "Added zoom tab to TabLayout: " + zoomLevel + "x");
+            } else if (verticalContainer != null) {
+                // Landscape mode - add to vertical LinearLayout
+                View zoomView = zoomTab.getView();
+
+                // Create layout params with margin for vertical spacing
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                );
+                int margin = dpToPx(fragmentActivity, 4);
+                params.setMargins(0, margin, 0, margin);
+                zoomView.setLayoutParams(params);
+
+                // Add click listener for landscape mode
+                final int finalIndex = zoomTabs.size() - 1;
+                zoomView.setOnClickListener(v -> {
+                    // Unselect all tabs
+                    for (ZoomTab tab : zoomTabs) {
+                        tab.setSelected(false);
+                    }
+                    // Select this tab
+                    zoomTab.setSelected(true);
+                    // Set zoom level
+                    if (!isSnappingZoom.get()) {
+                        zoomTab.setTransientZoomLevel(null);
+                        if (cameraController != null) {
+                            cameraController.setZoomRatio(zoomTab.getZoomLevel());
+                        }
+                    }
+                });
+
+                verticalContainer.addView(zoomView);
+                Log.d(TAG, "Added zoom tab to vertical container: " + zoomLevel + "x");
+            }
+
+            // Track which should be the default selected tab (1x zoom)
+            if (Math.abs(zoomLevel - 1f) < 0.01f) {
+                selectedTabIndex = zoomTabs.size() - 1;
+            }
+        }
+
+        Log.d(TAG, "Total zoom tabs created: " + zoomTabs.size());
+
+        // Select the 1x zoom tab
+        if (selectedTabIndex >= 0) {
+            if (tabLayout != null && selectedTabIndex < tabLayout.getTabCount()) {
+                tabLayout.selectTab(tabLayout.getTabAt(selectedTabIndex));
+                Log.d(TAG, "Selected default zoom tab at index: " + selectedTabIndex);
+            } else if (verticalContainer != null && selectedTabIndex < zoomTabs.size()) {
+                // For landscape mode, manually select the 1x zoom tab
+                zoomTabs.get(selectedTabIndex).setSelected(true);
+                Log.d(TAG, "Selected default zoom tab for landscape at index: " + selectedTabIndex);
+            }
+        }
     }
 
     private void createFilmstripView(FragmentActivity fragmentActivity) {
@@ -1798,18 +1917,20 @@ public class CameraFragment extends Fragment {
         relativeLayout.addView(filmstripView);
 
         // Use ViewTreeObserver to ensure filmstrip is properly laid out
-        filmstripView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+        filmstripViewListener = new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
                 // Remove the listener to prevent multiple callbacks
                 filmstripView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                filmstripViewListener = null;
 
                 // Scroll to the end of the filmstrip to show the most recent thumbnails
                 if (thumbnailAdapter.getItemCount() > 0) {
                     filmstripView.scrollToPosition(thumbnailAdapter.getItemCount() - 1);
                 }
             }
-        });
+        };
+        filmstripView.getViewTreeObserver().addOnGlobalLayoutListener(filmstripViewListener);
 
         thumbnailAdapter.setOnThumbnailsChangedCallback(
             new ThumbnailAdapter.OnThumbnailsChangedCallback() {
@@ -1927,18 +2048,20 @@ public class CameraFragment extends Fragment {
         relativeLayout.addView(filmstripView);
 
         // Use ViewTreeObserver to ensure filmstrip is properly laid out in landscape mode
-        filmstripView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+        filmstripViewSecondaryListener = new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
                 // Remove the listener to prevent multiple callbacks
                 filmstripView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                filmstripViewSecondaryListener = null;
 
                 // Scroll to the end of the filmstrip to show the most recent thumbnails
                 if (thumbnailAdapter.getItemCount() > 0) {
                     filmstripView.scrollToPosition(thumbnailAdapter.getItemCount() - 1);
                 }
             }
-        });
+        };
+        filmstripView.getViewTreeObserver().addOnGlobalLayoutListener(filmstripViewSecondaryListener);
 
         thumbnailAdapter.setOnThumbnailsChangedCallback(
             new ThumbnailAdapter.OnThumbnailsChangedCallback() {
@@ -2121,8 +2244,17 @@ public class CameraFragment extends Fragment {
                     minZoom = zoomState.getMinZoomRatio();
                     maxZoom = zoomState.getMaxZoomRatio();
 
+                    Log.d(TAG, "Zoom state changed - minZoom: " + minZoom + ", maxZoom: " + maxZoom + ", current zoom tabs: " + zoomTabs.size());
+
                     if (zoomTabs.isEmpty()) {
-                        createZoomTabs(requireActivity(), zoomTabLayout);
+                        Log.d(TAG, "Creating zoom tabs because zoomTabs is empty");
+                        if (isLandscape && verticalZoomContainer != null) {
+                            createZoomTabsForLandscape(requireActivity(), verticalZoomContainer);
+                        } else if (zoomTabLayout != null) {
+                            createZoomTabs(requireActivity(), zoomTabLayout);
+                        }
+                    } else {
+                        Log.d(TAG, "Not creating zoom tabs because zoomTabs is not empty (" + zoomTabs.size() + " tabs exist)");
                     }
 
                     if (zoomRunnable != null) {
@@ -2146,12 +2278,26 @@ public class CameraFragment extends Fragment {
 
                             // If we found a closest tab, update its display and select the tab.
                             if (closestTab != null) {
-                                TabLayout.Tab tab = zoomTabLayout.getTabAt(closestTab.getTabIndex());
-                                if (tab != null) {
-                                    closestTab.setTransientZoomLevel(currentZoom); // Update the tab's display to show the current zoom level
+                                closestTab.setTransientZoomLevel(currentZoom); // Update the tab's display to show the current zoom level
+
+                                if (isLandscape && verticalZoomContainer != null) {
+                                    // For landscape mode with vertical container, manually handle selection
                                     isSnappingZoom.set(true);
-                                    zoomTabLayout.selectTab(tab); // This will not trigger the camera zoom change due to the isSnappingZoom flag
+                                    // Unselect all tabs
+                                    for (ZoomTab tab : zoomTabs) {
+                                        tab.setSelected(false);
+                                    }
+                                    // Select the closest tab
+                                    closestTab.setSelected(true);
                                     isSnappingZoom.set(false);
+                                } else if (zoomTabLayout != null) {
+                                    // For portrait mode with TabLayout
+                                    TabLayout.Tab tab = zoomTabLayout.getTabAt(closestTab.getTabIndex());
+                                    if (tab != null) {
+                                        isSnappingZoom.set(true);
+                                        zoomTabLayout.selectTab(tab); // This will not trigger the camera zoom change due to the isSnappingZoom flag
+                                        isSnappingZoom.set(false);
+                                    }
                                 }
                             }
                         };
