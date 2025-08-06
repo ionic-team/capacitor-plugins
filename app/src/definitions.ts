@@ -1,4 +1,22 @@
+/// <reference types="@capacitor/cli" />
+
 import type { PluginListenerHandle } from '@capacitor/core';
+
+declare module '@capacitor/cli' {
+  export interface PluginsConfig {
+    App?: {
+      /**
+       * Disable the plugin's default back button handling.
+       *
+       * Only available for Android.
+       *
+       * @since 8.0.0
+       * @default false
+       */
+      disableBackButtonHandler?: boolean;
+    };
+  }
+}
 
 export interface AppInfo {
   /**
@@ -125,6 +143,15 @@ export interface BackButtonListenerEvent {
   canGoBack: boolean;
 }
 
+export interface ToggleBackButtonHandlerOptions {
+  /**
+   * Indicates whether to enable or disable default back button handling.
+   *
+   * @since 8.0.0
+   */
+  enabled: boolean;
+}
+
 export type StateChangeListener = (state: AppState) => void;
 export type URLOpenListener = (event: URLOpenListenerEvent) => void;
 export type RestoredListener = (event: RestoredListenerEvent) => void;
@@ -170,6 +197,17 @@ export interface AppPlugin {
    * @since 1.1.0
    */
   minimizeApp(): Promise<void>;
+
+  /**
+   * Enables or disables the plugin's back button handling during runtime.
+   *
+   * Only available for Android.
+   *
+   * @since 8.0.0
+   */
+  toggleBackButtonHandler(
+    options: ToggleBackButtonHandlerOptions,
+  ): Promise<void>;
 
   /**
    * Listen for changes in the app or the activity states.
