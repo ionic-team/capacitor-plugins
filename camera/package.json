@@ -1,6 +1,6 @@
 {
   "name": "@capacitor/camera",
-  "version": "7.0.1",
+  "version": "7.0.2",
   "description": "The Camera API provides the ability to take a photo with the camera or choose an existing one from the photo album.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
@@ -47,10 +47,10 @@
     "publish:cocoapod": "pod trunk push ./CapacitorCamera.podspec --allow-warnings"
   },
   "devDependencies": {
-    "@capacitor/android": "next",
-    "@capacitor/core": "next",
+    "@capacitor/android": "^7.0.0",
+    "@capacitor/core": "^7.0.0",
     "@capacitor/docgen": "0.2.2",
-    "@capacitor/ios": "next",
+    "@capacitor/ios": "^7.0.0",
     "@ionic/eslint-config": "^0.4.0",
     "@ionic/prettier-config": "~1.0.1",
     "@ionic/swiftlint-config": "^1.1.2",
