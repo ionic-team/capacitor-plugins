@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.0.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/splash-screen@7.0.1...@capacitor/splash-screen@7.0.2) (2025-08-05)
+
+### Bug Fixes
+
+- **splash-screen:** call clearOnExitAnimationListener on animation end ([#2379](https://github.com/ionic-team/capacitor-plugins/issues/2379)) ([dcfda05](https://github.com/ionic-team/capacitor-plugins/commit/dcfda0542b5efb420ad3fe9af7b6ad54e37fb15a))
+
 ## [7.0.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/splash-screen@7.0.0...@capacitor/splash-screen@7.0.1) (2025-04-02)
 
 **Note:** Version bump only for package @capacitor/splash-screen
