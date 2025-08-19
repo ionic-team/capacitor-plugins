@@ -102,10 +102,12 @@ public class Keyboard {
                     DisplayMetrics dm = activity.getResources().getDisplayMetrics();
                     final float density = dm.density;
 
-                    if (showingKeyboard) {
-                        keyboardEventListener.onKeyboardEvent(EVENT_KB_DID_SHOW, Math.round(imeHeight / density));
-                    } else {
-                        keyboardEventListener.onKeyboardEvent(EVENT_KB_DID_HIDE, 0);
+                    if (keyboardEventListener != null) {
+                        if (showingKeyboard) {
+                            keyboardEventListener.onKeyboardEvent(EVENT_KB_DID_SHOW, Math.round(imeHeight / density));
+                        } else {
+                            keyboardEventListener.onKeyboardEvent(EVENT_KB_DID_HIDE, 0);
+                        }
                     }
                 }
             }
