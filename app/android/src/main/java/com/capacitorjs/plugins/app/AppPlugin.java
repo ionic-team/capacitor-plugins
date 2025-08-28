@@ -28,7 +28,7 @@ public class AppPlugin extends Plugin {
     private OnBackPressedCallback onBackPressedCallback;
 
     public void load() {
-        boolean disableBackButtonHandler = bridge.getConfig().getPluginConfiguration("App").getBoolean("disableBackButtonListener", false);
+        boolean disableBackButtonHandler = getConfig().getBoolean("disableBackButtonHandler", false);
 
         bridge
             .getApp()
