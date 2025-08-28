@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.0.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/keyboard@7.0.1...@capacitor/keyboard@7.0.2) (2025-08-05)
+
+### Bug Fixes
+
+- **android:** fixed issues on android 15+ white space above keyboard ([#2382](https://github.com/ionic-team/capacitor-plugins/issues/2382)) ([2faaa4f](https://github.com/ionic-team/capacitor-plugins/commit/2faaa4f501b273aabb56ce72e9731fcea5a5878e))
+- **android:** fixed issues on android 15+ white space above keyboard ([#2388](https://github.com/ionic-team/capacitor-plugins/issues/2388)) ([50e7205](https://github.com/ionic-team/capacitor-plugins/commit/50e7205cd7e7d586a8dc538fb7f9d832fd895361))
+
 ## [7.0.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/keyboard@7.0.0...@capacitor/keyboard@7.0.1) (2025-04-02)
 
 **Note:** Version bump only for package @capacitor/keyboard
