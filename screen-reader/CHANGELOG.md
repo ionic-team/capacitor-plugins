@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.0.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/screen-reader@7.0.1...@capacitor/screen-reader@7.0.2) (2025-08-05)
+
+**Note:** Version bump only for package @capacitor/screen-reader
+
 ## [7.0.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/screen-reader@7.0.0...@capacitor/screen-reader@7.0.1) (2025-04-02)
 
 **Note:** Version bump only for package @capacitor/screen-reader
