@@ -74,7 +74,7 @@ const checkAppLaunchUrl = async () => {
 
 | Prop                           | Type                 | Description                                                                    | Default            | Since |
 | ------------------------------ | -------------------- | ------------------------------------------------------------------------------ | ------------------ | ----- |
-| **`disableBackButtonHandler`** | <code>boolean</code> | Disable the plugin's default back button handling. Only available for Android. | <code>false</code> | 8.0.0 |
+| **`disableBackButtonHandler`** | <code>boolean</code> | Disable the plugin's default back button handling. Only available for Android. | <code>false</code> | 7.1.0 |
 
 ### Examples
 
@@ -225,7 +225,7 @@ Only available for Android.
 | ------------- | ----------------------------------------------------------------------------------------- |
 | **`options`** | <code><a href="#togglebackbuttonhandleroptions">ToggleBackButtonHandlerOptions</a></code> |
 
-**Since:** 8.0.0
+**Since:** 7.1.0
 
 --------------------
 
@@ -431,7 +431,7 @@ Remove all native listeners for this plugin
 
 | Prop          | Type                 | Description                                                          | Since |
 | ------------- | -------------------- | -------------------------------------------------------------------- | ----- |
-| **`enabled`** | <code>boolean</code> | Indicates whether to enable or disable default back button handling. | 8.0.0 |
+| **`enabled`** | <code>boolean</code> | Indicates whether to enable or disable default back button handling. | 7.1.0 |
 
 
 #### PluginListenerHandle
