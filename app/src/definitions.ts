@@ -10,7 +10,7 @@ declare module '@capacitor/cli' {
        *
        * Only available for Android.
        *
-       * @since 8.0.0
+       * @since 7.1.0
        * @default false
        * @example true
        */
@@ -148,7 +148,7 @@ export interface ToggleBackButtonHandlerOptions {
   /**
    * Indicates whether to enable or disable default back button handling.
    *
-   * @since 8.0.0
+   * @since 7.1.0
    */
   enabled: boolean;
 }
@@ -204,7 +204,7 @@ export interface AppPlugin {
    *
    * Only available for Android.
    *
-   * @since 8.0.0
+   * @since 7.1.0
    */
   toggleBackButtonHandler(
     options: ToggleBackButtonHandlerOptions,
