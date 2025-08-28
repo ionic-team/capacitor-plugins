@@ -12,6 +12,7 @@ declare module '@capacitor/cli' {
        *
        * @since 8.0.0
        * @default false
+       * @example true
        */
       disableBackButtonHandler?: boolean;
     };

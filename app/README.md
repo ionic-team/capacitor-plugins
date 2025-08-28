@@ -67,6 +67,49 @@ const checkAppLaunchUrl = async () => {
 };
 ```
 
+## Configuration
+
+<docgen-config>
+<!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
+
+| Prop                           | Type                 | Description                                                                    | Default            | Since |
+| ------------------------------ | -------------------- | ------------------------------------------------------------------------------ | ------------------ | ----- |
+| **`disableBackButtonHandler`** | <code>boolean</code> | Disable the plugin's default back button handling. Only available for Android. | <code>false</code> | 8.0.0 |
+
+### Examples
+
+In `capacitor.config.json`:
+
+```json
+{
+  "plugins": {
+    "App": {
+      "disableBackButtonHandler": true
+    }
+  }
+}
+```
+
+In `capacitor.config.ts`:
+
+```ts
+/// <reference types="@capacitor/app" />
+
+import { CapacitorConfig } from '@capacitor/cli';
+
+const config: CapacitorConfig = {
+  plugins: {
+    App: {
+      disableBackButtonHandler: true,
+    },
+  },
+};
+
+export default config;
+```
+
+</docgen-config>
+
 ## API
 
 <docgen-index>
