@@ -48,6 +48,20 @@ typedef enum : NSUInteger {
 // protocol conformance for this class is implemented by a macro and clang isn't detecting that
 @implementation KeyboardPlugin
 
+/// Heights below this on iPad are treated as QuickType bar, not a real keyboard
+static const CGFloat QUICKTYPE_IGNORE_THRESHOLD = 100.0;
+
+- (BOOL)isIPad {
+  return ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad);
+}
+
+- (BOOL)shouldIgnoreResizeForHeight:(double)height {
+  if (![self isIPad]) return NO;
+  if (height <= 0.0) return NO;
+  return (height < QUICKTYPE_IGNORE_THRESHOLD);
+}
+
+
 NSTimer *hideTimer;
 NSString* UIClassString;
 NSString* WKClassString;
@@ -125,30 +139,36 @@ double stageManagerOffset;
     [hideTimer invalidate];
   }
   CGRect rect = [[notification.userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
-
   double height = rect.size.height;
-    
-  if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+
+  if ([self isIPad]) {
     if (stageManagerOffset > 0) {
       height = stageManagerOffset;
     } else {
-      CGRect webViewAbsolute = [self.webView convertRect:self.webView.frame toCoordinateSpace:self.webView.window.screen.coordinateSpace];
-      height = (webViewAbsolute.size.height + webViewAbsolute.origin.y) - (UIScreen.mainScreen.bounds.size.height - rect.size.height);
+      CGRect webViewAbsolute = [self.webView convertRect:self.webView.frame
+                                      toCoordinateSpace:self.webView.window.screen.coordinateSpace];
+      height = (webViewAbsolute.size.height + webViewAbsolute.origin.y)
+             - (UIScreen.mainScreen.bounds.size.height - rect.size.height);
       if (height < 0) {
         height = 0;
       }
-        
       stageManagerOffset = height;
     }
   }
 
-  double duration = [[notification.userInfo valueForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue]+0.2;
-  [self setKeyboardHeight:height delay:duration];
+  BOOL ignored = [self shouldIgnoreResizeForHeight:height];
+  if (ignored) {
+    NSLog(@"KeyboardPlugin: Ignoring QuickType Bar (%.1f) -> treat as 0 (QuickType/hardware).", height);
+    height = 0.0;
+  }
+
+  double duration = [[notification.userInfo valueForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue] + 0.2;
+  [self setKeyboardHeight:(int)height delay:duration];
   [self resetScrollView];
 
-  NSString * data = [NSString stringWithFormat:@"{ 'keyboardHeight': %d }", (int)height];
+  NSString *data = [NSString stringWithFormat:@"{ 'keyboardHeight': %d }", (int)height];
   [self.bridge triggerWindowJSEventWithEventName:@"keyboardWillShow" data:data];
-  NSDictionary * kbData = @{@"keyboardHeight": [NSNumber numberWithDouble:height]};
+  NSDictionary *kbData = @{@"keyboardHeight": [NSNumber numberWithDouble:height]};
   [self notifyListeners:@"keyboardWillShow" data:kbData];
 }
 
@@ -157,13 +177,26 @@ double stageManagerOffset;
   CGRect rect = [[notification.userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
   double height = rect.size.height;
 
+  if ([self isIPad]) {
+    if (stageManagerOffset > 0) {
+      height = stageManagerOffset;
+    }
+  }
+
+  BOOL ignored = [self shouldIgnoreResizeForHeight:height];
+  if (ignored) {
+    NSLog(@"KeyboardPlugin: (didShow) Ignoring QuickType Bar (%.1f) -> report 0.", height);
+    height = 0.0;
+  }
+
   [self resetScrollView];
 
-  NSString * data = [NSString stringWithFormat:@"{ 'keyboardHeight': %d }", (int)height];
+  NSString *data = [NSString stringWithFormat:@"{ 'keyboardHeight': %d }", (int)height];
   [self.bridge triggerWindowJSEventWithEventName:@"keyboardDidShow" data:data];
-  NSDictionary * kbData = @{@"keyboardHeight": [NSNumber numberWithDouble:height]};
+  NSDictionary *kbData = @{@"keyboardHeight": [NSNumber numberWithDouble:height]};
   [self notifyListeners:@"keyboardDidShow" data:kbData];
 }
+
 
 - (void)onKeyboardDidHide:(NSNotification *)notification
 {
