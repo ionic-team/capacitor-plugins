@@ -97,6 +97,9 @@ public class NetworkPlugin extends Plugin {
         JSObject jsObject = new JSObject();
         jsObject.put("connected", networkStatus.connected);
         jsObject.put("connectionType", networkStatus.connectionType.getConnectionType());
+        jsObject.put("upstreamInKbps", networkStatus.upstreamInKbps);
+        jsObject.put("downstreamInKbps", networkStatus.downstreamInKbps);
+        jsObject.put("signalStrength", networkStatus.signalStrength);
         return jsObject;
     }
 }

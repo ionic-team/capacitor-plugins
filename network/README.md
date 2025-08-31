@@ -95,10 +95,13 @@ Remove all listeners (including the network status changes) for this plugin.
 
 Represents the state and type of the network connection.
 
-| Prop                 | Type                                                      | Description                                                                                                                   | Since |
-| -------------------- | --------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`connected`**      | <code>boolean</code>                                      | Whether there is an active connection or not.                                                                                 | 1.0.0 |
-| **`connectionType`** | <code><a href="#connectiontype">ConnectionType</a></code> | The type of network connection currently in use. If there is no active network connection, `connectionType` will be `'none'`. | 1.0.0 |
+| Prop                   | Type                                                      | Description                                                                                                                   | Since |
+| ---------------------- | --------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`connected`**        | <code>boolean</code>                                      | Whether there is an active connection or not.                                                                                 | 1.0.0 |
+| **`connectionType`**   | <code><a href="#connectiontype">ConnectionType</a></code> | The type of network connection currently in use. If there is no active network connection, `connectionType` will be `'none'`. | 1.0.0 |
+| **`upstreamInKbps`**   | <code>number</code>                                       | The upstream bandwidth in kbps. If the platform does not provide the value will be undefined.                                 | TBD   |
+| **`downstreamInKbps`** | <code>number</code>                                       | The downstream bandwidth in kbps. If the platform does not provide the value will be undefined.                               | TBD   |
+| **`signalStrength`**   | <code>number</code>                                       | The signal strength as number. If the platform does not provide the value will be undefined.                                  | TBD   |
 
 
 #### PluginListenerHandle
