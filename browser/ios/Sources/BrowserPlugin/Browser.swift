@@ -34,7 +34,12 @@ import SafariServices
         return false
     }
 
-    @objc public func cleanup() {
+    @objc public func cleanup(clearWebsiteData: Bool) {
+       if clearWebsiteData {
+           if #available(iOS 16.0, *) {
+              SFSafariViewController.DataStore.default.clearWebsiteData(completionHandler: {})
+           }
+        }
         safariViewController = nil
     }
 
