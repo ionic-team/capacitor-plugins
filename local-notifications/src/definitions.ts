@@ -35,11 +35,11 @@ declare module '@capacitor/cli' {
       /**
        * Set the default notification sound for notifications.
        *
-       * On Android 26+ it sets the default channel sound and can't be
+       * On Android 8+ it sets the default channel sound and can't be
        * changed unless the app is uninstalled.
        *
        * If the audio file is not found, it will result in the default system
-       * sound being played on Android 21-25 and no sound on Android 26+.
+       * sound being played on Android 7.x and no sound on Android 8+.
        *
        * Only available for Android.
        *
@@ -591,8 +591,8 @@ export interface LocalNotificationSchema {
    *
    * Recommended format is `.wav` because is supported by both iOS and Android.
    *
-   * Only available for iOS and Android < 26.
-   * For Android 26+ use channelId of a channel configured with the desired sound.
+   * Only available for iOS and Android 7.x.
+   * For Android 8+ use channelId of a channel configured with the desired sound.
    *
    * If the sound file is not found, (i.e. empty string or wrong name)
    * the default system notification sound will be used.
@@ -722,7 +722,7 @@ export interface LocalNotificationSchema {
    * [`NotificationCompat.Builder`](https://developer.android.com/reference/androidx/core/app/NotificationCompat.Builder)
    * with the provided value.
    *
-   * Only available for Android 26+.
+   * Only available for Android 8+.
    *
    * @since 1.0.0
    */
@@ -802,8 +802,6 @@ export interface Schedule {
 
   /**
    * Allow this notification to fire while in [Doze](https://developer.android.com/training/monitoring-device-state/doze-standby)
-   *
-   * Only available for Android 23+.
    *
    * Note that these notifications can only fire [once per 9 minutes, per app](https://developer.android.com/training/monitoring-device-state/doze-standby#assessing_your_app).
    *

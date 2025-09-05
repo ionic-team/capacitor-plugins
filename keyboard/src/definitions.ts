@@ -80,10 +80,9 @@ export enum KeyboardStyle {
   Light = 'LIGHT',
 
   /**
-   * On iOS 13 and newer the keyboard style is based on the device appearance.
+   * The keyboard style is based on the device appearance.
    * If the device is using Dark mode, the keyboard will be dark.
    * If the device is using Light mode, the keyboard will be light.
-   * On iOS 12 the keyboard will be light.
    *
    * @since 1.0.0
    */
