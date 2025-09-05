@@ -3,7 +3,7 @@ import PackageDescription
 
 let package = Package(
     name: "CapacitorScreenOrientation",
-    platforms: [.iOS(.v14)],
+    platforms: [.iOS(.v15)],
     products: [
         .library(
             name: "CapacitorScreenOrientation",
