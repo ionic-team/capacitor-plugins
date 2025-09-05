@@ -49,6 +49,13 @@ public class FilesystemPlugin extends Plugin {
     private static final String PERMISSION_DENIED_ERROR = "Unable to do file operation, user denied permission request";
 
     @PluginMethod
+    public void isPortableStorageAvailable(PluginCall call) {
+        JSObject ret = new JSObject();
+        ret.put("available", implementation.isPortableStorageAvailable());
+        call.resolve(ret);
+    }
+
+    @PluginMethod
     public void readFile(PluginCall call) {
         String path = call.getString("path");
         String directory = getDirectoryParameter(call);

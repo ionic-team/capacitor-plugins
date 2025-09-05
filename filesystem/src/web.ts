@@ -21,6 +21,7 @@ import type {
   WriteFileOptions,
   WriteFileResult,
   Directory,
+  isPortableStorageAvailableResult,
   DownloadFileOptions,
   DownloadFileResult,
   ProgressStatus,
@@ -471,6 +472,10 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
 
   async checkPermissions(): Promise<PermissionStatus> {
     return { publicStorage: 'granted' };
+  }
+
+  async isPortableStorageAvailable(): Promise<isPortableStorageAvailableResult> {
+    return { available: false };
   }
 
   /**

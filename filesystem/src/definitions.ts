@@ -77,6 +77,16 @@ export enum Directory {
    * @since 1.0.0
    */
   ExternalStorage = 'EXTERNAL_STORAGE',
+
+  /**
+   * SDCARD when configured as Portable Storage
+   * Points to application private storage on the SD Card when configured as
+   * Portable Storage.
+   * On iOS it will use the Documents directory
+   *
+   * @since 5.0.5
+   */
+  PortableStorage = 'PORTABLE_STORAGE',
 }
 
 export enum Encoding {
@@ -482,6 +492,16 @@ export interface CopyResult {
   uri: string;
 }
 
+export interface isPortableStorageAvailableResult {
+  /**
+   * Is portable storage available (SD Card)
+   * Only available on Android
+   *
+   * @since 5.0.5
+   */
+  available: boolean;
+}
+
 export interface DownloadFileOptions extends HttpOptions {
   /**
    * The path the downloaded file should be moved to.
@@ -535,6 +555,7 @@ export interface DownloadFileResult {
    */
   blob?: Blob;
 }
+
 export interface ProgressStatus {
   /**
    * The url of the file being downloaded.
@@ -644,6 +665,14 @@ export interface FilesystemPlugin {
    * @since 1.0.0
    */
   copy(options: CopyOptions): Promise<CopyResult>;
+
+  /**
+   * Check if portable storage is available (SD Card for Android)
+   * Only available on Android
+   *
+   * @since 5.0.5
+   */
+  isPortableStorageAvailable(): Promise<isPortableStorageAvailableResult>;
 
   /**
    * Check read/write permissions.
