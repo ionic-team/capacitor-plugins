@@ -52,7 +52,7 @@ These are official Capacitor plugins that are not contained in this repository.
 | [Geolocation](https://github.com/ionic-team/capacitor-geolocation) (*) | [`@capacitor/geolocation`](https://capacitorjs.com/docs/apis/geolocation) | [![npm badge](https://img.shields.io/npm/v/@capacitor/geolocation?style=flat-square)](https://www.npmjs.com/package/@capacitor/geolocation) |
 | [Google Maps](https://github.com/ionic-team/capacitor-google-maps) | [`@capacitor/google-maps`](https://capacitorjs.com/docs/apis/google-maps) | [![npm badge](https://img.shields.io/npm/v/@capacitor/google-maps?style=flat-square)](https://www.npmjs.com/package/@capacitor/google-maps) |
 
-(*) These plugins were once part of this repository, but have been since been revamped and migrated to a separate repository. The code pre-migration still remains in this repository for historic purposes.
+(*) These plugins were once part of this repository, but have been since been revamped and migrated to a separate repository. The code pre-migration [still remains in this repository](https://github.com/ionic-team/capacitor-plugins/tree/7.x) for historic purposes.
 
 ## Capacitor Labs
 
