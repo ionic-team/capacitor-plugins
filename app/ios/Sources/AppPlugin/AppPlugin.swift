@@ -10,7 +10,8 @@ public class AppPlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "getInfo", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getLaunchUrl", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getState", returnType: CAPPluginReturnPromise),
-        CAPPluginMethod(name: "minimizeApp", returnType: CAPPluginReturnPromise)
+        CAPPluginMethod(name: "minimizeApp", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "toggleBackButtonHandler", returnType: CAPPluginReturnPromise)
     ]
     private var observers: [NSObjectProtocol] = []
 
@@ -111,6 +112,10 @@ public class AppPlugin: CAPPlugin, CAPBridgedPlugin {
     }
 
     @objc func minimizeApp(_ call: CAPPluginCall) {
+        call.unimplemented()
+    }
+
+    @objc func toggleBackButtonHandler(_ call: CAPPluginCall) {
         call.unimplemented()
     }
 }
