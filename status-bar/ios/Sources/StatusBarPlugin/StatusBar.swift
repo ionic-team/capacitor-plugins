@@ -125,7 +125,7 @@ public class StatusBar {
 
     private func resizeWebView() {
         let bounds: CGRect? = bridge.viewController?.view.window?.windowScene?.keyWindow?.bounds
-        
+
         guard
             let webView = bridge.webView,
             let bounds = bounds

@@ -75,12 +75,11 @@ public class Network {
         NetworkStatus networkStatus = new NetworkStatus();
         if (this.connectivityManager != null) {
             android.net.Network activeNetwork = this.connectivityManager.getActiveNetwork();
-            NetworkCapabilities capabilities =
-                this.connectivityManager.getNetworkCapabilities(this.connectivityManager.getActiveNetwork());
+            NetworkCapabilities capabilities = this.connectivityManager.getNetworkCapabilities(this.connectivityManager.getActiveNetwork());
             if (activeNetwork != null && capabilities != null) {
                 networkStatus.connected =
                     capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED) &&
-                            capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET);
+                    capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET);
                 if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
                     networkStatus.connectionType = NetworkStatus.ConnectionType.WIFI;
                 } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
