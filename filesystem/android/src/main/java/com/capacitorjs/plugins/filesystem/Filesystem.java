@@ -157,7 +157,7 @@ public class Filesystem {
     public InputStream getInputStream(String path, String directory) throws IOException {
         if (directory == null) {
             Uri u = Uri.parse(path);
-            if (u.getScheme().equals("content")) {
+            if (u.getScheme() != null && u.getScheme().equals("content")) {
                 return this.context.getContentResolver().openInputStream(u);
             } else {
                 return new FileInputStream(new File(u.getPath()));
