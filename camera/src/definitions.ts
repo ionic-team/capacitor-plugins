@@ -23,23 +23,22 @@ export interface CameraPlugin {
   getPhoto(options: ImageOptions): Promise<Photo>;
 
   /**
-   * Allows the user to pick multiple pictures from the photo gallery.
-   * On iOS 13 and older it only allows to pick one picture.
+   * Allows the user to pick multiplef pictures from the photo gallery.
    *
    * @since 1.2.0
    */
   pickImages(options: GalleryImageOptions): Promise<GalleryPhotos>;
 
   /**
-   * iOS 14+ Only: Allows the user to update their limited photo library selection.
-   * On iOS 15+ returns all the limited photos after the picker dismissal.
-   * On iOS 14 or if the user gave full access to the photos it returns an empty array.
+   * Allows the user to update their limited photo library selection.
+   * Returns all the limited photos after the picker dismissal.
+   * If instead the user gave full access to the photos it returns an empty array.
    *
    * @since 4.1.0
    */
   pickLimitedLibraryPhotos(): Promise<GalleryPhotos>;
   /**
-   * iOS 14+ Only: Return an array of photos selected from the limited photo library.
+   * Return an array of photos selected from the limited photo library.
    *
    * @since 4.1.0
    */
@@ -72,7 +71,7 @@ export interface ImageOptions {
   quality?: number;
   /**
    * Whether to allow the user to crop or make small edits (platform specific).
-   * On iOS 14+ it's only supported for CameraSource.Camera, but not for CameraSource.Photos.
+   * On iOS it's only supported for CameraSource.Camera, but not for CameraSource.Photos.
    *
    * @since 1.0.0
    */
