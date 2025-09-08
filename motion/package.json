@@ -1,6 +1,6 @@
 {
   "name": "@capacitor/motion",
-  "version": "8.0.0-alpha.0",
+  "version": "8.0.0-alpha.1",
   "description": "The Motion API tracks accelerometer and device orientation (compass heading, etc.)",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
