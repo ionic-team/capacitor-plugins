@@ -5,7 +5,7 @@
       "npmClientArgs": ["--no-package-lock"]
     },
     "version": {
-      "allowBranch": "main",
+      "allowBranch": "7.x",
       "conventionalCommits": true,
       "createRelease": "github",
       "message": "chore(release): publish [skip ci]",
