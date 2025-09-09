@@ -31,7 +31,7 @@ export interface ScreenOrientationPlugin {
 
   /**
    * Locks the screen orientation.
-   * 
+   *
    * Starting in Android targetSdk 36, this method has no effect for large screens (e.g. tablets) on Android 16 an higher.
    * You may opt-out of this behavior in your app by adding <property android:name="android.window.PROPERTY_COMPAT_ALLOW_RESTRICTED_RESIZABILITY" android:value="true" /> to your AndroidManifest.xml inside <application> or <activity>.
    * Keep in mind though that this opt-out is temporary will no longer work for Android 17. Android discourages setting specific orientations for large screens.
