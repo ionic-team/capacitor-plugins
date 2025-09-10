@@ -142,8 +142,7 @@ double stageManagerOffset;
     }
   }
 
-  double duration = [[notification.userInfo valueForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue]+0.2;
-  [self setKeyboardHeight:height delay:duration];
+  [self setKeyboardHeight:height delay:0];
   [self resetScrollView];
 
   NSString * data = [NSString stringWithFormat:@"{ 'keyboardHeight': %d }", (int)height];
@@ -199,7 +198,17 @@ double stageManagerOffset;
         height = screenHeight - paddingBottom;
     }
     
-    [self.bridge evalWithJs: [NSString stringWithFormat:@"(function() { var el = %@; var height = %d; if (el) { el.style.height = height > -1 ? height + 'px' : null; } })()", element, height]];
+    NSString *jsCode = [NSString stringWithFormat:
+        @"(function() { "
+        "var el = %@; "
+        "var height = %d; "
+        "if (el) { "
+        "el.style.transition = 'height 0.3s cubic-bezier(0.1, 0.76, 0.6, 0.99)'; "
+        "el.style.height = height > -1 ? height + 'px' : null; "
+        "} "
+        "})()", element, height];
+
+    [self.bridge evalWithJs:jsCode];
 }
 
 - (void)_updateFrame
