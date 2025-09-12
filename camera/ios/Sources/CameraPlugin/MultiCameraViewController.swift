@@ -59,7 +59,8 @@ class ThumbnailCell: UICollectionViewCell {
             loadingIndicator.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
 
             deleteButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 2),
-            deleteButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -2),
+            deleteButton.trailingAnchor.constraint(
+                equalTo: contentView.trailingAnchor, constant: -2),
             deleteButton.widthAnchor.constraint(equalToConstant: 20),
             deleteButton.heightAnchor.constraint(equalToConstant: 20)
         ])
@@ -100,7 +101,8 @@ class ImagePreviewViewController: UIViewController {
         collectionView.backgroundColor = .black
         collectionView.isPagingEnabled = true
         collectionView.showsHorizontalScrollIndicator = false
-        collectionView.register(ImagePreviewCell.self, forCellWithReuseIdentifier: "ImagePreviewCell")
+        collectionView.register(
+            ImagePreviewCell.self, forCellWithReuseIdentifier: "ImagePreviewCell")
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -143,7 +145,8 @@ class ImagePreviewViewController: UIViewController {
         // Scroll to the starting index after layout is complete
         if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
             layout.itemSize = collectionView.bounds.size
-            collectionView.scrollToItem(at: IndexPath(item: currentIndex, section: 0), at: .left, animated: false)
+            collectionView.scrollToItem(
+                at: IndexPath(item: currentIndex, section: 0), at: .left, animated: false)
         }
     }
 
@@ -167,7 +170,8 @@ class ImagePreviewViewController: UIViewController {
 
         view.addSubview(closeButton)
         NSLayoutConstraint.activate([
-            closeButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            closeButton.topAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
             closeButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             closeButton.widthAnchor.constraint(equalToConstant: 44),
             closeButton.heightAnchor.constraint(equalToConstant: 44)
@@ -177,7 +181,8 @@ class ImagePreviewViewController: UIViewController {
         if images.count > 1 {
             NSLayoutConstraint.activate([
                 positionIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                positionIndicator.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+                positionIndicator.topAnchor.constraint(
+                    equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
                 positionIndicator.widthAnchor.constraint(greaterThanOrEqualToConstant: 40),
                 positionIndicator.heightAnchor.constraint(equalToConstant: 24)
             ])
@@ -199,7 +204,9 @@ class ImagePreviewViewController: UIViewController {
 
 // MARK: - ImagePreviewViewController Extensions
 extension ImagePreviewViewController: UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int)
+        -> Int
+    {
         return images.count
     }
 
@@ -267,7 +274,7 @@ protocol MultiCameraViewControllerDelegate: AnyObject {
 class MultiCameraViewController: UIViewController {
     // MARK: - Properties
     weak var delegate: MultiCameraViewControllerDelegate?
-    var maxImages: Int = 0 // 0 means unlimited
+    var maxImages: Int = 0  // 0 means unlimited
     var cameraDirection: CameraDirection = .rear
 
     // Image processing settings
@@ -293,7 +300,7 @@ class MultiCameraViewController: UIViewController {
 
     private var capturedImages: [UIImage] = []
     private var capturedMetadata: [[String: Any]] = []
-    private var loadingStates: [Bool] = [] // Track which thumbnails are still loading
+    private var loadingStates: [Bool] = []  // Track which thumbnails are still loading
 
     // Track device orientation
     private var isLandscape: Bool = false
@@ -343,7 +350,16 @@ class MultiCameraViewController: UIViewController {
         let button = UIButton(type: .system)
         button.setImage(UIImage(systemName: "bolt.badge.a"), for: .normal)
         button.tintColor = .white
-        button.addTarget(self, action: #selector(toggleFlash), for: .touchUpInside)
+
+//        Setting Flash only for devices with Flash Hardware
+        if let device = getCamera(), device.hasFlash {
+            self.flashMode = .auto
+            button.addTarget(self, action: #selector(toggleFlash), for: .touchUpInside)
+        } else {
+            self.flashMode = .off
+            button.tintColor = .systemGray
+        }
+
         return button
     }()
 
@@ -444,7 +460,8 @@ class MultiCameraViewController: UIViewController {
         view.backgroundColor = .black
 
         // Add pinch gesture for zoom
-        let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(handlePinchGesture(_:)))
+        let pinchGesture = UIPinchGestureRecognizer(
+            target: self, action: #selector(handlePinchGesture(_:)))
         previewView.addGestureRecognizer(pinchGesture)
     }
 
@@ -473,9 +490,9 @@ class MultiCameraViewController: UIViewController {
             case .portrait:
                 connection.videoOrientation = .portrait
             case .landscapeLeft:
-                connection.videoOrientation = .landscapeRight // Note: device orientation is opposite to video orientation
+                connection.videoOrientation = .landscapeRight  // Note: device orientation is opposite to video orientation
             case .landscapeRight:
-                connection.videoOrientation = .landscapeLeft // Note: device orientation is opposite to video orientation
+                connection.videoOrientation = .landscapeLeft  // Note: device orientation is opposite to video orientation
             case .portraitUpsideDown:
                 connection.videoOrientation = .portraitUpsideDown
             default:
@@ -505,7 +522,9 @@ class MultiCameraViewController: UIViewController {
         stopCaptureSession()
     }
 
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+    override func viewWillTransition(
+        to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator
+    ) {
         super.viewWillTransition(to: size, with: coordinator)
 
         // Determine if we're switching to landscape or portrait
@@ -563,7 +582,8 @@ class MultiCameraViewController: UIViewController {
             processingOverlay.bottomAnchor.constraint(equalTo: view.bottomAnchor),
 
             processingSpinner.centerXAnchor.constraint(equalTo: processingOverlay.centerXAnchor),
-            processingSpinner.centerYAnchor.constraint(equalTo: processingOverlay.centerYAnchor, constant: -20),
+            processingSpinner.centerYAnchor.constraint(
+                equalTo: processingOverlay.centerYAnchor, constant: -20),
 
             processingLabel.topAnchor.constraint(equalTo: processingSpinner.bottomAnchor, constant: 20),
             processingLabel.centerXAnchor.constraint(equalTo: processingOverlay.centerXAnchor)
@@ -597,13 +617,15 @@ class MultiCameraViewController: UIViewController {
             previewView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 
             // Close button
-            closeButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
+            closeButton.topAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
             closeButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             closeButton.widthAnchor.constraint(equalToConstant: 44),
             closeButton.heightAnchor.constraint(equalToConstant: 44),
 
             // Flash button
-            flashButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
+            flashButton.topAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
             flashButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             flashButton.widthAnchor.constraint(equalToConstant: 44),
             flashButton.heightAnchor.constraint(equalToConstant: 44),
@@ -630,7 +652,8 @@ class MultiCameraViewController: UIViewController {
             // Bottom bar - horizontal at bottom
             bottomBarView.heightAnchor.constraint(equalToConstant: 100),
             bottomBarView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            bottomBarView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            bottomBarView.trailingAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             bottomBarView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
 
             // Preview view bottom connects to bottom bar top
@@ -638,20 +661,25 @@ class MultiCameraViewController: UIViewController {
 
             // Thumbnail collection view
             thumbnailCollectionView.heightAnchor.constraint(equalToConstant: 80),
-            thumbnailCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
-            thumbnailCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
-            thumbnailCollectionView.bottomAnchor.constraint(equalTo: bottomBarView.topAnchor, constant: -90), // Positioned higher to be above zoom controls
+            thumbnailCollectionView.leadingAnchor.constraint(
+                equalTo: view.leadingAnchor, constant: 10),
+            thumbnailCollectionView.trailingAnchor.constraint(
+                equalTo: view.trailingAnchor, constant: -10),
+            thumbnailCollectionView.bottomAnchor.constraint(
+                equalTo: bottomBarView.topAnchor, constant: -90),  // Positioned higher to be above zoom controls
 
             // Take picture button
             takePictureButton.centerXAnchor.constraint(equalTo: bottomBarView.centerXAnchor),
             takePictureButton.centerYAnchor.constraint(equalTo: bottomBarView.centerYAnchor),
 
             // Flip camera button
-            flipCameraButton.leadingAnchor.constraint(equalTo: bottomBarView.leadingAnchor, constant: 30),
+            flipCameraButton.leadingAnchor.constraint(
+                equalTo: bottomBarView.leadingAnchor, constant: 30),
             flipCameraButton.centerYAnchor.constraint(equalTo: bottomBarView.centerYAnchor),
 
             // Done button
-            doneButton.trailingAnchor.constraint(equalTo: bottomBarView.trailingAnchor, constant: -30),
+            doneButton.trailingAnchor.constraint(
+                equalTo: bottomBarView.trailingAnchor, constant: -30),
             doneButton.centerYAnchor.constraint(equalTo: bottomBarView.centerYAnchor),
 
             // Zoom buttons - positioned below the film strip
@@ -659,7 +687,8 @@ class MultiCameraViewController: UIViewController {
             zoomInButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
 
             zoomOutButton.bottomAnchor.constraint(equalTo: bottomBarView.topAnchor, constant: -20),
-            zoomOutButton.trailingAnchor.constraint(equalTo: zoomInButton.leadingAnchor, constant: -10),
+            zoomOutButton.trailingAnchor.constraint(
+                equalTo: zoomInButton.leadingAnchor, constant: -10),
 
             // Zoom factor label
             zoomFactorLabel.centerYAnchor.constraint(equalTo: zoomInButton.centerYAnchor),
@@ -680,13 +709,15 @@ class MultiCameraViewController: UIViewController {
             previewView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
 
             // Close button
-            closeButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
+            closeButton.topAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
             closeButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             closeButton.widthAnchor.constraint(equalToConstant: 44),
             closeButton.heightAnchor.constraint(equalToConstant: 44),
 
             // Flash button
-            flashButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
+            flashButton.topAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
             flashButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             flashButton.widthAnchor.constraint(equalToConstant: 44),
             flashButton.heightAnchor.constraint(equalToConstant: 44),
@@ -714,7 +745,8 @@ class MultiCameraViewController: UIViewController {
             bottomBarView.widthAnchor.constraint(equalToConstant: 120),
             bottomBarView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             bottomBarView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            bottomBarView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            bottomBarView.trailingAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.trailingAnchor),
 
             // Preview view connects to bottom bar on right
             previewView.trailingAnchor.constraint(equalTo: bottomBarView.leadingAnchor),
@@ -722,9 +754,12 @@ class MultiCameraViewController: UIViewController {
 
             // Thumbnail collection view - horizontal at bottom of preview
             thumbnailCollectionView.heightAnchor.constraint(equalToConstant: 80),
-            thumbnailCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 100), // Give space from left edge
-            thumbnailCollectionView.trailingAnchor.constraint(equalTo: bottomBarView.leadingAnchor, constant: -10),
-            thumbnailCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
+            thumbnailCollectionView.leadingAnchor.constraint(
+                equalTo: view.leadingAnchor, constant: 100),  // Give space from left edge
+            thumbnailCollectionView.trailingAnchor.constraint(
+                equalTo: bottomBarView.leadingAnchor, constant: -10),
+            thumbnailCollectionView.bottomAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
 
             // Take picture button - centered in the vertical bar
             takePictureButton.centerXAnchor.constraint(equalTo: bottomBarView.centerXAnchor),
@@ -732,17 +767,20 @@ class MultiCameraViewController: UIViewController {
 
             // Flip camera button - above the take picture button
             flipCameraButton.centerXAnchor.constraint(equalTo: bottomBarView.centerXAnchor),
-            flipCameraButton.bottomAnchor.constraint(equalTo: takePictureButton.topAnchor, constant: -30),
+            flipCameraButton.bottomAnchor.constraint(
+                equalTo: takePictureButton.topAnchor, constant: -30),
 
             // Done button - below the take picture button
             doneButton.centerXAnchor.constraint(equalTo: bottomBarView.centerXAnchor),
             doneButton.topAnchor.constraint(equalTo: takePictureButton.bottomAnchor, constant: 30),
 
             // Zoom buttons - on the right side of the preview
-            zoomInButton.trailingAnchor.constraint(equalTo: bottomBarView.leadingAnchor, constant: -20),
+            zoomInButton.trailingAnchor.constraint(
+                equalTo: bottomBarView.leadingAnchor, constant: -20),
             zoomInButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -20),
 
-            zoomOutButton.trailingAnchor.constraint(equalTo: zoomInButton.leadingAnchor, constant: -10),
+            zoomOutButton.trailingAnchor.constraint(
+                equalTo: zoomInButton.leadingAnchor, constant: -10),
             zoomOutButton.centerYAnchor.constraint(equalTo: zoomInButton.centerYAnchor),
 
             // Zoom factor label
@@ -781,15 +819,17 @@ class MultiCameraViewController: UIViewController {
             preferredStyle: .alert
         )
 
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel) { [weak self] _ in
-            self?.delegate?.multiCameraViewControllerDidCancel(self!)
-        })
+        alert.addAction(
+            UIAlertAction(title: "Cancel", style: .cancel) { [weak self] _ in
+                self?.delegate?.multiCameraViewControllerDidCancel(self!)
+            })
 
-        alert.addAction(UIAlertAction(title: "Settings", style: .default) { _ in
-            if let url = URL(string: UIApplication.openSettingsURLString) {
-                UIApplication.shared.open(url)
-            }
-        })
+        alert.addAction(
+            UIAlertAction(title: "Settings", style: .default) { _ in
+                if let url = URL(string: UIApplication.openSettingsURLString) {
+                    UIApplication.shared.open(url)
+                }
+            })
 
         present(alert, animated: true)
     }
@@ -864,14 +904,16 @@ class MultiCameraViewController: UIViewController {
         // Get device zoom capabilities
         if let device = getCamera() {
             minZoomFactor = 1.0
-            maxZoomFactor = min(device.activeFormat.videoMaxZoomFactor, 10.0) // Limit max zoom to 10x
+            maxZoomFactor = min(device.activeFormat.videoMaxZoomFactor, 10.0)  // Limit max zoom to 10x
         }
     }
 
     private func getCamera() -> AVCaptureDevice? {
         currentCameraPosition = cameraDirection == .front ? .front : .back
 
-        if let device = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: currentCameraPosition) {
+        if let device = AVCaptureDevice.default(
+            .builtInWideAngleCamera, for: .video, position: currentCameraPosition)
+        {
             return device
         }
 
@@ -930,7 +972,9 @@ class MultiCameraViewController: UIViewController {
     }
 
     private func setZoomFactor(_ zoomFactor: CGFloat) {
-        guard let device = (captureSession?.inputs.first as? AVCaptureDeviceInput)?.device else { return }
+        guard let device = (captureSession?.inputs.first as? AVCaptureDeviceInput)?.device else {
+            return
+        }
 
         do {
             try device.lockForConfiguration()
@@ -959,10 +1003,13 @@ class MultiCameraViewController: UIViewController {
 
         // Configure photo settings
         let photoSettings = AVCapturePhotoSettings()
+
         photoSettings.flashMode = flashMode
 
         if let photoPreviewType = photoSettings.availablePreviewPhotoPixelFormatTypes.first {
-            photoSettings.previewPhotoFormat = [kCVPixelBufferPixelFormatTypeKey as String: photoPreviewType]
+            photoSettings.previewPhotoFormat = [
+                kCVPixelBufferPixelFormatTypeKey as String: photoPreviewType
+            ]
         }
 
         // Capture the photo
@@ -974,7 +1021,7 @@ class MultiCameraViewController: UIViewController {
         generator.impactOccurred()
 
         // Play shutter sound
-        AudioServicesPlaySystemSound(1108) // Camera shutter sound
+        AudioServicesPlaySystemSound(1108)  // Camera shutter sound
     }
 
     @objc private func flipCamera() {
@@ -990,7 +1037,10 @@ class MultiCameraViewController: UIViewController {
         currentCameraPosition = (currentCameraPosition == .back) ? .front : .back
 
         // Add new input
-        guard let videoDevice = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: currentCameraPosition) else {
+        guard
+            let videoDevice = AVCaptureDevice.default(
+                .builtInWideAngleCamera, for: .video, position: currentCameraPosition)
+        else {
             captureSession.commitConfiguration()
             return
         }
@@ -1042,18 +1092,23 @@ class MultiCameraViewController: UIViewController {
 
     private func focusAtPoint(_ point: CGPoint) {
         guard let device = (captureSession?.inputs.first as? AVCaptureDeviceInput)?.device,
-              device.isFocusPointOfInterestSupported,
-              device.isFocusModeSupported(.autoFocus) else { return }
+            device.isFocusPointOfInterestSupported,
+            device.isFocusModeSupported(.autoFocus)
+        else { return }
 
         // Convert the touch point to device coordinates
-        let focusPoint = previewLayer?.captureDevicePointConverted(fromLayerPoint: point) ?? CGPoint(x: 0.5, y: 0.5)
+        let focusPoint =
+            previewLayer?.captureDevicePointConverted(fromLayerPoint: point)
+            ?? CGPoint(x: 0.5, y: 0.5)
 
         do {
             try device.lockForConfiguration()
             device.focusPointOfInterest = focusPoint
             device.focusMode = .autoFocus
 
-            if device.isExposurePointOfInterestSupported && device.isExposureModeSupported(.autoExpose) {
+            if device.isExposurePointOfInterestSupported
+                && device.isExposureModeSupported(.autoExpose)
+            {
                 device.exposurePointOfInterest = focusPoint
                 device.exposureMode = .autoExpose
             }
@@ -1076,15 +1131,21 @@ class MultiCameraViewController: UIViewController {
 
         previewView.addSubview(focusView)
 
-        UIView.animate(withDuration: 0.2, animations: {
-            focusView.alpha = 1
-        }, completion: { _ in
-            UIView.animate(withDuration: 0.5, delay: 0.5, options: [], animations: {
-                focusView.alpha = 0
-            }, completion: { _ in
-                focusView.removeFromSuperview()
+        UIView.animate(
+            withDuration: 0.2,
+            animations: {
+                focusView.alpha = 1
+            },
+            completion: { _ in
+                UIView.animate(
+                    withDuration: 0.5, delay: 0.5, options: [],
+                    animations: {
+                        focusView.alpha = 0
+                    },
+                    completion: { _ in
+                        focusView.removeFromSuperview()
+                    })
             })
-        })
     }
 
     @objc private func cancel() {
@@ -1102,10 +1163,11 @@ class MultiCameraViewController: UIViewController {
             )
 
             alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-            alert.addAction(UIAlertAction(title: "Discard", style: .destructive) { [weak self] _ in
-                guard let self = self else { return }
-                self.delegate?.multiCameraViewControllerDidCancel(self)
-            })
+            alert.addAction(
+                UIAlertAction(title: "Discard", style: .destructive) { [weak self] _ in
+                    guard let self = self else { return }
+                    self.delegate?.multiCameraViewControllerDidCancel(self)
+                })
 
             present(alert, animated: true)
         } else {
@@ -1177,7 +1239,8 @@ class MultiCameraViewController: UIViewController {
     }
 
     private func finishWithImages() {
-        delegate?.multiCameraViewController(self, didFinishWith: capturedImages, metadata: capturedMetadata)
+        delegate?.multiCameraViewController(
+            self, didFinishWith: capturedImages, metadata: capturedMetadata)
     }
 
     // MARK: - Image Processing
@@ -1198,7 +1261,7 @@ class MultiCameraViewController: UIViewController {
     // MARK: - Image Management
     private func addLoadingThumbnail() {
         // Add placeholder image and loading state
-        capturedImages.append(UIImage()) // Placeholder
+        capturedImages.append(UIImage())  // Placeholder
         capturedMetadata.append([:])
         loadingStates.append(true)
 
@@ -1262,14 +1325,18 @@ class MultiCameraViewController: UIViewController {
 
 // MARK: - AVCapturePhotoCaptureDelegate
 extension MultiCameraViewController: AVCapturePhotoCaptureDelegate {
-    func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
+    func photoOutput(
+        _ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto,
+        error: Error?
+    ) {
         if let error = error {
             CAPLog.print("Error capturing photo: \(error.localizedDescription)")
             return
         }
 
         guard let imageData = photo.fileDataRepresentation(),
-              let image = UIImage(data: imageData) else {
+            let image = UIImage(data: imageData)
+        else {
             return
         }
 
@@ -1300,7 +1367,7 @@ extension MultiCameraViewController: AVCapturePhotoCaptureDelegate {
         guard let cgImage = normalizedImage.cgImage else { return normalizedImage }
 
         // Determine the correct orientation based on device orientation
-        var uiOrientation: UIImage.Orientation = .up // Default is no additional rotation
+        var uiOrientation: UIImage.Orientation = .up  // Default is no additional rotation
 
         switch orientation {
         case .portrait:
@@ -1327,19 +1394,26 @@ extension MultiCameraViewController: AVCapturePhotoCaptureDelegate {
 
 // MARK: - UICollectionViewDataSource
 extension MultiCameraViewController: UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int)
+        -> Int
+    {
         return capturedImages.count
     }
 
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ThumbnailCell", for: indexPath) as? ThumbnailCell else {
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath)
+        -> UICollectionViewCell
+    {
+        guard
+            let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: "ThumbnailCell", for: indexPath) as? ThumbnailCell
+        else {
             return UICollectionViewCell()
         }
 
         // Check if this thumbnail is still loading
         if indexPath.item < loadingStates.count && loadingStates[indexPath.item] {
             cell.configureAsLoading()
-            cell.deleteHandler = nil // Don't allow deletion of loading thumbnails
+            cell.deleteHandler = nil  // Don't allow deletion of loading thumbnails
         } else {
             cell.configure(with: capturedImages[indexPath.item])
             cell.deleteHandler = { [weak self] in
@@ -1374,7 +1448,8 @@ extension MultiCameraViewController: UICollectionViewDelegate {
         }
 
         // Create a custom image preview controller with all non-loading images
-        let previewController = ImagePreviewViewController(images: nonLoadingImages, startingIndex: startingIndex)
+        let previewController = ImagePreviewViewController(
+            images: nonLoadingImages, startingIndex: startingIndex)
 
         // Present it modally
         present(previewController, animated: true)
