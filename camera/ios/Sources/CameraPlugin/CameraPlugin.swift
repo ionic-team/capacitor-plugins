@@ -31,11 +31,7 @@ public class CameraPlugin: CAPPlugin, CAPBridgedPlugin {
             case .camera:
                 state = AVCaptureDevice.authorizationStatus(for: .video).authorizationState
             case .photos:
-                if #available(iOS 14, *) {
-                    state = PHPhotoLibrary.authorizationStatus(for: .readWrite).authorizationState
-                } else {
-                    state = PHPhotoLibrary.authorizationStatus().authorizationState
-                }
+                state = PHPhotoLibrary.authorizationStatus(for: .readWrite).authorizationState
             }
             result[permission.rawValue] = state
         }
@@ -60,14 +56,8 @@ public class CameraPlugin: CAPPlugin, CAPBridgedPlugin {
                 }
             case .photos:
                 group.enter()
-                if #available(iOS 14, *) {
-                    PHPhotoLibrary.requestAuthorization(for: .readWrite) { (_) in
-                        group.leave()
-                    }
-                } else {
-                    PHPhotoLibrary.requestAuthorization({ (_) in
-                        group.leave()
-                    })
+                PHPhotoLibrary.requestAuthorization(for: .readWrite) { (_) in
+                    group.leave()
                 }
             }
         }
@@ -77,77 +67,62 @@ public class CameraPlugin: CAPPlugin, CAPBridgedPlugin {
     }
 
     @objc func pickLimitedLibraryPhotos(_ call: CAPPluginCall) {
-        if #available(iOS 14, *) {
-            PHPhotoLibrary.requestAuthorization(for: .readWrite) { (granted) in
-                if granted == .limited {
-                    if let viewController = self.bridge?.viewController {
-                        if #available(iOS 15, *) {
-                            PHPhotoLibrary.shared().presentLimitedLibraryPicker(from: viewController) { _ in
-                                self.getLimitedLibraryPhotos(call)
-                            }
-                        } else {
-                            PHPhotoLibrary.shared().presentLimitedLibraryPicker(from: viewController)
-                            call.resolve([
-                                "photos": []
-                            ])
-                        }
+        PHPhotoLibrary.requestAuthorization(for: .readWrite) { (granted) in
+            if granted == .limited {
+                if let viewController = self.bridge?.viewController {
+                    PHPhotoLibrary.shared().presentLimitedLibraryPicker(from: viewController) { _ in
+                        self.getLimitedLibraryPhotos(call)
                     }
-                } else {
-                    call.resolve([
-                        "photos": []
-                    ])
                 }
+            } else {
+                call.resolve([
+                    "photos": []
+                ])
             }
-        } else {
-            call.unavailable("Not available on iOS 13")
         }
     }
 
     @objc func getLimitedLibraryPhotos(_ call: CAPPluginCall) {
-        if #available(iOS 14, *) {
-            PHPhotoLibrary.requestAuthorization(for: .readWrite) { (granted) in
-                if granted == .limited {
+        PHPhotoLibrary.requestAuthorization(for: .readWrite) { (granted) in
+            if granted == .limited {
 
-                    self.call = call
+                self.call = call
 
-                    DispatchQueue.global(qos: .utility).async {
-                        let assets = PHAsset.fetchAssets(with: .image, options: nil)
-                        var processedImages: [ProcessedImage] = []
+                DispatchQueue.global(qos: .utility).async {
+                    let assets = PHAsset.fetchAssets(with: .image, options: nil)
+                    var processedImages: [ProcessedImage] = []
 
-                        let imageManager = PHImageManager.default()
-                        let options = PHImageRequestOptions()
-                        options.deliveryMode = .highQualityFormat
+                    let imageManager = PHImageManager.default()
+                    let options = PHImageRequestOptions()
+                    options.deliveryMode = .highQualityFormat
 
-                        let group = DispatchGroup()
-                        if assets.count > 0 {
-                            for index in 0...(assets.count - 1) {
-                                let asset = assets.object(at: index)
-                                let fullSize = CGSize(width: asset.pixelWidth, height: asset.pixelHeight)
+                    let group = DispatchGroup()
+                    if assets.count > 0 {
+                        for index in 0...(assets.count - 1) {
+                            let asset = assets.object(at: index)
+                            let fullSize = CGSize(width: asset.pixelWidth, height: asset.pixelHeight)
 
-                                group.enter()
-                                imageManager.requestImage(for: asset, targetSize: fullSize, contentMode: .default, options: options) { image, _ in
-                                    guard let image = image else {
-                                        group.leave()
-                                        return
-                                    }
-                                    processedImages.append(self.processedImage(from: image, with: asset.imageData))
+                            group.enter()
+                            imageManager.requestImage(for: asset, targetSize: fullSize, contentMode: .default, options: options) { image, _ in
+                                guard let image = image else {
                                     group.leave()
+                                    return
                                 }
+                                processedImages.append(self.processedImage(from: image, with: asset.imageData))
+                                group.leave()
                             }
                         }
-
-                        group.notify(queue: .global(qos: .utility)) { [weak self] in
-                            self?.returnImages(processedImages)
-                        }
                     }
-                } else {
-                    call.resolve([
-                        "photos": []
-                    ])
+
+                    group.notify(queue: .global(qos: .utility)) { [weak self] in
+                        self?.returnImages(processedImages)
+                    }
                 }
+            } else {
+                call.resolve([
+                    "photos": []
+                ])
             }
-        } else {
-            call.unavailable("Not available on iOS 13")
         }
     }
 
@@ -254,7 +229,6 @@ extension CameraPlugin: UIImagePickerControllerDelegate, UINavigationControllerD
     }
 }
 
-@available(iOS 14, *)
 extension CameraPlugin: PHPickerViewControllerDelegate {
     public func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         picker.dismiss(animated: true, completion: nil)
@@ -496,11 +470,7 @@ private extension CameraPlugin {
     }
 
     func presentSystemAppropriateImagePicker() {
-        if #available(iOS 14, *) {
-            presentPhotoPicker()
-        } else {
-            presentImagePicker()
-        }
+        presentPhotoPicker()
     }
 
     func showMultiCamera() {
@@ -563,7 +533,6 @@ private extension CameraPlugin {
         bridge?.viewController?.present(picker, animated: true, completion: nil)
     }
 
-    @available(iOS 14, *)
     func presentPhotoPicker() {
         var configuration = PHPickerConfiguration(photoLibrary: PHPhotoLibrary.shared())
         configuration.selectionLimit = self.multiple ? (self.call?.getInt("limit") ?? 0) : 1

@@ -1,6 +1,6 @@
 {
   "name": "@capacitor/motion",
-  "version": "7.0.1",
+  "version": "8.0.0-alpha.1",
   "description": "The Motion API tracks accelerometer and device orientation (compass heading, etc.)",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
@@ -39,10 +39,10 @@
     "prepublishOnly": "npm run build"
   },
   "devDependencies": {
-    "@capacitor/android": "^7.0.0",
-    "@capacitor/core": "^7.0.0",
+    "@capacitor/android": "next",
+    "@capacitor/core": "next",
     "@capacitor/docgen": "0.2.2",
-    "@capacitor/ios": "^7.0.0",
+    "@capacitor/ios": "next",
     "@ionic/eslint-config": "^0.4.0",
     "@ionic/prettier-config": "~1.0.1",
     "eslint": "^8.57.0",
@@ -53,7 +53,7 @@
     "typescript": "~4.1.5"
   },
   "peerDependencies": {
-    "@capacitor/core": ">=7.0.0"
+    "@capacitor/core": "next"
   },
   "prettier": "@ionic/prettier-config",
   "eslintConfig": {
