@@ -51,7 +51,6 @@
     "clipboard",
     "device",
     "dialog",
-    "keyboard",
     "local-notifications",
     "motion",
     "network",
