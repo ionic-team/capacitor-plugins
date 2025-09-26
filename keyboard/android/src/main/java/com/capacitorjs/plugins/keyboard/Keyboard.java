@@ -9,14 +9,11 @@ import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsAnimationCompat;
 import androidx.core.view.WindowInsetsCompat;
 import com.getcapacitor.Bridge;
-import java.util.List;
 
 public class Keyboard {
 
@@ -57,57 +54,25 @@ public class Keyboard {
         FrameLayout content = activity.getWindow().getDecorView().findViewById(android.R.id.content);
         rootView = content.getRootView();
 
-        ViewCompat.setWindowInsetsAnimationCallback(
+        ViewCompat.setOnApplyWindowInsetsListener(
             rootView,
-            new WindowInsetsAnimationCompat.Callback(WindowInsetsAnimationCompat.Callback.DISPATCH_MODE_STOP) {
-                @NonNull
-                @Override
-                public WindowInsetsCompat onProgress(
-                    @NonNull WindowInsetsCompat insets,
-                    @NonNull List<WindowInsetsAnimationCompat> runningAnimations
-                ) {
-                    return insets;
+            (View view, WindowInsetsCompat insets) -> {
+                boolean showingKeyboard = insets.isVisible(WindowInsetsCompat.Type.ime());
+                int imeHeight = insets.getInsets(WindowInsetsCompat.Type.ime()).bottom;
+                DisplayMetrics dm = activity.getResources().getDisplayMetrics();
+                final float density = dm.density;
+
+                if (resizeOnFullScreen) {
+                    possiblyResizeChildOfContent(showingKeyboard);
                 }
 
-                @NonNull
-                @Override
-                public WindowInsetsAnimationCompat.BoundsCompat onStart(
-                    @NonNull WindowInsetsAnimationCompat animation,
-                    @NonNull WindowInsetsAnimationCompat.BoundsCompat bounds
-                ) {
-                    boolean showingKeyboard = ViewCompat.getRootWindowInsets(rootView).isVisible(WindowInsetsCompat.Type.ime());
-                    WindowInsetsCompat insets = ViewCompat.getRootWindowInsets(rootView);
-                    int imeHeight = insets.getInsets(WindowInsetsCompat.Type.ime()).bottom;
-                    DisplayMetrics dm = activity.getResources().getDisplayMetrics();
-                    final float density = dm.density;
-
-                    if (resizeOnFullScreen) {
-                        possiblyResizeChildOfContent(showingKeyboard);
-                    }
-
-                    if (showingKeyboard) {
-                        keyboardEventListener.onKeyboardEvent(EVENT_KB_WILL_SHOW, Math.round(imeHeight / density));
-                    } else {
-                        keyboardEventListener.onKeyboardEvent(EVENT_KB_WILL_HIDE, 0);
-                    }
-                    return super.onStart(animation, bounds);
+                if (showingKeyboard) {
+                    keyboardEventListener.onKeyboardEvent(EVENT_KB_WILL_SHOW, Math.round(imeHeight / density));
+                } else {
+                    keyboardEventListener.onKeyboardEvent(EVENT_KB_WILL_HIDE, 0);
                 }
 
-                @Override
-                public void onEnd(@NonNull WindowInsetsAnimationCompat animation) {
-                    super.onEnd(animation);
-                    boolean showingKeyboard = ViewCompat.getRootWindowInsets(rootView).isVisible(WindowInsetsCompat.Type.ime());
-                    WindowInsetsCompat insets = ViewCompat.getRootWindowInsets(rootView);
-                    int imeHeight = insets.getInsets(WindowInsetsCompat.Type.ime()).bottom;
-                    DisplayMetrics dm = activity.getResources().getDisplayMetrics();
-                    final float density = dm.density;
-
-                    if (showingKeyboard) {
-                        keyboardEventListener.onKeyboardEvent(EVENT_KB_DID_SHOW, Math.round(imeHeight / density));
-                    } else {
-                        keyboardEventListener.onKeyboardEvent(EVENT_KB_DID_HIDE, 0);
-                    }
-                }
+                return insets;
             }
         );
 
