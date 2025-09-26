@@ -51,7 +51,6 @@
     "clipboard",
     "device",
     "dialog",
-    "haptics",
     "keyboard",
     "local-notifications",
     "motion",

@@ -23,7 +23,6 @@ This repository contains the official Capacitor plugins maintained by the Capaci
 | [`@capacitor/clipboard`](https://capacitorjs.com/docs/apis/clipboard) | [`./clipboard`](./clipboard) | [![npm badge](https://img.shields.io/npm/v/@capacitor/clipboard?style=flat-square)](https://www.npmjs.com/package/@capacitor/clipboard)
 | [`@capacitor/device`](https://capacitorjs.com/docs/apis/device) | [`./device`](./device) | [![npm badge](https://img.shields.io/npm/v/@capacitor/device?style=flat-square)](https://www.npmjs.com/package/@capacitor/device)
 | [`@capacitor/dialog`](https://capacitorjs.com/docs/apis/dialog) | [`./dialog`](./dialog) | [![npm badge](https://img.shields.io/npm/v/@capacitor/dialog?style=flat-square)](https://www.npmjs.com/package/@capacitor/dialog)
-| [`@capacitor/haptics`](https://capacitorjs.com/docs/apis/haptics) | [`./haptics`](./haptics) | [![npm badge](https://img.shields.io/npm/v/@capacitor/haptics?style=flat-square)](https://www.npmjs.com/package/@capacitor/haptics)
 | [`@capacitor/keyboard`](https://capacitorjs.com/docs/apis/keyboard) | [`./keyboard`](./keyboard) | [![npm badge](https://img.shields.io/npm/v/@capacitor/keyboard?style=flat-square)](https://www.npmjs.com/package/@capacitor/keyboard)
 | [`@capacitor/local-notifications`](https://capacitorjs.com/docs/apis/local-notifications) | [`./local-notifications`](./local-notifications) | [![npm badge](https://img.shields.io/npm/v/@capacitor/local-notifications?style=flat-square)](https://www.npmjs.com/package/@capacitor/local-notifications)
 | [`@capacitor/motion`](https://capacitorjs.com/docs/apis/motion) | [`./motion`](./motion) | [![npm badge](https://img.shields.io/npm/v/@capacitor/motion?style=flat-square)](https://www.npmjs.com/package/@capacitor/motion)
@@ -51,8 +50,9 @@ These are official Capacitor plugins that are not contained in this repository.
 | [File Viewer](https://github.com/ionic-team/capacitor-file-viewer) | [`@capacitor/file-viewer`](https://capacitorjs.com/docs/apis/file-viewer) | [![npm badge](https://img.shields.io/npm/v/@capacitor/file-viewer?style=flat-square)](https://www.npmjs.com/package/@capacitor/file-viewer) |
 | [Geolocation](https://github.com/ionic-team/capacitor-geolocation) (*) | [`@capacitor/geolocation`](https://capacitorjs.com/docs/apis/geolocation) | [![npm badge](https://img.shields.io/npm/v/@capacitor/geolocation?style=flat-square)](https://www.npmjs.com/package/@capacitor/geolocation) |
 | [Google Maps](https://github.com/ionic-team/capacitor-google-maps) | [`@capacitor/google-maps`](https://capacitorjs.com/docs/apis/google-maps) | [![npm badge](https://img.shields.io/npm/v/@capacitor/google-maps?style=flat-square)](https://www.npmjs.com/package/@capacitor/google-maps) |
+| [Haptics](https://github.com/ionic-team/capacitor-haptics) (*) | [`@capacitor/haptics`](https://capacitorjs.com/docs/apis/haptics) | [![npm badge](https://img.shields.io/npm/v/@capacitor/haptics?style=flat-square)](https://www.npmjs.com/package/@capacitor/haptics) |
 
-(*) These plugins were once part of this repository, but have been since been revamped and migrated to a separate repository. The code pre-migration [still remains in this repository](https://github.com/ionic-team/capacitor-plugins/tree/7.x) for historic purposes.
+(*) These plugins were once part of this repository, but have been since been revamped and/or migrated to a separate repository. The code pre-migration [still remains in this repository](https://github.com/ionic-team/capacitor-plugins/tree/7.x) for historic purposes.
 
 ## Capacitor Labs
 
