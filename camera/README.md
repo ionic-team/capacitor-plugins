@@ -143,7 +143,7 @@ with the camera.
 pickImages(options: GalleryImageOptions) => Promise<GalleryPhotos>
 ```
 
-Allows the user to pick multiplef pictures from the photo gallery.
+Allows the user to pick multiple pictures from the photo gallery.
 
 | Param         | Type                                                                |
 | ------------- | ------------------------------------------------------------------- |
