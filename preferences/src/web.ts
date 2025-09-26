@@ -21,17 +21,17 @@ export class PreferencesWeb extends WebPlugin implements PreferencesPlugin {
   }
 
   public async get(options: GetOptions): Promise<GetResult> {
-    const value = this.impl.getItem(this.applyPrefix(options.key));
+    const value = this.impl?.getItem(this.applyPrefix(options.key)) || null;
 
     return { value };
   }
 
   public async set(options: SetOptions): Promise<void> {
-    this.impl.setItem(this.applyPrefix(options.key), options.value);
+    this.impl?.setItem(this.applyPrefix(options.key), options.value);
   }
 
   public async remove(options: RemoveOptions): Promise<void> {
-    this.impl.removeItem(this.applyPrefix(options.key));
+    this.impl?.removeItem(this.applyPrefix(options.key));
   }
 
   public async keys(): Promise<KeysResult> {
@@ -42,7 +42,7 @@ export class PreferencesWeb extends WebPlugin implements PreferencesPlugin {
 
   public async clear(): Promise<void> {
     for (const key of this.rawKeys()) {
-      this.impl.removeItem(key);
+      this.impl?.removeItem(key);
     }
   }
 
@@ -50,11 +50,13 @@ export class PreferencesWeb extends WebPlugin implements PreferencesPlugin {
     const migrated: string[] = [];
     const existing: string[] = [];
     const oldprefix = '_cap_';
-    const keys = Object.keys(this.impl).filter(k => k.indexOf(oldprefix) === 0);
+    const keys = Object.keys(this.impl || {}).filter(
+      k => k.indexOf(oldprefix) === 0,
+    );
 
     for (const oldkey of keys) {
       const key = oldkey.substring(oldprefix.length);
-      const value = this.impl.getItem(oldkey) ?? '';
+      const value = this.impl?.getItem(oldkey) ?? '';
       const { value: currentValue } = await this.get({ key });
 
       if (typeof currentValue === 'string') {
@@ -70,13 +72,19 @@ export class PreferencesWeb extends WebPlugin implements PreferencesPlugin {
 
   public async removeOld(): Promise<void> {
     const oldprefix = '_cap_';
-    const keys = Object.keys(this.impl).filter(k => k.indexOf(oldprefix) === 0);
+    const keys = Object.keys(this.impl || {}).filter(
+      k => k.indexOf(oldprefix) === 0,
+    );
     for (const oldkey of keys) {
-      this.impl.removeItem(oldkey);
+      this.impl?.removeItem(oldkey);
     }
   }
 
-  private get impl(): Storage {
+  private get impl(): Storage | undefined {
+    if (typeof window === 'undefined') {
+      return undefined;
+    }
+
     return window.localStorage;
   }
 
@@ -85,7 +93,9 @@ export class PreferencesWeb extends WebPlugin implements PreferencesPlugin {
   }
 
   private rawKeys(): string[] {
-    return Object.keys(this.impl).filter(k => k.indexOf(this.prefix) === 0);
+    return Object.keys(this.impl || {}).filter(
+      k => k.indexOf(this.prefix) === 0,
+    );
   }
 
   private applyPrefix(key: string) {
