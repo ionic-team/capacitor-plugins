@@ -18,6 +18,7 @@
 #import "Keyboard.h"
 #import <Foundation/Foundation.h>
 #import <objc/runtime.h>
+#import <UIKit/UIKit.h>
 #import <Capacitor/Capacitor.h>
 #import <Capacitor/Capacitor-Swift.h>
 #import <Capacitor/CAPBridgedPlugin.h>
@@ -48,14 +49,94 @@ typedef enum : NSUInteger {
 // protocol conformance for this class is implemented by a macro and clang isn't detecting that
 @implementation KeyboardPlugin
 
+/// Heights below this on iPad are treated as QuickType bar, not a real keyboard
+static const CGFloat QUICKTYPE_IGNORE_THRESHOLD = 100.0;
+
 NSTimer *hideTimer;
 NSString* UIClassString;
 NSString* WKClassString;
 NSString* UITraitsClassString;
 double stageManagerOffset;
 
-- (void)load
-{
+#pragma mark - Helpers
+
+- (UIWindow *)currentKeyWindow {
+  UIWindow *window = nil;
+  if ([[[UIApplication sharedApplication] delegate] respondsToSelector:@selector(window)]) {
+    window = [[[UIApplication sharedApplication] delegate] window];
+  }
+  if (!window && @available(iOS 13.0, *)) {
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self isKindOfClass: %@", UIWindowScene.class];
+    UIScene *scene = [UIApplication.sharedApplication.connectedScenes.allObjects filteredArrayUsingPredicate:predicate].firstObject;
+    window = [[(UIWindowScene*)scene windows] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"isKeyWindow == YES"]].firstObject;
+  }
+  return window;
+}
+
+- (void)forceBackdropColor:(UIColor *)color {
+  UIWindow *w = [self currentKeyWindow];
+  if (w) {
+    dispatch_async(dispatch_get_main_queue(), ^{
+      w.backgroundColor = color;
+    });
+  }
+}
+
+- (BOOL)isIPad {
+  return ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad);
+}
+
+- (BOOL)shouldIgnoreResizeForHeight:(double)height {
+  if (![self isIPad]) return NO;
+  if (height <= 0.0) return NO;
+  return (height < QUICKTYPE_IGNORE_THRESHOLD);
+}
+
+#pragma mark - Lifecycle
+
+- (UIColor *)colorFromCssColorString:(NSString *)cssColor {
+    NSString *trimmed = [cssColor stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+
+    if ([trimmed hasPrefix:@"rgb"]) {
+        NSString *clean = [[trimmed stringByReplacingOccurrencesOfString:@"rgb(" withString:@""] stringByReplacingOccurrencesOfString:@")" withString:@""];
+        NSArray *parts = [clean componentsSeparatedByString:@","];
+        if (parts.count >= 3) {
+            CGFloat r = [parts[0] floatValue] / 255.0;
+            CGFloat g = [parts[1] floatValue] / 255.0;
+            CGFloat b = [parts[2] floatValue] / 255.0;
+            return [UIColor colorWithRed:r green:g blue:b alpha:1.0];
+        }
+    }
+
+    if ([trimmed hasPrefix:@"#"]) {
+        unsigned rgbValue = 0;
+        NSScanner *scanner = [NSScanner scannerWithString:trimmed];
+        [scanner setScanLocation:1];
+        if ([scanner scanHexInt:&rgbValue]) {
+            CGFloat r = ((rgbValue & 0xFF0000) >> 16) / 255.0;
+            CGFloat g = ((rgbValue & 0x00FF00) >> 8) / 255.0;
+            CGFloat b = (rgbValue & 0x0000FF) / 255.0;
+            return [UIColor colorWithRed:r green:g blue:b alpha:1.0];
+        }
+    }
+
+    return [UIColor whiteColor]; // fallback
+}
+
+- (void)updateBackdropColorFromDOM {
+    if (!self.webView) return;
+    [self.webView evaluateJavaScript:@"window.getComputedStyle(document.body).backgroundColor" completionHandler:^(id result, NSError *error) {
+        if (result && [result isKindOfClass:[NSString class]]) {
+            UIColor *color = [self colorFromCssColorString:(NSString *)result];
+            if (color) {
+                [self forceBackdropColor:color];
+            }
+        }
+    }];
+}
+
+
+- (void)load {
   self.disableScroll = !self.bridge.config.scrollingEnabled;
 
   UIClassString = [@[@"UI", @"Web", @"Browser", @"View"] componentsJoinedByString:@""];
@@ -85,31 +166,38 @@ double stageManagerOffset;
   }
 
   self.hideFormAccessoryBar = YES;
-  
+
   NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
-  
+
   [nc addObserver:self selector:@selector(onKeyboardDidHide:) name:UIKeyboardDidHideNotification object:nil];
   [nc addObserver:self selector:@selector(onKeyboardDidShow:) name:UIKeyboardDidShowNotification object:nil];
   [nc addObserver:self selector:@selector(onKeyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
   [nc addObserver:self selector:@selector(onKeyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
-  
+
   [nc removeObserver:self.webView name:UIKeyboardWillHideNotification object:nil];
   [nc removeObserver:self.webView name:UIKeyboardWillShowNotification object:nil];
   [nc removeObserver:self.webView name:UIKeyboardWillChangeFrameNotification object:nil];
   [nc removeObserver:self.webView name:UIKeyboardDidChangeFrameNotification object:nil];
+
+  // Make WKWebView transparent
+  if (self.webView) {
+    self.webView.opaque = NO;
+    self.webView.backgroundColor = UIColor.clearColor;
+    self.webView.scrollView.backgroundColor = UIColor.clearColor;
+  }
+
+  // Force DOM color on load
+  [self updateBackdropColorFromDOM];
 }
 
+#pragma mark - Keyboard events
 
-#pragma mark Keyboard events
-
-- (void)resetScrollView
-{
+- (void)resetScrollView {
   UIScrollView *scrollView = [self.webView scrollView];
   [scrollView setContentInset:UIEdgeInsetsZero];
 }
 
-- (void)onKeyboardWillHide:(NSNotification *)notification
-{
+- (void)onKeyboardWillHide:(NSNotification *)notification {
   [self setKeyboardHeight:0 delay:0.01];
   [self resetScrollView];
   hideTimer = [NSTimer scheduledTimerWithTimeInterval:0 repeats:NO block:^(NSTimer * _Nonnull timer) {
@@ -119,67 +207,85 @@ double stageManagerOffset;
   [[NSRunLoop currentRunLoop] addTimer:hideTimer forMode:NSRunLoopCommonModes];
 }
 
-- (void)onKeyboardWillShow:(NSNotification *)notification
-{
+- (void)onKeyboardWillShow:(NSNotification *)notification {
   if (hideTimer != nil) {
     [hideTimer invalidate];
   }
-  CGRect rect = [[notification.userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
 
+  // Force DOM Color whenever keyboard shows
+  [self updateBackdropColorFromDOM];
+
+  CGRect rect = [[notification.userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
   double height = rect.size.height;
-    
-  if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+
+  if ([self isIPad]) {
     if (stageManagerOffset > 0) {
       height = stageManagerOffset;
     } else {
-      CGRect webViewAbsolute = [self.webView convertRect:self.webView.frame toCoordinateSpace:self.webView.window.screen.coordinateSpace];
-      height = (webViewAbsolute.size.height + webViewAbsolute.origin.y) - (UIScreen.mainScreen.bounds.size.height - rect.size.height);
+      CGRect webViewAbsolute = [self.webView convertRect:self.webView.frame
+                                 toCoordinateSpace:self.webView.window.screen.coordinateSpace];
+      height = (webViewAbsolute.size.height + webViewAbsolute.origin.y)
+             - (UIScreen.mainScreen.bounds.size.height - rect.size.height);
       if (height < 0) {
         height = 0;
       }
-        
       stageManagerOffset = height;
     }
   }
 
-  double duration = [[notification.userInfo valueForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue]+0.2;
-  [self setKeyboardHeight:height delay:duration];
+  BOOL ignored = [self shouldIgnoreResizeForHeight:height];
+  if (ignored) {
+    NSLog(@"KeyboardPlugin: Ignoring QuickType Bar (%.1f) -> treat as 0.", height);
+    height = 0.0;
+  }
+
+  double duration = [[notification.userInfo valueForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue] + 0.2;
+  [self setKeyboardHeight:(int)height delay:duration];
   [self resetScrollView];
 
-  NSString * data = [NSString stringWithFormat:@"{ 'keyboardHeight': %d }", (int)height];
+  NSString *data = [NSString stringWithFormat:@"{ 'keyboardHeight': %d }", (int)height];
   [self.bridge triggerWindowJSEventWithEventName:@"keyboardWillShow" data:data];
-  NSDictionary * kbData = @{@"keyboardHeight": [NSNumber numberWithDouble:height]};
+  NSDictionary *kbData = @{@"keyboardHeight": [NSNumber numberWithDouble:height]};
   [self notifyListeners:@"keyboardWillShow" data:kbData];
 }
 
-- (void)onKeyboardDidShow:(NSNotification *)notification
-{
+- (void)onKeyboardDidShow:(NSNotification *)notification {
   CGRect rect = [[notification.userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
   double height = rect.size.height;
 
+  if ([self isIPad]) {
+    if (stageManagerOffset > 0) {
+      height = stageManagerOffset;
+    }
+  }
+
+  BOOL ignored = [self shouldIgnoreResizeForHeight:height];
+  if (ignored) {
+    NSLog(@"KeyboardPlugin: (didShow) Ignoring QuickType Bar (%.1f) -> report 0.", height);
+    height = 0.0;
+  }
+
   [self resetScrollView];
 
-  NSString * data = [NSString stringWithFormat:@"{ 'keyboardHeight': %d }", (int)height];
+  NSString *data = [NSString stringWithFormat:@"{ 'keyboardHeight': %d }", (int)height];
   [self.bridge triggerWindowJSEventWithEventName:@"keyboardDidShow" data:data];
-  NSDictionary * kbData = @{@"keyboardHeight": [NSNumber numberWithDouble:height]};
+  NSDictionary *kbData = @{@"keyboardHeight": [NSNumber numberWithDouble:height]};
   [self notifyListeners:@"keyboardDidShow" data:kbData];
 }
 
-- (void)onKeyboardDidHide:(NSNotification *)notification
-{
+- (void)onKeyboardDidHide:(NSNotification *)notification {
   [self.bridge triggerWindowJSEventWithEventName:@"keyboardDidHide"];
   [self notifyListeners:@"keyboardDidHide" data:nil];
   [self resetScrollView];
-
   stageManagerOffset = 0;
 }
 
-- (void)setKeyboardHeight:(int)height delay:(NSTimeInterval)delay
-{
+#pragma mark - Frame handling
+
+- (void)setKeyboardHeight:(int)height delay:(NSTimeInterval)delay {
   if (self.paddingBottom == height) {
     return;
   }
-
   self.paddingBottom = height;
 
   __weak KeyboardPlugin* weakSelf = self;
@@ -192,25 +298,24 @@ double stageManagerOffset;
   }
 }
 
-- (void)resizeElement:(NSString *)element withPaddingBottom:(int)paddingBottom withScreenHeight:(int)screenHeight
-{
-    int height = -1;
-    if (paddingBottom > 0) {
-        height = screenHeight - paddingBottom;
-    }
-    
-    [self.bridge evalWithJs: [NSString stringWithFormat:@"(function() { var el = %@; var height = %d; if (el) { el.style.height = height > -1 ? height + 'px' : null; } })()", element, height]];
+- (void)resizeElement:(NSString *)element withPaddingBottom:(int)paddingBottom withScreenHeight:(int)screenHeight {
+  int height = -1;
+  if (paddingBottom > 0) {
+    height = screenHeight - paddingBottom;
+  }
+  [self.bridge evalWithJs: [NSString stringWithFormat:
+    @"(function() { var el = %@; var height = %d; if (el) { el.style.height = height > -1 ? height + 'px' : null; } })()",
+    element, height]];
 }
 
-- (void)_updateFrame
-{
+- (void)_updateFrame {
   CGRect f, wf = CGRectZero;
   UIWindow * window = nil;
-    
+
   if ([[[UIApplication sharedApplication] delegate] respondsToSelector:@selector(window)]) {
     window = [[[UIApplication sharedApplication] delegate] window];
   }
-  
+
   if (!window) {
     if (@available(iOS 13.0, *)) {
       NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self isKindOfClass: %@", UIWindowScene.class];
@@ -225,18 +330,15 @@ double stageManagerOffset;
     wf = self.webView.frame;
   }
   switch (self.keyboardResizes) {
-    case ResizeBody:
-    {
+    case ResizeBody: {
       [self resizeElement:@"document.body" withPaddingBottom:_paddingBottom withScreenHeight:(int)f.size.height];
       break;
     }
-    case ResizeIonic:
-    {
+    case ResizeIonic: {
       [self resizeElement:@"document.querySelector('ion-app')" withPaddingBottom:_paddingBottom withScreenHeight:(int)f.size.height];
       break;
     }
-    case ResizeNative:
-    {
+    case ResizeNative: {
       [self.webView setFrame:CGRectMake(wf.origin.x, wf.origin.y, f.size.width - wf.origin.x, f.size.height - wf.origin.y - self.paddingBottom)];
       break;
     }
@@ -246,14 +348,12 @@ double stageManagerOffset;
   [self resetScrollView];
 }
 
-
-#pragma mark HideFormAccessoryBar
+#pragma mark - Accessory bar / scroll / plugin API
 
 static IMP UIOriginalImp;
 static IMP WKOriginalImp;
 
-- (void)setHideFormAccessoryBar:(BOOL)hideFormAccessoryBar
-{
+- (void)setHideFormAccessoryBar:(BOOL)hideFormAccessoryBar {
   if (hideFormAccessoryBar == _hideFormAccessoryBar) {
     return;
   }
@@ -273,8 +373,6 @@ static IMP WKOriginalImp;
   }
   _hideFormAccessoryBar = hideFormAccessoryBar;
 }
-
-#pragma mark scroll
 
 - (void)setDisableScroll:(BOOL)disableScroll {
   if (disableScroll == _disableScroll) {
@@ -297,39 +395,31 @@ static IMP WKOriginalImp;
   [scrollView setContentOffset: CGPointZero];
 }
 
-#pragma mark Plugin interface
-
-- (void)setAccessoryBarVisible:(CAPPluginCall *)call
-{
+- (void)setAccessoryBarVisible:(CAPPluginCall *)call {
   BOOL value = [call getBool:@"isVisible" defaultValue:FALSE];
-
   NSLog(@"Accessory bar visible change %d", value);
   self.hideFormAccessoryBar = !value;
   [call resolve];
 }
 
-- (void)hide:(CAPPluginCall *)call
-{
+- (void)hide:(CAPPluginCall *)call {
   dispatch_async(dispatch_get_main_queue(), ^{
     [self.webView endEditing:YES];
   });
   [call resolve];
 }
 
-- (void)show:(CAPPluginCall *)call
-{
+- (void)show:(CAPPluginCall *)call {
   [call unimplemented];
 }
 
-- (void)setStyle:(CAPPluginCall *)call
-{
+- (void)setStyle:(CAPPluginCall *)call {
   self.keyboardStyle = [call getString:@"style" defaultValue:@"LIGHT"];
-  [self changeKeyboardStyle:self.keyboardStyle]; 
+  [self changeKeyboardStyle:self.keyboardStyle];
   [call resolve];
 }
 
-- (void)setResizeMode:(CAPPluginCall *)call
-{
+- (void)setResizeMode:(CAPPluginCall *)call {
   NSString * mode = [call getString:@"mode" defaultValue:@"none"];
   if ([mode isEqualToString:@"ionic"]) {
     self.keyboardResizes = ResizeIonic;
@@ -343,22 +433,19 @@ static IMP WKOriginalImp;
   [call resolve];
 }
 
-- (void)getResizeMode:(CAPPluginCall *)call
-{
-    NSString *mode;
-    
-    if (self.keyboardResizes == ResizeIonic) {
-        mode = @"ionic";
-    } else if(self.keyboardResizes == ResizeBody) {
-        mode = @"body";
-    } else if (self.keyboardResizes == ResizeNative) {
-        mode = @"native";
-    } else {
-        mode = @"none";
-    }
-    
-    NSDictionary *response = [NSDictionary dictionaryWithObject:mode forKey:@"mode"];
-    [call resolve: response];
+- (void)getResizeMode:(CAPPluginCall *)call {
+  NSString *mode;
+  if (self.keyboardResizes == ResizeIonic) {
+    mode = @"ionic";
+  } else if(self.keyboardResizes == ResizeBody) {
+    mode = @"body";
+  } else if (self.keyboardResizes == ResizeNative) {
+    mode = @"native";
+  } else {
+    mode = @"none";
+  }
+  NSDictionary *response = [NSDictionary dictionaryWithObject:mode forKey:@"mode"];
+  [call resolve: response];
 }
 
 - (void)setScroll:(CAPPluginCall *)call {
@@ -366,8 +453,7 @@ static IMP WKOriginalImp;
   [call resolve];
 }
 
-- (void)changeKeyboardStyle:(NSString*)style
-{
+- (void)changeKeyboardStyle:(NSString*)style {
   IMP newImp = nil;
   if ([style isEqualToString:@"DARK"]) {
     newImp = imp_implementationWithBlock(^(id _s) {
@@ -394,13 +480,12 @@ static IMP WKOriginalImp;
   _keyboardStyle = style;
 }
 
-#pragma mark dealloc
+#pragma mark - dealloc
 
-- (void)dealloc
-{
+- (void)dealloc {
   [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 @end
-#pragma clang diagnostic pop
 
+#pragma clang diagnostic pop
