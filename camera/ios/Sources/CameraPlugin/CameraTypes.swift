@@ -5,6 +5,7 @@ import UIKit
 public enum CameraSource: String {
     case prompt = "PROMPT"
     case camera = "CAMERA"
+    case cameraMulti = "CAMERA_MULTI"
     case photos = "PHOTOS"
 }
 
