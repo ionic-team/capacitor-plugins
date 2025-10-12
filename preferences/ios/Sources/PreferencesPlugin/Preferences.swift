@@ -5,10 +5,16 @@ public struct PreferencesConfiguration {
         case named(String), cordovaNativeStorage
     }
 
+    let suite: String
     let group: Group
 
-    public init(for group: Group = .named("CapacitorStorage")) {
-        self.group = group
+    public init(for suite: String = "", for group: Group = .named("CapacitorStorage")) {
+        self.suite = suite
+        if !suite.isEmpty {
+            self.group = .cordovaNativeStorage;
+        } else {
+            self.group = group
+        }
     }
 }
 
@@ -16,10 +22,20 @@ public class Preferences {
     private let configuration: PreferencesConfiguration
 
     private var defaults: UserDefaults {
+        if !configuration.suite.isEmpty {
+            if let i = UserDefaults.init(suiteName: configuration.suite) {
+                return i
+            }
+        }
+
         return UserDefaults.standard
     }
 
     private var prefix: String {
+        if !configuration.suite.isEmpty {
+            return ""
+        }
+
         switch configuration.group {
         case .cordovaNativeStorage:
             return ""
