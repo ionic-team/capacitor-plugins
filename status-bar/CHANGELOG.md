@@ -3,6 +3,58 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [8.0.0-alpha.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/status-bar@7.0.3...@capacitor/status-bar@8.0.0-alpha.1) (2025-09-08)
+
+**Note:** Version bump only for package @capacitor/status-bar
+
+## [7.0.3](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/status-bar@7.0.2...@capacitor/status-bar@7.0.3) (2025-09-05)
+
+### Bug Fixes
+
+- **statusbar:** using window size instead of screen size for resize bounds ([#2394](https://github.com/ionic-team/capacitor-plugins/issues/2394)) ([fb13a38](https://github.com/ionic-team/capacitor-plugins/commit/fb13a385a9e2c414420b398c2227483b2f4d1740))
+
+## [7.0.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/status-bar@7.0.1...@capacitor/status-bar@7.0.2) (2025-08-05)
+
+**Note:** Version bump only for package @capacitor/status-bar
+
+## [7.0.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/status-bar@7.0.0...@capacitor/status-bar@7.0.1) (2025-04-02)
+
+**Note:** Version bump only for package @capacitor/status-bar
+
+# [7.0.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/status-bar@7.0.0-rc.0...@capacitor/status-bar@7.0.0) (2025-01-20)
+
+**Note:** Version bump only for package @capacitor/status-bar
+
+# [7.0.0-rc.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/status-bar@7.0.0-alpha.2...@capacitor/status-bar@7.0.0-rc.0) (2025-01-13)
+
+**Note:** Version bump only for package @capacitor/status-bar
+
+# [7.0.0-alpha.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/status-bar@7.0.0-alpha.1...@capacitor/status-bar@7.0.0-alpha.2) (2024-12-19)
+
+**Note:** Version bump only for package @capacitor/status-bar
+
+# [7.0.0-alpha.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/status-bar@6.0.1...@capacitor/status-bar@7.0.0-alpha.1) (2024-12-16)
+
+### Bug Fixes
+
+- **statusbar:** fix info when notify listeners ([#2247](https://github.com/ionic-team/capacitor-plugins/issues/2247)) ([af2317f](https://github.com/ionic-team/capacitor-plugins/commit/af2317f75f72d80308fac83ae65b7196cca98371))
+
+## [6.0.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/status-bar@6.0.0...@capacitor/status-bar@6.0.1) (2024-08-08)
+
+**Note:** Version bump only for package @capacitor/status-bar
+
+# [6.0.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/status-bar@6.0.0-rc.1...@capacitor/status-bar@6.0.0) (2024-04-15)
+
+**Note:** Version bump only for package @capacitor/status-bar
+
+# [6.0.0-rc.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/status-bar@6.0.0-rc.0...@capacitor/status-bar@6.0.0-rc.1) (2024-03-25)
+
+**Note:** Version bump only for package @capacitor/status-bar
+
+# [6.0.0-rc.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/status-bar@6.0.0-beta.1...@capacitor/status-bar@6.0.0-rc.0) (2024-02-07)
+
+**Note:** Version bump only for package @capacitor/status-bar
+
 # [6.0.0-beta.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/status-bar@6.0.0-beta.0...@capacitor/status-bar@6.0.0-beta.1) (2023-12-14)
 
 **Note:** Version bump only for package @capacitor/status-bar

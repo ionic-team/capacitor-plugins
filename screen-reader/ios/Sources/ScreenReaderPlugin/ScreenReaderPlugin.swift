@@ -3,12 +3,12 @@ import Capacitor
 
 @objc(ScreenReaderPlugin)
 public class ScreenReaderPlugin: CAPPlugin, CAPBridgedPlugin {
-    public let identifier = "ScreenReaderPlugin" 
-    public let jsName = "ScreenReader" 
+    public let identifier = "ScreenReaderPlugin"
+    public let jsName = "ScreenReader"
     public let pluginMethods: [CAPPluginMethod] = [
         CAPPluginMethod(name: "speak", returnType: CAPPluginReturnPromise),
-        CAPPluginMethod(name: "isEnabled", returnType: CAPPluginReturnPromise),
-    ] 
+        CAPPluginMethod(name: "isEnabled", returnType: CAPPluginReturnPromise)
+    ]
     static let stateChangeEvent = "stateChange"
 
     override public func load() {

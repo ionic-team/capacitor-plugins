@@ -3,6 +3,50 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [8.0.0-alpha.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/dialog@7.0.2...@capacitor/dialog@8.0.0-alpha.1) (2025-09-08)
+
+**Note:** Version bump only for package @capacitor/dialog
+
+## [7.0.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/dialog@7.0.1...@capacitor/dialog@7.0.2) (2025-08-05)
+
+**Note:** Version bump only for package @capacitor/dialog
+
+## [7.0.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/dialog@7.0.0...@capacitor/dialog@7.0.1) (2025-04-02)
+
+**Note:** Version bump only for package @capacitor/dialog
+
+# [7.0.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/dialog@7.0.0-rc.0...@capacitor/dialog@7.0.0) (2025-01-20)
+
+**Note:** Version bump only for package @capacitor/dialog
+
+# [7.0.0-rc.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/dialog@7.0.0-alpha.2...@capacitor/dialog@7.0.0-rc.0) (2025-01-13)
+
+**Note:** Version bump only for package @capacitor/dialog
+
+# [7.0.0-alpha.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/dialog@7.0.0-alpha.1...@capacitor/dialog@7.0.0-alpha.2) (2024-12-19)
+
+**Note:** Version bump only for package @capacitor/dialog
+
+# [7.0.0-alpha.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/dialog@6.0.1...@capacitor/dialog@7.0.0-alpha.1) (2024-12-16)
+
+**Note:** Version bump only for package @capacitor/dialog
+
+## [6.0.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/dialog@6.0.0...@capacitor/dialog@6.0.1) (2024-08-08)
+
+**Note:** Version bump only for package @capacitor/dialog
+
+# [6.0.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/dialog@6.0.0-rc.1...@capacitor/dialog@6.0.0) (2024-04-15)
+
+**Note:** Version bump only for package @capacitor/dialog
+
+# [6.0.0-rc.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/dialog@6.0.0-rc.0...@capacitor/dialog@6.0.0-rc.1) (2024-03-25)
+
+**Note:** Version bump only for package @capacitor/dialog
+
+# [6.0.0-rc.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/dialog@6.0.0-beta.1...@capacitor/dialog@6.0.0-rc.0) (2024-02-07)
+
+**Note:** Version bump only for package @capacitor/dialog
+
 # [6.0.0-beta.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/dialog@6.0.0-beta.0...@capacitor/dialog@6.0.0-beta.1) (2023-12-14)
 
 **Note:** Version bump only for package @capacitor/dialog

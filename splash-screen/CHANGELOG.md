@@ -3,6 +3,62 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [8.0.0-alpha.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/splash-screen@7.0.3...@capacitor/splash-screen@8.0.0-alpha.1) (2025-09-08)
+
+**Note:** Version bump only for package @capacitor/splash-screen
+
+## [7.0.3](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/splash-screen@7.0.2...@capacitor/splash-screen@7.0.3) (2025-09-05)
+
+**Note:** Version bump only for package @capacitor/splash-screen
+
+## [7.0.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/splash-screen@7.0.1...@capacitor/splash-screen@7.0.2) (2025-08-05)
+
+### Bug Fixes
+
+- **splash-screen:** call clearOnExitAnimationListener on animation end ([#2379](https://github.com/ionic-team/capacitor-plugins/issues/2379)) ([dcfda05](https://github.com/ionic-team/capacitor-plugins/commit/dcfda0542b5efb420ad3fe9af7b6ad54e37fb15a))
+
+## [7.0.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/splash-screen@7.0.0...@capacitor/splash-screen@7.0.1) (2025-04-02)
+
+**Note:** Version bump only for package @capacitor/splash-screen
+
+# [7.0.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/splash-screen@7.0.0-rc.0...@capacitor/splash-screen@7.0.0) (2025-01-20)
+
+**Note:** Version bump only for package @capacitor/splash-screen
+
+# [7.0.0-rc.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/splash-screen@7.0.0-alpha.2...@capacitor/splash-screen@7.0.0-rc.0) (2025-01-13)
+
+**Note:** Version bump only for package @capacitor/splash-screen
+
+# [7.0.0-alpha.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/splash-screen@7.0.0-alpha.1...@capacitor/splash-screen@7.0.0-alpha.2) (2024-12-19)
+
+**Note:** Version bump only for package @capacitor/splash-screen
+
+# [7.0.0-alpha.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/splash-screen@6.0.2...@capacitor/splash-screen@7.0.0-alpha.1) (2024-12-16)
+
+**Note:** Version bump only for package @capacitor/splash-screen
+
+## [6.0.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/splash-screen@6.0.1...@capacitor/splash-screen@6.0.2) (2024-08-08)
+
+**Note:** Version bump only for package @capacitor/splash-screen
+
+## [6.0.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/splash-screen@6.0.0...@capacitor/splash-screen@6.0.1) (2024-06-13)
+
+### Bug Fixes
+
+- **android:** removes setOnExitAnimationListener when fade out is disabled ([9634552](https://github.com/ionic-team/capacitor-plugins/commit/963455218e47df19fa25d0059ebe2be140ab3bd0))
+
+# [6.0.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/splash-screen@6.0.0-rc.1...@capacitor/splash-screen@6.0.0) (2024-04-15)
+
+**Note:** Version bump only for package @capacitor/splash-screen
+
+# [6.0.0-rc.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/splash-screen@6.0.0-rc.0...@capacitor/splash-screen@6.0.0-rc.1) (2024-03-25)
+
+**Note:** Version bump only for package @capacitor/splash-screen
+
+# [6.0.0-rc.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/splash-screen@6.0.0-beta.1...@capacitor/splash-screen@6.0.0-rc.0) (2024-02-07)
+
+**Note:** Version bump only for package @capacitor/splash-screen
+
 # [6.0.0-beta.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/splash-screen@6.0.0-beta.0...@capacitor/splash-screen@6.0.0-beta.1) (2023-12-14)
 
 **Note:** Version bump only for package @capacitor/splash-screen

@@ -3,11 +3,11 @@ import Capacitor
 
 @objc(ToastPlugin)
 public class ToastPlugin: CAPPlugin, CAPBridgedPlugin {
-    public let identifier = "ToastPlugin" 
-    public let jsName = "Toast" 
+    public let identifier = "ToastPlugin"
+    public let jsName = "Toast"
     public let pluginMethods: [CAPPluginMethod] = [
-        CAPPluginMethod(name: "show", returnType: CAPPluginReturnPromise),
-    ] 
+        CAPPluginMethod(name: "show", returnType: CAPPluginReturnPromise)
+    ]
 
     @objc func show(_ call: CAPPluginCall) {
         guard let text = call.getString("text") else {

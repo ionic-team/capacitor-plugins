@@ -204,6 +204,17 @@ public class CameraPlugin extends Plugin {
         boolean hasGalleryPerms = getPermissionState(SAVE_GALLERY) == PermissionState.GRANTED;
 
         // If we want to save to the gallery, we need two permissions
+        // actually we only need permissions to save to gallery for Android <= 9 (API 28)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            // we might still need to request permission for the camera
+            if (!hasCameraPerms) {
+                requestPermissionForAlias(CAMERA, call, "cameraPermissionsCallback");
+                return false;
+            }
+            return true;
+        }
+
+        // we need to request permissions to save to gallery for Android <= 9
         if (settings.isSaveToGallery() && !(hasCameraPerms && hasGalleryPerms) && isFirstRequest) {
             isFirstRequest = false;
             String[] aliases;
@@ -245,13 +256,7 @@ public class CameraPlugin extends Plugin {
 
     @Override
     protected void requestPermissionForAliases(@NonNull String[] aliases, @NonNull PluginCall call, @NonNull String callbackName) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            for (int i = 0; i < aliases.length; i++) {
-                if (aliases[i].equals(SAVE_GALLERY)) {
-                    aliases[i] = PHOTOS;
-                }
-            }
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             for (int i = 0; i < aliases.length; i++) {
                 if (aliases[i].equals(SAVE_GALLERY)) {
                     aliases[i] = READ_EXTERNAL_STORAGE;
@@ -798,11 +803,14 @@ public class CameraPlugin extends Plugin {
                 } catch (JSONException e) {}
             }
 
-            if (permsList != null && permsList.size() == 1 && (permsList.contains(CAMERA) || permsList.contains(PHOTOS))) {
-                // the only thing being asked for was the camera so we can just return the current state
+            if (
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU ||
+                (permsList != null && permsList.size() == 1 && (permsList.contains(CAMERA) || permsList.contains(PHOTOS)))
+            ) {
+                // either we're on Android 13+ (storage permissions do not apply)
+                // or the only thing being asked for was the camera so we can just return the current state
                 checkPermissions(call);
             } else {
-                // we need to ask about gallery so request storage permissions
                 requestPermissionForAlias(SAVE_GALLERY, call, "checkPermissions");
             }
         }

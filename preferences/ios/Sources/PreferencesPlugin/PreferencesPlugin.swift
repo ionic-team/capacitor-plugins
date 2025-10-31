@@ -3,8 +3,8 @@ import Capacitor
 
 @objc(PreferencesPlugin)
 public class PreferencesPlugin: CAPPlugin, CAPBridgedPlugin {
-    public let identifier = "PreferencesPlugin" 
-    public let jsName = "Preferences" 
+    public let identifier = "PreferencesPlugin"
+    public let jsName = "Preferences"
     public let pluginMethods: [CAPPluginMethod] = [
         CAPPluginMethod(name: "configure", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "get", returnType: CAPPluginReturnPromise),
@@ -13,8 +13,8 @@ public class PreferencesPlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "keys", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "clear", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "migrate", returnType: CAPPluginReturnPromise),
-        CAPPluginMethod(name: "removeOld", returnType: CAPPluginReturnPromise),
-    ] 
+        CAPPluginMethod(name: "removeOld", returnType: CAPPluginReturnPromise)
+    ]
     private var preferences = Preferences(with: PreferencesConfiguration())
 
     @objc func configure(_ call: CAPPluginCall) {

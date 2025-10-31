@@ -121,6 +121,9 @@ public class SplashScreen {
                                     public void onAnimationEnd(Animator animation) {
                                         isHiding = false;
                                         windowSplashScreenView.remove();
+                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                                            activity.getSplashScreen().clearOnExitAnimationListener();
+                                        }
                                     }
                                 }
                             );
@@ -129,14 +132,6 @@ public class SplashScreen {
 
                             isHiding = true;
                             isVisible = false;
-                        }
-                    );
-                } else {
-                    windowSplashScreen.setOnExitAnimationListener(
-                        windowSplashScreenView -> {
-                            isHiding = false;
-                            isVisible = false;
-                            windowSplashScreenView.remove();
                         }
                     );
                 }

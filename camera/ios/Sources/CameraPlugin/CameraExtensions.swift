@@ -91,12 +91,10 @@ internal extension UIImage {
             targetHeight = maxHeight
         }
         // generate the new image and return
-        let format: UIGraphicsImageRendererFormat = UIGraphicsImageRendererFormat.default()
-        format.scale = 1.0
-        format.opaque = false
-        let renderer = UIGraphicsImageRenderer(size: CGSize(width: targetWidth, height: targetHeight), format: format)
-        return renderer.image { (_) in
-            self.draw(in: CGRect(origin: .zero, size: CGSize(width: targetWidth, height: targetHeight)))
-        }
+        UIGraphicsBeginImageContextWithOptions(.init(width: targetWidth, height: targetHeight), false, 1.0) // size, opaque and scale
+        self.draw(in: .init(origin: .zero, size: .init(width: targetWidth, height: targetHeight)))
+        let resizedImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return resizedImage ?? self
     }
 }

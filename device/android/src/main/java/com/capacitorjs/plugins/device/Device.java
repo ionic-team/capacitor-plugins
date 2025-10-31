@@ -7,8 +7,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.BatteryManager;
 import android.os.Build;
-import android.os.Environment;
-import android.os.StatFs;
 import android.provider.Settings;
 import android.webkit.WebView;
 
@@ -24,26 +22,6 @@ public class Device {
         final Runtime runtime = Runtime.getRuntime();
         final long usedMem = (runtime.totalMemory() - runtime.freeMemory());
         return usedMem;
-    }
-
-    public long getDiskFree() {
-        StatFs statFs = new StatFs(Environment.getRootDirectory().getAbsolutePath());
-        return statFs.getAvailableBlocksLong() * statFs.getBlockSizeLong();
-    }
-
-    public long getDiskTotal() {
-        StatFs statFs = new StatFs(Environment.getRootDirectory().getAbsolutePath());
-        return statFs.getBlockCountLong() * statFs.getBlockSizeLong();
-    }
-
-    public long getRealDiskFree() {
-        StatFs statFs = new StatFs(Environment.getDataDirectory().getAbsolutePath());
-        return statFs.getAvailableBlocksLong() * statFs.getBlockSizeLong();
-    }
-
-    public long getRealDiskTotal() {
-        StatFs statFs = new StatFs(Environment.getDataDirectory().getAbsolutePath());
-        return statFs.getBlockCountLong() * statFs.getBlockSizeLong();
     }
 
     public String getPlatform() {
@@ -110,13 +88,8 @@ public class Device {
         return android.os.Build.VERSION.RELEASE;
     }
 
-    @SuppressWarnings("deprecation")
     private PackageInfo getWebViewVersionSubAndroid26() throws PackageManager.NameNotFoundException {
-        String webViewPackage = "com.google.android.webview";
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            webViewPackage = "com.android.chrome";
-        }
         PackageManager pm = this.context.getPackageManager();
-        return pm.getPackageInfo(webViewPackage, 0);
+        return pm.getPackageInfo("com.android.chrome", 0);
     }
 }

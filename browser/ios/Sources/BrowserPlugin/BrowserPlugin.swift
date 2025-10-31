@@ -3,12 +3,12 @@ import Capacitor
 
 @objc(CAPBrowserPlugin)
 public class CAPBrowserPlugin: CAPPlugin, CAPBridgedPlugin {
-    public let identifier = "CAPBrowserPlugin" 
-    public let jsName = "Browser" 
+    public let identifier = "CAPBrowserPlugin"
+    public let jsName = "Browser"
     public let pluginMethods: [CAPPluginMethod] = [
         CAPPluginMethod(name: "open", returnType: CAPPluginReturnPromise),
-        CAPPluginMethod(name: "close", returnType: CAPPluginReturnPromise),
-    ] 
+        CAPPluginMethod(name: "close", returnType: CAPPluginReturnPromise)
+    ]
     private let implementation = Browser()
 
     @objc func open(_ call: CAPPluginCall) {
@@ -29,7 +29,13 @@ public class CAPBrowserPlugin: CAPPlugin, CAPBridgedPlugin {
             return
         }
         implementation.browserEventDidOccur = { [weak self] (event) in
-            self?.notifyListeners(event.listenerEvent, data: nil)
+            if event == .finished {
+                self?.bridge?.dismissVC(animated: true, completion: {
+                    self?.notifyListeners(event.listenerEvent, data: nil)
+                })
+            } else {
+                self?.notifyListeners(event.listenerEvent, data: nil)
+            }
         }
         // display
         DispatchQueue.main.async { [weak self] in
