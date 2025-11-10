@@ -12,7 +12,7 @@ buildscript {
         google()
         mavenCentral()
         maven {
-            url "https://plugins.gradle.org/m2/"
+            url = "https://plugins.gradle.org/m2/"
         }
     }
     dependencies {
@@ -31,8 +31,8 @@ if (System.getenv("CAP_PLUGIN_PUBLISH") == "true") {
 }
 
 android {
-    namespace "com.capacitorjs.plugins.statusbar"
-    compileSdk project.hasProperty('compileSdkVersion') ? rootProject.ext.compileSdkVersion : 36
+    namespace = "com.capacitorjs.plugins.statusbar"
+    compileSdk = project.hasProperty('compileSdkVersion') ? rootProject.ext.compileSdkVersion : 36
     defaultConfig {
         minSdkVersion project.hasProperty('minSdkVersion') ? rootProject.ext.minSdkVersion : 24
         targetSdkVersion project.hasProperty('targetSdkVersion') ? rootProject.ext.targetSdkVersion : 36
@@ -47,7 +47,7 @@ android {
         }
     }
     lintOptions {
-        abortOnError false
+        abortOnError = false
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_21
