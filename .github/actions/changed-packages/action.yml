@@ -8,5 +8,5 @@ outputs:
   paths:
     description: An array of relative paths to packages that were changed
 runs:
-  using: node12
+  using: node22
   main: main.js
