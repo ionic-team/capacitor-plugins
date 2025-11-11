@@ -16,7 +16,8 @@ import type {
 
 export class LocalNotificationsWeb
   extends WebPlugin
-  implements LocalNotificationsPlugin {
+  implements LocalNotificationsPlugin
+{
   protected pending: LocalNotificationSchema[] = [];
   protected deliveredNotifications: Notification[] = [];
 

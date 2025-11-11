@@ -16,7 +16,8 @@ interface ScreenOrientationWithLock extends ScreenOrientation {
 
 export class ScreenOrientationWeb
   extends WebPlugin
-  implements ScreenOrientationPlugin {
+  implements ScreenOrientationPlugin
+{
   constructor() {
     super();
     if (
