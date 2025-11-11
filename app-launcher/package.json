@@ -49,18 +49,18 @@
   "devDependencies": {
     "@capacitor/android": "next",
     "@capacitor/core": "next",
-    "@capacitor/docgen": "0.2.2",
+    "@capacitor/docgen": "0.3.0",
     "@capacitor/ios": "next",
     "@ionic/eslint-config": "^0.4.0",
-    "@ionic/prettier-config": "~1.0.1",
-    "@ionic/swiftlint-config": "^1.1.2",
-    "eslint": "^8.57.0",
-    "prettier": "~2.3.0",
-    "prettier-plugin-java": "~1.0.2",
-    "rimraf": "^3.0.2",
-    "rollup": "^4.26.0",
-    "swiftlint": "^1.0.1",
-    "typescript": "~4.1.5"
+    "@ionic/prettier-config": "^4.0.0",
+    "@ionic/swiftlint-config": "^2.0.0",
+    "eslint": "^9.39.1",
+    "prettier": "^3.6.2",
+    "prettier-plugin-java": "^2.7.7",
+    "rimraf": "^6.1.0",
+    "rollup": "^4.53.2",
+    "swiftlint": "^2.0.0",
+    "typescript": "^5.9.3"
   },
   "peerDependencies": {
     "@capacitor/core": "next"

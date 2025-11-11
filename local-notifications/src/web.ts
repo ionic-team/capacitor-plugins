@@ -16,8 +16,7 @@ import type {
 
 export class LocalNotificationsWeb
   extends WebPlugin
-  implements LocalNotificationsPlugin
-{
+  implements LocalNotificationsPlugin {
   protected pending: LocalNotificationSchema[] = [];
   protected deliveredNotifications: Notification[] = [];
 
@@ -150,7 +149,7 @@ export class LocalNotificationsWeb
       try {
         new Notification('');
       } catch (e) {
-        if (e.name == 'TypeError') {
+        if (e instanceof Error && e.name === 'TypeError') {
           return false;
         }
       }
