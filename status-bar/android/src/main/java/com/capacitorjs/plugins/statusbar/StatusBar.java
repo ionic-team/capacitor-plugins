@@ -9,6 +9,7 @@ import android.view.Window;
 import android.view.WindowInsets;
 import android.view.WindowManager;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.ColorUtils;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -72,8 +73,8 @@ public class StatusBar {
             // update the local color field as well
             currentStatusBarColor = color;
 
-            // determine if the color is light or dark
-            boolean isLightColor = isColorLight(color);
+            // determine if the color is light or dark using luminance
+            boolean isLightColor = ColorUtils.calculateLuminance(color) > 0.5;
 
             // apply icon color contrast
             WindowInsetsControllerCompat insetsController =
@@ -84,14 +85,6 @@ public class StatusBar {
             // and icon color should not be changed
             currentStatusBarColor = Color.TRANSPARENT;
         }
-
-    }
-
-    private boolean isColorLight(int color) {
-        double darkness = 1 - (0.299 * Color.red(color)
-                + 0.587 * Color.green(color)
-                + 0.114 * Color.blue(color)) / 255;
-        return darkness < 0.4; // threshold can be adjusted if needed
     }
 
     public void hide() {
