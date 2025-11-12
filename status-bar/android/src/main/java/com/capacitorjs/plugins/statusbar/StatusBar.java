@@ -67,8 +67,11 @@ public class StatusBar {
         clearTranslucentStatusFlagDeprecated();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 
+        boolean supportsStatusBarColor = Build.VERSION.SDK_INT < Build.VERSION_CODES.VANILLA_ICE_CREAM // Android 14 and below
+                || isEdgeToEdgeOptOutEnabled(window); // Android 15 opt-out case
+
         // only applies for Android 14 and below because window.setStatusBarColor() only works for Android 14 and below
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+        if (supportsStatusBarColor) {
             setStatusBarColorDeprecated(color);
             // update the local color field as well
             currentStatusBarColor = color;
@@ -85,6 +88,21 @@ public class StatusBar {
             // and icon color should not be changed
             currentStatusBarColor = Color.TRANSPARENT;
         }
+    }
+
+    private boolean isEdgeToEdgeOptOutEnabled(Window window) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) { // Android 15+
+            try {
+                int resId = window.getContext().getTheme()
+                        .obtainStyledAttributes(new int[]{android.R.attr.windowOptOutEdgeToEdgeEnforcement})
+                        .getResourceId(0, 0);
+
+                if (resId != 0) {
+                    return window.getContext().getResources().getBoolean(resId);
+                }
+            } catch (Exception ignored) {}
+        }
+        return false;
     }
 
     public void hide() {
