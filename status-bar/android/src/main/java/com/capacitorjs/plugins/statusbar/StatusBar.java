@@ -65,17 +65,26 @@ public class StatusBar {
         Window window = activity.getWindow();
         clearTranslucentStatusFlagDeprecated();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        setStatusBarColorDeprecated(color);
-        // update the local color field as well
-        currentStatusBarColor = color;
 
-        // determine if the color is light or dark
-        boolean isLightColor = isColorLight(color);
+        // only applies for Android 14 and below because window.setStatusBarColor() only works for Android 14 and below
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+            setStatusBarColorDeprecated(color);
+            // update the local color field as well
+            currentStatusBarColor = color;
 
-        // apply icon color contrast
-        WindowInsetsControllerCompat insetsController =
-                WindowCompat.getInsetsController(window, window.getDecorView());
-        insetsController.setAppearanceLightStatusBars(isLightColor);
+            // determine if the color is light or dark
+            boolean isLightColor = isColorLight(color);
+
+            // apply icon color contrast
+            WindowInsetsControllerCompat insetsController =
+                    WindowCompat.getInsetsController(window, window.getDecorView());
+            insetsController.setAppearanceLightStatusBars(isLightColor);
+        } else {
+            // on Android 15+, setStatusBarColor() has no effect
+            // and icon color should not be changed
+            currentStatusBarColor = Color.TRANSPARENT;
+        }
+
     }
 
     private boolean isColorLight(int color) {
