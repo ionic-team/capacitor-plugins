@@ -27,7 +27,7 @@ public class StatusBar {
     public StatusBar(AppCompatActivity activity, StatusBarConfig config, ChangeListener listener) {
         // save initial color of the status bar
         this.activity = activity;
-        this.currentStatusBarColor = activity.getWindow().getStatusBarColor();
+        this.currentStatusBarColor = getStatusBarColorDeprecated();
         this.listener = listener;
         setBackgroundColor(config.getBackgroundColor());
         setStyle(config.getStyle());
@@ -61,12 +61,11 @@ public class StatusBar {
         setStyle(this.currentStyle);
     }
 
-    @SuppressWarnings("deprecation")
     public void setBackgroundColor(int color) {
         Window window = activity.getWindow();
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        clearTranslucentStatusFlagDeprecated();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.setStatusBarColor(color);
+        setStatusBarColorDeprecated(color);
         // update the local color field as well
         currentStatusBarColor = color;
     }
@@ -89,31 +88,29 @@ public class StatusBar {
         listener.onChange(statusBarVisibilityChanged, info);
     }
 
-    @SuppressWarnings("deprecation")
     public void setOverlaysWebView(Boolean overlays) {
         View decorView = activity.getWindow().getDecorView();
-        int uiOptions = decorView.getSystemUiVisibility();
+        int uiOptions = getSystemUiVisibilityDeprecated(decorView);
         if (overlays) {
             // Sets the layout to a fullscreen one that does not hide the actual status bar, so the WebView is displayed behind it.
-            uiOptions = uiOptions | View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
-            decorView.setSystemUiVisibility(uiOptions);
-            currentStatusBarColor = activity.getWindow().getStatusBarColor();
-            activity.getWindow().setStatusBarColor(Color.TRANSPARENT);
+            uiOptions = uiOptions | getSystemUiFlagLayoutStableDeprecated() | getSystemUiFlagLayoutFullscreenDeprecated();
+            setSystemUiVisibilityDeprecated(decorView, uiOptions);
+            currentStatusBarColor = getStatusBarColorDeprecated();
+            setStatusBarColorDeprecated(Color.TRANSPARENT);
         } else {
             // Sets the layout to a normal one that displays the WebView below the status bar.
-            uiOptions = uiOptions & ~View.SYSTEM_UI_FLAG_LAYOUT_STABLE & ~View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
-            decorView.setSystemUiVisibility(uiOptions);
+            uiOptions = uiOptions & ~getSystemUiFlagLayoutStableDeprecated() & ~getSystemUiFlagLayoutFullscreenDeprecated();
+            setSystemUiVisibilityDeprecated(decorView, uiOptions);
             // recover the previous color of the status bar
-            activity.getWindow().setStatusBarColor(currentStatusBarColor);
+            setStatusBarColorDeprecated(currentStatusBarColor);
         }
         listener.onChange(statusBarOverlayChanged, getInfo());
     }
 
-    @SuppressWarnings("deprecation")
     private boolean getIsOverlaid() {
         return (
-            (activity.getWindow().getDecorView().getSystemUiVisibility() & View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN) ==
-            View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+            (getSystemUiVisibilityDeprecated(activity.getWindow().getDecorView()) & getSystemUiFlagLayoutFullscreenDeprecated()) ==
+            getSystemUiFlagLayoutFullscreenDeprecated()
         );
     }
 
@@ -125,7 +122,7 @@ public class StatusBar {
         info.setStyle(getStyle());
         info.setOverlays(getIsOverlaid());
         info.setVisible(isVisible);
-        info.setColor(String.format("#%06X", (0xFFFFFF & window.getStatusBarColor())));
+        info.setColor(String.format("#%06X", (0xFFFFFF & getStatusBarColorDeprecated())));
         info.setHeight(getStatusBarHeight());
         return info;
     }
@@ -150,7 +147,7 @@ public class StatusBar {
 
         WindowInsets insets = activity.getWindow().getDecorView().getRootWindowInsets();
         if (insets != null) {
-            return (int) (insets.getSystemWindowInsetTop() / metrics.density);
+            return getSystemWindowInsetTopDeprecated(insets, metrics);
         }
 
         // Fallback if the insets are not available
@@ -159,5 +156,45 @@ public class StatusBar {
 
     public interface ChangeListener {
         void onChange(String eventName, StatusBarInfo info);
+    }
+
+    @SuppressWarnings("deprecation")
+    private int getStatusBarColorDeprecated() {
+        return activity.getWindow().getStatusBarColor();
+    }
+
+    @SuppressWarnings("deprecation")
+    private void setStatusBarColorDeprecated(int color) {
+        activity.getWindow().setStatusBarColor(color);
+    }
+
+    @SuppressWarnings("deprecation")
+    private void clearTranslucentStatusFlagDeprecated() {
+        activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+    }
+
+    @SuppressWarnings("deprecation")
+    private int getSystemUiVisibilityDeprecated(View decorView) {
+        return decorView.getSystemUiVisibility();
+    }
+
+    @SuppressWarnings("deprecation")
+    private void setSystemUiVisibilityDeprecated(View decorView, int uiOptions) {
+        decorView.setSystemUiVisibility(uiOptions);
+    }
+
+    @SuppressWarnings("deprecation")
+    private int getSystemUiFlagLayoutStableDeprecated() {
+        return View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
+    }
+
+    @SuppressWarnings("deprecation")
+    private int getSystemUiFlagLayoutFullscreenDeprecated() {
+        return View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
+    }
+
+    @SuppressWarnings("deprecation")
+    private int getSystemWindowInsetTopDeprecated(WindowInsets insets, DisplayMetrics metrics) {
+        return (int) (insets.getSystemWindowInsetTop() / metrics.density);
     }
 }
