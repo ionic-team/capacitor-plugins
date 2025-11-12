@@ -29,7 +29,7 @@ public class ActionSheetPlugin: CAPPlugin, CAPBridgedPlugin {
             } else if style == "CANCEL" {
                 buttonStyle = .cancel
             }
-            let action = UIAlertAction(title: title, style: buttonStyle, handler: { (_) -> Void in
+            let action = UIAlertAction(title: title, style: buttonStyle, handler: { (_) in
                 call.resolve([
                     "index": index
                 ])

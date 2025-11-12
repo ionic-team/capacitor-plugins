@@ -23,7 +23,7 @@ public class CameraUtils {
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = activity.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
 
-        File image = File.createTempFile(imageFileName, /* prefix */".jpg", /* suffix */storageDir/* directory */);
+        File image = File.createTempFile(imageFileName, /* prefix */ ".jpg", /* suffix */ storageDir /* directory */);
 
         return image;
     }
