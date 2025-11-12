@@ -57,11 +57,11 @@ const showStatusBar = async () => {
 
 These config values are available:
 
-| Prop                  | Type                 | Description                                                                                                                                                                                                                                                                                                                                                                      | Default              | Since |
-| --------------------- | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------- | ----- |
-| **`overlaysWebView`** | <code>boolean</code> | Whether the statusbar is overlaid or not. For applications targeting Android 15, this property has no effect unless the property windowOptOutEdgeToEdgeEnforcement is added to the application layout file. Otherwise, the application assumes always overlays as true. More details in https://developer.android.com/reference/android/R.attr#windowOptOutEdgeToEdgeEnforcement | <code>true</code>    | 1.0.0 |
-| **`style`**           | <code>string</code>  | <a href="#style">Style</a> of the text of the status bar.                                                                                                                                                                                                                                                                                                                        | <code>default</code> | 1.0.0 |
-| **`backgroundColor`** | <code>string</code>  | Color of the background of the statusbar in hex format, #RRGGBB. Doesn't work if `overlaysWebView` is true.                                                                                                                                                                                                                                                                      | <code>#000000</code> | 1.0.0 |
+| Prop                  | Type                 | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                   | Default              | Since |
+| --------------------- | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------- | ----- |
+| **`overlaysWebView`** | <code>boolean</code> | Whether the statusbar is overlaid or not. For applications targeting Android 15, this property has no effect unless the property windowOptOutEdgeToEdgeEnforcement is added to the application layout file. Otherwise, the application assumes always overlays as true. More details in https://developer.android.com/reference/android/R.attr#windowOptOutEdgeToEdgeEnforcement For applications targeting Android 16 or above, this property has no effect. | <code>true</code>    | 1.0.0 |
+| **`style`**           | <code>string</code>  | <a href="#style">Style</a> of the text of the status bar.                                                                                                                                                                                                                                                                                                                                                                                                     | <code>default</code> | 1.0.0 |
+| **`backgroundColor`** | <code>string</code>  | Color of the background of the statusbar in hex format, #RRGGBB. Doesn't work if `overlaysWebView` is true.                                                                                                                                                                                                                                                                                                                                                   | <code>#000000</code> | 1.0.0 |
 
 ### Examples
 
@@ -143,6 +143,11 @@ setBackgroundColor(options: BackgroundColorOptions) => Promise<void>
 ```
 
 Set the background color of the status bar.
+Only works for Android 14 or lower.
+For apps targeting Android 15 this function works if the windowOptOutEdgeToEdgeEnforcement proerty
+is added to the application layout file.
+More details in https://developer.android.com/reference/android/R.attr#windowOptOutEdgeToEdgeEnforcement.
+For apps targeting Android 16 and above, calling this function has no effect.
 
 | Param         | Type                                                                      |
 | ------------- | ------------------------------------------------------------------------- |
@@ -214,6 +219,11 @@ setOverlaysWebView(options: SetOverlaysWebViewOptions) => Promise<void>
 
 Set whether or not the status bar should overlay the webview to allow usage
 of the space underneath it.
+For applications targeting Android 15, calling this function has no effect unless
+the property windowOptOutEdgeToEdgeEnforcement is added to the application layout file.
+Otherwise, the application assumes always overlays as true.
+More details in https://developer.android.com/reference/android/R.attr#windowOptOutEdgeToEdgeEnforcement
+For applications targeting Android 16 or above, calling this function has no effect.
 
 | Param         | Type                                                                            |
 | ------------- | ------------------------------------------------------------------------------- |

@@ -12,7 +12,8 @@ declare module '@capacitor/cli' {
        * the property windowOptOutEdgeToEdgeEnforcement is added to the application layout file.
        * Otherwise, the application assumes always overlays as true.
        * More details in https://developer.android.com/reference/android/R.attr#windowOptOutEdgeToEdgeEnforcement
-       *
+       * For applications targeting Android 16 or above, this property has no effect.
+       * 
        * @since 1.0.0
        * @default true
        * @example false
@@ -172,6 +173,11 @@ export interface StatusBarPlugin {
 
   /**
    * Set the background color of the status bar.
+   * Only works for Android 14 or lower.
+   * For apps targeting Android 15 this function works if the windowOptOutEdgeToEdgeEnforcement proerty
+   * is added to the application layout file.
+   * More details in https://developer.android.com/reference/android/R.attr#windowOptOutEdgeToEdgeEnforcement.
+   * For apps targeting Android 16 and above, calling this function has no effect.
    *
    * @since 1.0.0
    */
@@ -205,6 +211,11 @@ export interface StatusBarPlugin {
   /**
    * Set whether or not the status bar should overlay the webview to allow usage
    * of the space underneath it.
+   * For applications targeting Android 15, calling this function has no effect unless
+   * the property windowOptOutEdgeToEdgeEnforcement is added to the application layout file.
+   * Otherwise, the application assumes always overlays as true.
+   * More details in https://developer.android.com/reference/android/R.attr#windowOptOutEdgeToEdgeEnforcement
+   * For applications targeting Android 16 or above, calling this function has no effect.
    *
    * @since 1.0.0
    */
