@@ -59,26 +59,37 @@ public class BrowserPlugin extends Plugin {
             Logger.error(getLogTag(), "Invalid color provided for toolbarColor. Using default", null);
         }
 
-        // open the browser and finish
+        if (implementation.areCustomTabsSupported()) {
+            // open the browser and finish
+            Intent intent = new Intent(getContext(), BrowserControllerActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            getContext().startActivity(intent);
 
-        Intent intent = new Intent(getContext(), BrowserControllerActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        getContext().startActivity(intent);
-
-        Integer finalToolbarColor = toolbarColor;
-        setBrowserControllerListener(
-            activity -> {
-                try {
-                    activity.open(implementation, url, finalToolbarColor);
-                    browserControllerActivityInstance = activity;
-                    call.resolve();
-                } catch (ActivityNotFoundException ex) {
-                    Logger.error(getLogTag(), ex.getLocalizedMessage(), null);
-                    call.reject("Unable to display URL");
+            Integer finalToolbarColor = toolbarColor;
+            setBrowserControllerListener(
+                activity -> {
+                    try {
+                        activity.open(implementation, url, finalToolbarColor);
+                        browserControllerActivityInstance = activity;
+                        call.resolve();
+                    } catch (ActivityNotFoundException ex) {
+                        Logger.error(getLogTag(), ex.getLocalizedMessage(), null);
+                        call.reject("Unable to display URL");
+                    }
                 }
+            );
+        } else {
+            // fallback to opening the URL in the default browser
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, url);
+            browserIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            if (browserIntent.resolveActivity(getContext().getPackageManager()) != null) {
+                getContext().startActivity(browserIntent);
+                call.resolve();
+            } else {
+                call.reject("No application can handle the URL");
             }
-        );
+        }
     }
 
     @PluginMethod
