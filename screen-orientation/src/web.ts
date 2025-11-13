@@ -20,10 +20,7 @@ export class ScreenOrientationWeb
 {
   constructor() {
     super();
-    if (
-      typeof screen !== 'undefined' &&
-      typeof screen.orientation !== 'undefined'
-    ) {
+    if (typeof screen !== 'undefined' && typeof screen.orientation !== 'undefined') {
       screen.orientation.addEventListener('change', () => {
         const type = screen.orientation.type;
         this.notifyListeners('screenOrientationChange', { type });
@@ -33,9 +30,7 @@ export class ScreenOrientationWeb
 
   async orientation(): Promise<ScreenOrientationResult> {
     if (typeof screen === 'undefined' || !screen.orientation) {
-      throw this.unavailable(
-        'ScreenOrientation API not available in this browser',
-      );
+      throw this.unavailable('ScreenOrientation API not available in this browser');
     }
     return { type: screen.orientation.type };
   }
@@ -55,28 +50,18 @@ export class ScreenOrientationWeb
         options.orientation,
       );
     } catch {
-      throw this.unavailable(
-        'ScreenOrientation API not available in this browser',
-      );
+      throw this.unavailable('ScreenOrientation API not available in this browser');
     }
   }
 
   async unlock(): Promise<void> {
-    if (
-      typeof screen === 'undefined' ||
-      !screen.orientation ||
-      !screen.orientation.unlock
-    ) {
-      throw this.unavailable(
-        'ScreenOrientation API not available in this browser',
-      );
+    if (typeof screen === 'undefined' || !screen.orientation || !screen.orientation.unlock) {
+      throw this.unavailable('ScreenOrientation API not available in this browser');
     }
     try {
       screen.orientation.unlock();
     } catch {
-      throw this.unavailable(
-        'ScreenOrientation API not available in this browser',
-      );
+      throw this.unavailable('ScreenOrientation API not available in this browser');
     }
   }
 }
