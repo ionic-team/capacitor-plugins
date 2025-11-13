@@ -1,10 +1,10 @@
 package com.capacitorjs.plugins.statusbar;
 
 import android.content.res.Configuration;
-import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.os.Build;
 import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowInsets;
@@ -71,38 +71,19 @@ public class StatusBar {
         clearTranslucentStatusFlagDeprecated();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 
-        //boolean targetsAndroid15OrAbove = Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM
-            //    && activity.getApplicationInfo().targetSdkVersion >= Build.VERSION_CODES.VANILLA_ICE_CREAM;
-
-        Logger.debug("============> SDK_INT: " + Build.VERSION.SDK_INT);
-        Logger.debug("============> targetSdkVersion: " + activity.getApplicationInfo().targetSdkVersion);
-
-
-        // only apply if the status bar color is supported (Android < 15 or opt-out flag is true)
-        // boolean supportsStatusBarColor = (Build.VERSION.SDK_INT < Build.VERSION_CODES.VANILLA_ICE_CREAM)
-       //         || (isEdgeToEdgeOptOutEnabled(window) && targetsAndroid15OrAbove);
-
-        boolean setStatusBar = shouldSetStatusBarColor(isEdgeToEdgeOptOutEnabled(window));
-        Logger.debug("============> setStatusBar: " + setStatusBar);
-        if (setStatusBar) {
+        if (shouldSetStatusBarColor(isEdgeToEdgeOptOutEnabled(window))) {
             setStatusBarColorDeprecated(color);
             currentStatusBarColor = color;
-            // determine if the color is light or dark using luminance
+            // determine if the color is light or dark using luminance and set icon color
             boolean isLightColor = ColorUtils.calculateLuminance(color) > 0.5;
-            // apply icon color contrast
-            WindowInsetsControllerCompat insetsController =
-                    WindowCompat.getInsetsController(window, window.getDecorView());
+            WindowInsetsControllerCompat insetsController = WindowCompat.getInsetsController(window, window.getDecorView());
             insetsController.setAppearanceLightStatusBars(isLightColor);
-        } else {
-            // on Android 15+ without the opt-out flag, setStatusBarColor() has no effect
-            // and icon color should not be changed
-            currentStatusBarColor = Color.TRANSPARENT;
         }
     }
 
 
     private boolean shouldSetStatusBarColor(boolean hasOptOut) {
-        boolean canSetStatusBar = false;
+        boolean canSetStatusBar;
         int deviceApi = Build.VERSION.SDK_INT;
         int targetApi = activity.getApplicationInfo().targetSdkVersion;
 
@@ -116,29 +97,39 @@ public class StatusBar {
             } else {
                 canSetStatusBar = hasOptOut; // Target 15 → allowed only if opted out
             }
-        } else if (deviceApi >= Build.VERSION_CODES.VANILLA_ICE_CREAM + 1) {
+        } else {
             // Android 16 or above
-            if (targetApi == Build.VERSION_CODES.VANILLA_ICE_CREAM && hasOptOut) {
-                canSetStatusBar = true; // App targets 15 → opt-out still respected
+            if ((targetApi == Build.VERSION_CODES.VANILLA_ICE_CREAM && hasOptOut) || targetApi < Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+                canSetStatusBar = true; // App targets 15 → opt-out still respected, App targets < 15 -> can set status bar
             } else {
-                canSetStatusBar = false; // App targets 16 → opt-out ignored
+                canSetStatusBar = false; // App targets 16 → opt-out ignored, App targets 15 but there is not opt out
             }
         }
+        return canSetStatusBar;
+    }
 
+    private boolean shouldSetStatusBarColor2(boolean hasOptOut) {
+        boolean canSetStatusBar = true;
+        int deviceApi = Build.VERSION.SDK_INT;
+        int targetApi = activity.getApplicationInfo().targetSdkVersion;
+
+        if (deviceApi == Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+            // Android 15
+            if (targetApi < Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+                canSetStatusBar = hasOptOut; // Target 15 → allowed only if opted out
+            }
+        } else {
+            // Android 16 or above
+            // App targets 16 → opt-out ignored
+            canSetStatusBar = targetApi == Build.VERSION_CODES.VANILLA_ICE_CREAM && hasOptOut; // App targets 15 → opt-out still respected
+        }
         return canSetStatusBar;
     }
     private boolean isEdgeToEdgeOptOutEnabled(Window window) {
-        try {
-            int resId = window.getContext().getResources().getIdentifier(
-                    "windowOptOutEdgeToEdgeEnforcement", "attr", "android");
-            if (resId != 0) {
-                TypedArray ta = window.getContext().getTheme().obtainStyledAttributes(new int[]{resId});
-                boolean optOut = ta.getBoolean(0, false);
-                ta.recycle();
-                return optOut;
-            }
-        } catch (Exception ignored) {
-            return false;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+            TypedValue value = new TypedValue();
+            window.getContext().getTheme().resolveAttribute(android.R.attr.windowOptOutEdgeToEdgeEnforcement, value, true);
+            return value.data != 0; // value is set to -1 on true as of Android 15, so we have to do this.
         }
         return false;
     }
