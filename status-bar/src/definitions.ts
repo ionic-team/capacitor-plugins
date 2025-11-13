@@ -8,11 +8,7 @@ declare module '@capacitor/cli' {
     StatusBar?: {
       /**
        * Whether the statusbar is overlaid or not.
-       * For applications targeting Android 15, this property has no effect unless
-       * the property windowOptOutEdgeToEdgeEnforcement is added to the application layout file.
-       * Otherwise, the application assumes always overlays as true.
-       * More details in https://developer.android.com/reference/android/R.attr#windowOptOutEdgeToEdgeEnforcement.
-       * For applications targeting Android 16 or above, this property has no effect.
+       * Not available on Android 15+.
        *
        * @since 1.0.0
        * @default true
@@ -32,6 +28,7 @@ declare module '@capacitor/cli' {
       /**
        * Color of the background of the statusbar in hex format, #RRGGBB.
        * Doesn't work if `overlaysWebView` is true.
+       * Not available on Android 15+.
        *
        * @since 1.0.0
        * @default #000000
@@ -173,11 +170,7 @@ export interface StatusBarPlugin {
 
   /**
    * Set the background color of the status bar.
-   * Only works for Android 14 or lower.
-   * For apps targeting Android 15 this function works if the windowOptOutEdgeToEdgeEnforcement proerty
-   * is added to the application layout file.
-   * More details in https://developer.android.com/reference/android/R.attr#windowOptOutEdgeToEdgeEnforcement.
-   * For apps targeting Android 16 and above, calling this function has no effect.
+   * Not available on Android 15+.
    *
    * @since 1.0.0
    */
@@ -211,11 +204,7 @@ export interface StatusBarPlugin {
   /**
    * Set whether or not the status bar should overlay the webview to allow usage
    * of the space underneath it.
-   * For applications targeting Android 15, calling this function has no effect unless
-   * the property windowOptOutEdgeToEdgeEnforcement is added to the application layout file.
-   * Otherwise, the application assumes always overlays as true.
-   * More details in https://developer.android.com/reference/android/R.attr#windowOptOutEdgeToEdgeEnforcement.
-   * For applications targeting Android 16 or above, calling this function has no effect.
+   * Not available on Android 15+.
    *
    * @since 1.0.0
    */
