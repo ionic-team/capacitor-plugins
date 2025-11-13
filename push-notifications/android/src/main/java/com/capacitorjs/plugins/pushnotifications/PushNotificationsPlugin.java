@@ -64,8 +64,7 @@ public class PushNotificationsPlugin extends Plugin {
                 if (key.equals("google.message_id")) {
                     notificationJson.put("id", bundle.getString(key));
                 } else {
-                    String valueStr = bundle.getString(key);
-                    dataObject.put(key, valueStr);
+                    dataObject.put(key, bundle.get(key));
                 }
             }
             notificationJson.put("data", dataObject);
