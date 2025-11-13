@@ -70,10 +70,14 @@ public class StatusBar {
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             setStatusBarColorDeprecated(color);
             currentStatusBarColor = color;
-            // determine if the color is light or dark using luminance and set icon color
-            boolean isLightColor = ColorUtils.calculateLuminance(color) > 0.5;
-            WindowInsetsControllerCompat insetsController = WindowCompat.getInsetsController(window, window.getDecorView());
-            insetsController.setAppearanceLightStatusBars(isLightColor);
+
+            // only set foreground color if style is default
+            if (currentStyle.equals("DEFAULT")) {
+                // determine if the color is light or dark using luminance and set icon color
+                boolean isLightColor = ColorUtils.calculateLuminance(color) > 0.5;
+                WindowInsetsControllerCompat insetsController = WindowCompat.getInsetsController(window, window.getDecorView());
+                insetsController.setAppearanceLightStatusBars(isLightColor);
+            }
         }
     }
 
