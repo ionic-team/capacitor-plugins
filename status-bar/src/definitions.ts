@@ -11,7 +11,7 @@ declare module '@capacitor/cli' {
        * For applications targeting Android 15, this property has no effect unless
        * the property windowOptOutEdgeToEdgeEnforcement is added to the application layout file.
        * Otherwise, the application assumes always overlays as true.
-       * More details in https://developer.android.com/reference/android/R.attr#windowOptOutEdgeToEdgeEnforcement
+       * More details in https://developer.android.com/reference/android/R.attr#windowOptOutEdgeToEdgeEnforcement.
        * For applications targeting Android 16 or above, this property has no effect.
        * 
        * @since 1.0.0
@@ -214,7 +214,7 @@ export interface StatusBarPlugin {
    * For applications targeting Android 15, calling this function has no effect unless
    * the property windowOptOutEdgeToEdgeEnforcement is added to the application layout file.
    * Otherwise, the application assumes always overlays as true.
-   * More details in https://developer.android.com/reference/android/R.attr#windowOptOutEdgeToEdgeEnforcement
+   * More details in https://developer.android.com/reference/android/R.attr#windowOptOutEdgeToEdgeEnforcement.
    * For applications targeting Android 16 or above, calling this function has no effect.
    *
    * @since 1.0.0
