@@ -26,29 +26,25 @@ public class TextZoomPlugin extends Plugin {
 
     @PluginMethod
     public void get(final PluginCall call) {
-        mainHandler.post(
-            () -> {
-                JSObject ret = new JSObject();
-                ret.put("value", textZoom.get());
-                call.resolve(ret);
-            }
-        );
+        mainHandler.post(() -> {
+            JSObject ret = new JSObject();
+            ret.put("value", textZoom.get());
+            call.resolve(ret);
+        });
     }
 
     @PluginMethod
     public void set(final PluginCall call) {
-        mainHandler.post(
-            () -> {
-                Double value = call.getDouble("value");
+        mainHandler.post(() -> {
+            Double value = call.getDouble("value");
 
-                if (value == null) {
-                    call.reject("Invalid integer value.");
-                } else {
-                    textZoom.set(value);
-                    call.resolve();
-                }
+            if (value == null) {
+                call.reject("Invalid integer value.");
+            } else {
+                textZoom.set(value);
+                call.resolve();
             }
-        );
+        });
     }
 
     @PluginMethod
