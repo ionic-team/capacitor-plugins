@@ -15,7 +15,6 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
-import com.getcapacitor.Logger;
 
 public class StatusBar {
 
@@ -32,7 +31,6 @@ public class StatusBar {
         this.activity = activity;
         this.currentStatusBarColor = getStatusBarColorDeprecated();
         this.listener = listener;
-
         setBackgroundColor(config.getBackgroundColor());
         setStyle(config.getStyle());
         setOverlaysWebView(config.isOverlaysWebView());
@@ -40,7 +38,6 @@ public class StatusBar {
         info.setVisible(true);
         listener.onChange(statusBarOverlayChanged, info);
     }
-
 
     public void setStyle(String style) {
         Window window = activity.getWindow();
@@ -68,10 +65,9 @@ public class StatusBar {
 
     public void setBackgroundColor(int color) {
         Window window = activity.getWindow();
-        clearTranslucentStatusFlagDeprecated();
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-
         if (shouldSetStatusBarColor(isEdgeToEdgeOptOutEnabled(window))) {
+            clearTranslucentStatusFlagDeprecated();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             setStatusBarColorDeprecated(color);
             currentStatusBarColor = color;
             // determine if the color is light or dark using luminance and set icon color
