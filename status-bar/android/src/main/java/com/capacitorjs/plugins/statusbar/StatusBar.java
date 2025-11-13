@@ -117,25 +117,13 @@ public class StatusBar {
     private boolean shouldSetStatusBarColor(boolean hasOptOut) {
         boolean canSetStatusBar;
         int deviceApi = Build.VERSION.SDK_INT;
-        int targetApi = activity.getApplicationInfo().targetSdkVersion;
-
         if (deviceApi < Build.VERSION_CODES.VANILLA_ICE_CREAM) {
             // device below Android 15 - can always set status bar
             canSetStatusBar = true;
         } else if (deviceApi == Build.VERSION_CODES.VANILLA_ICE_CREAM) {
-            // device is Android 15
-            if (targetApi < Build.VERSION_CODES.VANILLA_ICE_CREAM) {
-                canSetStatusBar = true; // app targets < 15 - can set status bar
-            } else {
-                canSetStatusBar = hasOptOut; // app targets 15 - can set status bar if opted out
-            }
+            canSetStatusBar = hasOptOut; // app targets 15 - can set status bar if opted out
         } else {
-            // device is Android 16 or above
-            if ((targetApi == Build.VERSION_CODES.VANILLA_ICE_CREAM && hasOptOut) || targetApi < Build.VERSION_CODES.VANILLA_ICE_CREAM) {
-                canSetStatusBar = true; // app targets 15 - can set status bar if opted out or if app targets < 15
-            } else {
-                canSetStatusBar = false; // app targets 16 - opt-out ignored or app targets 15 but there is not opt out
-            }
+            canSetStatusBar = false; // app targets 16 - opt-out ignored or app targets 15 but there is not opt out
         }
         return canSetStatusBar;
     }
