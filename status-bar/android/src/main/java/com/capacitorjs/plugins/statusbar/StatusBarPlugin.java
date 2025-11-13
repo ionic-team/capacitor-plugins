@@ -64,10 +64,13 @@ public class StatusBarPlugin extends Plugin {
             return;
         }
 
-        getBridge().executeOnMainThread(() -> {
-            implementation.setStyle(style);
-            call.resolve();
-        });
+        getBridge()
+            .executeOnMainThread(
+                () -> {
+                    implementation.setStyle(style);
+                    call.resolve();
+                }
+            );
     }
 
     @PluginMethod
@@ -78,33 +81,42 @@ public class StatusBarPlugin extends Plugin {
             return;
         }
 
-        getBridge().executeOnMainThread(() -> {
-            try {
-                final int parsedColor = WebColor.parseColor(color.toUpperCase(Locale.ROOT));
-                implementation.setBackgroundColor(parsedColor);
-                call.resolve();
-            } catch (IllegalArgumentException ex) {
-                call.reject("Invalid color provided. Must be a hex string (ex: #ff0000");
-            }
-        });
+        getBridge()
+            .executeOnMainThread(
+                () -> {
+                    try {
+                        final int parsedColor = WebColor.parseColor(color.toUpperCase(Locale.ROOT));
+                        implementation.setBackgroundColor(parsedColor);
+                        call.resolve();
+                    } catch (IllegalArgumentException ex) {
+                        call.reject("Invalid color provided. Must be a hex string (ex: #ff0000");
+                    }
+                }
+            );
     }
 
     @PluginMethod
     public void hide(final PluginCall call) {
         // Hide the status bar.
-        getBridge().executeOnMainThread(() -> {
-            implementation.hide();
-            call.resolve();
-        });
+        getBridge()
+            .executeOnMainThread(
+                () -> {
+                    implementation.hide();
+                    call.resolve();
+                }
+            );
     }
 
     @PluginMethod
     public void show(final PluginCall call) {
         // Show the status bar.
-        getBridge().executeOnMainThread(() -> {
-            implementation.show();
-            call.resolve();
-        });
+        getBridge()
+            .executeOnMainThread(
+                () -> {
+                    implementation.show();
+                    call.resolve();
+                }
+            );
     }
 
     @PluginMethod
@@ -116,10 +128,13 @@ public class StatusBarPlugin extends Plugin {
     @PluginMethod
     public void setOverlaysWebView(final PluginCall call) {
         final Boolean overlay = call.getBoolean("overlay", true);
-        getBridge().executeOnMainThread(() -> {
-            implementation.setOverlaysWebView(overlay);
-            call.resolve();
-        });
+        getBridge()
+            .executeOnMainThread(
+                () -> {
+                    implementation.setOverlaysWebView(overlay);
+                    call.resolve();
+                }
+            );
     }
 
     private JSObject toJSObject(StatusBarInfo info) {

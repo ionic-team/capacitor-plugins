@@ -13,7 +13,7 @@ declare module '@capacitor/cli' {
        * Otherwise, the application assumes always overlays as true.
        * More details in https://developer.android.com/reference/android/R.attr#windowOptOutEdgeToEdgeEnforcement.
        * For applications targeting Android 16 or above, this property has no effect.
-       * 
+       *
        * @since 1.0.0
        * @default true
        * @example false
