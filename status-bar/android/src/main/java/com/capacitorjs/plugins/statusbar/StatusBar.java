@@ -108,12 +108,24 @@ public class StatusBar {
             setSystemUiVisibilityDeprecated(decorView, uiOptions);
             currentStatusBarColor = getStatusBarColorDeprecated();
             setStatusBarColorDeprecated(Color.TRANSPARENT);
+            // only set foreground color if style is default
+            if (currentStyle.equals("DEFAULT")) {
+                setStyle("DEFAULT");
+            }
         } else {
             // Sets the layout to a normal one that displays the WebView below the status bar.
             uiOptions = uiOptions & ~getSystemUiFlagLayoutStableDeprecated() & ~getSystemUiFlagLayoutFullscreenDeprecated();
             setSystemUiVisibilityDeprecated(decorView, uiOptions);
             // recover the previous color of the status bar
             setStatusBarColorDeprecated(currentStatusBarColor);
+            // only set foreground color if style is default
+            if (currentStyle.equals("DEFAULT")) {
+                // determine if the color is light or dark using luminance and set icon color
+                Window window = activity.getWindow();
+                boolean isLightColor = ColorUtils.calculateLuminance(currentStatusBarColor) > 0.5;
+                WindowInsetsControllerCompat insetsController = WindowCompat.getInsetsController(window, window.getDecorView());
+                insetsController.setAppearanceLightStatusBars(isLightColor);
+            }
         }
         listener.onChange(statusBarOverlayChanged, getInfo());
     }
