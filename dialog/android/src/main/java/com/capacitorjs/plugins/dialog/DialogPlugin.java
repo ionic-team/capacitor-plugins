@@ -48,18 +48,11 @@ public class DialogPlugin extends Plugin {
             return;
         }
 
-        Dialog.confirm(
-            activity,
-            message,
-            title,
-            okButtonTitle,
-            cancelButtonTitle,
-            (value, didCancel, inputValue) -> {
-                JSObject ret = new JSObject();
-                ret.put("value", value);
-                call.resolve(ret);
-            }
-        );
+        Dialog.confirm(activity, message, title, okButtonTitle, cancelButtonTitle, (value, didCancel, inputValue) -> {
+            JSObject ret = new JSObject();
+            ret.put("value", value);
+            call.resolve(ret);
+        });
     }
 
     @PluginMethod
