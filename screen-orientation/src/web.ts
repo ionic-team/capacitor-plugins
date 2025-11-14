@@ -14,10 +14,7 @@ interface ScreenOrientationWithLock extends ScreenOrientation {
   lock(orientation: OrientationLockType): Promise<void>;
 }
 
-export class ScreenOrientationWeb
-  extends WebPlugin
-  implements ScreenOrientationPlugin
-{
+export class ScreenOrientationWeb extends WebPlugin implements ScreenOrientationPlugin {
   constructor() {
     super();
     if (typeof screen !== 'undefined' && typeof screen.orientation !== 'undefined') {
@@ -41,14 +38,10 @@ export class ScreenOrientationWeb
       !screen.orientation ||
       !(screen.orientation as ScreenOrientationWithLock).lock
     ) {
-      throw this.unavailable(
-        'ScreenOrientation API not available in this browser',
-      );
+      throw this.unavailable('ScreenOrientation API not available in this browser');
     }
     try {
-      await (screen.orientation as ScreenOrientationWithLock).lock(
-        options.orientation,
-      );
+      await (screen.orientation as ScreenOrientationWithLock).lock(options.orientation);
     } catch {
       throw this.unavailable('ScreenOrientation API not available in this browser');
     }
