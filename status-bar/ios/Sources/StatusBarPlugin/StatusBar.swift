@@ -8,9 +8,12 @@ public class StatusBar {
     private var backgroundColor = UIColor.black
     private var backgroundView: UIView?
     private var observers: [NSObjectProtocol] = []
+    private var statusBarConfig: StatusBarConfig
+    private var currentStyleSetByUser : UIStatusBarStyle?
 
     init(bridge: CAPBridgeProtocol, config: StatusBarConfig) {
         self.bridge = bridge
+        self.statusBarConfig = config
         setupObservers(with: config)
     }
 
@@ -43,13 +46,22 @@ public class StatusBar {
         }
     }
 
-    func setStyle(_ style: UIStatusBarStyle) {
+    func setStyle(_ style: UIStatusBarStyle, selectedByUser: Bool = false) {
         bridge.statusBarStyle = style
+        if selectedByUser {
+            currentStyleSetByUser = style
+        }
     }
 
     func setBackgroundColor(_ color: UIColor) {
         backgroundColor = color
         backgroundView?.backgroundColor = color
+      
+        if #unavailable(iOS 17) {
+            if((!isOverlayingWebview && currentStyleSetByUser == nil) || (!isOverlayingWebview  && currentStyleSetByUser == .default)){
+                calculateLuminance(color)
+            }
+        }
     }
 
     func setAnimation(_ animation: String) {
@@ -115,12 +127,29 @@ public class StatusBar {
         if overlay == isOverlayingWebview { return }
         isOverlayingWebview = overlay
         if overlay {
+            if #unavailable(iOS 17), (currentStyleSetByUser == .default || currentStyleSetByUser == nil) {
+                setStyle(statusBarConfig.style)
+            }
             backgroundView?.removeFromSuperview()
         } else {
             initializeBackgroundViewIfNeeded()
             bridge.webView?.superview?.addSubview(backgroundView!)
+            if #unavailable(iOS 17), (currentStyleSetByUser == .default || currentStyleSetByUser == nil) {
+                calculateLuminance(backgroundColor)
+            }
         }
         resizeWebView()
+    }
+    
+    private func calculateLuminance(_ color: UIColor) {
+        var red: CGFloat = 0
+        var green: CGFloat = 0
+        var blue: CGFloat = 0
+        var alpha: CGFloat = 0
+        color.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
+        let luminance = 0.299 * red + 0.587 * green + 0.114 * blue
+        let newStyle: UIStatusBarStyle = luminance > 0.5 ? .darkContent : .lightContent
+        setStyle(newStyle)
     }
 
     private func resizeWebView() {

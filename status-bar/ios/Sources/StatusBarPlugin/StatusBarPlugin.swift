@@ -54,7 +54,7 @@ public class StatusBarPlugin: CAPPlugin, CAPBridgedPlugin {
     @objc func setStyle(_ call: CAPPluginCall) {
         let options = call.options!
         if let styleString = options["style"] as? String {
-            statusBar?.setStyle(style(fromString: styleString))
+            statusBar?.setStyle(style(fromString: styleString), selectedByUser: true)
         }
         call.resolve([:])
     }
