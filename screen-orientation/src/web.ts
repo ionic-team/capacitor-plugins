@@ -1,6 +1,18 @@
 import { WebPlugin } from '@capacitor/core';
 
-import type { OrientationLockOptions, ScreenOrientationPlugin, ScreenOrientationResult } from './definitions';
+import type {
+  OrientationLockOptions,
+  OrientationLockType,
+  ScreenOrientationPlugin,
+  ScreenOrientationResult,
+} from './definitions';
+
+// Extend ScreenOrientation interface to include lock method
+// TypeScript's DOM lib removed lock() but it still exists in the browser API
+// See: https://github.com/microsoft/TypeScript-DOM-lib-generator/issues/1615
+interface ScreenOrientationWithLock extends ScreenOrientation {
+  lock(orientation: OrientationLockType): Promise<void>;
+}
 
 export class ScreenOrientationWeb extends WebPlugin implements ScreenOrientationPlugin {
   constructor() {
@@ -21,11 +33,15 @@ export class ScreenOrientationWeb extends WebPlugin implements ScreenOrientation
   }
 
   async lock(options: OrientationLockOptions): Promise<void> {
-    if (typeof screen === 'undefined' || !screen.orientation || !screen.orientation.lock) {
+    if (
+      typeof screen === 'undefined' ||
+      !screen.orientation ||
+      !(screen.orientation as ScreenOrientationWithLock).lock
+    ) {
       throw this.unavailable('ScreenOrientation API not available in this browser');
     }
     try {
-      await screen.orientation.lock(options.orientation);
+      await (screen.orientation as ScreenOrientationWithLock).lock(options.orientation);
     } catch {
       throw this.unavailable('ScreenOrientation API not available in this browser');
     }

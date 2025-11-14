@@ -134,7 +134,7 @@ export class LocalNotificationsWeb extends WebPlugin implements LocalNotificatio
       try {
         new Notification('');
       } catch (e) {
-        if (e.name == 'TypeError') {
+        if (e instanceof Error && e.name === 'TypeError') {
           return false;
         }
       }
