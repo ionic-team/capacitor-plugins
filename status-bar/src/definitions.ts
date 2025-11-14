@@ -170,6 +170,7 @@ export interface StatusBarPlugin {
 
   /**
    * Set the background color of the status bar.
+   * Calling this function updates the foreground color of the status bar if the style is set to default, except on iOS versions lower than 17.
    * Not available on Android 15+.
    *
    * @since 1.0.0
