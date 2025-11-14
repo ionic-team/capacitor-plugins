@@ -1,6 +1,6 @@
 {
   "name": "@capacitor/action-sheet",
-  "version": "8.0.0-alpha.1",
+  "version": "8.0.0-beta.0",
   "description": "The Action Sheet API provides access to native Action Sheets, which come up from the bottom of the screen and display actions a user can take.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",

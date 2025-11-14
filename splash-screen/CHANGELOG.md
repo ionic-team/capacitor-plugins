@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [8.0.0-beta.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/splash-screen@8.0.0-alpha.1...@capacitor/splash-screen@8.0.0-beta.0) (2025-11-14)
+
+**Note:** Version bump only for package @capacitor/splash-screen
+
 # [8.0.0-alpha.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/splash-screen@7.0.3...@capacitor/splash-screen@8.0.0-alpha.1) (2025-09-08)
 
 **Note:** Version bump only for package @capacitor/splash-screen
@@ -174,7 +178,8 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - **splash-screen:** Use Locale.ROOT on toLowerCase ([#813](https://github.com/ionic-team/capacitor-plugins/issues/813)) ([ecc55e1](https://github.com/ionic-team/capacitor-plugins/commit/ecc55e172acfe066977a4aac5018a55beef64f53))
 - add es2017 lib to tsconfig ([#180](https://github.com/ionic-team/capacitor-plugins/issues/180)) ([2c3776c](https://github.com/ionic-team/capacitor-plugins/commit/2c3776c38ca025c5ee965dec10ccf1cdb6c02e2f))
 - correct addListeners links ([#655](https://github.com/ionic-team/capacitor-plugins/issues/655)) ([f9871e7](https://github.com/ionic-team/capacitor-plugins/commit/f9871e7bd53478addb21155e148829f550c0e457))
-- export all TS definitions ([6cd2996](https://github.com/ionic-team/capacitor-plugins/commit/6cd299660fdeb27382ec7f45f0b3a55224cd0ad1))
+- export all TS definitions ([6cd2996](https://github.com/ionic-team/capacitor-plugins/commit/6cd299660fdeb27382ec7f45f0b3a55224cd0ad1)
+  )
 - inline source code in esm map files ([#760](https://github.com/ionic-team/capacitor-plugins/issues/760)) ([a960489](https://github.com/ionic-team/capacitor-plugins/commit/a960489a19db0182b90d187a50deff9dfbe51038))
 - remove postpublish scripts ([#656](https://github.com/ionic-team/capacitor-plugins/issues/656)) ([ed6ac49](https://github.com/ionic-team/capacitor-plugins/commit/ed6ac499ebf4a47525071ccbfc36c27503e11f60))
 - **splash-screen:** launchAutoHide not working on iOS ([#319](https://github.com/ionic-team/capacitor-plugins/issues/319)) ([2a83fcb](https://github.com/ionic-team/capacitor-plugins/commit/2a83fcb536cdfc5b601f363212353201de40ca5b))
@@ -316,7 +321,8 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ### Bug Fixes
 
 - add es2017 lib to tsconfig ([#180](https://github.com/ionic-team/capacitor-plugins/issues/180)) ([2c3776c](https://github.com/ionic-team/capacitor-plugins/commit/2c3776c38ca025c5ee965dec10ccf1cdb6c02e2f))
-- export all TS definitions ([6cd2996](https://github.com/ionic-team/capacitor-plugins/commit/6cd299660fdeb27382ec7f45f0b3a55224cd0ad1))
+- export all TS definitions ([6cd2996](https://github.com/ionic-team/capacitor-plugins/commit/6cd299660fdeb27382ec7f45f0b3a55224cd0ad1)
+  )
 
 ### Features
 

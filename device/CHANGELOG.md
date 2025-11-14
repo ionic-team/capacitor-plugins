@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [8.0.0-beta.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/device@8.0.0-alpha.1...@capacitor/device@8.0.0-beta.0) (2025-11-14)
+
+### Bug Fixes
+
+- **device:** make tests work on node 22 ([#2432](https://github.com/ionic-team/capacitor-plugins/issues/2432)) ([4f01876](https://github.com/ionic-team/capacitor-plugins/commit/4f01876f1841220d27937af37deeb3074302c546))
+
 # [8.0.0-alpha.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/device@7.0.2...@capacitor/device@8.0.0-alpha.1) (2025-09-08)
 
 **Note:** Version bump only for package @capacitor/device
