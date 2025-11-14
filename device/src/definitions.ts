@@ -1,4 +1,4 @@
-export type OperatingSystem = 'ios' | 'android' | 'windows' | 'mac' | 'unknown';
+export type OperatingSystem = 'ios' | 'android' | 'windows' | 'mac' | 'linux' | 'freebsd' | 'openbsd' | 'unknown';
 
 export interface DeviceId {
   /**
