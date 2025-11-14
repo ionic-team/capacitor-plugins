@@ -21,7 +21,7 @@ public class NetworkPlugin extends Plugin {
     @Override
     public void load() {
         implementation = new Network(getContext());
-        Network.NetworkStatusChangeListener listener = wasLostEvent -> {
+        Network.NetworkStatusChangeListener listener = (wasLostEvent) -> {
             if (wasLostEvent) {
                 JSObject jsObject = new JSObject();
                 jsObject.put("connected", false);

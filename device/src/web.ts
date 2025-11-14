@@ -102,13 +102,8 @@ export class DeviceWeb extends WebPlugin implements DevicePlugin {
         } else {
           const tmpFields = fields.split('; ').pop();
           if (tmpFields) {
-            const lastParts = tmpFields
-              .replace(' like Mac OS X', '')
-              .split(' ');
-            uaFields.osVersion = lastParts[lastParts.length - 1].replace(
-              /_/g,
-              '.',
-            );
+            const lastParts = tmpFields.replace(' like Mac OS X', '').split(' ');
+            uaFields.osVersion = lastParts[lastParts.length - 1].replace(/_/g, '.');
           }
         }
       }
@@ -136,13 +131,7 @@ export class DeviceWeb extends WebPlugin implements DevicePlugin {
     const isEdgeIOS = /EdgiOS/.test(ua);
 
     // FF and Edge User Agents both end with "/MAJOR.MINOR"
-    if (
-      isSafari ||
-      (isChrome && !isEdge) ||
-      isFirefoxIOS ||
-      isChromeIOS ||
-      isEdgeIOS
-    ) {
+    if (isSafari || (isChrome && !isEdge) || isFirefoxIOS || isChromeIOS || isEdgeIOS) {
       // Safari version comes as     "... Version/MAJOR.MINOR ..."
       // Chrome version comes as     "... Chrome/MAJOR.MINOR ..."
       // FirefoxIOS version comes as "... FxiOS/MAJOR.MINOR ..."
@@ -192,13 +181,10 @@ export class DeviceWeb extends WebPlugin implements DevicePlugin {
   }
 
   uuid4(): string {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(
-      /[xy]/g,
-      function (c) {
-        const r = (Math.random() * 16) | 0,
-          v = c === 'x' ? r : (r & 0x3) | 0x8;
-        return v.toString(16);
-      },
-    );
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+      const r = (Math.random() * 16) | 0,
+        v = c === 'x' ? r : (r & 0x3) | 0x8;
+      return v.toString(16);
+    });
   }
 }

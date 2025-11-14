@@ -5,11 +5,7 @@ import type { AppInfo, AppPlugin, AppLaunchUrl, AppState } from './definitions';
 export class AppWeb extends WebPlugin implements AppPlugin {
   constructor() {
     super();
-    document.addEventListener(
-      'visibilitychange',
-      this.handleVisibilityChange,
-      false,
-    );
+    document.addEventListener('visibilitychange', this.handleVisibilityChange, false);
   }
 
   exitApp(): Promise<void> {
