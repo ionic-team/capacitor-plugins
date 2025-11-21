@@ -35,7 +35,7 @@ class EventGroup {
     }
 
     private void checkForCompletion() {
-        if (count <= 0) {
+        if (count < 0) {
             if (isComplete == false && completion != null) {
                 completion.onGroupCompletion();
             }
