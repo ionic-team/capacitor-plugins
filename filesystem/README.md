@@ -55,7 +55,7 @@ As of version 7.1.0, the `downloadFile` functionality in the Filesystem plugin h
 ### Installing the File Transfer plugin
 
 ```bash
-npm install @capacitor/file-transfer@latest-7
+npm install @capacitor/file-transfer@1.0.6
 npx cap sync
 ```
 
