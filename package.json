@@ -18,7 +18,7 @@
     "ci:publish:beta": "lerna publish prerelease --conventional-commits --conventional-prerelease --preid beta --force-publish --dist-tag next --yes",
     "ci:publish:rc": "lerna publish prerelease --conventional-commits --conventional-prerelease --preid rc --force-publish --dist-tag next --yes",
     "ci:publish:latest": "lerna publish --conventional-commits --dist-tag latest-7 --no-verify-access --yes",
-    "ci:publish:latest-from-pre": "lerna publish --conventional-graduate --conventional-commits --dist-tag latest-7 --no-verify-access --force-publish --yes",
+    "ci:publish:latest-from-pre": "lerna publish --conventional-graduate --conventional-commits --dist-tag latest --no-verify-access --force-publish --yes",
     "ci:publish:dev": "lerna publish prerelease --conventional-commits --conventional-prerelease --preid dev-$(date +\"%Y%m%dT%H%M%S\") --force-publish --no-changelog --no-git-tag-version --dist-tag dev-7 --no-push --yes"
   },
   "devDependencies": {
