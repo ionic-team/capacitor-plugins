@@ -5,7 +5,7 @@ The Motion API tracks accelerometer and device orientation (compass heading, etc
 ## Install
 
 ```bash
-npm install @capacitor/motion
+npm install @capacitor/motion@latest-7
 npx cap sync
 ```
 

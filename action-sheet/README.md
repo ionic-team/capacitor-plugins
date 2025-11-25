@@ -5,7 +5,7 @@ The Action Sheet API provides access to native Action Sheets, which come up from
 ## Install
 
 ```bash
-npm install @capacitor/action-sheet
+npm install @capacitor/action-sheet@latest-7
 npx cap sync
 ```
 
