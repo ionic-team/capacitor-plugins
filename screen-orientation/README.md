@@ -69,9 +69,9 @@ lock(options: OrientationLockOptions) => Promise<void>
 
 Locks the screen orientation.
 
-Starting in Android targetSdk 36, this method has no effect for large screens (e.g. tablets) on Android 16 and higher.
+Starting in Android targetSdk 36, this method has no effect for large screens (e.g. tablets) on Android 16 an higher.
 You may opt-out of this behavior in your app by adding `&lt;property android:name="android.window.PROPERTY_COMPAT_ALLOW_RESTRICTED_RESIZABILITY" android:value="true" /&gt;` to your `AndroidManifest.xml` inside `&lt;application&gt;` or `&lt;activity&gt;`.
-Keep in mind though that this opt-out is temporary and will no longer work for Android 17. Android discourages setting specific orientations for large screens.
+Keep in mind though that this opt-out is temporary will no longer work for Android 17. Android discourages setting specific orientations for large screens.
 Regular Android phones are unaffected by this change.
 For more information check the Android docs at https://developer.android.com/about/versions/16/behavior-changes-16#adaptive-layouts
 
