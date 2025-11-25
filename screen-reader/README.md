@@ -5,7 +5,7 @@ The Screen Reader API provides access to TalkBack/VoiceOver/etc. and provides si
 ## Install
 
 ```bash
-npm install @capacitor/screen-reader
+npm install @capacitor/screen-reader@latest-7
 npx cap sync
 ```
 
@@ -33,12 +33,12 @@ const sayHello = async () => {
 
 <docgen-index>
 
-* [`isEnabled()`](#isenabled)
-* [`speak(...)`](#speak)
-* [`addListener('stateChange', ...)`](#addlistenerstatechange-)
-* [`removeAllListeners()`](#removealllisteners)
-* [Interfaces](#interfaces)
-* [Type Aliases](#type-aliases)
+- [`isEnabled()`](#isenabled)
+- [`speak(...)`](#speak)
+- [`addListener('stateChange', ...)`](#addlistenerstatechange-)
+- [`removeAllListeners()`](#removealllisteners)
+- [Interfaces](#interfaces)
+- [Type Aliases](#type-aliases)
 
 </docgen-index>
 
@@ -60,8 +60,7 @@ Readers).
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### speak(...)
 
@@ -87,8 +86,7 @@ plugin](https://github.com/capacitor-community/text-to-speech).
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### addListener('stateChange', ...)
 
@@ -112,8 +110,7 @@ Readers).
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### removeAllListeners()
 
@@ -125,11 +122,9 @@ Remove all the listeners that are attached to this plugin.
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### Interfaces
-
 
 #### SpeakOptions
 
@@ -138,13 +133,11 @@ Remove all the listeners that are attached to this plugin.
 | **`value`**    | <code>string</code> | The text to speak.                                                                                                                                                        | 1.0.0 |
 | **`language`** | <code>string</code> | The language to speak the text in, as its [ISO 639-1 Code](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) (e.g.: "en"). This option is only supported on Android. | 1.0.0 |
 
-
 #### PluginListenerHandle
 
 | Prop         | Type                                      |
 | ------------ | ----------------------------------------- |
 | **`remove`** | <code>() =&gt; Promise&lt;void&gt;</code> |
-
 
 #### ScreenReaderState
 
@@ -152,12 +145,12 @@ Remove all the listeners that are attached to this plugin.
 | ----------- | -------------------- | -------------------------------------------- | ----- |
 | **`value`** | <code>boolean</code> | Whether a Screen Reader is currently active. | 1.0.0 |
 
-
 ### Type Aliases
-
 
 #### StateChangeListener
 
-<code>(state: <a href="#screenreaderstate">ScreenReaderState</a>): void</code>
+<code>
+  (state: <a href="#screenreaderstate">ScreenReaderState</a>): void
+</code>
 
 </docgen-api>

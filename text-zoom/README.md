@@ -15,7 +15,7 @@ The Text Zoom API provides the ability to change Web View text size for visual a
 ## Install
 
 ```bash
-npm install @capacitor/text-zoom
+npm install @capacitor/text-zoom@latest-7
 npx cap sync
 ```
 
@@ -23,10 +23,10 @@ npx cap sync
 
 <docgen-index>
 
-* [`get()`](#get)
-* [`getPreferred()`](#getpreferred)
-* [`set(...)`](#set)
-* [Interfaces](#interfaces)
+- [`get()`](#get)
+- [`getPreferred()`](#getpreferred)
+- [`set(...)`](#set)
+- [Interfaces](#interfaces)
 
 </docgen-index>
 
@@ -47,8 +47,7 @@ Zoom levels are represented as a decimal (e.g. 1.2 is 120%).
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### getPreferred()
 
@@ -64,8 +63,7 @@ Zoom levels are represented as a decimal (e.g. 1.2 is 120%).
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### set(...)
 
@@ -83,11 +81,9 @@ Zoom levels are represented as a decimal (e.g. 1.2 is 120%).
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### Interfaces
-
 
 #### GetResult
 
@@ -95,13 +91,11 @@ Zoom levels are represented as a decimal (e.g. 1.2 is 120%).
 | ----------- | ------------------- | -------------------------------------------------- | ----- |
 | **`value`** | <code>number</code> | The current zoom level (represented as a decimal). | 1.0.0 |
 
-
 #### GetPreferredResult
 
 | Prop        | Type                | Description                                          | Since |
 | ----------- | ------------------- | ---------------------------------------------------- | ----- |
 | **`value`** | <code>number</code> | The preferred zoom level (represented as a decimal). | 1.0.0 |
-
 
 #### SetOptions
 

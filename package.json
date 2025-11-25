@@ -14,12 +14,12 @@
     "set-settings-gradle-for-monorepo": "node ./scripts/monorepo-tools/android-settings-gradle-fix.mjs",
     "publish:cocoapod": "lerna run publish:cocoapod --concurrency 1",
     "ci:publish:nightly": "lerna publish prerelease --conventional-commits --conventional-prerelease --preid nightly-$(date +\"%Y%m%dT%H%M%S\") --force-publish --no-changelog --no-git-tag-version --dist-tag nightly --no-push --yes",
-    "ci:publish:alpha": "lerna publish prerelease --conventional-commits --conventional-prerelease --preid alpha --force-publish --dist-tag next --yes",
-    "ci:publish:beta": "lerna publish prerelease --conventional-commits --conventional-prerelease --preid beta --force-publish --dist-tag next --yes",
-    "ci:publish:rc": "lerna publish prerelease --conventional-commits --conventional-prerelease --preid rc --force-publish --dist-tag next --yes",
-    "ci:publish:latest": "lerna publish --conventional-commits --dist-tag latest --no-verify-access --yes",
-    "ci:publish:latest-from-pre": "lerna publish --conventional-graduate --conventional-commits --dist-tag latest --no-verify-access --force-publish --yes",
-    "ci:publish:dev": "lerna publish prerelease --conventional-commits --conventional-prerelease --preid dev-$(date +\"%Y%m%dT%H%M%S\") --force-publish --no-changelog --no-git-tag-version --dist-tag dev --no-push --yes"
+    "ci:publish:alpha": "lerna publish prerelease --conventional-commits --conventional-prerelease --preid alpha --force-publish --dist-tag next-7 --yes",
+    "ci:publish:beta": "lerna publish prerelease --conventional-commits --conventional-prerelease --preid beta --force-publish --dist-tag next-7 --yes",
+    "ci:publish:rc": "lerna publish prerelease --conventional-commits --conventional-prerelease --preid rc --force-publish --dist-tag next-7 --yes",
+    "ci:publish:latest": "lerna publish --conventional-commits --dist-tag latest-7 --no-verify-access --yes",
+    "ci:publish:latest-from-pre": "lerna publish --conventional-graduate --conventional-commits --dist-tag latest-7 --no-verify-access --force-publish --yes",
+    "ci:publish:dev": "lerna publish prerelease --conventional-commits --conventional-prerelease --preid dev-$(date +\"%Y%m%dT%H%M%S\") --force-publish --no-changelog --no-git-tag-version --dist-tag dev-7 --no-push --yes"
   },
   "devDependencies": {
     "@actions/core": "^1.9.1",

@@ -8,9 +8,10 @@ API](https://web.dev/web-share/)), though web support is currently spotty.
 ## Install
 
 ```bash
-npm install @capacitor/share
+npm install @capacitor/share@latest-7
 npx cap sync
 ```
+
 ## Android
 
 By default, Capacitor apps only allow to share files from caches folder. To make other Android folders shareable, they have to be added in `android/app/src/main/res/xml/file_paths.xml` file. Check the Specifying Available Files section in [FileProvider docs](https://developer.android.com/reference/androidx/core/content/FileProvider) for the available locations.
@@ -46,7 +47,7 @@ await Share.share({
 // Share multiple files using files parameter
 const { photos } = await Camera.pickImages(options);
 await Share.share({
-  files: photos.map(photo => photo.path!),
+  files: photos.map((photo) => photo.path!),
 });
 ```
 
@@ -56,9 +57,9 @@ Each platform uses a different set of fields, but you should supply them all.
 
 <docgen-index>
 
-* [`canShare()`](#canshare)
-* [`share(...)`](#share)
-* [Interfaces](#interfaces)
+- [`canShare()`](#canshare)
+- [`share(...)`](#share)
+- [Interfaces](#interfaces)
 
 </docgen-index>
 
@@ -77,8 +78,7 @@ Check if sharing is supported.
 
 **Since:** 1.1.0
 
---------------------
-
+---
 
 ### share(...)
 
@@ -96,11 +96,9 @@ Show a Share modal for sharing content with other apps
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### Interfaces
-
 
 #### CanShareResult
 
@@ -108,13 +106,11 @@ Show a Share modal for sharing content with other apps
 | ----------- | -------------------- | ------------------------------------ | ----- |
 | **`value`** | <code>boolean</code> | Whether sharing is supported or not. | 1.1.0 |
 
-
 #### ShareResult
 
 | Prop               | Type                | Description                                                                                                              | Since |
 | ------------------ | ------------------- | ------------------------------------------------------------------------------------------------------------------------ | ----- |
 | **`activityType`** | <code>string</code> | Identifier of the app that received the share action. Can be an empty string in some cases. On web it will be undefined. | 1.0.0 |
-
 
 #### ShareOptions
 

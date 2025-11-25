@@ -5,7 +5,7 @@ The Action Sheet API provides access to native Action Sheets, which come up from
 ## Install
 
 ```bash
-npm install @capacitor/action-sheet
+npm install @capacitor/action-sheet@latest-7
 npx cap sync
 ```
 
@@ -50,9 +50,9 @@ const showActions = async () => {
 
 <docgen-index>
 
-* [`showActions(...)`](#showactions)
-* [Interfaces](#interfaces)
-* [Enums](#enums)
+- [`showActions(...)`](#showactions)
+- [Interfaces](#interfaces)
+- [Enums](#enums)
 
 </docgen-index>
 
@@ -76,18 +76,15 @@ to select.
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### Interfaces
-
 
 #### ShowActionsResult
 
 | Prop        | Type                | Description                                  | Since |
 | ----------- | ------------------- | -------------------------------------------- | ----- |
 | **`index`** | <code>number</code> | The index of the clicked option (Zero-based) | 1.0.0 |
-
 
 #### ShowActionsOptions
 
@@ -97,7 +94,6 @@ to select.
 | **`message`** | <code>string</code>              | A message to show under the title. This option is only supported on iOS. | 1.0.0 |
 | **`options`** | <code>ActionSheetButton[]</code> | Options the user can choose from.                                        | 1.0.0 |
 
-
 #### ActionSheetButton
 
 | Prop        | Type                                                                      | Description                                                                           | Since |
@@ -106,9 +102,7 @@ to select.
 | **`style`** | <code><a href="#actionsheetbuttonstyle">ActionSheetButtonStyle</a></code> | The style of the option This option is only supported on iOS.                         | 1.0.0 |
 | **`icon`**  | <code>string</code>                                                       | Icon for the option (ionicon naming convention) This option is only supported on Web. | 1.0.0 |
 
-
 ### Enums
-
 
 #### ActionSheetButtonStyle
 

@@ -5,7 +5,7 @@ The Dialog API provides methods for triggering native dialog windows for alerts,
 ## Install
 
 ```bash
-npm install @capacitor/dialog
+npm install @capacitor/dialog@latest-7
 npx cap sync
 ```
 
@@ -45,10 +45,10 @@ const showPrompt = async () => {
 
 <docgen-index>
 
-* [`alert(...)`](#alert)
-* [`prompt(...)`](#prompt)
-* [`confirm(...)`](#confirm)
-* [Interfaces](#interfaces)
+- [`alert(...)`](#alert)
+- [`prompt(...)`](#prompt)
+- [`confirm(...)`](#confirm)
+- [Interfaces](#interfaces)
 
 </docgen-index>
 
@@ -69,8 +69,7 @@ Show an alert dialog
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### prompt(...)
 
@@ -88,8 +87,7 @@ Show a prompt dialog
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### confirm(...)
 
@@ -107,11 +105,9 @@ Show a confirmation dialog
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### Interfaces
-
 
 #### AlertOptions
 
@@ -121,14 +117,12 @@ Show a confirmation dialog
 | **`message`**     | <code>string</code> | Message to show on the dialog.    |                   | 1.0.0 |
 | **`buttonTitle`** | <code>string</code> | Text to use on the action button. | <code>"OK"</code> | 1.0.0 |
 
-
 #### PromptResult
 
 | Prop            | Type                 | Description                                     | Since |
 | --------------- | -------------------- | ----------------------------------------------- | ----- |
 | **`value`**     | <code>string</code>  | Text entered on the prompt.                     | 1.0.0 |
 | **`cancelled`** | <code>boolean</code> | Whether if the prompt was canceled or accepted. | 1.0.0 |
-
 
 #### PromptOptions
 
@@ -141,13 +135,11 @@ Show a confirmation dialog
 | **`inputPlaceholder`**  | <code>string</code> | Placeholder text for hints.                |                       | 1.0.0 |
 | **`inputText`**         | <code>string</code> | Prepopulated text.                         |                       | 1.0.0 |
 
-
 #### ConfirmResult
 
 | Prop        | Type                 | Description                                               | Since |
 | ----------- | -------------------- | --------------------------------------------------------- | ----- |
 | **`value`** | <code>boolean</code> | true if the positive button was clicked, false otherwise. | 1.0.0 |
-
 
 #### ConfirmOptions
 

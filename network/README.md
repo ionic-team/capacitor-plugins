@@ -5,7 +5,7 @@ The Network API provides network and connectivity information.
 ## Install
 
 ```bash
-npm install @capacitor/network
+npm install @capacitor/network@latest-7
 npx cap sync
 ```
 
@@ -14,7 +14,7 @@ npx cap sync
 ```typescript
 import { Network } from '@capacitor/network';
 
-Network.addListener('networkStatusChange', status => {
+Network.addListener('networkStatusChange', (status) => {
   console.log('Network status changed', status);
 });
 
@@ -29,11 +29,11 @@ const logCurrentNetworkStatus = async () => {
 
 <docgen-index>
 
-* [`getStatus()`](#getstatus)
-* [`addListener('networkStatusChange', ...)`](#addlistenernetworkstatuschange-)
-* [`removeAllListeners()`](#removealllisteners)
-* [Interfaces](#interfaces)
-* [Type Aliases](#type-aliases)
+- [`getStatus()`](#getstatus)
+- [`addListener('networkStatusChange', ...)`](#addlistenernetworkstatuschange-)
+- [`removeAllListeners()`](#removealllisteners)
+- [Interfaces](#interfaces)
+- [Type Aliases](#type-aliases)
 
 </docgen-index>
 
@@ -52,8 +52,7 @@ Query the current status of the network connection.
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### addListener('networkStatusChange', ...)
 
@@ -72,8 +71,7 @@ Listen for changes in the network connection.
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### removeAllListeners()
 
@@ -85,11 +83,9 @@ Remove all listeners (including the network status changes) for this plugin.
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### Interfaces
-
 
 #### ConnectionStatus
 
@@ -100,16 +96,13 @@ Represents the state and type of the network connection.
 | **`connected`**      | <code>boolean</code>                                      | Whether there is an active connection or not.                                                                                 | 1.0.0 |
 | **`connectionType`** | <code><a href="#connectiontype">ConnectionType</a></code> | The type of network connection currently in use. If there is no active network connection, `connectionType` will be `'none'`. | 1.0.0 |
 
-
 #### PluginListenerHandle
 
 | Prop         | Type                                      |
 | ------------ | ----------------------------------------- |
 | **`remove`** | <code>() =&gt; Promise&lt;void&gt;</code> |
 
-
 ### Type Aliases
-
 
 #### ConnectionType
 
@@ -117,11 +110,12 @@ The type of network connection that a device might have.
 
 <code>'wifi' | 'cellular' | 'none' | 'unknown'</code>
 
-
 #### ConnectionStatusChangeListener
 
 Callback to receive the status change notifications.
 
-<code>(status: <a href="#connectionstatus">ConnectionStatus</a>): void</code>
+<code>
+  (status: <a href="#connectionstatus">ConnectionStatus</a>): void
+</code>
 
 </docgen-api>

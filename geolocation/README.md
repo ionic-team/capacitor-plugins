@@ -11,7 +11,7 @@ The Geolocation API provides simple methods for getting and tracking the current
 ## Install
 
 ```bash
-npm install @capacitor/geolocation
+npm install @capacitor/geolocation@latest-7
 npx cap sync
 ```
 
@@ -60,13 +60,13 @@ const printCurrentPosition = async () => {
 
 <docgen-index>
 
-* [`getCurrentPosition(...)`](#getcurrentposition)
-* [`watchPosition(...)`](#watchposition)
-* [`clearWatch(...)`](#clearwatch)
-* [`checkPermissions()`](#checkpermissions)
-* [`requestPermissions(...)`](#requestpermissions)
-* [Interfaces](#interfaces)
-* [Type Aliases](#type-aliases)
+- [`getCurrentPosition(...)`](#getcurrentposition)
+- [`watchPosition(...)`](#watchposition)
+- [`clearWatch(...)`](#clearwatch)
+- [`checkPermissions()`](#checkpermissions)
+- [`requestPermissions(...)`](#requestpermissions)
+- [Interfaces](#interfaces)
+- [Type Aliases](#type-aliases)
 
 </docgen-index>
 
@@ -89,8 +89,7 @@ Get the current GPS location of the device
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### watchPosition(...)
 
@@ -110,8 +109,7 @@ can consume a large amount of energy. Be smart about listening only when you nee
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### clearWatch(...)
 
@@ -127,8 +125,7 @@ Clear a given watch
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### checkPermissions()
 
@@ -136,14 +133,13 @@ Clear a given watch
 checkPermissions() => Promise<PermissionStatus>
 ```
 
-Check location permissions.  Will throw if system location services are disabled.
+Check location permissions. Will throw if system location services are disabled.
 
 **Returns:** <code>Promise&lt;<a href="#permissionstatus">PermissionStatus</a>&gt;</code>
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### requestPermissions(...)
 
@@ -151,7 +147,7 @@ Check location permissions.  Will throw if system location services are disabled
 requestPermissions(permissions?: GeolocationPluginPermissions | undefined) => Promise<PermissionStatus>
 ```
 
-Request location permissions.  Will throw if system location services are disabled.
+Request location permissions. Will throw if system location services are disabled.
 
 | Param             | Type                                                                                  |
 | ----------------- | ------------------------------------------------------------------------------------- |
@@ -161,11 +157,9 @@ Request location permissions.  Will throw if system location services are disabl
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### Interfaces
-
 
 #### Position
 
@@ -173,7 +167,6 @@ Request location permissions.  Will throw if system location services are disabl
 | --------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- | ----- |
 | **`timestamp`** | <code>number</code>                                                                                                                                                                 | Creation timestamp for coords                           | 1.0.0 |
 | **`coords`**    | <code>{ latitude: number; longitude: number; accuracy: number; altitudeAccuracy: number \| null; altitude: number \| null; speed: number \| null; heading: number \| null; }</code> | The GPS coordinates along with the accuracy of the data | 1.0.0 |
-
 
 #### PositionOptions
 
@@ -184,13 +177,11 @@ Request location permissions.  Will throw if system location services are disabl
 | **`maximumAge`**            | <code>number</code>  | The maximum age in milliseconds of a possible cached position that is acceptable to return                                                                                                                                                                                                                      | <code>0</code>     | 1.0.0 |
 | **`minimumUpdateInterval`** | <code>number</code>  | The minumum update interval for location updates. If location updates are available faster than this interval then an update will only occur if the minimum update interval has expired since the last location update. This parameter is only available for Android. It has no effect on iOS or Web platforms. | <code>5000</code>  | 6.1.0 |
 
-
 #### ClearWatchOptions
 
 | Prop     | Type                                              |
 | -------- | ------------------------------------------------- |
 | **`id`** | <code><a href="#callbackid">CallbackID</a></code> |
-
 
 #### PermissionStatus
 
@@ -199,31 +190,27 @@ Request location permissions.  Will throw if system location services are disabl
 | **`location`**       | <code><a href="#permissionstate">PermissionState</a></code> | Permission state for location alias. On Android it requests/checks both ACCESS_COARSE_LOCATION and ACCESS_FINE_LOCATION permissions. On iOS and web it requests/checks location permission.                                                                                                                                                                        | 1.0.0 |
 | **`coarseLocation`** | <code><a href="#permissionstate">PermissionState</a></code> | Permission state for coarseLocation alias. On Android it requests/checks ACCESS_COARSE_LOCATION. On Android 12+, users can choose between Approximate location (ACCESS_COARSE_LOCATION) or Precise location (ACCESS_FINE_LOCATION), so this alias can be used if the app doesn't need high accuracy. On iOS and web it will have the same value as location alias. | 1.2.0 |
 
-
 #### GeolocationPluginPermissions
 
 | Prop              | Type                                     |
 | ----------------- | ---------------------------------------- |
 | **`permissions`** | <code>GeolocationPermissionType[]</code> |
 
-
 ### Type Aliases
-
 
 #### WatchPositionCallback
 
-<code>(position: <a href="#position">Position</a> | null, err?: any): void</code>
-
+<code>
+  (position: <a href="#position">Position</a> | null, err?: any): void
+</code>
 
 #### CallbackID
 
 <code>string</code>
 
-
 #### PermissionState
 
 <code>'prompt' | 'prompt-with-rationale' | 'granted' | 'denied'</code>
-
 
 #### GeolocationPermissionType
 

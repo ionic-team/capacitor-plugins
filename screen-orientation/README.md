@@ -5,7 +5,7 @@ The Screen Orientation API provides information and functionality related to the
 ## Install
 
 ```bash
-npm install @capacitor/screen-orientation
+npm install @capacitor/screen-orientation@latest-7
 npx cap sync
 ```
 
@@ -33,13 +33,13 @@ By default, an iPad allows Multitasking and its orientation cannot be locked. If
 
 <docgen-index>
 
-* [`orientation()`](#orientation)
-* [`lock(...)`](#lock)
-* [`unlock()`](#unlock)
-* [`addListener('screenOrientationChange', ...)`](#addlistenerscreenorientationchange-)
-* [`removeAllListeners()`](#removealllisteners)
-* [Interfaces](#interfaces)
-* [Type Aliases](#type-aliases)
+- [`orientation()`](#orientation)
+- [`lock(...)`](#lock)
+- [`unlock()`](#unlock)
+- [`addListener('screenOrientationChange', ...)`](#addlistenerscreenorientationchange-)
+- [`removeAllListeners()`](#removealllisteners)
+- [Interfaces](#interfaces)
+- [Type Aliases](#type-aliases)
 
 </docgen-index>
 
@@ -58,8 +58,7 @@ Returns the current screen orientation.
 
 **Since:** 4.0.0
 
---------------------
-
+---
 
 ### lock(...)
 
@@ -75,8 +74,7 @@ Locks the screen orientation.
 
 **Since:** 4.0.0
 
---------------------
-
+---
 
 ### unlock()
 
@@ -88,8 +86,7 @@ Unlocks the screen's orientation.
 
 **Since:** 4.0.0
 
---------------------
-
+---
 
 ### addListener('screenOrientationChange', ...)
 
@@ -108,8 +105,7 @@ Listens for screen orientation changes.
 
 **Since:** 4.0.0
 
---------------------
-
+---
 
 ### removeAllListeners()
 
@@ -121,11 +117,9 @@ Removes all listeners.
 
 **Since:** 4.0.0
 
---------------------
-
+---
 
 ### Interfaces
-
 
 #### ScreenOrientationResult
 
@@ -133,13 +127,11 @@ Removes all listeners.
 | ---------- | ---------------------------- |
 | **`type`** | <code>OrientationType</code> |
 
-
 #### OrientationLockOptions
 
 | Prop              | Type                                                                | Description                                                                                                                           |
 | ----------------- | ------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
 | **`orientation`** | <code><a href="#orientationlocktype">OrientationLockType</a></code> | Note: Typescript v5.2+ users should import <a href="#orientationlocktype">OrientationLockType</a> from @capacitor/screen-orientation. |
-
 
 #### PluginListenerHandle
 
@@ -147,12 +139,13 @@ Removes all listeners.
 | ------------ | ----------------------------------------- |
 | **`remove`** | <code>() =&gt; Promise&lt;void&gt;</code> |
 
-
 ### Type Aliases
-
 
 #### OrientationLockType
 
-<code>'any' | 'natural' | 'landscape' | 'portrait' | 'portrait-primary' | 'portrait-secondary' | 'landscape-primary' | 'landscape-secondary'</code>
+<code>
+  'any' | 'natural' | 'landscape' | 'portrait' | 'portrait-primary' | 'portrait-secondary' | 'landscape-primary' |
+  'landscape-secondary'
+</code>
 
 </docgen-api>

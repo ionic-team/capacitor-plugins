@@ -9,6 +9,7 @@ On Android you can open apps if you know their url scheme or use their public pa
 **Note:** On [Android 11](https://developer.android.com/about/versions/11/privacy/package-visibility) and newer you have to add the app package names you want to query in the `AndroidManifest.xml` inside the `queries` tag.
 
 Example:
+
 ```xml
 <queries>
   <package android:name="com.getcapacitor.myapp" />
@@ -18,7 +19,7 @@ Example:
 ## Install
 
 ```bash
-npm install @capacitor/app-launcher
+npm install @capacitor/app-launcher@latest-7
 npx cap sync
 ```
 
@@ -42,9 +43,9 @@ const openPortfolioPage = async () => {
 
 <docgen-index>
 
-* [`canOpenUrl(...)`](#canopenurl)
-* [`openUrl(...)`](#openurl)
-* [Interfaces](#interfaces)
+- [`canOpenUrl(...)`](#canopenurl)
+- [`openUrl(...)`](#openurl)
+- [Interfaces](#interfaces)
 
 </docgen-index>
 
@@ -76,8 +77,7 @@ appropriate app is installed. To learn more about the key, see
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### openUrl(...)
 
@@ -97,11 +97,9 @@ On Android the URL can be a known URLScheme or an app package name.
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### Interfaces
-
 
 #### CanOpenURLResult
 
@@ -109,20 +107,17 @@ On Android the URL can be a known URLScheme or an app package name.
 | ----------- | -------------------- |
 | **`value`** | <code>boolean</code> |
 
-
 #### CanOpenURLOptions
 
 | Prop      | Type                |
 | --------- | ------------------- |
 | **`url`** | <code>string</code> |
 
-
 #### OpenURLResult
 
 | Prop            | Type                 |
 | --------------- | -------------------- |
 | **`completed`** | <code>boolean</code> |
-
 
 #### OpenURLOptions
 

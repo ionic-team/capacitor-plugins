@@ -5,7 +5,7 @@ The Clipboard API enables copy and pasting to/from the system clipboard.
 ## Install
 
 ```bash
-npm install @capacitor/clipboard
+npm install @capacitor/clipboard@latest-7
 npx cap sync
 ```
 
@@ -16,7 +16,7 @@ import { Clipboard } from '@capacitor/clipboard';
 
 const writeToClipboard = async () => {
   await Clipboard.write({
-    string: "Hello World!"
+    string: 'Hello World!',
   });
 };
 
@@ -31,9 +31,9 @@ const checkClipboard = async () => {
 
 <docgen-index>
 
-* [`write(...)`](#write)
-* [`read()`](#read)
-* [Interfaces](#interfaces)
+- [`write(...)`](#write)
+- [`read()`](#read)
+- [Interfaces](#interfaces)
 
 </docgen-index>
 
@@ -54,8 +54,7 @@ Write a value to the clipboard (the "copy" action)
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### read()
 
@@ -69,11 +68,9 @@ Read a value from the clipboard (the "paste" action)
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### Interfaces
-
 
 #### WriteOptions
 
@@ -85,7 +82,6 @@ Represents the data to be written to the clipboard.
 | **`image`**  | <code>string</code> | Image in [Data URL](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URIs) format to copy. | 1.0.0 |
 | **`url`**    | <code>string</code> | URL string to copy.                                                                                             | 1.0.0 |
 | **`label`**  | <code>string</code> | User visible label to accompany the copied data (Android Only).                                                 | 1.0.0 |
-
 
 #### ReadResult
 

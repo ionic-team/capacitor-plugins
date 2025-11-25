@@ -5,7 +5,7 @@ The Keyboard API provides keyboard display and visibility control, along with ev
 ## Install
 
 ```bash
-npm install @capacitor/keyboard
+npm install @capacitor/keyboard@latest-7
 npx cap sync
 ```
 
@@ -14,11 +14,11 @@ npx cap sync
 ```typescript
 import { Keyboard } from '@capacitor/keyboard';
 
-Keyboard.addListener('keyboardWillShow', info => {
+Keyboard.addListener('keyboardWillShow', (info) => {
   console.log('keyboard will show with height:', info.keyboardHeight);
 });
 
-Keyboard.addListener('keyboardDidShow', info => {
+Keyboard.addListener('keyboardDidShow', (info) => {
   console.log('keyboard did show with height:', info.keyboardHeight);
 });
 
@@ -93,20 +93,20 @@ the following events also work with `window.addEventListener`:
 
 <docgen-index>
 
-* [`show()`](#show)
-* [`hide()`](#hide)
-* [`setAccessoryBarVisible(...)`](#setaccessorybarvisible)
-* [`setScroll(...)`](#setscroll)
-* [`setStyle(...)`](#setstyle)
-* [`setResizeMode(...)`](#setresizemode)
-* [`getResizeMode()`](#getresizemode)
-* [`addListener('keyboardWillShow', ...)`](#addlistenerkeyboardwillshow-)
-* [`addListener('keyboardDidShow', ...)`](#addlistenerkeyboarddidshow-)
-* [`addListener('keyboardWillHide', ...)`](#addlistenerkeyboardwillhide-)
-* [`addListener('keyboardDidHide', ...)`](#addlistenerkeyboarddidhide-)
-* [`removeAllListeners()`](#removealllisteners)
-* [Interfaces](#interfaces)
-* [Enums](#enums)
+- [`show()`](#show)
+- [`hide()`](#hide)
+- [`setAccessoryBarVisible(...)`](#setaccessorybarvisible)
+- [`setScroll(...)`](#setscroll)
+- [`setStyle(...)`](#setstyle)
+- [`setResizeMode(...)`](#setresizemode)
+- [`getResizeMode()`](#getresizemode)
+- [`addListener('keyboardWillShow', ...)`](#addlistenerkeyboardwillshow-)
+- [`addListener('keyboardDidShow', ...)`](#addlistenerkeyboarddidshow-)
+- [`addListener('keyboardWillHide', ...)`](#addlistenerkeyboardwillhide-)
+- [`addListener('keyboardDidHide', ...)`](#addlistenerkeyboarddidhide-)
+- [`removeAllListeners()`](#removealllisteners)
+- [Interfaces](#interfaces)
+- [Enums](#enums)
 
 </docgen-index>
 
@@ -125,8 +125,7 @@ This method is only supported on Android.
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### hide()
 
@@ -138,8 +137,7 @@ Hide the keyboard.
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### setAccessoryBarVisible(...)
 
@@ -158,8 +156,7 @@ This method is only supported on iPhone devices.
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### setScroll(...)
 
@@ -177,8 +174,7 @@ This method is only supported on iOS.
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### setStyle(...)
 
@@ -196,8 +192,7 @@ This method is only supported on iOS.
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### setResizeMode(...)
 
@@ -215,8 +210,7 @@ This method is only supported on iOS.
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### getResizeMode()
 
@@ -232,8 +226,7 @@ This method is only supported on iOS.
 
 **Since:** 4.0.0
 
---------------------
-
+---
 
 ### addListener('keyboardWillShow', ...)
 
@@ -254,8 +247,7 @@ On Android keyboardWillShow and keyboardDidShow fire almost at the same time.
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### addListener('keyboardDidShow', ...)
 
@@ -276,8 +268,7 @@ On Android keyboardWillShow and keyboardDidShow fire almost at the same time.
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### addListener('keyboardWillHide', ...)
 
@@ -298,8 +289,7 @@ On Android keyboardWillHide and keyboardDidHide fire almost at the same time.
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### addListener('keyboardDidHide', ...)
 
@@ -320,8 +310,7 @@ On Android keyboardWillHide and keyboardDidHide fire almost at the same time.
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### removeAllListeners()
 
@@ -333,11 +322,9 @@ Remove all native listeners for this plugin.
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### Interfaces
-
 
 #### KeyboardStyleOptions
 
@@ -345,13 +332,11 @@ Remove all native listeners for this plugin.
 | ----------- | ------------------------------------------------------- | ---------------------- | ---------------------------------- | ----- |
 | **`style`** | <code><a href="#keyboardstyle">KeyboardStyle</a></code> | Style of the keyboard. | <code>KeyboardStyle.Default</code> | 1.0.0 |
 
-
 #### KeyboardResizeOptions
 
 | Prop       | Type                                                      | Description                                             | Since |
 | ---------- | --------------------------------------------------------- | ------------------------------------------------------- | ----- |
 | **`mode`** | <code><a href="#keyboardresize">KeyboardResize</a></code> | Mode used to resize elements when the keyboard appears. | 1.0.0 |
-
 
 #### PluginListenerHandle
 
@@ -359,16 +344,13 @@ Remove all native listeners for this plugin.
 | ------------ | ----------------------------------------- |
 | **`remove`** | <code>() =&gt; Promise&lt;void&gt;</code> |
 
-
 #### KeyboardInfo
 
 | Prop                 | Type                | Description             | Since |
 | -------------------- | ------------------- | ----------------------- | ----- |
 | **`keyboardHeight`** | <code>number</code> | Height of the heyboard. | 1.0.0 |
 
-
 ### Enums
-
 
 #### KeyboardStyle
 
@@ -377,7 +359,6 @@ Remove all native listeners for this plugin.
 | **`Dark`**    | <code>'DARK'</code>    | Dark keyboard.                                                                                                                                                                                                                              | 1.0.0 |
 | **`Light`**   | <code>'LIGHT'</code>   | Light keyboard.                                                                                                                                                                                                                             | 1.0.0 |
 | **`Default`** | <code>'DEFAULT'</code> | On iOS 13 and newer the keyboard style is based on the device appearance. If the device is using Dark mode, the keyboard will be dark. If the device is using Light mode, the keyboard will be light. On iOS 12 the keyboard will be light. | 1.0.0 |
-
 
 #### KeyboardResize
 

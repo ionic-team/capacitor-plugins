@@ -5,7 +5,7 @@ The StatusBar API Provides methods for configuring the style of the Status Bar, 
 ## Install
 
 ```bash
-npm install @capacitor/status-bar
+npm install @capacitor/status-bar@latest-7
 npx cap sync
 ```
 
@@ -90,8 +90,8 @@ const config: CapacitorConfig = {
   plugins: {
     StatusBar: {
       overlaysWebView: false,
-      style: "DARK",
-      backgroundColor: "#ffffffff",
+      style: 'DARK',
+      backgroundColor: '#ffffffff',
     },
   },
 };
@@ -105,14 +105,14 @@ export default config;
 
 <docgen-index>
 
-* [`setStyle(...)`](#setstyle)
-* [`setBackgroundColor(...)`](#setbackgroundcolor)
-* [`show(...)`](#show)
-* [`hide(...)`](#hide)
-* [`getInfo()`](#getinfo)
-* [`setOverlaysWebView(...)`](#setoverlayswebview)
-* [Interfaces](#interfaces)
-* [Enums](#enums)
+- [`setStyle(...)`](#setstyle)
+- [`setBackgroundColor(...)`](#setbackgroundcolor)
+- [`show(...)`](#show)
+- [`hide(...)`](#hide)
+- [`getInfo()`](#getinfo)
+- [`setOverlaysWebView(...)`](#setoverlayswebview)
+- [Interfaces](#interfaces)
+- [Enums](#enums)
 
 </docgen-index>
 
@@ -133,8 +133,7 @@ Set the current style of the status bar.
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### setBackgroundColor(...)
 
@@ -150,8 +149,7 @@ Set the background color of the status bar.
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### show(...)
 
@@ -171,8 +169,7 @@ to use <a href="#animation">`Animation.None`</a> as the animation on the first c
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### hide(...)
 
@@ -188,8 +185,7 @@ Hide the status bar.
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### getInfo()
 
@@ -203,8 +199,7 @@ Get info about the current state of the status bar.
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### setOverlaysWebView(...)
 
@@ -221,11 +216,9 @@ of the space underneath it.
 
 **Since:** 1.0.0
 
---------------------
-
+---
 
 ### Interfaces
-
 
 #### StyleOptions
 
@@ -233,20 +226,17 @@ of the space underneath it.
 | ----------- | --------------------------------------- | --------------------------------------------------------- | ----- |
 | **`style`** | <code><a href="#style">Style</a></code> | <a href="#style">Style</a> of the text of the status bar. | 1.0.0 |
 
-
 #### BackgroundColorOptions
 
 | Prop        | Type                | Description                                       | Since |
 | ----------- | ------------------- | ------------------------------------------------- | ----- |
 | **`color`** | <code>string</code> | A hex color to which the status bar color is set. | 1.0.0 |
 
-
 #### AnimationOptions
 
 | Prop            | Type                                            | Description                                                                                         | Default                     | Since |
 | --------------- | ----------------------------------------------- | --------------------------------------------------------------------------------------------------- | --------------------------- | ----- |
 | **`animation`** | <code><a href="#animation">Animation</a></code> | The type of status bar animation used when showing or hiding. This option is only supported on iOS. | <code>Animation.Fade</code> | 1.0.0 |
-
 
 #### StatusBarInfo
 
@@ -257,16 +247,13 @@ of the space underneath it.
 | **`color`**    | <code>string</code>                     | The current status bar color.             | 1.0.0 |
 | **`overlays`** | <code>boolean</code>                    | Whether the statusbar is overlaid or not. | 1.0.0 |
 
-
 #### SetOverlaysWebViewOptions
 
 | Prop          | Type                 | Description                               | Since |
 | ------------- | -------------------- | ----------------------------------------- | ----- |
 | **`overlay`** | <code>boolean</code> | Whether to overlay the status bar or not. | 1.0.0 |
 
-
 ### Enums
-
 
 #### Style
 
@@ -275,7 +262,6 @@ of the space underneath it.
 | **`Dark`**    | <code>'DARK'</code>    | Light text for dark backgrounds.                                                                                                                                                     | 1.0.0 |
 | **`Light`**   | <code>'LIGHT'</code>   | Dark text for light backgrounds.                                                                                                                                                     | 1.0.0 |
 | **`Default`** | <code>'DEFAULT'</code> | The style is based on the device appearance. If the device is using Dark mode, the statusbar text will be light. If the device is using Light mode, the statusbar text will be dark. | 1.0.0 |
-
 
 #### Animation
 
