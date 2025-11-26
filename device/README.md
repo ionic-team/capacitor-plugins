@@ -5,7 +5,7 @@ The Device API exposes internal information about the device, such as the model 
 ## Install
 
 ```bash
-npm install @capacitor/device
+npm install @capacitor/device@latest-7
 npx cap sync
 ```
 

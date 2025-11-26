@@ -5,7 +5,7 @@ The Camera API provides the ability to take a photo with the camera or choose an
 ## Install
 
 ```bash
-npm install @capacitor/camera
+npm install @capacitor/camera@latest-7
 npx cap sync
 ```
 
