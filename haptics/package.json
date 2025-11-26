@@ -1,6 +1,6 @@
 {
   "name": "@capacitor/haptics",
-  "version": "6.0.2",
+  "version": "6.0.3",
   "description": "The Haptics API provides physical feedback to the user through touch or vibration.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",

@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.1.3](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/local-notifications@6.1.2...@capacitor/local-notifications@6.1.3) (2025-11-26)
+
+**Note:** Version bump only for package @capacitor/local-notifications
+
 ## [6.1.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/local-notifications@6.1.1...@capacitor/local-notifications@6.1.2) (2025-01-15)
 
 **Note:** Version bump only for package @capacitor/local-notifications
