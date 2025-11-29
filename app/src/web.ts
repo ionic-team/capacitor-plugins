@@ -5,11 +5,7 @@ import type { AppInfo, AppPlugin, AppLaunchUrl, AppState } from './definitions';
 export class AppWeb extends WebPlugin implements AppPlugin {
   constructor() {
     super();
-    document.addEventListener(
-      'visibilitychange',
-      this.handleVisibilityChange,
-      false,
-    );
+    document.addEventListener('visibilitychange', this.handleVisibilityChange, false);
   }
 
   exitApp(): Promise<void> {
@@ -29,6 +25,10 @@ export class AppWeb extends WebPlugin implements AppPlugin {
   }
 
   async minimizeApp(): Promise<void> {
+    throw this.unimplemented('Not implemented on web.');
+  }
+
+  async toggleBackButtonHandler(): Promise<void> {
     throw this.unimplemented('Not implemented on web.');
   }
 

@@ -35,7 +35,7 @@ export class PreferencesWeb extends WebPlugin implements PreferencesPlugin {
   }
 
   public async keys(): Promise<KeysResult> {
-    const keys = this.rawKeys().map(k => k.substring(this.prefix.length));
+    const keys = this.rawKeys().map((k) => k.substring(this.prefix.length));
 
     return { keys };
   }
@@ -50,7 +50,7 @@ export class PreferencesWeb extends WebPlugin implements PreferencesPlugin {
     const migrated: string[] = [];
     const existing: string[] = [];
     const oldprefix = '_cap_';
-    const keys = Object.keys(this.impl).filter(k => k.indexOf(oldprefix) === 0);
+    const keys = Object.keys(this.impl).filter((k) => k.indexOf(oldprefix) === 0);
 
     for (const oldkey of keys) {
       const key = oldkey.substring(oldprefix.length);
@@ -70,7 +70,7 @@ export class PreferencesWeb extends WebPlugin implements PreferencesPlugin {
 
   public async removeOld(): Promise<void> {
     const oldprefix = '_cap_';
-    const keys = Object.keys(this.impl).filter(k => k.indexOf(oldprefix) === 0);
+    const keys = Object.keys(this.impl).filter((k) => k.indexOf(oldprefix) === 0);
     for (const oldkey of keys) {
       this.impl.removeItem(oldkey);
     }
@@ -85,7 +85,7 @@ export class PreferencesWeb extends WebPlugin implements PreferencesPlugin {
   }
 
   private rawKeys(): string[] {
-    return Object.keys(this.impl).filter(k => k.indexOf(this.prefix) === 0);
+    return Object.keys(this.impl).filter((k) => k.indexOf(this.prefix) === 0);
   }
 
   private applyPrefix(key: string) {

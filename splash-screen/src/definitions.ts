@@ -95,13 +95,7 @@ declare module '@capacitor/cli' {
        * @default large
        * @example "large"
        */
-      androidSpinnerStyle?:
-        | 'horizontal'
-        | 'small'
-        | 'large'
-        | 'inverse'
-        | 'smallInverse'
-        | 'largeInverse';
+      androidSpinnerStyle?: 'horizontal' | 'small' | 'large' | 'inverse' | 'smallInverse' | 'largeInverse';
 
       /**
        * Style of the iOS spinner.
