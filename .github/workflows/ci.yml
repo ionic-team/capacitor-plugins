@@ -46,7 +46,7 @@ jobs:
       - id: packages
         uses: ./.github/actions/changed-packages
         with:
-         files: ${{ steps.catjson.outputs.FILES_JSON }}
+          files: ${{ steps.catjson.outputs.FILES_JSON }}
 
   lint-scripts:
     runs-on: macos-15
@@ -107,7 +107,7 @@ jobs:
     strategy:
       matrix:
         xcode:
-        - /Applications/Xcode_16.app
+          - /Applications/Xcode_26.0.app
         plugin: ${{ fromJson(needs.setup.outputs.plugins) }}
     steps:
       - run: sudo xcode-select --switch ${{ matrix.xcode }}
