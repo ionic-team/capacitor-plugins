@@ -51,7 +51,7 @@ These are official Capacitor plugins that are not contained in this repository.
 | [Geolocation](https://github.com/ionic-team/capacitor-geolocation) (*) | [`@capacitor/geolocation`](https://capacitorjs.com/docs/apis/geolocation) | [![npm badge](https://img.shields.io/npm/v/@capacitor/geolocation?style=flat-square)](https://www.npmjs.com/package/@capacitor/geolocation) |
 | [Google Maps](https://github.com/ionic-team/capacitor-google-maps) | [`@capacitor/google-maps`](https://capacitorjs.com/docs/apis/google-maps) | [![npm badge](https://img.shields.io/npm/v/@capacitor/google-maps?style=flat-square)](https://www.npmjs.com/package/@capacitor/google-maps) |
 | [Haptics](https://github.com/ionic-team/capacitor-haptics) (*) | [`@capacitor/haptics`](https://capacitorjs.com/docs/apis/haptics) | [![npm badge](https://img.shields.io/npm/v/@capacitor/haptics?style=flat-square)](https://www.npmjs.com/package/@capacitor/haptics) |
-| [Keyboard](https://github.com/ionic-team/capacitor-keyboard) (*) | [`@capacitor/haptics`](https://capacitorjs.com/docs/apis/keyboard) | [![npm badge](https://img.shields.io/npm/v/@capacitor/keyboard?style=flat-square)](https://www.npmjs.com/package/@capacitor/keyboard) |
+| [Keyboard](https://github.com/ionic-team/capacitor-keyboard) (*) | [`@capacitor/keyboard`](https://capacitorjs.com/docs/apis/keyboard) | [![npm badge](https://img.shields.io/npm/v/@capacitor/keyboard?style=flat-square)](https://www.npmjs.com/package/@capacitor/keyboard) |
 
 (*) These plugins were once part of this repository, but have been since been revamped and/or migrated to a separate repository. The code pre-migration [still remains in this repository](https://github.com/ionic-team/capacitor-plugins/tree/7.x) for historic purposes.
 
