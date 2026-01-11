@@ -179,7 +179,7 @@ public class CameraPlugin extends Plugin {
         fragment.setTitle(call.getString("promptLabelHeader", "Photo"));
         fragment.setOptions(
             options,
-            index -> {
+            (index) -> {
                 if (index == 0) {
                     settings.setSource(CameraSource.PHOTOS);
                     openPhotos(call);
@@ -395,58 +395,46 @@ public class CameraPlugin extends Plugin {
     private void openPhotos(final PluginCall call, boolean multiple) {
         try {
             if (multiple) {
-                pickMultipleMedia =
-                    registerActivityResultLauncher(
-                        getContractForCall(call),
-                        uris -> {
-                            if (!uris.isEmpty()) {
-                                Executor executor = Executors.newSingleThreadExecutor();
-                                executor.execute(
-                                    () -> {
-                                        JSObject ret = new JSObject();
-                                        JSArray photos = new JSArray();
-                                        for (Uri imageUri : uris) {
-                                            try {
-                                                JSObject processResult = processPickedImages(imageUri);
-                                                if (
-                                                    processResult.getString("error") != null && !processResult.getString("error").isEmpty()
-                                                ) {
-                                                    call.reject(processResult.getString("error"));
-                                                    return;
-                                                } else {
-                                                    photos.put(processResult);
-                                                }
-                                            } catch (SecurityException ex) {
-                                                call.reject("SecurityException");
-                                            }
-                                        }
-                                        ret.put("photos", photos);
-                                        call.resolve(ret);
+                pickMultipleMedia = registerActivityResultLauncher(getContractForCall(call), (uris) -> {
+                    if (!uris.isEmpty()) {
+                        Executor executor = Executors.newSingleThreadExecutor();
+                        executor.execute(() -> {
+                            JSObject ret = new JSObject();
+                            JSArray photos = new JSArray();
+                            for (Uri imageUri : uris) {
+                                try {
+                                    JSObject processResult = processPickedImages(imageUri);
+                                    if (processResult.getString("error") != null && !processResult.getString("error").isEmpty()) {
+                                        call.reject(processResult.getString("error"));
+                                        return;
+                                    } else {
+                                        photos.put(processResult);
                                     }
-                                );
-                            } else {
-                                call.reject(USER_CANCELLED);
+                                } catch (SecurityException ex) {
+                                    call.reject("SecurityException");
+                                }
                             }
-                            pickMultipleMedia.unregister();
-                        }
-                    );
+                            ret.put("photos", photos);
+                            call.resolve(ret);
+                        });
+                    } else {
+                        call.reject(USER_CANCELLED);
+                    }
+                    pickMultipleMedia.unregister();
+                });
                 pickMultipleMedia.launch(
                     new PickVisualMediaRequest.Builder().setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE).build()
                 );
             } else {
-                pickMedia =
-                    registerActivityResultLauncher(
-                        new ActivityResultContracts.PickVisualMedia(),
-                        uri -> {
-                            if (uri != null) {
-                                imagePickedContentUri = uri;
-                                processPickedImage(uri, call);
-                            } else {
-                                call.reject(USER_CANCELLED);
-                            }
-                            pickMedia.unregister();
-                        }
-                    );
+                pickMedia = registerActivityResultLauncher(new ActivityResultContracts.PickVisualMedia(), (uri) -> {
+                    if (uri != null) {
+                        imagePickedContentUri = uri;
+                        processPickedImage(uri, call);
+                    } else {
+                        call.reject(USER_CANCELLED);
+                    }
+                    pickMedia.unregister();
+                });
                 pickMedia.launch(
                     new PickVisualMediaRequest.Builder().setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE).build()
                 );
@@ -944,10 +932,9 @@ public class CameraPlugin extends Plugin {
             List<ResolveInfo> resInfoList;
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                resInfoList =
-                    getContext()
-                        .getPackageManager()
-                        .queryIntentActivities(editIntent, PackageManager.ResolveInfoFlags.of(PackageManager.MATCH_DEFAULT_ONLY));
+                resInfoList = getContext()
+                    .getPackageManager()
+                    .queryIntentActivities(editIntent, PackageManager.ResolveInfoFlags.of(PackageManager.MATCH_DEFAULT_ONLY));
             } else {
                 resInfoList = legacyQueryIntentActivities(editIntent);
             }

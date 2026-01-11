@@ -22,13 +22,13 @@ jobs:
         with:
           access_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Get Latest
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: 20
-      - uses: actions/checkout@v3
+          node-version: 22
+      - uses: actions/checkout@v5
       - name: Restore Dependency Cache
         id: cache-modules
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             node_modules
@@ -46,7 +46,7 @@ jobs:
       - id: packages
         uses: ./.github/actions/changed-packages
         with:
-         files: ${{ steps.catjson.outputs.FILES_JSON }}
+          files: ${{ steps.catjson.outputs.FILES_JSON }}
 
   lint-scripts:
     runs-on: macos-15
@@ -54,13 +54,13 @@ jobs:
     needs:
       - setup
     steps:
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
-          node-version: 20
-      - uses: actions/checkout@v3
+          node-version: 22
+      - uses: actions/checkout@v5
       - name: Restore Dependency Cache
         id: cache-modules
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             node_modules
@@ -80,13 +80,13 @@ jobs:
       matrix:
         plugin: ${{ fromJson(needs.setup.outputs.plugins) }}
     steps:
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
-          node-version: 20
-      - uses: actions/checkout@v3
+          node-version: 22
+      - uses: actions/checkout@v5
       - name: Restore Dependency Cache
         id: cache-modules
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             node_modules
@@ -107,19 +107,19 @@ jobs:
     strategy:
       matrix:
         xcode:
-        - /Applications/Xcode_16.app
+          - /Applications/Xcode_26.0.app
         plugin: ${{ fromJson(needs.setup.outputs.plugins) }}
     steps:
       - run: sudo xcode-select --switch ${{ matrix.xcode }}
       - run: xcrun simctl list > /dev/null
       - run: xcodebuild -downloadPlatform iOS
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
-          node-version: 20
-      - uses: actions/checkout@v3
+          node-version: 22
+      - uses: actions/checkout@v5
       - name: Restore Dependency Cache
         id: cache-modules
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             node_modules
@@ -141,18 +141,18 @@ jobs:
       matrix:
         plugin: ${{ fromJson(needs.setup.outputs.plugins) }}
     steps:
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
-          node-version: 20
+          node-version: 22
       - name: set up JDK 21
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           java-version: '21'
           distribution: 'zulu'
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v5
       - name: Restore Dependency Cache
         id: cache-modules
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             node_modules
@@ -175,13 +175,13 @@ jobs:
       matrix:
         plugin: ${{ fromJson(needs.setup.outputs.plugins) }}
     steps:
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
-          node-version: 20
-      - uses: actions/checkout@v3
+          node-version: 22
+      - uses: actions/checkout@v5
       - name: Restore Dependency Cache
         id: cache-modules
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             node_modules

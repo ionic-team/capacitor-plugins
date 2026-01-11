@@ -154,7 +154,7 @@ public class StatusBar {
     }
 
     private func getStatusBarFrame() -> CGRect {
-        return UIApplication.shared.windows.first(where: { $0.isKeyWindow })?.windowScene?.statusBarManager?.statusBarFrame ?? .zero
+        return bridge.viewController?.view.window?.windowScene?.statusBarManager?.statusBarFrame ?? .zero
     }
 
     private func initializeBackgroundViewIfNeeded() {
