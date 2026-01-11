@@ -144,6 +144,8 @@ public class CameraPlugin: CAPPlugin, CAPBridgedPlugin {
                 self.showPrompt()
             case .camera:
                 self.showCamera()
+            case .cameraMulti:
+                self.showMultiCamera()
             case .photos:
                 self.showPhotos()
             }
@@ -388,6 +390,10 @@ private extension CameraPlugin {
             self?.showCamera()
         }))
 
+        alert.addAction(UIAlertAction(title: "Take Multiple Pictures", style: .default, handler: { [weak self] (_: UIAlertAction) in
+            self?.showMultiCamera()
+        }))
+
         alert.addAction(UIAlertAction(title: settings.userPromptText.cancelAction, style: .cancel, handler: { [weak self] (_: UIAlertAction) in
             self?.call?.reject("User cancelled photos app")
         }))
@@ -465,6 +471,51 @@ private extension CameraPlugin {
 
     func presentSystemAppropriateImagePicker() {
         presentPhotoPicker()
+    }
+
+    func showMultiCamera() {
+        // Check if we have a camera
+        if (bridge?.isSimEnvironment ?? false) || !UIImagePickerController.isSourceTypeAvailable(UIImagePickerController.SourceType.camera) {
+            CAPLog.print("⚡️ ", self.pluginId, "-", "Camera not available in simulator")
+            call?.reject("Camera not available while running in Simulator")
+            return
+        }
+
+        // Check for permission
+        let authStatus = AVCaptureDevice.authorizationStatus(for: .video)
+        if authStatus == .restricted || authStatus == .denied {
+            call?.reject("User denied access to camera")
+            return
+        }
+
+        // We either already have permission or can prompt
+        AVCaptureDevice.requestAccess(for: .video) { [weak self] granted in
+            if granted {
+                DispatchQueue.main.async {
+                    self?.presentMultiCameraPicker()
+                }
+            } else {
+                self?.call?.reject("User denied access to camera")
+            }
+        }
+    }
+
+    func presentMultiCameraPicker() {
+        // Set multiple flag to true for this operation
+        self.multiple = true
+
+        let multiCameraViewController = MultiCameraViewController()
+        multiCameraViewController.delegate = self
+        multiCameraViewController.maxImages = self.call?.getInt("limit") ?? 0
+        multiCameraViewController.cameraDirection = settings.direction
+
+        // Present the custom camera UI
+        multiCameraViewController.modalPresentationStyle = settings.presentationStyle
+        if settings.presentationStyle == .popover {
+            multiCameraViewController.popoverPresentationController?.delegate = self
+            setCenteredPopover(multiCameraViewController)
+        }
+        bridge?.viewController?.present(multiCameraViewController, animated: true, completion: nil)
     }
 
     func presentImagePicker() {
@@ -549,5 +600,47 @@ private extension CameraPlugin {
             result.overwriteMetadataOrientation(to: 1)
         }
         return result
+    }
+}
+
+// MARK: - MultiCameraViewControllerDelegate
+extension CameraPlugin: MultiCameraViewControllerDelegate {
+    func multiCameraViewController(_ viewController: MultiCameraViewController, didFinishWith images: [UIImage], metadata: [[String: Any]]) {
+        viewController.dismiss(animated: true) {
+            var processedImages: [ProcessedImage] = []
+
+            // Process each image
+            for (index, image) in images.enumerated() {
+                let meta = index < metadata.count ? metadata[index] : [:]
+                let processedImage = self.processedImage(from: image, with: meta)
+                processedImages.append(processedImage)
+            }
+
+            // Save images to gallery if requested, similar to single photo flow
+            if self.settings.saveToGallery {
+                let dispatchGroup = DispatchGroup()
+                var savedResults: [Bool] = Array(repeating: false, count: processedImages.count)
+                
+                for (index, processedImage) in processedImages.enumerated() {
+                    dispatchGroup.enter()
+                    _ = ImageSaver(image: processedImage.image) { error in
+                        savedResults[index] = (error == nil)
+                        dispatchGroup.leave()
+                    }
+                }
+                
+                dispatchGroup.notify(queue: .main) {
+                    self.returnImages(processedImages)
+                }
+            } else {
+                self.returnImages(processedImages)
+            }
+        }
+    }
+
+    func multiCameraViewControllerDidCancel(_ viewController: MultiCameraViewController) {
+        viewController.dismiss(animated: true) {
+            self.call?.reject("User cancelled camera")
+        }
     }
 }
