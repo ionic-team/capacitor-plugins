@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [8.0.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/push-notifications@8.0.0-beta.0...@capacitor/push-notifications@8.0.0) (2025-12-08)
+
+**Note:** Version bump only for package @capacitor/push-notifications
+
+# [8.0.0-beta.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/push-notifications@8.0.0-alpha.1...@capacitor/push-notifications@8.0.0-beta.0) (2025-11-14)
+
+**Note:** Version bump only for package @capacitor/push-notifications
+
+# [8.0.0-alpha.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/push-notifications@7.0.3...@capacitor/push-notifications@8.0.0-alpha.1) (2025-09-08)
+
+**Note:** Version bump only for package @capacitor/push-notifications
+
+## [7.0.3](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/push-notifications@7.0.2...@capacitor/push-notifications@7.0.3) (2025-09-05)
+
+**Note:** Version bump only for package @capacitor/push-notifications
+
+## [7.0.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/push-notifications@7.0.1...@capacitor/push-notifications@7.0.2) (2025-08-05)
+
+**Note:** Version bump only for package @capacitor/push-notifications
+
 ## [7.0.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/push-notifications@7.0.0...@capacitor/push-notifications@7.0.1) (2025-04-02)
 
 **Note:** Version bump only for package @capacitor/push-notifications
@@ -164,7 +184,8 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - **push-notifications:** proper return of push notification object properties ([#349](https://github.com/ionic-team/capacitor-plugins/issues/349)) ([733fc06](https://github.com/ionic-team/capacitor-plugins/commit/733fc06af7b62a576fb6214a7fe42838a3bcb93a))
 - **push-notifications:** Throw errors if missing mandatory channel fields ([#576](https://github.com/ionic-team/capacitor-plugins/issues/576)) ([50f4e70](https://github.com/ionic-team/capacitor-plugins/commit/50f4e7026e5cae5f0871d4863bfab36989208064))
 - add es2017 lib to tsconfig ([#180](https://github.com/ionic-team/capacitor-plugins/issues/180)) ([2c3776c](https://github.com/ionic-team/capacitor-plugins/commit/2c3776c38ca025c5ee965dec10ccf1cdb6c02e2f))
-- export all TS definitions ([6cd2996](https://github.com/ionic-team/capacitor-plugins/commit/6cd299660fdeb27382ec7f45f0b3a55224cd0ad1))
+- export all TS definitions ([6cd2996](https://github.com/ionic-team/capacitor-plugins/commit/6cd299660fdeb27382ec7f45f0b3a55224cd0ad1)
+  )
 - support deprecated types from Capacitor 2 ([#210](https://github.com/ionic-team/capacitor-plugins/issues/210)) ([b559e24](https://github.com/ionic-team/capacitor-plugins/commit/b559e24b24174be60129217e87c0bff14bcdd573))
 - **push-notifications:** remove unused Firebase/Messaging dependency ([#186](https://github.com/ionic-team/capacitor-plugins/issues/186)) ([0f4ca7c](https://github.com/ionic-team/capacitor-plugins/commit/0f4ca7ceaf67ced40b2cf2b359001b1ab060a3a6))
 
@@ -285,7 +306,8 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ### Bug Fixes
 
 - add es2017 lib to tsconfig ([#180](https://github.com/ionic-team/capacitor-plugins/issues/180)) ([2c3776c](https://github.com/ionic-team/capacitor-plugins/commit/2c3776c38ca025c5ee965dec10ccf1cdb6c02e2f))
-- export all TS definitions ([6cd2996](https://github.com/ionic-team/capacitor-plugins/commit/6cd299660fdeb27382ec7f45f0b3a55224cd0ad1))
+- export all TS definitions ([6cd2996](https://github.com/ionic-team/capacitor-plugins/commit/6cd299660fdeb27382ec7f45f0b3a55224cd0ad1)
+  )
 
 ### Features
 

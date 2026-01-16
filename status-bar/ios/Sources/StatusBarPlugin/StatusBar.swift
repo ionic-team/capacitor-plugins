@@ -129,9 +129,11 @@ public class StatusBar {
     }
 
     private func resizeWebView() {
+        let bounds: CGRect? = bridge.viewController?.view.window?.windowScene?.keyWindow?.bounds
+
         guard
             let webView = bridge.webView,
-            let bounds = bridge.viewController?.view.window?.windowScene?.screen.bounds
+            let bounds = bounds
         else { return }
         bridge.viewController?.view.frame = bounds
         webView.frame = bounds
@@ -157,7 +159,7 @@ public class StatusBar {
     }
 
     private func getStatusBarFrame() -> CGRect {
-        return UIApplication.shared.windows.first(where: { $0.isKeyWindow })?.windowScene?.statusBarManager?.statusBarFrame ?? .zero
+        return bridge.viewController?.view.window?.windowScene?.statusBarManager?.statusBarFrame ?? .zero
     }
 
     private func initializeBackgroundViewIfNeeded() {

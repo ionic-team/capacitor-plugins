@@ -171,7 +171,7 @@ public class CameraPlugin extends Plugin {
         fragment.setTitle(call.getString("promptLabelHeader", "Photo"));
         fragment.setOptions(
             options,
-            index -> {
+            (index) -> {
                 if (index == 0) {
                     settings.setSource(CameraSource.PHOTOS);
                     openPhotos(call);
@@ -256,13 +256,7 @@ public class CameraPlugin extends Plugin {
 
     @Override
     protected void requestPermissionForAliases(@NonNull String[] aliases, @NonNull PluginCall call, @NonNull String callbackName) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            for (int i = 0; i < aliases.length; i++) {
-                if (aliases[i].equals(SAVE_GALLERY)) {
-                    aliases[i] = PHOTOS;
-                }
-            }
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             for (int i = 0; i < aliases.length; i++) {
                 if (aliases[i].equals(SAVE_GALLERY)) {
                     aliases[i] = READ_EXTERNAL_STORAGE;
@@ -357,58 +351,46 @@ public class CameraPlugin extends Plugin {
     private void openPhotos(final PluginCall call, boolean multiple) {
         try {
             if (multiple) {
-                pickMultipleMedia =
-                    registerActivityResultLauncher(
-                        getContractForCall(call),
-                        uris -> {
-                            if (!uris.isEmpty()) {
-                                Executor executor = Executors.newSingleThreadExecutor();
-                                executor.execute(
-                                    () -> {
-                                        JSObject ret = new JSObject();
-                                        JSArray photos = new JSArray();
-                                        for (Uri imageUri : uris) {
-                                            try {
-                                                JSObject processResult = processPickedImages(imageUri);
-                                                if (
-                                                    processResult.getString("error") != null && !processResult.getString("error").isEmpty()
-                                                ) {
-                                                    call.reject(processResult.getString("error"));
-                                                    return;
-                                                } else {
-                                                    photos.put(processResult);
-                                                }
-                                            } catch (SecurityException ex) {
-                                                call.reject("SecurityException");
-                                            }
-                                        }
-                                        ret.put("photos", photos);
-                                        call.resolve(ret);
+                pickMultipleMedia = registerActivityResultLauncher(getContractForCall(call), (uris) -> {
+                    if (!uris.isEmpty()) {
+                        Executor executor = Executors.newSingleThreadExecutor();
+                        executor.execute(() -> {
+                            JSObject ret = new JSObject();
+                            JSArray photos = new JSArray();
+                            for (Uri imageUri : uris) {
+                                try {
+                                    JSObject processResult = processPickedImages(imageUri);
+                                    if (processResult.getString("error") != null && !processResult.getString("error").isEmpty()) {
+                                        call.reject(processResult.getString("error"));
+                                        return;
+                                    } else {
+                                        photos.put(processResult);
                                     }
-                                );
-                            } else {
-                                call.reject(USER_CANCELLED);
+                                } catch (SecurityException ex) {
+                                    call.reject("SecurityException");
+                                }
                             }
-                            pickMultipleMedia.unregister();
-                        }
-                    );
+                            ret.put("photos", photos);
+                            call.resolve(ret);
+                        });
+                    } else {
+                        call.reject(USER_CANCELLED);
+                    }
+                    pickMultipleMedia.unregister();
+                });
                 pickMultipleMedia.launch(
                     new PickVisualMediaRequest.Builder().setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE).build()
                 );
             } else {
-                pickMedia =
-                    registerActivityResultLauncher(
-                        new ActivityResultContracts.PickVisualMedia(),
-                        uri -> {
-                            if (uri != null) {
-                                imagePickedContentUri = uri;
-                                processPickedImage(uri, call);
-                            } else {
-                                call.reject(USER_CANCELLED);
-                            }
-                            pickMedia.unregister();
-                        }
-                    );
+                pickMedia = registerActivityResultLauncher(new ActivityResultContracts.PickVisualMedia(), (uri) -> {
+                    if (uri != null) {
+                        imagePickedContentUri = uri;
+                        processPickedImage(uri, call);
+                    } else {
+                        call.reject(USER_CANCELLED);
+                    }
+                    pickMedia.unregister();
+                });
                 pickMedia.launch(
                     new PickVisualMediaRequest.Builder().setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE).build()
                 );
@@ -809,11 +791,14 @@ public class CameraPlugin extends Plugin {
                 } catch (JSONException e) {}
             }
 
-            if (permsList != null && permsList.size() == 1 && (permsList.contains(CAMERA) || permsList.contains(PHOTOS))) {
-                // the only thing being asked for was the camera so we can just return the current state
+            if (
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU ||
+                (permsList != null && permsList.size() == 1 && (permsList.contains(CAMERA) || permsList.contains(PHOTOS)))
+            ) {
+                // either we're on Android 13+ (storage permissions do not apply)
+                // or the only thing being asked for was the camera so we can just return the current state
                 checkPermissions(call);
             } else {
-                // we need to ask about gallery so request storage permissions
                 requestPermissionForAlias(SAVE_GALLERY, call, "checkPermissions");
             }
         }
@@ -871,10 +856,9 @@ public class CameraPlugin extends Plugin {
             List<ResolveInfo> resInfoList;
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                resInfoList =
-                    getContext()
-                        .getPackageManager()
-                        .queryIntentActivities(editIntent, PackageManager.ResolveInfoFlags.of(PackageManager.MATCH_DEFAULT_ONLY));
+                resInfoList = getContext()
+                    .getPackageManager()
+                    .queryIntentActivities(editIntent, PackageManager.ResolveInfoFlags.of(PackageManager.MATCH_DEFAULT_ONLY));
             } else {
                 resInfoList = legacyQueryIntentActivities(editIntent);
             }
