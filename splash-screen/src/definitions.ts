@@ -44,6 +44,16 @@ declare module '@capacitor/cli' {
        */
       backgroundColor?: string;
 
+            
+      /**
+       * Color of the background of the Splash Screen in hex format, #RRGGBB or #RRGGBBAA (Works only in the dark mode)
+       * 
+       * Only available on Android
+       *
+       * @since 3.0.0
+       */
+      backgroundColorDarkMode?: string;
+
       /**
        * Name of the resource to be used as Splash Screen.
        *

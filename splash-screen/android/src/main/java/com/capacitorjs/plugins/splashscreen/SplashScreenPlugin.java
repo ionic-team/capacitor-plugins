@@ -91,6 +91,14 @@ public class SplashScreenPlugin extends Plugin {
                 Logger.debug("Background color not applied");
             }
         }
+        String backgroundColorDarkMode = getConfig().getString("backgroundColorDarkMode");
+        if (backgroundColorDarkMode != null) {
+            try {
+                config.setBackgroundColorDarkMode(WebColor.parseColor(backgroundColorDarkMode));
+            } catch (IllegalArgumentException ex) {
+                Logger.debug("Dark mode background color not applied");
+            }
+        }
         Integer duration = getConfig().getInt("launchShowDuration", config.getLaunchShowDuration());
         config.setLaunchShowDuration(duration);
         Integer fadeOutDuration = getConfig().getInt("launchFadeOutDuration", config.getLaunchFadeOutDuration());

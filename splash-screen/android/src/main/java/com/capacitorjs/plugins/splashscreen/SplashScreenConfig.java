@@ -5,6 +5,7 @@ import android.widget.ImageView.ScaleType;
 public class SplashScreenConfig {
 
     private Integer backgroundColor;
+    private Integer backgroundColorDarkMode;
     private Integer spinnerStyle;
     private Integer spinnerColor;
     private boolean showSpinner = false;
@@ -25,6 +26,14 @@ public class SplashScreenConfig {
 
     public void setBackgroundColor(Integer backgroundColor) {
         this.backgroundColor = backgroundColor;
+    }
+        
+    public Integer getBackgroundColorDarkMode() {
+        return backgroundColorDarkMode;
+    }
+
+    public void setBackgroundColorDarkMode(Integer backgroundColorDarkMode) {
+        this.backgroundColorDarkMode = backgroundColorDarkMode;
     }
 
     public Integer getSpinnerStyle() {
