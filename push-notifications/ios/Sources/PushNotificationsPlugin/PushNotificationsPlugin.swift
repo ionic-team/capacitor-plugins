@@ -27,7 +27,8 @@ public class PushNotificationsPlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "removeDeliveredNotifications", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "createChannel", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "listChannels", returnType: CAPPluginReturnPromise),
-        CAPPluginMethod(name: "deleteChannel", returnType: CAPPluginReturnPromise)
+        CAPPluginMethod(name: "deleteChannel", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "openSettings", returnType: CAPPluginReturnPromise),
     ]
     private let notificationDelegateHandler = PushNotificationsHandler()
     private var appDelegateRegistrationCalled: Bool = false
@@ -207,5 +208,24 @@ public class PushNotificationsPlugin: CAPPlugin, CAPBridgedPlugin {
         notifyListeners("registrationError", data: [
             "error": error.localizedDescription
         ])
+    }
+
+    @objc func openSettings(_ call: CAPPluginCall) {
+        var urlString = UIApplication.openSettingsURLString
+
+        if #available(iOS 16.0, *) {
+            urlString = UIApplication.openNotificationSettingsURLString
+        }
+
+        guard let url = URL(string: urlString) else {
+            call.reject("Can't open settings")
+            return
+        }
+
+        DispatchQueue.main.async {
+            UIApplication.shared.open(url, completionHandler: { success in
+                call.resolve(["success": success])
+            })
+        }
     }
 }
