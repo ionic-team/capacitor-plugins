@@ -62,7 +62,7 @@ The storage permissions are for reading/saving photo files.
 
 Read about [Setting Permissions](https://capacitorjs.com/docs/android/configuration#setting-permissions) in the [Android Guide](https://capacitorjs.com/docs/android) for more information on setting Android permissions.
 
-Additionally, because the Camera API launches a separate Activity to handle taking the photo, you should listen for `appRestoredResult` in the `App` plugin to handle any camera data that was sent in the case your app was terminated by the operating system while the Activity was running.
+Additionally, because the Camera API launches a separate Activity to handle taking the photo, you should listen for `appRestoredResult` in the `App` plugin to handle any camera data that was sent in the case your app was terminated by the operating system while the Activity was running. Read about [Restoring Activity Results](https://ionic.io/blog/take-control-of-your-capacitor-app-state) (scroll down to Restoring Activity Results) for a code sample and deeper explanation of handling activity results.
 
 ### Variables
 
