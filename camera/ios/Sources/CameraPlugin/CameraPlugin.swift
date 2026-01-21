@@ -349,13 +349,22 @@ private extension CameraPlugin {
                 call?.reject("Unable to get portable path to file")
                 return
             }
-
-            photos.append([
+            
+            var data = [
                 "path": fileURL.absoluteString,
                 "exif": processedImage.exifData,
                 "webPath": webURL.absoluteString,
                 "format": "jpeg"
-            ])
+            ] as [String : Any]
+            
+            if settings.resultType == CameraResultType.base64 {
+                data["base64String"] = jpeg.base64EncodedString()
+            } else {
+                data["path"] = fileURL.absoluteString
+                data["webPath"] = webURL.absoluteString
+            }
+
+            photos.append(data)
         }
         call?.resolve([
             "photos": photos
