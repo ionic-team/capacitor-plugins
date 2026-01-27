@@ -107,7 +107,12 @@ If the device has entered [Doze](https://developer.android.com/training/monitori
 * [`checkExactNotificationSetting()`](#checkexactnotificationsetting)
 * [`addListener('localNotificationReceived', ...)`](#addlistenerlocalnotificationreceived-)
 * [`addListener('localNotificationActionPerformed', ...)`](#addlistenerlocalnotificationactionperformed-)
+* [`addListener('liveActivityEnded', ...)`](#addlistenerliveactivityended-)
 * [`removeAllListeners()`](#removealllisteners)
+* [`startLiveActivity(...)`](#startliveactivity)
+* [`updateLiveActivity(...)`](#updateliveactivity)
+* [`endLiveActivity(...)`](#endliveactivity)
+* [`getActiveLiveActivities()`](#getactiveliveactivities)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
 * [Enums](#enums)
@@ -412,6 +417,26 @@ Listen for when an action is performed on a notification.
 --------------------
 
 
+### addListener('liveActivityEnded', ...)
+
+```typescript
+addListener(eventName: 'liveActivityEnded', listenerFunc: (event: LiveActivityEndedEvent) => void) => Promise<PluginListenerHandle>
+```
+
+Listen for when a Live Activity timer ends.
+
+| Param              | Type                                                                                          |
+| ------------------ | --------------------------------------------------------------------------------------------- |
+| **`eventName`**    | <code>'liveActivityEnded'</code>                                                              |
+| **`listenerFunc`** | <code>(event: <a href="#liveactivityendedevent">LiveActivityEndedEvent</a>) =&gt; void</code> |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
+
+**Since:** 7.1.0
+
+--------------------
+
+
 ### removeAllListeners()
 
 ```typescript
@@ -421,6 +446,80 @@ removeAllListeners() => Promise<void>
 Remove all listeners for this plugin.
 
 **Since:** 1.0.0
+
+--------------------
+
+
+### startLiveActivity(...)
+
+```typescript
+startLiveActivity(options: LiveActivityOptions) => Promise<LiveActivityResult>
+```
+
+Start a Live Activity (iOS) or Timer Notification (Android).
+Uses native system APIs for timer display - works in background.
+
+On Android: Uses setUsesChronometer() for native timer display.
+On iOS: Uses ActivityKit with Text(timerInterval:) for native timer.
+
+| Param         | Type                                                                |
+| ------------- | ------------------------------------------------------------------- |
+| **`options`** | <code><a href="#liveactivityoptions">LiveActivityOptions</a></code> |
+
+**Returns:** <code>Promise&lt;<a href="#liveactivityresult">LiveActivityResult</a>&gt;</code>
+
+**Since:** 7.1.0
+
+--------------------
+
+
+### updateLiveActivity(...)
+
+```typescript
+updateLiveActivity(options: UpdateLiveActivityOptions) => Promise<void>
+```
+
+Update a Live Activity content.
+On iOS: Updates the Live Activity content state.
+On Android: Updates the notification title/body (timer continues automatically).
+
+| Param         | Type                                                                            |
+| ------------- | ------------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#updateliveactivityoptions">UpdateLiveActivityOptions</a></code> |
+
+**Since:** 7.1.0
+
+--------------------
+
+
+### endLiveActivity(...)
+
+```typescript
+endLiveActivity(options: EndLiveActivityOptions) => Promise<void>
+```
+
+End/dismiss a Live Activity or Timer Notification.
+
+| Param         | Type                                                                      |
+| ------------- | ------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#endliveactivityoptions">EndLiveActivityOptions</a></code> |
+
+**Since:** 7.1.0
+
+--------------------
+
+
+### getActiveLiveActivities()
+
+```typescript
+getActiveLiveActivities() => Promise<ActiveLiveActivitiesResult>
+```
+
+Get list of active Live Activities/Timer Notifications.
+
+**Returns:** <code>Promise&lt;<a href="#activeliveactivitiesresult">ActiveLiveActivitiesResult</a>&gt;</code>
+
+**Since:** 7.1.0
 
 --------------------
 
@@ -453,30 +552,32 @@ The object that describes a local notification.
 
 #### LocalNotificationSchema
 
-| Prop                   | Type                                          | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     | Since |
-| ---------------------- | --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`title`**            | <code>string</code>                           | The title of the notification.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  | 1.0.0 |
-| **`body`**             | <code>string</code>                           | The body of the notification, shown below the title.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | 1.0.0 |
-| **`largeBody`**        | <code>string</code>                           | Sets a multiline text block for display in a big text notification style.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       | 1.0.0 |
-| **`summaryText`**      | <code>string</code>                           | Used to set the summary text detail in inbox and big text notification styles. Only available for Android.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      | 1.0.0 |
-| **`id`**               | <code>number</code>                           | The notification identifier. On Android it's a 32-bit int. So the value should be between -2147483648 and 2147483647 inclusive.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 | 1.0.0 |
-| **`schedule`**         | <code><a href="#schedule">Schedule</a></code> | <a href="#schedule">Schedule</a> this notification for a later time.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | 1.0.0 |
-| **`sound`**            | <code>string</code>                           | Name of the audio file to play when this notification is displayed. Include the file extension with the filename. On iOS, the file should be in the app bundle. On Android, the file should be in res/raw folder. Recommended format is `.wav` because is supported by both iOS and Android. Only available for iOS and Android &lt; 26. For Android 26+ use channelId of a channel configured with the desired sound. If the sound file is not found, (i.e. empty string or wrong name) the default system notification sound will be used. If not provided, it will produce the default sound on Android and no sound on iOS. | 1.0.0 |
-| **`smallIcon`**        | <code>string</code>                           | Set a custom status bar icon. If set, this overrides the `smallIcon` option from Capacitor configuration. Icons should be placed in your app's `res/drawable` folder. The value for this option should be the drawable resource ID, which is the filename without an extension. Only available for Android.                                                                                                                                                                                                                                                                                                                     | 1.0.0 |
-| **`largeIcon`**        | <code>string</code>                           | Set a large icon for notifications. Icons should be placed in your app's `res/drawable` folder. The value for this option should be the drawable resource ID, which is the filename without an extension. Only available for Android.                                                                                                                                                                                                                                                                                                                                                                                           | 1.0.0 |
-| **`iconColor`**        | <code>string</code>                           | Set the color of the notification icon. Only available for Android.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             | 1.0.0 |
-| **`attachments`**      | <code>Attachment[]</code>                     | Set attachments for this notification.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          | 1.0.0 |
-| **`actionTypeId`**     | <code>string</code>                           | Associate an action type with this notification.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                | 1.0.0 |
-| **`extra`**            | <code>any</code>                              | Set extra data to store within this notification.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               | 1.0.0 |
-| **`threadIdentifier`** | <code>string</code>                           | Used to group multiple notifications. Sets `threadIdentifier` on the [`UNMutableNotificationContent`](https://developer.apple.com/documentation/usernotifications/unmutablenotificationcontent). Only available for iOS.                                                                                                                                                                                                                                                                                                                                                                                                        | 1.0.0 |
-| **`summaryArgument`**  | <code>string</code>                           | The string this notification adds to the category's summary format string. Sets `summaryArgument` on the [`UNMutableNotificationContent`](https://developer.apple.com/documentation/usernotifications/unmutablenotificationcontent). Only available for iOS.                                                                                                                                                                                                                                                                                                                                                                    | 1.0.0 |
-| **`group`**            | <code>string</code>                           | Used to group multiple notifications. Calls `setGroup()` on [`NotificationCompat.Builder`](https://developer.android.com/reference/androidx/core/app/NotificationCompat.Builder) with the provided value. Only available for Android.                                                                                                                                                                                                                                                                                                                                                                                           | 1.0.0 |
-| **`groupSummary`**     | <code>boolean</code>                          | If true, this notification becomes the summary for a group of notifications. Calls `setGroupSummary()` on [`NotificationCompat.Builder`](https://developer.android.com/reference/androidx/core/app/NotificationCompat.Builder) with the provided value. Only available for Android when using `group`.                                                                                                                                                                                                                                                                                                                          | 1.0.0 |
-| **`channelId`**        | <code>string</code>                           | Specifies the channel the notification should be delivered on. If channel with the given name does not exist then the notification will not fire. If not provided, it will use the default channel. Calls `setChannelId()` on [`NotificationCompat.Builder`](https://developer.android.com/reference/androidx/core/app/NotificationCompat.Builder) with the provided value. Only available for Android 26+.                                                                                                                                                                                                                     | 1.0.0 |
-| **`ongoing`**          | <code>boolean</code>                          | If true, the notification can't be swiped away. Calls `setOngoing()` on [`NotificationCompat.Builder`](https://developer.android.com/reference/androidx/core/app/NotificationCompat.Builder) with the provided value. Only available for Android.                                                                                                                                                                                                                                                                                                                                                                               | 1.0.0 |
-| **`autoCancel`**       | <code>boolean</code>                          | If true, the notification is canceled when the user clicks on it. Calls `setAutoCancel()` on [`NotificationCompat.Builder`](https://developer.android.com/reference/androidx/core/app/NotificationCompat.Builder) with the provided value. Only available for Android.                                                                                                                                                                                                                                                                                                                                                          | 1.0.0 |
-| **`inboxList`**        | <code>string[]</code>                         | Sets a list of strings for display in an inbox style notification. Up to 5 strings are allowed. Only available for Android.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     | 1.0.0 |
-| **`silent`**           | <code>boolean</code>                          | If true, notification will not appear while app is in the foreground. Only available for iOS.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   | 5.0.0 |
+| Prop                   | Type                                                                   | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     | Since |
+| ---------------------- | ---------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`title`**            | <code>string</code>                                                    | The title of the notification.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  | 1.0.0 |
+| **`body`**             | <code>string</code>                                                    | The body of the notification, shown below the title.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | 1.0.0 |
+| **`largeBody`**        | <code>string</code>                                                    | Sets a multiline text block for display in a big text notification style.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       | 1.0.0 |
+| **`summaryText`**      | <code>string</code>                                                    | Used to set the summary text detail in inbox and big text notification styles. Only available for Android.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      | 1.0.0 |
+| **`id`**               | <code>number</code>                                                    | The notification identifier. On Android it's a 32-bit int. So the value should be between -2147483648 and 2147483647 inclusive.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 | 1.0.0 |
+| **`chronometer`**      | <code>{ enabled: boolean; countDown?: boolean; when?: number; }</code> | Display a native chronometer in the notification. The system handles the timer display automatically. Only available for Android.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               | 7.1.0 |
+| **`silentUpdate`**     | <code>boolean</code>                                                   | If true, updates to this notification will not make sound or vibrate. Useful for ongoing notifications that update frequently. Only available for Android.                                                                                                                                                                                                                                                                                                                                                                                                                                                                      | 7.1.0 |
+| **`schedule`**         | <code><a href="#schedule">Schedule</a></code>                          | <a href="#schedule">Schedule</a> this notification for a later time.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | 1.0.0 |
+| **`sound`**            | <code>string</code>                                                    | Name of the audio file to play when this notification is displayed. Include the file extension with the filename. On iOS, the file should be in the app bundle. On Android, the file should be in res/raw folder. Recommended format is `.wav` because is supported by both iOS and Android. Only available for iOS and Android &lt; 26. For Android 26+ use channelId of a channel configured with the desired sound. If the sound file is not found, (i.e. empty string or wrong name) the default system notification sound will be used. If not provided, it will produce the default sound on Android and no sound on iOS. | 1.0.0 |
+| **`smallIcon`**        | <code>string</code>                                                    | Set a custom status bar icon. If set, this overrides the `smallIcon` option from Capacitor configuration. Icons should be placed in your app's `res/drawable` folder. The value for this option should be the drawable resource ID, which is the filename without an extension. Only available for Android.                                                                                                                                                                                                                                                                                                                     | 1.0.0 |
+| **`largeIcon`**        | <code>string</code>                                                    | Set a large icon for notifications. Icons should be placed in your app's `res/drawable` folder. The value for this option should be the drawable resource ID, which is the filename without an extension. Only available for Android.                                                                                                                                                                                                                                                                                                                                                                                           | 1.0.0 |
+| **`iconColor`**        | <code>string</code>                                                    | Set the color of the notification icon. Only available for Android.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             | 1.0.0 |
+| **`attachments`**      | <code>Attachment[]</code>                                              | Set attachments for this notification.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          | 1.0.0 |
+| **`actionTypeId`**     | <code>string</code>                                                    | Associate an action type with this notification.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                | 1.0.0 |
+| **`extra`**            | <code>any</code>                                                       | Set extra data to store within this notification.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               | 1.0.0 |
+| **`threadIdentifier`** | <code>string</code>                                                    | Used to group multiple notifications. Sets `threadIdentifier` on the [`UNMutableNotificationContent`](https://developer.apple.com/documentation/usernotifications/unmutablenotificationcontent). Only available for iOS.                                                                                                                                                                                                                                                                                                                                                                                                        | 1.0.0 |
+| **`summaryArgument`**  | <code>string</code>                                                    | The string this notification adds to the category's summary format string. Sets `summaryArgument` on the [`UNMutableNotificationContent`](https://developer.apple.com/documentation/usernotifications/unmutablenotificationcontent). Only available for iOS.                                                                                                                                                                                                                                                                                                                                                                    | 1.0.0 |
+| **`group`**            | <code>string</code>                                                    | Used to group multiple notifications. Calls `setGroup()` on [`NotificationCompat.Builder`](https://developer.android.com/reference/androidx/core/app/NotificationCompat.Builder) with the provided value. Only available for Android.                                                                                                                                                                                                                                                                                                                                                                                           | 1.0.0 |
+| **`groupSummary`**     | <code>boolean</code>                                                   | If true, this notification becomes the summary for a group of notifications. Calls `setGroupSummary()` on [`NotificationCompat.Builder`](https://developer.android.com/reference/androidx/core/app/NotificationCompat.Builder) with the provided value. Only available for Android when using `group`.                                                                                                                                                                                                                                                                                                                          | 1.0.0 |
+| **`channelId`**        | <code>string</code>                                                    | Specifies the channel the notification should be delivered on. If channel with the given name does not exist then the notification will not fire. If not provided, it will use the default channel. Calls `setChannelId()` on [`NotificationCompat.Builder`](https://developer.android.com/reference/androidx/core/app/NotificationCompat.Builder) with the provided value. Only available for Android 26+.                                                                                                                                                                                                                     | 1.0.0 |
+| **`ongoing`**          | <code>boolean</code>                                                   | If true, the notification can't be swiped away. Calls `setOngoing()` on [`NotificationCompat.Builder`](https://developer.android.com/reference/androidx/core/app/NotificationCompat.Builder) with the provided value. Only available for Android.                                                                                                                                                                                                                                                                                                                                                                               | 1.0.0 |
+| **`autoCancel`**       | <code>boolean</code>                                                   | If true, the notification is canceled when the user clicks on it. Calls `setAutoCancel()` on [`NotificationCompat.Builder`](https://developer.android.com/reference/androidx/core/app/NotificationCompat.Builder) with the provided value. Only available for Android.                                                                                                                                                                                                                                                                                                                                                          | 1.0.0 |
+| **`inboxList`**        | <code>string[]</code>                                                  | Sets a list of strings for display in an inbox style notification. Up to 5 strings are allowed. Only available for Android.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     | 1.0.0 |
+| **`silent`**           | <code>boolean</code>                                                   | If true, notification will not appear while app is in the foreground. Only available for iOS.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   | 5.0.0 |
 
 
 #### Schedule
@@ -727,6 +828,71 @@ An action that can be taken when a notification is displayed.
 | **`notification`** | <code><a href="#localnotificationschema">LocalNotificationSchema</a></code> | The original notification schema.                                                                                      | 1.0.0 |
 
 
+#### LiveActivityEndedEvent
+
+Event fired when a Live Activity timer ends.
+
+| Prop             | Type                | Description                         |
+| ---------------- | ------------------- | ----------------------------------- |
+| **`activityId`** | <code>string</code> | The activity identifier that ended. |
+
+
+#### LiveActivityResult
+
+Result from starting a Live Activity.
+
+| Prop                 | Type                | Description                                     |
+| -------------------- | ------------------- | ----------------------------------------------- |
+| **`activityId`**     | <code>string</code> | The activity identifier.                        |
+| **`notificationId`** | <code>number</code> | Notification ID for Android (for internal use). |
+
+
+#### LiveActivityOptions
+
+Options for starting a Live Activity (iOS) or Timer Notification (Android).
+
+| Prop                   | Type                                                                                            | Description                                                                                        |
+| ---------------------- | ----------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| **`id`**               | <code>string</code>                                                                             | Unique identifier for the activity.                                                                |
+| **`title`**            | <code>string</code>                                                                             | Display title.                                                                                     |
+| **`message`**          | <code>string</code>                                                                             | Display message/body.                                                                              |
+| **`timer`**            | <code>{ mode: 'countdown' \| 'elapsed'; targetTimestamp: number; alertOnEnd?: boolean; }</code> | Timer configuration (optional). If provided, the system handles the timer display automatically.   |
+| **`contentState`**     | <code><a href="#record">Record</a>&lt;string, string&gt;</code>                                 | Dynamic values (updated via updateLiveActivity). All values must be strings for iOS compatibility. |
+| **`staticAttributes`** | <code><a href="#record">Record</a>&lt;string, string&gt;</code>                                 | Static values (set once at start, cannot be updated).                                              |
+| **`channelId`**        | <code>string</code>                                                                             | <a href="#channel">Channel</a> ID for Android notifications.                                       |
+| **`smallIcon`**        | <code>string</code>                                                                             | Small icon for Android notifications.                                                              |
+
+
+#### UpdateLiveActivityOptions
+
+Options for updating a Live Activity.
+
+| Prop               | Type                                                            | Description                       |
+| ------------------ | --------------------------------------------------------------- | --------------------------------- |
+| **`id`**           | <code>string</code>                                             | The activity identifier.          |
+| **`title`**        | <code>string</code>                                             | Updated title (optional).         |
+| **`message`**      | <code>string</code>                                             | Updated message (optional).       |
+| **`contentState`** | <code><a href="#record">Record</a>&lt;string, string&gt;</code> | Updated content state (optional). |
+
+
+#### EndLiveActivityOptions
+
+Options for ending a Live Activity.
+
+| Prop     | Type                | Description              |
+| -------- | ------------------- | ------------------------ |
+| **`id`** | <code>string</code> | The activity identifier. |
+
+
+#### ActiveLiveActivitiesResult
+
+Result from getting active Live Activities.
+
+| Prop             | Type                  | Description                  |
+| ---------------- | --------------------- | ---------------------------- |
+| **`activities`** | <code>string[]</code> | List of active activity IDs. |
+
+
 ### Type Aliases
 
 
@@ -752,6 +918,15 @@ The notification visibility. For more details, see the [Android Developer Docs](
 #### PermissionState
 
 <code>'prompt' | 'prompt-with-rationale' | 'granted' | 'denied'</code>
+
+
+#### Record
+
+Construct a type with a set of properties K of type T
+
+<code>{
+ [P in K]: T;
+ }</code>
 
 
 ### Enums

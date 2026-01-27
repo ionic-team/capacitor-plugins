@@ -2,9 +2,13 @@ import { WebPlugin } from '@capacitor/core';
 import type { PermissionState } from '@capacitor/core';
 
 import type {
+  ActiveLiveActivitiesResult,
   DeliveredNotifications,
   EnabledResult,
+  EndLiveActivityOptions,
   ListChannelsResult,
+  LiveActivityOptions,
+  LiveActivityResult,
   LocalNotificationSchema,
   LocalNotificationsPlugin,
   PendingResult,
@@ -12,6 +16,7 @@ import type {
   ScheduleOptions,
   ScheduleResult,
   SettingsPermissionStatus,
+  UpdateLiveActivityOptions,
 } from './definitions';
 
 export class LocalNotificationsWeb
@@ -149,8 +154,8 @@ export class LocalNotificationsWeb
       // otherwise this sends a real notification on supported browsers
       try {
         new Notification('');
-      } catch (e) {
-        if (e.name == 'TypeError') {
+      } catch (e: unknown) {
+        if (e instanceof Error && e.name == 'TypeError') {
           return false;
         }
       }
@@ -244,5 +249,43 @@ export class LocalNotificationsWeb
 
   protected onShow(notification: LocalNotificationSchema): void {
     this.notifyListeners('localNotificationReceived', notification);
+  }
+
+  // ============================================
+  // LIVE ACTIVITIES (not supported on web)
+  // ============================================
+
+  async startLiveActivity(options: LiveActivityOptions): Promise<LiveActivityResult> {
+    // On web, fall back to a regular notification
+    console.warn('[LocalNotifications] Live Activities not supported on web, using regular notification');
+    
+    const notification = new Notification(options.title, {
+      body: options.message,
+      tag: options.id,
+    });
+    this.deliveredNotifications.push(notification);
+    
+    return {
+      activityId: options.id,
+    };
+  }
+
+  async updateLiveActivity(_options: UpdateLiveActivityOptions): Promise<void> {
+    console.warn('[LocalNotifications] Live Activities not supported on web');
+  }
+
+  async endLiveActivity(options: EndLiveActivityOptions): Promise<void> {
+    // Try to close the notification with this tag
+    const found = this.deliveredNotifications.find(n => n.tag === options.id);
+    if (found) {
+      found.close();
+      this.deliveredNotifications = this.deliveredNotifications.filter(n => n !== found);
+    }
+  }
+
+  async getActiveLiveActivities(): Promise<ActiveLiveActivitiesResult> {
+    return {
+      activities: [],
+    };
   }
 }

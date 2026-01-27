@@ -1,6 +1,7 @@
 import Foundation
 import Capacitor
 import UserNotifications
+import ActivityKit
 
 enum LocalNotificationError: LocalizedError {
     case contentNoId
@@ -43,7 +44,12 @@ public class LocalNotificationsPlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "removeDeliveredNotifications", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "createChannel", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "deleteChannel", returnType: CAPPluginReturnPromise),
-        CAPPluginMethod(name: "listChannels", returnType: CAPPluginReturnPromise)
+        CAPPluginMethod(name: "listChannels", returnType: CAPPluginReturnPromise),
+        // Live Activity methods
+        CAPPluginMethod(name: "startLiveActivity", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "updateLiveActivity", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "endLiveActivity", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "getActiveLiveActivities", returnType: CAPPluginReturnPromise)
     ]
     private let notificationDelegationHandler = LocalNotificationsHandler()
 
@@ -256,7 +262,12 @@ public class LocalNotificationsPlugin: CAPPlugin, CAPBridgedPlugin {
         }
 
         if let summaryArgument = notification["summaryArgument"] as? String {
-            content.summaryArgument = summaryArgument
+            if #available(iOS 15.0, *) {
+                // summaryArgument is deprecated in iOS 15.0 and ignored
+                // Use threadIdentifier for grouping instead
+            } else {
+                content.summaryArgument = summaryArgument
+            }
         }
 
         if let sound = notification["sound"] as? String {
@@ -626,5 +637,267 @@ public class LocalNotificationsPlugin: CAPPlugin, CAPBridgedPlugin {
 
     @objc func listChannels(_ call: CAPPluginCall) {
         call.unimplemented()
+    }
+
+    // ============================================
+    // LIVE ACTIVITY METHODS
+    // ============================================
+
+    /**
+     * Start a Live Activity.
+     * Uses ActivityKit on iOS 16.1+, falls back to regular notification on older versions.
+     */
+    @objc func startLiveActivity(_ call: CAPPluginCall) {
+        CAPLog.print("[LN] ⚡️ startLiveActivity called")
+        
+        guard let id = call.getString("id") else {
+            CAPLog.print("[LN] ❌ id is required")
+            call.reject("id is required")
+            return
+        }
+        guard let title = call.getString("title") else {
+            CAPLog.print("[LN] ❌ title is required")
+            call.reject("title is required")
+            return
+        }
+        let message = call.getString("message") ?? ""
+        
+        CAPLog.print("[LN] 📋 Live Activity params - id: \(id), title: \(title), message: \(message)")
+
+        // Check if Live Activities are available
+        // Get actionTypeId
+        let actionTypeId = call.getString("actionTypeId")
+        
+        if #available(iOS 16.1, *) {
+            CAPLog.print("[LN] ✅ iOS 16.1+ detected")
+            
+            // Check if Live Activities are enabled
+            let authInfo = ActivityAuthorizationInfo()
+            CAPLog.print("[LN] 📱 Activities enabled: \(authInfo.areActivitiesEnabled)")
+            
+            guard authInfo.areActivitiesEnabled else {
+                CAPLog.print("[LN] ⚠️ Live Activities disabled, falling back to regular notification")
+                // Fall back to regular notification
+                scheduleRegularNotification(id: id, title: title, message: message, actionTypeId: actionTypeId, call: call)
+                return
+            }
+
+            // Get timer configuration
+            var timerMode: String = "countdown"
+            var timerTargetTimestamp: Double?
+
+            if let timer = call.getObject("timer") {
+                timerMode = timer["mode"] as? String ?? "countdown"
+                timerTargetTimestamp = timer["targetTimestamp"] as? Double
+            }
+
+            // Get content state
+            var contentState = call.getObject("contentState") ?? [:]
+            let staticAttributes = call.getObject("staticAttributes") ?? [:]
+            
+            // Get actionTypeId for button display in widget
+            if let actionTypeId = call.getString("actionTypeId") {
+                contentState["actionTypeId"] = actionTypeId
+            }
+
+            // Create the activity with GenericTimerAttributes
+            CAPLog.print("[LN] 🚀 Creating Live Activity with timerMode: \(timerMode), targetTimestamp: \(String(describing: timerTargetTimestamp))")
+            
+            do {
+                let attributes = GenericTimerAttributes(
+                    id: id,
+                    title: title,
+                    staticValues: staticAttributes.compactMapValues { "\($0)" }
+                )
+
+                let initialState = GenericTimerAttributes.TimerContentState(
+                    message: message,
+                    values: contentState.compactMapValues { "\($0)" },
+                    timerMode: timerMode,
+                    timerTargetTimestamp: timerTargetTimestamp
+                )
+
+                CAPLog.print("[LN] 📝 Requesting activity...")
+                let activity = try Activity<GenericTimerAttributes>.request(
+                    attributes: attributes,
+                    content: .init(state: initialState, staleDate: nil),
+                    pushType: nil
+                )
+
+                CAPLog.print("[LN] ✅ Live Activity created successfully with id: \(activity.id)")
+                call.resolve([
+                    "activityId": activity.id
+                ])
+            } catch {
+                CAPLog.print("[LN] ❌ Failed to start Live Activity: \(error)")
+                CAPLog.print("[LN] ⚠️ Falling back to regular notification")
+                // Fall back to regular notification
+                scheduleRegularNotification(id: id, title: title, message: message, actionTypeId: actionTypeId, call: call)
+            }
+        } else {
+            CAPLog.print("[LN] ⚠️ iOS < 16.1 detected, falling back to regular notification")
+            // iOS < 16.1: Fall back to regular notification
+            scheduleRegularNotification(id: id, title: title, message: message, actionTypeId: actionTypeId, call: call)
+        }
+    }
+
+    /**
+     * Update a Live Activity.
+     */
+    @objc func updateLiveActivity(_ call: CAPPluginCall) {
+        guard let id = call.getString("id") else {
+            call.reject("id is required")
+            return
+        }
+
+        if #available(iOS 16.1, *) {
+            let message = call.getString("message")
+            let contentState = call.getObject("contentState") ?? [:]
+
+            Task {
+                // Find the activity with matching ID
+                for activity in Activity<GenericTimerAttributes>.activities {
+                    if activity.attributes.id == id {
+                        // Merge new values with existing values (instead of replacing)
+                        var mergedValues = activity.content.state.values
+                        for (key, value) in contentState.compactMapValues({ "\($0)" }) {
+                            mergedValues[key] = value
+                        }
+                        
+                        let updatedState = GenericTimerAttributes.TimerContentState(
+                            message: message ?? activity.content.state.message,
+                            values: mergedValues,
+                            timerMode: activity.content.state.timerMode,
+                            timerTargetTimestamp: activity.content.state.timerTargetTimestamp
+                        )
+
+                        await activity.update(ActivityContent(state: updatedState, staleDate: nil))
+                        call.resolve()
+                        return
+                    }
+                }
+                call.reject("No active Live Activity with id: \(id)")
+            }
+        } else {
+            call.reject("Live Activities require iOS 16.1+")
+        }
+    }
+
+    /**
+     * End a Live Activity.
+     */
+    @objc func endLiveActivity(_ call: CAPPluginCall) {
+        guard let id = call.getString("id") else {
+            call.reject("id is required")
+            return
+        }
+
+        if #available(iOS 16.1, *) {
+            Task {
+                for activity in Activity<GenericTimerAttributes>.activities {
+                    if activity.attributes.id == id {
+                        await activity.end(nil, dismissalPolicy: .immediate)
+                        call.resolve()
+                        return
+                    }
+                }
+                // Also try to cancel as regular notification
+                UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [id])
+                call.resolve()
+            }
+        } else {
+            // Cancel regular notification
+            UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [id])
+            call.resolve()
+        }
+    }
+
+    /**
+     * Get list of active Live Activities.
+     */
+    @objc func getActiveLiveActivities(_ call: CAPPluginCall) {
+        if #available(iOS 16.1, *) {
+            var activityIds: [String] = []
+            for activity in Activity<GenericTimerAttributes>.activities {
+                activityIds.append(activity.attributes.id)
+            }
+            call.resolve([
+                "activities": activityIds
+            ])
+        } else {
+            call.resolve([
+                "activities": []
+            ])
+        }
+    }
+
+    /**
+     * Schedule a regular notification as fallback when Live Activities are not available.
+     */
+    private func scheduleRegularNotification(id: String, title: String, message: String, actionTypeId: String?, call: CAPPluginCall) {
+        let content = UNMutableNotificationContent()
+        content.title = title
+        content.body = message
+        
+        // Set action type if provided
+        if let actionTypeId = actionTypeId {
+            content.categoryIdentifier = actionTypeId
+        }
+        
+        // Add liveActivityId to extra for action handling
+        content.userInfo = [
+            "cap_extra": [
+                "liveActivityId": id
+            ]
+        ]
+
+        let request = UNNotificationRequest(identifier: id, content: content, trigger: nil)
+        UNUserNotificationCenter.current().add(request) { error in
+            if let error = error {
+                call.reject("Failed to schedule notification: \(error.localizedDescription)")
+            } else {
+                call.resolve([
+                    "activityId": id,
+                    "fallback": true
+                ])
+            }
+        }
+    }
+}
+
+// ============================================
+// GENERIC TIMER ATTRIBUTES FOR LIVE ACTIVITIES
+// ============================================
+
+@available(iOS 16.1, *)
+public struct GenericTimerAttributes: ActivityAttributes {
+    public typealias ContentState = TimerContentState
+
+    // Static attributes (set once)
+    public var id: String
+    public var title: String
+    public var staticValues: [String: String]
+
+    public init(id: String, title: String, staticValues: [String: String] = [:]) {
+        self.id = id
+        self.title = title
+        self.staticValues = staticValues
+    }
+
+    public struct TimerContentState: Codable, Hashable {
+        // Dynamic values
+        public var message: String
+        public var values: [String: String]
+
+        // Timer configuration
+        public var timerMode: String?
+        public var timerTargetTimestamp: Double?
+
+        public init(message: String, values: [String: String] = [:], timerMode: String? = nil, timerTargetTimestamp: Double? = nil) {
+            self.message = message
+            self.values = values
+            self.timerMode = timerMode
+            self.timerTargetTimestamp = timerTargetTimestamp
+        }
     }
 }

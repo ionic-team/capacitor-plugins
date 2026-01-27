@@ -200,11 +200,59 @@ export interface LocalNotificationsPlugin {
   ): Promise<PluginListenerHandle>;
 
   /**
+   * Listen for when a Live Activity timer ends.
+   *
+   * @since 7.1.0
+   */
+  addListener(
+    eventName: 'liveActivityEnded',
+    listenerFunc: (event: LiveActivityEndedEvent) => void,
+  ): Promise<PluginListenerHandle>;
+
+  /**
    * Remove all listeners for this plugin.
    *
    * @since 1.0.0
    */
   removeAllListeners(): Promise<void>;
+
+  // ============================================
+  // LIVE ACTIVITIES / TIMER NOTIFICATIONS
+  // ============================================
+
+  /**
+   * Start a Live Activity (iOS) or Timer Notification (Android).
+   * Uses native system APIs for timer display - works in background.
+   *
+   * On Android: Uses setUsesChronometer() for native timer display.
+   * On iOS: Uses ActivityKit with Text(timerInterval:) for native timer.
+   *
+   * @since 7.1.0
+   */
+  startLiveActivity(options: LiveActivityOptions): Promise<LiveActivityResult>;
+
+  /**
+   * Update a Live Activity content.
+   * On iOS: Updates the Live Activity content state.
+   * On Android: Updates the notification title/body (timer continues automatically).
+   *
+   * @since 7.1.0
+   */
+  updateLiveActivity(options: UpdateLiveActivityOptions): Promise<void>;
+
+  /**
+   * End/dismiss a Live Activity or Timer Notification.
+   *
+   * @since 7.1.0
+   */
+  endLiveActivity(options: EndLiveActivityOptions): Promise<void>;
+
+  /**
+   * Get list of active Live Activities/Timer Notifications.
+   *
+   * @since 7.1.0
+   */
+  getActiveLiveActivities(): Promise<ActiveLiveActivitiesResult>;
 }
 
 /**
@@ -573,6 +621,38 @@ export interface LocalNotificationSchema {
    * @since 1.0.0
    */
   id: number;
+
+  /**
+   * Display a native chronometer in the notification.
+   * The system handles the timer display automatically.
+   * Only available for Android.
+   *
+   * @since 7.1.0
+   */
+  chronometer?: {
+    /**
+     * Enable chronometer display.
+     */
+    enabled: boolean;
+    /**
+     * Count down instead of up. Requires API 24+.
+     */
+    countDown?: boolean;
+    /**
+     * Target timestamp for the chronometer.
+     * For countdown: the end time. For count-up: the start time.
+     */
+    when?: number;
+  };
+
+  /**
+   * If true, updates to this notification will not make sound or vibrate.
+   * Useful for ongoing notifications that update frequently.
+   * Only available for Android.
+   *
+   * @since 7.1.0
+   */
+  silentUpdate?: boolean;
 
   /**
    * Schedule this notification for a later time.
@@ -1147,80 +1227,249 @@ export type Importance = 1 | 2 | 3 | 4 | 5;
  */
 export type Visibility = -1 | 0 | 1;
 
-/**
- * @deprecated Use 'Channel`.
- * @since 1.0.0
- */
-export type NotificationChannel = Channel;
+// ============================================
+// LIVE ACTIVITIES / TIMER NOTIFICATIONS
+// ============================================
 
 /**
- * @deprecated Use `LocalNotificationDescriptor`.
- * @since 1.0.0
+ * Options for starting a Live Activity (iOS) or Timer Notification (Android).
+ *
+ * @since 7.1.0
  */
-export type LocalNotificationRequest = LocalNotificationDescriptor;
+export interface LiveActivityOptions {
+  /**
+   * Unique identifier for the activity.
+   */
+  id: string;
+
+  /**
+   * Display title.
+   */
+  title: string;
+
+  /**
+   * Display message/body.
+   */
+  message: string;
+
+  /**
+   * Timer configuration (optional).
+   * If provided, the system handles the timer display automatically.
+   */
+  timer?: {
+    /**
+     * Timer mode: countdown (toward 0) or elapsed (from 0).
+     * @default "countdown"
+     */
+    mode: 'countdown' | 'elapsed';
+
+    /**
+     * For countdown: target end timestamp (ms since epoch).
+     * For elapsed: start timestamp (ms since epoch).
+     */
+    targetTimestamp: number;
+
+    /**
+     * If true, triggers a callback when timer ends.
+     * Uses AlarmManager on Android.
+     * @default false
+     */
+    alertOnEnd?: boolean;
+
+    /**
+     * Timestamp (ms since epoch) when to trigger the alert.
+     * Required when alertOnEnd is true for elapsed timers.
+     * For countdown timers, defaults to targetTimestamp.
+     */
+    alertTimestamp?: number;
+
+    /**
+     * Start timestamp for elapsed timers (ms since epoch).
+     * Used by Android background service for progress calculation.
+     */
+    startTimestamp?: number;
+
+    /**
+     * Max duration in milliseconds for elapsed timers.
+     * Used by Android background service to detect exceeded state.
+     */
+    maxDurationMs?: number;
+  };
+
+  /**
+   * Dynamic values (updated via updateLiveActivity).
+   * All values must be strings for iOS compatibility.
+   */
+  contentState?: Record<string, string>;
+
+  /**
+   * Static values (set once at start, cannot be updated).
+   */
+  staticAttributes?: Record<string, string>;
+
+  /**
+   * Channel ID for Android notifications.
+   */
+  channelId?: string;
+
+  /**
+   * Small icon for Android notifications.
+   */
+  smallIcon?: string;
+
+  /**
+   * Action type ID for notification actions.
+   * Links to registered action types (buttons on the notification).
+   *
+   * @since 7.2.0
+   */
+  actionTypeId?: string;
+
+  /**
+   * Progress bar configuration (Android only).
+   * Shows a progress indicator in the notification.
+   *
+   * @since 7.2.0
+   */
+  progress?: {
+    /**
+     * Maximum value for the progress bar.
+     * @default 100
+     */
+    max?: number;
+
+    /**
+     * Current progress value.
+     * @default 0
+     */
+    current: number;
+
+    /**
+     * Whether to show an indeterminate progress bar.
+     * @default false
+     */
+    indeterminate?: boolean;
+  };
+
+  /**
+   * Whether to vibrate when the notification is shown (Android only).
+   * Useful for initial notification or alert state.
+   * @default true
+   *
+   * @since 7.2.0
+   */
+  vibrate?: boolean;
+}
 
 /**
- * @deprecated Use `ScheduleResult`.
- * @since 1.0.0
+ * Result from starting a Live Activity.
+ *
+ * @since 7.1.0
  */
-export type LocalNotificationScheduleResult = ScheduleResult;
+export interface LiveActivityResult {
+  /**
+   * The activity identifier.
+   */
+  activityId: string;
+
+  /**
+   * Notification ID for Android (for internal use).
+   */
+  notificationId?: number;
+}
 
 /**
- * @deprecated Use `PendingResult`.
- * @since 1.0.0
+ * Options for updating a Live Activity.
+ *
+ * @since 7.1.0
  */
-export type LocalNotificationPendingList = PendingResult;
+export interface UpdateLiveActivityOptions {
+  /**
+   * The activity identifier.
+   */
+  id: string;
+
+  /**
+   * Updated title (optional).
+   */
+  title?: string;
+
+  /**
+   * Updated message (optional).
+   */
+  message?: string;
+
+  /**
+   * Updated content state (optional).
+   */
+  contentState?: Record<string, string>;
+
+  /**
+   * Updated progress bar configuration (Android only).
+   *
+   * @since 7.2.0
+   */
+  progress?: {
+    /**
+     * Maximum value for the progress bar.
+     * @default 100
+     */
+    max?: number;
+
+    /**
+     * Current progress value.
+     */
+    current: number;
+
+    /**
+     * Whether to show an indeterminate progress bar.
+     * @default false
+     */
+    indeterminate?: boolean;
+  };
+
+  /**
+   * Whether to vibrate when updating (Android only).
+   * Useful for transitioning to alert state.
+   * @default false
+   *
+   * @since 7.2.0
+   */
+  vibrate?: boolean;
+}
 
 /**
- * @deprecated Use `ActionType`.
- * @since 1.0.0
+ * Options for ending a Live Activity.
+ *
+ * @since 7.1.0
  */
-export type LocalNotificationActionType = ActionType;
+export interface EndLiveActivityOptions {
+  /**
+   * The activity identifier.
+   */
+  id: string;
+}
 
 /**
- * @deprecated Use `Action`.
- * @since 1.0.0
+ * Result from getting active Live Activities.
+ *
+ * @since 7.1.0
  */
-export type LocalNotificationAction = Action;
+export interface ActiveLiveActivitiesResult {
+  /**
+   * List of active activity IDs.
+   */
+  activities: string[];
+}
 
 /**
- * @deprecated Use `EnabledResult`.
- * @since 1.0.0
+ * Event fired when a Live Activity timer ends.
+ *
+ * @since 7.1.0
  */
-export type LocalNotificationEnabledResult = EnabledResult;
-
-/**
- * @deprecated Use `ListChannelsResult`.
- * @since 1.0.0
- */
-export type NotificationChannelList = ListChannelsResult;
-
-/**
- * @deprecated Use `Attachment`.
- * @since 1.0.0
- */
-export type LocalNotificationAttachment = Attachment;
-
-/**
- * @deprecated Use `AttachmentOptions`.
- * @since 1.0.0
- */
-export type LocalNotificationAttachmentOptions = AttachmentOptions;
-
-/**
- * @deprecated Use `LocalNotificationSchema`.
- * @since 1.0.0
- */
-export type LocalNotification = LocalNotificationSchema;
-
-/**
- * @deprecated Use `Schedule`.
- * @since 1.0.0
- */
-export type LocalNotificationSchedule = Schedule;
-
-/**
- * @deprecated Use `ActionPerformed`.
- * @since 1.0.0
- */
-export type LocalNotificationActionPerformed = ActionPerformed;
+export interface LiveActivityEndedEvent {
+  /**
+   * The activity identifier that ended.
+   */
+  activityId: string;
+}
