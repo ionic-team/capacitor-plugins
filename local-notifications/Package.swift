@@ -3,7 +3,7 @@ import PackageDescription
 
 let package = Package(
     name: "CapacitorLocalNotifications",
-    platforms: [.iOS(.v14)],
+    platforms: [.iOS(.v16)],
     products: [
         .library(
             name: "CapacitorLocalNotifications",

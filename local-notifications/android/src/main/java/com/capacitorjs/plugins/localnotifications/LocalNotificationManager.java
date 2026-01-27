@@ -214,6 +214,29 @@ public class LocalNotificationManager {
         mBuilder.setVisibility(NotificationCompat.VISIBILITY_PRIVATE);
         mBuilder.setOnlyAlertOnce(true);
 
+        // Chronometer support for native timer display
+        if (localNotification.hasChronometer()) {
+            mBuilder.setUsesChronometer(true);
+            
+            long when = localNotification.getChronometerWhen();
+            if (when > 0) {
+                mBuilder.setWhen(when);
+            }
+            
+            // API 24+ for countdown mode
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && localNotification.isChronometerCountDown()) {
+                mBuilder.setChronometerCountDown(true);
+            }
+        }
+
+        // Silent update support - don't make sound/vibrate on update
+        if (localNotification.isSilentUpdate()) {
+            mBuilder.setOnlyAlertOnce(true);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                mBuilder.setSilent(true);
+            }
+        }
+
         mBuilder.setSmallIcon(localNotification.getSmallIcon(context, getDefaultSmallIcon(context)));
         mBuilder.setLargeIcon(localNotification.getLargeIcon(context));
 

@@ -41,6 +41,12 @@ public class LocalNotification {
     private LocalNotificationSchedule schedule;
     private String channelId;
     private String source;
+    
+    // Chronometer support for native timer display
+    private boolean chronometerEnabled;
+    private boolean chronometerCountDown;
+    private long chronometerWhen;
+    private boolean silentUpdate;
 
     public String getTitle() {
         return title;
@@ -203,6 +209,43 @@ public class LocalNotification {
         this.channelId = channelId;
     }
 
+    // Chronometer getters and setters
+    public boolean isChronometerEnabled() {
+        return chronometerEnabled;
+    }
+
+    public void setChronometerEnabled(boolean chronometerEnabled) {
+        this.chronometerEnabled = chronometerEnabled;
+    }
+
+    public boolean isChronometerCountDown() {
+        return chronometerCountDown;
+    }
+
+    public void setChronometerCountDown(boolean chronometerCountDown) {
+        this.chronometerCountDown = chronometerCountDown;
+    }
+
+    public long getChronometerWhen() {
+        return chronometerWhen;
+    }
+
+    public void setChronometerWhen(long chronometerWhen) {
+        this.chronometerWhen = chronometerWhen;
+    }
+
+    public boolean isSilentUpdate() {
+        return silentUpdate;
+    }
+
+    public void setSilentUpdate(boolean silentUpdate) {
+        this.silentUpdate = silentUpdate;
+    }
+
+    public boolean hasChronometer() {
+        return chronometerEnabled;
+    }
+
     /**
      * Build list of the notifications from remote plugin call
      */
@@ -270,6 +313,19 @@ public class LocalNotification {
         localNotification.setExtra(jsonObject.getJSObject("extra"));
         localNotification.setOngoing(jsonObject.getBoolean("ongoing", false));
         localNotification.setAutoCancel(jsonObject.getBoolean("autoCancel", true));
+        localNotification.setSilentUpdate(jsonObject.getBoolean("silentUpdate", false));
+
+        // Parse chronometer settings
+        JSObject chronometerObj = jsonObject.getJSObject("chronometer");
+        if (chronometerObj != null) {
+            localNotification.setChronometerEnabled(chronometerObj.getBoolean("enabled", false));
+            localNotification.setChronometerCountDown(chronometerObj.getBoolean("countDown", false));
+            // Use optLong to avoid JSONException - returns 0 if not found
+            long when = chronometerObj.optLong("when", 0);
+            if (when > 0) {
+                localNotification.setChronometerWhen(when);
+            }
+        }
 
         try {
             JSONArray inboxList = jsonObject.getJSONArray("inboxList");
