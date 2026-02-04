@@ -3,6 +3,7 @@ package com.capacitorjs.plugins.applauncher;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Logger;
@@ -36,7 +37,9 @@ public class AppLauncherPlugin extends Plugin {
             Logger.error(getLogTag(), "Package name '" + url + "' not found!", null);
         }
 
-        ret.put("value", false);
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        ResolveInfo resolved = pm.resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY);
+        ret.put("value", resolved != null);
         call.resolve(ret);
     }
 
@@ -62,7 +65,13 @@ public class AppLauncherPlugin extends Plugin {
                 getActivity().startActivity(launchIntent);
                 ret.put("completed", true);
             } catch (Exception expgk) {
-                ret.put("completed", false);
+                try {
+                    launchIntent = new Intent(url);
+                    getActivity().startActivity(launchIntent);
+                    ret.put("completed", true);
+                } catch (Exception exintent) {
+                    ret.put("completed", false);
+                }
             }
         }
         call.resolve(ret);
