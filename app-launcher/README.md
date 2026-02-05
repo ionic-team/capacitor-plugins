@@ -12,7 +12,7 @@ Example:
 ```xml
 <queries>
   <!-- Query by package name -->
-  <package android:name="com.getcapacitor.myapp" />
+  <package android:name="com.twitter.android" />
   <!-- Query by url scheme -->
   <intent>
       <action android:name="android.intent.action.VIEW"/>
@@ -33,15 +33,26 @@ npx cap sync
 ```typescript
 import { AppLauncher } from '@capacitor/app-launcher';
 
-const checkCanOpenUrl = async () => {
-  const { value } = await AppLauncher.canOpenUrl({ url: 'com.getcapacitor.myapp' });
-
+const checkCanOpenTwitterUrl = async () => {
+  const { value } = await AppLauncher.canOpenUrl({ url: 'twitter://timeline' });
   console.log('Can open url: ', value);
 };
 
-const openPortfolioPage = async () => {
-  const { completed } = await AppLauncher.openUrl({ url: 'com.getcapacitor.myapp://page?id=portfolio' });
+const openTwitterUrl = async () => {
+  const { completed } = await AppLauncher.openUrl({ url: 'twitter://timeline' });
   console.log('openUrl completed: ', completed);
+};
+
+// Android only
+const checkCanOpenTwitterPackage = async () => {
+  const { value } = await AppLauncher.canOpenUrl({ url: 'com.twitter.android' });
+  console.log('Can open package: ', value);
+};
+
+// Android only
+const openTwitterPackage = async () => {
+  const { completed } = await AppLauncher.openUrl({ url: 'com.twitter.android' });
+  console.log('openUrl package completed: ', completed);
 };
 ```
 
