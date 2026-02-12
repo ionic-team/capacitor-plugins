@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.0.4](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/screen-orientation@7.0.3...@capacitor/screen-orientation@7.0.4) (2026-02-12)
+
+### Bug Fixes
+
+- AGP 9.0 no longer supporting `proguard-android.txt` ([#2468](https://github.com/ionic-team/capacitor-plugins/issues/2468)) ([5c35807](https://github.com/ionic-team/capacitor-plugins/commit/5c3580726b7b216077d903de3546754a87588ac6))
+
 ## [7.0.3](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/screen-orientation@7.0.2...@capacitor/screen-orientation@7.0.3) (2025-11-26)
 
 **Note:** Version bump only for package @capacitor/screen-orientation

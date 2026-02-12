@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.0.4](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/app-launcher@7.0.3...@capacitor/app-launcher@7.0.4) (2026-02-12)
+
+### Bug Fixes
+
+- AGP 9.0 no longer supporting `proguard-android.txt` ([#2468](https://github.com/ionic-team/capacitor-plugins/issues/2468)) ([5c35807](https://github.com/ionic-team/capacitor-plugins/commit/5c3580726b7b216077d903de3546754a87588ac6))
+- **app-launcher:** improvements on canOpenUrl and openUrl ([#2476](https://github.com/ionic-team/capacitor-plugins/issues/2476)) ([#2478](https://github.com/ionic-team/capacitor-plugins/issues/2478)) ([6788247](https://github.com/ionic-team/capacitor-plugins/commit/6788247d08f77c1d5f9d6f9e0d0baea0ba5bbca7))
+
 ## [7.0.3](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/app-launcher@7.0.2...@capacitor/app-launcher@7.0.3) (2025-11-26)
 
 **Note:** Version bump only for package @capacitor/app-launcher

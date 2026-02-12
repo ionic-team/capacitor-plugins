@@ -1,6 +1,6 @@
 {
   "name": "@capacitor/screen-orientation",
-  "version": "7.0.3",
+  "version": "7.0.4",
   "description": "The Screen Orientation API provides methods to lock and unlock the screen orientation.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
