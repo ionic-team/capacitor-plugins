@@ -6,12 +6,18 @@ On iOS you can only open apps if you know their url scheme.
 
 On Android you can open apps if you know their url scheme or use their public package name.
 
-**Note:** On [Android 11](https://developer.android.com/about/versions/11/privacy/package-visibility) and newer you have to add the app package names you want to query in the `AndroidManifest.xml` inside the `queries` tag.
+**Note:** On [Android 11](https://developer.android.com/about/versions/11/privacy/package-visibility) and newer you have to add the app package names or url schemes you want to query in the `AndroidManifest.xml` inside the `queries` tag.
 
 Example:
 ```xml
 <queries>
-  <package android:name="com.getcapacitor.myapp" />
+  <!-- Query by package name -->
+  <package android:name="com.twitter.android" />
+  <!-- Query by url scheme -->
+  <intent>
+      <action android:name="android.intent.action.VIEW"/>
+      <data android:scheme="twitter"/>
+  </intent>
 </queries>
 ```
 
@@ -27,14 +33,26 @@ npx cap sync
 ```typescript
 import { AppLauncher } from '@capacitor/app-launcher';
 
-const checkCanOpenUrl = async () => {
-  const { value } = await AppLauncher.canOpenUrl({ url: 'com.getcapacitor.myapp' });
-
+const checkCanOpenTwitterUrl = async () => {
+  const { value } = await AppLauncher.canOpenUrl({ url: 'twitter://timeline' });
   console.log('Can open url: ', value);
 };
 
-const openPortfolioPage = async () => {
-  await AppLauncher.openUrl({ url: 'com.getcapacitor.myapp://page?id=portfolio' });
+const openTwitterUrl = async () => {
+  const { completed } = await AppLauncher.openUrl({ url: 'twitter://timeline' });
+  console.log('openUrl completed: ', completed);
+};
+
+// Android only
+const checkCanOpenTwitterPackage = async () => {
+  const { value } = await AppLauncher.canOpenUrl({ url: 'com.twitter.android' });
+  console.log('Can open package: ', value);
+};
+
+// Android only
+const openTwitterPackage = async () => {
+  const { completed } = await AppLauncher.openUrl({ url: 'com.twitter.android' });
+  console.log('openUrl package completed: ', completed);
 };
 ```
 
@@ -67,6 +85,12 @@ Learn more about configuring
 This method always returns false for undeclared schemes, whether or not an
 appropriate app is installed. To learn more about the key, see
 [LSApplicationQueriesSchemes](https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/LaunchServicesKeys.html#//apple_ref/doc/plist/info/LSApplicationQueriesSchemes).
+
+On Android the URL can be a known URLScheme or an app package name.
+
+On [Android 11](https://developer.android.com/about/versions/11/privacy/package-visibility)
+and newer you have to add the app package names or url schemes you want to query in the `AndroidManifest.xml`
+inside the `queries` tag.
 
 | Param         | Type                                                            |
 | ------------- | --------------------------------------------------------------- |
