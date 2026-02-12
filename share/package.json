@@ -1,6 +1,6 @@
 {
   "name": "@capacitor/share",
-  "version": "8.0.0",
+  "version": "8.0.1",
   "description": "The Share API provides methods for sharing content in any sharing-enabled apps the user may have installed.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
