@@ -35,11 +35,20 @@ public class LocalNotificationsHandler: NSObject, NotificationHandlerProtocol {
             }
         }
 
-        return [
-            .badge,
-            .sound,
-            .alert
-        ]
+        if #available(iOS 14.0, *) {
+            return [
+                .badge,
+                .sound,
+                .banner,
+                .list
+            ]
+        } else {
+            return [
+                .badge,
+                .sound,
+                .alert
+            ]
+        }
     }
 
     public func didReceive(response: UNNotificationResponse) {

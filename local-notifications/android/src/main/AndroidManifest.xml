@@ -13,8 +13,22 @@
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />
             </intent-filter>
         </receiver>
+        <!-- Receiver pour callback quand le timer se termine -->
+        <receiver 
+            android:name="com.capacitorjs.plugins.localnotifications.TimerEndReceiver"
+            android:exported="false" />
+        
+        <!-- Service foreground pour mise à jour de la progression du timer en arrière-plan -->
+        <service
+            android:name="com.capacitorjs.plugins.localnotifications.TimerProgressService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="specialUse" />
     </application>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
 </manifest>
