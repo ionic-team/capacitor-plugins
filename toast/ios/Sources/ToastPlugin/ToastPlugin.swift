@@ -14,8 +14,11 @@ public class ToastPlugin: CAPPlugin, CAPBridgedPlugin {
             call.reject("text must be provided and must be a string.")
             return
         }
-        let durationType = call.getString("duration", "short")
-        let duration = durationType == "long" ? 3500 : 2000
+        var duration = call.getInt("durationMilliseconds", 0)
+        if(duration <= 0) {
+            let durationType = call.getString("duration", "short")
+            duration = durationType == "long" ? 3500 : 2000
+        }
         let position = call.getString("position", "bottom")
 
         guard let viewController = bridge?.viewController else {
