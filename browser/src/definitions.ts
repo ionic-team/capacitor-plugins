@@ -99,6 +99,15 @@ export interface OpenOptions {
    * @since 4.0.0
    */
   height?: number;
+
+  /**
+   * iOS only: Whether to automatically enter Reader mode if available for the url
+   *
+   * Ignored on other platforms.
+   *
+   * @since 5.0.0
+   */
+  entersReaderIfAvailable?: boolean;
 }
 
 /**
