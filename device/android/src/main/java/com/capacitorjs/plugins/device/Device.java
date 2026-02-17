@@ -29,7 +29,7 @@ public class Device {
     }
 
     public String getUuid() {
-        return Settings.Secure.getString(this.context.getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
+        return Settings.Secure.getString(this.context.getContentResolver(), Settings.Secure.ANDROID_ID);
     }
 
     public float getBatteryLevel() {
@@ -59,7 +59,7 @@ public class Device {
     }
 
     public boolean isVirtual() {
-        return android.os.Build.FINGERPRINT.contains("generic") || android.os.Build.PRODUCT.contains("sdk");
+        return Build.FINGERPRINT.contains("generic") || Build.PRODUCT.contains("sdk");
     }
 
     public String getName() {
@@ -85,7 +85,7 @@ public class Device {
             return info.versionName;
         }
 
-        return android.os.Build.VERSION.RELEASE;
+        return Build.VERSION.RELEASE;
     }
 
     private PackageInfo getWebViewVersionSubAndroid26() throws PackageManager.NameNotFoundException {
