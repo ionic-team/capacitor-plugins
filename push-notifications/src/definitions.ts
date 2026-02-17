@@ -170,6 +170,13 @@ export interface PushNotificationsPlugin {
    * @since 1.0.0
    */
   removeAllListeners(): Promise<void>;
+
+  /**
+   * Open native notification settings.
+   *
+   * @since 5.0.0
+   */
+  openSettings(): Promise<{ success: boolean }>;
 }
 
 export interface PushNotificationSchema {

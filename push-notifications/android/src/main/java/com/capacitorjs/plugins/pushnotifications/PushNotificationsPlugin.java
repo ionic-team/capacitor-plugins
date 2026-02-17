@@ -1,6 +1,7 @@
 package com.capacitorjs.plugins.pushnotifications;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;
@@ -10,8 +11,13 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.service.notification.StatusBarNotification;
+import androidx.activity.result.ActivityResult;
+import androidx.core.app.NotificationCompat;
+
 import com.getcapacitor.*;
+import com.getcapacitor.annotation.ActivityCallback;
 import com.getcapacitor.annotation.CapacitorPlugin;
 import com.getcapacitor.annotation.Permission;
 import com.getcapacitor.annotation.PermissionCallback;
@@ -322,5 +328,26 @@ public class PushNotificationsPlugin extends Plugin {
             e.printStackTrace();
             return null;
         }
+    }
+
+    @PluginMethod
+    public void openSettings(PluginCall call) {
+        Intent intent = new Intent();
+        intent.setAction(Settings.ACTION_APP_NOTIFICATION_SETTINGS);
+        intent.putExtra(Settings.EXTRA_APP_PACKAGE, getContext().getPackageName());
+        startActivityForResult(call, intent, "activityCallback");
+    }
+
+    @ActivityCallback
+    private void activityCallback(PluginCall call, ActivityResult result) {
+        JSObject rvalue = new JSObject();
+
+        if (result.getResultCode() == Activity.RESULT_OK) {
+            rvalue.put("success", true);
+        } else {
+            rvalue.put("success", false);
+        }
+
+        call.resolve(rvalue);
     }
 }
