@@ -497,8 +497,13 @@ public class CameraPlugin extends Plugin {
             if (newUri != null) {
                 ret.put("format", "jpeg");
                 ret.put("exif", exif.toJson());
-                ret.put("path", newUri.toString());
-                ret.put("webPath", FileUtils.getPortablePath(getContext(), bridge.getLocalUrl(), newUri));
+                if (settings.getResultType() == CameraResultType.BASE64) {
+                  String encoded = this.getBase64String(bitmapOutputStream);
+                  ret.put("base64String", encoded);
+                } else {
+                  ret.put("path", newUri.toString());
+                  ret.put("webPath", FileUtils.getPortablePath(getContext(), bridge.getLocalUrl(), newUri));
+                }
             } else {
                 ret.put("error", UNABLE_TO_PROCESS_IMAGE);
             }
@@ -760,9 +765,13 @@ public class CameraPlugin extends Plugin {
         call.resolve(data);
     }
 
+    private String getBase64String(ByteArrayOutputStream bitmapOutputStream) {
+      byte[] byteArray = bitmapOutputStream.toByteArray();
+      return Base64.encodeToString(byteArray, Base64.NO_WRAP);
+    }
+
     private void returnBase64(PluginCall call, ExifWrapper exif, ByteArrayOutputStream bitmapOutputStream) {
-        byte[] byteArray = bitmapOutputStream.toByteArray();
-        String encoded = Base64.encodeToString(byteArray, Base64.NO_WRAP);
+        String encoded = this.getBase64String(bitmapOutputStream);
 
         JSObject data = new JSObject();
         data.put("format", "jpeg");
