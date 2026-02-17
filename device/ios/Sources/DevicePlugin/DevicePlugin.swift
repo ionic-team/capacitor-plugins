@@ -35,13 +35,15 @@ public class DevicePlugin: CAPPlugin, CAPBridgedPlugin {
 
         let memUsed = implementation.getMemoryUsage()
         let systemVersionNum = implementation.getSystemVersionInt() ?? 0
+        let systemVersionInfo = implementation.getVersionInfo()
 
         call.resolve([
             "memUsed": memUsed,
             "name": UIDevice.current.name,
             "model": modelName,
             "operatingSystem": "ios",
-            "osVersion": UIDevice.current.systemVersion,
+            "osVersion": systemVersionInfo.version,
+            "osBuild": systemVersionInfo.build,
             "iOSVersion": systemVersionNum,
             "platform": "ios",
             "manufacturer": "Apple",

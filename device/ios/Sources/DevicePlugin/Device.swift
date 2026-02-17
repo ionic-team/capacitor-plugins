@@ -64,4 +64,15 @@ import UIKit
 
         return Int(combined.joined())
     }
+
+    func getVersionInfo() -> (version: String, build: String) {
+        let string = ProcessInfo.processInfo.operatingSystemVersionString
+        let cleaned = string.replacingOccurrences(of: "Version ", with: "").replacingOccurrences(of: "Build ", with: "")
+        let components = cleaned.split(separator: "(")
+        
+        let version = components.first?.trimmingCharacters(in: .whitespacesAndNewlines) ?? "Unknown"
+        let build = components.count > 1 ? components[1].replacingOccurrences(of: ")", with: "").trimmingCharacters(in: .whitespacesAndNewlines) : "Unknown"
+        
+        return (version, build)
+    }
 }
