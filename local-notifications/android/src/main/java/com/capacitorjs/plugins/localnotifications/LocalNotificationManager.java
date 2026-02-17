@@ -332,8 +332,15 @@ public class LocalNotificationManager {
         }
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, request.getId(), notificationIntent, flags);
 
-        // Schedule at specific time (with repeating support)
         Date at = schedule.getAt();
+        String every = schedule.getEvery();
+        DateMatch on = schedule.getOn();
+        if ((at != null ? 0 : 1) + (every != null ? 0 : 1) + (on != null ? 0 : 1) <= 1) {
+            Logger.error(Logger.tags("LN"), "You cannot use multiple scheduler types. Use either 'at', 'every' or 'on' in the schedule object.", null);
+            return;
+        }
+
+        // Schedule at specific time (with repeating support)
         if (at != null) {
             if (at.getTime() < new Date().getTime()) {
                 Logger.error(Logger.tags("LN"), "Scheduled time must be *after* current time", null);
@@ -349,7 +356,6 @@ public class LocalNotificationManager {
         }
 
         // Schedule at specific intervals
-        String every = schedule.getEvery();
         if (every != null) {
             Long everyInterval = schedule.getEveryInterval();
             if (everyInterval != null) {
@@ -360,7 +366,6 @@ public class LocalNotificationManager {
         }
 
         // Cron like scheduler
-        DateMatch on = schedule.getOn();
         if (on != null) {
             long trigger = on.nextTrigger(new Date());
             notificationIntent.putExtra(TimedNotificationPublisher.CRON_KEY, on.toMatchString());
