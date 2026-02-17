@@ -15,7 +15,7 @@ export interface BrowserPlugin {
    *
    * @since 1.0.0
    */
-  close(): Promise<void>;
+  close(options?: CloseOptions): Promise<void>;
 
   /**
    * Android & iOS only: Listen for the browser finished event.
@@ -99,6 +99,15 @@ export interface OpenOptions {
    * @since 4.0.0
    */
   height?: number;
+}
+
+export interface CloseOptions {
+    /**
+     * iOS only: clear all website data before close
+     *
+     * default: null / false
+     */
+    clearWebsiteData?: boolean;
 }
 
 /**
