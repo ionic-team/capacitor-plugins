@@ -2,6 +2,8 @@ package com.capacitorjs.plugins.statusbar;
 
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
@@ -29,7 +31,7 @@ public class StatusBar {
     public StatusBar(AppCompatActivity activity, StatusBarConfig config, ChangeListener listener) {
         // save initial color of the status bar
         this.activity = activity;
-        this.currentStatusBarColor = getStatusBarColorDeprecated();
+        this.currentStatusBarColor = getStatusBarColor();
         this.listener = listener;
         setBackgroundColor(config.getBackgroundColor());
         setStyle(config.getStyle());
@@ -68,7 +70,7 @@ public class StatusBar {
         if (shouldSetStatusBarColor(isEdgeToEdgeOptOutEnabled(window))) {
             clearTranslucentStatusFlagDeprecated();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            setStatusBarColorDeprecated(color);
+            setStatusBarColor(color);
             currentStatusBarColor = color;
 
             // only set foreground color if style is default
@@ -106,14 +108,14 @@ public class StatusBar {
             // Sets the layout to a fullscreen one that does not hide the actual status bar, so the WebView is displayed behind it.
             uiOptions = uiOptions | getSystemUiFlagLayoutStableDeprecated() | getSystemUiFlagLayoutFullscreenDeprecated();
             setSystemUiVisibilityDeprecated(decorView, uiOptions);
-            currentStatusBarColor = getStatusBarColorDeprecated();
-            setStatusBarColorDeprecated(Color.TRANSPARENT);
+            currentStatusBarColor = getStatusBarColor();
+            setStatusBarColor(Color.TRANSPARENT);
         } else {
             // Sets the layout to a normal one that displays the WebView below the status bar.
             uiOptions = uiOptions & ~getSystemUiFlagLayoutStableDeprecated() & ~getSystemUiFlagLayoutFullscreenDeprecated();
             setSystemUiVisibilityDeprecated(decorView, uiOptions);
             // recover the previous color of the status bar
-            setStatusBarColorDeprecated(currentStatusBarColor);
+            setStatusBarColor(currentStatusBarColor);
         }
         listener.onChange(statusBarOverlayChanged, getInfo());
     }
@@ -156,7 +158,7 @@ public class StatusBar {
         info.setStyle(getStyle());
         info.setOverlays(getIsOverlaid());
         info.setVisible(isVisible);
-        info.setColor(String.format("#%06X", (0xFFFFFF & getStatusBarColorDeprecated())));
+        info.setColor(String.format("#%06X", (0xFFFFFF & getStatusBarColor())));
         info.setHeight(getStatusBarHeight());
         return info;
     }
@@ -188,18 +190,33 @@ public class StatusBar {
         return 0;
     }
 
+    private int getStatusBarColor() {
+        Window window = activity.getWindow();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+            View decorView = window.getDecorView();
+            Drawable background = decorView.getBackground();
+            if (background instanceof ColorDrawable) {
+                return ((ColorDrawable) background).getColor();
+            }
+
+            return Color.TRANSPARENT;
+        }
+
+        return window.getStatusBarColor();
+    }
+
+    private void setStatusBarColor(int color) {
+        Window window = activity.getWindow();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+            View decorView = window.getDecorView();
+            decorView.setBackgroundColor(color);
+        } else {
+            window.setStatusBarColor(color);
+        }
+    }
+
     public interface ChangeListener {
         void onChange(String eventName, StatusBarInfo info);
-    }
-
-    @SuppressWarnings("deprecation")
-    private int getStatusBarColorDeprecated() {
-        return activity.getWindow().getStatusBarColor();
-    }
-
-    @SuppressWarnings("deprecation")
-    private void setStatusBarColorDeprecated(int color) {
-        activity.getWindow().setStatusBarColor(color);
     }
 
     @SuppressWarnings("deprecation")
