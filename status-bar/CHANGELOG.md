@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [8.0.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/status-bar@8.0.0...@capacitor/status-bar@8.0.1) (2026-02-12)
+
+### Bug Fixes
+
+- AGP 9.0 no longer supporting `proguard-android.txt` ([#2468](https://github.com/ionic-team/capacitor-plugins/issues/2468)) ([a8760a9](https://github.com/ionic-team/capacitor-plugins/commit/a8760a989f594bc406d0ec7da58125d17447cae4))
+
 # [8.0.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/status-bar@8.0.0-beta.0...@capacitor/status-bar@8.0.0) (2025-12-08)
 
 ### Bug Fixes

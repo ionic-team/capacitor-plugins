@@ -1,6 +1,6 @@
 {
   "name": "@capacitor/app-launcher",
-  "version": "8.0.0",
+  "version": "8.0.1",
   "description": "The AppLauncher API allows to open other apps",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
