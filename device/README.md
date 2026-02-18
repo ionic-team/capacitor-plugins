@@ -173,6 +173,6 @@ Get the device's current language locale tag.
 
 #### OperatingSystem
 
-<code>'ios' | 'android' | 'windows' | 'mac' | 'unknown'</code>
+<code>'ios' | 'android' | 'windows' | 'mac' | 'linux' | 'freebsd' | 'openbsd' | 'unknown'</code>
 
 </docgen-api>
