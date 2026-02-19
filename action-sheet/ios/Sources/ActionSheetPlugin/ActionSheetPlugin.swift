@@ -46,7 +46,7 @@ public class ActionSheetPlugin: CAPPlugin, CAPBridgedPlugin {
             if let alertController = self?.implementation.buildActionSheet(title: title, message: message, actions: alertActions) {
                 self?.setCenteredPopover(alertController)
                 self?.bridge?.viewController?.present(alertController, animated: true) {
-                    if (forceCancelableOnClickOutside) {
+                    if forceCancelableOnClickOutside {
                         let gestureRecognizer = TapGestureRecognizerWithClosure {
                             alertController.dismiss(animated: true, completion: nil)
                             call.resolve([
@@ -61,7 +61,7 @@ public class ActionSheetPlugin: CAPPlugin, CAPBridgedPlugin {
             }
         }
     }
-    
+
     private final class TapGestureRecognizerWithClosure: UITapGestureRecognizer {
         private let onTap: () -> Void
 
