@@ -19,14 +19,7 @@ test('Chrome', () => {
     'Mozilla/5.0 (iPhone; CPU iPhone OS 14_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/87.0.4280.77 Mobile/15E148 Safari/604.1', // "ChromeRevision" 87 on iPhone
   ];
 
-  const expected = [
-    '87.0.4280.88',
-    '87.0.4280.88',
-    '87.0.4280.88',
-    '87.0.4280.86',
-    '87.0.4280.86',
-    '87.0.4280.77',
-  ];
+  const expected = ['87.0.4280.88', '87.0.4280.88', '87.0.4280.88', '87.0.4280.86', '87.0.4280.86', '87.0.4280.77'];
 
   for (const [index, ua] of userAgents.entries()) {
     const parsed = web.parseUa(ua);
@@ -86,14 +79,7 @@ test('Edge', () => {
     'Mozilla/5.0 (iPhone; CPU iPhone OS 14_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 EdgiOS/45.11.1 Mobile/15E148 Safari/605.1.15', // Edge 45 on iOS
   ];
 
-  const expected = [
-    '18.17763',
-    '17.17134',
-    '85.0.564.63',
-    '87.0.664.57',
-    '87.0.664.57',
-    '45.11.1',
-  ];
+  const expected = ['18.17763', '17.17134', '85.0.564.63', '87.0.664.57', '87.0.664.57', '45.11.1'];
 
   for (const [index, ua] of userAgents.entries()) {
     const parsed = web.parseUa(ua);

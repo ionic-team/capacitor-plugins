@@ -21,7 +21,7 @@ public class NetworkPlugin extends Plugin {
     @Override
     public void load() {
         implementation = new Network(getContext());
-        Network.NetworkStatusChangeListener listener = wasLostEvent -> {
+        Network.NetworkStatusChangeListener listener = (wasLostEvent) -> {
             if (wasLostEvent) {
                 JSObject jsObject = new JSObject();
                 jsObject.put("connected", false);
@@ -56,11 +56,7 @@ public class NetworkPlugin extends Plugin {
      */
     @Override
     protected void handleOnResume() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            implementation.startMonitoring();
-        } else {
-            implementation.startMonitoring(getActivity());
-        }
+        implementation.startMonitoring();
         NetworkStatus afterPauseNetworkStatus = implementation.getNetworkStatus();
         if (
             prePauseNetworkStatus != null &&
@@ -82,11 +78,7 @@ public class NetworkPlugin extends Plugin {
     @Override
     protected void handleOnPause() {
         this.prePauseNetworkStatus = implementation.getNetworkStatus();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            implementation.stopMonitoring();
-        } else {
-            implementation.stopMonitoring(getActivity());
-        }
+        implementation.stopMonitoring();
     }
 
     private void updateNetworkStatus() {

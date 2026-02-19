@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # The default Capacitor version(s) the plugin should depend on. Latest published in a range will be pulled by the user
-DEFAULT_CAPACITOR_VERSION="[6.0,7.0)"
+DEFAULT_CAPACITOR_VERSION="[7.0,8.0)"
 
 publish_plugin () {
     PLUGIN_PATH=$1
@@ -42,7 +42,7 @@ publish_plugin () {
                 if grep --quiet "BUILD SUCCESSFUL" $LOG_OUTPUT; then
                     printf %"s\n\n" "Success: $PLUGIN_NAME published to MavenCentral."
                 else
-                    printf %"s\n\n" "Error publishing $PLUGIN_NAME, check $LOG_OUTPUT for more info! Manual publication review may be necessary at the Sonatype Repository Manager https://s01.oss.sonatype.org/"
+                    printf %"s\n\n" "Error publishing $PLUGIN_NAME, check $LOG_OUTPUT for more info! Manually review and release from the Central Portal may be necessary https://central.sonatype.com/publishing/deployments/"
                     cat $LOG_OUTPUT
                     exit 1
                 fi

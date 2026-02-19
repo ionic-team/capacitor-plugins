@@ -44,7 +44,12 @@ public class ActionSheetPlugin extends Plugin {
             if (cancelable) {
                 implementation.setOnCancelListener(() -> resolve(call, -1));
             }
-            implementation.setOnSelectedListener(index -> resolve(call, index));
+            implementation.setOnSelectedListener((index) -> {
+                JSObject ret = new JSObject();
+                ret.put("index", index);
+                call.resolve(ret);
+                implementation.dismiss();
+            });
             implementation.show(getActivity().getSupportFragmentManager(), "capacitorModalsActionSheet");
         } catch (JSONException ex) {
             Logger.error("JSON error processing an option for showActions", ex);

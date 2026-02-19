@@ -168,15 +168,14 @@ public class Browser {
         }
 
         if (browserSession == null) {
-            browserSession =
-                customTabsClient.newSession(
-                    new CustomTabsCallback() {
-                        @Override
-                        public void onNavigationEvent(int navigationEvent, Bundle extras) {
-                            handledNavigationEvent(navigationEvent);
-                        }
+            browserSession = customTabsClient.newSession(
+                new CustomTabsCallback() {
+                    @Override
+                    public void onNavigationEvent(int navigationEvent, Bundle extras) {
+                        handledNavigationEvent(navigationEvent);
                     }
-                );
+                }
+            );
         }
 
         return browserSession;

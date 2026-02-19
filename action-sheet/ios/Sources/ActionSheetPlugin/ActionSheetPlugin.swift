@@ -33,7 +33,7 @@ public class ActionSheetPlugin: CAPPlugin, CAPBridgedPlugin {
                 forceCancelableOnClickOutside = false
                 buttonStyle = .cancel
             }
-            let action = UIAlertAction(title: title, style: buttonStyle, handler: { (_) -> Void in
+            let action = UIAlertAction(title: title, style: buttonStyle, handler: { (_) in
                 call.resolve([
                     "index": index,
                     "canceled": false

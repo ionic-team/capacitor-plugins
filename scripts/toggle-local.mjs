@@ -8,7 +8,7 @@ import { ls } from './lib/lerna.mjs';
 import { setPackageJsonDependencies } from './lib/version.mjs';
 import { run } from './lib/subprocess.mjs';
 
-const readMarkerFile = async p => {
+const readMarkerFile = async (p) => {
   try {
     return await readJSON(p);
   } catch (e) {
@@ -27,14 +27,14 @@ execute(async () => {
   const markerFile = await readMarkerFile(markerFilePath);
   const markerFileContents = Object.fromEntries(
     await Promise.all(
-      packages.map(async p => {
+      packages.map(async (p) => {
         const pkg = await readJSON(resolve(p.location, 'package.json'));
 
         return [
           p.name,
           Object.fromEntries(
             Object.entries(pkg.devDependencies).filter(([k]) =>
-              PROJECTS.some(project => k === `@capacitor/${project}`),
+              PROJECTS.some((project) => k === `@capacitor/${project}`),
             ),
           ),
         ];
@@ -43,7 +43,7 @@ execute(async () => {
   );
 
   await Promise.all(
-    packages.map(async p =>
+    packages.map(async (p) =>
       setPackageJsonDependencies(
         resolve(p.location, 'package.json'),
         markerFile
