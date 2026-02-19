@@ -8,10 +8,7 @@ declare module '@capacitor/cli' {
     StatusBar?: {
       /**
        * Whether the statusbar is overlaid or not.
-       * For applications targeting Android 15, this property has no effect unless
-       * the property windowOptOutEdgeToEdgeEnforcement is added to the application layout file.
-       * Otherwise, the application assumes always overlays as true.
-       * More details in https://developer.android.com/reference/android/R.attr#windowOptOutEdgeToEdgeEnforcement
+       * Not available on Android 15+.
        *
        * @since 1.0.0
        * @default true
@@ -31,6 +28,7 @@ declare module '@capacitor/cli' {
       /**
        * Color of the background of the statusbar in hex format, #RRGGBB.
        * Doesn't work if `overlaysWebView` is true.
+       * Not available on Android 15+.
        *
        * @since 1.0.0
        * @default #000000
@@ -69,7 +67,6 @@ export enum Style {
    * The style is based on the device appearance.
    * If the device is using Dark mode, the statusbar text will be light.
    * If the device is using Light mode, the statusbar text will be dark.
-   * On Android the default will be the one the app was launched with.
    *
    * @since 1.0.0
    */
@@ -173,6 +170,8 @@ export interface StatusBarPlugin {
 
   /**
    * Set the background color of the status bar.
+   * Calling this function updates the foreground color of the status bar if the style is set to default, except on iOS versions lower than 17.
+   * Not available on Android 15+.
    *
    * @since 1.0.0
    */
@@ -206,6 +205,7 @@ export interface StatusBarPlugin {
   /**
    * Set whether or not the status bar should overlay the webview to allow usage
    * of the space underneath it.
+   * Not available on Android 15+.
    *
    * @since 1.0.0
    */

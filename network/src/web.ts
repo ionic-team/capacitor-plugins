@@ -1,10 +1,6 @@
 import { WebPlugin } from '@capacitor/core';
 
-import type {
-  ConnectionStatus,
-  ConnectionType,
-  NetworkPlugin,
-} from './definitions';
+import type { ConnectionStatus, ConnectionType, NetworkPlugin } from './definitions';
 
 declare global {
   interface Navigator {
@@ -15,10 +11,7 @@ declare global {
 }
 
 function translatedConnection(): ConnectionType {
-  const connection =
-    window.navigator.connection ||
-    window.navigator.mozConnection ||
-    window.navigator.webkitConnection;
+  const connection = window.navigator.connection || window.navigator.mozConnection || window.navigator.webkitConnection;
   let result: ConnectionType = 'unknown';
   const type = connection ? connection.type || connection.effectiveType : null;
   if (type && typeof type === 'string') {
@@ -67,9 +60,7 @@ export class NetworkWeb extends WebPlugin implements NetworkPlugin {
 
   async getStatus(): Promise<ConnectionStatus> {
     if (!window.navigator) {
-      throw this.unavailable(
-        'Browser does not support the Network Information API',
-      );
+      throw this.unavailable('Browser does not support the Network Information API');
     }
 
     const connected = window.navigator.onLine;
