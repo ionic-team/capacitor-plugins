@@ -719,8 +719,7 @@ public class CameraPlugin extends Plugin {
         try {
             bis = new ByteArrayInputStream(bitmapOutputStream.toByteArray());
             newUri = saveImage(u, bis);
-        } catch (IOException ex) {
-        } finally {
+        } catch (IOException ex) {} finally {
             if (bis != null) {
                 try {
                     bis.close();
