@@ -6,22 +6,21 @@ import Capacitor
  * here: https://capacitorjs.com/docs/plugins/ios
  */
 @objc(ActionSheetPlugin)
-public class ActionSheetPlugin: CAPPlugin, CAPBridgedPlugin {
+public class ActionSheetPlugin: CAPPlugin, CAPBridgedPlugin, UIAdaptivePresentationControllerDelegate {
     public let identifier = "ActionSheetPlugin"
     public let jsName = "ActionSheet"
     public let pluginMethods: [CAPPluginMethod] = [
         CAPPluginMethod(name: "showActions", returnType: CAPPluginReturnPromise)
     ]
     private let implementation = ActionSheet()
+    private var currentCall: CAPPluginCall?
 
     @objc func showActions(_ call: CAPPluginCall) {
-        let title = call.getString("title")
-        let message = call.getString("message")
-        let cancelable = call.getBool("cancelable", false)
+        let title = call.options["title"] as? String
+        let message = call.options["message"] as? String
 
         let options = call.getArray("options", JSObject.self) ?? []
         var alertActions = [UIAlertAction]()
-        var forceCancelableOnClickOutside = cancelable
         for (index, option) in options.enumerated() {
             let style = option["style"] as? String ?? "DEFAULT"
             let title = option["title"] as? String ?? ""
@@ -30,49 +29,37 @@ public class ActionSheetPlugin: CAPPlugin, CAPBridgedPlugin {
                 buttonStyle = .destructive
             } else if style == "CANCEL" {
                 // if there's a cancel action, then it will already be cancelable when clicked outside
-                forceCancelableOnClickOutside = false
                 buttonStyle = .cancel
             }
-            let action = UIAlertAction(title: title, style: buttonStyle, handler: { (_) in
+            let action = UIAlertAction(title: title, style: buttonStyle, handler: { [weak self] (_) in
                 call.resolve([
                     "index": index,
                     "canceled": false
                 ])
+                self?.currentCall = nil
             })
             alertActions.append(action)
         }
 
         DispatchQueue.main.async { [weak self] in
             if let alertController = self?.implementation.buildActionSheet(title: title, message: message, actions: alertActions) {
+                self?.currentCall = call
+
+                alertController.presentationController?.delegate = self
+
                 self?.setCenteredPopover(alertController)
-                self?.bridge?.viewController?.present(alertController, animated: true) {
-                    if forceCancelableOnClickOutside {
-                        let gestureRecognizer = TapGestureRecognizerWithClosure {
-                            alertController.dismiss(animated: true, completion: nil)
-                            call.resolve([
-                                "index": -1,
-                                "canceled": true
-                            ])
-                        }
-                        let backroundView = alertController.view.superview?.subviews[0]
-                        backroundView?.addGestureRecognizer(gestureRecognizer)
-                    }
-                }
+                self?.bridge?.viewController?.present(alertController, animated: true, completion: nil)
             }
         }
     }
 
-    private final class TapGestureRecognizerWithClosure: UITapGestureRecognizer {
-        private let onTap: () -> Void
+    // MARK: - UIAdaptivePresentationControllerDelegate
 
-        init(onTap: @escaping () -> Void) {
-            self.onTap = onTap
-            super.init(target: nil, action: nil)
-            self.addTarget(self, action: #selector(action))
-        }
-
-        @objc private func action() {
-            onTap()
-        }
+    public func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        self.currentCall?.resolve([
+            "index": -1,
+            "canceled": true
+        ])
+        self.currentCall = nil
     }
 }
