@@ -31,7 +31,7 @@ public class ActionSheetPlugin: CAPPlugin, CAPBridgedPlugin, UIAdaptivePresentat
                 buttonStyle = .cancel
             }
             let action = UIAlertAction(title: title, style: buttonStyle, handler: { [weak self] (_) in
-                if (buttonStyle == .cancel) {
+                if buttonStyle == .cancel {
                     call.resolve([
                         "index": -1,
                         "canceled": true
