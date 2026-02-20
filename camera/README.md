@@ -44,7 +44,12 @@ Older devices and Android Go devices running Android 11 or 12 that support Googl
 
 If that entry is not added, the devices that don't support the Photo Picker, the Photo Picker component fallbacks to `Intent.ACTION_OPEN_DOCUMENT`.
 
-The Camera plugin requires no permissions, unless using `saveToGallery: true`, in that case the following permissions should be added to your `AndroidManifest.xml`:
+Beginning from Android 14, the Camera plugin now requires the Camera permission in the `AndroidManifest.xml` file:
+```xml
+<uses-permission android:name="android.permission.CAMERA" />
+```
+
+If using `saveToGallery: true`, the following permissions should be added to your `AndroidManifest.xml`:
 
 ```xml
 <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
