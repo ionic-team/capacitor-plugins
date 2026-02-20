@@ -28,14 +28,20 @@ public class ActionSheetPlugin: CAPPlugin, CAPBridgedPlugin, UIAdaptivePresentat
             if style == "DESTRUCTIVE" {
                 buttonStyle = .destructive
             } else if style == "CANCEL" {
-                // if there's a cancel action, then it will already be cancelable when clicked outside
                 buttonStyle = .cancel
             }
             let action = UIAlertAction(title: title, style: buttonStyle, handler: { [weak self] (_) in
-                call.resolve([
-                    "index": index,
-                    "canceled": false
-                ])
+                if (buttonStyle == .cancel) {
+                    call.resolve([
+                        "index": -1,
+                        "canceled": true
+                    ])
+                } else {
+                    call.resolve([
+                        "index": index,
+                        "canceled": false
+                    ])
+                }
                 self?.currentCall = nil
             })
             alertActions.append(action)
