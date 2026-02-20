@@ -25,8 +25,8 @@ export interface ShowActionsOptions {
   /**
    * If true, sheet is canceled when clicked outside; If false, it is not. By default, false.
    *
-   * On iOS, the sheet is also cancelable if a button with ActionSheetButtonStyle.Cancel is provided and cancelable is false.
-   * 
+   * Not available on iOS, sheet is always cancelable by clicking outside of it.
+   *
    * On Web, requires having @ionic/pwa-elements version 3.4.0 or higher.
    *
    * @since 8.1.0
@@ -96,9 +96,9 @@ export interface ShowActionsResult {
   index: number;
   /**
    * True if sheet was canceled by user; False otherwise
-   * 
+   *
    * On Web, requires having @ionic/pwa-elements version 3.4.0 or higher.
-   * 
+   *
    * @since 8.1.0
    */
   canceled: boolean;
