@@ -23,7 +23,7 @@ export class CameraWeb extends WebPlugin implements CameraPlugin {
           document.body.appendChild(actionSheet);
         }
         actionSheet.header = options.promptLabelHeader || 'Photo';
-        actionSheet.cancelable = false;
+        actionSheet.cancelable = true;
         actionSheet.options = [
           { title: options.promptLabelPhoto || 'From Photos' },
           { title: options.promptLabelPicture || 'Take Picture' },
@@ -35,6 +35,9 @@ export class CameraWeb extends WebPlugin implements CameraPlugin {
           } else {
             this.cameraExperience(options, resolve, reject);
           }
+        });
+        actionSheet.addEventListener('onCanceled', async () => {
+          reject(new CapacitorException('User cancelled photos app'));
         });
       } else {
         this.cameraExperience(options, resolve, reject);
