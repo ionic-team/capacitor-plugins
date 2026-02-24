@@ -103,9 +103,7 @@ export interface LocalNotificationsPlugin {
    *
    * @since 4.0.0
    */
-  removeDeliveredNotifications(
-    delivered: DeliveredNotifications,
-  ): Promise<void>;
+  removeDeliveredNotifications(delivered: DeliveredNotifications): Promise<void>;
 
   /**
    * Remove all the notifications from the notifications screen.
@@ -847,15 +845,7 @@ export interface ScheduleOn {
   second?: number;
 }
 
-export type ScheduleEvery =
-  | 'year'
-  | 'month'
-  | 'two-weeks'
-  | 'week'
-  | 'day'
-  | 'hour'
-  | 'minute'
-  | 'second';
+export type ScheduleEvery = 'year' | 'month' | 'two-weeks' | 'week' | 'day' | 'hour' | 'minute' | 'second';
 
 export interface ListChannelsResult {
   /**

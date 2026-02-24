@@ -32,38 +32,33 @@ public class AppPlugin extends Plugin {
 
         bridge
             .getApp()
-            .setStatusChangeListener(
-                isActive -> {
-                    Logger.debug(getLogTag(), "Firing change: " + isActive);
-                    JSObject data = new JSObject();
-                    data.put("isActive", isActive);
-                    notifyListeners(EVENT_STATE_CHANGE, data, false);
-                }
-            );
+            .setStatusChangeListener((isActive) -> {
+                Logger.debug(getLogTag(), "Firing change: " + isActive);
+                JSObject data = new JSObject();
+                data.put("isActive", isActive);
+                notifyListeners(EVENT_STATE_CHANGE, data, false);
+            });
         bridge
             .getApp()
-            .setAppRestoredListener(
-                result -> {
-                    Logger.debug(getLogTag(), "Firing restored result");
-                    notifyListeners(EVENT_RESTORED_RESULT, result.getWrappedResult(), true);
-                }
-            );
-        this.onBackPressedCallback =
-            new OnBackPressedCallback(!disableBackButtonHandler) {
-                @Override
-                public void handleOnBackPressed() {
-                    if (!hasListeners(EVENT_BACK_BUTTON)) {
-                        if (bridge.getWebView().canGoBack()) {
-                            bridge.getWebView().goBack();
-                        }
-                    } else {
-                        JSObject data = new JSObject();
-                        data.put("canGoBack", bridge.getWebView().canGoBack());
-                        notifyListeners(EVENT_BACK_BUTTON, data, true);
-                        bridge.triggerJSEvent("backbutton", "document");
+            .setAppRestoredListener((result) -> {
+                Logger.debug(getLogTag(), "Firing restored result");
+                notifyListeners(EVENT_RESTORED_RESULT, result.getWrappedResult(), true);
+            });
+        this.onBackPressedCallback = new OnBackPressedCallback(!disableBackButtonHandler) {
+            @Override
+            public void handleOnBackPressed() {
+                if (!hasListeners(EVENT_BACK_BUTTON)) {
+                    if (bridge.getWebView().canGoBack()) {
+                        bridge.getWebView().goBack();
                     }
+                } else {
+                    JSObject data = new JSObject();
+                    data.put("canGoBack", bridge.getWebView().canGoBack());
+                    notifyListeners(EVENT_BACK_BUTTON, data, true);
+                    bridge.triggerJSEvent("backbutton", "document");
                 }
-            };
+            }
+        };
 
         getActivity().getOnBackPressedDispatcher().addCallback(getActivity(), this.onBackPressedCallback);
     }

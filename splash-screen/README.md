@@ -27,7 +27,7 @@ The Android 12 Splash Screen API can't be disabled on Android 12+ as it's part o
 **NOTE**: On Android 12 and Android 12L devices the Splash Screen image is not showing when launched from third party launchers such as Nova Launcher, MIUI, Realme Launcher, OPPO Launcher, etc., from app info in Settings App, or from IDEs such as Android Studio.
 **[Google Issue Tracker](https://issuetracker.google.com/issues/205021357)**
 **[Google Issue Tracker](https://issuetracker.google.com/issues/207386164)**
-Google have fixed those problems on Android 13 but they won't be backport the fixes to Android 12 and Android 12L.
+Google has fixed those problems on Android 13 but they won't backport the fixes to Android 12 and Android 12L.
 Launcher related issues might get fixed by a launcher update.
 If you still find issues related to the Splash Screen on Android 13, please, report them to [Google](https://issuetracker.google.com/).
 

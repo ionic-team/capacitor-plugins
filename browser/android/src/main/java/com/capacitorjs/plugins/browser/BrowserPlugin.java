@@ -67,18 +67,16 @@ public class BrowserPlugin extends Plugin {
         getContext().startActivity(intent);
 
         Integer finalToolbarColor = toolbarColor;
-        setBrowserControllerListener(
-            activity -> {
-                try {
-                    activity.open(implementation, url, finalToolbarColor);
-                    browserControllerActivityInstance = activity;
-                    call.resolve();
-                } catch (ActivityNotFoundException ex) {
-                    Logger.error(getLogTag(), ex.getLocalizedMessage(), null);
-                    call.reject("Unable to display URL");
-                }
+        setBrowserControllerListener((activity) -> {
+            try {
+                activity.open(implementation, url, finalToolbarColor);
+                browserControllerActivityInstance = activity;
+                call.resolve();
+            } catch (ActivityNotFoundException ex) {
+                Logger.error(getLogTag(), ex.getLocalizedMessage(), null);
+                call.reject("Unable to display URL");
             }
-        );
+        });
     }
 
     @PluginMethod
