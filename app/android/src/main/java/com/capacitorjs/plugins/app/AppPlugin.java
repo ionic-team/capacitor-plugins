@@ -25,26 +25,26 @@ public class AppPlugin extends Plugin {
     private static final String EVENT_RESUME = "resume";
     private boolean hasPausedEver = false;
 
+    private OnBackPressedCallback onBackPressedCallback;
+
     public void load() {
+        boolean disableBackButtonHandler = getConfig().getBoolean("disableBackButtonHandler", false);
+
         bridge
             .getApp()
-            .setStatusChangeListener(
-                isActive -> {
-                    Logger.debug(getLogTag(), "Firing change: " + isActive);
-                    JSObject data = new JSObject();
-                    data.put("isActive", isActive);
-                    notifyListeners(EVENT_STATE_CHANGE, data, false);
-                }
-            );
+            .setStatusChangeListener((isActive) -> {
+                Logger.debug(getLogTag(), "Firing change: " + isActive);
+                JSObject data = new JSObject();
+                data.put("isActive", isActive);
+                notifyListeners(EVENT_STATE_CHANGE, data, false);
+            });
         bridge
             .getApp()
-            .setAppRestoredListener(
-                result -> {
-                    Logger.debug(getLogTag(), "Firing restored result");
-                    notifyListeners(EVENT_RESTORED_RESULT, result.getWrappedResult(), true);
-                }
-            );
-        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            .setAppRestoredListener((result) -> {
+                Logger.debug(getLogTag(), "Firing restored result");
+                notifyListeners(EVENT_RESTORED_RESULT, result.getWrappedResult(), true);
+            });
+        this.onBackPressedCallback = new OnBackPressedCallback(!disableBackButtonHandler) {
             @Override
             public void handleOnBackPressed() {
                 if (!hasListeners(EVENT_BACK_BUTTON)) {
@@ -59,7 +59,8 @@ public class AppPlugin extends Plugin {
                 }
             }
         };
-        getActivity().getOnBackPressedDispatcher().addCallback(getActivity(), callback);
+
+        getActivity().getOnBackPressedDispatcher().addCallback(getActivity(), this.onBackPressedCallback);
     }
 
     @PluginMethod
@@ -109,6 +110,19 @@ public class AppPlugin extends Plugin {
     @PluginMethod
     public void minimizeApp(PluginCall call) {
         getActivity().moveTaskToBack(true);
+        call.resolve();
+    }
+
+    @PluginMethod
+    public void toggleBackButtonHandler(PluginCall call) {
+        if (this.onBackPressedCallback == null) {
+            call.reject("onBackPressedCallback is not set");
+            return;
+        }
+
+        Boolean enabled = call.getBoolean("enabled");
+
+        this.onBackPressedCallback.setEnabled(enabled);
         call.resolve();
     }
 

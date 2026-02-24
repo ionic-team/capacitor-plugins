@@ -30,7 +30,7 @@ public class CAPBrowserPlugin: CAPPlugin, CAPBridgedPlugin {
         }
         implementation.browserEventDidOccur = { [weak self] (event) in
             if event == .finished {
-                self?.bridge?.dismissVC(animated: true, completion: {
+                self?.bridge?.viewController?.dismiss(animated: true, completion: {
                     self?.notifyListeners(event.listenerEvent, data: nil)
                 })
             } else {
@@ -46,7 +46,7 @@ public class CAPBrowserPlugin: CAPPlugin, CAPBridgedPlugin {
                     self?.setCenteredPopover(viewController)
                 }
             }
-            self?.bridge?.presentVC(viewController, animated: true, completion: {
+            self?.bridge?.viewController?.present(viewController, animated: true, completion: {
                 call.resolve()
             })
         }
@@ -55,7 +55,7 @@ public class CAPBrowserPlugin: CAPPlugin, CAPBridgedPlugin {
     @objc func close(_ call: CAPPluginCall) {
         DispatchQueue.main.async { [weak self] in
             if self?.implementation.viewController != nil {
-                self?.bridge?.dismissVC(animated: true) {
+                self?.bridge?.viewController?.dismiss(animated: true) {
                     call.resolve()
                     self?.implementation.cleanup()
                 }

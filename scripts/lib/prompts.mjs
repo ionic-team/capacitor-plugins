@@ -4,8 +4,8 @@ const prompts = require('prompts');
 
 export default prompts;
 
-export const confirm = async message => {
-  return new Promise(resolve => {
+export const confirm = async (message) => {
+  return new Promise((resolve) => {
     prompts(
       [
         {
@@ -16,11 +16,11 @@ export const confirm = async message => {
         },
       ],
       { onCancel: () => resolve(false) },
-    ).then(result => resolve(result.confirm));
+    ).then((result) => resolve(result.confirm));
   });
 };
 
-export const confirmOrExit = async message => {
+export const confirmOrExit = async (message) => {
   const result = await confirm(message);
 
   if (!result) {

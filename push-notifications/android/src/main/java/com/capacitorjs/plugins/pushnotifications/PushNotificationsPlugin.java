@@ -101,18 +101,15 @@ public class PushNotificationsPlugin extends Plugin {
     @PluginMethod
     public void register(PluginCall call) {
         FirebaseMessaging.getInstance().setAutoInitEnabled(true);
-        FirebaseMessaging
-            .getInstance()
+        FirebaseMessaging.getInstance()
             .getToken()
-            .addOnCompleteListener(
-                task -> {
-                    if (!task.isSuccessful()) {
-                        sendError(task.getException().getLocalizedMessage());
-                        return;
-                    }
-                    sendToken(task.getResult());
+            .addOnCompleteListener((task) -> {
+                if (!task.isSuccessful()) {
+                    sendError(task.getException().getLocalizedMessage());
+                    return;
                 }
-            );
+                sendToken(task.getResult());
+            });
         call.resolve();
     }
 
@@ -278,13 +275,8 @@ public class PushNotificationsPlugin extends Plugin {
                             bundle
                         );
 
-                        CommonNotificationBuilder.DisplayNotificationInfo notificationInfo = CommonNotificationBuilder.createNotificationInfo(
-                            getContext(),
-                            getContext(),
-                            params,
-                            channelId,
-                            bundle
-                        );
+                        CommonNotificationBuilder.DisplayNotificationInfo notificationInfo =
+                            CommonNotificationBuilder.createNotificationInfo(getContext(), getContext(), params, channelId, bundle);
 
                         notificationManager.notify(notificationInfo.tag, notificationInfo.id, notificationInfo.notificationBuilder.build());
                     }

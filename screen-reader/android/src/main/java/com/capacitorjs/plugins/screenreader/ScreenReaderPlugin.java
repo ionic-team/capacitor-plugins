@@ -15,13 +15,11 @@ public class ScreenReaderPlugin extends Plugin {
     @Override
     public void load() {
         screenReader = new ScreenReader(getContext());
-        screenReader.addStateChangeListener(
-            enabled -> {
-                JSObject ret = new JSObject();
-                ret.put("value", enabled);
-                notifyListeners(EVENT_STATE_CHANGE, ret);
-            }
-        );
+        screenReader.addStateChangeListener((enabled) -> {
+            JSObject ret = new JSObject();
+            ret.put("value", enabled);
+            notifyListeners(EVENT_STATE_CHANGE, ret);
+        });
     }
 
     @Override

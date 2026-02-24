@@ -23,13 +23,13 @@ jobs:
         with:
           access_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Get Latest
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: 20
-      - uses: actions/checkout@v3
+          node-version: 22
+      - uses: actions/checkout@v5
       - name: Restore Dependency Cache
         id: cache-modules
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             node_modules
@@ -61,13 +61,13 @@ jobs:
       matrix:
         plugin: ${{ fromJson(needs.setup.outputs.plugins) }}
     steps:
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
-          node-version: 20
-      - uses: actions/checkout@v3
+          node-version: 22
+      - uses: actions/checkout@v5
       - name: Restore Dependency Cache
         id: cache-modules
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             node_modules
