@@ -10,7 +10,7 @@ let package = Package(
             targets: ["LocalNotificationsPlugin"])
     ],
     dependencies: [
-        .package(url: "https://github.com/ionic-team/capacitor-swift-pm.git", from: "8.0.0-beta")
+        .package(url: "https://github.com/ionic-team/capacitor-swift-pm.git", from: "8.0.0")
     ],
     targets: [
         .target(
