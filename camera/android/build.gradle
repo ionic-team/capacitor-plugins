@@ -25,6 +25,7 @@ buildscript {
 }
 
 apply plugin: 'com.android.library'
+apply plugin: 'org.jetbrains.kotlin.android'
 if (System.getenv("CAP_PLUGIN_PUBLISH") == "true") {
     apply plugin: 'io.github.gradle-nexus.publish-plugin'
     apply from: file('../../scripts/android/publish-root.gradle')
@@ -57,6 +58,9 @@ android {
     publishing {
         singleVariant("release")
     }
+    kotlinOptions {
+        jvmTarget = '21'
+    }
 }
 
 repositories {
@@ -77,7 +81,10 @@ dependencies {
     implementation "androidx.exifinterface:exifinterface:$androidxExifInterfaceVersion"
     implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"
     implementation "com.google.android.material:material:$androidxMaterialVersion"
+    implementation 'androidx.core:core-ktx:1.17.0'
     testImplementation "junit:junit:$junitVersion"
     androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"
+    implementation 'com.google.code.gson:gson:2.10.1'
+    implementation project(':gradle-project-test')
 }

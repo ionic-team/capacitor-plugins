@@ -103,6 +103,7 @@ const takePicture = async () => {
 <docgen-index>
 
 * [`getPhoto(...)`](#getphoto)
+* [`takePhoto(...)`](#takephoto)
 * [`pickImages(...)`](#pickimages)
 * [`pickLimitedLibraryPhotos()`](#picklimitedlibraryphotos)
 * [`getLimitedLibraryPhotos()`](#getlimitedlibraryphotos)
@@ -121,6 +122,26 @@ const takePicture = async () => {
 
 ```typescript
 getPhoto(options: ImageOptions) => Promise<Photo>
+```
+
+Prompt the user to pick a photo from an album, or take a new photo
+with the camera.
+
+| Param         | Type                                                  |
+| ------------- | ----------------------------------------------------- |
+| **`options`** | <code><a href="#imageoptions">ImageOptions</a></code> |
+
+**Returns:** <code>Promise&lt;<a href="#photo">Photo</a>&gt;</code>
+
+**Since:** 1.0.0
+
+--------------------
+
+
+### takePhoto(...)
+
+```typescript
+takePhoto(options: ImageOptions) => Promise<Photo>
 ```
 
 Prompt the user to pick a photo from an album, or take a new photo

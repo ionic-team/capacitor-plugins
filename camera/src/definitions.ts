@@ -23,6 +23,14 @@ export interface CameraPlugin {
   getPhoto(options: ImageOptions): Promise<Photo>;
 
   /**
+   * Prompt the user to pick a photo from an album, or take a new photo
+   * with the camera.
+   *
+   * @since 1.0.0
+   */
+  takePhoto(options: ImageOptions): Promise<Photo>;
+
+  /**
    * Allows the user to pick multiple pictures from the photo gallery.
    *
    * @since 1.2.0
