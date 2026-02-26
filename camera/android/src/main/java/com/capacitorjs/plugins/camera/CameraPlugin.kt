@@ -101,12 +101,23 @@ class CameraPlugin : Plugin() {
     /**
      * Completes the plugin call after a camera permission request
      *
-     * @see .takePhoto
+     * @see .getPhoto
      * @param call the plugin call
      */
     @PermissionCallback
     private fun cameraPermissionsCallback(call: PluginCall) {
         legacyFlow.handleCameraPermissionsCallback(call)
+    }
+
+    /**
+     * Completes the plugin call after a camera permission request
+     *
+     * @see .takePhoto
+     * @param call the plugin call
+     */
+    @PermissionCallback
+    private fun ionCameraPermissionsCallback(call: PluginCall) {
+        ionFlow.handleCameraPermissionsCallback(call)
     }
 
     override fun requestPermissionForAliases(

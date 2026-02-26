@@ -15,6 +15,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
 import com.getcapacitor.FileUtils
 import com.getcapacitor.JSObject
+import com.getcapacitor.Logger
 import com.getcapacitor.PermissionState
 import com.getcapacitor.PluginCall
 import io.ionic.libs.ioncameralib.helper.OSCAMRExifHelper
@@ -258,7 +259,7 @@ class IonCameraFlow(
                 plugin.requestLegacyPermissionForAlias(
                     CameraPlugin.CAMERA,
                     call,
-                    "cameraPermissionsCallback"
+                    "ionCameraPermissionsCallback"
                 )
                 return false
             }
@@ -273,17 +274,33 @@ class IonCameraFlow(
             } else {
                 arrayOf(CameraPlugin.SAVE_GALLERY)
             }
-            plugin.requestLegacyPermissionForAliases(aliases, call, "cameraPermissionsCallback")
+            plugin.requestLegacyPermissionForAliases(aliases, call, "ionCameraPermissionsCallback")
             return false
         } else if (!hasCameraPerms) {
             plugin.requestLegacyPermissionForAlias(
                 CameraPlugin.CAMERA,
                 call,
-                "cameraPermissionsCallback"
+                "ionCameraPermissionsCallback"
             )
             return false
         }
         return true
+    }
+
+    fun handleCameraPermissionsCallback(call: PluginCall) {
+        if (call.getMethodName() == "pickImages") {
+            //openPhotos(call, true)
+        } else {
+            if (settings.source == CameraSource.CAMERA && plugin.getPermissionState(CameraPlugin.CAMERA) != PermissionState.GRANTED) {
+                Logger.debug(
+                    plugin.getLegacyLogTag(),
+                    "User denied camera permission: " + plugin.getPermissionState(CameraPlugin.CAMERA)
+                )
+                sendError(IONError.CAMERA_PERMISSION_DENIED_ERROR)
+                return
+            }
+            doShow(call)
+        }
     }
 
 
