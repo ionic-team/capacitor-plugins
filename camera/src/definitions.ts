@@ -65,6 +65,24 @@ export interface CameraPlugin {
    * @since 1.0.0
    */
   requestPermissions(permissions?: CameraPluginPermissions): Promise<PermissionStatus>;
+
+  recordVideo(options: RecordVideoOptions): Promise<MediaResult>;
+
+  playVideo(options: { videoURI: string }): Promise<void>;
+}
+
+export interface RecordVideoOptions {
+  saveToGallery?: boolean;
+  includeMetadata?: boolean;
+}
+
+export interface MediaResult {
+  path: string;
+  webPath: string;
+  duration?: number;
+  size: number;
+  format: string;
+  saved: boolean;
 }
 
 export interface ImageOptions {

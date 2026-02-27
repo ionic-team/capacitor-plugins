@@ -109,6 +109,8 @@ const takePicture = async () => {
 * [`getLimitedLibraryPhotos()`](#getlimitedlibraryphotos)
 * [`checkPermissions()`](#checkpermissions)
 * [`requestPermissions(...)`](#requestpermissions)
+* [`recordVideo(...)`](#recordvideo)
+* [`playVideo(...)`](#playvideo)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
 * [Enums](#enums)
@@ -243,6 +245,34 @@ Request camera and photo album permissions
 --------------------
 
 
+### recordVideo(...)
+
+```typescript
+recordVideo(options: RecordVideoOptions) => Promise<MediaResult>
+```
+
+| Param         | Type                                                              |
+| ------------- | ----------------------------------------------------------------- |
+| **`options`** | <code><a href="#recordvideooptions">RecordVideoOptions</a></code> |
+
+**Returns:** <code>Promise&lt;<a href="#mediaresult">MediaResult</a>&gt;</code>
+
+--------------------
+
+
+### playVideo(...)
+
+```typescript
+playVideo(options: { videoURI: string; }) => Promise<void>
+```
+
+| Param         | Type                               |
+| ------------- | ---------------------------------- |
+| **`options`** | <code>{ videoURI: string; }</code> |
+
+--------------------
+
+
 ### Interfaces
 
 
@@ -322,6 +352,26 @@ Request camera and photo album permissions
 | Prop              | Type                                |
 | ----------------- | ----------------------------------- |
 | **`permissions`** | <code>CameraPermissionType[]</code> |
+
+
+#### MediaResult
+
+| Prop           | Type                 |
+| -------------- | -------------------- |
+| **`path`**     | <code>string</code>  |
+| **`webPath`**  | <code>string</code>  |
+| **`duration`** | <code>number</code>  |
+| **`size`**     | <code>number</code>  |
+| **`format`**   | <code>string</code>  |
+| **`saved`**    | <code>boolean</code> |
+
+
+#### RecordVideoOptions
+
+| Prop                  | Type                 |
+| --------------------- | -------------------- |
+| **`saveToGallery`**   | <code>boolean</code> |
+| **`includeMetadata`** | <code>boolean</code> |
 
 
 ### Type Aliases

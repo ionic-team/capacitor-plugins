@@ -8,11 +8,20 @@ import type {
   ImageOptions,
   PermissionStatus,
   Photo,
+  RecordVideoOptions,
+  MediaResult,
 } from './definitions';
 
 export class CameraWeb extends WebPlugin implements CameraPlugin {
+  async recordVideo(_options: RecordVideoOptions): Promise<MediaResult> {
+    throw this.unimplemented('recordVideo is not implemented on web.');
+  }
 
-    async getPhoto(options: ImageOptions): Promise<Photo> {
+  async playVideo(_options: { videoURI: string }): Promise<void> {
+    throw this.unimplemented('playVideo is not implemented on web.');
+  }
+
+  async getPhoto(options: ImageOptions): Promise<Photo> {
     // eslint-disable-next-line no-async-promise-executor
     return new Promise<Photo>(async (resolve, reject) => {
       if (options.webUseInput || options.source === CameraSource.Photos) {

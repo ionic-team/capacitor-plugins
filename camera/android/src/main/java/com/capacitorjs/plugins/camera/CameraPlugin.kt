@@ -73,14 +73,22 @@ class CameraPlugin : Plugin() {
 
     @PluginMethod
     fun getPhoto(call: PluginCall) {
-        Log.d("CAMERA_DEBUG", "=================> getPhoto")
         legacyFlow.getPhoto(call)
     }
 
     @PluginMethod
     fun takePhoto(call: PluginCall) {
-        Log.d("CAMERA_DEBUG", "=================> takePhoto")
         ionFlow.takePhoto(call)
+    }
+
+    @PluginMethod
+    fun recordVideo(call: PluginCall) {
+        ionFlow.recordVideo(call)
+    }
+
+    @PluginMethod
+    fun playVideo(call: PluginCall) {
+        ionFlow.playVideo(call)
     }
 
     @PluginMethod
@@ -223,6 +231,13 @@ class CameraPlugin : Plugin() {
         return settings
     }
 
+     fun getVideoSettings(call: PluginCall): VideoSettings {
+         val settings = VideoSettings()
+         settings.saveToGallery = call.getBoolean("saveToGallery") ?: false
+         settings.includeMetadata = call.getBoolean("includeMetadata") ?: false
+         return settings
+    }
+
     private fun getResultType(resultType: String?): CameraResultType? {
         if (resultType == null) {
             return null
@@ -260,6 +275,7 @@ class CameraPlugin : Plugin() {
      */
     protected override fun handleOnDestroy() {
         legacyFlow.onDestroy()
+        ionFlow.onDestroy()
     }
 
     fun requestLegacyPermissionForAlias(alias: String, call: PluginCall, callbackName: String) {
