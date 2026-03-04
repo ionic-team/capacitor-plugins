@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.0.5](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/splash-screen@7.0.4...@capacitor/splash-screen@7.0.5) (2026-02-12)
+
+### Bug Fixes
+
+- AGP 9.0 no longer supporting `proguard-android.txt` ([#2468](https://github.com/ionic-team/capacitor-plugins/issues/2468)) ([5c35807](https://github.com/ionic-team/capacitor-plugins/commit/5c3580726b7b216077d903de3546754a87588ac6))
+
+## [7.0.4](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/splash-screen@7.0.3...@capacitor/splash-screen@7.0.4) (2025-11-26)
+
+**Note:** Version bump only for package @capacitor/splash-screen
+
+## [7.0.3](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/splash-screen@7.0.2...@capacitor/splash-screen@7.0.3) (2025-09-05)
+
+**Note:** Version bump only for package @capacitor/splash-screen
+
+## [7.0.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/splash-screen@7.0.1...@capacitor/splash-screen@7.0.2) (2025-08-05)
+
+### Bug Fixes
+
+- **splash-screen:** call clearOnExitAnimationListener on animation end ([#2379](https://github.com/ionic-team/capacitor-plugins/issues/2379)) ([dcfda05](https://github.com/ionic-team/capacitor-plugins/commit/dcfda0542b5efb420ad3fe9af7b6ad54e37fb15a))
+
 ## [7.0.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/splash-screen@7.0.0...@capacitor/splash-screen@7.0.1) (2025-04-02)
 
 **Note:** Version bump only for package @capacitor/splash-screen

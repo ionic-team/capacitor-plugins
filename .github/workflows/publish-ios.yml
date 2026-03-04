@@ -16,6 +16,8 @@ jobs:
         plugin: ${{ fromJson(github.event.inputs.plugins) }}
     steps:
       - run: sudo xcode-select --switch /Applications/Xcode_16.app
+      - run: xcrun simctl list > /dev/null
+      - run: xcodebuild -downloadPlatform iOS
       - uses: actions/setup-node@v4
         with:
           node-version: 20

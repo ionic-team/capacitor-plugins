@@ -7,7 +7,7 @@ On devices that don't have Taptic Engine or Vibrator, the API calls will resolve
 ## Install
 
 ```bash
-npm install @capacitor/haptics
+npm install @capacitor/haptics@latest-7
 npx cap sync
 ```
 

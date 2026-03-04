@@ -5,7 +5,7 @@ The Clipboard API enables copy and pasting to/from the system clipboard.
 ## Install
 
 ```bash
-npm install @capacitor/clipboard
+npm install @capacitor/clipboard@latest-7
 npx cap sync
 ```
 

@@ -2,7 +2,7 @@ name: CI
 on:
   push:
     branches:
-      - main
+      - 7.x
   pull_request:
     branches:
       - '**'
@@ -111,6 +111,8 @@ jobs:
         plugin: ${{ fromJson(needs.setup.outputs.plugins) }}
     steps:
       - run: sudo xcode-select --switch ${{ matrix.xcode }}
+      - run: xcrun simctl list > /dev/null
+      - run: xcodebuild -downloadPlatform iOS
       - uses: actions/setup-node@v4
         with:
           node-version: 20

@@ -5,7 +5,7 @@ The Network API provides network and connectivity information.
 ## Install
 
 ```bash
-npm install @capacitor/network
+npm install @capacitor/network@latest-7
 npx cap sync
 ```
 

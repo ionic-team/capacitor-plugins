@@ -15,7 +15,7 @@ The Text Zoom API provides the ability to change Web View text size for visual a
 ## Install
 
 ```bash
-npm install @capacitor/text-zoom
+npm install @capacitor/text-zoom@latest-7
 npx cap sync
 ```
 

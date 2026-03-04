@@ -1,6 +1,6 @@
 # ⓘ Plugin migrated
 
-**From version 7.1.0 onwards, this plugin is now housed in a separate repository. Refer to [capacitor-geolocation repository](https://github.com/ionic-team/capacitor-geolocation).**
+**From version 7.1.0 onwards, this plugin is now hosted in a separate repository. Refer to [capacitor-geolocation repository](https://github.com/ionic-team/capacitor-geolocation).**
 
 This file remains here to serve as documentation for version 7.0.0.
 
@@ -11,7 +11,7 @@ The Geolocation API provides simple methods for getting and tracking the current
 ## Install
 
 ```bash
-npm install @capacitor/geolocation
+npm install @capacitor/geolocation@latest-7
 npx cap sync
 ```
 
