@@ -26,7 +26,9 @@ public class ActionSheet extends BottomSheetDialogFragment {
     @Override
     public void onCancel(DialogInterface dialog) {
         super.onCancel(dialog);
-        this.cancelListener.onCancel();
+        if (this.cancelListener != null) {
+            this.cancelListener.onCancel();
+        }
     }
 
     private String title;
