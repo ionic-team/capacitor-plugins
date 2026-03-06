@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.0.5](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@7.0.4...@capacitor/camera@7.0.5) (2026-03-06)
+
+### Bug Fixes
+
+- **camera:** Allow cancelation of sheet in Web, requires pwa-elements 3.4.0 or higher ([#2284](https://github.com/ionic-team/capacitor-plugins/issues/2284)) ([dbe53ba](https://github.com/ionic-team/capacitor-plugins/commit/dbe53ba962290410bc8ed854170b0fe087f83e87))
+
 ## [7.0.4](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@7.0.3...@capacitor/camera@7.0.4) (2026-02-12)
 
 ### Bug Fixes
