@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [8.0.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/local-notifications@8.0.1...@capacitor/local-notifications@8.0.2) (2026-03-06)
+
+### Bug Fixes
+
+- **android:** notification Bundles with non-string values ([#2445](https://github.com/ionic-team/capacitor-plugins/issues/2445)) ([2788f81](https://github.com/ionic-team/capacitor-plugins/commit/2788f81d5dfe53e5d72b32e3b724e0f1a41e8373))
+
 ## [8.0.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/local-notifications@8.0.0...@capacitor/local-notifications@8.0.1) (2026-02-12)
 
 ### Bug Fixes

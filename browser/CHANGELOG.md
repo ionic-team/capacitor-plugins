@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [8.0.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/browser@8.0.1...@capacitor/browser@8.0.2) (2026-03-06)
+
+### Bug Fixes
+
+- **browser:** stop using deprecated dismissVC/presentVC ([#2477](https://github.com/ionic-team/capacitor-plugins/issues/2477)) ([16e66d5](https://github.com/ionic-team/capacitor-plugins/commit/16e66d5547d0802f30d77073c006a3566b18bf83))
+
 ## [8.0.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/browser@8.0.0...@capacitor/browser@8.0.1) (2026-02-12)
 
 ### Bug Fixes

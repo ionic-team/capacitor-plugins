@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [8.1.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/action-sheet@8.0.1...@capacitor/action-sheet@8.1.0) (2026-03-06)
+
+### Features
+
+- **action-sheet:** Add `cancelable` input option and and `canceled` output parameter ([#2285](https://github.com/ionic-team/capacitor-plugins/issues/2285)) ([251c62c](https://github.com/ionic-team/capacitor-plugins/commit/251c62c4d513f7baa51783799ab7505a4e2b075f))
+
 ## [8.0.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/action-sheet@8.0.0...@capacitor/action-sheet@8.0.1) (2026-02-12)
 
 ### Bug Fixes
