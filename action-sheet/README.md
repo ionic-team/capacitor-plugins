@@ -84,20 +84,20 @@ to select.
 
 #### ShowActionsResult
 
-| Prop           | Type                 | Description                                                                                                                                                                                                                                                         | Since |
-| -------------- | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`index`**    | <code>number</code>  | The index of the clicked option (Zero-based), or -1 if the sheet was canceled. On iOS, if there is a button with <a href="#actionsheetbuttonstyle">ActionSheetButtonStyle.Cancel</a>, and user clicks outside the sheet, the index of the cancel option is returned | 1.0.0 |
-| **`canceled`** | <code>boolean</code> | True if sheet was canceled by user; False otherwise On Web, requires having @ionic/pwa-elements version 3.4.0 or higher.                                                                                                                                            | 8.1.0 |
+| Prop           | Type                 | Description                                                                                                                                                                                                                                                                        | Since |
+| -------------- | -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`index`**    | <code>number</code>  | The index of the clicked option (Zero-based), or -1 if the Action Sheet was canceled. On iOS, if there is a button with <a href="#actionsheetbuttonstyle">ActionSheetButtonStyle.Cancel</a>, and user clicks outside the Action Sheet, the index of the Cancel button is returned. | 1.0.0 |
+| **`canceled`** | <code>boolean</code> | True if the Action Sheet was canceled by user; False otherwise. On Web, requires having @ionic/pwa-elements version 3.4.0 or higher.                                                                                                                                               | 8.1.0 |
 
 
 #### ShowActionsOptions
 
-| Prop             | Type                             | Description                                                                                                                                                                                                                               | Since |
-| ---------------- | -------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`title`**      | <code>string</code>              | The title of the Action Sheet.                                                                                                                                                                                                            | 1.0.0 |
-| **`message`**    | <code>string</code>              | A message to show under the title. This option is only supported on iOS.                                                                                                                                                                  | 1.0.0 |
-| **`options`**    | <code>ActionSheetButton[]</code> | Options the user can choose from.                                                                                                                                                                                                         | 1.0.0 |
-| **`cancelable`** | <code>boolean</code>             | If true, sheet is canceled when clicked outside; If false, it is not. By default, false. Not available on iOS, sheet is always cancelable by clicking outside of it. On Web, requires having @ionic/pwa-elements version 3.4.0 or higher. | 8.1.0 |
+| Prop             | Type                             | Description                                                                                                                                                                                                                                                                                                                                                       | Default            | Since |
+| ---------------- | -------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
+| **`title`**      | <code>string</code>              | The title of the Action Sheet.                                                                                                                                                                                                                                                                                                                                    |                    | 1.0.0 |
+| **`message`**    | <code>string</code>              | A message to show under the title. This option is only supported on iOS.                                                                                                                                                                                                                                                                                          |                    | 1.0.0 |
+| **`options`**    | <code>ActionSheetButton[]</code> | Options the user can choose from.                                                                                                                                                                                                                                                                                                                                 |                    | 1.0.0 |
+| **`cancelable`** | <code>boolean</code>             | If true, the Action Sheet is canceled when clicked outside; If false, it is not. Not available on iOS 26+ or if there is a button with <a href="#actionsheetbuttonstyle">ActionSheetButtonStyle.Cancel</a>, in those cases, the Action Sheet is always cancelable by clicking outside of it. On Web, requires having @ionic/pwa-elements version 3.4.0 or higher. | <code>false</code> | 8.1.0 |
 
 
 #### ActionSheetButton
@@ -114,10 +114,10 @@ to select.
 
 #### ActionSheetButtonStyle
 
-| Members           | Value                      | Description                                                                                                 | Since |
-| ----------------- | -------------------------- | ----------------------------------------------------------------------------------------------------------- | ----- |
-| **`Default`**     | <code>'DEFAULT'</code>     | Default style of the option.                                                                                | 1.0.0 |
-| **`Destructive`** | <code>'DESTRUCTIVE'</code> | Style to use on destructive options.                                                                        | 1.0.0 |
-| **`Cancel`**      | <code>'CANCEL'</code>      | Style to use on the option that cancels the Action Sheet. If used, should be on the latest availabe option. | 1.0.0 |
+| Members           | Value                      | Description                                                                                                                                                                                  | Since |
+| ----------------- | -------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`Default`**     | <code>'DEFAULT'</code>     | Default style of the option.                                                                                                                                                                 | 1.0.0 |
+| **`Destructive`** | <code>'DESTRUCTIVE'</code> | Style to use on destructive options.                                                                                                                                                         | 1.0.0 |
+| **`Cancel`**      | <code>'CANCEL'</code>      | Style to use on the option that cancels the Action Sheet. If used, should be on the latest available option. On iOS 26+ is not displayed, the Action Sheet is cancelable by tapping outside. | 1.0.0 |
 
 </docgen-api>
