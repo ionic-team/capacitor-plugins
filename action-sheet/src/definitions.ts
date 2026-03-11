@@ -25,7 +25,7 @@ export interface ShowActionsOptions {
   /**
    * If true, the Action Sheet is canceled when clicked outside; If false, it is not.
    *
-   * Not available on iOS 26+ or if there is a button with ActionSheetButtonStyle.Cancel, 
+   * Not available on iOS 26+ or if there is a button with ActionSheetButtonStyle.Cancel,
    * in those cases, the Action Sheet is always cancelable by clicking outside of it.
    *
    * On Web, requires having @ionic/pwa-elements version 3.4.0 or higher.
