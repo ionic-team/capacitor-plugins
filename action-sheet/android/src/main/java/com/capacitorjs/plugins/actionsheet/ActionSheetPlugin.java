@@ -45,9 +45,7 @@ public class ActionSheetPlugin extends Plugin {
                 implementation.setOnCancelListener(() -> resolve(call, -1));
             }
             implementation.setOnSelectedListener((index) -> {
-                JSObject ret = new JSObject();
-                ret.put("index", index);
-                call.resolve(ret);
+                resolve(call, index);
                 implementation.dismiss();
             });
             implementation.show(getActivity().getSupportFragmentManager(), "capacitorModalsActionSheet");

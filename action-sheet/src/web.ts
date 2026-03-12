@@ -11,7 +11,7 @@ export class ActionSheetWeb extends WebPlugin implements ActionSheetPlugin {
         document.body.appendChild(actionSheet);
       }
       actionSheet.header = options.title;
-      actionSheet.cancelable = options.cancelable;
+      actionSheet.cancelable = options.cancelable ?? false;
       actionSheet.options = options.options;
       actionSheet.addEventListener('onSelection', async (e: any) => {
         const selection = e.detail;
