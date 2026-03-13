@@ -22,11 +22,11 @@ public class Preferences {
     }
 
     public void set(String key, String value) {
-        executeOperation(editor -> editor.putString(key, value));
+        executeOperation((editor) -> editor.putString(key, value));
     }
 
     public void remove(String key) {
-        executeOperation(editor -> editor.remove(key));
+        executeOperation((editor) -> editor.remove(key));
     }
 
     public Set<String> keys() {

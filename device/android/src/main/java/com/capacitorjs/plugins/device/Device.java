@@ -88,13 +88,8 @@ public class Device {
         return android.os.Build.VERSION.RELEASE;
     }
 
-    @SuppressWarnings("deprecation")
     private PackageInfo getWebViewVersionSubAndroid26() throws PackageManager.NameNotFoundException {
-        String webViewPackage = "com.google.android.webview";
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            webViewPackage = "com.android.chrome";
-        }
         PackageManager pm = this.context.getPackageManager();
-        return pm.getPackageInfo(webViewPackage, 0);
+        return pm.getPackageInfo("com.android.chrome", 0);
     }
 }

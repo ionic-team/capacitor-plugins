@@ -11,6 +11,12 @@ export interface AppLauncherPlugin {
    * appropriate app is installed. To learn more about the key, see
    * [LSApplicationQueriesSchemes](https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/LaunchServicesKeys.html#//apple_ref/doc/plist/info/LSApplicationQueriesSchemes).
    *
+   * On Android the URL can be a known URLScheme or an app package name.
+   *
+   * On [Android 11](https://developer.android.com/about/versions/11/privacy/package-visibility)
+   * and newer you have to add the app package names or url schemes you want to query in the `AndroidManifest.xml`
+   * inside the `queries` tag.
+   *
    * @since 1.0.0
    */
   canOpenUrl(options: CanOpenURLOptions): Promise<CanOpenURLResult>;

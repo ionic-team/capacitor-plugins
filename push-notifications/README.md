@@ -27,7 +27,9 @@ func application(_ application: UIApplication, didFailToRegisterForRemoteNotific
 
 ## Android
 
-The Push Notification API uses [Firebase Cloud Messaging](https://firebase.google.com/docs/cloud-messaging) SDK for handling notifications.  See [Set up a Firebase Cloud Messaging client app on Android](https://firebase.google.com/docs/cloud-messaging/android/client) and follow the instructions for creating a Firebase project and registering your application.  There is no need to add the Firebase SDK to your app or edit your app manifest - the Push Notifications provides that for you.  All that is required is your Firebase project's `google-services.json` file added to the module (app-level) directory of your app.
+The Push Notification API uses [Firebase Cloud Messaging](https://firebase.google.com/docs/cloud-messaging) SDK for handling notifications.  See [Set up a Firebase Cloud Messaging client app on Android](https://firebase.google.com/docs/cloud-messaging/android/client) and follow the instructions for creating a Firebase project and registering your application.   
+
+**There is no need to add the Firebase SDK** to your app or edit your app manifest - the Push Notifications provides that for you.  All that is required is your Firebase project's `google-services.json` file added to the module (app-level) directory of your app.
 
 Android 13 requires a permission check in order to receive push notifications.  You are required to call `checkPermissions()` and `requestPermissions()` accordingly, when targeting SDK 33.
 
@@ -41,7 +43,7 @@ For more information about the behavior changes of your app related to the priva
 
 This plugin will use the following project variables (defined in your app's `variables.gradle` file):
 
-- `firebaseMessagingVersion` version of `com.google.firebase:firebase-messaging` (default: `24.1.0`)
+- `firebaseMessagingVersion` version of `com.google.firebase:firebase-messaging` (default: `25.0.1`)
 
 ---
 
