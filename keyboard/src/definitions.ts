@@ -5,7 +5,7 @@ import type { PluginListenerHandle } from '@capacitor/core';
 declare module '@capacitor/cli' {
   export interface PluginsConfig {
     /**
-     * On iOS, the keyboard can be configured with the following options:
+     * The keyboard can be configured with the following options:
      */
     Keyboard?: {
       /**
