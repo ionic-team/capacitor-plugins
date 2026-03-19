@@ -20,8 +20,6 @@
         "{projectRoot}/clipboard/dist",
         "{projectRoot}/device/dist",
         "{projectRoot}/dialog/dist",
-        "{projectRoot}/haptics/dist",
-        "{projectRoot}/keyboard/dist",
         "{projectRoot}/local-notifications/dist",
         "{projectRoot}/motion/dist",
         "{projectRoot}/network/dist",

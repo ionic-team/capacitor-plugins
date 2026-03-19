@@ -14,10 +14,7 @@ import type {
   SettingsPermissionStatus,
 } from './definitions';
 
-export class LocalNotificationsWeb
-  extends WebPlugin
-  implements LocalNotificationsPlugin
-{
+export class LocalNotificationsWeb extends WebPlugin implements LocalNotificationsPlugin {
   protected pending: LocalNotificationSchema[] = [];
   protected deliveredNotifications: Notification[] = [];
 
@@ -35,17 +32,11 @@ export class LocalNotificationsWeb
       notifications: deliveredSchemas,
     };
   }
-  async removeDeliveredNotifications(
-    delivered: DeliveredNotifications,
-  ): Promise<void> {
+  async removeDeliveredNotifications(delivered: DeliveredNotifications): Promise<void> {
     for (const toRemove of delivered.notifications) {
-      const found = this.deliveredNotifications.find(
-        n => n.tag === String(toRemove.id),
-      );
+      const found = this.deliveredNotifications.find((n) => n.tag === String(toRemove.id));
       found?.close();
-      this.deliveredNotifications = this.deliveredNotifications.filter(
-        () => !found,
-      );
+      this.deliveredNotifications = this.deliveredNotifications.filter(() => !found);
     }
   }
   async removeAllDeliveredNotifications(): Promise<void> {
@@ -76,7 +67,7 @@ export class LocalNotificationsWeb
     }
 
     return {
-      notifications: options.notifications.map(notification => ({
+      notifications: options.notifications.map((notification) => ({
         id: notification.id,
       })),
     };
@@ -93,10 +84,7 @@ export class LocalNotificationsWeb
   }
 
   async cancel(pending: ScheduleResult): Promise<void> {
-    this.pending = this.pending.filter(
-      notification =>
-        !pending.notifications.find(n => n.id === notification.id),
-    );
+    this.pending = this.pending.filter((notification) => !pending.notifications.find((n) => n.id === notification.id));
   }
 
   async areEnabled(): Promise<EnabledResult> {
@@ -120,9 +108,7 @@ export class LocalNotificationsWeb
       throw this.unavailable('Notifications not supported in this browser.');
     }
 
-    const display = this.transformNotificationPermission(
-      await Notification.requestPermission(),
-    );
+    const display = this.transformNotificationPermission(await Notification.requestPermission());
 
     return { display };
   }
@@ -132,9 +118,7 @@ export class LocalNotificationsWeb
       throw this.unavailable('Notifications not supported in this browser.');
     }
 
-    const display = this.transformNotificationPermission(
-      Notification.permission,
-    );
+    const display = this.transformNotificationPermission(Notification.permission);
 
     return { display };
   }
@@ -150,7 +134,7 @@ export class LocalNotificationsWeb
       try {
         new Notification('');
       } catch (e) {
-        if (e.name == 'TypeError') {
+        if (e instanceof Error && e.name === 'TypeError') {
           return false;
         }
       }
@@ -159,9 +143,7 @@ export class LocalNotificationsWeb
     return true;
   };
 
-  protected transformNotificationPermission(
-    permission: NotificationPermission,
-  ): PermissionState {
+  protected transformNotificationPermission(permission: NotificationPermission): PermissionState {
     switch (permission) {
       case 'granted':
         return 'granted';
@@ -177,18 +159,13 @@ export class LocalNotificationsWeb
     const now = new Date().getTime();
 
     for (const notification of this.pending) {
-      if (
-        notification.schedule?.at &&
-        notification.schedule.at.getTime() <= now
-      ) {
+      if (notification.schedule?.at && notification.schedule.at.getTime() <= now) {
         this.buildNotification(notification);
         toRemove.push(notification);
       }
     }
 
-    this.pending = this.pending.filter(
-      notification => !toRemove.find(n => n === notification),
-    );
+    this.pending = this.pending.filter((notification) => !toRemove.find((n) => n === notification));
   }
 
   protected sendNotification(notification: LocalNotificationSchema): void {
@@ -204,29 +181,17 @@ export class LocalNotificationsWeb
     this.buildNotification(notification);
   }
 
-  protected buildNotification(
-    notification: LocalNotificationSchema,
-  ): Notification {
+  protected buildNotification(notification: LocalNotificationSchema): Notification {
     const localNotification = new Notification(notification.title, {
       body: notification.body,
       tag: String(notification.id),
     });
-    localNotification.addEventListener(
-      'click',
-      this.onClick.bind(this, notification),
-      false,
-    );
-    localNotification.addEventListener(
-      'show',
-      this.onShow.bind(this, notification),
-      false,
-    );
+    localNotification.addEventListener('click', this.onClick.bind(this, notification), false);
+    localNotification.addEventListener('show', this.onShow.bind(this, notification), false);
     localNotification.addEventListener(
       'close',
       () => {
-        this.deliveredNotifications = this.deliveredNotifications.filter(
-          () => !this,
-        );
+        this.deliveredNotifications = this.deliveredNotifications.filter(() => !this);
       },
       false,
     );

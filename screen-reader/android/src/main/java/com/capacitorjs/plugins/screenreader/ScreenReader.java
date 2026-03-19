@@ -47,18 +47,12 @@ public class ScreenReader {
         if (isEnabled()) {
             final Locale locale = Locale.forLanguageTag(languageTag);
 
-            textToSpeech =
-                new TextToSpeech(
-                    context,
-                    status -> {
-                        AudioAttributes attributes = new AudioAttributes.Builder()
-                            .setUsage(AudioAttributes.USAGE_ASSISTANCE_ACCESSIBILITY)
-                            .build();
-                        textToSpeech.setAudioAttributes(attributes);
-                        textToSpeech.setLanguage(locale);
-                        textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, "capacitor-screen-reader" + System.currentTimeMillis());
-                    }
-                );
+            textToSpeech = new TextToSpeech(context, (status) -> {
+                AudioAttributes attributes = new AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_ASSISTANCE_ACCESSIBILITY).build();
+                textToSpeech.setAudioAttributes(attributes);
+                textToSpeech.setLanguage(locale);
+                textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, "capacitor-screen-reader" + System.currentTimeMillis());
+            });
         }
     }
 }

@@ -46,12 +46,12 @@ jobs:
       contents: read
       packages: write
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v5
       with:
         fetch-depth: 0
         token: ${{ secrets.CAP_GH_RELEASE_TOKEN }}
     - name: set up JDK 21
-      uses: actions/setup-java@v4
+      uses: actions/setup-java@v5
       with:
         java-version: '21'
         distribution: 'zulu'

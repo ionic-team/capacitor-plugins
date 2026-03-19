@@ -64,8 +64,7 @@ public class PushNotificationsPlugin extends Plugin {
                 if (key.equals("google.message_id")) {
                     notificationJson.put("id", bundle.getString(key));
                 } else {
-                    String valueStr = bundle.getString(key);
-                    dataObject.put(key, valueStr);
+                    dataObject.put(key, bundle.get(key));
                 }
             }
             notificationJson.put("data", dataObject);
@@ -101,18 +100,15 @@ public class PushNotificationsPlugin extends Plugin {
     @PluginMethod
     public void register(PluginCall call) {
         FirebaseMessaging.getInstance().setAutoInitEnabled(true);
-        FirebaseMessaging
-            .getInstance()
+        FirebaseMessaging.getInstance()
             .getToken()
-            .addOnCompleteListener(
-                task -> {
-                    if (!task.isSuccessful()) {
-                        sendError(task.getException().getLocalizedMessage());
-                        return;
-                    }
-                    sendToken(task.getResult());
+            .addOnCompleteListener((task) -> {
+                if (!task.isSuccessful()) {
+                    sendError(task.getException().getLocalizedMessage());
+                    return;
                 }
-            );
+                sendToken(task.getResult());
+            });
         call.resolve();
     }
 
@@ -144,7 +140,7 @@ public class PushNotificationsPlugin extends Plugin {
                 JSObject extras = new JSObject();
 
                 for (String key : notification.extras.keySet()) {
-                    extras.put(key, notification.extras.getString(key));
+                    extras.put(key, notification.extras.get(key));
                 }
 
                 jsNotif.put("data", extras);
@@ -278,13 +274,8 @@ public class PushNotificationsPlugin extends Plugin {
                             bundle
                         );
 
-                        CommonNotificationBuilder.DisplayNotificationInfo notificationInfo = CommonNotificationBuilder.createNotificationInfo(
-                            getContext(),
-                            getContext(),
-                            params,
-                            channelId,
-                            bundle
-                        );
+                        CommonNotificationBuilder.DisplayNotificationInfo notificationInfo =
+                            CommonNotificationBuilder.createNotificationInfo(getContext(), getContext(), params, channelId, bundle);
 
                         notificationManager.notify(notificationInfo.tag, notificationInfo.id, notificationInfo.notificationBuilder.build());
                     }

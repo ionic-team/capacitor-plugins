@@ -9,6 +9,22 @@ npm install @capacitor/status-bar
 npx cap sync
 ```
 
+## Android 16+ behavior change
+
+For apps targeting **Android 16 (API level 36)** and higher using **Capacitor 8**, the following Status Bar configuration options **no longer work**:
+
+- `overlaysWebView`
+- `backgroundColor`
+
+These options relied on the ability to opt out of Android’s **edge-to-edge** system UI behavior, which allowed apps to control how the status bar overlays and its background color.
+
+In **Android 15 (API level 35)**, it was still possible to opt out of this enforced behavior by setting the `windowOptOutEdgeToEdgeEnforcement` property in the application layout file.
+Without that property, the application assumed `overlaysWebView` as always `true`.
+See more details in the Android documentation: [https://developer.android.com/reference/android/R.attr#windowOptOutEdgeToEdgeEnforcement](https://developer.android.com.reference/android/R.attr#windowOptOutEdgeToEdgeEnforcement)
+
+Starting with **Android 16**, this opt-out is **no longer available**, and the behavior is enforced by the system.  
+As a result, the `overlaysWebView` and `backgroundColor` configuration options no longer have any effect.
+
 ## iOS Note
 
 This plugin requires "View controller-based status bar appearance"
@@ -57,11 +73,11 @@ const showStatusBar = async () => {
 
 These config values are available:
 
-| Prop                  | Type                 | Description                                                                                                                                                                                                                                                                                                                                                                      | Default              | Since |
-| --------------------- | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------- | ----- |
-| **`overlaysWebView`** | <code>boolean</code> | Whether the statusbar is overlaid or not. For applications targeting Android 15, this property has no effect unless the property windowOptOutEdgeToEdgeEnforcement is added to the application layout file. Otherwise, the application assumes always overlays as true. More details in https://developer.android.com/reference/android/R.attr#windowOptOutEdgeToEdgeEnforcement | <code>true</code>    | 1.0.0 |
-| **`style`**           | <code>string</code>  | <a href="#style">Style</a> of the text of the status bar.                                                                                                                                                                                                                                                                                                                        | <code>default</code> | 1.0.0 |
-| **`backgroundColor`** | <code>string</code>  | Color of the background of the statusbar in hex format, #RRGGBB. Doesn't work if `overlaysWebView` is true.                                                                                                                                                                                                                                                                      | <code>#000000</code> | 1.0.0 |
+| Prop                  | Type                 | Description                                                                                                                               | Default              | Since |
+| --------------------- | -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | -------------------- | ----- |
+| **`overlaysWebView`** | <code>boolean</code> | Whether the statusbar is overlaid or not. Not available on Android 15+.                                                                   | <code>true</code>    | 1.0.0 |
+| **`style`**           | <code>string</code>  | <a href="#style">Style</a> of the text of the status bar.                                                                                 | <code>default</code> | 1.0.0 |
+| **`backgroundColor`** | <code>string</code>  | Color of the background of the statusbar in hex format, #RRGGBB. Doesn't work if `overlaysWebView` is true. Not available on Android 15+. | <code>#000000</code> | 1.0.0 |
 
 ### Examples
 
@@ -111,7 +127,10 @@ export default config;
 * [`hide(...)`](#hide)
 * [`getInfo()`](#getinfo)
 * [`setOverlaysWebView(...)`](#setoverlayswebview)
+* [`addListener('statusBarVisibilityChanged', ...)`](#addlistenerstatusbarvisibilitychanged-)
+* [`addListener('statusBarOverlayChanged', ...)`](#addlistenerstatusbaroverlaychanged-)
 * [Interfaces](#interfaces)
+* [Type Aliases](#type-aliases)
 * [Enums](#enums)
 
 </docgen-index>
@@ -143,6 +162,8 @@ setBackgroundColor(options: BackgroundColorOptions) => Promise<void>
 ```
 
 Set the background color of the status bar.
+Calling this function updates the foreground color of the status bar if the style is set to default, except on iOS versions lower than 17.
+Not available on Android 15+.
 
 | Param         | Type                                                                      |
 | ------------- | ------------------------------------------------------------------------- |
@@ -214,12 +235,55 @@ setOverlaysWebView(options: SetOverlaysWebViewOptions) => Promise<void>
 
 Set whether or not the status bar should overlay the webview to allow usage
 of the space underneath it.
+Not available on Android 15+.
 
 | Param         | Type                                                                            |
 | ------------- | ------------------------------------------------------------------------------- |
 | **`options`** | <code><a href="#setoverlayswebviewoptions">SetOverlaysWebViewOptions</a></code> |
 
 **Since:** 1.0.0
+
+--------------------
+
+
+### addListener('statusBarVisibilityChanged', ...)
+
+```typescript
+addListener(eventName: 'statusBarVisibilityChanged', listenerFunc: VisibilityChangeListener) => Promise<PluginListenerHandle>
+```
+
+Listen for status bar visibility changes.
+Fired when hide or show methods get called.
+
+| Param              | Type                                                                          |
+| ------------------ | ----------------------------------------------------------------------------- |
+| **`eventName`**    | <code>'statusBarVisibilityChanged'</code>                                     |
+| **`listenerFunc`** | <code><a href="#visibilitychangelistener">VisibilityChangeListener</a></code> |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
+
+**Since:** 7.0.0
+
+--------------------
+
+
+### addListener('statusBarOverlayChanged', ...)
+
+```typescript
+addListener(eventName: 'statusBarOverlayChanged', listenerFunc: OverlayChangeListener) => Promise<PluginListenerHandle>
+```
+
+Listen for status bar overlay changes.
+Fired when setOverlaysWebView gets called.
+
+| Param              | Type                                                                    |
+| ------------------ | ----------------------------------------------------------------------- |
+| **`eventName`**    | <code>'statusBarOverlayChanged'</code>                                  |
+| **`listenerFunc`** | <code><a href="#overlaychangelistener">OverlayChangeListener</a></code> |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
+
+**Since:** 7.0.0
 
 --------------------
 
@@ -250,12 +314,13 @@ of the space underneath it.
 
 #### StatusBarInfo
 
-| Prop           | Type                                    | Description                               | Since |
-| -------------- | --------------------------------------- | ----------------------------------------- | ----- |
-| **`visible`**  | <code>boolean</code>                    | Whether the status bar is visible or not. | 1.0.0 |
-| **`style`**    | <code><a href="#style">Style</a></code> | The current status bar style.             | 1.0.0 |
-| **`color`**    | <code>string</code>                     | The current status bar color.             | 1.0.0 |
-| **`overlays`** | <code>boolean</code>                    | Whether the statusbar is overlaid or not. | 1.0.0 |
+| Prop           | Type                                    | Description                                | Since |
+| -------------- | --------------------------------------- | ------------------------------------------ | ----- |
+| **`visible`**  | <code>boolean</code>                    | Whether the status bar is visible or not.  | 1.0.0 |
+| **`style`**    | <code><a href="#style">Style</a></code> | The current status bar style.              | 1.0.0 |
+| **`color`**    | <code>string</code>                     | The current status bar color.              | 1.0.0 |
+| **`overlays`** | <code>boolean</code>                    | Whether the status bar is overlaid or not. | 1.0.0 |
+| **`height`**   | <code>number</code>                     | The height of the status bar.              | 7.0.0 |
 
 
 #### SetOverlaysWebViewOptions
@@ -263,6 +328,26 @@ of the space underneath it.
 | Prop          | Type                 | Description                               | Since |
 | ------------- | -------------------- | ----------------------------------------- | ----- |
 | **`overlay`** | <code>boolean</code> | Whether to overlay the status bar or not. | 1.0.0 |
+
+
+#### PluginListenerHandle
+
+| Prop         | Type                                      |
+| ------------ | ----------------------------------------- |
+| **`remove`** | <code>() =&gt; Promise&lt;void&gt;</code> |
+
+
+### Type Aliases
+
+
+#### VisibilityChangeListener
+
+<code>(info: <a href="#statusbarinfo">StatusBarInfo</a>): void</code>
+
+
+#### OverlayChangeListener
+
+<code>(info: <a href="#statusbarinfo">StatusBarInfo</a>): void</code>
 
 
 ### Enums

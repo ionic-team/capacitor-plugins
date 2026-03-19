@@ -24,7 +24,7 @@ public class DialogPlugin: CAPPlugin, CAPBridgedPlugin {
 
         DispatchQueue.main.async { [weak self] in
             let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertController.Style.alert)
-            alert.addAction(UIAlertAction(title: buttonTitle, style: UIAlertAction.Style.default, handler: { (_) -> Void in
+            alert.addAction(UIAlertAction(title: buttonTitle, style: UIAlertAction.Style.default, handler: { (_) in
                 call.resolve()
             }))
             self?.bridge?.viewController?.present(alert, animated: true, completion: nil)
@@ -42,12 +42,12 @@ public class DialogPlugin: CAPPlugin, CAPBridgedPlugin {
 
         DispatchQueue.main.async { [weak self] in
             let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertController.Style.alert)
-            alert.addAction(UIAlertAction(title: cancelButtonTitle, style: UIAlertAction.Style.default, handler: { (_) -> Void in
+            alert.addAction(UIAlertAction(title: cancelButtonTitle, style: UIAlertAction.Style.default, handler: { (_) in
                 call.resolve([
                     "value": false
                 ])
             }))
-            alert.addAction(UIAlertAction(title: okButtonTitle, style: UIAlertAction.Style.default, handler: { (_) -> Void in
+            alert.addAction(UIAlertAction(title: okButtonTitle, style: UIAlertAction.Style.default, handler: { (_) in
                 call.resolve([
                     "value": true
                 ])
@@ -75,13 +75,13 @@ public class DialogPlugin: CAPPlugin, CAPBridgedPlugin {
                 textField.text = inputText
             }
 
-            alert.addAction(UIAlertAction(title: cancelButtonTitle, style: UIAlertAction.Style.default, handler: { (_) -> Void in
+            alert.addAction(UIAlertAction(title: cancelButtonTitle, style: UIAlertAction.Style.default, handler: { (_) in
                 call.resolve([
                     "value": "",
                     "cancelled": true
                 ])
             }))
-            alert.addAction(UIAlertAction(title: okButtonTitle, style: UIAlertAction.Style.default, handler: { (_) -> Void in
+            alert.addAction(UIAlertAction(title: okButtonTitle, style: UIAlertAction.Style.default, handler: { (_) in
                 let textField = alert.textFields?[0]
                 call.resolve([
                     "value": textField?.text ?? "",
