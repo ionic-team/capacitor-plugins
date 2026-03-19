@@ -127,7 +127,10 @@ export default config;
 * [`hide(...)`](#hide)
 * [`getInfo()`](#getinfo)
 * [`setOverlaysWebView(...)`](#setoverlayswebview)
+* [`addListener('statusBarVisibilityChanged', ...)`](#addlistenerstatusbarvisibilitychanged-)
+* [`addListener('statusBarOverlayChanged', ...)`](#addlistenerstatusbaroverlaychanged-)
 * [Interfaces](#interfaces)
+* [Type Aliases](#type-aliases)
 * [Enums](#enums)
 
 </docgen-index>
@@ -243,6 +246,48 @@ Not available on Android 15+.
 --------------------
 
 
+### addListener('statusBarVisibilityChanged', ...)
+
+```typescript
+addListener(eventName: 'statusBarVisibilityChanged', listenerFunc: VisibilityChangeListener) => Promise<PluginListenerHandle>
+```
+
+Listen for status bar visibility changes.
+Fired when hide or show methods get called.
+
+| Param              | Type                                                                          |
+| ------------------ | ----------------------------------------------------------------------------- |
+| **`eventName`**    | <code>'statusBarVisibilityChanged'</code>                                     |
+| **`listenerFunc`** | <code><a href="#visibilitychangelistener">VisibilityChangeListener</a></code> |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
+
+**Since:** 7.0.0
+
+--------------------
+
+
+### addListener('statusBarOverlayChanged', ...)
+
+```typescript
+addListener(eventName: 'statusBarOverlayChanged', listenerFunc: OverlayChangeListener) => Promise<PluginListenerHandle>
+```
+
+Listen for status bar overlay changes.
+Fired when setOverlaysWebView gets called.
+
+| Param              | Type                                                                    |
+| ------------------ | ----------------------------------------------------------------------- |
+| **`eventName`**    | <code>'statusBarOverlayChanged'</code>                                  |
+| **`listenerFunc`** | <code><a href="#overlaychangelistener">OverlayChangeListener</a></code> |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
+
+**Since:** 7.0.0
+
+--------------------
+
+
 ### Interfaces
 
 
@@ -269,12 +314,13 @@ Not available on Android 15+.
 
 #### StatusBarInfo
 
-| Prop           | Type                                    | Description                               | Since |
-| -------------- | --------------------------------------- | ----------------------------------------- | ----- |
-| **`visible`**  | <code>boolean</code>                    | Whether the status bar is visible or not. | 1.0.0 |
-| **`style`**    | <code><a href="#style">Style</a></code> | The current status bar style.             | 1.0.0 |
-| **`color`**    | <code>string</code>                     | The current status bar color.             | 1.0.0 |
-| **`overlays`** | <code>boolean</code>                    | Whether the statusbar is overlaid or not. | 1.0.0 |
+| Prop           | Type                                    | Description                                | Since |
+| -------------- | --------------------------------------- | ------------------------------------------ | ----- |
+| **`visible`**  | <code>boolean</code>                    | Whether the status bar is visible or not.  | 1.0.0 |
+| **`style`**    | <code><a href="#style">Style</a></code> | The current status bar style.              | 1.0.0 |
+| **`color`**    | <code>string</code>                     | The current status bar color.              | 1.0.0 |
+| **`overlays`** | <code>boolean</code>                    | Whether the status bar is overlaid or not. | 1.0.0 |
+| **`height`**   | <code>number</code>                     | The height of the status bar.              | 7.0.0 |
 
 
 #### SetOverlaysWebViewOptions
@@ -282,6 +328,26 @@ Not available on Android 15+.
 | Prop          | Type                 | Description                               | Since |
 | ------------- | -------------------- | ----------------------------------------- | ----- |
 | **`overlay`** | <code>boolean</code> | Whether to overlay the status bar or not. | 1.0.0 |
+
+
+#### PluginListenerHandle
+
+| Prop         | Type                                      |
+| ------------ | ----------------------------------------- |
+| **`remove`** | <code>() =&gt; Promise&lt;void&gt;</code> |
+
+
+### Type Aliases
+
+
+#### VisibilityChangeListener
+
+<code>(info: <a href="#statusbarinfo">StatusBarInfo</a>): void</code>
+
+
+#### OverlayChangeListener
+
+<code>(info: <a href="#statusbarinfo">StatusBarInfo</a>): void</code>
 
 
 ### Enums
