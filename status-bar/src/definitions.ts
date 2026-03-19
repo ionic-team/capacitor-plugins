@@ -239,7 +239,10 @@ export interface StatusBarPlugin {
    *
    * @since 7.0.0
    */
-  addListener(eventName: 'statusBarOverlayChanged', listenerFunc: OverlayChangeListener): Promise<PluginListenerHandle>;
+  addListener(
+    eventName: 'statusBarOverlayChanged',
+    listenerFunc: OverlayChangeListener,
+  ): Promise<PluginListenerHandle>;
 }
 
 /**
