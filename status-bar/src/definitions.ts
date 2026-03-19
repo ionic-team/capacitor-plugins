@@ -1,5 +1,7 @@
 /// <reference types="@capacitor/cli" />
 
+import type { PluginListenerHandle } from '@capacitor/core';
+
 declare module '@capacitor/cli' {
   export interface PluginsConfig {
     /**
@@ -143,14 +145,21 @@ export interface StatusBarInfo {
    *
    * @since 1.0.0
    */
-  color?: string;
+  color: string;
 
   /**
-   * Whether the statusbar is overlaid or not.
+   * Whether the status bar is overlaid or not.
    *
    * @since 1.0.0
    */
-  overlays?: boolean;
+  overlays: boolean;
+
+  /**
+   * The height of the status bar.
+   *
+   * @since 7.0.0
+   */
+  height: number;
 }
 
 export interface SetOverlaysWebViewOptions {
@@ -161,6 +170,9 @@ export interface SetOverlaysWebViewOptions {
    */
   overlay: boolean;
 }
+
+export type VisibilityChangeListener = (info: StatusBarInfo) => void;
+export type OverlayChangeListener = (info: StatusBarInfo) => void;
 
 export interface StatusBarPlugin {
   /**
@@ -209,6 +221,28 @@ export interface StatusBarPlugin {
    * @since 1.0.0
    */
   setOverlaysWebView(options: SetOverlaysWebViewOptions): Promise<void>;
+
+  /**
+   * Listen for status bar visibility changes.
+   * Fired when hide or show methods get called.
+   *
+   * @since 7.0.0
+   */
+  addListener(
+    eventName: 'statusBarVisibilityChanged',
+    listenerFunc: VisibilityChangeListener,
+  ): Promise<PluginListenerHandle>;
+
+  /**
+   * Listen for status bar overlay changes.
+   * Fired when setOverlaysWebView gets called.
+   *
+   * @since 7.0.0
+   */
+  addListener(
+    eventName: 'statusBarOverlayChanged',
+    listenerFunc: OverlayChangeListener,
+  ): Promise<PluginListenerHandle>;
 }
 
 /**
