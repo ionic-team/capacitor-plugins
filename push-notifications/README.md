@@ -11,7 +11,7 @@ npx cap sync
 
 ## iOS
 
-On iOS you must enable the Push Notifications capability. See [Setting Capabilities](https://capacitorjs.com/docs/v3/ios/configuration#setting-capabilities) for instructions on how to enable the capability.
+On iOS you must enable the Push Notifications capability. See [Setting Capabilities](https://capacitorjs.com/docs/ios/configuration#setting-capabilities) for instructions on how to enable the capability.
 
 After enabling the Push Notifications capability, add the following to your app's `AppDelegate.swift`:
 

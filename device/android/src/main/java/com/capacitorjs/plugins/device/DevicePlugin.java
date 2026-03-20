@@ -32,12 +32,12 @@ public class DevicePlugin extends Plugin {
         JSObject r = new JSObject();
 
         r.put("memUsed", implementation.getMemUsed());
-        r.put("model", android.os.Build.MODEL);
+        r.put("model", Build.MODEL);
         r.put("operatingSystem", "android");
-        r.put("osVersion", android.os.Build.VERSION.RELEASE);
+        r.put("osVersion", Build.VERSION.RELEASE);
         r.put("androidSDKVersion", Build.VERSION.SDK_INT);
         r.put("platform", implementation.getPlatform());
-        r.put("manufacturer", android.os.Build.MANUFACTURER);
+        r.put("manufacturer", Build.MANUFACTURER);
         r.put("isVirtual", implementation.isVirtual());
         r.put("name", implementation.getName());
         r.put("webViewVersion", implementation.getWebViewVersion());

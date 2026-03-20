@@ -33,14 +33,10 @@ public class ActionSheetPlugin: CAPPlugin, CAPBridgedPlugin, UIAdaptivePresentat
                 buttonStyle = .cancel
             }
             let action = UIAlertAction(title: title, style: buttonStyle, handler: { [weak self] (_) in
-                if buttonStyle == .cancel {
-                    call.actionSheetCanceled()
-                } else {
-                    call.resolve([
-                        "index": index,
-                        "canceled": false
-                    ])
-                }
+                call.resolve([
+                    "index": index,
+                    "canceled": buttonStyle == .cancel
+                ])
                 self?.currentCall = nil
             })
             alertActions.append(action)
@@ -51,18 +47,19 @@ public class ActionSheetPlugin: CAPPlugin, CAPBridgedPlugin, UIAdaptivePresentat
                 self?.setCenteredPopover(alertController)
                 self?.bridge?.viewController?.present(alertController, animated: true) {
                     if !hasCancellableButton {
-                        self?.setupCancelationListerners(alertController, call)
+                        self?.setupCancelationListeners(alertController, call)
                     }
                 }
             }
         }
     }
 
-    private func setupCancelationListerners(_ alertController: UIAlertController, _ call: CAPPluginCall) {
+    private func setupCancelationListeners(_ alertController: UIAlertController, _ call: CAPPluginCall) {
+        let cancelable = call.getBool("cancelable", false)
         if #available(iOS 26, *) {
             self.currentCall = call
             alertController.presentationController?.delegate = self
-        } else {
+        } else if cancelable {
             // For iOS versions below 26, setting the presentation controller delegate would result in a crash
             //  "Terminating app due to uncaught exception 'NSInternalInconsistencyException', reason: 'The presentation controller of an alert controller presenting as an alert must not have its delegate modified"
             //  Hence, the alternative by adding a gesture recognizer (which only works for iOS versions below 26)
@@ -70,8 +67,8 @@ public class ActionSheetPlugin: CAPPlugin, CAPBridgedPlugin, UIAdaptivePresentat
                 alertController.dismiss(animated: true, completion: nil)
                 call.actionSheetCanceled()
             }
-            let backroundView = alertController.view.superview?.subviews[0]
-            backroundView?.addGestureRecognizer(gestureRecognizer)
+            let backgroundView = alertController.view.superview?.subviews[0]
+            backgroundView?.addGestureRecognizer(gestureRecognizer)
         }
     }
 
