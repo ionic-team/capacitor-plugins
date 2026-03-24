@@ -211,6 +211,7 @@ Only available for Android.
 
 --------------------
 
+
 ### getAppLanguage()
 
 ```typescript
@@ -221,9 +222,10 @@ Get the app specific language locale code.
 
 **Returns:** <code>Promise&lt;<a href="#applanguagecode">AppLanguageCode</a>&gt;</code>
 
-**Since:** 6.0.0
+**Since:** 8.1.0
 
 --------------------
+
 
 ### toggleBackButtonHandler(...)
 
@@ -242,6 +244,7 @@ Only available for Android.
 **Since:** 7.1.0
 
 --------------------
+
 
 ### addListener('appStateChange', ...)
 
@@ -439,17 +442,20 @@ Remove all native listeners for this plugin
 | --------- | ------------------- | ----------------------------- | ----- |
 | **`url`** | <code>string</code> | The url used to open the app. | 1.0.0 |
 
+
 #### AppLanguageCode
 
 | Prop        | Type                | Description                           | Since |
 | ----------- | ------------------- | ------------------------------------- | ----- |
-| **`value`** | <code>string</code> | Two or Three character language code. | 5.1.0 |
+| **`value`** | <code>string</code> | Two or Three character language code. | 8.1.0 |
+
 
 #### ToggleBackButtonHandlerOptions
 
 | Prop          | Type                 | Description                                                          | Since |
 | ------------- | -------------------- | -------------------------------------------------------------------- | ----- |
 | **`enabled`** | <code>boolean</code> | Indicates whether to enable or disable default back button handling. | 7.1.0 |
+
 
 #### PluginListenerHandle
 

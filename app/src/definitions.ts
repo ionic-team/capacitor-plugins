@@ -162,7 +162,7 @@ export interface AppLanguageCode {
   /**
    * Two or Three character language code.
    *
-   * @since 5.1.0
+   * @since 8.1.0
    */
   value: string;
 }
@@ -211,10 +211,11 @@ export interface AppPlugin {
   /**
    * Get the app specific language locale code.
    *
-   * @since 6.0.0
+   * @since 8.1.0
    */
   getAppLanguage(): Promise<AppLanguageCode>;
 
+  /**
    * Enables or disables the plugin's back button handling during runtime.
    *
    * Only available for Android.
