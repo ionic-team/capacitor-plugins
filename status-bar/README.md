@@ -9,6 +9,22 @@ npm install @capacitor/status-bar
 npx cap sync
 ```
 
+## Android 16+ behavior change
+
+For apps targeting **Android 16 (API level 36)** and higher using **Capacitor 8**, the following Status Bar configuration options **no longer work**:
+
+- `overlaysWebView`
+- `backgroundColor`
+
+These options relied on the ability to opt out of Android’s **edge-to-edge** system UI behavior, which allowed apps to control how the status bar overlays and its background color.
+
+In **Android 15 (API level 35)**, it was still possible to opt out of this enforced behavior by setting the `windowOptOutEdgeToEdgeEnforcement` property in the application layout file.
+Without that property, the application assumed `overlaysWebView` as always `true`.
+See more details in the Android documentation: [https://developer.android.com/reference/android/R.attr#windowOptOutEdgeToEdgeEnforcement](https://developer.android.com.reference/android/R.attr#windowOptOutEdgeToEdgeEnforcement)
+
+Starting with **Android 16**, this opt-out is **no longer available**, and the behavior is enforced by the system.  
+As a result, the `overlaysWebView` and `backgroundColor` configuration options no longer have any effect.
+
 ## iOS Note
 
 This plugin requires "View controller-based status bar appearance"
@@ -20,9 +36,6 @@ The status bar visibility defaults to visible and the style defaults to
 `Style.Default`. You can change these defaults by adding
 `UIStatusBarHidden` and/or `UIStatusBarStyle` in `Info.plist`.
 
-`setBackgroundColor` and `setOverlaysWebView` are currently not supported on
-iOS devices.
-
 ## Example
 
 ```typescript
@@ -33,7 +46,7 @@ window.addEventListener('statusTap', function () {
   console.log('statusbar tapped');
 });
 
-// Display content under transparent status bar (Android only)
+// Display content under transparent status bar
 StatusBar.setOverlaysWebView({ overlay: true });
 
 const setStatusBarStyleDark = async () => {
@@ -53,6 +66,57 @@ const showStatusBar = async () => {
 };
 ```
 
+## Configuration
+
+<docgen-config>
+<!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
+
+These config values are available:
+
+| Prop                  | Type                 | Description                                                                                                                               | Default              | Since |
+| --------------------- | -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | -------------------- | ----- |
+| **`overlaysWebView`** | <code>boolean</code> | Whether the statusbar is overlaid or not. Not available on Android 15+.                                                                   | <code>true</code>    | 1.0.0 |
+| **`style`**           | <code>string</code>  | <a href="#style">Style</a> of the text of the status bar.                                                                                 | <code>default</code> | 1.0.0 |
+| **`backgroundColor`** | <code>string</code>  | Color of the background of the statusbar in hex format, #RRGGBB. Doesn't work if `overlaysWebView` is true. Not available on Android 15+. | <code>#000000</code> | 1.0.0 |
+
+### Examples
+
+In `capacitor.config.json`:
+
+```json
+{
+  "plugins": {
+    "StatusBar": {
+      "overlaysWebView": false,
+      "style": "DARK",
+      "backgroundColor": "#ffffffff"
+    }
+  }
+}
+```
+
+In `capacitor.config.ts`:
+
+```ts
+/// <reference types="@capacitor/status-bar" />
+
+import { CapacitorConfig } from '@capacitor/cli';
+
+const config: CapacitorConfig = {
+  plugins: {
+    StatusBar: {
+      overlaysWebView: false,
+      style: "DARK",
+      backgroundColor: "#ffffffff",
+    },
+  },
+};
+
+export default config;
+```
+
+</docgen-config>
+
 ## API
 
 <docgen-index>
@@ -63,7 +127,10 @@ const showStatusBar = async () => {
 * [`hide(...)`](#hide)
 * [`getInfo()`](#getinfo)
 * [`setOverlaysWebView(...)`](#setoverlayswebview)
+* [`addListener('statusBarVisibilityChanged', ...)`](#addlistenerstatusbarvisibilitychanged-)
+* [`addListener('statusBarOverlayChanged', ...)`](#addlistenerstatusbaroverlaychanged-)
 * [Interfaces](#interfaces)
+* [Type Aliases](#type-aliases)
 * [Enums](#enums)
 
 </docgen-index>
@@ -95,8 +162,8 @@ setBackgroundColor(options: BackgroundColorOptions) => Promise<void>
 ```
 
 Set the background color of the status bar.
-
-This method is only supported on Android.
+Calling this function updates the foreground color of the status bar if the style is set to default, except on iOS versions lower than 17.
+Not available on Android 15+.
 
 | Param         | Type                                                                      |
 | ------------- | ------------------------------------------------------------------------- |
@@ -168,14 +235,55 @@ setOverlaysWebView(options: SetOverlaysWebViewOptions) => Promise<void>
 
 Set whether or not the status bar should overlay the webview to allow usage
 of the space underneath it.
-
-This method is only supported on Android.
+Not available on Android 15+.
 
 | Param         | Type                                                                            |
 | ------------- | ------------------------------------------------------------------------------- |
 | **`options`** | <code><a href="#setoverlayswebviewoptions">SetOverlaysWebViewOptions</a></code> |
 
 **Since:** 1.0.0
+
+--------------------
+
+
+### addListener('statusBarVisibilityChanged', ...)
+
+```typescript
+addListener(eventName: 'statusBarVisibilityChanged', listenerFunc: VisibilityChangeListener) => Promise<PluginListenerHandle>
+```
+
+Listen for status bar visibility changes.
+Fired when hide or show methods get called.
+
+| Param              | Type                                                                          |
+| ------------------ | ----------------------------------------------------------------------------- |
+| **`eventName`**    | <code>'statusBarVisibilityChanged'</code>                                     |
+| **`listenerFunc`** | <code><a href="#visibilitychangelistener">VisibilityChangeListener</a></code> |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
+
+**Since:** 7.0.0
+
+--------------------
+
+
+### addListener('statusBarOverlayChanged', ...)
+
+```typescript
+addListener(eventName: 'statusBarOverlayChanged', listenerFunc: OverlayChangeListener) => Promise<PluginListenerHandle>
+```
+
+Listen for status bar overlay changes.
+Fired when setOverlaysWebView gets called.
+
+| Param              | Type                                                                    |
+| ------------------ | ----------------------------------------------------------------------- |
+| **`eventName`**    | <code>'statusBarOverlayChanged'</code>                                  |
+| **`listenerFunc`** | <code><a href="#overlaychangelistener">OverlayChangeListener</a></code> |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
+
+**Since:** 7.0.0
 
 --------------------
 
@@ -192,9 +300,9 @@ This method is only supported on Android.
 
 #### BackgroundColorOptions
 
-| Prop        | Type                | Description                                                                                 | Since |
-| ----------- | ------------------- | ------------------------------------------------------------------------------------------- | ----- |
-| **`color`** | <code>string</code> | A hex color to which the status bar color is set. This option is only supported on Android. | 1.0.0 |
+| Prop        | Type                | Description                                       | Since |
+| ----------- | ------------------- | ------------------------------------------------- | ----- |
+| **`color`** | <code>string</code> | A hex color to which the status bar color is set. | 1.0.0 |
 
 
 #### AnimationOptions
@@ -206,12 +314,13 @@ This method is only supported on Android.
 
 #### StatusBarInfo
 
-| Prop           | Type                                    | Description                                                                         | Since |
-| -------------- | --------------------------------------- | ----------------------------------------------------------------------------------- | ----- |
-| **`visible`**  | <code>boolean</code>                    | Whether the status bar is visible or not.                                           | 1.0.0 |
-| **`style`**    | <code><a href="#style">Style</a></code> | The current status bar style.                                                       | 1.0.0 |
-| **`color`**    | <code>string</code>                     | The current status bar color. This option is only supported on Android.             | 1.0.0 |
-| **`overlays`** | <code>boolean</code>                    | Whether the statusbar is overlaid or not. This option is only supported on Android. | 1.0.0 |
+| Prop           | Type                                    | Description                                | Since |
+| -------------- | --------------------------------------- | ------------------------------------------ | ----- |
+| **`visible`**  | <code>boolean</code>                    | Whether the status bar is visible or not.  | 1.0.0 |
+| **`style`**    | <code><a href="#style">Style</a></code> | The current status bar style.              | 1.0.0 |
+| **`color`**    | <code>string</code>                     | The current status bar color.              | 1.0.0 |
+| **`overlays`** | <code>boolean</code>                    | Whether the status bar is overlaid or not. | 1.0.0 |
+| **`height`**   | <code>number</code>                     | The height of the status bar.              | 7.0.0 |
 
 
 #### SetOverlaysWebViewOptions
@@ -221,16 +330,36 @@ This method is only supported on Android.
 | **`overlay`** | <code>boolean</code> | Whether to overlay the status bar or not. | 1.0.0 |
 
 
+#### PluginListenerHandle
+
+| Prop         | Type                                      |
+| ------------ | ----------------------------------------- |
+| **`remove`** | <code>() =&gt; Promise&lt;void&gt;</code> |
+
+
+### Type Aliases
+
+
+#### VisibilityChangeListener
+
+<code>(info: <a href="#statusbarinfo">StatusBarInfo</a>): void</code>
+
+
+#### OverlayChangeListener
+
+<code>(info: <a href="#statusbarinfo">StatusBarInfo</a>): void</code>
+
+
 ### Enums
 
 
 #### Style
 
-| Members       | Value                  | Description                                                                                                                                                                                                                                            | Since |
-| ------------- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
-| **`Dark`**    | <code>'DARK'</code>    | Light text for dark backgrounds.                                                                                                                                                                                                                       | 1.0.0 |
-| **`Light`**   | <code>'LIGHT'</code>   | Dark text for light backgrounds.                                                                                                                                                                                                                       | 1.0.0 |
-| **`Default`** | <code>'DEFAULT'</code> | The style is based on the device appearance. If the device is using Dark mode, the statusbar text will be light. If the device is using Light mode, the statusbar text will be dark. On Android the default will be the one the app was launched with. | 1.0.0 |
+| Members       | Value                  | Description                                                                                                                                                                          | Since |
+| ------------- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
+| **`Dark`**    | <code>'DARK'</code>    | Light text for dark backgrounds.                                                                                                                                                     | 1.0.0 |
+| **`Light`**   | <code>'LIGHT'</code>   | Dark text for light backgrounds.                                                                                                                                                     | 1.0.0 |
+| **`Default`** | <code>'DEFAULT'</code> | The style is based on the device appearance. If the device is using Dark mode, the statusbar text will be light. If the device is using Light mode, the statusbar text will be dark. | 1.0.0 |
 
 
 #### Animation

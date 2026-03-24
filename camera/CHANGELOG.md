@@ -3,6 +3,95 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [8.0.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@8.0.1...@capacitor/camera@8.0.2) (2026-03-06)
+
+### Bug Fixes
+
+- **camera:** Allow cancelation of sheet in Web, requires pwa-elements 3.4.0 or higher ([#2284](https://github.com/ionic-team/capacitor-plugins/issues/2284)) ([06cf611](https://github.com/ionic-team/capacitor-plugins/commit/06cf611be3822cd41be8a4e314bf4a1b4e9b551d))
+
+## [8.0.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@8.0.0...@capacitor/camera@8.0.1) (2026-02-12)
+
+### Bug Fixes
+
+- AGP 9.0 no longer supporting `proguard-android.txt` ([#2468](https://github.com/ionic-team/capacitor-plugins/issues/2468)) ([a8760a9](https://github.com/ionic-team/capacitor-plugins/commit/a8760a989f594bc406d0ec7da58125d17447cae4))
+
+# [8.0.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@8.0.0-beta.0...@capacitor/camera@8.0.0) (2025-12-08)
+
+**Note:** Version bump only for package @capacitor/camera
+
+# [8.0.0-beta.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@8.0.0-alpha.1...@capacitor/camera@8.0.0-beta.0) (2025-11-14)
+
+**Note:** Version bump only for package @capacitor/camera
+
+# [8.0.0-alpha.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@7.0.2...@capacitor/camera@8.0.0-alpha.1) (2025-09-08)
+
+**Note:** Version bump only for package @capacitor/camera
+
+## [7.0.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@7.0.1...@capacitor/camera@7.0.2) (2025-08-05)
+
+### Bug Fixes
+
+- **camera:** requestPermissions on Android 13+ ([#2393](https://github.com/ionic-team/capacitor-plugins/issues/2393)) ([4d707a7](https://github.com/ionic-team/capacitor-plugins/commit/4d707a7353de44c9663f661ce869cb99429b1ca5))
+
+## [7.0.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@7.0.0...@capacitor/camera@7.0.1) (2025-04-02)
+
+**Note:** Version bump only for package @capacitor/camera
+
+# [7.0.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@7.0.0-rc.0...@capacitor/camera@7.0.0) (2025-01-20)
+
+**Note:** Version bump only for package @capacitor/camera
+
+# [7.0.0-rc.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@7.0.0-alpha.2...@capacitor/camera@7.0.0-rc.0) (2025-01-13)
+
+**Note:** Version bump only for package @capacitor/camera
+
+# [7.0.0-alpha.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@7.0.0-alpha.1...@capacitor/camera@7.0.0-alpha.2) (2024-12-19)
+
+**Note:** Version bump only for package @capacitor/camera
+
+# [7.0.0-alpha.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@6.0.2...@capacitor/camera@7.0.0-alpha.1) (2024-12-16)
+
+### Bug Fixes
+
+- **camera:** Android dialog not fully showing when in landscape ([#2276](https://github.com/ionic-team/capacitor-plugins/issues/2276)) ([123193b](https://github.com/ionic-team/capacitor-plugins/commit/123193b9cf19784c69e1fd382516a319779e36a5))
+
+### Features
+
+- **camera:** only request permission to save to the gallery for Android <= 9 ([#2222](https://github.com/ionic-team/capacitor-plugins/issues/2222)) ([30da38e](https://github.com/ionic-team/capacitor-plugins/commit/30da38ee9a92da1c5bbeb301fa6371a43365dfeb))
+
+## [6.0.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@6.0.1...@capacitor/camera@6.0.2) (2024-08-08)
+
+**Note:** Version bump only for package @capacitor/camera
+
+## [6.0.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@6.0.0...@capacitor/camera@6.0.1) (2024-06-13)
+
+### Bug Fixes
+
+- **ios:** iOS panorama photos selected through CameraPlugin are corrupted ([#2090](https://github.com/ionic-team/capacitor-plugins/issues/2090)) ([998e495](https://github.com/ionic-team/capacitor-plugins/commit/998e4950d539cb2ebe38818d7f6046ac4b4b8950))
+- **ios:** Picking ProRAW pictures from Gallery ([#2098](https://github.com/ionic-team/capacitor-plugins/issues/2098)) ([20b9e26](https://github.com/ionic-team/capacitor-plugins/commit/20b9e26b1b0b10228c85049b4093a5ed9cfe64c5))
+
+# [6.0.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@6.0.0-rc.1...@capacitor/camera@6.0.0) (2024-04-15)
+
+**Note:** Version bump only for package @capacitor/camera
+
+# [6.0.0-rc.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@6.0.0-rc.0...@capacitor/camera@6.0.0-rc.1) (2024-03-25)
+
+**Note:** Version bump only for package @capacitor/camera
+
+# [6.0.0-rc.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@6.0.0-beta.1...@capacitor/camera@6.0.0-rc.0) (2024-02-07)
+
+**Note:** Version bump only for package @capacitor/camera
+
+# [6.0.0-beta.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@6.0.0-beta.0...@capacitor/camera@6.0.0-beta.1) (2023-12-14)
+
+### Bug Fixes
+
+- **camera:** reject promise on web input cancel event ([#1958](https://github.com/ionic-team/capacitor-plugins/issues/1958)) ([d218ba6](https://github.com/ionic-team/capacitor-plugins/commit/d218ba6c53250b990f4913bd121915cfd3d65d72))
+
+# [6.0.0-beta.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@6.0.0-alpha.2...@capacitor/camera@6.0.0-beta.0) (2023-12-13)
+
+**Note:** Version bump only for package @capacitor/camera
+
 # [6.0.0-alpha.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@6.0.0-alpha.1...@capacitor/camera@6.0.0-alpha.2) (2023-11-15)
 
 **Note:** Version bump only for package @capacitor/camera
@@ -10,6 +99,12 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 # [6.0.0-alpha.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@5.0.7...@capacitor/camera@6.0.0-alpha.1) (2023-11-08)
 
 **Note:** Version bump only for package @capacitor/camera
+
+## [5.0.8](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@5.0.7...@capacitor/camera@5.0.8) (2023-12-15)
+
+### Bug Fixes
+
+- **camera:** reject promise on web input cancel event ([#1964](https://github.com/ionic-team/capacitor-plugins/issues/1964)) ([77dc373](https://github.com/ionic-team/capacitor-plugins/commit/77dc373b41fb5fee9fb7acdb511564043494bb10))
 
 ## [5.0.7](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@5.0.6...@capacitor/camera@5.0.7) (2023-08-09)
 

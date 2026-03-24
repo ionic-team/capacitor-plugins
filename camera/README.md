@@ -21,7 +21,30 @@ Read about [Configuring `Info.plist`](https://capacitorjs.com/docs/ios/configura
 
 ## Android
 
-This API requires no permissions, unless using `saveToGallery: true`, in that case the following permissions should be added to your `AndroidManifest.xml`:
+When picking existing images from the device gallery, the Android Photo Picker component is now used. The Photo Picker is available on devices that meet the following criteria:
+
+- Run Android 11 (API level 30) or higher
+- Receive changes to Modular System Components through Google System Updates
+
+Older devices and Android Go devices running Android 11 or 12 that support Google Play services can install a backported version of the photo picker. To enable the automatic installation of the backported photo picker module through Google Play services, add the following entry to the `<application>` tag in your `AndroidManifest.xml` file:
+
+```xml
+<!-- Trigger Google Play services to install the backported photo picker module. -->
+<!--suppress AndroidDomInspection -->
+<service android:name="com.google.android.gms.metadata.ModuleDependencies"
+    android:enabled="false"
+    android:exported="false"
+    tools:ignore="MissingClass">
+    <intent-filter>
+        <action android:name="com.google.android.gms.metadata.MODULE_DEPENDENCIES" />
+    </intent-filter>
+    <meta-data android:name="photopicker_activity:0:required" android:value="" />
+</service>
+```
+
+If that entry is not added, the devices that don't support the Photo Picker, the Photo Picker component fallbacks to `Intent.ACTION_OPEN_DOCUMENT`.
+
+The Camera plugin requires no permissions, unless using `saveToGallery: true`, in that case the following permissions should be added to your `AndroidManifest.xml`:
 
 ```xml
 <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
@@ -45,8 +68,8 @@ Additionally, because the Camera API launches a separate Activity to handle taki
 
 This plugin will use the following project variables (defined in your app's `variables.gradle` file):
 
-- `androidxExifInterfaceVersion`: version of `androidx.exifinterface:exifinterface` (default: `1.3.6`)
-- `androidxMaterialVersion`: version of `com.google.android.material:material` (default: `1.10.0`)
+- `androidxExifInterfaceVersion`: version of `androidx.exifinterface:exifinterface` (default: `1.4.1`)
+- `androidxMaterialVersion`: version of `com.google.android.material:material` (default: `1.13.0`)
 
 ## PWA Notes
 
@@ -121,7 +144,6 @@ pickImages(options: GalleryImageOptions) => Promise<GalleryPhotos>
 ```
 
 Allows the user to pick multiple pictures from the photo gallery.
-On iOS 13 and older it only allows to pick one picture.
 
 | Param         | Type                                                                |
 | ------------- | ------------------------------------------------------------------- |
@@ -140,9 +162,9 @@ On iOS 13 and older it only allows to pick one picture.
 pickLimitedLibraryPhotos() => Promise<GalleryPhotos>
 ```
 
-iOS 14+ Only: Allows the user to update their limited photo library selection.
-On iOS 15+ returns all the limited photos after the picker dismissal.
-On iOS 14 or if the user gave full access to the photos it returns an empty array.
+Allows the user to update their limited photo library selection.
+Returns all the limited photos after the picker dismissal.
+If instead the user gave full access to the photos it returns an empty array.
 
 **Returns:** <code>Promise&lt;<a href="#galleryphotos">GalleryPhotos</a>&gt;</code>
 
@@ -157,7 +179,7 @@ On iOS 14 or if the user gave full access to the photos it returns an empty arra
 getLimitedLibraryPhotos() => Promise<GalleryPhotos>
 ```
 
-iOS 14+ Only: Return an array of photos selected from the limited photo library.
+Return an array of photos selected from the limited photo library.
 
 **Returns:** <code>Promise&lt;<a href="#galleryphotos">GalleryPhotos</a>&gt;</code>
 
@@ -221,7 +243,7 @@ Request camera and photo album permissions
 | Prop                     | Type                                                          | Description                                                                                                                                                                                                                                                                | Default                             | Since |
 | ------------------------ | ------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------- | ----- |
 | **`quality`**            | <code>number</code>                                           | The quality of image to return as JPEG, from 0-100 Note: This option is only supported on Android and iOS                                                                                                                                                                  |                                     | 1.0.0 |
-| **`allowEditing`**       | <code>boolean</code>                                          | Whether to allow the user to crop or make small edits (platform specific). On iOS 14+ it's only supported for <a href="#camerasource">CameraSource.Camera</a>, but not for <a href="#camerasource">CameraSource.Photos</a>.                                                |                                     | 1.0.0 |
+| **`allowEditing`**       | <code>boolean</code>                                          | Whether to allow the user to crop or make small edits (platform specific). On iOS it's only supported for <a href="#camerasource">CameraSource.Camera</a>, but not for <a href="#camerasource">CameraSource.Photos</a>.                                                    |                                     | 1.0.0 |
 | **`resultType`**         | <code><a href="#cameraresulttype">CameraResultType</a></code> | How the data should be returned. Currently, only 'Base64', 'DataUrl' or 'Uri' is supported                                                                                                                                                                                 |                                     | 1.0.0 |
 | **`saveToGallery`**      | <code>boolean</code>                                          | Whether to save the photo to the gallery. If the photo was picked from the gallery, it will only be saved if edited.                                                                                                                                                       | <code>: false</code>                | 1.0.0 |
 | **`width`**              | <code>number</code>                                           | The desired maximum width of the saved image. The aspect ratio is respected.                                                                                                                                                                                               |                                     | 1.0.0 |

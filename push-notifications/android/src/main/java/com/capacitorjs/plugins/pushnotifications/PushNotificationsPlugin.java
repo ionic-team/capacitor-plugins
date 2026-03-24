@@ -64,8 +64,7 @@ public class PushNotificationsPlugin extends Plugin {
                 if (key.equals("google.message_id")) {
                     notificationJson.put("id", bundle.getString(key));
                 } else {
-                    String valueStr = bundle.getString(key);
-                    dataObject.put(key, valueStr);
+                    dataObject.put(key, bundle.get(key));
                 }
             }
             notificationJson.put("data", dataObject);
@@ -101,18 +100,15 @@ public class PushNotificationsPlugin extends Plugin {
     @PluginMethod
     public void register(PluginCall call) {
         FirebaseMessaging.getInstance().setAutoInitEnabled(true);
-        FirebaseMessaging
-            .getInstance()
+        FirebaseMessaging.getInstance()
             .getToken()
-            .addOnCompleteListener(
-                task -> {
-                    if (!task.isSuccessful()) {
-                        sendError(task.getException().getLocalizedMessage());
-                        return;
-                    }
-                    sendToken(task.getResult());
+            .addOnCompleteListener((task) -> {
+                if (!task.isSuccessful()) {
+                    sendError(task.getException().getLocalizedMessage());
+                    return;
                 }
-            );
+                sendToken(task.getResult());
+            });
         call.resolve();
     }
 
@@ -126,33 +122,31 @@ public class PushNotificationsPlugin extends Plugin {
     @PluginMethod
     public void getDeliveredNotifications(PluginCall call) {
         JSArray notifications = new JSArray();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            StatusBarNotification[] activeNotifications = notificationManager.getActiveNotifications();
+        StatusBarNotification[] activeNotifications = notificationManager.getActiveNotifications();
 
-            for (StatusBarNotification notif : activeNotifications) {
-                JSObject jsNotif = new JSObject();
+        for (StatusBarNotification notif : activeNotifications) {
+            JSObject jsNotif = new JSObject();
 
-                jsNotif.put("id", notif.getId());
-                jsNotif.put("tag", notif.getTag());
+            jsNotif.put("id", notif.getId());
+            jsNotif.put("tag", notif.getTag());
 
-                Notification notification = notif.getNotification();
-                if (notification != null) {
-                    jsNotif.put("title", notification.extras.getCharSequence(Notification.EXTRA_TITLE));
-                    jsNotif.put("body", notification.extras.getCharSequence(Notification.EXTRA_TEXT));
-                    jsNotif.put("group", notification.getGroup());
-                    jsNotif.put("groupSummary", 0 != (notification.flags & Notification.FLAG_GROUP_SUMMARY));
+            Notification notification = notif.getNotification();
+            if (notification != null) {
+                jsNotif.put("title", notification.extras.getCharSequence(Notification.EXTRA_TITLE));
+                jsNotif.put("body", notification.extras.getCharSequence(Notification.EXTRA_TEXT));
+                jsNotif.put("group", notification.getGroup());
+                jsNotif.put("groupSummary", 0 != (notification.flags & Notification.FLAG_GROUP_SUMMARY));
 
-                    JSObject extras = new JSObject();
+                JSObject extras = new JSObject();
 
-                    for (String key : notification.extras.keySet()) {
-                        extras.put(key, notification.extras.getString(key));
-                    }
-
-                    jsNotif.put("data", extras);
+                for (String key : notification.extras.keySet()) {
+                    extras.put(key, notification.extras.get(key));
                 }
 
-                notifications.put(jsNotif);
+                jsNotif.put("data", extras);
             }
+
+            notifications.put(jsNotif);
         }
 
         JSObject result = new JSObject();
@@ -280,13 +274,8 @@ public class PushNotificationsPlugin extends Plugin {
                             bundle
                         );
 
-                        CommonNotificationBuilder.DisplayNotificationInfo notificationInfo = CommonNotificationBuilder.createNotificationInfo(
-                            getContext(),
-                            getContext(),
-                            params,
-                            channelId,
-                            bundle
-                        );
+                        CommonNotificationBuilder.DisplayNotificationInfo notificationInfo =
+                            CommonNotificationBuilder.createNotificationInfo(getContext(), getContext(), params, channelId, bundle);
 
                         notificationManager.notify(notificationInfo.tag, notificationInfo.id, notificationInfo.notificationBuilder.build());
                     }

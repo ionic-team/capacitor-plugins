@@ -51,7 +51,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -104,6 +103,7 @@ public class CameraPlugin extends Plugin {
     private static final String UNABLE_TO_PROCESS_IMAGE = "Unable to process image";
     private static final String IMAGE_EDIT_ERROR = "Unable to edit image";
     private static final String IMAGE_GALLERY_SAVE_ERROR = "Unable to save the image in the gallery";
+    private static final String USER_CANCELLED = "User cancelled photos app";
 
     private String imageFileSavePath;
     private String imageEditedFileSavePath;
@@ -171,7 +171,7 @@ public class CameraPlugin extends Plugin {
         fragment.setTitle(call.getString("promptLabelHeader", "Photo"));
         fragment.setOptions(
             options,
-            index -> {
+            (index) -> {
                 if (index == 0) {
                     settings.setSource(CameraSource.PHOTOS);
                     openPhotos(call);
@@ -180,7 +180,7 @@ public class CameraPlugin extends Plugin {
                     openCamera(call);
                 }
             },
-            () -> call.reject("User cancelled photos app")
+            () -> call.reject(USER_CANCELLED)
         );
         fragment.show(getActivity().getSupportFragmentManager(), "capacitorModalsActionSheet");
     }
@@ -204,6 +204,17 @@ public class CameraPlugin extends Plugin {
         boolean hasGalleryPerms = getPermissionState(SAVE_GALLERY) == PermissionState.GRANTED;
 
         // If we want to save to the gallery, we need two permissions
+        // actually we only need permissions to save to gallery for Android <= 9 (API 28)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            // we might still need to request permission for the camera
+            if (!hasCameraPerms) {
+                requestPermissionForAlias(CAMERA, call, "cameraPermissionsCallback");
+                return false;
+            }
+            return true;
+        }
+
+        // we need to request permissions to save to gallery for Android <= 9
         if (settings.isSaveToGallery() && !(hasCameraPerms && hasGalleryPerms) && isFirstRequest) {
             isFirstRequest = false;
             String[] aliases;
@@ -245,13 +256,7 @@ public class CameraPlugin extends Plugin {
 
     @Override
     protected void requestPermissionForAliases(@NonNull String[] aliases, @NonNull PluginCall call, @NonNull String callbackName) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            for (int i = 0; i < aliases.length; i++) {
-                if (aliases[i].equals(SAVE_GALLERY)) {
-                    aliases[i] = PHOTOS;
-                }
-            }
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             for (int i = 0; i < aliases.length; i++) {
                 if (aliases[i].equals(SAVE_GALLERY)) {
                     aliases[i] = READ_EXTERNAL_STORAGE;
@@ -346,58 +351,46 @@ public class CameraPlugin extends Plugin {
     private void openPhotos(final PluginCall call, boolean multiple) {
         try {
             if (multiple) {
-                pickMultipleMedia =
-                    registerActivityResultLauncher(
-                        getContractForCall(call),
-                        uris -> {
-                            if (!uris.isEmpty()) {
-                                Executor executor = Executors.newSingleThreadExecutor();
-                                executor.execute(
-                                    () -> {
-                                        JSObject ret = new JSObject();
-                                        JSArray photos = new JSArray();
-                                        for (Uri imageUri : uris) {
-                                            try {
-                                                JSObject processResult = processPickedImages(imageUri);
-                                                if (
-                                                    processResult.getString("error") != null && !processResult.getString("error").isEmpty()
-                                                ) {
-                                                    call.reject(processResult.getString("error"));
-                                                    return;
-                                                } else {
-                                                    photos.put(processResult);
-                                                }
-                                            } catch (SecurityException ex) {
-                                                call.reject("SecurityException");
-                                            }
-                                        }
-                                        ret.put("photos", photos);
-                                        call.resolve(ret);
+                pickMultipleMedia = registerActivityResultLauncher(getContractForCall(call), (uris) -> {
+                    if (!uris.isEmpty()) {
+                        Executor executor = Executors.newSingleThreadExecutor();
+                        executor.execute(() -> {
+                            JSObject ret = new JSObject();
+                            JSArray photos = new JSArray();
+                            for (Uri imageUri : uris) {
+                                try {
+                                    JSObject processResult = processPickedImages(imageUri);
+                                    if (processResult.getString("error") != null && !processResult.getString("error").isEmpty()) {
+                                        call.reject(processResult.getString("error"));
+                                        return;
+                                    } else {
+                                        photos.put(processResult);
                                     }
-                                );
-                            } else {
-                                call.reject("No images picked");
+                                } catch (SecurityException ex) {
+                                    call.reject("SecurityException");
+                                }
                             }
-                            pickMultipleMedia.unregister();
-                        }
-                    );
+                            ret.put("photos", photos);
+                            call.resolve(ret);
+                        });
+                    } else {
+                        call.reject(USER_CANCELLED);
+                    }
+                    pickMultipleMedia.unregister();
+                });
                 pickMultipleMedia.launch(
                     new PickVisualMediaRequest.Builder().setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE).build()
                 );
             } else {
-                pickMedia =
-                    registerActivityResultLauncher(
-                        new ActivityResultContracts.PickVisualMedia(),
-                        uri -> {
-                            if (uri != null) {
-                                imagePickedContentUri = uri;
-                                processPickedImage(uri, call);
-                            } else {
-                                call.reject("No image picked");
-                            }
-                            pickMedia.unregister();
-                        }
-                    );
+                pickMedia = registerActivityResultLauncher(new ActivityResultContracts.PickVisualMedia(), (uri) -> {
+                    if (uri != null) {
+                        imagePickedContentUri = uri;
+                        processPickedImage(uri, call);
+                    } else {
+                        call.reject(USER_CANCELLED);
+                    }
+                    pickMedia.unregister();
+                });
                 pickMedia.launch(
                     new PickVisualMediaRequest.Builder().setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE).build()
                 );
@@ -421,7 +414,7 @@ public class CameraPlugin extends Plugin {
         Bitmap bitmap = BitmapFactory.decodeFile(imageFileSavePath, bmOptions);
 
         if (bitmap == null) {
-            call.reject("User cancelled photos app");
+            call.reject(USER_CANCELLED);
             return;
         }
 
@@ -432,7 +425,7 @@ public class CameraPlugin extends Plugin {
         settings = getSettings(call);
         Intent data = result.getData();
         if (data == null) {
-            call.reject("No image picked");
+            call.reject(USER_CANCELLED);
             return;
         }
 
@@ -714,7 +707,8 @@ public class CameraPlugin extends Plugin {
         try {
             bis = new ByteArrayInputStream(bitmapOutputStream.toByteArray());
             newUri = saveImage(u, bis);
-        } catch (IOException ex) {} finally {
+        } catch (IOException ex) {
+        } finally {
             if (bis != null) {
                 try {
                     bis.close();
@@ -798,11 +792,14 @@ public class CameraPlugin extends Plugin {
                 } catch (JSONException e) {}
             }
 
-            if (permsList != null && permsList.size() == 1 && (permsList.contains(CAMERA) || permsList.contains(PHOTOS))) {
-                // the only thing being asked for was the camera so we can just return the current state
+            if (
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU ||
+                (permsList != null && permsList.size() == 1 && (permsList.contains(CAMERA) || permsList.contains(PHOTOS)))
+            ) {
+                // either we're on Android 13+ (storage permissions do not apply)
+                // or the only thing being asked for was the camera so we can just return the current state
                 checkPermissions(call);
             } else {
-                // we need to ask about gallery so request storage permissions
                 requestPermissionForAlias(SAVE_GALLERY, call, "checkPermissions");
             }
         }
@@ -860,10 +857,9 @@ public class CameraPlugin extends Plugin {
             List<ResolveInfo> resInfoList;
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                resInfoList =
-                    getContext()
-                        .getPackageManager()
-                        .queryIntentActivities(editIntent, PackageManager.ResolveInfoFlags.of(PackageManager.MATCH_DEFAULT_ONLY));
+                resInfoList = getContext()
+                    .getPackageManager()
+                    .queryIntentActivities(editIntent, PackageManager.ResolveInfoFlags.of(PackageManager.MATCH_DEFAULT_ONLY));
             } else {
                 resInfoList = legacyQueryIntentActivities(editIntent);
             }

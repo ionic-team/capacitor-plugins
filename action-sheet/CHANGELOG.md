@@ -3,6 +3,82 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [8.1.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/action-sheet@8.0.1...@capacitor/action-sheet@8.1.0) (2026-03-06)
+
+### Features
+
+- **action-sheet:** Add `cancelable` input option and and `canceled` output parameter ([#2285](https://github.com/ionic-team/capacitor-plugins/issues/2285)) ([251c62c](https://github.com/ionic-team/capacitor-plugins/commit/251c62c4d513f7baa51783799ab7505a4e2b075f))
+
+## [8.0.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/action-sheet@8.0.0...@capacitor/action-sheet@8.0.1) (2026-02-12)
+
+### Bug Fixes
+
+- AGP 9.0 no longer supporting `proguard-android.txt` ([#2468](https://github.com/ionic-team/capacitor-plugins/issues/2468)) ([a8760a9](https://github.com/ionic-team/capacitor-plugins/commit/a8760a989f594bc406d0ec7da58125d17447cae4))
+
+# [8.0.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/action-sheet@8.0.0-beta.0...@capacitor/action-sheet@8.0.0) (2025-12-08)
+
+**Note:** Version bump only for package @capacitor/action-sheet
+
+# [8.0.0-beta.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/action-sheet@8.0.0-alpha.1...@capacitor/action-sheet@8.0.0-beta.0) (2025-11-14)
+
+**Note:** Version bump only for package @capacitor/action-sheet
+
+# [8.0.0-alpha.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/action-sheet@7.0.2...@capacitor/action-sheet@8.0.0-alpha.1) (2025-09-08)
+
+**Note:** Version bump only for package @capacitor/action-sheet
+
+## [7.0.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/action-sheet@7.0.1...@capacitor/action-sheet@7.0.2) (2025-08-05)
+
+**Note:** Version bump only for package @capacitor/action-sheet
+
+## [7.0.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/action-sheet@7.0.0...@capacitor/action-sheet@7.0.1) (2025-04-02)
+
+**Note:** Version bump only for package @capacitor/action-sheet
+
+# [7.0.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/action-sheet@7.0.0-rc.0...@capacitor/action-sheet@7.0.0) (2025-01-20)
+
+**Note:** Version bump only for package @capacitor/action-sheet
+
+# [7.0.0-rc.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/action-sheet@7.0.0-alpha.2...@capacitor/action-sheet@7.0.0-rc.0) (2025-01-13)
+
+**Note:** Version bump only for package @capacitor/action-sheet
+
+# [7.0.0-alpha.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/action-sheet@7.0.0-alpha.1...@capacitor/action-sheet@7.0.0-alpha.2) (2024-12-19)
+
+**Note:** Version bump only for package @capacitor/action-sheet
+
+# [7.0.0-alpha.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/action-sheet@6.0.2...@capacitor/action-sheet@7.0.0-alpha.1) (2024-12-16)
+
+**Note:** Version bump only for package @capacitor/action-sheet
+
+## [6.0.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/action-sheet@6.0.1...@capacitor/action-sheet@6.0.2) (2024-08-08)
+
+**Note:** Version bump only for package @capacitor/action-sheet
+
+## [6.0.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/action-sheet@6.0.0...@capacitor/action-sheet@6.0.1) (2024-06-13)
+
+**Note:** Version bump only for package @capacitor/action-sheet
+
+# [6.0.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/action-sheet@6.0.0-rc.1...@capacitor/action-sheet@6.0.0) (2024-04-15)
+
+**Note:** Version bump only for package @capacitor/action-sheet
+
+# [6.0.0-rc.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/action-sheet@6.0.0-rc.0...@capacitor/action-sheet@6.0.0-rc.1) (2024-03-25)
+
+**Note:** Version bump only for package @capacitor/action-sheet
+
+# [6.0.0-rc.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/action-sheet@6.0.0-beta.1...@capacitor/action-sheet@6.0.0-rc.0) (2024-02-07)
+
+**Note:** Version bump only for package @capacitor/action-sheet
+
+# [6.0.0-beta.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/action-sheet@6.0.0-beta.0...@capacitor/action-sheet@6.0.0-beta.1) (2023-12-14)
+
+**Note:** Version bump only for package @capacitor/action-sheet
+
+# [6.0.0-beta.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/action-sheet@6.0.0-alpha.2...@capacitor/action-sheet@6.0.0-beta.0) (2023-12-13)
+
+**Note:** Version bump only for package @capacitor/action-sheet
+
 # [6.0.0-alpha.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/action-sheet@6.0.0-alpha.1...@capacitor/action-sheet@6.0.0-alpha.2) (2023-11-15)
 
 **Note:** Version bump only for package @capacitor/action-sheet

@@ -19,6 +19,7 @@ public class ActionSheetPlugin extends Plugin {
     @PluginMethod
     public void showActions(final PluginCall call) {
         String title = call.getString("title");
+        boolean cancelable = Boolean.TRUE.equals(call.getBoolean("cancelable", false));
         JSArray options = call.getArray("options");
         if (options == null) {
             call.reject("Must supply options");
@@ -39,19 +40,26 @@ public class ActionSheetPlugin extends Plugin {
             }
             implementation.setTitle(title);
             implementation.setOptions(actionOptions);
-            implementation.setCancelable(false);
-            implementation.setOnSelectedListener(
-                index -> {
-                    JSObject ret = new JSObject();
-                    ret.put("index", index);
-                    call.resolve(ret);
-                    implementation.dismiss();
-                }
-            );
+            implementation.setCancelable(cancelable);
+            if (cancelable) {
+                implementation.setOnCancelListener(() -> resolve(call, -1));
+            }
+            implementation.setOnSelectedListener((index) -> {
+                resolve(call, index);
+                implementation.dismiss();
+            });
             implementation.show(getActivity().getSupportFragmentManager(), "capacitorModalsActionSheet");
         } catch (JSONException ex) {
             Logger.error("JSON error processing an option for showActions", ex);
             call.reject("JSON error processing an option for showActions", ex);
         }
+    }
+
+    private void resolve(final PluginCall call, int selectedIndex) {
+        JSObject ret = new JSObject();
+        ret.put("index", selectedIndex);
+        ret.put("canceled", selectedIndex < 0);
+        call.resolve(ret);
+        implementation.dismiss();
     }
 }

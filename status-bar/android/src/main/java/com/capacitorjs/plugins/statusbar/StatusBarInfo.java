@@ -1,11 +1,14 @@
 package com.capacitorjs.plugins.statusbar;
 
-public class StatusBarInfo {
+import java.io.Serializable;
+
+public class StatusBarInfo implements Serializable {
 
     private boolean overlays;
     private boolean visible;
     private String style;
     private String color;
+    private int height;
 
     public boolean isOverlays() {
         return overlays;
@@ -37,5 +40,13 @@ public class StatusBarInfo {
 
     public void setColor(String color) {
         this.color = color;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
     }
 }

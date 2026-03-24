@@ -57,8 +57,8 @@ API to understand the data supplied in the 'accel' event.
 
 <docgen-index>
 
-* [`addListener('accel', ...)`](#addlisteneraccel)
-* [`addListener('orientation', ...)`](#addlistenerorientation)
+* [`addListener('accel', ...)`](#addlisteneraccel-)
+* [`addListener('orientation', ...)`](#addlistenerorientation-)
 * [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)

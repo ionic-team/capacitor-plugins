@@ -1,6 +1,0 @@
-{
-	"appId": "io.ionic.starter",
-	"appName": "e2e-tests",
-	"webDir": "build",
-	"bundledWebRuntime": false
-}

@@ -35,11 +35,11 @@ declare module '@capacitor/cli' {
       /**
        * Set the default notification sound for notifications.
        *
-       * On Android 26+ it sets the default channel sound and can't be
+       * On Android 8+ it sets the default channel sound and can't be
        * changed unless the app is uninstalled.
        *
        * If the audio file is not found, it will result in the default system
-       * sound being played on Android 21-25 and no sound on Android 26+.
+       * sound being played on Android 7.x and no sound on Android 8+.
        *
        * Only available for Android.
        *
@@ -103,9 +103,7 @@ export interface LocalNotificationsPlugin {
    *
    * @since 4.0.0
    */
-  removeDeliveredNotifications(
-    delivered: DeliveredNotifications,
-  ): Promise<void>;
+  removeDeliveredNotifications(delivered: DeliveredNotifications): Promise<void>;
 
   /**
    * Remove all the notifications from the notifications screen.
@@ -154,6 +152,30 @@ export interface LocalNotificationsPlugin {
    * @since 1.0.0
    */
   requestPermissions(): Promise<PermissionStatus>;
+
+  /**
+   * Direct user to the application settings screen to configure exact alarms.
+   *
+   * In the event that a user changes the settings from granted to denied, the application
+   * will restart and any notification scheduled with an exact alarm will be deleted.
+   *
+   * On Android < 12, the user will NOT be directed to the application settings screen, instead this function will
+   * return `granted`.
+   *
+   * Only available on Android.
+   *
+   * @since 6.0.0
+   */
+  changeExactNotificationSetting(): Promise<SettingsPermissionStatus>;
+
+  /**
+   * Check application setting for using exact alarms.
+   *
+   * Only available on Android.
+   *
+   * @since 6.0.0
+   */
+  checkExactNotificationSetting(): Promise<SettingsPermissionStatus>;
 
   /**
    * Listen for when notifications are displayed.
@@ -567,8 +589,8 @@ export interface LocalNotificationSchema {
    *
    * Recommended format is `.wav` because is supported by both iOS and Android.
    *
-   * Only available for iOS and Android < 26.
-   * For Android 26+ use channelId of a channel configured with the desired sound.
+   * Only available for iOS and Android 7.x.
+   * For Android 8+ use channelId of a channel configured with the desired sound.
    *
    * If the sound file is not found, (i.e. empty string or wrong name)
    * the default system notification sound will be used.
@@ -698,7 +720,7 @@ export interface LocalNotificationSchema {
    * [`NotificationCompat.Builder`](https://developer.android.com/reference/androidx/core/app/NotificationCompat.Builder)
    * with the provided value.
    *
-   * Only available for Android 26+.
+   * Only available for Android 8+.
    *
    * @since 1.0.0
    */
@@ -740,6 +762,15 @@ export interface LocalNotificationSchema {
    * @since 1.0.0
    */
   inboxList?: string[];
+
+  /**
+   * If true, notification will not appear while app is in the foreground.
+   *
+   * Only available for iOS.
+   *
+   * @since 5.0.0
+   */
+  silent?: boolean;
 }
 
 /**
@@ -769,8 +800,6 @@ export interface Schedule {
 
   /**
    * Allow this notification to fire while in [Doze](https://developer.android.com/training/monitoring-device-state/doze-standby)
-   *
-   * Only available for Android 23+.
    *
    * Note that these notifications can only fire [once per 9 minutes, per app](https://developer.android.com/training/monitoring-device-state/doze-standby#assessing_your_app).
    *
@@ -816,15 +845,7 @@ export interface ScheduleOn {
   second?: number;
 }
 
-export type ScheduleEvery =
-  | 'year'
-  | 'month'
-  | 'two-weeks'
-  | 'week'
-  | 'day'
-  | 'hour'
-  | 'minute'
-  | 'second';
+export type ScheduleEvery = 'year' | 'month' | 'two-weeks' | 'week' | 'day' | 'hour' | 'minute' | 'second';
 
 export interface ListChannelsResult {
   /**
@@ -842,6 +863,15 @@ export interface PermissionStatus {
    * @since 1.0.0
    */
   display: PermissionState;
+}
+
+export interface SettingsPermissionStatus {
+  /**
+   * Permission state of using exact alarms.
+   *
+   * @since 6.0.0
+   */
+  exact_alarm: PermissionState;
 }
 
 export interface ActionPerformed {

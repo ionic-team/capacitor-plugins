@@ -67,6 +67,49 @@ const checkAppLaunchUrl = async () => {
 };
 ```
 
+## Configuration
+
+<docgen-config>
+<!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
+
+| Prop                           | Type                 | Description                                                                    | Default            | Since |
+| ------------------------------ | -------------------- | ------------------------------------------------------------------------------ | ------------------ | ----- |
+| **`disableBackButtonHandler`** | <code>boolean</code> | Disable the plugin's default back button handling. Only available for Android. | <code>false</code> | 7.1.0 |
+
+### Examples
+
+In `capacitor.config.json`:
+
+```json
+{
+  "plugins": {
+    "App": {
+      "disableBackButtonHandler": true
+    }
+  }
+}
+```
+
+In `capacitor.config.ts`:
+
+```ts
+/// <reference types="@capacitor/app" />
+
+import { CapacitorConfig } from '@capacitor/cli';
+
+const config: CapacitorConfig = {
+  plugins: {
+    App: {
+      disableBackButtonHandler: true,
+    },
+  },
+};
+
+export default config;
+```
+
+</docgen-config>
+
 ## API
 
 <docgen-index>
@@ -77,12 +120,13 @@ const checkAppLaunchUrl = async () => {
 * [`getLaunchUrl()`](#getlaunchurl)
 * [`minimizeApp()`](#minimizeapp)
 * [`getAppLanguage()`](#getapplanguage)
-* [`addListener('appStateChange', ...)`](#addlistenerappstatechange)
-* [`addListener('pause', ...)`](#addlistenerpause)
-* [`addListener('resume', ...)`](#addlistenerresume)
-* [`addListener('appUrlOpen', ...)`](#addlistenerappurlopen)
-* [`addListener('appRestoredResult', ...)`](#addlistenerapprestoredresult)
-* [`addListener('backButton', ...)`](#addlistenerbackbutton)
+* [`toggleBackButtonHandler(...)`](#togglebackbuttonhandler)
+* [`addListener('appStateChange', ...)`](#addlistenerappstatechange-)
+* [`addListener('pause', ...)`](#addlistenerpause-)
+* [`addListener('resume', ...)`](#addlistenerresume-)
+* [`addListener('appUrlOpen', ...)`](#addlistenerappurlopen-)
+* [`addListener('appRestoredResult', ...)`](#addlistenerapprestoredresult-)
+* [`addListener('backButton', ...)`](#addlistenerbackbutton-)
 * [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
@@ -167,7 +211,6 @@ Only available for Android.
 
 --------------------
 
-
 ### getAppLanguage()
 
 ```typescript
@@ -182,6 +225,23 @@ Get the app specific language locale code.
 
 --------------------
 
+### toggleBackButtonHandler(...)
+
+```typescript
+toggleBackButtonHandler(options: ToggleBackButtonHandlerOptions) => Promise<void>
+```
+
+Enables or disables the plugin's back button handling during runtime.
+
+Only available for Android.
+
+| Param         | Type                                                                                      |
+| ------------- | ----------------------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#togglebackbuttonhandleroptions">ToggleBackButtonHandlerOptions</a></code> |
+
+**Since:** 7.1.0
+
+--------------------
 
 ### addListener('appStateChange', ...)
 
@@ -379,13 +439,17 @@ Remove all native listeners for this plugin
 | --------- | ------------------- | ----------------------------- | ----- |
 | **`url`** | <code>string</code> | The url used to open the app. | 1.0.0 |
 
-
 #### AppLanguageCode
 
 | Prop        | Type                | Description                           | Since |
 | ----------- | ------------------- | ------------------------------------- | ----- |
 | **`value`** | <code>string</code> | Two or Three character language code. | 5.1.0 |
 
+#### ToggleBackButtonHandlerOptions
+
+| Prop          | Type                 | Description                                                          | Since |
+| ------------- | -------------------- | -------------------------------------------------------------------- | ----- |
+| **`enabled`** | <code>boolean</code> | Indicates whether to enable or disable default back button handling. | 7.1.0 |
 
 #### PluginListenerHandle
 

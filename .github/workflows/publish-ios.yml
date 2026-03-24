@@ -8,20 +8,22 @@ on:
         required: true
 jobs:
   publish-ios:
-    runs-on: macos-13
+    runs-on: macos-15
     if: github.event.inputs.plugins != '[]'
     timeout-minutes: 30
     strategy:
       matrix:
         plugin: ${{ fromJson(github.event.inputs.plugins) }}
     steps:
-      - run: sudo xcode-select --switch /Applications/Xcode_15.0.app
-      - uses: actions/setup-node@v3
+      - run: sudo xcode-select --switch /Applications/Xcode_26.0.app
+      - run: xcrun simctl list > /dev/null
+      - run: xcodebuild -downloadPlatform iOS
+      - uses: actions/setup-node@v6
         with:
-          node-version: 16
-      - uses: actions/checkout@v3
+          node-version: 22
+      - uses: actions/checkout@v5
       - name: Install Cocoapods
-        run: | 
+        run: |
           gem install cocoapods
       - name: Deploy to Cocoapods
         run: |

@@ -1,7 +1,0 @@
-{
-  "name": "e2e-tests",
-  "integrations": {
-    "capacitor": {}
-  },
-  "type": "react"
-}

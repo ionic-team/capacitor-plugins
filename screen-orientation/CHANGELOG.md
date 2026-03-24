@@ -3,6 +3,78 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [8.0.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/screen-orientation@8.0.0...@capacitor/screen-orientation@8.0.1) (2026-02-12)
+
+### Bug Fixes
+
+- AGP 9.0 no longer supporting `proguard-android.txt` ([#2468](https://github.com/ionic-team/capacitor-plugins/issues/2468)) ([a8760a9](https://github.com/ionic-team/capacitor-plugins/commit/a8760a989f594bc406d0ec7da58125d17447cae4))
+
+# [8.0.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/screen-orientation@8.0.0-beta.0...@capacitor/screen-orientation@8.0.0) (2025-12-08)
+
+**Note:** Version bump only for package @capacitor/screen-orientation
+
+# [8.0.0-beta.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/screen-orientation@8.0.0-alpha.1...@capacitor/screen-orientation@8.0.0-beta.0) (2025-11-14)
+
+**Note:** Version bump only for package @capacitor/screen-orientation
+
+# [8.0.0-alpha.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/screen-orientation@7.0.2...@capacitor/screen-orientation@8.0.0-alpha.1) (2025-09-08)
+
+**Note:** Version bump only for package @capacitor/screen-orientation
+
+## [7.0.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/screen-orientation@7.0.1...@capacitor/screen-orientation@7.0.2) (2025-08-05)
+
+**Note:** Version bump only for package @capacitor/screen-orientation
+
+## [7.0.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/screen-orientation@7.0.0...@capacitor/screen-orientation@7.0.1) (2025-04-02)
+
+**Note:** Version bump only for package @capacitor/screen-orientation
+
+# [7.0.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/screen-orientation@7.0.0-rc.0...@capacitor/screen-orientation@7.0.0) (2025-01-20)
+
+**Note:** Version bump only for package @capacitor/screen-orientation
+
+# [7.0.0-rc.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/screen-orientation@7.0.0-alpha.2...@capacitor/screen-orientation@7.0.0-rc.0) (2025-01-13)
+
+**Note:** Version bump only for package @capacitor/screen-orientation
+
+# [7.0.0-alpha.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/screen-orientation@7.0.0-alpha.1...@capacitor/screen-orientation@7.0.0-alpha.2) (2024-12-19)
+
+**Note:** Version bump only for package @capacitor/screen-orientation
+
+# [7.0.0-alpha.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/screen-orientation@6.0.2...@capacitor/screen-orientation@7.0.0-alpha.1) (2024-12-16)
+
+**Note:** Version bump only for package @capacitor/screen-orientation
+
+## [6.0.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/screen-orientation@6.0.1...@capacitor/screen-orientation@6.0.2) (2024-08-08)
+
+**Note:** Version bump only for package @capacitor/screen-orientation
+
+## [6.0.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/screen-orientation@6.0.0...@capacitor/screen-orientation@6.0.1) (2024-06-13)
+
+**Note:** Version bump only for package @capacitor/screen-orientation
+
+# [6.0.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/screen-orientation@6.0.0-rc.1...@capacitor/screen-orientation@6.0.0) (2024-04-15)
+
+**Note:** Version bump only for package @capacitor/screen-orientation
+
+# [6.0.0-rc.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/screen-orientation@6.0.0-rc.0...@capacitor/screen-orientation@6.0.0-rc.1) (2024-03-25)
+
+**Note:** Version bump only for package @capacitor/screen-orientation
+
+# [6.0.0-rc.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/screen-orientation@6.0.0-beta.1...@capacitor/screen-orientation@6.0.0-rc.0) (2024-02-07)
+
+### Bug Fixes
+
+- **screen-orientation:** Add OrientationLockType ([#1914](https://github.com/ionic-team/capacitor-plugins/issues/1914)) ([bc61f5c](https://github.com/ionic-team/capacitor-plugins/commit/bc61f5cd82fecb11fa039919f555d5b2596071ab))
+
+# [6.0.0-beta.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/screen-orientation@6.0.0-beta.0...@capacitor/screen-orientation@6.0.0-beta.1) (2023-12-14)
+
+**Note:** Version bump only for package @capacitor/screen-orientation
+
+# [6.0.0-beta.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/screen-orientation@6.0.0-alpha.2...@capacitor/screen-orientation@6.0.0-beta.0) (2023-12-13)
+
+**Note:** Version bump only for package @capacitor/screen-orientation
+
 # [6.0.0-alpha.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/screen-orientation@6.0.0-alpha.1...@capacitor/screen-orientation@6.0.0-alpha.2) (2023-11-15)
 
 **Note:** Version bump only for package @capacitor/screen-orientation

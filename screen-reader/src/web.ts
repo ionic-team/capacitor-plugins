@@ -9,9 +9,7 @@ export class ScreenReaderWeb extends WebPlugin implements ScreenReaderPlugin {
 
   async speak(options: SpeakOptions): Promise<void> {
     if (!('speechSynthesis' in window)) {
-      throw this.unavailable(
-        'Browser does not support the SpeechSynthesis API',
-      );
+      throw this.unavailable('Browser does not support the SpeechSynthesis API');
     }
 
     const utterance = new SpeechSynthesisUtterance(options.value);

@@ -3,6 +3,88 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [8.0.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/browser@8.0.1...@capacitor/browser@8.0.2) (2026-03-06)
+
+### Bug Fixes
+
+- **browser:** stop using deprecated dismissVC/presentVC ([#2477](https://github.com/ionic-team/capacitor-plugins/issues/2477)) ([16e66d5](https://github.com/ionic-team/capacitor-plugins/commit/16e66d5547d0802f30d77073c006a3566b18bf83))
+
+## [8.0.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/browser@8.0.0...@capacitor/browser@8.0.1) (2026-02-12)
+
+### Bug Fixes
+
+- AGP 9.0 no longer supporting `proguard-android.txt` ([#2468](https://github.com/ionic-team/capacitor-plugins/issues/2468)) ([a8760a9](https://github.com/ionic-team/capacitor-plugins/commit/a8760a989f594bc406d0ec7da58125d17447cae4))
+
+# [8.0.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/browser@8.0.0-beta.0...@capacitor/browser@8.0.0) (2025-12-08)
+
+**Note:** Version bump only for package @capacitor/browser
+
+# [8.0.0-beta.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/browser@8.0.0-alpha.1...@capacitor/browser@8.0.0-beta.0) (2025-11-14)
+
+**Note:** Version bump only for package @capacitor/browser
+
+# [8.0.0-alpha.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/browser@7.0.2...@capacitor/browser@8.0.0-alpha.1) (2025-09-08)
+
+**Note:** Version bump only for package @capacitor/browser
+
+## [7.0.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/browser@7.0.1...@capacitor/browser@7.0.2) (2025-08-05)
+
+**Note:** Version bump only for package @capacitor/browser
+
+## [7.0.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/browser@7.0.0...@capacitor/browser@7.0.1) (2025-04-02)
+
+**Note:** Version bump only for package @capacitor/browser
+
+# [7.0.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/browser@7.0.0-rc.0...@capacitor/browser@7.0.0) (2025-01-20)
+
+**Note:** Version bump only for package @capacitor/browser
+
+# [7.0.0-rc.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/browser@7.0.0-alpha.2...@capacitor/browser@7.0.0-rc.0) (2025-01-13)
+
+**Note:** Version bump only for package @capacitor/browser
+
+# [7.0.0-alpha.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/browser@7.0.0-alpha.1...@capacitor/browser@7.0.0-alpha.2) (2024-12-19)
+
+### Bug Fixes
+
+- **browser:** crash when trying to open blob urls on android ([#2274](https://github.com/ionic-team/capacitor-plugins/issues/2274)) ([74fe051](https://github.com/ionic-team/capacitor-plugins/commit/74fe051ed9e852293550f201337d427e21c06421))
+
+# [7.0.0-alpha.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/browser@6.0.2...@capacitor/browser@7.0.0-alpha.1) (2024-12-16)
+
+### Bug Fixes
+
+- **browser:** call notifyListeners only when browser is dismissed ([#2186](https://github.com/ionic-team/capacitor-plugins/issues/2186)) ([aaa8658](https://github.com/ionic-team/capacitor-plugins/commit/aaa8658eb65b6c95ae231a3ed1547f3f78cd2cac))
+
+## [6.0.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/browser@6.0.1...@capacitor/browser@6.0.2) (2024-08-08)
+
+**Note:** Version bump only for package @capacitor/browser
+
+## [6.0.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/browser@6.0.0...@capacitor/browser@6.0.1) (2024-06-13)
+
+**Note:** Version bump only for package @capacitor/browser
+
+# [6.0.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/browser@6.0.0-rc.1...@capacitor/browser@6.0.0) (2024-04-15)
+
+**Note:** Version bump only for package @capacitor/browser
+
+# [6.0.0-rc.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/browser@6.0.0-rc.0...@capacitor/browser@6.0.0-rc.1) (2024-03-25)
+
+**Note:** Version bump only for package @capacitor/browser
+
+# [6.0.0-rc.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/browser@6.0.0-beta.1...@capacitor/browser@6.0.0-rc.0) (2024-02-07)
+
+### Features
+
+- **browser:** implement close() method for android ([60e0267](https://github.com/ionic-team/capacitor-plugins/commit/60e026776da6fe00ec48356c3cdf55a860a9685b))
+
+# [6.0.0-beta.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/browser@6.0.0-beta.0...@capacitor/browser@6.0.0-beta.1) (2023-12-14)
+
+**Note:** Version bump only for package @capacitor/browser
+
+# [6.0.0-beta.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/browser@6.0.0-alpha.2...@capacitor/browser@6.0.0-beta.0) (2023-12-13)
+
+**Note:** Version bump only for package @capacitor/browser
+
 # [6.0.0-alpha.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/browser@6.0.0-alpha.1...@capacitor/browser@6.0.0-alpha.2) (2023-11-15)
 
 **Note:** Version bump only for package @capacitor/browser

@@ -31,9 +31,7 @@ export class ClipboardWeb extends WebPlugin implements ClipboardPlugin {
           throw new Error('Failed to write image');
         }
       } else {
-        throw this.unavailable(
-          'Writing images to the clipboard is not supported in this browser',
-        );
+        throw this.unavailable('Writing images to the clipboard is not supported in this browser');
       }
     } else {
       throw new Error('Nothing to write');
@@ -61,14 +59,8 @@ export class ClipboardWeb extends WebPlugin implements ClipboardPlugin {
   }
 
   private async readText() {
-    if (
-      typeof navigator === 'undefined' ||
-      !navigator.clipboard ||
-      !navigator.clipboard.readText
-    ) {
-      throw this.unavailable(
-        'Reading from clipboard not supported in this browser',
-      );
+    if (typeof navigator === 'undefined' || !navigator.clipboard || !navigator.clipboard.readText) {
+      throw this.unavailable('Reading from clipboard not supported in this browser');
     }
 
     const text = await navigator.clipboard.readText();
@@ -76,14 +68,8 @@ export class ClipboardWeb extends WebPlugin implements ClipboardPlugin {
   }
 
   private async writeText(text: string) {
-    if (
-      typeof navigator === 'undefined' ||
-      !navigator.clipboard ||
-      !navigator.clipboard.writeText
-    ) {
-      throw this.unavailable(
-        'Writting to clipboard not supported in this browser',
-      );
+    if (typeof navigator === 'undefined' || !navigator.clipboard || !navigator.clipboard.writeText) {
+      throw this.unavailable('Writting to clipboard not supported in this browser');
     }
 
     await navigator.clipboard.writeText(text);
@@ -101,7 +87,7 @@ export class ClipboardWeb extends WebPlugin implements ClipboardPlugin {
         const r = reader.result as string;
         resolve(r);
       };
-      reader.onerror = e => {
+      reader.onerror = (e) => {
         reject(e);
       };
     });

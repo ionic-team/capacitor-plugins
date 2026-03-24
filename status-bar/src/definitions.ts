@@ -1,3 +1,46 @@
+/// <reference types="@capacitor/cli" />
+
+import type { PluginListenerHandle } from '@capacitor/core';
+
+declare module '@capacitor/cli' {
+  export interface PluginsConfig {
+    /**
+     * These config values are available:
+     */
+    StatusBar?: {
+      /**
+       * Whether the statusbar is overlaid or not.
+       * Not available on Android 15+.
+       *
+       * @since 1.0.0
+       * @default true
+       * @example false
+       */
+      overlaysWebView?: boolean;
+
+      /**
+       * Style of the text of the status bar.
+       *
+       * @since 1.0.0
+       * @default default
+       * @example "DARK"
+       */
+      style?: string;
+
+      /**
+       * Color of the background of the statusbar in hex format, #RRGGBB.
+       * Doesn't work if `overlaysWebView` is true.
+       * Not available on Android 15+.
+       *
+       * @since 1.0.0
+       * @default #000000
+       * @example "#ffffffff"
+       */
+      backgroundColor?: string;
+    };
+  }
+}
+
 export interface StyleOptions {
   /**
    * Style of the text of the status bar.
@@ -26,7 +69,6 @@ export enum Style {
    * The style is based on the device appearance.
    * If the device is using Dark mode, the statusbar text will be light.
    * If the device is using Light mode, the statusbar text will be dark.
-   * On Android the default will be the one the app was launched with.
    *
    * @since 1.0.0
    */
@@ -76,8 +118,6 @@ export interface BackgroundColorOptions {
   /**
    * A hex color to which the status bar color is set.
    *
-   * This option is only supported on Android.
-   *
    * @since 1.0.0
    */
   color: string;
@@ -101,20 +141,23 @@ export interface StatusBarInfo {
   /**
    * The current status bar color.
    *
-   * This option is only supported on Android.
-   *
    * @since 1.0.0
    */
-  color?: string;
+  color: string;
 
   /**
-   * Whether the statusbar is overlaid or not.
-   *
-   * This option is only supported on Android.
+   * Whether the status bar is overlaid or not.
    *
    * @since 1.0.0
    */
-  overlays?: boolean;
+  overlays: boolean;
+
+  /**
+   * The height of the status bar.
+   *
+   * @since 7.0.0
+   */
+  height: number;
 }
 
 export interface SetOverlaysWebViewOptions {
@@ -126,6 +169,9 @@ export interface SetOverlaysWebViewOptions {
   overlay: boolean;
 }
 
+export type VisibilityChangeListener = (info: StatusBarInfo) => void;
+export type OverlayChangeListener = (info: StatusBarInfo) => void;
+
 export interface StatusBarPlugin {
   /**
    * Set the current style of the status bar.
@@ -136,8 +182,8 @@ export interface StatusBarPlugin {
 
   /**
    * Set the background color of the status bar.
-   *
-   * This method is only supported on Android.
+   * Calling this function updates the foreground color of the status bar if the style is set to default, except on iOS versions lower than 17.
+   * Not available on Android 15+.
    *
    * @since 1.0.0
    */
@@ -171,12 +217,30 @@ export interface StatusBarPlugin {
   /**
    * Set whether or not the status bar should overlay the webview to allow usage
    * of the space underneath it.
-   *
-   * This method is only supported on Android.
+   * Not available on Android 15+.
    *
    * @since 1.0.0
    */
   setOverlaysWebView(options: SetOverlaysWebViewOptions): Promise<void>;
+
+  /**
+   * Listen for status bar visibility changes.
+   * Fired when hide or show methods get called.
+   *
+   * @since 7.0.0
+   */
+  addListener(
+    eventName: 'statusBarVisibilityChanged',
+    listenerFunc: VisibilityChangeListener,
+  ): Promise<PluginListenerHandle>;
+
+  /**
+   * Listen for status bar overlay changes.
+   * Fired when setOverlaysWebView gets called.
+   *
+   * @since 7.0.0
+   */
+  addListener(eventName: 'statusBarOverlayChanged', listenerFunc: OverlayChangeListener): Promise<PluginListenerHandle>;
 }
 
 /**

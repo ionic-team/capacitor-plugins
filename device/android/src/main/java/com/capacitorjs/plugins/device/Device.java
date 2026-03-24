@@ -7,8 +7,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.BatteryManager;
 import android.os.Build;
-import android.os.Environment;
-import android.os.StatFs;
 import android.provider.Settings;
 import android.webkit.WebView;
 
@@ -26,32 +24,12 @@ public class Device {
         return usedMem;
     }
 
-    public long getDiskFree() {
-        StatFs statFs = new StatFs(Environment.getRootDirectory().getAbsolutePath());
-        return statFs.getAvailableBlocksLong() * statFs.getBlockSizeLong();
-    }
-
-    public long getDiskTotal() {
-        StatFs statFs = new StatFs(Environment.getRootDirectory().getAbsolutePath());
-        return statFs.getBlockCountLong() * statFs.getBlockSizeLong();
-    }
-
-    public long getRealDiskFree() {
-        StatFs statFs = new StatFs(Environment.getDataDirectory().getAbsolutePath());
-        return statFs.getAvailableBlocksLong() * statFs.getBlockSizeLong();
-    }
-
-    public long getRealDiskTotal() {
-        StatFs statFs = new StatFs(Environment.getDataDirectory().getAbsolutePath());
-        return statFs.getBlockCountLong() * statFs.getBlockSizeLong();
-    }
-
     public String getPlatform() {
         return "android";
     }
 
     public String getUuid() {
-        return Settings.Secure.getString(this.context.getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
+        return Settings.Secure.getString(this.context.getContentResolver(), Settings.Secure.ANDROID_ID);
     }
 
     public float getBatteryLevel() {
@@ -81,7 +59,7 @@ public class Device {
     }
 
     public boolean isVirtual() {
-        return android.os.Build.FINGERPRINT.contains("generic") || android.os.Build.PRODUCT.contains("sdk");
+        return Build.FINGERPRINT.contains("generic") || Build.PRODUCT.contains("sdk");
     }
 
     public String getName() {
@@ -107,16 +85,11 @@ public class Device {
             return info.versionName;
         }
 
-        return android.os.Build.VERSION.RELEASE;
+        return Build.VERSION.RELEASE;
     }
 
-    @SuppressWarnings("deprecation")
     private PackageInfo getWebViewVersionSubAndroid26() throws PackageManager.NameNotFoundException {
-        String webViewPackage = "com.google.android.webview";
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            webViewPackage = "com.android.chrome";
-        }
         PackageManager pm = this.context.getPackageManager();
-        return pm.getPackageInfo(webViewPackage, 0);
+        return pm.getPackageInfo("com.android.chrome", 0);
     }
 }

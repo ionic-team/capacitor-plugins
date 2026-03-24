@@ -30,7 +30,7 @@ const logCurrentNetworkStatus = async () => {
 <docgen-index>
 
 * [`getStatus()`](#getstatus)
-* [`addListener('networkStatusChange', ...)`](#addlistenernetworkstatuschange)
+* [`addListener('networkStatusChange', ...)`](#addlistenernetworkstatuschange-)
 * [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)

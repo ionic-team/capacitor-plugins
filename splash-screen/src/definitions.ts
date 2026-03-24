@@ -95,13 +95,7 @@ declare module '@capacitor/cli' {
        * @default large
        * @example "large"
        */
-      androidSpinnerStyle?:
-        | 'horizontal'
-        | 'small'
-        | 'large'
-        | 'inverse'
-        | 'smallInverse'
-        | 'largeInverse';
+      androidSpinnerStyle?: 'horizontal' | 'small' | 'large' | 'inverse' | 'smallInverse' | 'largeInverse';
 
       /**
        * Style of the iOS spinner.
@@ -235,15 +229,3 @@ export interface SplashScreenPlugin {
    */
   hide(options?: HideOptions): Promise<void>;
 }
-
-/**
- * @deprecated Use `ShowOptions`.
- * @since 1.0.0
- */
-export type SplashScreenShowOptions = ShowOptions;
-
-/**
- * @deprecated Use `HideOptions`.
- * @since 1.0.0
- */
-export type SplashScreenHideOptions = HideOptions;

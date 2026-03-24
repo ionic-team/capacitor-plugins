@@ -97,14 +97,12 @@ public class CameraBottomSheetDialogFragment extends BottomSheetDialogFragment {
             tv.setTextColor(Color.parseColor("#000000"));
             tv.setPadding(layoutPaddingPx12, layoutPaddingPx12, layoutPaddingPx12, layoutPaddingPx12);
             tv.setText(options.get(i));
-            tv.setOnClickListener(
-                view -> {
-                    if (selectedListener != null) {
-                        selectedListener.onSelected(optionIndex);
-                    }
-                    dismiss();
+            tv.setOnClickListener((view) -> {
+                if (selectedListener != null) {
+                    selectedListener.onSelected(optionIndex);
                 }
-            );
+                dismiss();
+            });
             layout.addView(tv);
         }
 
@@ -113,10 +111,12 @@ public class CameraBottomSheetDialogFragment extends BottomSheetDialogFragment {
         dialog.setContentView(parentLayout.getRootView());
 
         CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) ((View) parentLayout.getParent()).getLayoutParams();
-        CoordinatorLayout.Behavior behavior = params.getBehavior();
+        CoordinatorLayout.Behavior<View> behavior = params.getBehavior();
 
-        if (behavior != null && behavior instanceof BottomSheetBehavior) {
-            ((BottomSheetBehavior) behavior).addBottomSheetCallback(mBottomSheetBehaviorCallback);
+        if (behavior instanceof BottomSheetBehavior) {
+            BottomSheetBehavior<View> bottomSheetBehavior = (BottomSheetBehavior<View>) behavior;
+            bottomSheetBehavior.addBottomSheetCallback(mBottomSheetBehaviorCallback);
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         }
     }
 }
