@@ -5,7 +5,9 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.net.Uri;
 import androidx.activity.OnBackPressedCallback;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.pm.PackageInfoCompat;
+import androidx.core.os.LocaleListCompat;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Logger;
 import com.getcapacitor.Plugin;
@@ -13,6 +15,7 @@ import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
 import com.getcapacitor.util.InternalUtils;
+import java.util.Locale;
 
 @CapacitorPlugin(name = "App")
 public class AppPlugin extends Plugin {
@@ -124,6 +127,15 @@ public class AppPlugin extends Plugin {
 
         this.onBackPressedCallback.setEnabled(enabled);
         call.resolve();
+    }
+
+    @PluginMethod
+    public void getAppLanguage(PluginCall call) {
+        JSObject ret = new JSObject();
+        LocaleListCompat appLocales = AppCompatDelegate.getApplicationLocales();
+        Locale appLocale = !appLocales.isEmpty() ? appLocales.get(0) : null;
+        ret.put("value", appLocale != null ? appLocale.getLanguage() : Locale.getDefault().getLanguage());
+        call.resolve(ret);
     }
 
     /**
