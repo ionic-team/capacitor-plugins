@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.0.5](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/device@7.0.4...@capacitor/device@7.0.5) (2026-03-25)
+
+**Note:** Version bump only for package @capacitor/device
+
 ## [7.0.4](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/device@7.0.3...@capacitor/device@7.0.4) (2026-02-12)
 
 ### Bug Fixes

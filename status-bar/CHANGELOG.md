@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.0.6](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/status-bar@7.0.5...@capacitor/status-bar@7.0.6) (2026-03-25)
+
+### Bug Fixes
+
+- **status-bar:** add missing types ([#2498](https://github.com/ionic-team/capacitor-plugins/issues/2498)) ([#2500](https://github.com/ionic-team/capacitor-plugins/issues/2500)) ([83cd977](https://github.com/ionic-team/capacitor-plugins/commit/83cd9771ee4e42e1a58cbc210a8761a5deae0946))
+
 ## [7.0.5](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/status-bar@7.0.4...@capacitor/status-bar@7.0.5) (2026-02-12)
 
 ### Bug Fixes
