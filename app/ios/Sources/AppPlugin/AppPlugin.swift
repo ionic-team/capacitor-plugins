@@ -8,6 +8,7 @@ public class AppPlugin: CAPPlugin, CAPBridgedPlugin {
     public let pluginMethods: [CAPPluginMethod] = [
         CAPPluginMethod(name: "exitApp", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getInfo", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "getAppLanguage", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getLaunchUrl", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getState", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "minimizeApp", returnType: CAPPluginReturnPromise),
@@ -113,6 +114,12 @@ public class AppPlugin: CAPPlugin, CAPBridgedPlugin {
 
     @objc func minimizeApp(_ call: CAPPluginCall) {
         call.unimplemented()
+    }
+
+    @objc func getAppLanguage(_ call: CAPPluginCall) {
+        call.resolve([
+            "value": Bundle.main.preferredLocalizations.first
+        ])
     }
 
     @objc func toggleBackButtonHandler(_ call: CAPPluginCall) {
