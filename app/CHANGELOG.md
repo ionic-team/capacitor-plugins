@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [8.1.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/app@8.0.1...@capacitor/app@8.1.0) (2026-03-25)
+
+### Features
+
+- **app:** Add getAppLanguage ([#1694](https://github.com/ionic-team/capacitor-plugins/issues/1694)) ([698600a](https://github.com/ionic-team/capacitor-plugins/commit/698600aa081e1d4040ce780a1e85175e53aa2b19))
+
 ## [8.0.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/app@8.0.0...@capacitor/app@8.0.1) (2026-02-12)
 
 ### Bug Fixes
