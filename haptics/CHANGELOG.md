@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.0.5](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/haptics@7.0.4...@capacitor/haptics@7.0.5) (2026-03-27)
+
+**Note:** Version bump only for package @capacitor/haptics
+
 ## [7.0.4](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/haptics@7.0.3...@capacitor/haptics@7.0.4) (2026-03-06)
 
 ### Bug Fixes
