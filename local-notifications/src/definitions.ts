@@ -1127,7 +1127,7 @@ export enum Weekday {
  * The importance level. For more details, see the [Android Developer Docs](https://developer.android.com/reference/android/app/NotificationManager#IMPORTANCE_DEFAULT)
  * @since 1.0.0
  */
-export type Importance = 1 | 2 | 3 | 4 | 5;
+export type Importance = 0 | 1 | 2 | 3 | 4 | 5;
 
 /**
  * The notification visibility. For more details, see the [Android Developer Docs](https://developer.android.com/reference/androidx/core/app/NotificationCompat#VISIBILITY_PRIVATE)
