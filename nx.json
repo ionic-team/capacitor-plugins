@@ -16,7 +16,6 @@
         "{projectRoot}/app/dist",
         "{projectRoot}/app-launcher/dist",
         "{projectRoot}/browser/dist",
-        "{projectRoot}/camera/dist",
         "{projectRoot}/clipboard/dist",
         "{projectRoot}/device/dist",
         "{projectRoot}/dialog/dist",
