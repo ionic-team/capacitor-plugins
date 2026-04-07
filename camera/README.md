@@ -1,4 +1,4 @@
-# ⓘ Plugin migrated
+# ⓘ Plugin migrated 
 
 **From version 8.1.0 onwards, this plugin is now hosted in a separate repository. Refer to [capacitor-camera repository](https://github.com/ionic-team/capacitor-camera).**
 
