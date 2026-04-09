@@ -1,3 +1,5 @@
+import type { PluginListenerHandle } from '@capacitor/core';
+
 export type OperatingSystem = 'ios' | 'android' | 'windows' | 'mac' | 'unknown';
 
 export interface DeviceId {
@@ -123,6 +125,13 @@ export interface BatteryInfo {
   isCharging?: boolean;
 }
 
+/**
+ * Callback for battery charging state changes.
+ *
+ * @since 8.1.0
+ */
+export type BatteryStateChangeListener = (info: BatteryInfo) => void;
+
 export interface GetLanguageCodeResult {
   /**
    * Two character language code.
@@ -176,4 +185,21 @@ export interface DevicePlugin {
    * @since 4.0.0
    */
   getLanguageTag(): Promise<LanguageTag>;
+
+  /**
+   * Listen for changes to whether the device is charging (including when the battery becomes full while plugged in).
+   *
+   * @since 8.1.0
+   */
+  addListener(
+    eventName: 'batteryStateChange',
+    listenerFunc: BatteryStateChangeListener,
+  ): Promise<PluginListenerHandle>;
+
+  /**
+   * Remove all listeners for this plugin.
+   *
+   * @since 8.1.0
+   */
+  removeAllListeners(): Promise<void>;
 }

@@ -1,5 +1,10 @@
 package com.capacitorjs.plugins.device;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.BatteryManager;
 import android.os.Build;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
@@ -11,11 +16,63 @@ import java.util.Locale;
 @CapacitorPlugin(name = "Device")
 public class DevicePlugin extends Plugin {
 
+    public static final String BATTERY_STATE_CHANGE_EVENT = "batteryStateChange";
+
     private Device implementation;
+    private Boolean lastBatteryChargingState;
+
+    private final BroadcastReceiver batteryStateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent == null || !Intent.ACTION_BATTERY_CHANGED.equals(intent.getAction())) {
+                return;
+            }
+            int status = intent.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
+            boolean charging =
+                status == BatteryManager.BATTERY_STATUS_CHARGING || status == BatteryManager.BATTERY_STATUS_FULL;
+            if (lastBatteryChargingState == null) {
+                lastBatteryChargingState = charging;
+                return;
+            }
+            if (lastBatteryChargingState != charging) {
+                lastBatteryChargingState = charging;
+                notifyBatteryStateChange(intent);
+            }
+        }
+    };
 
     @Override
     public void load() {
         implementation = new Device(getContext());
+        IntentFilter filter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            getContext().registerReceiver(batteryStateReceiver, filter, Context.RECEIVER_NOT_EXPORTED);
+        } else {
+            getContext().registerReceiver(batteryStateReceiver, filter);
+        }
+    }
+
+    @Override
+    protected void handleOnDestroy() {
+        try {
+            getContext().unregisterReceiver(batteryStateReceiver);
+        } catch (IllegalArgumentException e) {
+            // Receiver was not registered
+        }
+    }
+
+    private void notifyBatteryStateChange(Intent batteryIntent) {
+        int level = batteryIntent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
+        int scale = batteryIntent.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
+        float batteryLevel = level >= 0 && scale > 0 ? level / (float) scale : -1;
+        int status = batteryIntent.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
+        boolean isCharging =
+            status == BatteryManager.BATTERY_STATUS_CHARGING || status == BatteryManager.BATTERY_STATUS_FULL;
+
+        JSObject data = new JSObject();
+        data.put("batteryLevel", batteryLevel);
+        data.put("isCharging", isCharging);
+        notifyListeners(BATTERY_STATE_CHANGE_EVENT, data);
     }
 
     @PluginMethod
