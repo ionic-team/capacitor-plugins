@@ -16,7 +16,7 @@ import java.util.Locale;
 @CapacitorPlugin(name = "Device")
 public class DevicePlugin extends Plugin {
 
-    public static final String BATTERY_STATE_CHANGE_EVENT = "batteryStateChange";
+    public static final String BATTERY_CHARGING_STATE_CHANGE_EVENT = "batteryChargingStateChange";
 
     private Device implementation;
     private Boolean lastBatteryChargingState;
@@ -36,7 +36,7 @@ public class DevicePlugin extends Plugin {
             }
             if (lastBatteryChargingState != charging) {
                 lastBatteryChargingState = charging;
-                notifyBatteryStateChange(intent);
+                notifyBatteryChargingStateChange(intent);
             }
         }
     };
@@ -61,7 +61,7 @@ public class DevicePlugin extends Plugin {
         }
     }
 
-    private void notifyBatteryStateChange(Intent batteryIntent) {
+    private void notifyBatteryChargingStateChange(Intent batteryIntent) {
         int level = batteryIntent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
         int scale = batteryIntent.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
         float batteryLevel = level >= 0 && scale > 0 ? level / (float) scale : -1;
@@ -72,7 +72,7 @@ public class DevicePlugin extends Plugin {
         JSObject data = new JSObject();
         data.put("batteryLevel", batteryLevel);
         data.put("isCharging", isCharging);
-        notifyListeners(BATTERY_STATE_CHANGE_EVENT, data);
+        notifyListeners(BATTERY_CHARGING_STATE_CHANGE_EVENT, data);
     }
 
     @PluginMethod

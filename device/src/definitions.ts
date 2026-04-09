@@ -130,7 +130,7 @@ export interface BatteryInfo {
  *
  * @since 8.1.0
  */
-export type BatteryStateChangeListener = (info: BatteryInfo) => void;
+export type BatteryChargingStateChangeListener = (info: BatteryInfo) => void;
 
 export interface GetLanguageCodeResult {
   /**
@@ -192,8 +192,8 @@ export interface DevicePlugin {
    * @since 8.1.0
    */
   addListener(
-    eventName: 'batteryStateChange',
-    listenerFunc: BatteryStateChangeListener,
+    eventName: 'batteryChargingStateChange',
+    listenerFunc: BatteryChargingStateChangeListener,
   ): Promise<PluginListenerHandle>;
 
   /**

@@ -4,7 +4,7 @@ import Capacitor
 
 @objc(DevicePlugin)
 public class DevicePlugin: CAPPlugin, CAPBridgedPlugin {
-    public static let batteryStateChangeEvent = "batteryStateChange"
+    public static let batteryChargingStateChangeEvent = "batteryChargingStateChange"
 
     public let identifier = "DevicePlugin"
     public let jsName = "Device"
@@ -45,7 +45,7 @@ public class DevicePlugin: CAPPlugin, CAPBridgedPlugin {
         }
         if lastBatteryChargingState != charging {
             lastBatteryChargingState = charging
-            notifyListeners(DevicePlugin.batteryStateChangeEvent, data: [
+            notifyListeners(DevicePlugin.batteryChargingStateChangeEvent, data: [
                 "batteryLevel": UIDevice.current.batteryLevel,
                 "isCharging": charging
             ])

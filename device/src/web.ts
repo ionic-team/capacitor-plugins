@@ -4,7 +4,7 @@ import type { PluginListenerHandle } from '@capacitor/core';
 
 import type {
   BatteryInfo,
-  BatteryStateChangeListener,
+  BatteryChargingStateChangeListener,
   DeviceId,
   DeviceInfo,
   DevicePlugin,
@@ -34,7 +34,7 @@ export class DeviceWeb extends WebPlugin implements DevicePlugin {
     if (!this.batteryApi) {
       return;
     }
-    this.notifyListeners('batteryStateChange', {
+    this.notifyListeners('batteryChargingStateChange', {
       batteryLevel: this.batteryApi.level,
       isCharging: this.batteryApi.charging,
     });
@@ -62,10 +62,10 @@ export class DeviceWeb extends WebPlugin implements DevicePlugin {
   }
 
   async addListener(
-    eventName: 'batteryStateChange',
-    listenerFunc: BatteryStateChangeListener,
+    eventName: 'batteryChargingStateChange',
+    listenerFunc: BatteryChargingStateChangeListener,
   ): Promise<PluginListenerHandle> {
-    if (eventName === 'batteryStateChange') {
+    if (eventName === 'batteryChargingStateChange') {
       void this.attachBatteryListeners();
     }
     return super.addListener(eventName, listenerFunc);

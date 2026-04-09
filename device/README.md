@@ -36,7 +36,7 @@ const logBatteryInfo = async () => {
 * [`getBatteryInfo()`](#getbatteryinfo)
 * [`getLanguageCode()`](#getlanguagecode)
 * [`getLanguageTag()`](#getlanguagetag)
-* [`addListener('batteryStateChange', ...)`](#addlistenerbatterystatechange-)
+* [`addListener('batteryChargingStateChange', ...)`](#addlistenerbatterychargingstatechange-)
 * [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
@@ -121,18 +121,18 @@ Get the device's current language locale tag.
 --------------------
 
 
-### addListener('batteryStateChange', ...)
+### addListener('batteryChargingStateChange', ...)
 
 ```typescript
-addListener(eventName: 'batteryStateChange', listenerFunc: BatteryStateChangeListener) => Promise<PluginListenerHandle>
+addListener(eventName: 'batteryChargingStateChange', listenerFunc: BatteryChargingStateChangeListener) => Promise<PluginListenerHandle>
 ```
 
 Listen for changes to whether the device is charging (including when the battery becomes full while plugged in).
 
-| Param              | Type                                                                              |
-| ------------------ | --------------------------------------------------------------------------------- |
-| **`eventName`**    | <code>'batteryStateChange'</code>                                                 |
-| **`listenerFunc`** | <code><a href="#batterystatechangelistener">BatteryStateChangeListener</a></code> |
+| Param              | Type                                                                                              |
+| ------------------ | ------------------------------------------------------------------------------------------------- |
+| **`eventName`**    | <code>'batteryChargingStateChange'</code>                                                         |
+| **`listenerFunc`** | <code><a href="#batterychargingstatechangelistener">BatteryChargingStateChangeListener</a></code> |
 
 **Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
 
@@ -218,7 +218,7 @@ Remove all listeners for this plugin.
 <code>'ios' | 'android' | 'windows' | 'mac' | 'unknown'</code>
 
 
-#### BatteryStateChangeListener
+#### BatteryChargingStateChangeListener
 
 Callback for battery charging state changes.
 
