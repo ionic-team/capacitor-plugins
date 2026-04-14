@@ -43,8 +43,7 @@
     "build": "npm run clean && npm run docgen && tsc && rollup -c rollup.config.mjs",
     "clean": "rimraf ./dist",
     "watch": "tsc --watch",
-    "prepublishOnly": "npm run build",
-    "publish:cocoapod": "echo 'This repository does not publish the camera plugin. Refer to https://github.com/ionic-team/capacitor-camera'"
+    "prepublishOnly": "npm run build"
   },
   "devDependencies": {
     "@capacitor/android": "^8.0.0",
