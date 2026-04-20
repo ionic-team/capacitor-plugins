@@ -20,9 +20,8 @@ publish_plugin () {
             # Get latest plugin info from MavenCentral
             PLUGIN_PUBLISHED_URL="https://repo1.maven.org/maven2/com/capacitorjs/$PLUGIN_NAME/maven-metadata.xml"
             PLUGIN_PUBLISHED_DATA=$(curl -s $PLUGIN_PUBLISHED_URL)
-            PLUGIN_PUBLISHED_VERSION="$(perl -ne 'print and last if s/.*<latest>(.*)<\/latest>.*/\1/;' <<< $PLUGIN_PUBLISHED_DATA)"
 
-            if [[ $PLUGIN_VERSION == $PLUGIN_PUBLISHED_VERSION ]]; then
+            if echo "$PLUGIN_PUBLISHED_DATA" | grep -q "<version>$PLUGIN_VERSION</version>"; then
                 printf %"s\n\n" "Duplicate: a published plugin $PLUGIN_NAME exists for version $PLUGIN_VERSION, skipping..."
             else
                 # Make log dir if doesnt exist
