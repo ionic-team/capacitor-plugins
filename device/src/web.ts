@@ -1,7 +1,10 @@
 import { WebPlugin } from '@capacitor/core';
 
+import type { PluginListenerHandle } from '@capacitor/core';
+
 import type {
   BatteryInfo,
+  BatteryChargingStateChangeListener,
   DeviceId,
   DeviceInfo,
   DevicePlugin,
@@ -24,6 +27,55 @@ declare global {
 }
 
 export class DeviceWeb extends WebPlugin implements DevicePlugin {
+  private batteryApi: any = null;
+  private batteryListenersAttached = false;
+
+  private readonly handleBatteryChargingChange = (): void => {
+    if (!this.batteryApi) {
+      return;
+    }
+    this.notifyListeners('batteryChargingStateChange', {
+      batteryLevel: this.batteryApi.level,
+      isCharging: this.batteryApi.charging,
+    });
+  };
+
+  private async attachBatteryListeners(): Promise<void> {
+    if (this.batteryListenersAttached || typeof navigator === 'undefined' || !navigator.getBattery) {
+      return;
+    }
+    try {
+      this.batteryApi = await navigator.getBattery();
+      this.batteryApi.addEventListener('chargingchange', this.handleBatteryChargingChange);
+      this.batteryListenersAttached = true;
+    } catch (e) {
+      // Battery Status API unavailable or denied
+    }
+  }
+
+  private detachBatteryListeners(): void {
+    if (this.batteryApi && this.batteryListenersAttached) {
+      this.batteryApi.removeEventListener('chargingchange', this.handleBatteryChargingChange);
+      this.batteryListenersAttached = false;
+      this.batteryApi = null;
+    }
+  }
+
+  async addListener(
+    eventName: 'batteryChargingStateChange',
+    listenerFunc: BatteryChargingStateChangeListener,
+  ): Promise<PluginListenerHandle> {
+    if (eventName === 'batteryChargingStateChange') {
+      void this.attachBatteryListeners();
+    }
+    return super.addListener(eventName, listenerFunc);
+  }
+
+  async removeAllListeners(): Promise<void> {
+    this.detachBatteryListeners();
+    return super.removeAllListeners();
+  }
+
   async getId(): Promise<DeviceId> {
     return {
       identifier: this.getUid(),
