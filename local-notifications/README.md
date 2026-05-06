@@ -478,6 +478,7 @@ The object that describes a local notification.
 | **`inboxList`**        | <code>string[]</code>                         | Sets a list of strings for display in an inbox style notification. Up to 5 strings are allowed. Only available for Android.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                | 1.0.0 |
 | **`silent`**           | <code>boolean</code>                          | If true, notification will not appear while app is in the foreground. Only available for iOS.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              | 5.0.0 |
 
+
 #### Schedule
 
 Represents a schedule for a notification.
