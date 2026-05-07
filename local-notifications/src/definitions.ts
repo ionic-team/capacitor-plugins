@@ -680,8 +680,37 @@ export interface LocalNotificationSchema {
    * Only available for iOS.
    *
    * @since 1.0.0
+   * @deprecated Use `relevanceScore` instead. This property is ignored on iOS 15+.
    */
   summaryArgument?: string;
+
+  /**
+   * The score the system uses to determine if the notification is the
+   * featured notification when the system groups the app's notifications.
+   *
+   * The value must be between 0 and 1, where 0 is the least relevant and
+   * 1 is the most relevant. The default value is 0.
+   *
+   * Sets `relevanceScore` on the
+   * [`UNMutableNotificationContent`](https://developer.apple.com/documentation/usernotifications/unmutablenotificationcontent).
+   *
+   * Only available for iOS.
+   *
+   * @since 8.1.0
+   */
+  relevanceScore?: number;
+
+  /**
+   * The interruption level that indicates the priority and delivery timing of a notification.
+   *
+   * Sets `interruptionLevel` on the
+   * [`UNMutableNotificationContent`](https://developer.apple.com/documentation/usernotifications/unmutablenotificationcontent).
+   *
+   * Only available for iOS.
+   *
+   * @since 8.1.0
+   */
+  interruptionLevel?: InterruptionLevel;
 
   /**
    * Used to group multiple notifications.
@@ -846,6 +875,22 @@ export interface ScheduleOn {
 }
 
 export type ScheduleEvery = 'year' | 'month' | 'two-weeks' | 'week' | 'day' | 'hour' | 'minute' | 'second';
+
+/**
+ * The interruption level that indicates the priority and delivery timing of a notification.
+ *
+ * - `active`: The system presents the notification immediately, lights up the screen, and can play a sound.
+ * - `critical`: The system presents the notification immediately, lights up the screen, and bypasses the mute switch to play a sound.
+ *   Requires the [Critical Alerts entitlement](https://developer.apple.com/documentation/bundleresources/entitlements/com.apple.developer.usernotifications.critical-alerts).
+ * - `passive`: The system adds the notification to the notification list without lighting up the screen or playing a sound.
+ * - `timeSensitive`: The system presents the notification immediately, lights up the screen, can play a sound, and breaks through system notification controls.
+ *   Requires the Time Sensitive Notifications capability. Without it, the notification may not break through stricter Focus modes such as Do Not Disturb.
+ *   Even with the capability, the user can disable Time Sensitive notifications per Focus mode in Settings.
+ *   See [Time Sensitive notifications](https://developer.apple.com/documentation/usernotifications/unnotificationinterruptionlevel/timesensitive) for more details.
+ *
+ * @since 8.1.0
+ */
+export type InterruptionLevel = 'active' | 'critical' | 'passive' | 'timeSensitive';
 
 export interface ListChannelsResult {
   /**
