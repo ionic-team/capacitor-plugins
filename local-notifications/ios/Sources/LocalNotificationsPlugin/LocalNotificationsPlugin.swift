@@ -261,24 +261,22 @@ public class LocalNotificationsPlugin: CAPPlugin, CAPBridgedPlugin {
             }
         }
 
-        if #available(iOS 15.0, *) {
-            if let relevanceScore = notification["relevanceScore"] as? Double {
-                content.relevanceScore = relevanceScore
-            }
+        if let relevanceScore = notification["relevanceScore"] as? Double {
+            content.relevanceScore = relevanceScore
+        }
 
-            if let interruptionLevelString = notification["interruptionLevel"] as? String {
-                switch interruptionLevelString {
-                case "active":
-                    content.interruptionLevel = .active
-                case "critical":
-                    content.interruptionLevel = .critical
-                case "passive":
-                    content.interruptionLevel = .passive
-                case "timeSensitive":
-                    content.interruptionLevel = .timeSensitive
-                default:
-                    break
-                }
+        if let interruptionLevelString = notification["interruptionLevel"] as? String {
+            switch interruptionLevelString {
+            case "active":
+                content.interruptionLevel = .active
+            case "critical":
+                content.interruptionLevel = .critical
+            case "passive":
+                content.interruptionLevel = .passive
+            case "timeSensitive":
+                content.interruptionLevel = .timeSensitive
+            default:
+                break
             }
         }
 
