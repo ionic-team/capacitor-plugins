@@ -255,8 +255,23 @@ public class LocalNotificationsPlugin: CAPPlugin, CAPBridgedPlugin {
             content.threadIdentifier = threadIdentifier
         }
 
-        if let summaryArgument = notification["summaryArgument"] as? String {
-            content.summaryArgument = summaryArgument
+        if let relevanceScore = notification["relevanceScore"] as? Double {
+            content.relevanceScore = relevanceScore
+        }
+
+        if let interruptionLevelString = notification["interruptionLevel"] as? String {
+            switch interruptionLevelString {
+            case "active":
+                content.interruptionLevel = .active
+            case "critical":
+                content.interruptionLevel = .critical
+            case "passive":
+                content.interruptionLevel = .passive
+            case "timeSensitive":
+                content.interruptionLevel = .timeSensitive
+            default:
+                break
+            }
         }
 
         if let sound = notification["sound"] as? String {
