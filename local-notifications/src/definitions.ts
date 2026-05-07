@@ -672,19 +672,6 @@ export interface LocalNotificationSchema {
   threadIdentifier?: string;
 
   /**
-   * The string this notification adds to the category's summary format string.
-   *
-   * Sets `summaryArgument` on the
-   * [`UNMutableNotificationContent`](https://developer.apple.com/documentation/usernotifications/unmutablenotificationcontent).
-   *
-   * Only available for iOS.
-   *
-   * @since 1.0.0
-   * @deprecated Use `relevanceScore` instead. This property is ignored on iOS 15+.
-   */
-  summaryArgument?: string;
-
-  /**
    * The score the system uses to determine if the notification is the
    * featured notification when the system groups the app's notifications.
    *

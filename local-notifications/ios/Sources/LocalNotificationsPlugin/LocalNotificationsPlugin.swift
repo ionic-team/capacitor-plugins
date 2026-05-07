@@ -255,12 +255,6 @@ public class LocalNotificationsPlugin: CAPPlugin, CAPBridgedPlugin {
             content.threadIdentifier = threadIdentifier
         }
 
-        if let summaryArgument = notification["summaryArgument"] as? String {
-            if #unavailable(iOS 15.0) {
-                content.summaryArgument = summaryArgument
-            }
-        }
-
         if let relevanceScore = notification["relevanceScore"] as? Double {
             content.relevanceScore = relevanceScore
         }
