@@ -694,7 +694,7 @@ export interface LocalNotificationSchema {
    * Sets `relevanceScore` on the
    * [`UNMutableNotificationContent`](https://developer.apple.com/documentation/usernotifications/unmutablenotificationcontent).
    *
-   * Only available for iOS 15+.
+   * Only available for iOS.
    *
    * @since 8.1.0
    */
@@ -706,7 +706,7 @@ export interface LocalNotificationSchema {
    * Sets `interruptionLevel` on the
    * [`UNMutableNotificationContent`](https://developer.apple.com/documentation/usernotifications/unmutablenotificationcontent).
    *
-   * Only available for iOS 15+.
+   * Only available for iOS.
    *
    * @since 8.1.0
    */
