@@ -10,14 +10,13 @@ let package = Package(
             targets: ["PushNotificationsPlugin"])
     ],
     dependencies: [
-        .package(url: "https://github.com/ionic-team/capacitor-swift-pm.git", from: "8.0.0")
+        .package(url: "https://github.com/ionic-team/capacitor-swift-pm.git", from: "9.0.0-alpha.0")
     ],
     targets: [
         .target(
             name: "PushNotificationsPlugin",
             dependencies: [
-                .product(name: "Capacitor", package: "capacitor-swift-pm"),
-                .product(name: "Cordova", package: "capacitor-swift-pm")
+                .product(name: "Capacitor", package: "capacitor-swift-pm")
             ],
             path: "ios/Sources/PushNotificationsPlugin"),
         .testTarget(
