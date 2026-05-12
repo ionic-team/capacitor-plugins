@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [8.1.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/action-sheet@8.1.0...@capacitor/action-sheet@8.1.1) (2026-03-25)
+
+### Bug Fixes
+
+- **action-sheet:** correct some cancelable misbehaviors ([#2491](https://github.com/ionic-team/capacitor-plugins/issues/2491)) ([f1506be](https://github.com/ionic-team/capacitor-plugins/commit/f1506bea616b718b8697b50be0eef29198501860))
+
 # [8.1.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/action-sheet@8.0.1...@capacitor/action-sheet@8.1.0) (2026-03-06)
 
 ### Features

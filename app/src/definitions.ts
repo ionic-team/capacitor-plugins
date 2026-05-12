@@ -158,6 +158,15 @@ export type URLOpenListener = (event: URLOpenListenerEvent) => void;
 export type RestoredListener = (event: RestoredListenerEvent) => void;
 export type BackButtonListener = (event: BackButtonListenerEvent) => void;
 
+export interface AppLanguageCode {
+  /**
+   * Two or Three character language code.
+   *
+   * @since 8.1.0
+   */
+  value: string;
+}
+
 export interface AppPlugin {
   /**
    * Force exit the app. This should only be used in conjunction with the `backButton` handler for Android to
@@ -198,6 +207,13 @@ export interface AppPlugin {
    * @since 1.1.0
    */
   minimizeApp(): Promise<void>;
+
+  /**
+   * Get the app specific language locale code.
+   *
+   * @since 8.1.0
+   */
+  getAppLanguage(): Promise<AppLanguageCode>;
 
   /**
    * Enables or disables the plugin's back button handling during runtime.

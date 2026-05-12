@@ -1,3 +1,9 @@
+# ⓘ Plugin migrated
+
+**From version 8.1.0 onwards, this plugin is now hosted in a separate repository. Refer to [capacitor-camera repository](https://github.com/ionic-team/capacitor-camera).**
+
+This file remains here to serve as documentation for version 8.0.2.
+
 # @capacitor/camera
 
 The Camera API provides the ability to take a photo with the camera or choose an existing one from the photo album.

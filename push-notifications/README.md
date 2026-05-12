@@ -588,7 +588,7 @@ Open native notification settings.
 
 The importance level. For more details, see the [Android Developer Docs](https://developer.android.com/reference/android/app/NotificationManager#IMPORTANCE_DEFAULT)
 
-<code>1 | 2 | 3 | 4 | 5</code>
+<code>0 | 1 | 2 | 3 | 4 | 5</code>
 
 
 #### Visibility

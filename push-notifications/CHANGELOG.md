@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [8.0.4](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/push-notifications@8.0.3...@capacitor/push-notifications@8.0.4) (2026-05-07)
+
+### Bug Fixes
+
+- add Importance 0 for notification channels ([#2507](https://github.com/ionic-team/capacitor-plugins/issues/2507)) ([b98c4f9](https://github.com/ionic-team/capacitor-plugins/commit/b98c4f9ee368b66dc92fb54865129df777bf38e5))
+
+## [8.0.3](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/push-notifications@8.0.2...@capacitor/push-notifications@8.0.3) (2026-03-25)
+
+**Note:** Version bump only for package @capacitor/push-notifications
+
 ## [8.0.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/push-notifications@8.0.1...@capacitor/push-notifications@8.0.2) (2026-03-06)
 
 ### Bug Fixes
