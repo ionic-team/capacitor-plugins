@@ -9,6 +9,7 @@ import Capacitor
     var config: SplashScreenConfig = SplashScreenConfig()
     var hideTask: Any?
     var isVisible: Bool = false
+    var isLaunchSplash: Bool = false
 
     init(parentView: UIView, config: SplashScreenConfig) {
         self.parentView = parentView
@@ -16,6 +17,7 @@ import Capacitor
     }
 
     public func showOnLaunch() {
+        isLaunchSplash = true
         buildViews()
         if self.config.launchShowDuration == 0 {
             return
@@ -23,6 +25,7 @@ import Capacitor
         var settings = SplashScreenSettings()
         settings.showDuration = config.launchShowDuration
         settings.fadeInDuration = config.launchFadeInDuration
+        settings.fadeOutDuration = config.launchFadeOutDuration
         settings.autoHide = config.launchAutoHide
         showSplash(settings: settings, completion: {}, isLaunchSplash: true)
     }
@@ -32,7 +35,9 @@ import Capacitor
     }
 
     public func hide(settings: SplashScreenSettings) {
-        hideSplash(fadeOutDuration: settings.fadeOutDuration, isLaunchSplash: false)
+        let fadeOutDuration = self.isLaunchSplash ? config.launchFadeOutDuration : settings.fadeOutDuration
+        self.isLaunchSplash = false
+        hideSplash(fadeOutDuration: fadeOutDuration, isLaunchSplash: false)
     }
 
     private func showSplash(settings: SplashScreenSettings, completion: @escaping () -> Void, isLaunchSplash: Bool) {
