@@ -82,6 +82,7 @@ public class SplashScreenPlugin: CAPPlugin, CAPBridgedPlugin {
 
         config.launchShowDuration = getConfig().getInt("launchShowDuration", config.launchShowDuration)
         config.launchAutoHide = getConfig().getBoolean("launchAutoHide", config.launchAutoHide)
+        config.launchFadeOutDuration = getConfig().getInt("launchFadeOutDuration", config.launchFadeOutDuration)
         return config
     }
 

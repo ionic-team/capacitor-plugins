@@ -27,7 +27,7 @@ declare module '@capacitor/cli' {
       /**
        * Duration for the fade out animation of the launch splash screen (in ms)
        *
-       * Only available for Android, when using the Android 12 Splash Screen API.
+       * On Android, only available when using the Android 12 Splash Screen API.
        *
        * @since 4.2.0
        * @default 200

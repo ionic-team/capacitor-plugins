@@ -8,4 +8,5 @@ public struct SplashScreenConfig {
     var launchShowDuration = 500
     var launchAutoHide = true
     let launchFadeInDuration = 0
+    var launchFadeOutDuration = 0
 }
