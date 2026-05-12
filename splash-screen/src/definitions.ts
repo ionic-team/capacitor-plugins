@@ -30,7 +30,7 @@ declare module '@capacitor/cli' {
        * Only available for Android, when using the Android 12 Splash Screen API.
        *
        * @since 4.2.0
-       * @default 200
+       * @default 0
        * @example 3000
        */
       launchFadeOutDuration?: number;

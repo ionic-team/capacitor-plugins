@@ -11,7 +11,7 @@ public class SplashScreenConfig {
     private Integer launchShowDuration = 500;
     private boolean launchAutoHide = true;
     private Integer launchFadeInDuration = 0;
-    private Integer launchFadeOutDuration = 200;
+    private Integer launchFadeOutDuration = 0;
     private String resourceName = "splash";
     private boolean immersive = false;
     private boolean fullScreen = false;
