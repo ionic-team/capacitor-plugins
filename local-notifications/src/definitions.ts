@@ -2,10 +2,12 @@
 
 import type { PermissionState, PluginListenerHandle } from '@capacitor/core';
 
+export type LocalNotificationPresentationOption = 'badge' | 'sound' | 'banner' | 'list';
+
 declare module '@capacitor/cli' {
   export interface PluginsConfig {
     /**
-     * On Android, the Local Notifications can be configured with the following options:
+     * The Local Notifications can be configured with the following options:
      */
     LocalNotifications?: {
       /**
@@ -47,6 +49,22 @@ declare module '@capacitor/cli' {
        * @example "beep.wav"
        */
       sound?: string;
+
+      /**
+       * This is an array of strings you can combine. Possible values in the array are:
+       *   - `badge`: badge count on the app icon is updated (default value)
+       *   - `sound`: the device will ring/vibrate when the notification is received
+       *   - `banner`: the notification is displayed as a banner
+       *   - `list`: the notification is displayed in the notification center
+       *
+       * An empty array can be provided if none of the options are desired.
+       *
+       * Only available for iOS.
+       *
+       * @since 8.2.0
+       * @example ["badge", "sound", "banner", "list"]
+       */
+      presentationOptions?: LocalNotificationPresentationOption[];
     };
   }
 }
