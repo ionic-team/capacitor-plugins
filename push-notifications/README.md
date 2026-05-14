@@ -87,9 +87,9 @@ From Android 8.0 (API level 26) and higher, notification channels are supported 
 
 You can configure the way the push notifications are displayed when the app is in foreground.
 
-| Prop                      | Type                              | Description                                                                                                                                                                                                                                                                                                                                                                                          | Since |
-| ------------------------- | --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`presentationOptions`** | <code>PresentationOption[]</code> | This is an array of strings you can combine. Possible values in the array are: - `badge`: badge count on the app icon is updated (default value) - `sound`: the device will ring/vibrate when the push notification is received - `alert`: the push notification is displayed in a native dialog An empty array can be provided if none of the options are desired. badge is only available for iOS. | 1.0.0 |
+| Prop                      | Type                              | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 | Since |
+| ------------------------- | --------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`presentationOptions`** | <code>PresentationOption[]</code> | This is an array of strings you can combine. Possible values in the array are: - `badge`: badge count on the app icon is updated (default value) - `sound`: the device will ring/vibrate when the push notification is received - `alert`: **Deprecated on iOS.** Use `banner` and `list` instead. On Android, this value is still used to display the notification. - `banner`: the push notification is displayed as a banner - `list`: the push notification is displayed in the notification center An empty array can be provided if none of the options are desired. badge is only available for iOS. | 1.0.0 |
 
 ### Examples
 
@@ -99,7 +99,7 @@ In `capacitor.config.json`:
 {
   "plugins": {
     "PushNotifications": {
-      "presentationOptions": ["badge", "sound", "alert"]
+      "presentationOptions": ["badge", "sound", "alert", "banner", "list"]
     }
   }
 }
@@ -115,7 +115,7 @@ import { CapacitorConfig } from '@capacitor/cli';
 const config: CapacitorConfig = {
   plugins: {
     PushNotifications: {
-      presentationOptions: ["badge", "sound", "alert"],
+      presentationOptions: ["badge", "sound", "alert", "banner", "list"],
     },
   },
 };

@@ -20,6 +20,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.NotificationParams;
 import com.google.firebase.messaging.RemoteMessage;
 import java.util.Arrays;
+import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -247,7 +248,8 @@ public class PushNotificationsPlugin extends Plugin {
             String body = notification.getBody();
             String[] presentation = getConfig().getArray("presentationOptions");
             if (presentation != null) {
-                if (Arrays.asList(presentation).contains("alert")) {
+                List<String> presentationList = Arrays.asList(presentation);
+                if (presentationList.contains("alert") || presentationList.contains("banner") || presentationList.contains("list")) {
                     Bundle bundle = null;
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                         try {
