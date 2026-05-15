@@ -34,11 +34,12 @@ public class PushNotificationsHandler: NSObject, NotificationHandlerProtocol {
 
             optionsArray.forEach { option in
                 switch option {
-                case "alert":
-                    presentationOptions.insert(.alert)
+                case "banner":
+                    presentationOptions.insert(.banner)
+                case "list":
+                    presentationOptions.insert(.list)
                 case "badge":
                     presentationOptions.insert(.badge)
-
                 case "sound":
                     presentationOptions.insert(.sound)
                 default:
