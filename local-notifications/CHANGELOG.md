@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [8.2.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/local-notifications@8.1.0...@capacitor/local-notifications@8.2.0) (2026-05-15)
+
+### Features
+
+- **local-notifications:** add presentationOptions config support for iOS ([#2530](https://github.com/ionic-team/capacitor-plugins/issues/2530)) ([78bea4c](https://github.com/ionic-team/capacitor-plugins/commit/78bea4c325bcaa8b3cd2eacb8c0444b154ea6735))
+
 # [8.1.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/local-notifications@8.0.2...@capacitor/local-notifications@8.1.0) (2026-05-07)
 
 ### Bug Fixes
