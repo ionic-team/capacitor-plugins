@@ -36,13 +36,14 @@ For more information about the behavior changes of your app related to the priva
 <docgen-config>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
 
-On Android, the Local Notifications can be configured with the following options:
+The Local Notifications can be configured with the following options:
 
-| Prop            | Type                | Description                                                                                                                                                                                                                                                                                                              | Since |
-| --------------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
-| **`smallIcon`** | <code>string</code> | Set the default status bar icon for notifications. Icons should be placed in your app's `res/drawable` folder. The value for this option should be the drawable resource ID, which is the filename without an extension. Only available for Android.                                                                     | 1.0.0 |
-| **`iconColor`** | <code>string</code> | Set the default color of status bar icons for notifications. Only available for Android.                                                                                                                                                                                                                                 | 1.0.0 |
-| **`sound`**     | <code>string</code> | Set the default notification sound for notifications. On Android 8+ it sets the default channel sound and can't be changed unless the app is uninstalled. If the audio file is not found, it will result in the default system sound being played on Android 7.x and no sound on Android 8+. Only available for Android. | 1.0.0 |
+| Prop                      | Type                                               | Description                                                                                                                                                                                                                                                                                                                                                                                                                                    | Since |
+| ------------------------- | -------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`smallIcon`**           | <code>string</code>                                | Set the default status bar icon for notifications. Icons should be placed in your app's `res/drawable` folder. The value for this option should be the drawable resource ID, which is the filename without an extension. Only available for Android.                                                                                                                                                                                           | 1.0.0 |
+| **`iconColor`**           | <code>string</code>                                | Set the default color of status bar icons for notifications. Only available for Android.                                                                                                                                                                                                                                                                                                                                                       | 1.0.0 |
+| **`sound`**               | <code>string</code>                                | Set the default notification sound for notifications. On Android 8+ it sets the default channel sound and can't be changed unless the app is uninstalled. If the audio file is not found, it will result in the default system sound being played on Android 7.x and no sound on Android 8+. Only available for Android.                                                                                                                       | 1.0.0 |
+| **`presentationOptions`** | <code>LocalNotificationPresentationOption[]</code> | This is an array of strings you can combine. Possible values in the array are: - `badge`: badge count on the app icon is updated (default value) - `sound`: the device will ring/vibrate when the notification is received - `banner`: the notification is displayed as a banner - `list`: the notification is displayed in the notification center An empty array can be provided if none of the options are desired. Only available for iOS. | 8.2.0 |
 
 ### Examples
 
@@ -54,7 +55,8 @@ In `capacitor.config.json`:
     "LocalNotifications": {
       "smallIcon": "ic_stat_icon_config_sample",
       "iconColor": "#488AFF",
-      "sound": "beep.wav"
+      "sound": "beep.wav",
+      "presentationOptions": ["badge", "sound", "banner", "list"]
     }
   }
 }
@@ -73,6 +75,7 @@ const config: CapacitorConfig = {
       smallIcon: "ic_stat_icon_config_sample",
       iconColor: "#488AFF",
       sound: "beep.wav",
+      presentationOptions: ["badge", "sound", "banner", "list"],
     },
   },
 };
