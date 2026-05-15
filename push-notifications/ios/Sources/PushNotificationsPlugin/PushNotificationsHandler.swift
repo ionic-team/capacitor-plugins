@@ -38,9 +38,6 @@ public class PushNotificationsHandler: NSObject, NotificationHandlerProtocol {
                     presentationOptions.insert(.banner)
                 case "list":
                     presentationOptions.insert(.list)
-                case "alert":
-                    presentationOptions.insert(.banner)
-                    presentationOptions.insert(.list)
                 case "badge":
                     presentationOptions.insert(.badge)
                 case "sound":
