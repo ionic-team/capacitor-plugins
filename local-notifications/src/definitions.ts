@@ -718,34 +718,6 @@ export interface LocalNotificationSchema {
   interruptionLevel?: InterruptionLevel;
 
   /**
-   * The score the system uses to determine if the notification is the
-   * featured notification when the system groups the app's notifications.
-   *
-   * The value must be between 0 and 1, where 0 is the least relevant and
-   * 1 is the most relevant. The default value is 0.
-   *
-   * Sets `relevanceScore` on the
-   * [`UNMutableNotificationContent`](https://developer.apple.com/documentation/usernotifications/unmutablenotificationcontent).
-   *
-   * Only available for iOS.
-   *
-   * @since 8.1.0
-   */
-  relevanceScore?: number;
-
-  /**
-   * The interruption level that indicates the priority and delivery timing of a notification.
-   *
-   * Sets `interruptionLevel` on the
-   * [`UNMutableNotificationContent`](https://developer.apple.com/documentation/usernotifications/unmutablenotificationcontent).
-   *
-   * Only available for iOS.
-   *
-   * @since 8.1.0
-   */
-  interruptionLevel?: InterruptionLevel;
-
-  /**
    * Used to group multiple notifications.
    *
    * Calls `setGroup()` on
