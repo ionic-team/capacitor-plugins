@@ -15,8 +15,8 @@ declare module '@capacitor/cli' {
        *   - `badge`: badge count on the app icon is updated (default value)
        *   - `sound`: the device will ring/vibrate when the push notification is received
        *   - `alert`: **Deprecated on iOS.** Use `banner` and `list` instead. On Android, this value is still used to display the notification.
-       *   - `banner`: the push notification is displayed as a banner
-       *   - `list`: the push notification is displayed in the notification center
+       *   - `banner`: the push notification is displayed as a banner. On Android, defaults to the same behavior as `alert`.
+       *   - `list`: the push notification is displayed in the notification center. On Android, defaults to the same behavior as `alert`.
        *
        * An empty array can be provided if none of the options are desired.
        *
