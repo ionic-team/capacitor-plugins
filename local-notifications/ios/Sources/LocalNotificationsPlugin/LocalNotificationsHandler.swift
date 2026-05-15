@@ -35,10 +35,32 @@ public class LocalNotificationsHandler: NSObject, NotificationHandlerProtocol {
             }
         }
 
+        if let optionsArray = self.plugin?.getConfig().getArray("presentationOptions") as? [String] {
+            var presentationOptions = UNNotificationPresentationOptions.init()
+
+            optionsArray.forEach { option in
+                switch option {
+                case "banner":
+                    presentationOptions.insert(.banner)
+                case "list":
+                    presentationOptions.insert(.list)
+                case "badge":
+                    presentationOptions.insert(.badge)
+                case "sound":
+                    presentationOptions.insert(.sound)
+                default:
+                    print("Unrecognized presentation option: \(option)")
+                }
+            }
+
+            return presentationOptions
+        }
+
         return [
-            .badge,
-            .sound,
-            .alert
+            .badge, 
+            .sound, 
+            .banner, 
+            .list
         ]
     }
 
