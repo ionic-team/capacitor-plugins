@@ -2,7 +2,7 @@
 
 import type { PermissionState, PluginListenerHandle } from '@capacitor/core';
 
-export type PresentationOption = 'badge' | 'sound' | 'alert';
+export type PresentationOption = 'badge' | 'sound' | 'alert' | 'banner' | 'list';
 
 declare module '@capacitor/cli' {
   export interface PluginsConfig {
@@ -14,14 +14,16 @@ declare module '@capacitor/cli' {
        * This is an array of strings you can combine. Possible values in the array are:
        *   - `badge`: badge count on the app icon is updated (default value)
        *   - `sound`: the device will ring/vibrate when the push notification is received
-       *   - `alert`: the push notification is displayed in a native dialog
+       *   - `alert`: **Deprecated on iOS.** Use `banner` and `list` instead. On Android, this value is still used to display the notification.
+       *   - `banner`: the push notification is displayed as a banner. On Android, defaults to the same behavior as `alert`.
+       *   - `list`: the push notification is displayed in the notification center. On Android, defaults to the same behavior as `alert`.
        *
        * An empty array can be provided if none of the options are desired.
        *
        * badge is only available for iOS.
        *
        * @since 1.0.0
-       * @example ["badge", "sound", "alert"]
+       * @example ["badge", "sound", "alert", "banner", "list"]
        */
       presentationOptions: PresentationOption[];
     };
