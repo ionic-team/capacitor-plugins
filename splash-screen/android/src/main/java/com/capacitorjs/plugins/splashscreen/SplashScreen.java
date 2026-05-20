@@ -138,17 +138,14 @@ public class SplashScreen {
                     if (!isVisible && !isHiding) {
                         isVisible = true;
 
-                        new Handler(context.getMainLooper()).postDelayed(
-                            () -> {
-                                // Splash screen is done... start drawing content.
-                                if (settings.isAutoHide()) {
-                                    isVisible = false;
-                                    onPreDrawListener = null;
-                                    content.getViewTreeObserver().removeOnPreDrawListener(this);
-                                }
-                            },
-                            settings.getShowDuration()
-                        );
+                        new Handler(context.getMainLooper()).postDelayed(() -> {
+                            // Splash screen is done... start drawing content.
+                            if (settings.isAutoHide()) {
+                                isVisible = false;
+                                onPreDrawListener = null;
+                                content.getViewTreeObserver().removeOnPreDrawListener(this);
+                            }
+                        }, settings.getShowDuration());
                     }
 
                     // Not ready to dismiss splash screen
@@ -225,16 +222,13 @@ public class SplashScreen {
             isVisible = true;
 
             if (settings.isAutoHide()) {
-                new Handler(context.getMainLooper()).postDelayed(
-                    () -> {
-                        hideDialog(activity, isLaunchSplash);
+                new Handler(context.getMainLooper()).postDelayed(() -> {
+                    hideDialog(activity, isLaunchSplash);
 
-                        if (splashListener != null) {
-                            splashListener.completed();
-                        }
-                    },
-                    settings.getShowDuration()
-                );
+                    if (splashListener != null) {
+                        splashListener.completed();
+                    }
+                }, settings.getShowDuration());
             } else {
                 // If no autoHide, call complete
                 if (splashListener != null) {
@@ -344,12 +338,12 @@ public class SplashScreen {
             Integer spinnerBarColor = config.getSpinnerColor();
             if (spinnerBarColor != null) {
                 int[][] states = new int[][] {
-                    new int[] { android.R.attr.state_enabled }, // enabled
-                    new int[] { -android.R.attr.state_enabled }, // disabled
-                    new int[] { -android.R.attr.state_checked }, // unchecked
-                    new int[] { android.R.attr.state_pressed } // pressed
+                    new int[] {android.R.attr.state_enabled}, // enabled
+                    new int[] {-android.R.attr.state_enabled}, // disabled
+                    new int[] {-android.R.attr.state_checked}, // unchecked
+                    new int[] {android.R.attr.state_pressed} // pressed
                 };
-                int[] colors = new int[] { spinnerBarColor, spinnerBarColor, spinnerBarColor, spinnerBarColor };
+                int[] colors = new int[] {spinnerBarColor, spinnerBarColor, spinnerBarColor, spinnerBarColor};
                 ColorStateList colorStateList = new ColorStateList(states, colors);
                 spinnerBar.setIndeterminateTintList(colorStateList);
             }
@@ -397,16 +391,13 @@ public class SplashScreen {
                 isVisible = true;
 
                 if (settings.isAutoHide()) {
-                    new Handler(context.getMainLooper()).postDelayed(
-                        () -> {
-                            hide(settings.getFadeOutDuration(), isLaunchSplash);
+                    new Handler(context.getMainLooper()).postDelayed(() -> {
+                        hide(settings.getFadeOutDuration(), isLaunchSplash);
 
-                            if (splashListener != null) {
-                                splashListener.completed();
-                            }
-                        },
-                        settings.getShowDuration()
-                    );
+                        if (splashListener != null) {
+                            splashListener.completed();
+                        }
+                    }, settings.getShowDuration());
                 } else {
                     // If no autoHide, call complete
                     if (splashListener != null) {
