@@ -338,12 +338,12 @@ public class SplashScreen {
             Integer spinnerBarColor = config.getSpinnerColor();
             if (spinnerBarColor != null) {
                 int[][] states = new int[][] {
-                    new int[] {android.R.attr.state_enabled}, // enabled
-                    new int[] {-android.R.attr.state_enabled}, // disabled
-                    new int[] {-android.R.attr.state_checked}, // unchecked
-                    new int[] {android.R.attr.state_pressed} // pressed
+                    new int[] { android.R.attr.state_enabled }, // enabled
+                    new int[] { -android.R.attr.state_enabled }, // disabled
+                    new int[] { -android.R.attr.state_checked }, // unchecked
+                    new int[] { android.R.attr.state_pressed } // pressed
                 };
-                int[] colors = new int[] {spinnerBarColor, spinnerBarColor, spinnerBarColor, spinnerBarColor};
+                int[] colors = new int[] { spinnerBarColor, spinnerBarColor, spinnerBarColor, spinnerBarColor };
                 ColorStateList colorStateList = new ColorStateList(states, colors);
                 spinnerBar.setIndeterminateTintList(colorStateList);
             }

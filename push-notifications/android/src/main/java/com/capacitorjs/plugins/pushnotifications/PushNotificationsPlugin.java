@@ -26,7 +26,7 @@ import org.json.JSONObject;
 
 @CapacitorPlugin(
     name = "PushNotifications",
-    permissions = @Permission(strings = {Manifest.permission.POST_NOTIFICATIONS}, alias = PushNotificationsPlugin.PUSH_NOTIFICATIONS)
+    permissions = @Permission(strings = { Manifest.permission.POST_NOTIFICATIONS }, alias = PushNotificationsPlugin.PUSH_NOTIFICATIONS)
 )
 public class PushNotificationsPlugin extends Plugin {
 
