@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       plugins:
-        description: 'Specify a set of plugins to publish (as a JSON array, ex: [\"camera\", \"browser\"])'
+        description: 'Specify a set of plugins to publish (as a JSON array, ex: [\"app\", \"browser\"])'
         required: true
 jobs:
   publish-ios:
