@@ -144,6 +144,14 @@ export interface BackButtonListenerEvent {
   canGoBack: boolean;
 }
 
+export interface BackGestureListenerEvent {
+  phase: 'start' | 'progress' | 'cancel' | 'commit';
+  progress?: number;
+  swipeEdge?: 'left' | 'right' | 'none';
+  touchX?: number;
+  touchY?: number;
+}
+
 export interface ToggleBackButtonHandlerOptions {
   /**
    * Indicates whether to enable or disable default back button handling.
@@ -157,6 +165,7 @@ export type StateChangeListener = (state: AppState) => void;
 export type URLOpenListener = (event: URLOpenListenerEvent) => void;
 export type RestoredListener = (event: RestoredListenerEvent) => void;
 export type BackButtonListener = (event: BackButtonListenerEvent) => void;
+export type BackGestureListener = (event: BackGestureListenerEvent) => void;
 
 export interface AppLanguageCode {
   /**
@@ -302,6 +311,8 @@ export interface AppPlugin {
    * @since 1.0.0
    */
   addListener(eventName: 'backButton', listenerFunc: BackButtonListener): Promise<PluginListenerHandle>;
+
+  addListener(eventName: 'backGesture', listenerFunc: BackGestureListener): Promise<PluginListenerHandle>;
 
   /**
    * Remove all native listeners for this plugin

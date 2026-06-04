@@ -127,6 +127,7 @@ export default config;
 * [`addListener('appUrlOpen', ...)`](#addlistenerappurlopen-)
 * [`addListener('appRestoredResult', ...)`](#addlistenerapprestoredresult-)
 * [`addListener('backButton', ...)`](#addlistenerbackbutton-)
+* [`addListener('backGesture', ...)`](#addlistenerbackgesture-)
 * [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
@@ -403,6 +404,22 @@ If you want to close the app, call `App.exitApp()`.
 --------------------
 
 
+### addListener('backGesture', ...)
+
+```typescript
+addListener(eventName: 'backGesture', listenerFunc: BackGestureListener) => Promise<PluginListenerHandle>
+```
+
+| Param              | Type                                                                |
+| ------------------ | ------------------------------------------------------------------- |
+| **`eventName`**    | <code>'backGesture'</code>                                          |
+| **`listenerFunc`** | <code><a href="#backgesturelistener">BackGestureListener</a></code> |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
+
+--------------------
+
+
 ### removeAllListeners()
 
 ```typescript
@@ -491,6 +508,17 @@ Remove all native listeners for this plugin
 | **`canGoBack`** | <code>boolean</code> | Indicates whether the browser can go back in history. False when the history stack is on the first entry. | 1.0.0 |
 
 
+#### BackGestureListenerEvent
+
+| Prop            | Type                                                       |
+| --------------- | ---------------------------------------------------------- |
+| **`phase`**     | <code>'start' \| 'progress' \| 'cancel' \| 'commit'</code> |
+| **`progress`**  | <code>number</code>                                        |
+| **`swipeEdge`** | <code>'left' \| 'right'</code>                             |
+| **`touchX`**    | <code>number</code>                                        |
+| **`touchY`**    | <code>number</code>                                        |
+
+
 ### Type Aliases
 
 
@@ -512,5 +540,10 @@ Remove all native listeners for this plugin
 #### BackButtonListener
 
 <code>(event: <a href="#backbuttonlistenerevent">BackButtonListenerEvent</a>): void</code>
+
+
+#### BackGestureListener
+
+<code>(event: <a href="#backgesturelistenerevent">BackGestureListenerEvent</a>): void</code>
 
 </docgen-api>

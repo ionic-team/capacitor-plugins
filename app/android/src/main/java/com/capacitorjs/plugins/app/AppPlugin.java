@@ -1,10 +1,20 @@
 package com.capacitorjs.plugins.app;
 
+import static android.window.BackEvent.EDGE_LEFT;
+import static android.window.BackEvent.EDGE_NONE;
+import static android.window.BackEvent.EDGE_RIGHT;
+
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.net.Uri;
+import android.os.Build;
+import android.window.BackEvent;
+import android.window.OnBackAnimationCallback;
+
+import androidx.activity.BackEventCompat;
 import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.pm.PackageInfoCompat;
 import androidx.core.os.LocaleListCompat;
@@ -21,6 +31,7 @@ import java.util.Locale;
 public class AppPlugin extends Plugin {
 
     private static final String EVENT_BACK_BUTTON = "backButton";
+    private static final String EVENT_BACK_GESTURE = "backGesture";
     private static final String EVENT_URL_OPEN = "appUrlOpen";
     private static final String EVENT_STATE_CHANGE = "appStateChange";
     private static final String EVENT_RESTORED_RESULT = "appRestoredResult";
@@ -29,6 +40,7 @@ public class AppPlugin extends Plugin {
     private boolean hasPausedEver = false;
 
     private OnBackPressedCallback onBackPressedCallback;
+    private OnBackAnimationCallback onBackAnimationCallback;
 
     public void load() {
         boolean disableBackButtonHandler = getConfig().getBoolean("disableBackButtonHandler", false);
@@ -58,6 +70,58 @@ public class AppPlugin extends Plugin {
                 }
             }
         };
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            this.onBackAnimationCallback = new OnBackAnimationCallback() {
+                @Override
+                public void onBackInvoked() {
+                    if (hasListeners(EVENT_BACK_GESTURE)) {
+                        JSObject data = new JSObject();
+                        data.put("phase", "commit");
+
+                        notifyListeners(EVENT_BACK_GESTURE, data, true);
+                    }
+                }
+
+                @Override
+                public void onBackStarted(@NonNull BackEvent backEvent) {
+                    OnBackAnimationCallback.super.onBackStarted(backEvent);
+                    JSObject data = new JSObject();
+                    data.put("phase", "start");
+                    data.put("progress", backEvent.getProgress());
+                    data.put("swipeEdge", backEvent.getSwipeEdge());
+                    data.put("touchX", backEvent.getTouchX());
+                    data.put("touchY", backEvent.getTouchY());
+                    data.put("swipeEdge", getSwipeEdge(backEvent.getSwipeEdge()));
+
+                    notifyListeners(EVENT_BACK_GESTURE, data, true);
+                }
+
+                @Override
+                public void onBackProgressed(@NonNull BackEvent backEvent) {
+                    OnBackAnimationCallback.super.onBackStarted(backEvent);
+                    JSObject data = new JSObject();
+                    data.put("phase", "progress");
+                    data.put("progress", backEvent.getProgress());
+                    data.put("swipeEdge", backEvent.getSwipeEdge());
+                    data.put("touchX", backEvent.getTouchX());
+                    data.put("touchY", backEvent.getTouchY());
+                    data.put("swipeEdge", getSwipeEdge(backEvent.getSwipeEdge()));
+
+                    notifyListeners(EVENT_BACK_GESTURE, data, true);
+                }
+
+                @Override
+                public void onBackCancelled() {
+                    OnBackAnimationCallback.super.onBackCancelled();
+
+                    JSObject data = new JSObject();
+                    data.put("phase", "cancel");
+
+                    notifyListeners(EVENT_BACK_GESTURE, data, true);
+                }
+            };
+        }
 
         getActivity().getOnBackPressedDispatcher().addCallback(getActivity(), this.onBackPressedCallback);
     }
@@ -177,5 +241,14 @@ public class AppPlugin extends Plugin {
     private void unsetAppListeners() {
         bridge.getApp().setStatusChangeListener(null);
         bridge.getApp().setAppRestoredListener(null);
+    }
+
+    private String getSwipeEdge(int edge) {
+        return switch (edge) {
+            case EDGE_LEFT -> "left";
+            case EDGE_RIGHT -> "right";
+            case EDGE_NONE -> "none";
+            default -> "none";
+        };
     }
 }
