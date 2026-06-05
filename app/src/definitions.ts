@@ -15,6 +15,8 @@ declare module '@capacitor/cli' {
        * @example true
        */
       disableBackButtonHandler?: boolean;
+
+      backGestureEnabled?: boolean;
     };
   }
 }
@@ -232,6 +234,8 @@ export interface AppPlugin {
    * @since 7.1.0
    */
   toggleBackButtonHandler(options: ToggleBackButtonHandlerOptions): Promise<void>;
+
+  setBackGestureEnabled(options: { enabled: boolean }): Promise<void>;
 
   /**
    * Listen for changes in the app or the activity states.

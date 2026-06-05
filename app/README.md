@@ -75,6 +75,7 @@ const checkAppLaunchUrl = async () => {
 | Prop                           | Type                 | Description                                                                    | Default            | Since |
 | ------------------------------ | -------------------- | ------------------------------------------------------------------------------ | ------------------ | ----- |
 | **`disableBackButtonHandler`** | <code>boolean</code> | Disable the plugin's default back button handling. Only available for Android. | <code>false</code> | 7.1.0 |
+| **`backGestureEnabled`**       | <code>boolean</code> |                                                                                |                    |       |
 
 ### Examples
 
@@ -84,7 +85,8 @@ In `capacitor.config.json`:
 {
   "plugins": {
     "App": {
-      "disableBackButtonHandler": true
+      "disableBackButtonHandler": true,
+      "backGestureEnabled": undefined
     }
   }
 }
@@ -101,6 +103,7 @@ const config: CapacitorConfig = {
   plugins: {
     App: {
       disableBackButtonHandler: true,
+      backGestureEnabled: undefined,
     },
   },
 };
@@ -121,6 +124,7 @@ export default config;
 * [`minimizeApp()`](#minimizeapp)
 * [`getAppLanguage()`](#getapplanguage)
 * [`toggleBackButtonHandler(...)`](#togglebackbuttonhandler)
+* [`setBackGestureEnabled(...)`](#setbackgestureenabled)
 * [`addListener('appStateChange', ...)`](#addlistenerappstatechange-)
 * [`addListener('pause', ...)`](#addlistenerpause-)
 * [`addListener('resume', ...)`](#addlistenerresume-)
@@ -243,6 +247,19 @@ Only available for Android.
 | **`options`** | <code><a href="#togglebackbuttonhandleroptions">ToggleBackButtonHandlerOptions</a></code> |
 
 **Since:** 7.1.0
+
+--------------------
+
+
+### setBackGestureEnabled(...)
+
+```typescript
+setBackGestureEnabled(options: { enabled: boolean; }) => Promise<void>
+```
+
+| Param         | Type                               |
+| ------------- | ---------------------------------- |
+| **`options`** | <code>{ enabled: boolean; }</code> |
 
 --------------------
 
@@ -514,7 +531,7 @@ Remove all native listeners for this plugin
 | --------------- | ---------------------------------------------------------- |
 | **`phase`**     | <code>'start' \| 'progress' \| 'cancel' \| 'commit'</code> |
 | **`progress`**  | <code>number</code>                                        |
-| **`swipeEdge`** | <code>'left' \| 'right'</code>                             |
+| **`swipeEdge`** | <code>'none' \| 'left' \| 'right'</code>                   |
 | **`touchX`**    | <code>number</code>                                        |
 | **`touchY`**    | <code>number</code>                                        |
 
