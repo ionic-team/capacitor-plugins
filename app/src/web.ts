@@ -32,6 +32,10 @@ export class AppWeb extends WebPlugin implements AppPlugin {
     throw this.unimplemented('Not implemented on web.');
   }
 
+  async setBackGestureEnabled(): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
+
   private handleVisibilityChange = () => {
     const data = {
       isActive: document.hidden !== true,
