@@ -17,6 +17,8 @@ public class AppPlugin: CAPPlugin, CAPBridgedPlugin {
     private var observers: [NSObjectProtocol] = []
 
     override public func load() {
+        loadGestureRecognizers()
+
         NotificationCenter.default.addObserver(self, selector: #selector(self.handleUrlOpened(notification:)), name: Notification.Name.capacitorOpenURL, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.handleUniversalLink(notification:)), name: Notification.Name.capacitorOpenUniversalLink, object: nil)
         observers.append(NotificationCenter.default.addObserver(forName: UIApplication.didBecomeActiveNotification, object: nil, queue: OperationQueue.main) { [weak self] (_) in
@@ -124,5 +126,87 @@ public class AppPlugin: CAPPlugin, CAPBridgedPlugin {
 
     @objc func toggleBackButtonHandler(_ call: CAPPluginCall) {
         call.unimplemented()
+    }
+
+    @objc func handleEdgePan(_ recognizer: UIScreenEdgePanGestureRecognizer) {
+        guard let view = bridge?.webView else { return }
+
+        let translation = recognizer.translation(in: webView)
+        let viewWidth = view.bounds.width
+        let viewHeight = view.bounds.height
+
+        var data: [String: Any] = [:]
+
+        switch recognizer.edges {
+        case .left:
+            let progress = translation.x / viewWidth
+            data["swipeEdge"] = "left"
+            data["progress"] = max(0, min(1, progress))
+
+        case .right:
+            let progress = -translation.x / viewWidth
+            data["swipeEdge"] = "right"
+            data["progress"] = max(0, min(1, progress))
+        case .top:
+            let progress = translation.y / viewHeight
+            data["swipeEdge"] = "top"
+            data["progress"] = max(0, min(1, progress))
+        case .bottom:
+            let progress = -translation.y / viewHeight
+            data["swipeEdge"] = "bottom"
+            data["progress"] = max(0, min(1, progress))
+        case .all:
+            break
+        default:
+            break
+        }
+
+        switch recognizer.state {
+        case .began:
+            data["phase"] = "start"
+        case .changed:
+            data["phase"] = "progress"
+        case .ended:
+            data["phase"] = "commit"
+        case .cancelled:
+            data["phase"] = "cancel"
+        case .failed:
+            data["phase"] = "cancel"
+        case .possible:
+            break
+        @unknown default:
+            break
+        }
+
+        notifyListeners("backGesture", data: data)
+    }
+
+    private func loadGestureRecognizers() {
+        guard let window = UIApplication.shared.delegate?.window ?? nil else { return }
+
+        let leftEdgePanRecognizer = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(self.handleEdgePan(_:)))
+        leftEdgePanRecognizer.delegate = self
+        leftEdgePanRecognizer.edges = .left
+
+        let rightEdgePanRecognizer = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(self.handleEdgePan(_:)))
+        rightEdgePanRecognizer.delegate = self
+        rightEdgePanRecognizer.edges = .right
+
+        window.addGestureRecognizer(leftEdgePanRecognizer)
+        window.addGestureRecognizer(rightEdgePanRecognizer)
+    }
+}
+
+extension AppPlugin: UIGestureRecognizerDelegate {
+    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
+    }
+
+    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return false
+    }
+
+    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRequireFailureOf otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return false
     }
 }
