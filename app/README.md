@@ -75,7 +75,7 @@ const checkAppLaunchUrl = async () => {
 | Prop                           | Type                 | Description                                                                    | Default            | Since |
 | ------------------------------ | -------------------- | ------------------------------------------------------------------------------ | ------------------ | ----- |
 | **`disableBackButtonHandler`** | <code>boolean</code> | Disable the plugin's default back button handling. Only available for Android. | <code>false</code> | 7.1.0 |
-| **`backGestureEnabled`**       | <code>boolean</code> |                                                                                |                    |       |
+| **`enableEdgeGestureHandler`** | <code>boolean</code> |                                                                                |                    |       |
 
 ### Examples
 
@@ -86,7 +86,7 @@ In `capacitor.config.json`:
   "plugins": {
     "App": {
       "disableBackButtonHandler": true,
-      "backGestureEnabled": undefined
+      "enableEdgeGestureHandler": undefined
     }
   }
 }
@@ -103,7 +103,7 @@ const config: CapacitorConfig = {
   plugins: {
     App: {
       disableBackButtonHandler: true,
-      backGestureEnabled: undefined,
+      enableEdgeGestureHandler: undefined,
     },
   },
 };
@@ -124,14 +124,14 @@ export default config;
 * [`minimizeApp()`](#minimizeapp)
 * [`getAppLanguage()`](#getapplanguage)
 * [`toggleBackButtonHandler(...)`](#togglebackbuttonhandler)
-* [`setBackGestureEnabled(...)`](#setbackgestureenabled)
+* [`toggleEdgeGestureHandler(...)`](#toggleedgegesturehandler)
 * [`addListener('appStateChange', ...)`](#addlistenerappstatechange-)
 * [`addListener('pause', ...)`](#addlistenerpause-)
 * [`addListener('resume', ...)`](#addlistenerresume-)
 * [`addListener('appUrlOpen', ...)`](#addlistenerappurlopen-)
 * [`addListener('appRestoredResult', ...)`](#addlistenerapprestoredresult-)
 * [`addListener('backButton', ...)`](#addlistenerbackbutton-)
-* [`addListener('backGesture', ...)`](#addlistenerbackgesture-)
+* [`addListener('edgeGesture', ...)`](#addlisteneredgegesture-)
 * [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
@@ -251,15 +251,15 @@ Only available for Android.
 --------------------
 
 
-### setBackGestureEnabled(...)
+### toggleEdgeGestureHandler(...)
 
 ```typescript
-setBackGestureEnabled(options: { enabled: boolean; }) => Promise<void>
+toggleEdgeGestureHandler(options: ToggleEdgeGestureHandlerOptions) => Promise<void>
 ```
 
-| Param         | Type                               |
-| ------------- | ---------------------------------- |
-| **`options`** | <code>{ enabled: boolean; }</code> |
+| Param         | Type                                                                                        |
+| ------------- | ------------------------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#toggleedgegesturehandleroptions">ToggleEdgeGestureHandlerOptions</a></code> |
 
 --------------------
 
@@ -421,16 +421,16 @@ If you want to close the app, call `App.exitApp()`.
 --------------------
 
 
-### addListener('backGesture', ...)
+### addListener('edgeGesture', ...)
 
 ```typescript
-addListener(eventName: 'backGesture', listenerFunc: BackGestureListener) => Promise<PluginListenerHandle>
+addListener(eventName: 'edgeGesture', listenerFunc: EdgeGestureListener) => Promise<PluginListenerHandle>
 ```
 
 | Param              | Type                                                                |
 | ------------------ | ------------------------------------------------------------------- |
-| **`eventName`**    | <code>'backGesture'</code>                                          |
-| **`listenerFunc`** | <code><a href="#backgesturelistener">BackGestureListener</a></code> |
+| **`eventName`**    | <code>'edgeGesture'</code>                                          |
+| **`listenerFunc`** | <code><a href="#edgegesturelistener">EdgeGestureListener</a></code> |
 
 **Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
 
@@ -491,6 +491,13 @@ Remove all native listeners for this plugin
 | **`enabled`** | <code>boolean</code> | Indicates whether to enable or disable default back button handling. | 7.1.0 |
 
 
+#### ToggleEdgeGestureHandlerOptions
+
+| Prop          | Type                 |
+| ------------- | -------------------- |
+| **`enabled`** | <code>boolean</code> |
+
+
 #### PluginListenerHandle
 
 | Prop         | Type                                      |
@@ -525,7 +532,7 @@ Remove all native listeners for this plugin
 | **`canGoBack`** | <code>boolean</code> | Indicates whether the browser can go back in history. False when the history stack is on the first entry. | 1.0.0 |
 
 
-#### BackGestureListenerEvent
+#### EdgeGestureListenerEvent
 
 | Prop            | Type                                                       |
 | --------------- | ---------------------------------------------------------- |
@@ -559,8 +566,8 @@ Remove all native listeners for this plugin
 <code>(event: <a href="#backbuttonlistenerevent">BackButtonListenerEvent</a>): void</code>
 
 
-#### BackGestureListener
+#### EdgeGestureListener
 
-<code>(event: <a href="#backgesturelistenerevent">BackGestureListenerEvent</a>): void</code>
+<code>(event: <a href="#edgegesturelistenerevent">EdgeGestureListenerEvent</a>): void</code>
 
 </docgen-api>

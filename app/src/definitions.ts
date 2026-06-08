@@ -16,7 +16,7 @@ declare module '@capacitor/cli' {
        */
       disableBackButtonHandler?: boolean;
 
-      backGestureEnabled?: boolean;
+      enableEdgeGestureHandler?: boolean;
     };
   }
 }
@@ -146,7 +146,7 @@ export interface BackButtonListenerEvent {
   canGoBack: boolean;
 }
 
-export interface BackGestureListenerEvent {
+export interface EdgeGestureListenerEvent {
   phase: 'start' | 'progress' | 'cancel' | 'commit';
   progress?: number;
   swipeEdge?: 'left' | 'right' | 'none';
@@ -163,11 +163,15 @@ export interface ToggleBackButtonHandlerOptions {
   enabled: boolean;
 }
 
+export interface ToggleEdgeGestureHandlerOptions {
+  enabled: boolean;
+}
+
 export type StateChangeListener = (state: AppState) => void;
 export type URLOpenListener = (event: URLOpenListenerEvent) => void;
 export type RestoredListener = (event: RestoredListenerEvent) => void;
 export type BackButtonListener = (event: BackButtonListenerEvent) => void;
-export type BackGestureListener = (event: BackGestureListenerEvent) => void;
+export type EdgeGestureListener = (event: EdgeGestureListenerEvent) => void;
 
 export interface AppLanguageCode {
   /**
@@ -235,7 +239,7 @@ export interface AppPlugin {
    */
   toggleBackButtonHandler(options: ToggleBackButtonHandlerOptions): Promise<void>;
 
-  setBackGestureEnabled(options: { enabled: boolean }): Promise<void>;
+  toggleEdgeGestureHandler(options: ToggleEdgeGestureHandlerOptions): Promise<void>;
 
   /**
    * Listen for changes in the app or the activity states.
@@ -316,7 +320,7 @@ export interface AppPlugin {
    */
   addListener(eventName: 'backButton', listenerFunc: BackButtonListener): Promise<PluginListenerHandle>;
 
-  addListener(eventName: 'backGesture', listenerFunc: BackGestureListener): Promise<PluginListenerHandle>;
+  addListener(eventName: 'edgeGesture', listenerFunc: EdgeGestureListener): Promise<PluginListenerHandle>;
 
   /**
    * Remove all native listeners for this plugin
