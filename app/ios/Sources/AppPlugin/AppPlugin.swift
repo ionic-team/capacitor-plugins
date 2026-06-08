@@ -149,10 +149,14 @@ public class AppPlugin: CAPPlugin, CAPBridgedPlugin {
         guard let view = bridge?.webView else { return }
 
         let translation = recognizer.translation(in: webView)
+        let touch = recognizer.location(in: view)
         let viewWidth = view.bounds.width
         let viewHeight = view.bounds.height
 
         var data: [String: Any] = [:]
+      
+        data["touchX"] = touch.x
+        data["touchY"] = touch.y
 
         switch recognizer.edges {
         case .left:
