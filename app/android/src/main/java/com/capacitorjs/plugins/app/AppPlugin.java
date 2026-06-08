@@ -12,7 +12,6 @@ import android.os.Build;
 import android.window.BackEvent;
 import android.window.OnBackAnimationCallback;
 import android.window.OnBackInvokedDispatcher;
-
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -48,7 +47,6 @@ public class AppPlugin extends Plugin {
     private Float lastEdgeProgress = null;
     private Float lastEdgeTouchX = null;
     private Float lastEdgeTouchY = null;
-
 
     public void load() {
         this.backButtonHandlerEnabled = !getConfig().getBoolean("disableBackButtonHandler", false);
@@ -310,10 +308,9 @@ public class AppPlugin extends Plugin {
                 }
             };
 
-            getActivity().getOnBackInvokedDispatcher().registerOnBackInvokedCallback(
-                OnBackInvokedDispatcher.PRIORITY_DEFAULT,
-                this.onBackAnimationCallback
-            );
+            getActivity()
+                .getOnBackInvokedDispatcher()
+                .registerOnBackInvokedCallback(OnBackInvokedDispatcher.PRIORITY_DEFAULT, this.onBackAnimationCallback);
         }
     }
 

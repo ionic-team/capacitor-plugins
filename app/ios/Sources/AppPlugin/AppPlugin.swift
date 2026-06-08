@@ -16,12 +16,12 @@ public class AppPlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "toggleEdgeGestureHandler", returnType: CAPPluginReturnPromise)
     ]
     private var observers: [NSObjectProtocol] = []
-    private var leftEdgePanRecognizer: UIScreenEdgePanGestureRecognizer? = nil
-    private var rightEdgePanRecognizer: UIScreenEdgePanGestureRecognizer? = nil
-  
+    private var leftEdgePanRecognizer: UIScreenEdgePanGestureRecognizer?
+    private var rightEdgePanRecognizer: UIScreenEdgePanGestureRecognizer?
+
     override public func load() {
         if getConfig().getBoolean("enableEdgeGestureHandler", false) {
-          loadGestureRecognizers()
+            loadGestureRecognizers()
         }
 
         NotificationCenter.default.addObserver(self, selector: #selector(self.handleUrlOpened(notification:)), name: Notification.Name.capacitorOpenURL, object: nil)
@@ -132,17 +132,17 @@ public class AppPlugin: CAPPlugin, CAPBridgedPlugin {
     @objc func toggleBackButtonHandler(_ call: CAPPluginCall) {
         call.unimplemented()
     }
-  
+
     @objc func toggleEdgeGestureHandler(_ call: CAPPluginCall) {
-      DispatchQueue.main.async {
-        if (call.getBool("enabled", false)) {
-          self.loadGestureRecognizers()
-        } else {
-          self.destroyGestureRecognizers()
+        DispatchQueue.main.async {
+            if call.getBool("enabled", false) {
+                self.loadGestureRecognizers()
+            } else {
+                self.destroyGestureRecognizers()
+            }
+
+            call.resolve()
         }
-        
-        call.resolve()
-      }
     }
 
     @objc func handleEdgePan(_ recognizer: UIScreenEdgePanGestureRecognizer) {
@@ -154,7 +154,7 @@ public class AppPlugin: CAPPlugin, CAPBridgedPlugin {
         let viewHeight = view.bounds.height
 
         var data: [String: Any] = [:]
-      
+
         data["touchX"] = touch.x
         data["touchY"] = touch.y
 
@@ -215,19 +215,19 @@ public class AppPlugin: CAPPlugin, CAPBridgedPlugin {
 
         window.addGestureRecognizer(leftEdgePanRecognizer)
         window.addGestureRecognizer(rightEdgePanRecognizer)
-      
+
         self.leftEdgePanRecognizer = leftEdgePanRecognizer
         self.rightEdgePanRecognizer = rightEdgePanRecognizer
     }
-  
+
     private func destroyGestureRecognizers() {
-      guard let window = UIApplication.shared.delegate?.window ?? nil,
-            let leftEdgePanRecognizer = self.leftEdgePanRecognizer,
-            let rightEdgePanRecognizer = self.rightEdgePanRecognizer
+        guard let window = UIApplication.shared.delegate?.window ?? nil,
+              let leftEdgePanRecognizer = self.leftEdgePanRecognizer,
+              let rightEdgePanRecognizer = self.rightEdgePanRecognizer
         else { return }
-      
-      window.removeGestureRecognizer(leftEdgePanRecognizer)
-      window.removeGestureRecognizer(rightEdgePanRecognizer)
+
+        window.removeGestureRecognizer(leftEdgePanRecognizer)
+        window.removeGestureRecognizer(rightEdgePanRecognizer)
     }
 }
 
