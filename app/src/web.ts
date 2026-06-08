@@ -32,7 +32,7 @@ export class AppWeb extends WebPlugin implements AppPlugin {
     throw this.unimplemented('Not implemented on web.');
   }
 
-  async setBackGestureEnabled(): Promise<void> {
+  async toggleEdgeGestureHandler(): Promise<void> {
     throw new Error('Method not implemented.');
   }
 

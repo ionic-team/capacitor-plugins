@@ -13,14 +13,14 @@ public class AppPlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "getState", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "minimizeApp", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "toggleBackButtonHandler", returnType: CAPPluginReturnPromise),
-        CAPPluginMethod(name: "setBackGestureEnabled", returnType: CAPPluginReturnPromise)
+        CAPPluginMethod(name: "toggleEdgeGestureHandler", returnType: CAPPluginReturnPromise)
     ]
     private var observers: [NSObjectProtocol] = []
     private var leftEdgePanRecognizer: UIScreenEdgePanGestureRecognizer? = nil
     private var rightEdgePanRecognizer: UIScreenEdgePanGestureRecognizer? = nil
   
     override public func load() {
-        if getConfig().getBoolean("enableBackGestureHandler", false) {
+        if getConfig().getBoolean("enableEdgeGestureHandler", false) {
           loadGestureRecognizers()
         }
 
@@ -133,14 +133,16 @@ public class AppPlugin: CAPPlugin, CAPBridgedPlugin {
         call.unimplemented()
     }
   
-    @objc func setBackGestureEnabled(_ call: CAPPluginCall) {
-      if (call.getBool("enabled", false)) {
-        loadGestureRecognizers()
-      } else {
-        destroyGestureRecognizers()
+    @objc func toggleEdgeGestureHandler(_ call: CAPPluginCall) {
+      DispatchQueue.main.async {
+        if (call.getBool("enabled", false)) {
+          self.loadGestureRecognizers()
+        } else {
+          self.destroyGestureRecognizers()
+        }
+        
+        call.resolve()
       }
-      
-      call.resolve()
     }
 
     @objc func handleEdgePan(_ recognizer: UIScreenEdgePanGestureRecognizer) {
@@ -193,7 +195,7 @@ public class AppPlugin: CAPPlugin, CAPBridgedPlugin {
             break
         }
 
-        notifyListeners("backGesture", data: data)
+        notifyListeners("edgeGesture", data: data)
     }
 
     private func loadGestureRecognizers() {

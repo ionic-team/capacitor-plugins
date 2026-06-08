@@ -30,7 +30,7 @@ import java.util.Locale;
 public class AppPlugin extends Plugin {
 
     private static final String EVENT_BACK_BUTTON = "backButton";
-    private static final String EVENT_BACK_GESTURE = "backGesture";
+    private static final String EVENT_BACK_GESTURE = "edgeGesture";
     private static final String EVENT_URL_OPEN = "appUrlOpen";
     private static final String EVENT_STATE_CHANGE = "appStateChange";
     private static final String EVENT_RESTORED_RESULT = "appRestoredResult";
@@ -38,7 +38,7 @@ public class AppPlugin extends Plugin {
     private static final String EVENT_RESUME = "resume";
     private boolean hasPausedEver = false;
     private boolean backButtonHandlerEnabled = false;
-    private boolean backGestureHandlerEnabled = false;
+    private boolean edgeGestureHandlerEnabled = false;
 
     private OnBackPressedCallback onBackPressedCallback;
     private OnBackAnimationCallback onBackAnimationCallback;
@@ -50,7 +50,7 @@ public class AppPlugin extends Plugin {
 
     public void load() {
         this.backButtonHandlerEnabled = !getConfig().getBoolean("disableBackButtonHandler", false);
-        this.backGestureHandlerEnabled = getConfig().getBoolean("enableBackGestureHandler", false);
+        this.edgeGestureHandlerEnabled = getConfig().getBoolean("enableEdgeGestureHandler", false);
 
         bridge
             .getApp()
@@ -67,7 +67,7 @@ public class AppPlugin extends Plugin {
                 notifyListeners(EVENT_RESTORED_RESULT, result.getWrappedResult(), true);
             });
 
-        this.onBackPressedCallback = new OnBackPressedCallback(backButtonHandlerEnabled && !backGestureHandlerEnabled) {
+        this.onBackPressedCallback = new OnBackPressedCallback(backButtonHandlerEnabled && !edgeGestureHandlerEnabled) {
             @Override
             public void handleOnBackPressed() {
                 if (!hasListeners(EVENT_BACK_BUTTON)) {
@@ -83,7 +83,7 @@ public class AppPlugin extends Plugin {
             }
         };
 
-        if (this.backGestureHandlerEnabled) {
+        if (this.edgeGestureHandlerEnabled) {
             this.setupBackGestureHandlers();
         }
 
@@ -164,11 +164,11 @@ public class AppPlugin extends Plugin {
     }
 
     @PluginMethod
-    public void setBackGestureEnabled(PluginCall call) {
+    public void toggleEdgeGestureHandler(PluginCall call) {
         Boolean enabled = call.getBoolean("enabled", false);
-        backGestureHandlerEnabled = enabled;
+        edgeGestureHandlerEnabled = enabled;
 
-        if (backGestureHandlerEnabled) {
+        if (edgeGestureHandlerEnabled) {
             this.onBackPressedCallback.setEnabled(false);
             setupBackGestureHandlers();
         } else {
