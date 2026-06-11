@@ -21,7 +21,9 @@ public class AppPlugin: CAPPlugin, CAPBridgedPlugin {
 
     override public func load() {
         if getConfig().getBoolean("enableEdgeGestureHandler", false) {
-            loadGestureRecognizers()
+            DispatchQueue.main.async { [weak self] in
+                self?.loadGestureRecognizers()
+            }
         }
 
         NotificationCenter.default.addObserver(self, selector: #selector(self.handleUrlOpened(notification:)), name: Notification.Name.capacitorOpenURL, object: nil)
@@ -148,7 +150,7 @@ public class AppPlugin: CAPPlugin, CAPBridgedPlugin {
     @objc func handleEdgePan(_ recognizer: UIScreenEdgePanGestureRecognizer) {
         guard let view = bridge?.webView else { return }
 
-        let translation = recognizer.translation(in: webView)
+        let translation = recognizer.translation(in: view)
         let touch = recognizer.location(in: view)
         let viewWidth = view.bounds.width
         let viewHeight = view.bounds.height
@@ -163,21 +165,10 @@ public class AppPlugin: CAPPlugin, CAPBridgedPlugin {
             let progress = translation.x / viewWidth
             data["swipeEdge"] = "left"
             data["progress"] = max(0, min(1, progress))
-
         case .right:
             let progress = -translation.x / viewWidth
             data["swipeEdge"] = "right"
             data["progress"] = max(0, min(1, progress))
-        case .top:
-            let progress = translation.y / viewHeight
-            data["swipeEdge"] = "top"
-            data["progress"] = max(0, min(1, progress))
-        case .bottom:
-            let progress = -translation.y / viewHeight
-            data["swipeEdge"] = "bottom"
-            data["progress"] = max(0, min(1, progress))
-        case .all:
-            break
         default:
             break
         }
@@ -199,11 +190,17 @@ public class AppPlugin: CAPPlugin, CAPBridgedPlugin {
             break
         }
 
-        notifyListeners("edgeGesture", data: data)
+        // dont notify if there is no phase
+        guard data["phase"] != nil else { return }
+
+        if hasListeners("edgeGesture") {
+            notifyListeners("edgeGesture", data: data)
+        }
     }
 
     private func loadGestureRecognizers() {
-        guard let window = UIApplication.shared.delegate?.window ?? nil else { return }
+        guard self.leftEdgePanRecognizer == nil, self.rightEdgePanRecognizer == nil else { return }
+        guard let window = bridge?.viewController?.view.window else { return }
 
         let leftEdgePanRecognizer = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(self.handleEdgePan(_:)))
         leftEdgePanRecognizer.delegate = self
@@ -221,26 +218,20 @@ public class AppPlugin: CAPPlugin, CAPBridgedPlugin {
     }
 
     private func destroyGestureRecognizers() {
-        guard let window = UIApplication.shared.delegate?.window ?? nil,
-              let leftEdgePanRecognizer = self.leftEdgePanRecognizer,
+        guard let leftEdgePanRecognizer = self.leftEdgePanRecognizer,
               let rightEdgePanRecognizer = self.rightEdgePanRecognizer
         else { return }
 
-        window.removeGestureRecognizer(leftEdgePanRecognizer)
-        window.removeGestureRecognizer(rightEdgePanRecognizer)
+        leftEdgePanRecognizer.view?.removeGestureRecognizer(leftEdgePanRecognizer)
+        rightEdgePanRecognizer.view?.removeGestureRecognizer(rightEdgePanRecognizer)
+
+        self.leftEdgePanRecognizer = nil
+        self.rightEdgePanRecognizer = nil
     }
 }
 
 extension AppPlugin: UIGestureRecognizerDelegate {
     public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return true
-    }
-
-    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return false
-    }
-
-    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRequireFailureOf otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return false
+        return gestureRecognizer === leftEdgePanRecognizer || gestureRecognizer === rightEdgePanRecognizer
     }
 }
