@@ -43,6 +43,9 @@ For being able to open the app from a custom scheme you need to register the sch
 
 `custom_url_scheme` value is stored in `strings.xml`. When the Android platform is added, `@capacitor/cli` adds the app's package name as default value, but can be replaced by editing the `strings.xml` file.
 
+## Android Predictive Back
+Android predictive back also requires `android:enableOnBackInvokedCallback="true"` on `<application>` in your `AndroidManifest.xml` (on Android 14; default on Android 15+).
+
 ## Example
 
 ```typescript
@@ -72,10 +75,10 @@ const checkAppLaunchUrl = async () => {
 <docgen-config>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
 
-| Prop                           | Type                 | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         | Default            | Since |
-| ------------------------------ | -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
-| **`disableBackButtonHandler`** | <code>boolean</code> | Disable the plugin's default back button handling. Only available for Android.                                                                                                                                                                                                                                                                                                                                                                                                                      | <code>false</code> | 7.1.0 |
-| **`enableEdgeGestureHandler`** | <code>boolean</code> | Enable the plugin's edge gesture handler at startup. When enabled, the plugin emits `edgeGesture` events for system edge swipes (iOS left/right screen-edge pans, Android predictive back). On Android, enabling this handler suppresses the default `backButton` handler for the duration that the edge gesture handler is active. The Android predictive-back integration requires API 34 (Android 14) or later; on earlier versions the configuration is accepted but no events will be emitted. | <code>false</code> | 9.0.0 |
+| Prop                           | Type                 | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | Default            | Since |
+| ------------------------------ | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
+| **`disableBackButtonHandler`** | <code>boolean</code> | Disable the plugin's default back button handling. Only available for Android.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         | <code>false</code> | 7.1.0 |
+| **`enableEdgeGestureHandler`** | <code>boolean</code> | Enable the plugin's edge gesture handler at startup. When enabled, the plugin emits `edgeGesture` events for system edge swipes (iOS left/right screen-edge pans, Android predictive back). On Android, enabling this handler suppresses the default `backButton` handler for the duration that the edge gesture handler is active. The Android predictive-back integration requires API 34 (Android 14) or later; on earlier versions the configuration is accepted but no events will be emitted. Android predictive back also requires `android:enableOnBackInvokedCallback="true"` on `&lt;application&gt;` in your `AndroidManifest.xml` (on Android 14; default on Android 15+). | <code>false</code> | 9.0.0 |
 
 ### Examples
 
@@ -267,7 +270,10 @@ On Android, enabling the edge gesture handler temporarily disables
 the default `backButton` handler; disabling it restores the previous
 back button handler state. The Android predictive-back integration
 requires API 34 (Android 14) or later; on earlier versions the call
-resolves but no events will be emitted.
+resolves but no events will be emitted. Android predictive back also
+requires `android:enableOnBackInvokedCallback="true"` on
+`&lt;application&gt;` in your `AndroidManifest.xml` (on Android 14; default
+on Android 15+).
 
 | Param         | Type                                                                                        |
 | ------------- | ------------------------------------------------------------------------------------------- |

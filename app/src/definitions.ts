@@ -26,7 +26,10 @@ declare module '@capacitor/cli' {
        * `backButton` handler for the duration that the edge gesture handler
        * is active. The Android predictive-back integration requires API 34
        * (Android 14) or later; on earlier versions the configuration is
-       * accepted but no events will be emitted.
+       * accepted but no events will be emitted. Android predictive back
+       * also requires `android:enableOnBackInvokedCallback="true"` on
+       * `<application>` in your `AndroidManifest.xml` (on Android 14;
+       * default on Android 15+).
        *
        * @since 9.0.0
        * @default false
@@ -323,7 +326,10 @@ export interface AppPlugin {
    * the default `backButton` handler; disabling it restores the previous
    * back button handler state. The Android predictive-back integration
    * requires API 34 (Android 14) or later; on earlier versions the call
-   * resolves but no events will be emitted.
+   * resolves but no events will be emitted. Android predictive back also
+   * requires `android:enableOnBackInvokedCallback="true"` on
+   * `<application>` in your `AndroidManifest.xml` (on Android 14; default
+   * on Android 15+).
    *
    * @since 9.0.0
    */

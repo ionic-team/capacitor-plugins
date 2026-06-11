@@ -63,7 +63,7 @@ public class AppPlugin extends Plugin {
             notifyListeners(EVENT_RESTORED_RESULT, result.getWrappedResult(), true);
         });
 
-        this.onBackPressedCallback = new OnBackPressedCallback(backButtonHandlerEnabled && !edgeGestureHandlerEnabled) {
+        this.onBackPressedCallback = new OnBackPressedCallback(false) {
             @Override
             public void handleOnBackPressed() {
                 if (!hasListeners(EVENT_BACK_BUTTON)) {
@@ -79,11 +79,13 @@ public class AppPlugin extends Plugin {
             }
         };
 
+        getActivity().getOnBackPressedDispatcher().addCallback(getActivity(), this.onBackPressedCallback);
+
         if (this.edgeGestureHandlerEnabled) {
             this.setupBackGestureHandlers();
         }
 
-        getActivity().getOnBackPressedDispatcher().addCallback(getActivity(), this.onBackPressedCallback);
+        applyBackButtonHandlerState();
     }
 
     @PluginMethod
@@ -137,20 +139,6 @@ public class AppPlugin extends Plugin {
     }
 
     @PluginMethod
-    public void toggleBackButtonHandler(PluginCall call) {
-        if (this.onBackPressedCallback == null) {
-            call.reject("onBackPressedCallback is not set");
-            return;
-        }
-
-        Boolean enabled = call.getBoolean("enabled", false);
-        backButtonHandlerEnabled = enabled;
-
-        this.onBackPressedCallback.setEnabled(backButtonHandlerEnabled);
-        call.resolve();
-    }
-
-    @PluginMethod
     public void getAppLanguage(PluginCall call) {
         JSObject ret = new JSObject();
         LocaleListCompat appLocales = AppCompatDelegate.getApplicationLocales();
@@ -160,19 +148,41 @@ public class AppPlugin extends Plugin {
     }
 
     @PluginMethod
+    public void toggleBackButtonHandler(PluginCall call) {
+        if (this.onBackPressedCallback == null) {
+            call.reject("onBackPressedCallback is not set");
+            return;
+        }
+
+        backButtonHandlerEnabled = call.getBoolean("enabled", false);
+
+        applyBackButtonHandlerState();
+        call.resolve();
+    }
+
+    @PluginMethod
     public void toggleEdgeGestureHandler(PluginCall call) {
-        Boolean enabled = call.getBoolean("enabled", false);
-        edgeGestureHandlerEnabled = enabled;
+        if (getActivity() == null) {
+            call.reject("activity is null");
+            return;
+        }
+
+        edgeGestureHandlerEnabled = call.getBoolean("enabled", false);
+        applyBackButtonHandlerState();
 
         if (edgeGestureHandlerEnabled) {
-            this.onBackPressedCallback.setEnabled(false);
             setupBackGestureHandlers();
         } else {
-            this.onBackPressedCallback.setEnabled(this.backButtonHandlerEnabled);
             teardownBackGestureHandlers();
         }
 
         call.resolve();
+    }
+
+    private void applyBackButtonHandlerState() {
+        if (this.onBackPressedCallback != null) {
+            this.onBackPressedCallback.setEnabled(backButtonHandlerEnabled && !edgeGestureHandlerEnabled);
+        }
     }
 
     /**
@@ -213,6 +223,7 @@ public class AppPlugin extends Plugin {
     @Override
     protected void handleOnDestroy() {
         unsetAppListeners();
+        teardownBackGestureHandlers();
     }
 
     private void unsetAppListeners() {
@@ -222,6 +233,10 @@ public class AppPlugin extends Plugin {
 
     private void setupBackGestureHandlers() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            if (this.onBackAnimationCallback != null) {
+                return;
+            }
+
             this.onBackAnimationCallback = new OnBackAnimationCallback() {
                 @Override
                 public void onBackInvoked() {
@@ -245,7 +260,6 @@ public class AppPlugin extends Plugin {
                 @Override
                 public void onBackStarted(@NonNull BackEvent backEvent) {
                     if (hasListeners(EVENT_BACK_GESTURE)) {
-                        OnBackAnimationCallback.super.onBackStarted(backEvent);
                         JSObject data = new JSObject();
                         data.put("phase", "start");
                         data.put("progress", backEvent.getProgress());
@@ -265,7 +279,6 @@ public class AppPlugin extends Plugin {
                 @Override
                 public void onBackProgressed(@NonNull BackEvent backEvent) {
                     if (hasListeners(EVENT_BACK_GESTURE)) {
-                        OnBackAnimationCallback.super.onBackStarted(backEvent);
                         JSObject data = new JSObject();
                         data.put("phase", "progress");
                         data.put("progress", backEvent.getProgress());
@@ -285,8 +298,6 @@ public class AppPlugin extends Plugin {
                 @Override
                 public void onBackCancelled() {
                     if (hasListeners(EVENT_BACK_GESTURE)) {
-                        OnBackAnimationCallback.super.onBackCancelled();
-
                         JSObject data = new JSObject();
                         data.put("phase", "cancel");
                         data.put("progress", lastEdgeProgress);
@@ -312,6 +323,10 @@ public class AppPlugin extends Plugin {
 
     private void teardownBackGestureHandlers() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            if (this.onBackAnimationCallback == null) {
+                return;
+            }
+
             getActivity().getOnBackInvokedDispatcher().unregisterOnBackInvokedCallback(this.onBackAnimationCallback);
             this.onBackAnimationCallback = null;
         }
@@ -321,7 +336,6 @@ public class AppPlugin extends Plugin {
         return switch (edge) {
             case EDGE_LEFT -> "left";
             case EDGE_RIGHT -> "right";
-            case EDGE_NONE -> "none";
             default -> "none";
         };
     }
