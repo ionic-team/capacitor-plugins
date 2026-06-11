@@ -61,7 +61,7 @@ These are experimental plugins. Use at your own risk.
 
 | GitHub | Package | Version |
 | --- | --- | --- |
-| [Watch](https://github.com/ionic-team/CapacitorWatch) | [`@capacitor/watch`](https://capacitorjs.com/docs/apis/watch) | [![npm badge](https://img.shields.io/npm/v/@capacitor/watch?style=flat-square)](https://www.npmjs.com/package/@capacitor/watch) |
+| [LocalLLM](https://github.com/ionic-team/capacitor-local-llm) | [`@capacitor/local-llm`](https://capacitorjs.com/docs/apis/local-llm) | [![npm badge](https://img.shields.io/npm/v/@capacitor/local-llm?style=flat-square)](https://www.npmjs.com/package/@capacitor/local-llm) |
 
 ## Contributing
 
