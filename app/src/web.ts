@@ -33,7 +33,7 @@ export class AppWeb extends WebPlugin implements AppPlugin {
   }
 
   async toggleEdgeGestureHandler(): Promise<void> {
-    throw new Error('Method not implemented.');
+    throw this.unimplemented('Not implemented on web.');
   }
 
   private handleVisibilityChange = () => {
