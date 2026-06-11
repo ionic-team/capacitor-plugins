@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.os.BatteryManager;
 import android.os.Build;
 import android.provider.Settings;
@@ -63,33 +62,14 @@ public class Device {
     }
 
     public String getName() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
-            return Settings.Global.getString(this.context.getContentResolver(), Settings.Global.DEVICE_NAME);
-        }
-
-        return null;
+        return Settings.Global.getString(this.context.getContentResolver(), Settings.Global.DEVICE_NAME);
     }
 
     public String getWebViewVersion() {
-        PackageInfo info = null;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            info = WebView.getCurrentWebViewPackage();
-        } else {
-            try {
-                info = getWebViewVersionSubAndroid26();
-            } catch (PackageManager.NameNotFoundException e) {
-                e.printStackTrace();
-            }
-        }
+        PackageInfo info = WebView.getCurrentWebViewPackage();
         if (info != null) {
             return info.versionName;
         }
-
         return Build.VERSION.RELEASE;
-    }
-
-    private PackageInfo getWebViewVersionSubAndroid26() throws PackageManager.NameNotFoundException {
-        PackageManager pm = this.context.getPackageManager();
-        return pm.getPackageInfo("com.android.chrome", 0);
     }
 }
