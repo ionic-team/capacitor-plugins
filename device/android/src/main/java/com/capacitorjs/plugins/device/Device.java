@@ -66,7 +66,7 @@ public class Device {
     }
 
     public String getWebViewVersion() {
-        PackageInfo info =  WebView.getCurrentWebViewPackage();;
+        PackageInfo info = WebView.getCurrentWebViewPackage();
         if (info != null) {
             return info.versionName;
         }
