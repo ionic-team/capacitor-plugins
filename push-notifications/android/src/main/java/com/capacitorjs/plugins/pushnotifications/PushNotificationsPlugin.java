@@ -51,7 +51,7 @@ public class PushNotificationsPlugin extends Plugin {
             lastMessage = null;
         }
 
-        notificationChannelManager = new NotificationChannelManager(getActivity(), notificationManager, getConfig());
+        notificationChannelManager = new NotificationChannelManager(getActivity(), notificationManager);
     }
 
     @Override

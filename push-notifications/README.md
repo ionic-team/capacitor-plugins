@@ -61,7 +61,7 @@ Android Studio has an icon generator you can use to create your Push Notificatio
 
 ## Push Notification channel
 
-From Android 8.0 (API level 26) and higher, notification channels are supported and recommended. The SDK will derive the `channelId` for incoming push notifications in the following order:
+The SDK will derive the `channelId` for incoming push notifications in the following order:
 
 1. **Firstly it will check if the incoming notification has a `channelId` set.**
    When sending a push notification from either the FCM dashboard, or through their API, it's possible to specify a `channelId`.
@@ -295,7 +295,7 @@ createChannel(channel: Channel) => Promise<void>
 
 Create a notification channel.
 
-Only available on Android O or newer (SDK 26+).
+Only available on Android.
 
 | Param         | Type                                        |
 | ------------- | ------------------------------------------- |
@@ -314,7 +314,7 @@ deleteChannel(args: { id: string; }) => Promise<void>
 
 Delete a notification channel.
 
-Only available on Android O or newer (SDK 26+).
+Only available on Android.
 
 | Param      | Type                         |
 | ---------- | ---------------------------- |
@@ -333,7 +333,7 @@ listChannels() => Promise<ListChannelsResult>
 
 List the available notification channels.
 
-Only available on Android O or newer (SDK 26+).
+Only available on Android.
 
 **Returns:** <code>Promise&lt;<a href="#listchannelsresult">ListChannelsResult</a>&gt;</code>
 
