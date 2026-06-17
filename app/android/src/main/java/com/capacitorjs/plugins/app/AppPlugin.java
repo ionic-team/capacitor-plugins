@@ -39,6 +39,7 @@ public class AppPlugin extends Plugin {
     private boolean hasPausedEver = false;
     private boolean backButtonHandlerEnabled = false;
     private boolean edgeGestureHandlerEnabled = false;
+    private boolean canUseEdgeGesture = Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE;
 
     private OnBackPressedCallback onBackPressedCallback;
     private OnBackAnimationCallback onBackAnimationCallback;
@@ -50,7 +51,7 @@ public class AppPlugin extends Plugin {
 
     public void load() {
         this.backButtonHandlerEnabled = !getConfig().getBoolean("disableBackButtonHandler", false);
-        this.edgeGestureHandlerEnabled = getConfig().getBoolean("enableEdgeGestureHandler", false);
+        this.edgeGestureHandlerEnabled = canUseEdgeGesture && getConfig().getBoolean("enableEdgeGestureHandler", false);
 
         bridge.getApp().setStatusChangeListener((isActive) -> {
             Logger.debug(getLogTag(), "Firing change: " + isActive);
@@ -58,6 +59,7 @@ public class AppPlugin extends Plugin {
             data.put("isActive", isActive);
             notifyListeners(EVENT_STATE_CHANGE, data, false);
         });
+
         bridge.getApp().setAppRestoredListener((result) -> {
             Logger.debug(getLogTag(), "Firing restored result");
             notifyListeners(EVENT_RESTORED_RESULT, result.getWrappedResult(), true);
@@ -167,7 +169,7 @@ public class AppPlugin extends Plugin {
             return;
         }
 
-        edgeGestureHandlerEnabled = call.getBoolean("enabled", false);
+        edgeGestureHandlerEnabled = canUseEdgeGesture && call.getBoolean("enabled", false);
         applyBackButtonHandlerState();
 
         if (edgeGestureHandlerEnabled) {
