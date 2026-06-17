@@ -152,7 +152,7 @@ public class AppPlugin: CAPPlugin, CAPBridgedPlugin {
 
         let translation = recognizer.translation(in: view)
         let touch = recognizer.location(in: view)
-        let viewWidth = view.bounds.width        
+        let viewWidth = view.bounds.width
 
         var data: [String: Any] = [:]
 
