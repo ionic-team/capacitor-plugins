@@ -17,7 +17,8 @@ let package = Package(
         .target(
             name: "StatusBarPlugin",
             dependencies: [
-                .product(name: "Capacitor", package: "capacitor-swift-pm")],
+                .product(name: "Capacitor", package: "capacitor-swift-pm")
+            ],
             path: "ios/Sources/StatusBarPlugin"
         ),
         .testTarget(

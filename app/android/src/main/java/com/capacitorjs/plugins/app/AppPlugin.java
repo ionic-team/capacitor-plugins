@@ -33,20 +33,16 @@ public class AppPlugin extends Plugin {
     public void load() {
         boolean disableBackButtonHandler = getConfig().getBoolean("disableBackButtonHandler", false);
 
-        bridge
-            .getApp()
-            .setStatusChangeListener((isActive) -> {
-                Logger.debug(getLogTag(), "Firing change: " + isActive);
-                JSObject data = new JSObject();
-                data.put("isActive", isActive);
-                notifyListeners(EVENT_STATE_CHANGE, data, false);
-            });
-        bridge
-            .getApp()
-            .setAppRestoredListener((result) -> {
-                Logger.debug(getLogTag(), "Firing restored result");
-                notifyListeners(EVENT_RESTORED_RESULT, result.getWrappedResult(), true);
-            });
+        bridge.getApp().setStatusChangeListener((isActive) -> {
+            Logger.debug(getLogTag(), "Firing change: " + isActive);
+            JSObject data = new JSObject();
+            data.put("isActive", isActive);
+            notifyListeners(EVENT_STATE_CHANGE, data, false);
+        });
+        bridge.getApp().setAppRestoredListener((result) -> {
+            Logger.debug(getLogTag(), "Firing restored result");
+            notifyListeners(EVENT_RESTORED_RESULT, result.getWrappedResult(), true);
+        });
         this.onBackPressedCallback = new OnBackPressedCallback(!disableBackButtonHandler) {
             @Override
             public void handleOnBackPressed() {
