@@ -10,7 +10,9 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.service.notification.StatusBarNotification;
+import androidx.core.os.BundleCompat;
 import com.getcapacitor.*;
 import com.getcapacitor.annotation.CapacitorPlugin;
 import com.getcapacitor.annotation.Permission;
@@ -19,8 +21,10 @@ import com.google.firebase.messaging.CommonNotificationBuilder;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.NotificationParams;
 import com.google.firebase.messaging.RemoteMessage;
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -65,7 +69,7 @@ public class PushNotificationsPlugin extends Plugin {
                 if (key.equals("google.message_id")) {
                     notificationJson.put("id", bundle.getString(key));
                 } else {
-                    dataObject.put(key, bundle.get(key));
+                    dataObject.put(key, extractBundleValue(bundle, key));
                 }
             }
             notificationJson.put("data", dataObject);
@@ -141,7 +145,7 @@ public class PushNotificationsPlugin extends Plugin {
                 JSObject extras = new JSObject();
 
                 for (String key : notification.extras.keySet()) {
-                    extras.put(key, notification.extras.get(key));
+                    extras.put(key, extractBundleValue(notification.extras, key));
                 }
 
                 jsNotif.put("data", extras);
@@ -310,6 +314,42 @@ public class PushNotificationsPlugin extends Plugin {
     @PermissionCallback
     private void permissionsCallback(PluginCall call) {
         this.checkPermissions(call);
+    }
+
+    private static Object extractBundleValue(Bundle bundle, String key) {
+        if (!bundle.containsKey(key)) return null;
+
+        String s = bundle.getString(key);
+        if (s != null) return s;
+
+        CharSequence cs = bundle.getCharSequence(key);
+        if (cs != null) return cs.toString();
+
+        String[] sArr = bundle.getStringArray(key);
+        if (sArr != null) return new JSONArray(Arrays.asList(sArr));
+
+        int iMin = bundle.getInt(key, Integer.MIN_VALUE);
+        if (iMin == bundle.getInt(key, Integer.MAX_VALUE)) return iMin;
+
+        long lMin = bundle.getLong(key, Long.MIN_VALUE);
+        if (lMin == bundle.getLong(key, Long.MAX_VALUE)) return lMin;
+
+        double dNeg = bundle.getDouble(key, -1d);
+        if (Double.compare(dNeg, bundle.getDouble(key, 1d)) == 0) return dNeg;
+
+        float fNeg = bundle.getFloat(key, -1f);
+        if (Float.compare(fNeg, bundle.getFloat(key, 1f)) == 0) return fNeg;
+
+        boolean bTrue = bundle.getBoolean(key, true);
+        if (bTrue == bundle.getBoolean(key, false)) return bTrue;
+
+        Parcelable parcelable = BundleCompat.getParcelable(bundle, key, Parcelable.class);
+        if (parcelable != null) return parcelable.toString();
+
+        Serializable serializable = BundleCompat.getSerializable(bundle, key, Serializable.class);
+        if (serializable != null) return serializable.toString();
+
+        return null;
     }
 
     @SuppressWarnings("deprecation")

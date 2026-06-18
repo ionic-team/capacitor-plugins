@@ -10,8 +10,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
+import android.os.Parcelable;
 import android.service.notification.StatusBarNotification;
 import androidx.activity.result.ActivityResult;
+import androidx.core.os.BundleCompat;
 import com.getcapacitor.Bridge;
 import com.getcapacitor.JSArray;
 import com.getcapacitor.JSObject;
@@ -24,6 +27,8 @@ import com.getcapacitor.annotation.ActivityCallback;
 import com.getcapacitor.annotation.CapacitorPlugin;
 import com.getcapacitor.annotation.Permission;
 import com.getcapacitor.annotation.PermissionCallback;
+import java.io.Serializable;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import org.json.JSONArray;
@@ -141,7 +146,7 @@ public class LocalNotificationsPlugin extends Plugin {
                 JSObject extras = new JSObject();
 
                 for (String key : notification.extras.keySet()) {
-                    extras.put(key, notification.extras.get(key));
+                    extras.put(key, extractBundleValue(notification.extras, key));
                 }
 
                 jsNotif.put("data", extras);
@@ -285,6 +290,42 @@ public class LocalNotificationsPlugin extends Plugin {
         if (localNotificationsPlugin != null) {
             localNotificationsPlugin.notifyListeners("localNotificationReceived", notification, true);
         }
+    }
+
+    private static Object extractBundleValue(Bundle bundle, String key) {
+        if (!bundle.containsKey(key)) return null;
+
+        String s = bundle.getString(key);
+        if (s != null) return s;
+
+        CharSequence cs = bundle.getCharSequence(key);
+        if (cs != null) return cs.toString();
+
+        String[] sArr = bundle.getStringArray(key);
+        if (sArr != null) return new JSONArray(Arrays.asList(sArr));
+
+        int iMin = bundle.getInt(key, Integer.MIN_VALUE);
+        if (iMin == bundle.getInt(key, Integer.MAX_VALUE)) return iMin;
+
+        long lMin = bundle.getLong(key, Long.MIN_VALUE);
+        if (lMin == bundle.getLong(key, Long.MAX_VALUE)) return lMin;
+
+        double dNeg = bundle.getDouble(key, -1d);
+        if (Double.compare(dNeg, bundle.getDouble(key, 1d)) == 0) return dNeg;
+
+        float fNeg = bundle.getFloat(key, -1f);
+        if (Float.compare(fNeg, bundle.getFloat(key, 1f)) == 0) return fNeg;
+
+        boolean bTrue = bundle.getBoolean(key, true);
+        if (bTrue == bundle.getBoolean(key, false)) return bTrue;
+
+        Parcelable parcelable = BundleCompat.getParcelable(bundle, key, Parcelable.class);
+        if (parcelable != null) return parcelable.toString();
+
+        Serializable serializable = BundleCompat.getSerializable(bundle, key, Serializable.class);
+        if (serializable != null) return serializable.toString();
+
+        return null;
     }
 
     public static LocalNotificationsPlugin getLocalNotificationsInstance() {
