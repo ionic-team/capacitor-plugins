@@ -75,7 +75,7 @@ export interface PushNotificationsPlugin {
   /**
    * Create a notification channel.
    *
-   * Only available on Android O or newer (SDK 26+).
+   * Only available on Android.
    *
    * @since 1.0.0
    */
@@ -84,7 +84,7 @@ export interface PushNotificationsPlugin {
   /**
    * Delete a notification channel.
    *
-   * Only available on Android O or newer (SDK 26+).
+   * Only available on Android.
    *
    * @since 1.0.0
    */
@@ -93,7 +93,7 @@ export interface PushNotificationsPlugin {
   /**
    * List the available notification channels.
    *
-   * Only available on Android O or newer (SDK 26+).
+   * Only available on Android.
    *
    * @since 1.0.0
    */

@@ -7,7 +7,7 @@ export interface DeviceId {
    *
    * On iOS, the identifier is a UUID that uniquely identifies a device to the app’s vendor ([read more](https://developer.apple.com/documentation/uikit/uidevice/1620059-identifierforvendor)).
    *
-   * on Android 8+, __the identifier is a 64-bit number (expressed as a hexadecimal string)__, unique to each combination of app-signing key, user, and device ([read more](https://developer.android.com/reference/android/provider/Settings.Secure#ANDROID_ID)).
+   * on Android, __the identifier is a 64-bit number (expressed as a hexadecimal string)__, unique to each combination of app-signing key, user, and device ([read more](https://developer.android.com/reference/android/provider/Settings.Secure#ANDROID_ID)).
    *
    * On web, a random identifier is generated and stored on localStorage for subsequent calls.
    * If localStorage is not available a new random identifier will be generated on every call.
@@ -21,7 +21,7 @@ export interface DeviceInfo {
   /**
    * The name of the device. For example, "John's iPhone".
    *
-   * This is only supported on iOS and Android 7.1 or above.
+   * This is only supported on iOS and Android.
    *
    * On iOS 16+ this will return a generic device name without the appropriate [entitlements](https://developer.apple.com/documentation/bundleresources/entitlements/com_apple_developer_device-information_user-assigned-device-name).
    *

@@ -101,27 +101,23 @@ public class LocalNotificationManager {
      * Create notification channel
      */
     public void createNotificationChannel() {
-        // Create the NotificationChannel, but only on API 26+ because
-        // the NotificationChannel class is new and not in the support library
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = "Default";
-            String description = "Default";
-            int importance = android.app.NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel(DEFAULT_NOTIFICATION_CHANNEL_ID, name, importance);
-            channel.setDescription(description);
-            AudioAttributes audioAttributes = new AudioAttributes.Builder()
-                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                .setUsage(AudioAttributes.USAGE_ALARM)
-                .build();
-            Uri soundUri = this.getDefaultSoundUrl(context);
-            if (soundUri != null) {
-                channel.setSound(soundUri, audioAttributes);
-            }
-            // Register the channel with the system; you can't change the importance
-            // or other notification behaviors after this
-            android.app.NotificationManager notificationManager = context.getSystemService(android.app.NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
+        CharSequence name = "Default";
+        String description = "Default";
+        int importance = android.app.NotificationManager.IMPORTANCE_DEFAULT;
+        NotificationChannel channel = new NotificationChannel(DEFAULT_NOTIFICATION_CHANNEL_ID, name, importance);
+        channel.setDescription(description);
+        AudioAttributes audioAttributes = new AudioAttributes.Builder()
+            .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+            .setUsage(AudioAttributes.USAGE_ALARM)
+            .build();
+        Uri soundUri = this.getDefaultSoundUrl(context);
+        if (soundUri != null) {
+            channel.setSound(soundUri, audioAttributes);
         }
+        // Register the channel with the system; you can't change the importance
+        // or other notification behaviors after this
+        android.app.NotificationManager notificationManager = context.getSystemService(android.app.NotificationManager.class);
+        notificationManager.createNotificationChannel(channel);
     }
 
     @Nullable
