@@ -37,11 +37,10 @@ declare module '@capacitor/cli' {
       /**
        * Set the default notification sound for notifications.
        *
-       * On Android 8+ it sets the default channel sound and can't be
+       * It sets the default channel sound and can't be
        * changed unless the app is uninstalled.
        *
-       * If the audio file is not found, it will result in the default system
-       * sound being played on Android 7.x and no sound on Android 8+.
+       * If the audio file is not found, it will result in no sound.
        *
        * Only available for Android.
        *
@@ -602,17 +601,16 @@ export interface LocalNotificationSchema {
    *
    * Include the file extension with the filename.
    *
-   * On iOS, the file should be in the app bundle.
-   * On Android, the file should be in res/raw folder.
+   * The file should be in the app bundle.
    *
-   * Recommended format is `.wav` because is supported by both iOS and Android.
+   * Recommended format is `.wav`.
    *
-   * Only available for iOS and Android 7.x.
-   * For Android 8+ use channelId of a channel configured with the desired sound.
+   * Only available for iOS.
+   * For Android, use channelId of a channel configured with the desired sound.
    *
    * If the sound file is not found, (i.e. empty string or wrong name)
    * the default system notification sound will be used.
-   * If not provided, it will produce the default sound on Android and no sound on iOS.
+   * If not provided, it will produce no sound.
    *
    * @since 1.0.0
    */
@@ -754,7 +752,7 @@ export interface LocalNotificationSchema {
    * [`NotificationCompat.Builder`](https://developer.android.com/reference/androidx/core/app/NotificationCompat.Builder)
    * with the provided value.
    *
-   * Only available for Android 8+.
+   * Only available for Android.
    *
    * @since 1.0.0
    */
