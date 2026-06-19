@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [9.0.0-alpha.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/splash-screen@8.0.1...@capacitor/splash-screen@9.0.0-alpha.1) (2026-06-19)
+
+### Features
+
+- **splash-screen:** implement launchFadeOutDuration support on iOS ([#2524](https://github.com/ionic-team/capacitor-plugins/issues/2524)) ([d1b094d](https://github.com/ionic-team/capacitor-plugins/commit/d1b094d52153bf4c2d219c5ee3315aea22ef4e1e))
+
 ## [8.0.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/splash-screen@8.0.0...@capacitor/splash-screen@8.0.1) (2026-02-12)
 
 ### Bug Fixes
