@@ -316,7 +316,7 @@ public class PushNotificationsPlugin extends Plugin {
         this.checkPermissions(call);
     }
 
-    private static Object extractBundleValue(Bundle bundle, String key) {
+    private Object extractBundleValue(Bundle bundle, String key) {
         if (!bundle.containsKey(key)) return null;
 
         String s = bundle.getString(key);
