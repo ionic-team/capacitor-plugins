@@ -56,7 +56,7 @@ public class DialogPlugin: CAPPlugin, CAPBridgedPlugin {
         }
     }
 
-    @objc public func prompt (_ call: CAPPluginCall) {
+    @objc public func prompt(_ call: CAPPluginCall) {
         let title = call.options["title"] as? String
         guard let message = call.options["message"] as? String else {
             call.reject("Please provide a message for the dialog")
