@@ -121,6 +121,7 @@ public class LocalNotificationsPlugin extends Plugin {
     }
 
     @PluginMethod
+    @SuppressWarnings("deprecation")
     public void getDeliveredNotifications(PluginCall call) {
         JSArray notifications = new JSArray();
         StatusBarNotification[] activeNotifications = notificationManager.getActiveNotifications();
