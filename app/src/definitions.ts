@@ -15,6 +15,27 @@ declare module '@capacitor/cli' {
        * @example true
        */
       disableBackButtonHandler?: boolean;
+
+      /**
+       * Enable the plugin's edge gesture handler at startup.
+       *
+       * When enabled, the plugin emits `edgeGesture` events for system edge
+       * swipes (iOS left/right screen-edge pans, Android predictive back).
+       *
+       * On Android, enabling this handler suppresses the default
+       * `backButton` handler for the duration that the edge gesture handler
+       * is active. The Android predictive-back integration requires API 34
+       * (Android 14) or later; on earlier versions the configuration is
+       * accepted but no events will be emitted. Android predictive back
+       * also requires `android:enableOnBackInvokedCallback="true"` on
+       * `<application>` in your `AndroidManifest.xml` (on Android 14;
+       * default on Android 15+).
+       *
+       * @since 9.0.0
+       * @default false
+       * @example true
+       */
+      enableEdgeGestureHandler?: boolean;
     };
   }
 }
@@ -144,6 +165,66 @@ export interface BackButtonListenerEvent {
   canGoBack: boolean;
 }
 
+export interface EdgeGestureListenerEvent {
+  /**
+   * The current phase of the edge gesture.
+   *
+   * - `start`: the user has initiated an edge swipe.
+   * - `progress`: the user is moving their finger; emitted continuously
+   *   during the gesture.
+   * - `commit`: the user released the gesture and the system accepted it
+   *   (for example, a back navigation should occur).
+   * - `cancel`: the user released the gesture without committing it, or
+   *   the system cancelled it.
+   *
+   * @since 9.0.0
+   */
+  phase: 'start' | 'progress' | 'cancel' | 'commit';
+
+  /**
+   * How far the gesture has progressed, normalized between `0` and `1`.
+   *
+   * On `start` this is the initial progress reported by the system. On
+   * `progress` it updates as the user drags. On `commit` and `cancel`
+   * it reports the last observed progress value.
+   *
+   * @since 9.0.0
+   */
+  progress?: number;
+
+  /**
+   * Which screen edge the gesture originated from.
+   *
+   * On iOS this is `'left'` or `'right'` (left/right screen-edge pans
+   * are tracked). On Android this reflects the value reported by the
+   * predictive-back system and may also be `'none'` when the platform
+   * does not report a specific edge.
+   *
+   * @since 9.0.0
+   */
+  swipeEdge?: 'left' | 'right' | 'none';
+
+  /**
+   * X coordinate of the touch that initiated or is driving the gesture.
+   *
+   * On iOS the value is in points relative to the WebView. On Android the
+   * value is provided by the platform's `BackEvent.getTouchX()`.
+   *
+   * @since 9.0.0
+   */
+  touchX?: number;
+
+  /**
+   * Y coordinate of the touch that initiated or is driving the gesture.
+   *
+   * On iOS the value is in points relative to the WebView. On Android the
+   * value is provided by the platform's `BackEvent.getTouchY()`.
+   *
+   * @since 9.0.0
+   */
+  touchY?: number;
+}
+
 export interface ToggleBackButtonHandlerOptions {
   /**
    * Indicates whether to enable or disable default back button handling.
@@ -153,10 +234,20 @@ export interface ToggleBackButtonHandlerOptions {
   enabled: boolean;
 }
 
+export interface ToggleEdgeGestureHandlerOptions {
+  /**
+   * Whether to enable or disable the plugin's edge gesture handling.
+   *
+   * @since 9.0.0
+   */
+  enabled: boolean;
+}
+
 export type StateChangeListener = (state: AppState) => void;
 export type URLOpenListener = (event: URLOpenListenerEvent) => void;
 export type RestoredListener = (event: RestoredListenerEvent) => void;
 export type BackButtonListener = (event: BackButtonListenerEvent) => void;
+export type EdgeGestureListener = (event: EdgeGestureListenerEvent) => void;
 
 export interface AppLanguageCode {
   /**
@@ -223,6 +314,26 @@ export interface AppPlugin {
    * @since 7.1.0
    */
   toggleBackButtonHandler(options: ToggleBackButtonHandlerOptions): Promise<void>;
+
+  /**
+   * Enables or disables the plugin's edge gesture handling at runtime.
+   *
+   * When enabled, the plugin installs platform edge-gesture recognizers
+   * and begins emitting `edgeGesture` events. When disabled, the
+   * recognizers are removed and no further events are emitted.
+   *
+   * On Android, enabling the edge gesture handler temporarily disables
+   * the default `backButton` handler; disabling it restores the previous
+   * back button handler state. The Android predictive-back integration
+   * requires API 34 (Android 14) or later; on earlier versions the call
+   * resolves but no events will be emitted. Android predictive back also
+   * requires `android:enableOnBackInvokedCallback="true"` on
+   * `<application>` in your `AndroidManifest.xml` (on Android 14; default
+   * on Android 15+).
+   *
+   * @since 9.0.0
+   */
+  toggleEdgeGestureHandler(options: ToggleEdgeGestureHandlerOptions): Promise<void>;
 
   /**
    * Listen for changes in the app or the activity states.
@@ -302,6 +413,25 @@ export interface AppPlugin {
    * @since 1.0.0
    */
   addListener(eventName: 'backButton', listenerFunc: BackButtonListener): Promise<PluginListenerHandle>;
+
+  /**
+   * Listen for system edge-swipe gestures.
+   *
+   * On iOS this fires for left- and right-edge screen pans tracked by
+   * `UIScreenEdgePanGestureRecognizer`. On Android this fires for the
+   * predictive back gesture (requires Android 14 / API 34 or later).
+   *
+   * The edge gesture handler must be active for events to fire; enable
+   * it via the `enableEdgeGestureHandler` configuration option or at
+   * runtime via `toggleEdgeGestureHandler({ enabled: true })`.
+   *
+   * Each gesture produces a sequence of events: a single `start`, zero
+   * or more `progress`, and then either `commit` (the gesture completed)
+   * or `cancel` (the gesture was abandoned).
+   *
+   * @since 9.0.0
+   */
+  addListener(eventName: 'edgeGesture', listenerFunc: EdgeGestureListener): Promise<PluginListenerHandle>;
 
   /**
    * Remove all native listeners for this plugin
