@@ -4,8 +4,9 @@ import Capacitor
 public class StatusBar {
 
     private var bridge: CAPBridgeProtocol
-    private var isOverlayingWebview = true
-    private var backgroundColor = UIColor.black
+    private var isOverlayingWebview: Bool!
+    private var backgroundColor: UIColor!
+    private var style: UIStatusBarStyle!
     private var backgroundView: UIView?
     private var observers: [NSObjectProtocol] = []
 
@@ -31,9 +32,9 @@ public class StatusBar {
     }
 
     private func handleViewDidAppear(config: StatusBarConfig) {
-        setStyle(config.style)
-        setBackgroundColor(config.backgroundColor)
-        setOverlaysWebView(config.overlaysWebView)
+        setStyle(self.style ?? config.style)
+        setBackgroundColor(self.backgroundColor ?? config.backgroundColor)
+        setOverlaysWebView(self.isOverlayingWebview ?? config.overlaysWebView)
     }
 
     private func handleViewWillTransition() {
@@ -44,12 +45,13 @@ public class StatusBar {
     }
 
     func setStyle(_ style: UIStatusBarStyle) {
-        bridge.statusBarStyle = style
+        self.style = style
+        bridge.statusBarStyle = self.style
     }
 
     func setBackgroundColor(_ color: UIColor) {
-        backgroundColor = color
-        backgroundView?.backgroundColor = color
+        self.backgroundColor = color
+        backgroundView?.backgroundColor = self.backgroundColor
     }
 
     func setAnimation(_ animation: String) {
@@ -112,7 +114,10 @@ public class StatusBar {
     }
 
     func setOverlaysWebView(_ overlay: Bool) {
-        if overlay == isOverlayingWebview { return }
+        if overlay == isOverlayingWebview {
+            resizeWebView()
+            return
+        }
         isOverlayingWebview = overlay
         if overlay {
             backgroundView?.removeFromSuperview()
