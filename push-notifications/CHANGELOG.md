@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [8.1.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/push-notifications@8.1.0...@capacitor/push-notifications@8.1.1) (2026-05-15)
+
+**Note:** Version bump only for package @capacitor/push-notifications
+
+# [8.1.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/push-notifications@8.0.4...@capacitor/push-notifications@8.1.0) (2026-05-15)
+
+### Features
+
+- **push-notifications:** add banner and list presentation options for iOS ([#2529](https://github.com/ionic-team/capacitor-plugins/issues/2529)) ([f266d2e](https://github.com/ionic-team/capacitor-plugins/commit/f266d2e86b76148343d364e252d629383a56bbee))
+
+## [8.0.4](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/push-notifications@8.0.3...@capacitor/push-notifications@8.0.4) (2026-05-07)
+
+### Bug Fixes
+
+- add Importance 0 for notification channels ([#2507](https://github.com/ionic-team/capacitor-plugins/issues/2507)) ([b98c4f9](https://github.com/ionic-team/capacitor-plugins/commit/b98c4f9ee368b66dc92fb54865129df777bf38e5))
+
 ## [8.0.3](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/push-notifications@8.0.2...@capacitor/push-notifications@8.0.3) (2026-03-25)
 
 **Note:** Version bump only for package @capacitor/push-notifications
