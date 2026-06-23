@@ -49,6 +49,14 @@ function translatedConnection(): ConnectionType {
   return result;
 }
 
+function connectionDetails(): Pick<ConnectionStatus, 'constrained' | 'expensive'> {
+  const connection = window.navigator.connection || window.navigator.mozConnection || window.navigator.webkitConnection;
+  return {
+    constrained: !!connection?.saveData,
+    expensive: false,
+  };
+}
+
 export class NetworkWeb extends WebPlugin implements NetworkPlugin {
   constructor() {
     super();
@@ -69,6 +77,7 @@ export class NetworkWeb extends WebPlugin implements NetworkPlugin {
     const status: ConnectionStatus = {
       connected,
       connectionType: connected ? connectionType : 'none',
+      ...connectionDetails(),
     };
 
     return status;
@@ -80,6 +89,7 @@ export class NetworkWeb extends WebPlugin implements NetworkPlugin {
     const status: ConnectionStatus = {
       connected: true,
       connectionType: connectionType,
+      ...connectionDetails(),
     };
 
     this.notifyListeners('networkStatusChange', status);
@@ -89,6 +99,8 @@ export class NetworkWeb extends WebPlugin implements NetworkPlugin {
     const status: ConnectionStatus = {
       connected: false,
       connectionType: 'none',
+      constrained: false,
+      expensive: false,
     };
 
     this.notifyListeners('networkStatusChange', status);
