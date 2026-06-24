@@ -16,10 +16,7 @@ public class NetworkPlugin: CAPPlugin, CAPBridgedPlugin {
             implementation = try Network()
             implementation?.statusObserver = { [weak self] status in
                 CAPLog.print(status.logMessage)
-                self?.notifyListeners("networkStatusChange", data: [
-                    "connected": status.isConnected,
-                    "connectionType": status.jsStringValue
-                ])
+                self?.notifyListeners("networkStatusChange", data: self?.statusData(status) ?? [:])
             }
         } catch let error {
             CAPLog.print("Unable to start network monitor: \(error)")
@@ -28,7 +25,17 @@ public class NetworkPlugin: CAPPlugin, CAPBridgedPlugin {
 
     @objc func getStatus(_ call: CAPPluginCall) {
         let status = implementation?.currentStatus() ?? Network.Connection.unavailable
-        call.resolve(["connected": status.isConnected, "connectionType": status.jsStringValue])
+        call.resolve(statusData(status))
+    }
+
+    private func statusData(_ status: Network.Connection) -> [String: Any] {
+        let details = status.isConnected ? (implementation?.connectionDetails ?? Network.ConnectionDetails()) : Network.ConnectionDetails()
+        return [
+            "connected": status.isConnected,
+            "connectionType": status.jsStringValue,
+            "constrained": details.constrained,
+            "expensive": details.expensive
+        ]
     }
 }
 

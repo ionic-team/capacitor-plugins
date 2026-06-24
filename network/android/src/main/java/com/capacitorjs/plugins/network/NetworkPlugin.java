@@ -1,6 +1,5 @@
 package com.capacitorjs.plugins.network;
 
-import android.os.Build;
 import android.util.Log;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
@@ -26,6 +25,8 @@ public class NetworkPlugin extends Plugin {
                 JSObject jsObject = new JSObject();
                 jsObject.put("connected", false);
                 jsObject.put("connectionType", "none");
+                jsObject.put("constrained", false);
+                jsObject.put("expensive", false);
                 notifyListeners(NETWORK_CHANGE_EVENT, jsObject);
             } else {
                 updateNetworkStatus();
@@ -89,6 +90,8 @@ public class NetworkPlugin extends Plugin {
         JSObject jsObject = new JSObject();
         jsObject.put("connected", networkStatus.connected);
         jsObject.put("connectionType", networkStatus.connectionType.getConnectionType());
+        jsObject.put("constrained", networkStatus.constrained);
+        jsObject.put("expensive", networkStatus.expensive);
         return jsObject;
     }
 }

@@ -2,9 +2,12 @@ package com.capacitorjs.plugins.network;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.ConnectivityManager.NetworkCallback;
 import android.net.NetworkCapabilities;
+import android.os.Build;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -38,7 +41,7 @@ public class Network {
     private ConnectivityCallback connectivityCallback;
     private Context context;
     private ConnectivityManager connectivityManager;
-    private BroadcastReceiver receiver;
+    private BroadcastReceiver restrictBackgroundReceiver;
 
     /**
      * Create network monitoring object.
@@ -48,6 +51,14 @@ public class Network {
         this.context = context;
         this.connectivityManager = (ConnectivityManager) this.context.getSystemService(Context.CONNECTIVITY_SERVICE);
         this.connectivityCallback = new ConnectivityCallback();
+        this.restrictBackgroundReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (ConnectivityManager.ACTION_RESTRICT_BACKGROUND_CHANGED.equals(intent.getAction()) && statusChangeListener != null) {
+                    statusChangeListener.onNetworkStatusChanged(false);
+                }
+            }
+        };
     }
 
     /**
@@ -75,11 +86,17 @@ public class Network {
         NetworkStatus networkStatus = new NetworkStatus();
         if (this.connectivityManager != null) {
             android.net.Network activeNetwork = this.connectivityManager.getActiveNetwork();
-            NetworkCapabilities capabilities = this.connectivityManager.getNetworkCapabilities(this.connectivityManager.getActiveNetwork());
+            NetworkCapabilities capabilities = this.connectivityManager.getNetworkCapabilities(activeNetwork);
             if (activeNetwork != null && capabilities != null) {
                 networkStatus.connected =
                     capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED) &&
                     capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET);
+                networkStatus.expensive = !capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED);
+                networkStatus.constrained = isConstrained(
+                    connectivityManager.getRestrictBackgroundStatus(),
+                    networkStatus.expensive,
+                    isBandwidthConstrained(capabilities)
+                );
                 if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
                     networkStatus.connectionType = NetworkStatus.ConnectionType.WIFI;
                 } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
@@ -90,6 +107,17 @@ public class Network {
             }
         }
         return networkStatus;
+    }
+
+    static boolean isConstrained(int restrictBackgroundStatus, boolean expensive, boolean bandwidthConstrained) {
+        return (expensive && restrictBackgroundStatus == ConnectivityManager.RESTRICT_BACKGROUND_STATUS_ENABLED) || bandwidthConstrained;
+    }
+
+    private static boolean isBandwidthConstrained(NetworkCapabilities capabilities) {
+        return (
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM &&
+            !capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_BANDWIDTH_CONSTRAINED)
+        );
     }
 
     @SuppressWarnings("deprecation")
@@ -113,6 +141,12 @@ public class Network {
      */
     public void startMonitoring() {
         connectivityManager.registerDefaultNetworkCallback(connectivityCallback);
+        IntentFilter filter = new IntentFilter(ConnectivityManager.ACTION_RESTRICT_BACKGROUND_CHANGED);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            context.registerReceiver(restrictBackgroundReceiver, filter, Context.RECEIVER_NOT_EXPORTED);
+        } else {
+            context.registerReceiver(restrictBackgroundReceiver, filter);
+        }
     }
 
     /**
@@ -120,5 +154,6 @@ public class Network {
      */
     public void stopMonitoring() {
         connectivityManager.unregisterNetworkCallback(connectivityCallback);
+        context.unregisterReceiver(restrictBackgroundReceiver);
     }
 }
