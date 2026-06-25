@@ -19,7 +19,7 @@ public class Device {
 
     public long getMemUsed() {
         final Runtime runtime = Runtime.getRuntime();
-        final long usedMem = (runtime.totalMemory() - runtime.freeMemory());
+        final long usedMem = runtime.totalMemory() - runtime.freeMemory();
         return usedMem;
     }
 

@@ -156,7 +156,7 @@ public class StatusBar {
         info.setStyle(getStyle());
         info.setOverlays(getIsOverlaid());
         info.setVisible(isVisible);
-        info.setColor(String.format("#%06X", (0xFFFFFF & getStatusBarColorDeprecated())));
+        info.setColor(String.format("#%06X", 0xFFFFFF & getStatusBarColorDeprecated()));
         info.setHeight(getStatusBarHeight());
         return info;
     }
