@@ -109,7 +109,7 @@ public class NotificationChannelManager {
             channel.put(CHANNEL_SOUND, notificationChannel.getSound());
             channel.put(CHANNEL_VIBRATE, notificationChannel.shouldVibrate());
             channel.put(CHANNEL_USE_LIGHTS, notificationChannel.shouldShowLights());
-            channel.put(CHANNEL_LIGHT_COLOR, String.format("#%06X", (0xFFFFFF & notificationChannel.getLightColor())));
+            channel.put(CHANNEL_LIGHT_COLOR, String.format("#%06X", 0xFFFFFF & notificationChannel.getLightColor()));
             Logger.debug(Logger.tags("NotificationChannel"), "visibility " + notificationChannel.getLockscreenVisibility());
             Logger.debug(Logger.tags("NotificationChannel"), "importance " + notificationChannel.getImportance());
             channels.put(channel);
