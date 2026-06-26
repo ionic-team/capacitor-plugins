@@ -118,6 +118,12 @@ export class DeviceWeb extends WebPlugin implements DevicePlugin {
       uaFields.operatingSystem = 'windows';
     } else if (/Mac/i.test(ua)) {
       uaFields.operatingSystem = 'mac';
+    } else if (/Linux/i.test(ua)) {
+      uaFields.operatingSystem = 'linux';
+    } else if (/FreeBSD/i.test(ua)) {
+      uaFields.operatingSystem = 'freebsd';
+    } else if (/OpenBSD/i.test(ua)) {
+      uaFields.operatingSystem = 'openbsd';
     } else {
       uaFields.operatingSystem = 'unknown';
     }
