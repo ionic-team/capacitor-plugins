@@ -3,14 +3,14 @@ import PackageDescription
 
 let package = Package(
     name: "CapacitorApp",
-    platforms: [.iOS(.v15)],
+    platforms: [.iOS(.v16)],
     products: [
         .library(
             name: "CapacitorApp",
             targets: ["AppPlugin"])
     ],
     dependencies: [
-        .package(url: "https://github.com/ionic-team/capacitor-swift-pm.git", from: "9.0.0-alpha.0")
+        .package(url: "https://github.com/ionic-team/capacitor-swift-pm.git", from: "9.0.0-alpha.5")
     ],
     targets: [
         .target(

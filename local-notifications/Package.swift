@@ -3,14 +3,14 @@ import PackageDescription
 
 let package = Package(
     name: "CapacitorLocalNotifications",
-    platforms: [.iOS(.v15)],
+    platforms: [.iOS(.v16)],
     products: [
         .library(
             name: "CapacitorLocalNotifications",
             targets: ["LocalNotificationsPlugin"])
     ],
     dependencies: [
-        .package(url: "https://github.com/ionic-team/capacitor-swift-pm.git", from: "9.0.0-alpha.0")
+        .package(url: "https://github.com/ionic-team/capacitor-swift-pm.git", from: "9.0.0-alpha.5")
     ],
     targets: [
         .target(
