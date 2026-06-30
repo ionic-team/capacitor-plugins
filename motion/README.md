@@ -23,10 +23,9 @@ import { Motion } from '@capacitor/motion';
 let accelHandler: PluginListenerHandle;
 let orientationHandler: PluginListenerHandle;
 
-myButton.addEventListener('click', async () => {
+myAccelerationButton.addEventListener('click', async () => {
   try {
     await DeviceMotionEvent.requestPermission();
-    await DeviceOrientationEvent.requestPermission();
   } catch (e) {
     // Handle error
     return;
@@ -36,17 +35,31 @@ myButton.addEventListener('click', async () => {
   accelHandler = await Motion.addListener('accel', event => {
     console.log('Device motion event:', event);
   });
+});
 
+myOrientationButton.addEventListener('click', async () => {
+  try {
+    await DeviceOrientationEvent.requestPermission();
+  } catch (e) {
+    // Handle error
+    return;
+  }
+
+  // Once the user approves, can start listening:
   orientationHandler = await Motion.addListener('orientation', event => {
     console.log('Device orientation event:', event);
   });
 });
 
-// Stop a specific listener
-const stopListening = () => {
+// Stop the acceleration listener
+const stopAcceleration = () => {
   if (accelHandler) {
     accelHandler.remove();
   }
+};
+
+// Stop the orientation listener
+const stopOrientation = () => {
   if (orientationHandler) {
     orientationHandler.remove();
   }
