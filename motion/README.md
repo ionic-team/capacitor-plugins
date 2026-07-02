@@ -11,10 +11,10 @@ npx cap sync
 
 ## Permissions
 
-This plugin is currently implemented using Web APIs. On iOS, permission must
-be requested before accessing device motion or orientation events. Other
-platforms do not require the check. To request permission, prompt the user
-on any user-initiated action (such as a button click):
+This plugin is currently implemented using Web APIs. On iOS devices,
+permission must be requested before accessing device motion or orientation
+events. To request permission, prompt the user on any user-initiated action
+(such as a button click):
 
 ```typescript
 import { PluginListenerHandle } from '@capacitor/core';
