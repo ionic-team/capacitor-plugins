@@ -11,9 +11,10 @@ npx cap sync
 
 ## Permissions
 
-This plugin is currently implemented using Web APIs. Most browsers require
-permission before using these APIs. To request permission, prompt the user for
-permission on any user-initiated action (such as a button click):
+This plugin is currently implemented using Web APIs. On iOS, permission must
+be requested before accessing device motion or orientation events. Other
+platforms do not require the check. To request permission, prompt the user
+on any user-initiated action (such as a button click):
 
 ```typescript
 import { PluginListenerHandle } from '@capacitor/core';
@@ -24,11 +25,14 @@ let accelHandler: PluginListenerHandle;
 let orientationHandler: PluginListenerHandle;
 
 myAccelerationButton.addEventListener('click', async () => {
-  try {
-    await DeviceMotionEvent.requestPermission();
-  } catch (e) {
-    // Handle error
-    return;
+  if (typeof DeviceMotionEvent.requestPermission === 'function') {
+    try {
+      const permission = await DeviceMotionEvent.requestPermission();
+      if (permission !== 'granted') return;
+    } catch (e) {
+      // Handle error
+      return;
+    }
   }
 
   // Once the user approves, can start listening:
@@ -38,11 +42,14 @@ myAccelerationButton.addEventListener('click', async () => {
 });
 
 myOrientationButton.addEventListener('click', async () => {
-  try {
-    await DeviceOrientationEvent.requestPermission();
-  } catch (e) {
-    // Handle error
-    return;
+  if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+    try {
+      const permission = await DeviceOrientationEvent.requestPermission();
+      if (permission !== 'granted') return;
+    } catch (e) {
+      // Handle error
+      return;
+    }
   }
 
   // Once the user approves, can start listening:
