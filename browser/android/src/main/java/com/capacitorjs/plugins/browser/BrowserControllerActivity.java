@@ -1,19 +1,31 @@
 package com.capacitorjs.plugins.browser;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import androidx.activity.ComponentActivity;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 
-public class BrowserControllerActivity extends Activity {
+public class BrowserControllerActivity extends ComponentActivity {
 
-    private boolean isCustomTabsOpen = false;
+    private ActivityResultLauncher<Intent> customTabLauncher;
+    private Browser implementation;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        isCustomTabsOpen = false;
+
+        customTabLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (implementation != null) {
+                    implementation.notifyBrowserFinished();
+                }
+                finish();
+            }
+        );
 
         if (BrowserPlugin.browserControllerListener != null) {
             BrowserPlugin.browserControllerListener.onControllerReady(this);
@@ -28,25 +40,15 @@ public class BrowserControllerActivity extends Activity {
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (isCustomTabsOpen) {
-            isCustomTabsOpen = false;
-            finish();
-        } else {
-            isCustomTabsOpen = true;
-        }
-    }
-
     public void open(Browser implementation, Uri url, Integer toolbarColor) {
+        this.implementation = implementation;
+        implementation.setCustomTabLauncher(customTabLauncher);
         implementation.open(url, toolbarColor);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        isCustomTabsOpen = false;
         BrowserPlugin.setBrowserControllerListener(null);
     }
 }
