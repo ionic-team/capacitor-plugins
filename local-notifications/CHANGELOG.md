@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.0.7](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/local-notifications@7.0.6...@capacitor/local-notifications@7.0.7) (2026-07-03)
+
+### Bug Fixes
+
+- add Importance 0 for notification channels ([#2507](https://github.com/ionic-team/capacitor-plugins/issues/2507)) ([#2508](https://github.com/ionic-team/capacitor-plugins/issues/2508)) ([d04a74e](https://github.com/ionic-team/capacitor-plugins/commit/d04a74ef15cada1f2214b4e1ae39f326c0baf66c))
+
 ## [7.0.6](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/local-notifications@7.0.5...@capacitor/local-notifications@7.0.6) (2026-03-06)
 
 ### Bug Fixes
