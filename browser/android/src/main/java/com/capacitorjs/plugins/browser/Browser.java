@@ -44,8 +44,10 @@ public class Browser {
     private CustomTabsClient customTabsClient;
     private CustomTabsSession browserSession;
     private boolean isInitialLoad = false;
+
     @Nullable
     private ActivityResultLauncher<Intent> customTabLauncher;
+
     private CustomTabsServiceConnection connection = new CustomTabsServiceConnection() {
         @Override
         public void onCustomTabsServiceConnected(ComponentName name, CustomTabsClient client) {

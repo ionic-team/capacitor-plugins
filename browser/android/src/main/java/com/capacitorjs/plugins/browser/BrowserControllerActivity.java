@@ -17,15 +17,12 @@ public class BrowserControllerActivity extends ComponentActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        customTabLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            result -> {
-                if (implementation != null) {
-                    implementation.notifyBrowserFinished();
-                }
-                finish();
+        customTabLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), (result) -> {
+            if (implementation != null) {
+                implementation.notifyBrowserFinished();
             }
-        );
+            finish();
+        });
 
         if (BrowserPlugin.browserControllerListener != null) {
             BrowserPlugin.browserControllerListener.onControllerReady(this);
