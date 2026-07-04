@@ -332,6 +332,21 @@ public class LocalNotificationManager {
         }
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, request.getId(), notificationIntent, flags);
 
+        // Cron like scheduler
+        DateMatch on = schedule.getOn();
+        if (on != null) {
+            Date startDate = schedule.getAt() == null
+                ? new Date()
+                : schedule.getAt();
+            long trigger = on.nextTrigger(startDate);
+            notificationIntent.putExtra(TimedNotificationPublisher.CRON_KEY, on.toMatchString());
+            pendingIntent = PendingIntent.getBroadcast(context, request.getId(), notificationIntent, flags);
+            setExactIfPossible(alarmManager, schedule, trigger, pendingIntent);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+            Logger.debug(Logger.tags("LN"), "notification " + request.getId() + " will next fire at " + sdf.format(new Date(trigger)));
+            return;
+        }
+
         // Schedule at specific time (with repeating support)
         Date at = schedule.getAt();
         if (at != null) {
@@ -356,18 +371,6 @@ public class LocalNotificationManager {
                 long startTime = new Date().getTime() + everyInterval;
                 alarmManager.setRepeating(AlarmManager.RTC, startTime, everyInterval, pendingIntent);
             }
-            return;
-        }
-
-        // Cron like scheduler
-        DateMatch on = schedule.getOn();
-        if (on != null) {
-            long trigger = on.nextTrigger(new Date());
-            notificationIntent.putExtra(TimedNotificationPublisher.CRON_KEY, on.toMatchString());
-            pendingIntent = PendingIntent.getBroadcast(context, request.getId(), notificationIntent, flags);
-            setExactIfPossible(alarmManager, schedule, trigger, pendingIntent);
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-            Logger.debug(Logger.tags("LN"), "notification " + request.getId() + " will next fire at " + sdf.format(new Date(trigger)));
         }
     }
 
