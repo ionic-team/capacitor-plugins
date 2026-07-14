@@ -26,6 +26,8 @@ public class NetworkPlugin extends Plugin {
                 JSObject jsObject = new JSObject();
                 jsObject.put("connected", false);
                 jsObject.put("connectionType", "none");
+                jsObject.put("internetReachable", false);
+                jsObject.put("state", "offline");
                 notifyListeners(NETWORK_CHANGE_EVENT, jsObject);
             } else {
                 updateNetworkStatus();
@@ -89,6 +91,8 @@ public class NetworkPlugin extends Plugin {
         JSObject jsObject = new JSObject();
         jsObject.put("connected", networkStatus.connected);
         jsObject.put("connectionType", networkStatus.connectionType.getConnectionType());
+        jsObject.put("internetReachable", networkStatus.internetReachable);
+        jsObject.put("state", networkStatus.state);
         return jsObject;
     }
 }
