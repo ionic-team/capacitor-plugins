@@ -15,10 +15,12 @@ public class NetworkPlugin: CAPPlugin, CAPBridgedPlugin {
         do {
             implementation = try Network()
             implementation?.statusObserver = { [weak self] status in
-                CAPLog.print(status.logMessage)
+                CAPLog.print("\(status.connection.logMessage) | state=\(status.state)")
                 self?.notifyListeners("networkStatusChange", data: [
-                    "connected": status.isConnected,
-                    "connectionType": status.jsStringValue
+                    "connected": status.connected,
+                    "connectionType": status.connectionType,
+                    "internetReachable": status.internetReachable,
+                    "state": status.state
                 ])
             }
         } catch let error {
@@ -27,8 +29,24 @@ public class NetworkPlugin: CAPPlugin, CAPBridgedPlugin {
     }
 
     @objc func getStatus(_ call: CAPPluginCall) {
-        let status = implementation?.currentStatus() ?? Network.Connection.unavailable
-        call.resolve(["connected": status.isConnected, "connectionType": status.jsStringValue])
+        guard let implementation = implementation else {
+            call.resolve([
+                "connected": false,
+                "connectionType": "none",
+                "internetReachable": false,
+                "state": "offline"
+            ])
+            return
+        }
+
+        implementation.getStatus { status in
+            call.resolve([
+                "connected": status.connected,
+                "connectionType": status.connectionType,
+                "internetReachable": status.internetReachable,
+                "state": status.state
+            ])
+        }
     }
 }
 
