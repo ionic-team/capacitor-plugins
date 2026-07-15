@@ -69,6 +69,8 @@ export class NetworkWeb extends WebPlugin implements NetworkPlugin {
     const status: ConnectionStatus = {
       connected,
       connectionType: connected ? connectionType : 'none',
+      internetReachable: connected,
+      state: connected ? 'online' : 'offline',
     };
 
     return status;
@@ -80,6 +82,8 @@ export class NetworkWeb extends WebPlugin implements NetworkPlugin {
     const status: ConnectionStatus = {
       connected: true,
       connectionType: connectionType,
+      internetReachable: true,
+      state: 'online',
     };
 
     this.notifyListeners('networkStatusChange', status);
@@ -89,6 +93,8 @@ export class NetworkWeb extends WebPlugin implements NetworkPlugin {
     const status: ConnectionStatus = {
       connected: false,
       connectionType: 'none',
+      internetReachable: false,
+      state: 'offline'
     };
 
     this.notifyListeners('networkStatusChange', status);
