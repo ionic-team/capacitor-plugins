@@ -83,8 +83,6 @@ public class LocalNotificationManager {
         }
         String menuAction = data.getStringExtra(LocalNotificationManager.ACTION_INTENT_KEY);
 
-        dismissVisibleNotification(notificationId);
-
         dataJson.put("actionId", menuAction);
         JSONObject request = null;
         try {
@@ -93,6 +91,15 @@ public class LocalNotificationManager {
                 request = new JSObject(notificationJsonString);
             }
         } catch (JSONException e) {}
+
+        // Only dismiss the tapped notification when autoCancel allows it; the
+        // builder already applies setAutoCancel(), but this explicit cancel used
+        // to run unconditionally, making `autoCancel: false` a no-op on tap.
+        boolean autoCancel = request == null || request.optBoolean("autoCancel", true);
+        if (autoCancel) {
+            dismissVisibleNotification(notificationId);
+        }
+
         dataJson.put("notification", request);
         return dataJson;
     }
