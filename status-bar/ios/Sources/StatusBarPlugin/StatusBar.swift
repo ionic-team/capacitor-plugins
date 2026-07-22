@@ -3,7 +3,10 @@ import Capacitor
 
 public class StatusBar {
 
-    private var bridge: CAPBridgeProtocol
+    // Weak to avoid a retain cycle: the bridge owns this object transitively
+    // (bridge -> plugins -> StatusBarPlugin -> statusBar), so a strong back
+    // reference would keep the whole bridge alive forever.
+    private weak var bridge: CAPBridgeProtocol?
     private var isOverlayingWebview = true
     private var backgroundColor = UIColor.black
     private var backgroundView: UIView?
@@ -23,7 +26,7 @@ public class StatusBar {
             self?.handleViewDidAppear(config: config)
         })
         observers.append(NotificationCenter.default.addObserver(forName: .capacitorStatusBarTapped, object: .none, queue: .none) { [weak self] _ in
-            self?.bridge.triggerJSEvent(eventName: "statusTap", target: "window")
+            self?.bridge?.triggerJSEvent(eventName: "statusTap", target: "window")
         })
         observers.append(NotificationCenter.default.addObserver(forName: .capacitorViewWillTransition, object: .none, queue: .none) { [weak self] _ in
             self?.handleViewWillTransition()
@@ -44,7 +47,7 @@ public class StatusBar {
     }
 
     func setStyle(_ style: UIStatusBarStyle) {
-        bridge.statusBarStyle = style
+        bridge?.statusBarStyle = style
     }
 
     func setBackgroundColor(_ color: UIColor) {
@@ -54,17 +57,17 @@ public class StatusBar {
 
     func setAnimation(_ animation: String) {
         if animation == "SLIDE" {
-            bridge.statusBarAnimation = .slide
+            bridge?.statusBarAnimation = .slide
         } else if animation == "NONE" {
-            bridge.statusBarAnimation = .none
+            bridge?.statusBarAnimation = .none
         } else {
-            bridge.statusBarAnimation = .fade
+            bridge?.statusBarAnimation = .fade
         }
     }
 
     func hide(animation: String) {
         setAnimation(animation)
-        if bridge.statusBarVisible {
+        if let bridge, bridge.statusBarVisible {
             bridge.statusBarVisible = false
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
                 self?.resizeWebView()
@@ -76,7 +79,7 @@ public class StatusBar {
 
     func show(animation: String) {
         setAnimation(animation)
-        if !bridge.statusBarVisible {
+        if let bridge, !bridge.statusBarVisible {
             bridge.statusBarVisible = true
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [self] in
                 resizeWebView()
@@ -91,7 +94,7 @@ public class StatusBar {
 
     func getInfo() -> StatusBarInfo {
         let style: String
-        switch bridge.statusBarStyle {
+        switch bridge?.statusBarStyle ?? .default {
         case .default:
             style = "DEFAULT"
         case .lightContent:
@@ -104,7 +107,7 @@ public class StatusBar {
 
         return StatusBarInfo(
             overlays: isOverlayingWebview,
-            visible: bridge.statusBarVisible,
+            visible: bridge?.statusBarVisible ?? false,
             style: style,
             color: UIColor.capacitor.hex(fromColor: backgroundColor),
             height: getStatusBarFrame().size.height
@@ -118,19 +121,19 @@ public class StatusBar {
             backgroundView?.removeFromSuperview()
         } else {
             initializeBackgroundViewIfNeeded()
-            bridge.webView?.superview?.addSubview(backgroundView!)
+            bridge?.webView?.superview?.addSubview(backgroundView!)
         }
         resizeWebView()
     }
 
     private func resizeWebView() {
-        let bounds: CGRect? = bridge.viewController?.view.window?.windowScene?.keyWindow?.bounds
+        let bounds: CGRect? = bridge?.viewController?.view.window?.windowScene?.keyWindow?.bounds
 
         guard
-            let webView = bridge.webView,
+            let webView = bridge?.webView,
             let bounds = bounds
         else { return }
-        bridge.viewController?.view.frame = bounds
+        bridge?.viewController?.view.frame = bounds
         webView.frame = bounds
         let statusBarHeight = getStatusBarFrame().size.height
         var webViewFrame = webView.frame
@@ -154,7 +157,7 @@ public class StatusBar {
     }
 
     private func getStatusBarFrame() -> CGRect {
-        return bridge.viewController?.view.window?.windowScene?.statusBarManager?.statusBarFrame ?? .zero
+        return bridge?.viewController?.view.window?.windowScene?.statusBarManager?.statusBarFrame ?? .zero
     }
 
     private func initializeBackgroundViewIfNeeded() {
@@ -162,7 +165,7 @@ public class StatusBar {
             backgroundView = UIView(frame: getStatusBarFrame())
             backgroundView!.backgroundColor = backgroundColor
             backgroundView!.autoresizingMask = [.flexibleWidth, .flexibleBottomMargin]
-            backgroundView!.isHidden = !bridge.statusBarVisible
+            backgroundView!.isHidden = !(bridge?.statusBarVisible ?? false)
         }
     }
 }
