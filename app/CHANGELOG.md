@@ -3,6 +3,45 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [9.0.0](https://github.com/ionic-team/capacitor-plugins/compare/app-v8.1.1...app-v9.0.0) (2026-08-04)
+
+
+### ⚠ BREAKING CHANGES
+
+* Support Capacitor 8 (alpha) ([#2410](https://github.com/ionic-team/capacitor-plugins/issues/2410))
+* **app:** Remove deprecated types ([#2263](https://github.com/ionic-team/capacitor-plugins/issues/2263))
+* **app:** use moveTaskToBack within minimizeApp ([#1956](https://github.com/ionic-team/capacitor-plugins/issues/1956))
+* **android:** bump targetSDK to 34 ([#1779](https://github.com/ionic-team/capacitor-plugins/issues/1779))
+* set targetSDK default value to 33 ([#1431](https://github.com/ionic-team/capacitor-plugins/issues/1431))
+
+### Features
+
+* **android:** Removing enableJetifier ([d66f9cb](https://github.com/ionic-team/capacitor-plugins/commit/d66f9cbd9da7e3b1d8c64ca6a5b45156867d4a04))
+* **app,haptics,status-bar,keyboard:** Supporting Swift Package Manager ([#1886](https://github.com/ionic-team/capacitor-plugins/issues/1886)) ([918ea30](https://github.com/ionic-team/capacitor-plugins/commit/918ea30a95f80d740f39e9ab472ed90f9d4a6aba))
+* **app:** Add getAppLanguage ([#1694](https://github.com/ionic-team/capacitor-plugins/issues/1694)) ([698600a](https://github.com/ionic-team/capacitor-plugins/commit/698600aa081e1d4040ce780a1e85175e53aa2b19))
+* **app:** Add pause and resume event listeners ([#1220](https://github.com/ionic-team/capacitor-plugins/issues/1220)) ([7e93c88](https://github.com/ionic-team/capacitor-plugins/commit/7e93c888a3e3daae95c2f465941a4097484adae8))
+* **app:** Add support for toggling Android back button handling ([#2390](https://github.com/ionic-team/capacitor-plugins/issues/2390)) ([6c56293](https://github.com/ionic-team/capacitor-plugins/commit/6c56293d65d5359fc2f9cd8491c546c4c91bc0a0))
+* Support Capacitor 8 (alpha) ([#2410](https://github.com/ionic-team/capacitor-plugins/issues/2410)) ([4659359](https://github.com/ionic-team/capacitor-plugins/commit/465935967bd55ab29304fbf5c816a8fd32a43726))
+* Update gradle to 8.0.2 and gradle plugin to 8.0.0 ([#1542](https://github.com/ionic-team/capacitor-plugins/issues/1542)) ([e7210b4](https://github.com/ionic-team/capacitor-plugins/commit/e7210b47867644f5983e37acdbf0247214ec232d))
+
+
+### Bug Fixes
+
+* AGP 9.0 no longer supporting `proguard-android.txt` ([#2468](https://github.com/ionic-team/capacitor-plugins/issues/2468)) ([a8760a9](https://github.com/ionic-team/capacitor-plugins/commit/a8760a989f594bc406d0ec7da58125d17447cae4))
+* Use Capacitor 5 final ([#1574](https://github.com/ionic-team/capacitor-plugins/issues/1574)) ([139c18b](https://github.com/ionic-team/capacitor-plugins/commit/139c18b86a11d31246e952d1a74335ff8ce5dbc2))
+
+
+### Miscellaneous Chores
+
+* **android:** bump targetSDK to 34 ([#1779](https://github.com/ionic-team/capacitor-plugins/issues/1779)) ([eb503fe](https://github.com/ionic-team/capacitor-plugins/commit/eb503fe32d56c48a00510c1ed1e7292d020badd0))
+* set targetSDK default value to 33 ([#1431](https://github.com/ionic-team/capacitor-plugins/issues/1431)) ([44795e7](https://github.com/ionic-team/capacitor-plugins/commit/44795e70c4943aa59d369748fe51b20b19705aad))
+
+
+### Code Refactoring
+
+* **app:** Remove deprecated types ([#2263](https://github.com/ionic-team/capacitor-plugins/issues/2263)) ([51c0561](https://github.com/ionic-team/capacitor-plugins/commit/51c05612764d67410a0214b4ac7c963f0d9cb597))
+* **app:** use moveTaskToBack within minimizeApp ([#1956](https://github.com/ionic-team/capacitor-plugins/issues/1956)) ([f69604e](https://github.com/ionic-team/capacitor-plugins/commit/f69604ee14f7583a42aeb8202f0fcb2f94cb2f2e))
+
 ## [8.1.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/app@8.1.0...@capacitor/app@8.1.1) (2026-07-15)
 
 **Note:** Version bump only for package @capacitor/app

@@ -7,6 +7,56 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [9.0.0](https://github.com/ionic-team/capacitor-plugins/compare/camera-v8.0.2...camera-v9.0.0) (2026-08-04)
+
+
+### ⚠ BREAKING CHANGES
+
+* Support Capacitor 8 (alpha) ([#2410](https://github.com/ionic-team/capacitor-plugins/issues/2410))
+* **camera:** don't lazy load Camera plugin to prevent bug in Safari ([#1978](https://github.com/ionic-team/capacitor-plugins/issues/1978))
+* **android:** Unify gallery cancel message ([#1967](https://github.com/ionic-team/capacitor-plugins/issues/1967))
+* **camera:** Use Android Photo Picker instead of ACTION_PICK intent ([#1833](https://github.com/ionic-team/capacitor-plugins/issues/1833))
+* **android:** bump targetSDK to 34 ([#1779](https://github.com/ionic-team/capacitor-plugins/issues/1779))
+* set targetSDK default value to 33 ([#1431](https://github.com/ionic-team/capacitor-plugins/issues/1431))
+
+### Features
+
+* **android:** Removing enableJetifier ([d66f9cb](https://github.com/ionic-team/capacitor-plugins/commit/d66f9cbd9da7e3b1d8c64ca6a5b45156867d4a04))
+* **camera:** Add support for iOS limited photo library mode ([#1125](https://github.com/ionic-team/capacitor-plugins/issues/1125)) ([cc5e4e6](https://github.com/ionic-team/capacitor-plugins/commit/cc5e4e683a2b9a9d216fac9ee88e8653a7ca68c6))
+* **camera:** only request permission to save to the gallery for Android &lt;= 9 ([#2222](https://github.com/ionic-team/capacitor-plugins/issues/2222)) ([30da38e](https://github.com/ionic-team/capacitor-plugins/commit/30da38ee9a92da1c5bbeb301fa6371a43365dfeb))
+* **camera:** Use Android Photo Picker instead of ACTION_PICK intent ([#1833](https://github.com/ionic-team/capacitor-plugins/issues/1833)) ([dd8f5d2](https://github.com/ionic-team/capacitor-plugins/commit/dd8f5d2789fe8c9e15f1fdf7c95812b7b0af8a3d))
+* Support Capacitor 8 (alpha) ([#2410](https://github.com/ionic-team/capacitor-plugins/issues/2410)) ([4659359](https://github.com/ionic-team/capacitor-plugins/commit/465935967bd55ab29304fbf5c816a8fd32a43726))
+* Update gradle to 8.0.2 and gradle plugin to 8.0.0 ([#1542](https://github.com/ionic-team/capacitor-plugins/issues/1542)) ([e7210b4](https://github.com/ionic-team/capacitor-plugins/commit/e7210b47867644f5983e37acdbf0247214ec232d))
+
+
+### Bug Fixes
+
+* AGP 9.0 no longer supporting `proguard-android.txt` ([#2468](https://github.com/ionic-team/capacitor-plugins/issues/2468)) ([a8760a9](https://github.com/ionic-team/capacitor-plugins/commit/a8760a989f594bc406d0ec7da58125d17447cae4))
+* **camera:** add proper permissions for Android 13 ([#1509](https://github.com/ionic-team/capacitor-plugins/issues/1509)) ([0dcbe56](https://github.com/ionic-team/capacitor-plugins/commit/0dcbe56bc554b1919c3e26d2f6b7ff8e5b7a0f5e))
+* **camera:** Allow cancelation of sheet in Web, requires pwa-elements 3.4.0 or higher ([#2284](https://github.com/ionic-team/capacitor-plugins/issues/2284)) ([06cf611](https://github.com/ionic-team/capacitor-plugins/commit/06cf611be3822cd41be8a4e314bf4a1b4e9b551d))
+* **camera:** Android dialog not fully showing when in landscape ([#2276](https://github.com/ionic-team/capacitor-plugins/issues/2276)) ([123193b](https://github.com/ionic-team/capacitor-plugins/commit/123193b9cf19784c69e1fd382516a319779e36a5))
+* **camera:** don't lazy load Camera plugin to prevent bug in Safari ([#1978](https://github.com/ionic-team/capacitor-plugins/issues/1978)) ([c131f71](https://github.com/ionic-team/capacitor-plugins/commit/c131f71ba3ee2295e17cc89a0fa8a40cb3ee0943))
+* **camera:** Handle null permissions list ([#1457](https://github.com/ionic-team/capacitor-plugins/issues/1457)) ([fcd28e9](https://github.com/ionic-team/capacitor-plugins/commit/fcd28e95420207f0e194f9fecab12415c400cba5))
+* **camera:** make pickLimitedLibraryPhotos return photos on iOS 15+ ([#1191](https://github.com/ionic-team/capacitor-plugins/issues/1191)) ([a65c8ca](https://github.com/ionic-team/capacitor-plugins/commit/a65c8ca8582c15e16ece369b77d1eac5df43e60e))
+* **camera:** prevent iOS crash with 0 limited images selected ([#1495](https://github.com/ionic-team/capacitor-plugins/issues/1495)) ([33f5c8e](https://github.com/ionic-team/capacitor-plugins/commit/33f5c8ebc7705c0e697caee4b2177ebc27d46311))
+* **camera:** reject promise on web input cancel event ([#1958](https://github.com/ionic-team/capacitor-plugins/issues/1958)) ([d218ba6](https://github.com/ionic-team/capacitor-plugins/commit/d218ba6c53250b990f4913bd121915cfd3d65d72))
+* **camera:** Request only the permissions needed by Android version ([#1713](https://github.com/ionic-team/capacitor-plugins/issues/1713)) ([f1585d6](https://github.com/ionic-team/capacitor-plugins/commit/f1585d661b2234e0c63afa098c92618dd630282e))
+* **camera:** requestPermissions on Android 13+ ([#2393](https://github.com/ionic-team/capacitor-plugins/issues/2393)) ([4d707a7](https://github.com/ionic-team/capacitor-plugins/commit/4d707a7353de44c9663f661ce869cb99429b1ca5))
+* **ios:** iOS panorama photos selected through CameraPlugin are corrupted ([#2090](https://github.com/ionic-team/capacitor-plugins/issues/2090)) ([998e495](https://github.com/ionic-team/capacitor-plugins/commit/998e4950d539cb2ebe38818d7f6046ac4b4b8950))
+* **ios:** Picking ProRAW pictures from Gallery ([#2098](https://github.com/ionic-team/capacitor-plugins/issues/2098)) ([20b9e26](https://github.com/ionic-team/capacitor-plugins/commit/20b9e26b1b0b10228c85049b4093a5ed9cfe64c5))
+* Use Capacitor 5 final ([#1574](https://github.com/ionic-team/capacitor-plugins/issues/1574)) ([139c18b](https://github.com/ionic-team/capacitor-plugins/commit/139c18b86a11d31246e952d1a74335ff8ce5dbc2))
+
+
+### Miscellaneous Chores
+
+* **android:** bump targetSDK to 34 ([#1779](https://github.com/ionic-team/capacitor-plugins/issues/1779)) ([eb503fe](https://github.com/ionic-team/capacitor-plugins/commit/eb503fe32d56c48a00510c1ed1e7292d020badd0))
+* set targetSDK default value to 33 ([#1431](https://github.com/ionic-team/capacitor-plugins/issues/1431)) ([44795e7](https://github.com/ionic-team/capacitor-plugins/commit/44795e70c4943aa59d369748fe51b20b19705aad))
+
+
+### Code Refactoring
+
+* **android:** Unify gallery cancel message ([#1967](https://github.com/ionic-team/capacitor-plugins/issues/1967)) ([fb12c04](https://github.com/ionic-team/capacitor-plugins/commit/fb12c049e3bd619dbbab00c21888e3c31021bf88))
+
 ## [8.0.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/camera@8.0.1...@capacitor/camera@8.0.2) (2026-03-06)
 
 ### Bug Fixes

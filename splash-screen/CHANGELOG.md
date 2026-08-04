@@ -3,6 +3,46 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [9.0.0](https://github.com/ionic-team/capacitor-plugins/compare/splash-screen-v8.0.2...splash-screen-v9.0.0) (2026-08-04)
+
+
+### ⚠ BREAKING CHANGES
+
+* Support Capacitor 8 (alpha) ([#2410](https://github.com/ionic-team/capacitor-plugins/issues/2410))
+* **splash-screen:** remove deprecated types ([#2266](https://github.com/ionic-team/capacitor-plugins/issues/2266))
+* **android:** bump targetSDK to 34 ([#1779](https://github.com/ionic-team/capacitor-plugins/issues/1779))
+* set targetSDK default value to 33 ([#1431](https://github.com/ionic-team/capacitor-plugins/issues/1431))
+
+### Features
+
+* **android:** Removing enableJetifier ([d66f9cb](https://github.com/ionic-team/capacitor-plugins/commit/d66f9cbd9da7e3b1d8c64ca6a5b45156867d4a04))
+* **splash-screen:** Add launchFadeOutDuration configuration option ([#1393](https://github.com/ionic-team/capacitor-plugins/issues/1393)) ([66929c2](https://github.com/ionic-team/capacitor-plugins/commit/66929c2177009f65758ccbacdc166ae95294ef37))
+* **splash-screen:** Use Android 12 Splash Screen API ([#1011](https://github.com/ionic-team/capacitor-plugins/issues/1011)) ([79185ad](https://github.com/ionic-team/capacitor-plugins/commit/79185adf76bc4ff4bae1be5ec5b5881cfbe748b1))
+* Support Capacitor 8 (alpha) ([#2410](https://github.com/ionic-team/capacitor-plugins/issues/2410)) ([4659359](https://github.com/ionic-team/capacitor-plugins/commit/465935967bd55ab29304fbf5c816a8fd32a43726))
+* Update gradle to 8.0.2 and gradle plugin to 8.0.0 ([#1542](https://github.com/ionic-team/capacitor-plugins/issues/1542)) ([e7210b4](https://github.com/ionic-team/capacitor-plugins/commit/e7210b47867644f5983e37acdbf0247214ec232d))
+
+
+### Bug Fixes
+
+* AGP 9.0 no longer supporting `proguard-android.txt` ([#2468](https://github.com/ionic-team/capacitor-plugins/issues/2468)) ([a8760a9](https://github.com/ionic-team/capacitor-plugins/commit/a8760a989f594bc406d0ec7da58125d17447cae4))
+* **android:** removes setOnExitAnimationListener when fade out is disabled ([9634552](https://github.com/ionic-team/capacitor-plugins/commit/963455218e47df19fa25d0059ebe2be140ab3bd0))
+* **splash-screen:** Avoid crash when splash resources not found ([#1642](https://github.com/ionic-team/capacitor-plugins/issues/1642)) ([f94773c](https://github.com/ionic-team/capacitor-plugins/commit/f94773c914b5e7b2664f2c10a3ff1c4ac996b70e))
+* **splash-screen:** call clearOnExitAnimationListener on animation end ([#2379](https://github.com/ionic-team/capacitor-plugins/issues/2379)) ([dcfda05](https://github.com/ionic-team/capacitor-plugins/commit/dcfda0542b5efb420ad3fe9af7b6ad54e37fb15a))
+* **splash-screen:** Don't show if WebView is older than supported ([#1317](https://github.com/ionic-team/capacitor-plugins/issues/1317)) ([c884c38](https://github.com/ionic-team/capacitor-plugins/commit/c884c38cb2d24105e4667e32ffb6bbe59c97b9b4))
+* **splash-screen:** Remove extension from storyboard name ([#1281](https://github.com/ionic-team/capacitor-plugins/issues/1281)) ([86ecc4f](https://github.com/ionic-team/capacitor-plugins/commit/86ecc4f0c45799b2a5a02700c18a3d5f0de00615))
+* Use Capacitor 5 final ([#1574](https://github.com/ionic-team/capacitor-plugins/issues/1574)) ([139c18b](https://github.com/ionic-team/capacitor-plugins/commit/139c18b86a11d31246e952d1a74335ff8ce5dbc2))
+
+
+### Miscellaneous Chores
+
+* **android:** bump targetSDK to 34 ([#1779](https://github.com/ionic-team/capacitor-plugins/issues/1779)) ([eb503fe](https://github.com/ionic-team/capacitor-plugins/commit/eb503fe32d56c48a00510c1ed1e7292d020badd0))
+* set targetSDK default value to 33 ([#1431](https://github.com/ionic-team/capacitor-plugins/issues/1431)) ([44795e7](https://github.com/ionic-team/capacitor-plugins/commit/44795e70c4943aa59d369748fe51b20b19705aad))
+
+
+### Code Refactoring
+
+* **splash-screen:** remove deprecated types ([#2266](https://github.com/ionic-team/capacitor-plugins/issues/2266)) ([12505f3](https://github.com/ionic-team/capacitor-plugins/commit/12505f3b5761c382702e3370a0633e0336bed84e))
+
 ## [8.0.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/splash-screen@8.0.1...@capacitor/splash-screen@8.0.2) (2026-07-15)
 
 **Note:** Version bump only for package @capacitor/splash-screen

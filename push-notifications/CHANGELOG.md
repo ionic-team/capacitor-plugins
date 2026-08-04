@@ -3,6 +3,42 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [9.0.0](https://github.com/ionic-team/capacitor-plugins/compare/push-notifications-v8.1.2...push-notifications-v9.0.0) (2026-08-04)
+
+
+### ⚠ BREAKING CHANGES
+
+* Support Capacitor 8 (alpha) ([#2410](https://github.com/ionic-team/capacitor-plugins/issues/2410))
+* **android:** bump targetSDK to 34 ([#1779](https://github.com/ionic-team/capacitor-plugins/issues/1779))
+* set targetSDK default value to 33 ([#1431](https://github.com/ionic-team/capacitor-plugins/issues/1431))
+
+### Features
+
+* **android:** Removing enableJetifier ([d66f9cb](https://github.com/ionic-team/capacitor-plugins/commit/d66f9cbd9da7e3b1d8c64ca6a5b45156867d4a04))
+* **push-notifications:** add banner and list presentation options for iOS ([#2529](https://github.com/ionic-team/capacitor-plugins/issues/2529)) ([f266d2e](https://github.com/ionic-team/capacitor-plugins/commit/f266d2e86b76148343d364e252d629383a56bbee))
+* **push-notifications:** add unregister functions ([#1498](https://github.com/ionic-team/capacitor-plugins/issues/1498)) ([878e295](https://github.com/ionic-team/capacitor-plugins/commit/878e2950b4113af49d2856a11b6e02d01ba62bb6))
+* **push-notifications:** support Android 13+ permissions ([#1463](https://github.com/ionic-team/capacitor-plugins/issues/1463)) ([b152c88](https://github.com/ionic-team/capacitor-plugins/commit/b152c885e40a88055c374e3b33ac6fa2c963e77a))
+* Support Capacitor 8 (alpha) ([#2410](https://github.com/ionic-team/capacitor-plugins/issues/2410)) ([4659359](https://github.com/ionic-team/capacitor-plugins/commit/465935967bd55ab29304fbf5c816a8fd32a43726))
+* Update gradle to 8.0.2 and gradle plugin to 8.0.0 ([#1542](https://github.com/ionic-team/capacitor-plugins/issues/1542)) ([e7210b4](https://github.com/ionic-team/capacitor-plugins/commit/e7210b47867644f5983e37acdbf0247214ec232d))
+* use Firebase SDK for creating foreground notifications ([#1657](https://github.com/ionic-team/capacitor-plugins/issues/1657)) ([530029c](https://github.com/ionic-team/capacitor-plugins/commit/530029ce5125999dde6e8eed216cd7d0f4bee513))
+
+
+### Bug Fixes
+
+* add Importance 0 for notification channels ([#2507](https://github.com/ionic-team/capacitor-plugins/issues/2507)) ([b98c4f9](https://github.com/ionic-team/capacitor-plugins/commit/b98c4f9ee368b66dc92fb54865129df777bf38e5))
+* AGP 9.0 no longer supporting `proguard-android.txt` ([#2468](https://github.com/ionic-team/capacitor-plugins/issues/2468)) ([a8760a9](https://github.com/ionic-team/capacitor-plugins/commit/a8760a989f594bc406d0ec7da58125d17447cae4))
+* **android:** notification Bundles with non-string values ([#2445](https://github.com/ionic-team/capacitor-plugins/issues/2445)) ([2788f81](https://github.com/ionic-team/capacitor-plugins/commit/2788f81d5dfe53e5d72b32e3b724e0f1a41e8373))
+* **push-notifications:** fixing Android deprecations ([#1467](https://github.com/ionic-team/capacitor-plugins/issues/1467)) ([6558c5e](https://github.com/ionic-team/capacitor-plugins/commit/6558c5ede8649e272649f374229107b138ae6115))
+* **push-notifications:** make requestPermissions resolve if granted ([#1677](https://github.com/ionic-team/capacitor-plugins/issues/1677)) ([798f788](https://github.com/ionic-team/capacitor-plugins/commit/798f788452f1f21e868cbab32743db3875d930e9))
+* **push-notifications:** properly get the configured icon from manifest ([#1118](https://github.com/ionic-team/capacitor-plugins/issues/1118)) ([20e87d3](https://github.com/ionic-team/capacitor-plugins/commit/20e87d3da337e12050cbfd6d7dd336b369b558b7))
+* Use Capacitor 5 final ([#1574](https://github.com/ionic-team/capacitor-plugins/issues/1574)) ([139c18b](https://github.com/ionic-team/capacitor-plugins/commit/139c18b86a11d31246e952d1a74335ff8ce5dbc2))
+
+
+### Miscellaneous Chores
+
+* **android:** bump targetSDK to 34 ([#1779](https://github.com/ionic-team/capacitor-plugins/issues/1779)) ([eb503fe](https://github.com/ionic-team/capacitor-plugins/commit/eb503fe32d56c48a00510c1ed1e7292d020badd0))
+* set targetSDK default value to 33 ([#1431](https://github.com/ionic-team/capacitor-plugins/issues/1431)) ([44795e7](https://github.com/ionic-team/capacitor-plugins/commit/44795e70c4943aa59d369748fe51b20b19705aad))
+
 ## [8.1.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/push-notifications@8.1.1...@capacitor/push-notifications@8.1.2) (2026-07-15)
 
 **Note:** Version bump only for package @capacitor/push-notifications
