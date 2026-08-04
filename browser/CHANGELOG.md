@@ -11,6 +11,39 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 **Note:** Version bump only for package @capacitor/browser
 
+## [9.0.0](https://github.com/ionic-team/capacitor-plugins/compare/browser-v8.0.4...browser-v9.0.0) (2026-08-04)
+
+
+### ⚠ BREAKING CHANGES
+
+* Support Capacitor 8 (alpha) ([#2410](https://github.com/ionic-team/capacitor-plugins/issues/2410))
+* **android:** bump targetSDK to 34 ([#1779](https://github.com/ionic-team/capacitor-plugins/issues/1779))
+* set targetSDK default value to 33 ([#1431](https://github.com/ionic-team/capacitor-plugins/issues/1431))
+
+### Features
+
+* **android:** Removing enableJetifier ([d66f9cb](https://github.com/ionic-team/capacitor-plugins/commit/d66f9cbd9da7e3b1d8c64ca6a5b45156867d4a04))
+* **browser:** implement close() method for android ([60e0267](https://github.com/ionic-team/capacitor-plugins/commit/60e026776da6fe00ec48356c3cdf55a860a9685b))
+* **browser:** support other custom tabs providers ([#1669](https://github.com/ionic-team/capacitor-plugins/issues/1669)) ([b9b68c2](https://github.com/ionic-team/capacitor-plugins/commit/b9b68c2cc3344ab7bad2d005b10d5b554e310dde))
+* Support Capacitor 8 (alpha) ([#2410](https://github.com/ionic-team/capacitor-plugins/issues/2410)) ([4659359](https://github.com/ionic-team/capacitor-plugins/commit/465935967bd55ab29304fbf5c816a8fd32a43726))
+* Update gradle to 8.0.2 and gradle plugin to 8.0.0 ([#1542](https://github.com/ionic-team/capacitor-plugins/issues/1542)) ([e7210b4](https://github.com/ionic-team/capacitor-plugins/commit/e7210b47867644f5983e37acdbf0247214ec232d))
+
+
+### Bug Fixes
+
+* AGP 9.0 no longer supporting `proguard-android.txt` ([#2468](https://github.com/ionic-team/capacitor-plugins/issues/2468)) ([a8760a9](https://github.com/ionic-team/capacitor-plugins/commit/a8760a989f594bc406d0ec7da58125d17447cae4))
+* **browser:** call notifyListeners only when browser is dismissed ([#2186](https://github.com/ionic-team/capacitor-plugins/issues/2186)) ([aaa8658](https://github.com/ionic-team/capacitor-plugins/commit/aaa8658eb65b6c95ae231a3ed1547f3f78cd2cac))
+* **browser:** crash when trying to open blob urls on android ([#2274](https://github.com/ionic-team/capacitor-plugins/issues/2274)) ([74fe051](https://github.com/ionic-team/capacitor-plugins/commit/74fe051ed9e852293550f201337d427e21c06421))
+* **browser:** Reject if custom tabs are not available ([#1323](https://github.com/ionic-team/capacitor-plugins/issues/1323)) ([3c90fea](https://github.com/ionic-team/capacitor-plugins/commit/3c90fea63e2c24deacc38ba9fd8471c2cc0bde56))
+* **browser:** stop using deprecated dismissVC/presentVC ([#2477](https://github.com/ionic-team/capacitor-plugins/issues/2477)) ([16e66d5](https://github.com/ionic-team/capacitor-plugins/commit/16e66d5547d0802f30d77073c006a3566b18bf83))
+* Use Capacitor 5 final ([#1574](https://github.com/ionic-team/capacitor-plugins/issues/1574)) ([139c18b](https://github.com/ionic-team/capacitor-plugins/commit/139c18b86a11d31246e952d1a74335ff8ce5dbc2))
+
+
+### Miscellaneous Chores
+
+* **android:** bump targetSDK to 34 ([#1779](https://github.com/ionic-team/capacitor-plugins/issues/1779)) ([eb503fe](https://github.com/ionic-team/capacitor-plugins/commit/eb503fe32d56c48a00510c1ed1e7292d020badd0))
+* set targetSDK default value to 33 ([#1431](https://github.com/ionic-team/capacitor-plugins/issues/1431)) ([44795e7](https://github.com/ionic-team/capacitor-plugins/commit/44795e70c4943aa59d369748fe51b20b19705aad))
+
 ## [8.0.3](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/browser@8.0.2...@capacitor/browser@8.0.3) (2026-03-25)
 
 **Note:** Version bump only for package @capacitor/browser

@@ -11,6 +11,47 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 **Note:** Version bump only for package @capacitor/status-bar
 
+## [9.0.0](https://github.com/ionic-team/capacitor-plugins/compare/status-bar-v8.0.3...status-bar-v9.0.0) (2026-08-04)
+
+
+### ⚠ BREAKING CHANGES
+
+* **status-bar:** remove notification related extensions ([#2442](https://github.com/ionic-team/capacitor-plugins/issues/2442))
+* **status-bar:** update foreground color of status bar on `setBackgroundColor` in Android ([#2447](https://github.com/ionic-team/capacitor-plugins/issues/2447))
+* Support Capacitor 8 (alpha) ([#2410](https://github.com/ionic-team/capacitor-plugins/issues/2410))
+* **statusbar:** make DEFAULT change style based on the Android theme ([#2166](https://github.com/ionic-team/capacitor-plugins/issues/2166))
+* **statusbar:** implement overlay and background color in iOS ([#2179](https://github.com/ionic-team/capacitor-plugins/issues/2179))
+* **android:** bump targetSDK to 34 ([#1779](https://github.com/ionic-team/capacitor-plugins/issues/1779))
+* set targetSDK default value to 33 ([#1431](https://github.com/ionic-team/capacitor-plugins/issues/1431))
+
+### Features
+
+* **android:** Removing enableJetifier ([d66f9cb](https://github.com/ionic-team/capacitor-plugins/commit/d66f9cbd9da7e3b1d8c64ca6a5b45156867d4a04))
+* **app,haptics,status-bar,keyboard:** Supporting Swift Package Manager ([#1886](https://github.com/ionic-team/capacitor-plugins/issues/1886)) ([918ea30](https://github.com/ionic-team/capacitor-plugins/commit/918ea30a95f80d740f39e9ab472ed90f9d4a6aba))
+* **status-bar:** update foreground color of status bar on `setBackgroundColor` in Android ([#2447](https://github.com/ionic-team/capacitor-plugins/issues/2447)) ([c859c84](https://github.com/ionic-team/capacitor-plugins/commit/c859c84cfde94bef379d84873c8a923e391e2aa9))
+* **statusbar:** implement overlay and background color in iOS ([#2179](https://github.com/ionic-team/capacitor-plugins/issues/2179)) ([88228ac](https://github.com/ionic-team/capacitor-plugins/commit/88228ac4cff2e4ebaf33e7ba28a6946e11b1af96))
+* **statusbar:** make DEFAULT change style based on the Android theme ([#2166](https://github.com/ionic-team/capacitor-plugins/issues/2166)) ([8c24903](https://github.com/ionic-team/capacitor-plugins/commit/8c249033cd983dc3d21165f0424ea3e98cf0c876))
+* Support Capacitor 8 (alpha) ([#2410](https://github.com/ionic-team/capacitor-plugins/issues/2410)) ([4659359](https://github.com/ionic-team/capacitor-plugins/commit/465935967bd55ab29304fbf5c816a8fd32a43726))
+* Update gradle to 8.0.2 and gradle plugin to 8.0.0 ([#1542](https://github.com/ionic-team/capacitor-plugins/issues/1542)) ([e7210b4](https://github.com/ionic-team/capacitor-plugins/commit/e7210b47867644f5983e37acdbf0247214ec232d))
+
+
+### Bug Fixes
+
+* AGP 9.0 no longer supporting `proguard-android.txt` ([#2468](https://github.com/ionic-team/capacitor-plugins/issues/2468)) ([a8760a9](https://github.com/ionic-team/capacitor-plugins/commit/a8760a989f594bc406d0ec7da58125d17447cae4))
+* **ios:** handle deprecation warning on status-bar ([#2448](https://github.com/ionic-team/capacitor-plugins/issues/2448)) ([0303a85](https://github.com/ionic-team/capacitor-plugins/commit/0303a85586e04605c80f0888273e3cb2908e453f))
+* **status-bar:** add missing types ([#2498](https://github.com/ionic-team/capacitor-plugins/issues/2498)) ([aa683d8](https://github.com/ionic-team/capacitor-plugins/commit/aa683d87f9e8d219924febffaa47055d41f707ec))
+* **status-bar:** not working on older devices ([#1078](https://github.com/ionic-team/capacitor-plugins/issues/1078)) ([4e34977](https://github.com/ionic-team/capacitor-plugins/commit/4e349772d3d8f8e30ce52c1831a1dc9a9f9fd408))
+* **status-bar:** remove notification related extensions ([#2442](https://github.com/ionic-team/capacitor-plugins/issues/2442)) ([8068706](https://github.com/ionic-team/capacitor-plugins/commit/8068706736b37398bf1254c82f3294384928b84c))
+* **statusbar:** fix info when notify listeners ([#2247](https://github.com/ionic-team/capacitor-plugins/issues/2247)) ([af2317f](https://github.com/ionic-team/capacitor-plugins/commit/af2317f75f72d80308fac83ae65b7196cca98371))
+* **statusbar:** using window size instead of screen size for resize bounds ([#2394](https://github.com/ionic-team/capacitor-plugins/issues/2394)) ([fb13a38](https://github.com/ionic-team/capacitor-plugins/commit/fb13a385a9e2c414420b398c2227483b2f4d1740))
+* Use Capacitor 5 final ([#1574](https://github.com/ionic-team/capacitor-plugins/issues/1574)) ([139c18b](https://github.com/ionic-team/capacitor-plugins/commit/139c18b86a11d31246e952d1a74335ff8ce5dbc2))
+
+
+### Miscellaneous Chores
+
+* **android:** bump targetSDK to 34 ([#1779](https://github.com/ionic-team/capacitor-plugins/issues/1779)) ([eb503fe](https://github.com/ionic-team/capacitor-plugins/commit/eb503fe32d56c48a00510c1ed1e7292d020badd0))
+* set targetSDK default value to 33 ([#1431](https://github.com/ionic-team/capacitor-plugins/issues/1431)) ([44795e7](https://github.com/ionic-team/capacitor-plugins/commit/44795e70c4943aa59d369748fe51b20b19705aad))
+
 ## [8.0.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/status-bar@8.0.1...@capacitor/status-bar@8.0.2) (2026-03-25)
 
 ### Bug Fixes
