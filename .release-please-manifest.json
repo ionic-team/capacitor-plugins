@@ -1,1 +1,22 @@
-{}
+{
+  "action-sheet": "8.1.1",
+  "app": "8.1.1",
+  "app-launcher": "8.0.1",
+  "browser": "8.0.4",
+  "camera": "8.0.2",
+  "clipboard": "8.0.1",
+  "device": "8.0.3",
+  "dialog": "8.0.1",
+  "local-notifications": "8.2.1",
+  "motion": "8.0.1",
+  "network": "8.0.1",
+  "preferences": "8.0.1",
+  "push-notifications": "8.1.2",
+  "screen-orientation": "8.0.1",
+  "screen-reader": "8.0.1",
+  "share": "8.0.1",
+  "splash-screen": "8.0.2",
+  "status-bar": "8.0.3",
+  "text-zoom": "8.0.1",
+  "toast": "8.0.1"
+}
