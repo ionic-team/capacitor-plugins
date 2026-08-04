@@ -3,6 +3,47 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [9.0.0](https://github.com/ionic-team/capacitor-plugins/compare/local-notifications-v8.2.1...local-notifications-v9.0.0) (2026-08-04)
+
+
+### ⚠ BREAKING CHANGES
+
+* Support Capacitor 8 (alpha) ([#2410](https://github.com/ionic-team/capacitor-plugins/issues/2410))
+* **android:** bump targetSDK to 34 ([#1779](https://github.com/ionic-team/capacitor-plugins/issues/1779))
+* set targetSDK default value to 33 ([#1431](https://github.com/ionic-team/capacitor-plugins/issues/1431))
+
+### Features
+
+* **android:** Removing enableJetifier ([d66f9cb](https://github.com/ionic-team/capacitor-plugins/commit/d66f9cbd9da7e3b1d8c64ca6a5b45156867d4a04))
+* **local-notifications:** Add delivered notification handling ([#1060](https://github.com/ionic-team/capacitor-plugins/issues/1060)) ([0a89dc9](https://github.com/ionic-team/capacitor-plugins/commit/0a89dc97407685a7f1ec97532af304115fea7a0f))
+* **local-notifications:** add presentationOptions config support for iOS ([#2530](https://github.com/ionic-team/capacitor-plugins/issues/2530)) ([78bea4c](https://github.com/ionic-team/capacitor-plugins/commit/78bea4c325bcaa8b3cd2eacb8c0444b154ea6735))
+* **local-notifications:** Adding permissions for using SCHEDULE_EXACT_ALARM in Android 14 ([#1840](https://github.com/ionic-team/capacitor-plugins/issues/1840)) ([55c31e8](https://github.com/ionic-team/capacitor-plugins/commit/55c31e897783a372527121b7b74e3bf138295a15))
+* **local-notifications:** Allowing local notifications to be delivered silently while app is in foreground (iOS only) ([#1921](https://github.com/ionic-team/capacitor-plugins/issues/1921)) ([9421137](https://github.com/ionic-team/capacitor-plugins/commit/94211377433c7d26208aedbcee8bb82f3d0985ae))
+* **local-notifications:** deprecate summaryArgument and add relevanceScore and interruptionLevel ([#2521](https://github.com/ionic-team/capacitor-plugins/issues/2521)) ([fcff6f1](https://github.com/ionic-team/capacitor-plugins/commit/fcff6f11dc8dcbe42c0738e89b4c15239629ab24))
+* **local-notifications:** support Android 13+ permissions ([#1189](https://github.com/ionic-team/capacitor-plugins/issues/1189)) ([ace7d73](https://github.com/ionic-team/capacitor-plugins/commit/ace7d73c57a1a8ca780d91bd1dace70eb226b21e))
+* Support Capacitor 8 (alpha) ([#2410](https://github.com/ionic-team/capacitor-plugins/issues/2410)) ([4659359](https://github.com/ionic-team/capacitor-plugins/commit/465935967bd55ab29304fbf5c816a8fd32a43726))
+* Update gradle to 8.0.2 and gradle plugin to 8.0.0 ([#1542](https://github.com/ionic-team/capacitor-plugins/issues/1542)) ([e7210b4](https://github.com/ionic-team/capacitor-plugins/commit/e7210b47867644f5983e37acdbf0247214ec232d))
+
+
+### Bug Fixes
+
+* add Importance 0 for notification channels ([#2507](https://github.com/ionic-team/capacitor-plugins/issues/2507)) ([b98c4f9](https://github.com/ionic-team/capacitor-plugins/commit/b98c4f9ee368b66dc92fb54865129df777bf38e5))
+* AGP 9.0 no longer supporting `proguard-android.txt` ([#2468](https://github.com/ionic-team/capacitor-plugins/issues/2468)) ([a8760a9](https://github.com/ionic-team/capacitor-plugins/commit/a8760a989f594bc406d0ec7da58125d17447cae4))
+* **android:** notification Bundles with non-string values ([#2445](https://github.com/ionic-team/capacitor-plugins/issues/2445)) ([2788f81](https://github.com/ionic-team/capacitor-plugins/commit/2788f81d5dfe53e5d72b32e3b724e0f1a41e8373))
+* **local-notifications:** Add FLAG_MUTABLE to schedule on notifications ([#1173](https://github.com/ionic-team/capacitor-plugins/issues/1173)) ([98a5cb1](https://github.com/ionic-team/capacitor-plugins/commit/98a5cb1c60598bd3932a47dceb1f8918241ce8cb))
+* **local-notifications:** error if notification id is bigger than allowed ([#1303](https://github.com/ionic-team/capacitor-plugins/issues/1303)) ([df7e2f5](https://github.com/ionic-team/capacitor-plugins/commit/df7e2f5a35879e618f0c3d50fe1a4b3ef4380b0e))
+* **local-notifications:** make requestPermissions resolve if granted ([#1678](https://github.com/ionic-team/capacitor-plugins/issues/1678)) ([4872589](https://github.com/ionic-team/capacitor-plugins/commit/487258940e0d1c27deeaa6326760095fc2549715))
+* **local-notifications:** prevent crash on restoring old notifications ([#1156](https://github.com/ionic-team/capacitor-plugins/issues/1156)) ([8c65584](https://github.com/ionic-team/capacitor-plugins/commit/8c655843ebbee5ab02503d7a10dd8296aa56ab04))
+* **local-notifications:** Showing correct scheduled notification time ([#1198](https://github.com/ionic-team/capacitor-plugins/issues/1198)) ([96c5430](https://github.com/ionic-team/capacitor-plugins/commit/96c5430f9bae13b54f3897dd1bffad030bfe3a3b))
+* **local-notifications:** Use RTC_WAKEUP if schedule.allowWhileIdle is true ([#1362](https://github.com/ionic-team/capacitor-plugins/issues/1362)) ([1cd2259](https://github.com/ionic-team/capacitor-plugins/commit/1cd2259e33694d8aeb819f1713ccbc88600211b0))
+* Use Capacitor 5 final ([#1574](https://github.com/ionic-team/capacitor-plugins/issues/1574)) ([139c18b](https://github.com/ionic-team/capacitor-plugins/commit/139c18b86a11d31246e952d1a74335ff8ce5dbc2))
+
+
+### Miscellaneous Chores
+
+* **android:** bump targetSDK to 34 ([#1779](https://github.com/ionic-team/capacitor-plugins/issues/1779)) ([eb503fe](https://github.com/ionic-team/capacitor-plugins/commit/eb503fe32d56c48a00510c1ed1e7292d020badd0))
+* set targetSDK default value to 33 ([#1431](https://github.com/ionic-team/capacitor-plugins/issues/1431)) ([44795e7](https://github.com/ionic-team/capacitor-plugins/commit/44795e70c4943aa59d369748fe51b20b19705aad))
+
 ## [8.2.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/local-notifications@8.2.0...@capacitor/local-notifications@8.2.1) (2026-07-15)
 
 **Note:** Version bump only for package @capacitor/local-notifications

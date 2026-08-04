@@ -3,6 +3,48 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [9.0.0](https://github.com/ionic-team/capacitor-plugins/compare/device-v8.0.3...device-v9.0.0) (2026-08-04)
+
+
+### ⚠ BREAKING CHANGES
+
+* Support Capacitor 8 (alpha) ([#2410](https://github.com/ionic-team/capacitor-plugins/issues/2410))
+* **device:** Remove deprecated types ([#2262](https://github.com/ionic-team/capacitor-plugins/issues/2262))
+* **device:** remove disk size related information ([#2251](https://github.com/ionic-team/capacitor-plugins/issues/2251))
+* **android:** bump targetSDK to 34 ([#1779](https://github.com/ionic-team/capacitor-plugins/issues/1779))
+* **device:** Change `DeviceId.uuid` to `DeviceId.identifier` ([#1507](https://github.com/ionic-team/capacitor-plugins/issues/1507))
+* set targetSDK default value to 33 ([#1431](https://github.com/ionic-team/capacitor-plugins/issues/1431))
+
+### Features
+
+* **android:** Removing enableJetifier ([d66f9cb](https://github.com/ionic-team/capacitor-plugins/commit/d66f9cbd9da7e3b1d8c64ca6a5b45156867d4a04))
+* **device:** Add numerical SDK / OS Version ([#1505](https://github.com/ionic-team/capacitor-plugins/issues/1505)) ([2ceb296](https://github.com/ionic-team/capacitor-plugins/commit/2ceb2965f3572068f22bad3e6d79c0902ec5c116))
+* **device:** Change `DeviceId.uuid` to `DeviceId.identifier` ([#1507](https://github.com/ionic-team/capacitor-plugins/issues/1507)) ([a5967b7](https://github.com/ionic-team/capacitor-plugins/commit/a5967b754403c57e2abe161c8aa6baeb8276a7c3))
+* **device:** remove disk size related information ([#2251](https://github.com/ionic-team/capacitor-plugins/issues/2251)) ([8449b18](https://github.com/ionic-team/capacitor-plugins/commit/8449b188496d710699bc6f5bc031a28f44e29fbe))
+* Support Capacitor 8 (alpha) ([#2410](https://github.com/ionic-team/capacitor-plugins/issues/2410)) ([4659359](https://github.com/ionic-team/capacitor-plugins/commit/465935967bd55ab29304fbf5c816a8fd32a43726))
+* Update gradle to 8.0.2 and gradle plugin to 8.0.0 ([#1542](https://github.com/ionic-team/capacitor-plugins/issues/1542)) ([e7210b4](https://github.com/ionic-team/capacitor-plugins/commit/e7210b47867644f5983e37acdbf0247214ec232d))
+
+
+### Bug Fixes
+
+* AGP 9.0 no longer supporting `proguard-android.txt` ([#2468](https://github.com/ionic-team/capacitor-plugins/issues/2468)) ([a8760a9](https://github.com/ionic-team/capacitor-plugins/commit/a8760a989f594bc406d0ec7da58125d17447cae4))
+* **device:** handle case of no localStorage for getId ([#1059](https://github.com/ionic-team/capacitor-plugins/issues/1059)) ([5f77a7d](https://github.com/ionic-team/capacitor-plugins/commit/5f77a7da48fc7f0ce5250e7cba621731ac6b210a))
+* **device:** Improving iOSVersion consistency ([#1514](https://github.com/ionic-team/capacitor-plugins/issues/1514)) ([b697fee](https://github.com/ionic-team/capacitor-plugins/commit/b697feec4d1f5d0576c76e927e893100d0be5e30))
+* **device:** make tests work on node 22 ([#2432](https://github.com/ionic-team/capacitor-plugins/issues/2432)) ([4f01876](https://github.com/ionic-team/capacitor-plugins/commit/4f01876f1841220d27937af37deeb3074302c546))
+* **device:** webViewVersion not working on Firefox &gt; v108 ([#1419](https://github.com/ionic-team/capacitor-plugins/issues/1419)) ([85cd516](https://github.com/ionic-team/capacitor-plugins/commit/85cd516f06806012350a718b6cd053f9efe583c4))
+* Use Capacitor 5 final ([#1574](https://github.com/ionic-team/capacitor-plugins/issues/1574)) ([139c18b](https://github.com/ionic-team/capacitor-plugins/commit/139c18b86a11d31246e952d1a74335ff8ce5dbc2))
+
+
+### Miscellaneous Chores
+
+* **android:** bump targetSDK to 34 ([#1779](https://github.com/ionic-team/capacitor-plugins/issues/1779)) ([eb503fe](https://github.com/ionic-team/capacitor-plugins/commit/eb503fe32d56c48a00510c1ed1e7292d020badd0))
+* set targetSDK default value to 33 ([#1431](https://github.com/ionic-team/capacitor-plugins/issues/1431)) ([44795e7](https://github.com/ionic-team/capacitor-plugins/commit/44795e70c4943aa59d369748fe51b20b19705aad))
+
+
+### Code Refactoring
+
+* **device:** Remove deprecated types ([#2262](https://github.com/ionic-team/capacitor-plugins/issues/2262)) ([1ceecb0](https://github.com/ionic-team/capacitor-plugins/commit/1ceecb0195280ea1145593aa9e6c0ee751d905d0))
+
 ## [8.0.3](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/device@8.0.2...@capacitor/device@8.0.3) (2026-07-15)
 
 **Note:** Version bump only for package @capacitor/device
