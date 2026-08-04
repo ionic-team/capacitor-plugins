@@ -61,5 +61,6 @@
     "status-bar",
     "text-zoom",
     "toast"
-  ]
+  ],
+  "version": "1.0.0"
 }
