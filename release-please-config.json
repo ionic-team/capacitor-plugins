@@ -24,7 +24,7 @@
   "release-type": "node",
   "bump-minor-pre-major": true,
   "bump-patch-for-minor-pre-major": true,
-  "last-release-sha": "0bfde98313dbd0312224c0a4896648b9fa6d57c3",
+  "last-release-sha": "3865beba413621711a947acc8d61bb4c74d98122",
   "draft": false,
   "prerelease": true,
   "plugins": ["node-workspace"],
