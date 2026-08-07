@@ -18,10 +18,10 @@ jobs:
       - run: sudo xcode-select --switch /Applications/Xcode_26.0.app
       - run: xcrun simctl list > /dev/null
       - run: xcodebuild -downloadPlatform iOS
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@v7
         with:
-          node-version: 22
-      - uses: actions/checkout@v5
+          node-version: 24
+      - uses: actions/checkout@v7
       - name: Install Cocoapods
         run: |
           gem install cocoapods
