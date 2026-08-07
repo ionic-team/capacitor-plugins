@@ -69,14 +69,7 @@ declare module '@capacitor/cli' {
        * @example "CENTER_CROP"
        */
       androidScaleType?:
-        | 'CENTER'
-        | 'CENTER_CROP'
-        | 'CENTER_INSIDE'
-        | 'FIT_CENTER'
-        | 'FIT_END'
-        | 'FIT_START'
-        | 'FIT_XY'
-        | 'MATRIX';
+        'CENTER' | 'CENTER_CROP' | 'CENTER_INSIDE' | 'FIT_CENTER' | 'FIT_END' | 'FIT_START' | 'FIT_XY' | 'MATRIX';
 
       /**
        * Show a loading spinner on the Splash Screen.
