@@ -1,3 +1,9 @@
+# ⓘ Plugin migrated
+
+**From version 8.3.0 onwards, this plugin is now hosted in a separate repository. Refer to [capacitor-local-notifications repository](https://github.com/ionic-team/capacitor-local-notifications).**
+
+This file remains here to serve as documentation for version 8.2.1.
+
 # @capacitor/local-notifications
 
 The Local Notifications API provides a way to schedule device notifications locally (i.e. without a server sending push notifications).
