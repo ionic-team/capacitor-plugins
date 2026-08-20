@@ -47,6 +47,16 @@ export interface ConnectionStatus {
    * @since 1.0.0
    */
   connectionType: ConnectionType;
+
+  /**
+   * Whether the device can reach the internet or not.
+   */
+  internetReachable: boolean;
+
+  /**
+   * The current state of the internet connection.
+   */
+  state: 'online' | 'limited' | 'offline';
 }
 
 /**

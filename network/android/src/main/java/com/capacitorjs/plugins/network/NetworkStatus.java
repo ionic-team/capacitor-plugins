@@ -21,4 +21,6 @@ public class NetworkStatus {
 
     public boolean connected = false;
     public ConnectionType connectionType = ConnectionType.NONE;
+    public boolean internetReachable = false;
+    public String state = "offline";
 }
