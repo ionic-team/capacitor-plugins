@@ -21,4 +21,6 @@ public class NetworkStatus {
 
     public boolean connected = false;
     public ConnectionType connectionType = ConnectionType.NONE;
+    public boolean constrained = false;
+    public boolean expensive = false;
 }
