@@ -41,16 +41,17 @@ public class ScreenOrientationPlugin: CAPPlugin, CAPBridgedPlugin {
         implementation.lock(lockToOrientation) { error in
             if let error = error {
                 call.reject(error.localizedDescription)
+                return
             }
             call.resolve()
         }
-
     }
 
     @objc public func unlock(_ call: CAPPluginCall) {
         implementation.unlock { error in
             if let error = error {
                 call.reject(error.localizedDescription)
+                return
             }
             call.resolve()
         }

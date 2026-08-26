@@ -21,49 +21,33 @@ public class ScreenOrientation: NSObject {
         return fromDeviceOrientationToOrientationType(currentOrientation)
     }
 
-    private func lockLegacy(_ orientation: Int) {
-        UIDevice.current.setValue(orientation, forKey: "orientation")
-        UINavigationController.attemptRotationToDeviceOrientation()
-    }
-
     public func lock(_ orientationType: String, completion: @escaping (Error?) -> Void) {
         DispatchQueue.main.async {
             let orientation = self.fromOrientationTypeToInt(orientationType)
             self.capViewController?.supportedOrientations = [orientation]
             let mask = self.fromOrientationTypeToMask(orientationType)
-            if #available(iOS 16.0, *) {
-                if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
-                    windowScene.keyWindow?.rootViewController?.setNeedsUpdateOfSupportedInterfaceOrientations()
-                    windowScene.requestGeometryUpdate(.iOS(interfaceOrientations: mask)) { error in
-                        completion(error)
-                    }
-                } else {
-                    completion(ScreenOrientationError.noWindowScene)
-                }
-            } else {
-                self.lockLegacy(orientation)
-            }
-            completion(nil)
+            self.requestGeometryUpdate(mask, completion: completion)
         }
     }
 
     public func unlock(completion: @escaping (Error?) -> Void) {
         DispatchQueue.main.async {
             self.capViewController?.supportedOrientations = self.supportedOrientations
-            if #available(iOS 16.0, *) {
-                if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
-                    windowScene.keyWindow?.rootViewController?.setNeedsUpdateOfSupportedInterfaceOrientations()
-                    windowScene.requestGeometryUpdate(.iOS(interfaceOrientations: .all)) { error in
-                        completion(error)
-                    }
-                } else {
-                    completion(ScreenOrientationError.noWindowScene)
-                }
-            } else {
-                UINavigationController.attemptRotationToDeviceOrientation()
-            }
-            completion(nil)
+            self.requestGeometryUpdate(.all, completion: completion)
         }
+    }
+
+    private func requestGeometryUpdate(_ mask: UIInterfaceOrientationMask, completion: @escaping (Error?) -> Void) {
+        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene else {
+            completion(ScreenOrientationError.noWindowScene)
+            return
+        }
+        windowScene.keyWindow?.rootViewController?.setNeedsUpdateOfSupportedInterfaceOrientations()
+        var requestError: Error?
+        windowScene.requestGeometryUpdate(.iOS(interfaceOrientations: mask)) { error in
+            requestError = error
+        }
+        completion(requestError)
     }
 
     private func fromDeviceOrientationToOrientationType(_ orientation: UIDeviceOrientation) -> String {
