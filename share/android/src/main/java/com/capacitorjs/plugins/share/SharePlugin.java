@@ -39,12 +39,13 @@ public class SharePlugin extends Plugin {
             @Override
             public void onReceive(Context context, Intent intent) {
                 // Validate nonce to prevent spoofing from other apps
+                //  Reference: https://github.com/ionic-team/capacitor-plugins/pull/2592
                 String receivedNonce = intent.getStringExtra(NONCE_EXTRA_KEY);
                 if (receivedNonce == null || !receivedNonce.equals(expectedNonce)) {
-                    return; // Reject broadcasts that don't have the correct nonce
+                    // Reject broadcasts that don't have the correct nonce
+                    return;
                 }
 
-                // Extract chosen component
                 ComponentName component;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                     component = intent.getParcelableExtra(Intent.EXTRA_CHOSEN_COMPONENT, ComponentName.class);
