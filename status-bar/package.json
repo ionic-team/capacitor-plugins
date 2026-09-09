@@ -52,7 +52,7 @@
     "@capacitor/core": "next",
     "@capacitor/docgen": "0.3.0",
     "@capacitor/ios": "next",
-    "@ionic/eslint-config": "^1.0.0",
+    "@ionic/eslint-config": "^0.5.0",
     "@ionic/prettier-config": "^4.0.0",
     "@ionic/swiftlint-config": "^2.0.0",
     "eslint": "^10.0.0",
