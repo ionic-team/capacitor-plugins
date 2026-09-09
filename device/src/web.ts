@@ -57,7 +57,7 @@ export class DeviceWeb extends WebPlugin implements DevicePlugin {
 
     try {
       battery = await navigator.getBattery();
-    } catch (e) {
+    } catch {
       // Let it fail, we don't care
     }
 

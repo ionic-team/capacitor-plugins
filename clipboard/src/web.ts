@@ -27,7 +27,7 @@ export class ClipboardWeb extends WebPlugin implements ClipboardPlugin {
           const blob = await (await fetch(options.image)).blob();
           const clipboardItemInput = new ClipboardItem({ [blob.type]: blob });
           await navigator.clipboard.write([clipboardItemInput]);
-        } catch (err) {
+        } catch {
           throw new Error('Failed to write image');
         }
       } else {
@@ -50,7 +50,7 @@ export class ClipboardWeb extends WebPlugin implements ClipboardPlugin {
         const clipboardBlob = await clipboardItems[0].getType(type);
         const data = await this._getBlobData(clipboardBlob, type);
         return { value: data, type };
-      } catch (err) {
+      } catch {
         return this.readText();
       }
     } else {
