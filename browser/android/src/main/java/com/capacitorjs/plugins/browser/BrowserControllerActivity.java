@@ -46,6 +46,7 @@ public class BrowserControllerActivity extends ComponentActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        implementation = null;
         BrowserPlugin.setBrowserControllerListener(null);
     }
 }
