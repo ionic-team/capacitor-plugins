@@ -11,9 +11,10 @@ npx cap sync
 
 ## Permissions
 
-This plugin is currently implemented using Web APIs. Most browsers require
-permission before using this API. To request permission, prompt the user for
-permission on any user-initiated action (such as a button click):
+This plugin is currently implemented using Web APIs. On iOS devices,
+permission must be requested before accessing device motion or orientation
+events. To request permission, prompt the user on any user-initiated action
+(such as a button click):
 
 ```typescript
 import { PluginListenerHandle } from '@capacitor/core';
@@ -21,13 +22,17 @@ import { Motion } from '@capacitor/motion';
 
 
 let accelHandler: PluginListenerHandle;
+let orientationHandler: PluginListenerHandle;
 
-myButton.addEventListener('click', async () => {
-  try {
-    await DeviceMotionEvent.requestPermission();
-  } catch (e) {
-    // Handle error
-    return;
+myAccelerationButton.addEventListener('click', async () => {
+  if (typeof DeviceMotionEvent.requestPermission === 'function') {
+    try {
+      const permission = await DeviceMotionEvent.requestPermission();
+      if (permission !== 'granted') return;
+    } catch (e) {
+      // Handle error
+      return;
+    }
   }
 
   // Once the user approves, can start listening:
@@ -36,10 +41,34 @@ myButton.addEventListener('click', async () => {
   });
 });
 
+myOrientationButton.addEventListener('click', async () => {
+  if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+    try {
+      const permission = await DeviceOrientationEvent.requestPermission();
+      if (permission !== 'granted') return;
+    } catch (e) {
+      // Handle error
+      return;
+    }
+  }
+
+  // Once the user approves, can start listening:
+  orientationHandler = await Motion.addListener('orientation', event => {
+    console.log('Device orientation event:', event);
+  });
+});
+
 // Stop the acceleration listener
 const stopAcceleration = () => {
   if (accelHandler) {
     accelHandler.remove();
+  }
+};
+
+// Stop the orientation listener
+const stopOrientation = () => {
+  if (orientationHandler) {
+    orientationHandler.remove();
   }
 };
 
@@ -51,7 +80,10 @@ const removeListeners = () => {
 
 See the
 [`DeviceMotionEvent`](https://developer.mozilla.org/en-US/docs/Web/API/DeviceMotionEvent)
-API to understand the data supplied in the 'accel' event.
+and
+[`DeviceOrientationEvent`](https://developer.mozilla.org/en-US/docs/Web/API/DeviceOrientationEvent)
+APIs to understand the data supplied in the `'accel'` and `'orientation'`
+events respectively.
 
 ## API
 
