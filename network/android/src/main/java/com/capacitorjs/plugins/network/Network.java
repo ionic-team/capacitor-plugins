@@ -77,9 +77,10 @@ public class Network {
             android.net.Network activeNetwork = this.connectivityManager.getActiveNetwork();
             NetworkCapabilities capabilities = this.connectivityManager.getNetworkCapabilities(this.connectivityManager.getActiveNetwork());
             if (activeNetwork != null && capabilities != null) {
-                networkStatus.connected =
-                    capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED) &&
-                    capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET);
+                boolean validated = capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED);
+                boolean hasInternet = capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET);
+                networkStatus.connected = validated && hasInternet;
+
                 if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
                     networkStatus.connectionType = NetworkStatus.ConnectionType.WIFI;
                 } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
@@ -87,6 +88,8 @@ public class Network {
                 } else {
                     networkStatus.connectionType = NetworkStatus.ConnectionType.UNKNOWN;
                 }
+                networkStatus.internetReachable = networkStatus.connected;
+                networkStatus.state = networkStatus.connected ? "online" : "limited";
             }
         }
         return networkStatus;
@@ -104,6 +107,8 @@ public class Network {
             } else if (typeName.equals("MOBILE")) {
                 networkStatus.connectionType = NetworkStatus.ConnectionType.CELLULAR;
             }
+            networkStatus.internetReachable = networkStatus.connected;
+            networkStatus.state = networkStatus.connected ? "online" : "offline";
         }
         return networkStatus;
     }
