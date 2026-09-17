@@ -7,20 +7,30 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Looper;
 import android.service.notification.StatusBarNotification;
+import androidx.core.app.NotificationCompat;
 import com.getcapacitor.*;
 import com.getcapacitor.annotation.CapacitorPlugin;
 import com.getcapacitor.annotation.Permission;
 import com.getcapacitor.annotation.PermissionCallback;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.messaging.CommonNotificationBuilder;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.ImageDownload;
 import com.google.firebase.messaging.NotificationParams;
 import com.google.firebase.messaging.RemoteMessage;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -30,6 +40,7 @@ import org.json.JSONObject;
 )
 public class PushNotificationsPlugin extends Plugin {
 
+    private static final int IMAGE_DOWNLOAD_TIMEOUT_SECONDS = 5;
     static final String PUSH_NOTIFICATIONS = "receive";
 
     public static Bridge staticBridge = null;
@@ -279,7 +290,7 @@ public class PushNotificationsPlugin extends Plugin {
                         CommonNotificationBuilder.DisplayNotificationInfo notificationInfo =
                             CommonNotificationBuilder.createNotificationInfo(getContext(), getContext(), params, channelId, bundle);
 
-                        notificationManager.notify(notificationInfo.tag, notificationInfo.id, notificationInfo.notificationBuilder.build());
+                        showForegroundNotification(notificationInfo, notification.getImageUrl());
                     }
                 }
             }
@@ -294,6 +305,61 @@ public class PushNotificationsPlugin extends Plugin {
         }
 
         notifyListeners("pushNotificationReceived", remoteMessageData, true);
+    }
+
+    private void showForegroundNotification(CommonNotificationBuilder.DisplayNotificationInfo notificationInfo, Uri imageUrl) {
+        Runnable showNotification = () -> {
+            try {
+                applyNotificationImage(notificationInfo.notificationBuilder, imageUrl);
+            } catch (RuntimeException e) {
+                Logger.error("Unexpected error while applying notification image", e);
+            } finally {
+                notificationManager.notify(notificationInfo.tag, notificationInfo.id, notificationInfo.notificationBuilder.build());
+            }
+        };
+
+        if (Looper.myLooper() != Looper.getMainLooper()) {
+            showNotification.run();
+            return;
+        }
+
+        ExecutorService displayExecutor = Executors.newSingleThreadExecutor();
+        displayExecutor.execute(() -> {
+            try {
+                showNotification.run();
+            } finally {
+                displayExecutor.shutdown();
+            }
+        });
+    }
+
+    private void applyNotificationImage(NotificationCompat.Builder notificationBuilder, Uri imageUrl) {
+        if (imageUrl == null) {
+            return;
+        }
+
+        ImageDownload imageDownload = ImageDownload.create(imageUrl.toString());
+        if (imageDownload == null) {
+            return;
+        }
+
+        ExecutorService imageExecutor = Executors.newSingleThreadExecutor();
+        try {
+            imageDownload.start(imageExecutor);
+            Bitmap bitmap = Tasks.await(imageDownload.getTask(), IMAGE_DOWNLOAD_TIMEOUT_SECONDS, TimeUnit.SECONDS);
+            notificationBuilder.setLargeIcon(bitmap);
+            notificationBuilder.setStyle(new NotificationCompat.BigPictureStyle().bigPicture(bitmap).bigLargeIcon((Bitmap) null));
+        } catch (ExecutionException e) {
+            Logger.warn("Failed to download notification image: " + e.getCause());
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            Logger.warn("Notification image download was interrupted");
+        } catch (TimeoutException e) {
+            Logger.warn("Notification image download timed out");
+        } finally {
+            imageDownload.close();
+            imageExecutor.shutdownNow();
+        }
     }
 
     public static PushNotificationsPlugin getPushNotificationsInstance() {
