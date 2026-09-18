@@ -34,4 +34,14 @@ class NetworkTests: XCTestCase {
             XCTFail("Network initialization failed! \(error)")
         }
     }
+
+    func testConnectionConditionDefaults() {
+        do {
+            let implementation = try Network()
+            XCTAssertFalse(implementation.connectionDetails.constrained)
+            XCTAssertFalse(implementation.connectionDetails.expensive)
+        } catch let error {
+            XCTFail("Network initialization failed! \(error)")
+        }
+    }
 }
