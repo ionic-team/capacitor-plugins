@@ -6,11 +6,13 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.browser.customtabs.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * The Browser class implements Custom Chrome Tabs. See
@@ -44,6 +46,7 @@ public class Browser {
     private CustomTabsClient customTabsClient;
     private CustomTabsSession browserSession;
     private boolean isInitialLoad = false;
+    private final AtomicBoolean browserFinishedFired = new AtomicBoolean(false);
 
     @Nullable
     private ActivityResultLauncher<Intent> customTabLauncher;
@@ -121,6 +124,7 @@ public class Browser {
         tabsIntent.intent.putExtra(Intent.EXTRA_REFERRER, Uri.parse(Intent.URI_ANDROID_APP_SCHEME + "//" + context.getPackageName()));
 
         isInitialLoad = true;
+        browserFinishedFired.set(false);
         if (customTabLauncher != null) {
             tabsIntent.intent.setData(url);
             customTabLauncher.launch(tabsIntent.intent);
@@ -161,10 +165,10 @@ public class Browser {
     }
 
     public void notifyBrowserFinished() {
-        // Notify listeners that the browser session has finished. Called by the
-        // host activity when the Custom Tab activity actually returns a result
-        // (i.e. the tab was truly dismissed, not just backgrounded or minimised).
-        if (browserEventListener != null) {
+        // Guarded so the finished event is delivered at most once per open()
+        // session, even when multiple signals (ActivityResult, onMinimized)
+        // fire for the same browser instance.
+        if (browserFinishedFired.compareAndSet(false, true) && browserEventListener != null) {
             browserEventListener.onBrowserEvent(BROWSER_FINISHED);
         }
     }
@@ -181,6 +185,18 @@ public class Browser {
                     @Override
                     public void onNavigationEvent(int navigationEvent, Bundle extras) {
                         handledNavigationEvent(navigationEvent);
+                    }
+
+                    @Override
+                    public void onMinimized(@NonNull Bundle extras) {
+                        // On Android <14 the ActivityResult callback is not
+                        // reliably delivered when the Custom Tab is dismissed from PiP,
+                        // so we notify listeners as the Custom Tab enters PiP as a
+                        // compromise. Skipped on 14+ where the ActivityResult
+                        // callback handles it correctly.
+                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                            notifyBrowserFinished();
+                        }
                     }
                 }
             );
