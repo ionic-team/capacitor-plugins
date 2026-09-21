@@ -1,3 +1,7 @@
+# ⓘ Plugin migrated
+
+**From version 8.3.0 onwards, this plugin is now hosted in a separate repository. Refer to the [updated CHANGELOG](https://github.com/ionic-team/capacitor-local-notifications/blob/main/CHANGELOG.md).**
+
 # Change Log
 
 All notable changes to this project will be documented in this file.
