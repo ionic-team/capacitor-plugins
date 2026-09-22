@@ -11,6 +11,12 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 **Note:** Version bump only for package @capacitor/share
 
+## [8.0.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/share@8.0.1...@capacitor/share@8.0.2) (2026-09-16)
+
+### Bug Fixes
+
+- **share:** Add nonce validation to broadcast receiver on Android ([#2592](https://github.com/ionic-team/capacitor-plugins/issues/2592)) ([fa8ddfb](https://github.com/ionic-team/capacitor-plugins/commit/fa8ddfb4e671fa1c91e6d92c80512f09cfd3a335))
+
 ## [8.0.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/share@8.0.0...@capacitor/share@8.0.1) (2026-02-12)
 
 ### Bug Fixes

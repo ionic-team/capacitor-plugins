@@ -11,6 +11,10 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 **Note:** Version bump only for package @capacitor/status-bar
 
+## [8.0.3](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/status-bar@8.0.2...@capacitor/status-bar@8.0.3) (2026-07-15)
+
+**Note:** Version bump only for package @capacitor/status-bar
+
 ## [8.0.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/status-bar@8.0.1...@capacitor/status-bar@8.0.2) (2026-03-25)
 
 ### Bug Fixes

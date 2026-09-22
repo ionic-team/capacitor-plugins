@@ -11,6 +11,10 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 **Note:** Version bump only for package @capacitor/push-notifications
 
+## [8.1.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/push-notifications@8.1.1...@capacitor/push-notifications@8.1.2) (2026-07-15)
+
+**Note:** Version bump only for package @capacitor/push-notifications
+
 ## [8.1.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/push-notifications@8.1.0...@capacitor/push-notifications@8.1.1) (2026-05-15)
 
 **Note:** Version bump only for package @capacitor/push-notifications

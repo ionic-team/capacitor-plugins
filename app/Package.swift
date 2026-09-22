@@ -10,13 +10,13 @@ let package = Package(
             targets: ["AppPlugin"])
     ],
     dependencies: [
-        .package(url: "https://github.com/ionic-team/capacitor-swift-pm.git", from: "9.0.0-alpha.5")
+        .package(url: "https://github.com/ionic-team/capacitor.git", from: "9.0.0-alpha.7")
     ],
     targets: [
         .target(
             name: "AppPlugin",
             dependencies: [
-                .product(name: "Capacitor", package: "capacitor-swift-pm")
+                .product(name: "Capacitor", package: "capacitor")
             ],
             path: "ios/Sources/AppPlugin"),
         .testTarget(
