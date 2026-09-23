@@ -23,7 +23,8 @@ func application(_ application: UIApplication, supportedInterfaceOrientationsFor
 }
 ```
 
-> [!IMPORTANT]
+> **Warning**
+>
 > If your app already has an earlier version of this snippet, update it. Capacitor 8.5 and later adopt the UIScene lifecycle, in which the window is owned by `SceneDelegate`, so `self.window` on the `AppDelegate` is always `nil` and the previous snippet crashes on launch. Read the root view controller from the `window` passed into the method instead:
 >
 > ```diff
