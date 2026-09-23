@@ -118,7 +118,7 @@ public class AppPlugin: CAPPlugin, CAPBridgedPlugin {
 
     @objc func getAppLanguage(_ call: CAPPluginCall) {
         call.resolve([
-            "value": Bundle.main.preferredLocalizations.first
+            "value": Bundle.main.preferredLocalizations.first as Any
         ])
     }
 
