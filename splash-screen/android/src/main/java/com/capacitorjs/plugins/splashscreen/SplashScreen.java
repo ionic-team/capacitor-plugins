@@ -538,11 +538,15 @@ public class SplashScreen {
                 );
             }
             this.isVisible = false;
-            if (null != content) {
-                content.getViewTreeObserver().removeOnPreDrawListener(this.onPreDrawListener);
+            final View hideContent = content;
+            final OnPreDrawListener listenerToRemove = this.onPreDrawListener;
+            if (null != hideContent) {
+                new Handler(context.getMainLooper())
+                    .post(() -> hideContent.getViewTreeObserver().removeOnPreDrawListener(listenerToRemove));
             }
             this.onPreDrawListener = null;
             return;
+
         }
 
         if (splashImage == null || splashImage.getParent() == null) {
@@ -608,8 +612,11 @@ public class SplashScreen {
         // Hide with Android 12 API
         if (null != this.onPreDrawListener) {
             this.isVisible = false;
-            if (null != content) {
-                content.getViewTreeObserver().removeOnPreDrawListener(this.onPreDrawListener);
+            final View hideContent = content;
+            final OnPreDrawListener listenerToRemove = this.onPreDrawListener;
+            if (null != hideContent) {
+                new Handler(context.getMainLooper())
+                    .post(() -> hideContent.getViewTreeObserver().removeOnPreDrawListener(listenerToRemove));
             }
             this.onPreDrawListener = null;
             return;
