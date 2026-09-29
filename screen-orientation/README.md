@@ -16,9 +16,24 @@ For also lock presented View Controllers, this code can be added to the app's `A
 
 ```swift
 func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
-  return UIInterfaceOrientationMask(rawValue: (self.window!.rootViewController as! CAPBridgeViewController).supportedInterfaceOrientations.rawValue)
+  guard let bridgeViewController = window?.rootViewController as? CAPBridgeViewController else {
+    return .all
+  }
+  return bridgeViewController.supportedInterfaceOrientations
 }
 ```
+
+> **Warning**
+>
+> If your app already has an earlier version of this snippet, update it. Capacitor 8.5 and later adopt the UIScene lifecycle, in which the window is owned by `SceneDelegate`, so `self.window` on the `AppDelegate` is always `nil` and the previous snippet crashes on launch. Read the root view controller from the `window` passed into the method instead:
+>
+> ```diff
+> - return UIInterfaceOrientationMask(rawValue: (self.window!.rootViewController as! CAPBridgeViewController).supportedInterfaceOrientations.rawValue)
+> + guard let bridgeViewController = window?.rootViewController as? CAPBridgeViewController else {
+> +   return .all
+> + }
+> + return bridgeViewController.supportedInterfaceOrientations
+> ```
 
 ### iPad Orientation Lock
 
