@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [8.0.4](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/status-bar@8.0.3...@capacitor/status-bar@8.0.4) (2026-10-02)
+
+### Bug Fixes
+
+- **status-bar:** avoid retain cycle between StatusBar and the bridge ([#2569](https://github.com/ionic-team/capacitor-plugins/issues/2569)) ([bf42d23](https://github.com/ionic-team/capacitor-plugins/commit/bf42d237c1dca1b608dcbedf9c62559feccfb532))
+
 ## [8.0.3](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/status-bar@8.0.2...@capacitor/status-bar@8.0.3) (2026-07-15)
 
 **Note:** Version bump only for package @capacitor/status-bar

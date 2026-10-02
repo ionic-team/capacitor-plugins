@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [8.1.3](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/push-notifications@8.1.2...@capacitor/push-notifications@8.1.3) (2026-10-02)
+
+### Bug Fixes
+
+- **push-notifications:** show foreground notification image on Android ([#2572](https://github.com/ionic-team/capacitor-plugins/issues/2572)) ([fd606de](https://github.com/ionic-team/capacitor-plugins/commit/fd606deafbd52754d54a9c6dfcfef79f4ccc0b1c))
+
 ## [8.1.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/push-notifications@8.1.1...@capacitor/push-notifications@8.1.2) (2026-07-15)
 
 **Note:** Version bump only for package @capacitor/push-notifications

@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [8.0.3](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/share@8.0.2...@capacitor/share@8.0.3) (2026-10-02)
+
+### Bug Fixes
+
+- **share:** present share sheet from the topmost view controller on iOS ([#2574](https://github.com/ionic-team/capacitor-plugins/issues/2574)) ([ed6cf8f](https://github.com/ionic-team/capacitor-plugins/commit/ed6cf8f1f64ce63ab7630c41831b6606c9c6636c))
+
 ## [8.0.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/share@8.0.1...@capacitor/share@8.0.2) (2026-09-16)
 
 ### Bug Fixes

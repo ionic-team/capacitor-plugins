@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [8.0.5](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/browser@8.0.4...@capacitor/browser@8.0.5) (2026-10-02)
+
+### Bug Fixes
+
+- **browser:** only fire browserFinished when the Custom Tab actually terminates ([#2561](https://github.com/ionic-team/capacitor-plugins/issues/2561)) ([5608b1c](https://github.com/ionic-team/capacitor-plugins/commit/5608b1c5139f81a6d473db14c815a0aad730f71c))
+
 ## [8.0.4](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/browser@8.0.3...@capacitor/browser@8.0.4) (2026-07-15)
 
 **Note:** Version bump only for package @capacitor/browser
