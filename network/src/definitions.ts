@@ -47,6 +47,20 @@ export interface ConnectionStatus {
    * @since 1.0.0
    */
   connectionType: ConnectionType;
+
+  /**
+   * Whether the active connection is constrained by platform data-saving or bandwidth-reduction signals.
+   *
+   * @since 8.1.0
+   */
+  constrained?: boolean;
+
+  /**
+   * Whether the active connection is considered expensive or metered by the platform.
+   *
+   * @since 8.1.0
+   */
+  expensive?: boolean;
 }
 
 /**
