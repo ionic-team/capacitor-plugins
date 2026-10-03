@@ -52,33 +52,41 @@ public class NetworkPlugin extends Plugin {
     }
 
     /**
-     * Register the IntentReceiver on resume
+     * Register the network callback on resume.
+     * The ConnectivityManager calls are binder IPCs that can block for a long time, so they run
+     * on the plugin thread instead of the main thread to avoid ANRs. The plugin thread is a single
+     * serial thread, so this work stays ordered with handleOnPause and with plugin method calls.
      */
     @Override
     protected void handleOnResume() {
-        implementation.startMonitoring();
-        NetworkStatus afterPauseNetworkStatus = implementation.getNetworkStatus();
-        if (
-            prePauseNetworkStatus != null &&
-            !afterPauseNetworkStatus.connected &&
-            (prePauseNetworkStatus.connected || afterPauseNetworkStatus.connectionType != prePauseNetworkStatus.connectionType)
-        ) {
-            Log.d(
-                "Capacitor/NetworkPlugin",
-                "Detected pre-pause and after-pause network status mismatch. Updating network status and notifying listeners."
-            );
-            this.updateNetworkStatus();
-        }
-        this.prePauseNetworkStatus = null;
+        getBridge().execute(() -> {
+            implementation.startMonitoring();
+            NetworkStatus afterPauseNetworkStatus = implementation.getNetworkStatus();
+            if (
+                prePauseNetworkStatus != null &&
+                !afterPauseNetworkStatus.connected &&
+                (prePauseNetworkStatus.connected || afterPauseNetworkStatus.connectionType != prePauseNetworkStatus.connectionType)
+            ) {
+                Log.d(
+                    "Capacitor/NetworkPlugin",
+                    "Detected pre-pause and after-pause network status mismatch. Updating network status and notifying listeners."
+                );
+                this.updateNetworkStatus();
+            }
+            this.prePauseNetworkStatus = null;
+        });
     }
 
     /**
-     * Unregister the IntentReceiver on pause to avoid leaking it
+     * Unregister the network callback on pause to avoid leaking it.
+     * Runs on the plugin thread for the same reason as handleOnResume.
      */
     @Override
     protected void handleOnPause() {
-        this.prePauseNetworkStatus = implementation.getNetworkStatus();
-        implementation.stopMonitoring();
+        getBridge().execute(() -> {
+            this.prePauseNetworkStatus = implementation.getNetworkStatus();
+            implementation.stopMonitoring();
+        });
     }
 
     private void updateNetworkStatus() {

@@ -75,7 +75,7 @@ public class Network {
         NetworkStatus networkStatus = new NetworkStatus();
         if (this.connectivityManager != null) {
             android.net.Network activeNetwork = this.connectivityManager.getActiveNetwork();
-            NetworkCapabilities capabilities = this.connectivityManager.getNetworkCapabilities(this.connectivityManager.getActiveNetwork());
+            NetworkCapabilities capabilities = this.connectivityManager.getNetworkCapabilities(activeNetwork);
             if (activeNetwork != null && capabilities != null) {
                 networkStatus.connected =
                     capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED) &&
