@@ -16,6 +16,8 @@ on Android. Stored data is cleared if the app is uninstalled.
 stores a lot of data, has high read/write load, or requires complex querying,
 we recommend taking a look at a SQLite-based solution. One such solution is [Ionic Secure Storage](https://ionic.io/docs/secure-storage), a SQLite-based engine with full encryption support. The [Capacitor Community](https://github.com/capacitor-community/) has also built a number of other storage engines.
 
+Also note that data stored with this API is _not_ encrypted: it is persisted via `UserDefaults` on iOS and `SharedPreferences` on Android, both of which store values in plain text. For sensitive values such as tokens or credentials, consider an encrypted key/value solution such as the [Capawesome Secure Preferences](https://capawesome.io/docs/sdks/capacitor/secure-preferences/) plugin, which encrypts values using the Android Keystore and iOS Keychain.
+
 ## Install
 
 ```bash
