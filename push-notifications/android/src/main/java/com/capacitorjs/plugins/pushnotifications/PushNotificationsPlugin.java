@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.service.notification.StatusBarNotification;
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import com.getcapacitor.*;
 import com.getcapacitor.annotation.CapacitorPlugin;
 import com.getcapacitor.annotation.Permission;
@@ -85,6 +86,13 @@ public class PushNotificationsPlugin extends Plugin {
             actionJson.put("notification", notificationJson);
             notifyListeners("pushNotificationActionPerformed", actionJson, true);
         }
+    }
+
+    @PluginMethod
+    public void checkAppEnabled(PluginCall call) {
+        JSObject result = new JSObject();
+        result.put("value", NotificationManagerCompat.from(getContext()).areNotificationsEnabled());
+        call.resolve(result);
     }
 
     @PluginMethod
@@ -212,6 +220,11 @@ public class PushNotificationsPlugin extends Plugin {
     @PluginMethod
     public void listChannels(PluginCall call) {
         notificationChannelManager.listChannels(call);
+    }
+
+    @PluginMethod
+    public void checkChannelEnabled(PluginCall call) {
+        notificationChannelManager.checkChannelEnabled(call);
     }
 
     public void sendToken(String token) {

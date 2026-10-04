@@ -30,6 +30,7 @@ public class NotificationChannelManager {
     private static String CHANNEL_NAME = "name";
     private static String CHANNEL_DESCRIPTION = "description";
     private static String CHANNEL_IMPORTANCE = "importance";
+    private static String CHANNEL_ENABLED = "enabled";
     private static String CHANNEL_VISIBILITY = "visibility";
     private static String CHANNEL_SOUND = "sound";
     private static String CHANNEL_VIBRATE = "vibration";
@@ -111,6 +112,22 @@ public class NotificationChannelManager {
         }
     }
 
+    public void checkChannelEnabled(PluginCall call) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            String channelId = call.getString(CHANNEL_ID);
+            if (channelId == null || channelId.isEmpty()) {
+                call.reject("Channel missing identifier");
+                return;
+            }
+            NotificationChannel channel = notificationManager.getNotificationChannel(channelId);
+            JSObject result = new JSObject();
+            result.put("value", channel != null && channel.getImportance() != NotificationManager.IMPORTANCE_NONE);
+            call.resolve(result);
+        } else {
+            call.unavailable();
+        }
+    }
+
     public void listChannels(PluginCall call) {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             List<NotificationChannel> notificationChannels = notificationManager.getNotificationChannels();
@@ -121,6 +138,7 @@ public class NotificationChannelManager {
                 channel.put(CHANNEL_NAME, notificationChannel.getName());
                 channel.put(CHANNEL_DESCRIPTION, notificationChannel.getDescription());
                 channel.put(CHANNEL_IMPORTANCE, notificationChannel.getImportance());
+                channel.put(CHANNEL_ENABLED, notificationChannel.getImportance() != NotificationManager.IMPORTANCE_NONE);
                 channel.put(CHANNEL_VISIBILITY, notificationChannel.getLockscreenVisibility());
                 channel.put(CHANNEL_SOUND, notificationChannel.getSound());
                 channel.put(CHANNEL_VIBRATE, notificationChannel.shouldVibrate());

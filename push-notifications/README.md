@@ -195,6 +195,8 @@ const getDeliveredNotifications = async () => {
 * [`createChannel(...)`](#createchannel)
 * [`deleteChannel(...)`](#deletechannel)
 * [`listChannels()`](#listchannels)
+* [`checkAppEnabled()`](#checkappenabled)
+* [`checkChannelEnabled(...)`](#checkchannelenabled)
 * [`checkPermissions()`](#checkpermissions)
 * [`requestPermissions()`](#requestpermissions)
 * [`addListener('registration', ...)`](#addlistenerregistration-)
@@ -342,6 +344,50 @@ Only available on Android O or newer (SDK 26+).
 --------------------
 
 
+### checkAppEnabled()
+
+```typescript
+checkAppEnabled() => Promise<EnabledResult>
+```
+
+Check whether notifications are enabled for the app in the system settings.
+
+On iOS, authorized, provisional, and ephemeral authorization are considered enabled.
+This does not request permission or check push registration, individual channels,
+or temporary restrictions such as Do Not Disturb.
+
+**Returns:** <code>Promise&lt;<a href="#enabledresult">EnabledResult</a>&gt;</code>
+
+**Since:** 8.2.0
+
+--------------------
+
+
+### checkChannelEnabled(...)
+
+```typescript
+checkChannelEnabled(args: { id: string; }) => Promise<EnabledResult>
+```
+
+Check whether a notification channel exists and its importance is not `0` (disabled).
+
+Returns `false` if the channel does not exist. This does not check app-wide
+notification settings or channel group settings. Use `checkAppEnabled()` to
+check the app-wide setting separately.
+
+Only available on Android O or newer (SDK 26+).
+
+| Param      | Type                         |
+| ---------- | ---------------------------- |
+| **`args`** | <code>{ id: string; }</code> |
+
+**Returns:** <code>Promise&lt;<a href="#enabledresult">EnabledResult</a>&gt;</code>
+
+**Since:** 8.2.0
+
+--------------------
+
+
 ### checkPermissions()
 
 ```typescript
@@ -352,7 +398,7 @@ Check permission to receive push notifications.
 
 On Android 12 and below the status is always granted because you can always
 receive push notifications. If you need to check if the user allows
-to display notifications, use local-notifications plugin.
+to display notifications, use `checkAppEnabled()`.
 
 **Returns:** <code>Promise&lt;<a href="#permissionstatus">PermissionStatus</a>&gt;</code>
 
@@ -518,6 +564,7 @@ Remove all native listeners for this plugin.
 | **`description`** | <code>string</code>                               | The description of this channel (presented to the user).                                                                                                                                                                                                   |                  | 1.0.0 |
 | **`sound`**       | <code>string</code>                               | The sound that should be played for notifications posted to this channel. Notification channels with an importance of at least `3` should have a sound. The file name of a sound file should be specified relative to the android app `res/raw` directory. |                  | 1.0.0 |
 | **`importance`**  | <code><a href="#importance">Importance</a></code> | The level of interruption for notifications posted to this channel.                                                                                                                                                                                        | <code>`3`</code> | 1.0.0 |
+| **`enabled`**     | <code>boolean</code>                              | Whether the channel's importance is not `0` (disabled). Returned by `listChannels()` and ignored by `createChannel()`. This does not include app-wide notification settings or channel group settings. Only available on Android O or newer (SDK 26+).     |                  | 8.2.0 |
 | **`visibility`**  | <code><a href="#visibility">Visibility</a></code> | The visibility of notifications posted to this channel. This setting is for whether notifications posted to this channel appear on the lockscreen or not, and if so, whether they appear in a redacted form.                                               |                  | 1.0.0 |
 | **`lights`**      | <code>boolean</code>                              | Whether notifications posted to this channel should display notification lights, on devices that support it.                                                                                                                                               |                  | 1.0.0 |
 | **`lightColor`**  | <code>string</code>                               | The light color for notifications posted to this channel. Only supported if lights are enabled on this channel and the device supports it. Supported color formats are `#RRGGBB` and `#RRGGBBAA`.                                                          |                  | 1.0.0 |
@@ -529,6 +576,13 @@ Remove all native listeners for this plugin.
 | Prop           | Type                   | Description                                   | Since |
 | -------------- | ---------------------- | --------------------------------------------- | ----- |
 | **`channels`** | <code>Channel[]</code> | List of all the Channels created by your app. | 1.0.0 |
+
+
+#### EnabledResult
+
+| Prop        | Type                 | Description                                                             | Since |
+| ----------- | -------------------- | ----------------------------------------------------------------------- | ----- |
+| **`value`** | <code>boolean</code> | Whether notifications are enabled for the app or the specified channel. | 8.2.0 |
 
 
 #### PermissionStatus

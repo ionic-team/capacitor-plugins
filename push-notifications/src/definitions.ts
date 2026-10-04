@@ -100,11 +100,35 @@ export interface PushNotificationsPlugin {
   listChannels(): Promise<ListChannelsResult>;
 
   /**
+   * Check whether notifications are enabled for the app in the system settings.
+   *
+   * On iOS, authorized, provisional, and ephemeral authorization are considered enabled.
+   * This does not request permission or check push registration, individual channels,
+   * or temporary restrictions such as Do Not Disturb.
+   *
+   * @since 8.2.0
+   */
+  checkAppEnabled(): Promise<EnabledResult>;
+
+  /**
+   * Check whether a notification channel exists and its importance is not `0` (disabled).
+   *
+   * Returns `false` if the channel does not exist. This does not check app-wide
+   * notification settings or channel group settings. Use `checkAppEnabled()` to
+   * check the app-wide setting separately.
+   *
+   * Only available on Android O or newer (SDK 26+).
+   *
+   * @since 8.2.0
+   */
+  checkChannelEnabled(args: { id: string }): Promise<EnabledResult>;
+
+  /**
    * Check permission to receive push notifications.
    *
    * On Android 12 and below the status is always granted because you can always
    * receive push notifications. If you need to check if the user allows
-   * to display notifications, use local-notifications plugin.
+   * to display notifications, use `checkAppEnabled()`.
    *
    * @since 1.0.0
    */
@@ -371,6 +395,18 @@ export interface Channel {
   importance?: Importance;
 
   /**
+   * Whether the channel's importance is not `0` (disabled).
+   *
+   * Returned by `listChannels()` and ignored by `createChannel()`.
+   * This does not include app-wide notification settings or channel group settings.
+   *
+   * Only available on Android O or newer (SDK 26+).
+   *
+   * @since 8.2.0
+   */
+  enabled?: boolean;
+
+  /**
    * The visibility of notifications posted to this channel.
    *
    * This setting is for whether notifications posted to this channel appear on
@@ -427,6 +463,15 @@ export interface ListChannelsResult {
    * @since 1.0.0
    */
   channels: Channel[];
+}
+
+export interface EnabledResult {
+  /**
+   * Whether notifications are enabled for the app or the specified channel.
+   *
+   * @since 8.2.0
+   */
+  value: boolean;
 }
 
 export interface PermissionStatus {

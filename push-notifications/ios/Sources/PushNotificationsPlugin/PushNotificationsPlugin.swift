@@ -20,6 +20,8 @@ public class PushNotificationsPlugin: CAPPlugin, CAPBridgedPlugin {
     public let pluginMethods: [CAPPluginMethod] = [
         CAPPluginMethod(name: "register", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "unregister", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "checkAppEnabled", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "checkChannelEnabled", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "checkPermissions", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "requestPermissions", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getDeliveredNotifications", returnType: CAPPluginReturnPromise),
@@ -93,6 +95,12 @@ public class PushNotificationsPlugin: CAPPlugin, CAPBridgedPlugin {
             }
 
             call.resolve(["receive": result.rawValue])
+        }
+    }
+
+    @objc func checkAppEnabled(_ call: CAPPluginCall) {
+        self.notificationDelegateHandler.checkAppEnabled { enabled in
+            call.resolve(["value": enabled])
         }
     }
 
@@ -178,6 +186,10 @@ public class PushNotificationsPlugin: CAPPlugin, CAPBridgedPlugin {
     }
 
     @objc func listChannels(_ call: CAPPluginCall) {
+        call.unimplemented("Not available on iOS")
+    }
+
+    @objc func checkChannelEnabled(_ call: CAPPluginCall) {
         call.unimplemented("Not available on iOS")
     }
 

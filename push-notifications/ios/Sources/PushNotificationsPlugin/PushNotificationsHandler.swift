@@ -17,6 +17,19 @@ public class PushNotificationsHandler: NSObject, NotificationHandlerProtocol {
         }
     }
 
+    public func checkAppEnabled(with completion: ((Bool) -> Void)? = nil) {
+        checkPermissions { status in
+            switch status {
+            case .authorized, .provisional, .ephemeral:
+                completion?(true)
+            case .notDetermined, .denied:
+                completion?(false)
+            @unknown default:
+                completion?(false)
+            }
+        }
+    }
+
     public func willPresent(notification: UNNotification) -> UNNotificationPresentationOptions {
         let notificationData = makeNotificationRequestJSObject(notification.request)
         self.plugin?.notifyListeners("pushNotificationReceived", data: notificationData)
