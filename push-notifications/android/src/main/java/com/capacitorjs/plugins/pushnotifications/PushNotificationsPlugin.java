@@ -127,8 +127,16 @@ public class PushNotificationsPlugin extends Plugin {
     @PluginMethod
     public void unregister(PluginCall call) {
         FirebaseMessaging.getInstance().setAutoInitEnabled(false);
-        FirebaseMessaging.getInstance().deleteToken();
-        call.resolve();
+        FirebaseMessaging.getInstance()
+            .deleteToken()
+            .addOnCompleteListener((task) -> {
+                if (!task.isSuccessful()) {
+                    Exception exception = task.getException();
+                    call.reject(exception != null ? exception.getLocalizedMessage() : "Failed to delete FCM token", exception);
+                    return;
+                }
+                call.resolve();
+            });
     }
 
     @PluginMethod
