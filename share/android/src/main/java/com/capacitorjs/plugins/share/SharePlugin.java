@@ -151,14 +151,16 @@ public class SharePlugin extends Plugin {
                 flags = flags | PendingIntent.FLAG_ALLOW_UNSAFE_IMPLICIT_INTENT;
             }
 
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
             // requestCode parameter is not used. Providing 0
             PendingIntent pi = PendingIntent.getBroadcast(getContext(), 0, callbackIntent, flags);
             Intent chooser = Intent.createChooser(intent, dialogTitle, pi.getIntentSender());
             chosenComponent = null;
             chooser.addCategory(Intent.CATEGORY_DEFAULT);
             stopped = false;
-            isPresenting = true;
-            startActivityForResult(call, chooser, "activityResult");
+            getActivity().startActivity(chooser);
+            call.resolve(new JSObject());
         } else {
             call.reject("Can't share while sharing is in progress");
         }
