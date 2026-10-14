@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [8.0.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/screen-orientation@8.0.1...@capacitor/screen-orientation@8.0.2) (2026-10-02)
+
+**Note:** Version bump only for package @capacitor/screen-orientation
+
 ## [8.0.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/screen-orientation@8.0.0...@capacitor/screen-orientation@8.0.1) (2026-02-12)
 
 ### Bug Fixes

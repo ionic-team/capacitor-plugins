@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [8.1.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/app@8.1.1...@capacitor/app@8.1.2) (2026-10-02)
+
+### Bug Fixes
+
+- **app:** silence the String?-to-Any coercion warning in getAppLanguage on iOS ([#2598](https://github.com/ionic-team/capacitor-plugins/issues/2598)) ([0706269](https://github.com/ionic-team/capacitor-plugins/commit/070626962cde7b5f7d78ff0b79893033a75e5030))
+
 ## [8.1.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/app@8.1.0...@capacitor/app@8.1.1) (2026-07-15)
 
 **Note:** Version bump only for package @capacitor/app

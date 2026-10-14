@@ -19,25 +19,44 @@ import com.getcapacitor.annotation.CapacitorPlugin;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import org.json.JSONException;
 
 @CapacitorPlugin(name = "Share")
 public class SharePlugin extends Plugin {
 
+    private static final String NONCE_EXTRA_KEY = "_share_nonce";
+
     private BroadcastReceiver broadcastReceiver;
     private boolean stopped = false;
     private boolean isPresenting = false;
     private ComponentName chosenComponent;
+    private String expectedNonce;
 
     @Override
     public void load() {
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
+                // Validate nonce to prevent spoofing from other apps
+                //  Reference: https://github.com/ionic-team/capacitor-plugins/pull/2592
+                String receivedNonce = intent.getStringExtra(NONCE_EXTRA_KEY);
+                if (receivedNonce == null || !receivedNonce.equals(expectedNonce)) {
+                    // Reject broadcasts that don't have the correct nonce
+                    return;
+                }
+
+                ComponentName component;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    chosenComponent = intent.getParcelableExtra(Intent.EXTRA_CHOSEN_COMPONENT, ComponentName.class);
+                    component = intent.getParcelableExtra(Intent.EXTRA_CHOSEN_COMPONENT, ComponentName.class);
                 } else {
-                    chosenComponent = getParcelableExtraLegacy(intent, Intent.EXTRA_CHOSEN_COMPONENT);
+                    component = getParcelableExtraLegacy(intent, Intent.EXTRA_CHOSEN_COMPONENT);
+                }
+
+                // Only clear nonce if we successfully got the component data
+                if (component != null) {
+                    chosenComponent = component;
+                    expectedNonce = null;
                 }
             }
         };
@@ -64,6 +83,7 @@ public class SharePlugin extends Plugin {
             call.resolve(callResult);
         }
         isPresenting = false;
+        expectedNonce = null;
     }
 
     @PluginMethod
@@ -117,6 +137,12 @@ public class SharePlugin extends Plugin {
             if (files != null && files.length() != 0) {
                 shareFiles(files, intent, call);
             }
+
+            // Generate a random nonce to prevent spoofing via exported receiver
+            expectedNonce = UUID.randomUUID().toString();
+            Intent callbackIntent = new Intent(Intent.EXTRA_CHOSEN_COMPONENT);
+            callbackIntent.putExtra(NONCE_EXTRA_KEY, expectedNonce);
+
             int flags = PendingIntent.FLAG_UPDATE_CURRENT;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 flags = flags | PendingIntent.FLAG_MUTABLE;
@@ -126,7 +152,7 @@ public class SharePlugin extends Plugin {
             }
 
             // requestCode parameter is not used. Providing 0
-            PendingIntent pi = PendingIntent.getBroadcast(getContext(), 0, new Intent(Intent.EXTRA_CHOSEN_COMPONENT), flags);
+            PendingIntent pi = PendingIntent.getBroadcast(getContext(), 0, callbackIntent, flags);
             Intent chooser = Intent.createChooser(intent, dialogTitle, pi.getIntentSender());
             chosenComponent = null;
             chooser.addCategory(Intent.CATEGORY_DEFAULT);
@@ -180,6 +206,7 @@ public class SharePlugin extends Plugin {
 
     @Override
     protected void handleOnDestroy() {
+        expectedNonce = null;
         if (broadcastReceiver != null) {
             getActivity().unregisterReceiver(broadcastReceiver);
         }
