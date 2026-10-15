@@ -15,12 +15,23 @@ public class BrowserPlugin extends Plugin {
 
     private Browser implementation;
 
-    public static BrowserControllerListener browserControllerListener;
-    private static BrowserControllerActivity browserControllerActivityInstance;
+    // Written on the plugin thread, read on the main thread.
+    public static volatile BrowserControllerListener browserControllerListener;
+    private static volatile BrowserControllerActivity browserControllerActivityInstance;
 
     public static void setBrowserControllerListener(BrowserControllerListener listener) {
         browserControllerListener = listener;
         if (listener == null) {
+            browserControllerActivityInstance = null;
+        }
+    }
+
+    /**
+     * Called by each controller as it is destroyed. It forgets that controller only: the listener
+     * may already belong to a newer open() whose controller has not been created yet.
+     */
+    static void onControllerDestroyed(BrowserControllerActivity activity) {
+        if (browserControllerActivityInstance == activity) {
             browserControllerActivityInstance = null;
         }
     }
@@ -61,11 +72,7 @@ public class BrowserPlugin extends Plugin {
 
         // open the browser and finish
 
-        Intent intent = new Intent(getContext(), BrowserControllerActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        getContext().startActivity(intent);
-
+        // Set the listener before starting the activity, so its onCreate can't run first and miss it.
         Integer finalToolbarColor = toolbarColor;
         setBrowserControllerListener((activity) -> {
             try {
@@ -77,6 +84,11 @@ public class BrowserPlugin extends Plugin {
                 call.reject("Unable to display URL");
             }
         });
+
+        Intent intent = new Intent(getContext(), BrowserControllerActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        getContext().startActivity(intent);
     }
 
     @PluginMethod
