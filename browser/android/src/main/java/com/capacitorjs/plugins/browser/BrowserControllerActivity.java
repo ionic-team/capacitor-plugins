@@ -19,6 +19,14 @@ public class BrowserControllerActivity extends ComponentActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // close() starts a new instance when the previous one was already cleared off the task
+        // (e.g. by a deep link into a singleTask activity) but not destroyed yet. There is nothing
+        // to close then, and the last open() must not run again.
+        if (getIntent().hasExtra("close")) {
+            finish();
+            return;
+        }
+
         customTabLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), (result) -> {
             if (implementation != null) {
                 implementation.notifyBrowserFinished();
@@ -26,8 +34,11 @@ public class BrowserControllerActivity extends ComponentActivity {
             finish();
         });
 
-        if (BrowserPlugin.browserControllerListener != null) {
-            BrowserPlugin.browserControllerListener.onControllerReady(this);
+        // Each open() is served once, by the controller it started.
+        BrowserControllerListener listener = BrowserPlugin.browserControllerListener;
+        BrowserPlugin.browserControllerListener = null;
+        if (listener != null) {
+            listener.onControllerReady(this);
         }
     }
 
@@ -64,6 +75,6 @@ public class BrowserControllerActivity extends ComponentActivity {
     protected void onDestroy() {
         super.onDestroy();
         implementation = null;
-        BrowserPlugin.setBrowserControllerListener(null);
+        BrowserPlugin.onControllerDestroyed(this);
     }
 }
