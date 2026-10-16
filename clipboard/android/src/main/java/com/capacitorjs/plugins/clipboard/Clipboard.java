@@ -52,15 +52,19 @@ public class Clipboard {
         if (clipboard != null) {
             CharSequence value = null;
 
-            if (clipboard.hasPrimaryClip()) {
-                if (clipboard.getPrimaryClipDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
+            // hasPrimaryClip() can be true while getPrimaryClip() and
+            // getPrimaryClipDescription() still return null, e.g. while the app
+            // is not focused yet, so read the clip once and check it.
+            ClipData clip = clipboard.getPrimaryClip();
+            if (clip != null && clip.getItemCount() > 0) {
+                ClipDescription description = clip.getDescription();
+                ClipData.Item item = clip.getItemAt(0);
+                if (description != null && description.hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
                     Logger.debug(TAG, "Got plaintxt");
-                    ClipData.Item item = clipboard.getPrimaryClip().getItemAt(0);
                     value = item.getText();
                 } else {
                     Logger.debug(TAG, "Not plaintext!");
-                    ClipData.Item item = clipboard.getPrimaryClip().getItemAt(0);
-                    value = item.coerceToText(context).toString();
+                    value = item.coerceToText(context);
                 }
             }
 
