@@ -27,7 +27,7 @@ public class DialogPlugin: CAPPlugin, CAPBridgedPlugin {
             alert.addAction(UIAlertAction(title: buttonTitle, style: UIAlertAction.Style.default, handler: { (_) in
                 call.resolve()
             }))
-            self?.bridge?.viewController?.present(alert, animated: true, completion: nil)
+            self?.present(alert, for: call)
         }
     }
 
@@ -52,7 +52,7 @@ public class DialogPlugin: CAPPlugin, CAPBridgedPlugin {
                     "value": true
                 ])
             }))
-            self?.bridge?.viewController?.present(alert, animated: true, completion: nil)
+            self?.present(alert, for: call)
         }
     }
 
@@ -89,7 +89,22 @@ public class DialogPlugin: CAPPlugin, CAPBridgedPlugin {
                 ])
             }))
 
-            self?.bridge?.viewController?.present(alert, animated: true, completion: nil)
+            self?.present(alert, for: call)
         }
+    }
+
+    // UIKit refuses to present from a view controller that already presents one, so climb to
+    // the topmost presented controller. A controller that is mid-dismissal cannot present, and
+    // neither can its presenter until the dismissal ends, so reject in that window.
+    private func present(_ alert: UIAlertController, for call: CAPPluginCall) {
+        var presenter = bridge?.viewController
+        while let presented = presenter?.presentedViewController, !presented.isBeingDismissed {
+            presenter = presented
+        }
+        guard let presenter, presenter.presentedViewController == nil else {
+            call.reject("Can't present a dialog while another view controller is being dismissed")
+            return
+        }
+        presenter.present(alert, animated: true, completion: nil)
     }
 }
