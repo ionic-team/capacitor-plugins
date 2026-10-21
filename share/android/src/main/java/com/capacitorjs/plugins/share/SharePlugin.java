@@ -167,16 +167,14 @@ public class SharePlugin extends Plugin {
     private void shareFiles(JSArray files, Intent intent, PluginCall call) {
         List<Object> filesList;
         ArrayList<Uri> fileUris = new ArrayList<>();
+        String sharedType = null;
         try {
             filesList = files.toList();
             for (int i = 0; i < filesList.size(); i++) {
                 String file = (String) filesList.get(i);
                 if (isFileUrl(file)) {
-                    String type = getMimeType(file);
-                    if (type == null || filesList.size() > 1) {
-                        type = "*/*";
-                    }
-                    intent.setType(type);
+                    sharedType = i == 0 ? getMimeType(file) : getCommonMimeType(sharedType, getMimeType(file));
+                    intent.setType(sharedType != null ? sharedType : "*/*");
 
                     Uri fileUrl = FileProvider.getUriForFile(
                         getActivity(),
@@ -225,6 +223,24 @@ public class SharePlugin extends Plugin {
             type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
         }
         return type;
+    }
+
+    /**
+     * Returns the most specific MIME type that covers both types: the type itself when they match,
+     * {@code type/*} when only the top-level type matches, and {@code null} otherwise.
+     */
+    static String getCommonMimeType(String first, String second) {
+        if (first == null || second == null) {
+            return null;
+        }
+        if (first.equals(second)) {
+            return first;
+        }
+        int slash = first.indexOf('/');
+        if (slash > 0 && slash == second.indexOf('/') && first.regionMatches(0, second, 0, slash)) {
+            return first.substring(0, slash) + "/*";
+        }
+        return null;
     }
 
     private boolean isFileUrl(String url) {
