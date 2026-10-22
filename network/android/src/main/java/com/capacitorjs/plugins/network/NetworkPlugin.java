@@ -1,7 +1,7 @@
 package com.capacitorjs.plugins.network;
 
-import android.os.Build;
 import android.util.Log;
+import androidx.annotation.Nullable;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
@@ -13,7 +13,9 @@ public class NetworkPlugin extends Plugin {
 
     private Network implementation;
     public static final String NETWORK_CHANGE_EVENT = "networkStatusChange";
-    private NetworkStatus prePauseNetworkStatus = null;
+
+    @Nullable
+    private NetworkStatus lastNotifiedStatus = null;
 
     /**
      * Monitor for network status changes and fire our event.
@@ -21,17 +23,8 @@ public class NetworkPlugin extends Plugin {
     @Override
     public void load() {
         implementation = new Network(getContext());
-        Network.NetworkStatusChangeListener listener = (wasLostEvent) -> {
-            if (wasLostEvent) {
-                JSObject jsObject = new JSObject();
-                jsObject.put("connected", false);
-                jsObject.put("connectionType", "none");
-                notifyListeners(NETWORK_CHANGE_EVENT, jsObject);
-            } else {
-                updateNetworkStatus();
-            }
-        };
-        implementation.setStatusChangeListener(listener);
+        implementation.setStatusChangeListener(this::notifyIfChanged);
+        implementation.startMonitoring();
     }
 
     /**
@@ -40,6 +33,7 @@ public class NetworkPlugin extends Plugin {
     @Override
     protected void handleOnDestroy() {
         implementation.setStatusChangeListener(null);
+        implementation.stopMonitoring();
     }
 
     /**
@@ -52,37 +46,38 @@ public class NetworkPlugin extends Plugin {
     }
 
     /**
-     * Register the IntentReceiver on resume
+     * Register the network callback on resume
      */
     @Override
     protected void handleOnResume() {
         implementation.startMonitoring();
+        // Registering delivers the current default network, but nothing is delivered when there is
+        // none, so a connection lost while paused has to be reported from here.
         NetworkStatus afterPauseNetworkStatus = implementation.getNetworkStatus();
-        if (
-            prePauseNetworkStatus != null &&
-            !afterPauseNetworkStatus.connected &&
-            (prePauseNetworkStatus.connected || afterPauseNetworkStatus.connectionType != prePauseNetworkStatus.connectionType)
-        ) {
-            Log.d(
-                "Capacitor/NetworkPlugin",
-                "Detected pre-pause and after-pause network status mismatch. Updating network status and notifying listeners."
-            );
-            this.updateNetworkStatus();
+        if (!afterPauseNetworkStatus.connected && hasNotified()) {
+            Log.d("Capacitor/NetworkPlugin", "Network status is not connected after resume. Notifying listeners if it changed.");
+            notifyIfChanged(afterPauseNetworkStatus);
         }
-        this.prePauseNetworkStatus = null;
     }
 
     /**
-     * Unregister the IntentReceiver on pause to avoid leaking it
+     * Unregister the network callback on pause to avoid leaking it
      */
     @Override
     protected void handleOnPause() {
-        this.prePauseNetworkStatus = implementation.getNetworkStatus();
         implementation.stopMonitoring();
     }
 
-    private void updateNetworkStatus() {
-        notifyListeners(NETWORK_CHANGE_EVENT, parseNetworkStatus(implementation.getNetworkStatus()));
+    private synchronized boolean hasNotified() {
+        return lastNotifiedStatus != null;
+    }
+
+    private synchronized void notifyIfChanged(NetworkStatus status) {
+        if (status.equals(lastNotifiedStatus)) {
+            return;
+        }
+        lastNotifiedStatus = status;
+        notifyListeners(NETWORK_CHANGE_EVENT, parseNetworkStatus(status));
     }
 
     private JSObject parseNetworkStatus(NetworkStatus networkStatus) {
