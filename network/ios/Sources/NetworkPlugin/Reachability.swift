@@ -92,11 +92,16 @@ public class Reachability {
         return connection
     }
 
-    public var connection: Connection {
-        if flags == nil {
-            try? setReachabilityFlags()
+    public var currentConnection: Connection {
+        var freshFlags = SCNetworkReachabilityFlags()
+        if SCNetworkReachabilityGetFlags(reachabilityRef, &freshFlags) {
+            reachabilitySerialQueue.sync { flags = freshFlags }
         }
+        return connection
+    }
 
+    public var connection: Connection {
+        if flags == nil { try? setReachabilityFlags() }
         switch flags?.connection {
         case .unavailable?, nil: return .unavailable
         case .cellular?: return allowsCellularConnection ? .cellular : .unavailable

@@ -29,7 +29,7 @@ public class Network {
     }
 
     func currentStatus() -> Network.Connection {
-        return reachability?.connection.equivalentEnum ?? Connection.unavailable
+        return reachability?.currentConnection.equivalentEnum ?? Connection.unavailable
     }
 }
 
