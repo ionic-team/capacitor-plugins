@@ -43,7 +43,7 @@ For more information about the behavior changes of your app related to the priva
 
 This plugin will use the following project variables (defined in your app's `variables.gradle` file):
 
-- `firebaseMessagingVersion` version of `com.google.firebase:firebase-messaging` (default: `25.0.1`)
+- `firebaseMessagingVersion` version of `com.google.firebase:firebase-messaging` (default: `26.0.1`)
 
 ---
 
