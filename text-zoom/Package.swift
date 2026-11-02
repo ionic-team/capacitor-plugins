@@ -10,7 +10,7 @@ let package = Package(
             targets: ["TextZoomPlugin"])
     ],
     dependencies: [
-        .package(url: "https://github.com/ionic-team/capacitor.git", from: "9.0.0-alpha.7")
+        .package(url: "https://github.com/ionic-team/capacitor.git", from: "9.0.0-beta.0")
     ],
     targets: [
         .target(

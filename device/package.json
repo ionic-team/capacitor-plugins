@@ -13,7 +13,8 @@
     "ios/Sources",
     "ios/Tests",
     "Package.swift",
-    "CapacitorDevice.podspec"
+    "CapacitorDevice.podspec",
+    "android/proguard-rules.pro"
   ],
   "author": "Ionic <hi@ionicframework.com>",
   "license": "MIT",
@@ -50,7 +51,7 @@
   "devDependencies": {
     "@capacitor/android": "next",
     "@capacitor/core": "next",
-    "@capacitor/docgen": "0.3.0",
+    "@capacitor/docgen": "^0.3.1",
     "@capacitor/ios": "next",
     "@ionic/eslint-config": "^0.5.0",
     "@ionic/prettier-config": "^4.0.0",
@@ -66,7 +67,7 @@
     "uvu": "^0.5.6"
   },
   "peerDependencies": {
-    "@capacitor/core": ">=9.0.0-alpha.0"
+    "@capacitor/core": ">=9.0.0-beta.0"
   },
   "prettier": "@ionic/prettier-config",
   "swiftlint": "@ionic/swiftlint-config",
