@@ -7,7 +7,6 @@
     "clipboard": {},
     "device": {},
     "dialog": {},
-    "local-notifications": {},
     "motion": {},
     "network": {},
     "preferences": {},
@@ -24,12 +23,15 @@
   "release-type": "node",
   "bump-minor-pre-major": true,
   "bump-patch-for-minor-pre-major": true,
+  "last-release-sha": "3865beba413621711a947acc8d61bb4c74d98122",
   "include-component-in-tag": true,
   "include-v-in-tag": false,
   "tag-seprator": "@",
   "draft": false,
   "prerelease": true,
   "prerelease-type": "beta",
-  "plugins": ["node-workspace"],
+  "plugins": [
+    "node-workspace"
+  ],
   "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json"
 }
