@@ -11,6 +11,23 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 **Note:** Version bump only for package @capacitor/share
 
+## [9.0.0-alpha.3](https://github.com/ionic-team/capacitor-plugins/compare/share@9.0.0-alpha.2...share@9.0.0-alpha.3) (2026-11-04)
+
+
+### ⚠ BREAKING CHANGES
+
+* Upgrade AGP to 9.4.1 and Gradle to 9.8.2 ([#2623](https://github.com/ionic-team/capacitor-plugins/issues/2623))
+
+### Features
+
+* Upgrade AGP to 9.4.1 and Gradle to 9.8.2 ([#2623](https://github.com/ionic-team/capacitor-plugins/issues/2623)) ([e833a78](https://github.com/ionic-team/capacitor-plugins/commit/e833a7865c2bde2237d963032da3bf4d3c0651aa))
+
+
+### Bug Fixes
+
+* **share:** Add nonce validation to broadcast receiver on Android ([#2592](https://github.com/ionic-team/capacitor-plugins/issues/2592)) ([fa8ddfb](https://github.com/ionic-team/capacitor-plugins/commit/fa8ddfb4e671fa1c91e6d92c80512f09cfd3a335))
+* **share:** present share sheet from the topmost view controller on iOS ([#2574](https://github.com/ionic-team/capacitor-plugins/issues/2574)) ([ed6cf8f](https://github.com/ionic-team/capacitor-plugins/commit/ed6cf8f1f64ce63ab7630c41831b6606c9c6636c))
+
 ## [8.0.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/share@8.0.1...@capacitor/share@8.0.2) (2026-09-16)
 
 ### Bug Fixes
