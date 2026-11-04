@@ -11,6 +11,8 @@ public class StatusBar {
     private var backgroundColor = UIColor.black
     private var backgroundView: UIView?
     private var observers: [NSObjectProtocol] = []
+    private var webViewFrameObservations: [NSKeyValueObservation] = []
+    private var isApplyingLayout = false
 
     init(bridge: CAPBridgeProtocol, config: StatusBarConfig) {
         self.bridge = bridge
@@ -19,6 +21,7 @@ public class StatusBar {
 
     deinit {
         observers.forEach { NotificationCenter.default.removeObserver($0) }
+        stopObservingWebViewFrame()
     }
 
     private func setupObservers(with config: StatusBarConfig) {
@@ -37,6 +40,42 @@ public class StatusBar {
         setStyle(config.style)
         setBackgroundColor(config.backgroundColor)
         setOverlaysWebView(config.overlaysWebView)
+        // Fallback for a frame reset that the observer below could not correct.
+        restoreLayout()
+    }
+
+    // The WebView is the root view of CAPBridgeViewController. When a full-screen
+    // modal (for example the SFSafariViewController of @capacitor/browser) is
+    // dismissed, UIKit resets the root view to the full window bounds. Watch the
+    // frame and move the WebView back below the status bar in the same layout pass.
+    private func observeWebViewFrame() {
+        guard webViewFrameObservations.isEmpty, let layer = bridge?.webView?.layer else { return }
+        webViewFrameObservations = [
+            layer.observe(\.position) { [weak self] _, _ in self?.webViewFrameDidChange() },
+            layer.observe(\.bounds) { [weak self] _, _ in self?.webViewFrameDidChange() }
+        ]
+    }
+
+    private func stopObservingWebViewFrame() {
+        webViewFrameObservations.forEach { $0.invalidate() }
+        webViewFrameObservations = []
+    }
+
+    private func webViewFrameDidChange() {
+        guard !isApplyingLayout, !isOverlayingWebview, let webView = bridge?.webView else { return }
+        let statusBarHeight = getStatusBarFrame().size.height
+        // Other frame changes, such as the keyboard plugin changing the height, keep the origin.
+        guard statusBarHeight > 0, webView.frame.origin.y != statusBarHeight else { return }
+        restoreLayout()
+    }
+
+    private func restoreLayout() {
+        if !isOverlayingWebview, let backgroundView {
+            // addSubview also brings the view to the front if it is already a subview.
+            bridge?.webView?.superview?.addSubview(backgroundView)
+        }
+        resizeStatusBarBackgroundView()
+        resizeWebView()
     }
 
     private func handleViewWillTransition() {
@@ -118,10 +157,12 @@ public class StatusBar {
         if overlay == isOverlayingWebview { return }
         isOverlayingWebview = overlay
         if overlay {
+            stopObservingWebViewFrame()
             backgroundView?.removeFromSuperview()
         } else {
             initializeBackgroundViewIfNeeded()
             bridge?.webView?.superview?.addSubview(backgroundView!)
+            observeWebViewFrame()
         }
         resizeWebView()
     }
@@ -133,6 +174,8 @@ public class StatusBar {
             let webView = bridge?.webView,
             let bounds = bounds
         else { return }
+        isApplyingLayout = true
+        defer { isApplyingLayout = false }
         bridge?.viewController?.view.frame = bounds
         webView.frame = bounds
         let statusBarHeight = getStatusBarFrame().size.height
