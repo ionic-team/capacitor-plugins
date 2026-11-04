@@ -11,6 +11,22 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 **Note:** Version bump only for package @capacitor/push-notifications
 
+## [9.0.0-alpha.3](https://github.com/ionic-team/capacitor-plugins/compare/push-notifications@9.0.0-alpha.2...push-notifications@9.0.0-alpha.3) (2026-11-04)
+
+
+### ⚠ BREAKING CHANGES
+
+* Upgrade AGP to 9.4.1 and Gradle to 9.8.2 ([#2623](https://github.com/ionic-team/capacitor-plugins/issues/2623))
+
+### Features
+
+* Upgrade AGP to 9.4.1 and Gradle to 9.8.2 ([#2623](https://github.com/ionic-team/capacitor-plugins/issues/2623)) ([e833a78](https://github.com/ionic-team/capacitor-plugins/commit/e833a7865c2bde2237d963032da3bf4d3c0651aa))
+
+
+### Bug Fixes
+
+* **push-notifications:** show foreground notification image on Android ([#2572](https://github.com/ionic-team/capacitor-plugins/issues/2572)) ([fd606de](https://github.com/ionic-team/capacitor-plugins/commit/fd606deafbd52754d54a9c6dfcfef79f4ccc0b1c))
+
 ## [8.1.2](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/push-notifications@8.1.1...@capacitor/push-notifications@8.1.2) (2026-07-15)
 
 **Note:** Version bump only for package @capacitor/push-notifications

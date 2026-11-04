@@ -13,6 +13,17 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 **Note:** Version bump only for package @capacitor/app
 
+## [9.0.0-alpha.3](https://github.com/ionic-team/capacitor-plugins/compare/app@9.0.0-alpha.2...app@9.0.0-alpha.3) (2026-11-04)
+
+
+### ⚠ BREAKING CHANGES
+
+* Upgrade AGP to 9.4.1 and Gradle to 9.8.2 ([#2623](https://github.com/ionic-team/capacitor-plugins/issues/2623))
+
+### Features
+
+* Upgrade AGP to 9.4.1 and Gradle to 9.8.2 ([#2623](https://github.com/ionic-team/capacitor-plugins/issues/2623)) ([e833a78](https://github.com/ionic-team/capacitor-plugins/commit/e833a7865c2bde2237d963032da3bf4d3c0651aa))
+
 ## [8.1.1](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/app@8.1.0...@capacitor/app@8.1.1) (2026-07-15)
 
 **Note:** Version bump only for package @capacitor/app
