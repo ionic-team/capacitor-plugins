@@ -26,7 +26,7 @@
   "last-release-sha": "3865beba413621711a947acc8d61bb4c74d98122",
   "include-component-in-tag": true,
   "include-v-in-tag": false,
-  "tag-seprator": "@",
+  "tag-separator": "@",
   "draft": false,
   "prerelease": true,
   "prerelease-type": "beta",
