@@ -21,7 +21,7 @@
   },
   "changelog-path": "CHANGELOG.md",
   "release-type": "node",
-  "bump-minor-pre-major": false,
+  "bump-minor-pre-major": true,
   "bump-patch-for-minor-pre-major": true,
   "last-release-sha": "3865beba413621711a947acc8d61bb4c74d98122",
   "include-component-in-tag": true,
