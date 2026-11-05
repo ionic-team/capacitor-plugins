@@ -15,10 +15,6 @@ task androidSourcesJar(type: Jar) {
     }
 }
 
-artifacts {
-    archives androidSourcesJar
-}
-
 group = 'com.capacitorjs'
 version = LIB_VERSION
 
