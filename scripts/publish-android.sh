@@ -36,11 +36,10 @@ publish_plugin () {
                 export CAP_PLUGIN_PUBLISH=true
 
                 # Build and publish
-                (cd "$ANDROID_PATH" && ./gradlew clean build publishReleasePublicationToSonatypeRepository --no-daemon --max-workers 1 -Pandroid.useAndroidX=true) > $LOG_OUTPUT 2>&1
+                (cd "$ANDROID_PATH" && ./gradlew clean build publishReleasePublicationToSonatypeRepository closeAndReleaseSonatypeStagingRepository --no-daemon --max-workers 1 -Pandroid.useAndroidX=true) > $LOG_OUTPUT 2>&1
 
                 if grep --quiet "BUILD SUCCESSFUL" $LOG_OUTPUT; then
                     printf %"s\n\n" "Success: $PLUGIN_NAME published to MavenCentral."
-                    cat $LOG_OUTPUT
                 else
                     printf %"s\n\n" "Error publishing $PLUGIN_NAME, check $LOG_OUTPUT for more info! Manually review and release from the Central Portal may be necessary https://central.sonatype.com/publishing/deployments/"
                     cat $LOG_OUTPUT
