@@ -391,7 +391,9 @@ private extension CameraPlugin {
         alert.addAction(UIAlertAction(title: settings.userPromptText.cancelAction, style: .cancel, handler: { [weak self] (_: UIAlertAction) in
             self?.call?.reject("User cancelled photos app")
         }))
-        self.setCenteredPopover(alert)
+        if UIDevice.current.userInterfaceIdiom != .phone {
+            self.setCenteredPopover(alert)
+        }
         self.bridge?.viewController?.present(alert, animated: true, completion: nil)
     }
 
