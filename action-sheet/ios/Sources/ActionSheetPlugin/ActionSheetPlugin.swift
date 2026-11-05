@@ -44,7 +44,11 @@ public class ActionSheetPlugin: CAPPlugin, CAPBridgedPlugin, UIAdaptivePresentat
 
         DispatchQueue.main.async { [weak self] in
             if let alertController = self?.implementation.buildActionSheet(title: title, message: message, actions: alertActions) {
-                self?.setCenteredPopover(alertController)
+                // On iPhone, an anchored action sheet shows as a popover without its Cancel action (iOS 26+).
+                // Without a Cancel action, keep the popover: tapping outside it cancels.
+                if UIDevice.current.userInterfaceIdiom != .phone || !hasCancellableButton {
+                    self?.setCenteredPopover(alertController)
+                }
                 self?.bridge?.viewController?.present(alertController, animated: true) {
                     if !hasCancellableButton {
                         self?.setupCancelationListeners(alertController, call)
