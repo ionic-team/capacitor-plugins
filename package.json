@@ -60,5 +60,12 @@
     "status-bar",
     "text-zoom",
     "toast"
-  ]
+  ],
+  "allowScripts": {
+    "@parcel/watcher@2.0.4": true,
+    "esbuild@0.15.18": true,
+    "fsevents@2.3.3": true,
+    "nx@16.10.0": true,
+    "swiftlint@2.0.0": true
+  }
 }
