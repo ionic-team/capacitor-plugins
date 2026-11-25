@@ -18,12 +18,22 @@ public class ToastPlugin: CAPPlugin, CAPBridgedPlugin {
         let duration = durationType == "long" ? 3500 : 2000
         let position = call.getString("position", "bottom")
 
-        guard let viewController = bridge?.viewController else {
-            call.reject("Unable to display toast!")
-            return
+        DispatchQueue.main.async { [weak self] in
+            guard var viewController = self?.bridge?.viewController else {
+                call.reject("Unable to display toast!")
+                return
+            }
+            // A view controller presented over the webview (e.g. the Browser plugin) hides the
+            // bridge view controller's view, so show the toast in the topmost one instead.
+            // UIAlertController is skipped: its view is only the alert box.
+            while let presented = viewController.presentedViewController,
+                  !presented.isBeingDismissed,
+                  !(presented is UIAlertController) {
+                viewController = presented
+            }
+            Toast.showToast(in: viewController, text: text, duration: duration, position: position, completion: {(_) in
+                call.resolve()
+            })
         }
-        Toast.showToast(in: viewController, text: text, duration: duration, position: position, completion: {(_) in
-            call.resolve()
-        })
     }
 }
